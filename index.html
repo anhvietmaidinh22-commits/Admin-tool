@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Quản Trị - Admin Panel</title>
+    <title>Hệ Thống Quản Trị - Admin Panel Full</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -26,44 +26,34 @@
     </header>
 
     <div class="flex min-h-screen">
-        <!-- Sidebar chuẩn tím đặc trưng SMM Panel -->
-        <aside id="sidebar" class="w-64 bg-[#20133c] border-r border-[#35215e] p-4 hidden md:flex flex-col fixed md:static inset-y-0 left-0 z-40 transition-transform duration-300 shadow-2xl">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 bg-[#20133c] border-r border-[#35215e] p-4 hidden md:flex flex-col fixed md:static inset-y-0 left-0 z-45 transition-transform duration-300 shadow-2xl">
             <div class="mb-4 px-2 pt-2 flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Quản trị viên</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Quản trị hệ thống</span>
                 <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white text-lg">✕</button>
             </div>
 
             <div class="space-y-1 overflow-y-auto flex-1 pr-1 text-xs">
-                <!-- Mục Quản trị hệ thống -->
-                <div class="px-3 py-2.5 font-bold text-slate-200 flex items-center justify-between bg-[#2d1b54] rounded-xl mb-2 shadow-inner">
-                    <span class="flex items-center space-x-2">
-                        <span class="text-rose-400">👤</span>
-                        <span>Quản trị hệ thống</span>
-                    </span>
-                    <span>▾</span>
-                </div>
-
-                <!-- Danh sách menu đầy đủ y hệt ảnh -->
-                <nav class="space-y-0.5 pl-2">
-                    <button onclick="switchTab('thongke')" id="btn-thongke" class="menu-item w-full text-left px-3 py-2.5 rounded-xl bg-[#6332c5] text-white font-medium transition flex items-center space-x-3 shadow-md">
+                <nav class="space-y-0.5">
+                    <button onclick="switchTab('thongke')" id="btn-thongke" class="menu-item w-full text-left px-3.5 py-2.5 rounded-xl bg-[#6332c5] text-white font-medium transition flex items-center space-x-3 shadow-md">
                         <span>📊</span><span>Thống kê</span>
                     </button>
-                    <button onclick="switchTab('khachhang')" id="btn-khachhang" class="menu-item w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3">
+                    <button onclick="switchTab('khachhang')" id="btn-khachhang" class="menu-item w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3">
                         <span>👥</span><span>Khách hàng</span>
                     </button>
-                    <button onclick="switchTab('giaodich')" id="btn-giaodich" class="menu-item w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3">
+                    <button onclick="switchTab('giaodich')" id="btn-giaodich" class="menu-item w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3">
                         <span>💱</span><span>Giao dịch</span>
                     </button>
-                    <button onclick="switchTab('donhang')" id="btn-donhang" class="menu-item w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3">
+                    <button onclick="switchTab('donhang')" id="btn-donhang" class="menu-item w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3">
                         <span>📄</span><span>Đơn hàng</span>
                     </button>
-                    <button onclick="switchTab('hoantien')" id="btn-hoantien" class="menu-item w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3">
+                    <button onclick="switchTab('hoantien')" id="btn-hoantien" class="menu-item w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3">
                         <span>🖼️</span><span>Hoàn tiền</span>
                     </button>
-                    <button onclick="switchTab('naptientudong')" id="btn-naptientudong" class="menu-item w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3">
+                    <button onclick="switchTab('naptientudong')" id="btn-naptientudong" class="menu-item w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3">
                         <span>⚡</span><span>Nạp tiền tự động</span>
                     </button>
-                    <button onclick="switchTab('caidatnaptien')" id="btn-caidatnaptien" class="menu-item w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3">
+                    <button onclick="switchTab('caidatnaptien')" id="btn-caidatnaptien" class="menu-item w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3">
                         <span>💳</span><span>Cài đặt nạp tiền</span>
                     </button>
                     <button onclick="switchTab('nguondichvu')" id="btn-nguondichvu" class="menu-item w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3">
@@ -97,81 +87,160 @@
         <!-- Main Content Area -->
         <main class="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full space-y-6 overflow-x-hidden">
             
-            <!-- Topbar Desktop Header -->
             <div class="hidden md:flex justify-between items-center bg-[#1a0f35] border border-[#2d1b54] p-4 rounded-2xl shadow-lg">
                 <div>
-                    <h2 id="current-title" class="text-sm font-bold text-white uppercase tracking-wider">📊 Thống Kê Tổng Quan Hệ Thống</h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Quản lý toàn bộ dịch vụ mạng xã hội & AI tự động</p>
+                    <h2 id="page-title" class="text-sm font-bold text-white uppercase tracking-wider">📊 Thống Kê Tổng Quan</h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Hệ thống điều hành mạng xã hội tự động</p>
                 </div>
-                <div class="flex items-center space-x-3">
-                    <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1.5 rounded-xl font-semibold">● Hệ thống trực tuyến</span>
-                </div>
+                <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1.5 rounded-xl font-semibold">● Trực tuyến</span>
             </div>
 
-            <!-- TAB 1: THỐNG KÊ -->
-            <div id="tab-thongke" class="content-tab space-y-6">
+            <!-- 1. THỐNG KÊ -->
+            <div id="tab-thongke" class="panel-tab space-y-6">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl">
                         <p class="text-xs text-slate-400">Doanh thu hôm nay</p>
                         <h3 class="text-2xl font-black text-emerald-400 mt-2">1.450.000 đ</h3>
-                        <span class="text-[10px] text-emerald-400 mt-2 inline-block">🚀 +15% so với hôm qua</span>
                     </div>
                     <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl">
                         <p class="text-xs text-slate-400">Tổng khách hàng</p>
                         <h3 class="text-2xl font-black text-blue-400 mt-2">128</h3>
-                        <span class="text-[10px] text-blue-400 mt-2 inline-block">👥 +4 đăng ký mới</span>
                     </div>
                     <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl">
-                        <p class="text-xs text-slate-400">Tổng đơn chạy tự động</p>
-                        <h3 class="text-2xl font-black text-purple-400 mt-2">1,840 đơn</h3>
-                        <span class="text-[10px] text-purple-400 mt-2 inline-block">⚡ Hoạt động ổn định</span>
+                        <p class="text-xs text-slate-400">Tổng đơn chạy</p>
+                        <h3 class="text-2xl font-black text-purple-400 mt-2">1,840</h3>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 2: KHÁCH HÀNG -->
-            <div id="tab-khachhang" class="content-tab space-y-6 hidden">
+            <!-- 2. KHÁCH HÀNG -->
+            <div id="tab-khachhang" class="panel-tab space-y-6 hidden">
                 <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl space-y-4">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-bold text-white">Quản Lý Thành Viên & Số Dư</h3>
-                        <button class="bg-[#6332c5] hover:bg-[#723ad6] text-white px-3 py-1.5 rounded-xl text-xs font-semibold shadow">＋ Thêm tài khoản</button>
-                    </div>
+                    <h3 class="text-sm font-bold text-white">Quản Lý Khách Hàng</h3>
                     <div class="space-y-2">
-                        <div class="bg-[#120b24] border border-[#2d1b54] p-3.5 rounded-xl flex justify-between items-center">
-                            <div>
-                                <p class="text-xs font-semibold text-slate-200">nguyenvanA@gmail.com</p>
-                                <p class="text-[11px] text-slate-400">Số dư: <span class="text-emerald-400 font-bold">500.000 đ</span></p>
-                            </div>
-                            <button onclick="alert('Mở bảng chỉnh sửa số dư!')" class="bg-[#3b2568] hover:bg-[#4c2c85] text-white px-3 py-1.5 rounded-lg text-xs font-medium">Sửa số dư</button>
+                        <div class="bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl flex justify-between items-center text-xs">
+                            <div><p class="font-semibold text-slate-200">nguyenvanA@gmail.com</p><p class="text-slate-400">Số dư: <span class="text-emerald-400 font-bold">500.000 đ</span></p></div>
+                            <button onclick="actionAlert('Đã mở chỉnh sửa khách hàng A')" class="bg-[#3b2568] px-3 py-1.5 rounded-lg">Sửa</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB NẠP TIỀN TỰ ĐỘNG -->
-            <div id="tab-naptientudong" class="content-tab space-y-6 hidden">
-                <div class="bg-[#1a0f35] border border-[#2d1b54] p-6 rounded-2xl shadow-xl space-y-4">
-                    <h3 class="text-sm font-bold text-white">Cấu Hình Nạp Tiền Tự Động (VietQR / SePay)</h3>
-                    <div class="space-y-3">
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">Trạng thái API Ngân hàng / SePay:</label>
-                            <input type="text" value="Đang kết nối Webhook tự động cộng tiền (Active)" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-xs text-emerald-400 outline-none" readonly>
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">Mã nội dung chuyển khoản tự động:</label>
-                            <input type="text" value="NAPTIEN [ID_KHÁCH_HÀNG]" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-xs text-slate-200 outline-none">
-                        </div>
-                        <button onclick="alert('Đã lưu cấu hình nạp tiền thành công!')" class="w-full bg-[#6332c5] hover:bg-[#723ad6] p-3 rounded-xl text-xs font-bold text-white shadow">Lưu Cấu Hình</button>
+            <!-- 3. GIAO DỊCH -->
+            <div id="tab-giaodich" class="panel-tab space-y-6 hidden">
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl space-y-4">
+                    <h3 class="text-sm font-bold text-white">Lịch Sử Giao Dịch Tiền Nạp / Trừ Dịch Vụ</h3>
+                    <div class="bg-[#120b24] p-3 rounded-xl border border-[#2d1b54] text-xs flex justify-between">
+                        <span>#TX9821 - Nạp qua VietQR (+200.000đ)</span>
+                        <span class="text-emerald-400 font-bold">Thành công</span>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB GENERIC (Cho tất cả các mục khác) -->
-            <div id="tab-generic" class="content-tab space-y-6 hidden">
-                <div class="bg-[#1a0f35] border border-[#2d1b54] p-8 rounded-2xl shadow-xl text-center space-y-3">
-                    <span class="text-3xl">🛠️</span>
-                    <h3 id="generic-title" class="text-sm font-bold text-white">Khu vực quản lý chuyên sâu</h3>
-                    <p class="text-xs text-slate-400 max-w-md mx-auto">Chức năng này đã được tích hợp sẵn sàng trong hệ thống quản trị phong cách SMM Panel của bạn.</p>
+            <!-- 4. ĐƠN HÀNG -->
+            <div id="tab-donhang" class="panel-tab space-y-6 hidden">
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl space-y-4">
+                    <h3 class="text-sm font-bold text-white">Quản Lý Đơn Hàng Đăng Bài & Auto-Cmt</h3>
+                    <div class="bg-[#120b24] p-3 rounded-xl border border-[#2d1b54] text-xs flex justify-between">
+                        <span>#DH551 - Facebook Group (Đang chạy AI)</span>
+                        <span class="text-blue-400 font-bold">Đang xử lý</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. HOÀN TIỀN -->
+            <div id="tab-hoantien" class="panel-tab space-y-6 hidden">
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl space-y-4">
+                    <h3 class="text-sm font-bold text-white">Danh Sách Hoàn Tiền Lỗi Đơn</h3>
+                    <p class="text-xs text-slate-400">Hiện không có đơn nào yêu cầu hoàn tiền lỗi hệ thống.</p>
+                </div>
+            </div>
+
+            <!-- 6. NẠP TIỀN TỰ ĐỘNG -->
+            <div id="tab-naptientudong" class="panel-tab space-y-6 hidden">
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl space-y-4">
+                    <h3 class="text-sm font-bold text-white">Kiểm Tra Giao Dịch Nạp Tự Động (SePay / VietQR)</h3>
+                    <input type="text" value="Webhook đang lắng nghe giao dịch 24/7..." class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-xs text-emerald-400 outline-none" readonly>
+                </div>
+            </div>
+
+            <!-- 7. CÀI ĐẶT NẠP TIỀN -->
+            <div id="tab-caidatnaptien" class="panel-tab space-y-6 hidden">
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl space-y-4">
+                    <h3 class="text-sm font-bold text-white">Cài Đặt Ngân Hàng & API Nạp Tiền</h3>
+                    <input type="text" value="STK: 190xxxxxx - Techcombank - Chủ TK: ADMIN" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-xs text-slate-200 outline-none">
+                    <button onclick="actionAlert('Đã lưu cấu hình nạp tiền!')" class="bg-[#6332c5] px-4 py-2 rounded-xl font-bold">Lưu lại</button>
+                </div>
+            </div>
+
+            <!-- 8. NGUỒN DỊCH VỤ -->
+            <div id="tab-nguondichvu" class="panel-tab space-y-6 hidden">
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl space-y-4">
+                    <h3 class="text-sm font-bold text-white">Kết Nối Nguồn Dịch Vụ API SMM Khác</h3>
+                    <input type="text" placeholder="Nhập API URL và Token nguồn tổng..." class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-xs text-slate-200 outline-none">
+                </div>
+            </div>
+
+            <!-- 9. NỀN TẢNG -->
+            <div id="tab-nentang" class="panel-tab space-y-6 hidden">
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl space-y-4">
+                    <h3 class="text-sm font-bold text-white">Quản Lý Nền Tảng (Facebook, Telegram, Discord, TikTok)</h3>
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div class="bg-[#120b24] p-3 rounded-xl border border-[#2d1b54]">📱 Facebook: Đang bật</div>
+                        <div class="bg-[#120b24] p-3 rounded-xl border border-[#2d1b54]">✈️ Telegram: Đang bật</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. DANH MỤC -->
+            <div id="tab-danhmuc" class="panel-tab space-y-6 hidden">
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl space-y-4">
+                    <h3 class="text-sm font-bold text-white">Quản Lý Danh Mục Dịch Vụ</h3>
+                    <button class="bg-[#6332c5] px-3 py-1.5 rounded-xl font-semibold">＋ Thêm danh mục mới</button>
+                </div>
+            </div>
+
+            <!-- 11. QUẢN LÝ GÓI -->
+            <div id="tab-quanlygoi" class="panel-tab space-y-6 hidden">
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl space-y-4">
+                    <h3 class="text-sm font-bold text-white">Quản Lý Gói Dịch Vụ & Giá Tiền AI Đăng Bài</h3>
+                    <div class="bg-[#120b24] p-3 rounded-xl border border-[#2d1b54] text-xs flex justify-between">
+                        <span>Gói AI Viết & Đăng Group Facebook tự động</span>
+                        <span class="text-emerald-400 font-bold">1.000đ / bài</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 12. THÔNG BÁO -->
+            <div id="tab-thongbao" class="panel-tab space-y-6 hidden">
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl space-y-4">
+                    <h3 class="text-sm font-bold text-white">Gửi Thông Báo Cho Toàn Bộ Thành Viên</h3>
+                    <textarea rows="3" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-xs text-slate-200 outline-none" placeholder="Nhập nội dung thông báo..."></textarea>
+                    <button onclick="actionAlert('Đã gửi thông báo thành công!')" class="bg-[#6332c5] px-4 py-2 rounded-xl font-bold">Phát thông báo</button>
+                </div>
+            </div>
+
+            <!-- 13. HỖ TRỢ -->
+            <div id="tab-hoptro" class="panel-tab space-y-6 hidden">
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl space-y-4">
+                    <h3 class="text-sm font-bold text-white">Hộp Thư Hỗ Trợ (Ticket) Từ Khách Hàng</h3>
+                    <p class="text-xs text-slate-400">Không có yêu cầu hỗ trợ mới cần xử lý.</p>
+                </div>
+            </div>
+
+            <!-- 14. COUPONS -->
+            <div id="tab-coupons" class="panel-tab space-y-6 hidden">
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl space-y-4">
+                    <h3 class="text-sm font-bold text-white">Quản Lý Mã Giảm Giá / Coupons</h3>
+                    <button class="bg-[#6332c5] px-3 py-1.5 rounded-xl font-semibold">＋ Tạo mã giảm giá mới</button>
+                </div>
+            </div>
+
+            <!-- 15. TIẾP THỊ LIÊN KẾT -->
+            <div id="tab-tiepthilienket" class="panel-tab space-y-6 hidden">
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl space-y-4">
+                    <h3 class="text-sm font-bold text-white">Cấu Hình Tiếp Thị Liên Kết (Affiliate)</h3>
+                    <input type="text" value="Hoa hồng giới thiệu: 10%" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-xs text-slate-200 outline-none">
                 </div>
             </div>
 
@@ -180,25 +249,17 @@
 
     <script>
         function switchTab(tabId) {
-            const tabs = document.querySelectorAll('.content-tab');
-            tabs.forEach(t => t.classList.add('hidden'));
-
+            document.querySelectorAll('.panel-tab').forEach(t => t.classList.add('hidden'));
             const target = document.getElementById('tab-' + tabId);
-            if (target) {
-                target.classList.remove('hidden');
-            } else {
-                document.getElementById('tab-generic').classList.remove('hidden');
-                document.getElementById('generic-title').innerText = "Quản lý: " + tabId.toUpperCase();
-            }
+            if (target) target.classList.remove('hidden');
 
-            const buttons = document.querySelectorAll('.menu-item');
-            buttons.forEach(b => {
-                b.className = "menu-item w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3";
+            document.querySelectorAll('.menu-item').forEach(b => {
+                b.className = "menu-item w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3";
             });
 
             const activeBtn = document.getElementById('btn-' + tabId);
             if (activeBtn) {
-                activeBtn.className = "menu-item w-full text-left px-3 py-2.5 rounded-xl bg-[#6332c5] text-white font-medium transition flex items-center space-x-3 shadow-md";
+                activeBtn.className = "menu-item w-full text-left px-3.5 py-2.5 rounded-xl bg-[#6332c5] text-white font-medium transition flex items-center space-x-3 shadow-md";
             }
 
             if (window.innerWidth < 768) {
@@ -207,8 +268,11 @@
         }
 
         function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('hidden');
+            document.getElementById('sidebar').classList.toggle('hidden');
+        }
+
+        function actionAlert(msg) {
+            alert(msg);
         }
     </script>
 </body>

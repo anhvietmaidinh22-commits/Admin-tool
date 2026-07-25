@@ -11,17 +11,15 @@
         ::-webkit-scrollbar-thumb { background: #4c2c85; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #6b3fa0; }
 
-        /* Hiệu ứng LED RGB phát sáng chuyển màu liên tục */
-        @keyframes rgb-glow {
-            0% { filter: drop-shadow(0 0 2px #ff0055) drop-shadow(0 0 6px #ff0055); transform: scale(1); }
-            33% { filter: drop-shadow(0 0 2px #00ff66) drop-shadow(0 0 6px #00ff66); transform: scale(1.1); }
-            66% { filter: drop-shadow(0 0 2px #0055ff) drop-shadow(0 0 6px #0055ff); transform: scale(1); }
-            100% { filter: drop-shadow(0 0 2px #ff0055) drop-shadow(0 0 6px #ff0055); transform: scale(1.1); }
+        @keyframes soft-rgb {
+            0% { filter: drop-shadow(0 0 3px rgba(92, 82, 255, 0.6)); }
+            50% { filter: drop-shadow(0 0 5px rgba(0, 229, 255, 0.6)); }
+            100% { filter: drop-shadow(0 0 3px rgba(92, 82, 255, 0.6)); }
         }
 
         .rgb-icon {
             display: inline-block;
-            animation: rgb-glow 3s infinite ease-in-out;
+            animation: soft-rgb 4s infinite ease-in-out;
         }
     </style>
 </head>
@@ -189,31 +187,33 @@
                 </div>
             </div>
 
-            <!-- 9. NỀN TẢNG -->
+            <!-- 9. NỀN TẢNG (ĐÃ THÊM ĐẦY ĐỦ CÁC NÚT NỀN TẢNG TƯƠNG TÁC) -->
             <div id="tab-nentang" class="panel-tab space-y-6 hidden">
                 <div class="bg-[#1a0f35] border border-[#2d1b54] p-6 rounded-2xl shadow-xl space-y-5 text-xs">
                     <div class="flex justify-between items-center border-b border-[#2d1b54] pb-3">
                         <div>
                             <h3 class="text-sm font-bold text-white">📱 Quản Lý Nền Tảng Đăng Bài & Chia Sẻ Tự Động (AI)</h3>
-                            <p class="text-slate-400 text-[11px] mt-0.5">Bật/tắt và cấu hình các kênh mạng xã hội.</p>
+                            <p class="text-slate-400 text-[11px] mt-0.5">Bấm vào các nút nền tảng bên dưới để cấu hình nhanh kênh.</p>
                         </div>
-                        <button onclick="actionAlert('Đã lưu trạng thái các nền tảng!')" class="bg-[#5c52ff] hover:bg-[#6c63ff] text-white px-4 py-2 rounded-xl font-bold shadow">Cập nhật</button>
+                        <button onclick="actionAlert('Đã lưu cấu hình nền tảng thành công!')" class="bg-[#5c52ff] hover:bg-[#6c63ff] text-white px-4 py-2 rounded-xl font-bold shadow">Cập nhật</button>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="bg-[#120b24] border border-[#2d1b54] p-4 rounded-xl space-y-3">
-                            <div class="flex justify-between items-center">
-                                <span class="font-bold text-sm text-blue-400 flex items-center space-x-2"><span class="rgb-icon">📘</span><span>Facebook</span></span>
-                                <select class="bg-[#1a0f35] border border-[#2d1b54] px-2 py-1 rounded-lg text-emerald-400 font-bold"><option>Bật</option><option>Tắt</option></select>
-                            </div>
-                            <input type="text" value="EAAG... (Facebook Access Token)" class="w-full bg-[#1a0f35] border border-[#2d1b54] p-2.5 rounded-lg text-slate-300 outline-none">
-                        </div>
-                        <div class="bg-[#120b24] border border-[#2d1b54] p-4 rounded-xl space-y-3">
-                            <div class="flex justify-between items-center">
-                                <span class="font-bold text-sm text-sky-400 flex items-center space-x-2"><span class="rgb-icon">✈️</span><span>Telegram</span></span>
-                                <select class="bg-[#1a0f35] border border-[#2d1b54] px-2 py-1 rounded-lg text-emerald-400 font-bold"><option>Bật</option><option>Tắt</option></select>
-                            </div>
-                            <input type="text" value="bot123456:ABC-DEF" class="w-full bg-[#1a0f35] border border-[#2d1b54] p-2.5 rounded-lg text-slate-300 outline-none">
+                    <!-- Thanh nút chọn nền tảng nhanh -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                        <button onclick="actionAlert('Đang cấu hình nền tảng: Facebook')" class="bg-[#1e143b] hover:bg-[#2e1d5e] border border-[#3b2568] p-3 rounded-xl font-bold text-blue-400 flex items-center justify-center space-x-2 transition shadow"><span>📘</span><span>Facebook</span></button>
+                        <button onclick="actionAlert('Đang cấu hình nền tảng: Telegram')" class="bg-[#1e143b] hover:bg-[#2e1d5e] border border-[#3b2568] p-3 rounded-xl font-bold text-sky-400 flex items-center justify-center space-x-2 transition shadow"><span>✈️</span><span>Telegram</span></button>
+                        <button onclick="actionAlert('Đang cấu hình nền tảng: TikTok')" class="bg-[#1e143b] hover:bg-[#2e1d5e] border border-[#3b2568] p-3 rounded-xl font-bold text-pink-400 flex items-center justify-center space-x-2 transition shadow"><span>🎵</span><span>TikTok</span></button>
+                        <button onclick="actionAlert('Đang cấu hình nền tảng: YouTube')" class="bg-[#1e143b] hover:bg-[#2e1d5e] border border-[#3b2568] p-3 rounded-xl font-bold text-red-400 flex items-center justify-center space-x-2 transition shadow"><span>▶️</span><span>YouTube</span></button>
+                        <button onclick="actionAlert('Đang cấu hình nền tảng: Twitter/X')" class="bg-[#1e143b] hover:bg-[#2e1d5e] border border-[#3b2568] p-3 rounded-xl font-bold text-slate-200 flex items-center justify-center space-x-2 transition shadow"><span>🅧</span><span>Twitter / X</span></button>
+                        <button onclick="actionAlert('Đang cấu hình nền tảng: Zalo OA')" class="bg-[#1e143b] hover:bg-[#2e1d5e] border border-[#3b2568] p-3 rounded-xl font-bold text-blue-300 flex items-center justify-center space-x-2 transition shadow"><span>💬</span><span>Zalo OA</span></button>
+                        <button onclick="actionAlert('Đang cấu hình nền tảng: Instagram')" class="bg-[#1e143b] hover:bg-[#2e1d5e] border border-[#3b2568] p-3 rounded-xl font-bold text-purple-400 flex items-center justify-center space-x-2 transition shadow"><span>📸</span><span>Instagram</span></button>
+                        <button onclick="actionAlert('Đang cấu hình nền tảng: Discord')" class="bg-[#1e143b] hover:bg-[#2e1d5e] border border-[#3b2568] p-3 rounded-xl font-bold text-indigo-400 flex items-center justify-center space-x-2 transition shadow"><span>🎮</span><span>Discord</span></button>
+                    </div>
+
+                    <div class="pt-2 space-y-3">
+                        <div>
+                            <label class="block text-slate-400 mb-1">Token API nền tảng đang chọn:</label>
+                            <input type="text" value="Bearer_Token_Active_Key_2026..." class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
                         </div>
                     </div>
                 </div>

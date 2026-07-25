@@ -30,7 +30,6 @@
             background: linear-gradient(135deg, rgba(26, 15, 53, 0.95), rgba(18, 11, 36, 0.95));
         }
 
-        /* Hiệu ứng trượt menu di động mượt mà từ trái sang */
         @media (max-width: 767px) {
             #sidebar {
                 position: fixed;
@@ -116,7 +115,7 @@
                 <div class="space-y-1">
                     <div class="px-3 py-2 font-bold text-slate-300 uppercase tracking-wider text-[10px]">Nền tảng</div>
                     <nav class="space-y-0.5 pl-1 pt-1">
-                        <button onclick="switchTab('platform-facebook')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center justify-between"><span class="flex items-center space-x-2.5"><span class="rgb-icon">📘</span><span>Facebook</span></span><span>▾</span></button>
+                        <button onclick="switchTab('platform-facebook')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center justify-between"><span class="flex items-center space-x-2.5"><span class="rgb-icon">📘</span><span>Facebook (Đăng nhóm & Spam)</span></span><span>▾</span></button>
                         <button onclick="switchTab('platform-tiktok')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center justify-between"><span class="flex items-center space-x-2.5"><span class="rgb-icon">🎵</span><span>TikTok (Gemini AI)</span></span><span>▾</span></button>
                         <button onclick="switchTab('platform-instagram')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center justify-between"><span class="flex items-center space-x-2.5"><span class="rgb-icon">📸</span><span>Instagram</span></span><span>▾</span></button>
                         <button onclick="switchTab('platform-youtube')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center justify-between"><span class="flex items-center space-x-2.5"><span class="rgb-icon">▶️</span><span>Youtube</span></span><span>▾</span></button>
@@ -134,68 +133,54 @@
 
         <main class="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full space-y-6 overflow-x-hidden">
             
-            <div id="tab-admin-thongke" class="panel-tab space-y-6">
-                <div class="led-card p-5 rounded-2xl shadow-xl">
-                    <h3 class="text-sm font-bold text-rose-400 mb-4">📊 Thống Kê Tổng Quan (Admin - autopostai.site)</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-                        <div class="bg-[#120b24] p-4 rounded-xl border border-[#2d1b54]"><p class="text-slate-400">Doanh thu</p><h4 class="text-xl font-bold text-emerald-400 mt-1">1.450.000 đ</h4></div>
-                        <div class="bg-[#120b24] p-4 rounded-xl border border-[#2d1b54]"><p class="text-slate-400">Thành viên</p><h4 class="text-xl font-bold text-blue-400 mt-1">128 người</h4></div>
-                        <div class="bg-[#120b24] p-4 rounded-xl border border-[#2d1b54]"><p class="text-slate-400">Tổng đơn</p><h4 class="text-xl font-bold text-purple-400 mt-1">1,840 đơn</h4></div>
-                    </div>
+            <div id="dynamic-content">
+                <div class="led-card p-6 rounded-2xl shadow-xl space-y-3">
+                    <h3 id="panel-title" class="text-base font-bold text-rose-400">📊 Thống Kê Tổng Quan</h3>
+                    <p id="panel-desc" class="text-slate-300 text-xs">Chào mừng bạn đến với trang quản trị hệ thống autopostai.site.</p>
                 </div>
             </div>
-
-            <div id="tab-admin-khachhang" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-rose-400 mb-2">👥 Quản lý khách hàng</h3><p class="text-slate-400">Danh sách thành viên, số dư và lịch sử giao dịch.</p></div></div>
-            <div id="tab-admin-giaodich" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-rose-400 mb-2">⏳ Quản lý giao dịch</h3><p class="text-slate-400">Lịch sử nạp tiền và dòng tiền hệ thống.</p></div></div>
-            <div id="tab-admin-donhang" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-rose-400 mb-2">📄 Quản lý tất cả đơn hàng</h3><p class="text-slate-400">Kiểm tra trạng thái đơn hàng của toàn bộ hệ thống.</p></div></div>
-            <div id="tab-admin-hoantien" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-rose-400 mb-2">🔄 Quản lý hoàn tiền</h3><p class="text-slate-400">Xử lý yêu cầu hoàn tiền đơn lỗi.</p></div></div>
-            <div id="tab-admin-naptientudong" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-rose-400 mb-2">⚡ Nạp tiền tự động (Webhook SePay/VietQR)</h3><p class="text-slate-400">Cấu hình kết nối ngân hàng nhận tiền tự động.</p></div></div>
-            <div id="tab-admin-nguondichvu" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-rose-400 mb-2">🌐 Nguồn dịch vụ API SMM</h3><p class="text-slate-400">Kết nối nguồn tổng để đồng bộ dịch vụ.</p></div></div>
-            <div id="tab-admin-danhmuc" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-rose-400 mb-2">🗂️ Quản lý danh mục nền tảng</h3><p class="text-slate-400">Thêm, sửa, xóa các danh mục dịch vụ.</p></div></div>
-            <div id="tab-admin-quanlygoi" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-rose-400 mb-2">🗄️ Quản lý gói cước</h3><p class="text-slate-400">Chỉnh sửa giá tiền dịch vụ.</p></div></div>
-            <div id="tab-admin-coupons" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-rose-400 mb-2">🎟️ Quản lý mã giảm giá (Coupons)</h3><p class="text-slate-400">Tạo mã khuyến mãi cho khách hàng.</p></div></div>
-            <div id="tab-admin-tiepthilienket" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-rose-400 mb-2">🤝 Tiếp thị liên kết (Affiliate)</h3><p class="text-slate-400">Cấu hình hoa hồng giới thiệu.</p></div></div>
-            <div id="tab-admin-caidatrang" class="panel-tab space-y-6 hidden">
-                <div class="led-card p-6 rounded-2xl shadow-xl space-y-4 text-xs">
-                    <h3 class="text-sm font-bold text-rose-400">⚙️ Cài Đặt Giao Diện & Telegram Bot (autopostai.site)</h3>
-                    <div class="flex space-x-2 border-b border-[#2d1b54] pb-2 text-[11px]">
-                        <button class="bg-[#3b2568] px-3 py-1.5 rounded-lg text-white font-bold">Cài đặt website</button>
-                        <button class="text-slate-400 hover:text-white px-3 py-1.5">Liên hệ</button>
-                        <button class="text-slate-400 hover:text-white px-3 py-1.5">API + BOT</button>
-                    </div>
-                    <div><label class="block text-slate-400 mb-1">Tỉ giá đô la:</label><input type="text" value="26000" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none"></div>
-                    <div><label class="block text-slate-400 mb-1">Tiêu đề trang:</label><input type="text" value="AUTOPOSTAI - MẠNG XÃ HỘI AI" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none"></div>
-                    <div><label class="block text-slate-400 mb-1">Telegram Bot Token:</label><input type="text" value="8790856839:AAFEVmHetVcF1Qw5p5W" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none"></div>
-                    <button onclick="alert('Đã cập nhật cài đặt thành công!')" class="bg-[#6332c5] text-white p-3 rounded-xl font-bold w-full">Cập nhật</button>
-                </div>
-            </div>
-
-            <div id="tab-trangchu" class="panel-tab space-y-6 hidden">
-                <div class="led-card p-6 rounded-2xl shadow-xl space-y-4 text-xs">
-                    <div class="bg-[#241542] p-4 rounded-xl border border-[#3b2568] space-y-2">
-                        <h4 class="font-bold text-emerald-400">🔔 THÔNG BÁO HỆ THỐNG - AUTOPOSTAI</h4>
-                        <p class="text-slate-300">Chào mừng bạn đến với hệ thống dịch vụ mạng xã hội uy tín, chất lượng và tự động hóa hàng đầu! Xử lý 24/7. Bảo mật tuyệt đối.</p>
-                    </div>
-                </div>
-            </div>
-            <div id="tab-quanlydonhang" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">📄 Quản lý đơn hàng của tôi</h3><p class="text-slate-400">Danh sách các dịch vụ bạn đã đặt.</p></div></div>
-            <div id="tab-luongtien" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">⏳ Luồng tiền</h3><p class="text-slate-400">Biến động số dư ví của bạn.</p></div></div>
-            <div id="tab-taikhoan" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">👤 Tài khoản của tôi</h3><p class="text-slate-400">Thông tin tài khoản và đổi mật khẩu.</p></div></div>
-            <div id="tab-naptien" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">💳 Nạp tiền tài khoản</h3><p class="text-slate-400">Quét mã QR chuyển khoản tự động qua SePay.</p></div></div>
-            <div id="tab-hoantien" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">🔄 Hoàn tiền đơn lỗi</h3><p class="text-slate-400">Danh sách các đơn hàng được hoàn tiền.</p></div></div>
-            <div id="tab-thongke" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">📈 Thống kê cá nhân</h3><p class="text-slate-400">Biểu đồ chi tiêu dịch vụ của bạn.</p></div></div>
-            <div id="tab-banggiadichvu" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">💎 Bảng giá dịch vụ</h3><p class="text-slate-400">Bảng giá chi tiết các nền tảng.</p></div></div>
-            <div id="tab-taowebcon" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">🌐 Tạo web con</h3><p class="text-slate-400">Đăng ký hệ thống SMM riêng.</p></div></div>
-            <div id="tab-tailieuapi" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">💻 Tài liệu API</h3><p class="text-slate-400">Tài liệu tích hợp hệ thống cho lập trình viên.</p></div></div>
-            <div id="tab-hoptro" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">🎧 Hỗ trợ khách hàng</h3><p class="text-slate-400">Tạo ticket hỗ trợ kỹ thuật.</p></div></div>
-            <div id="tab-tiepthilienket" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">🤝 Tiếp thị liên kết</h3><p class="text-slate-400">Link giới thiệu nhận hoa hồng.</p></div></div>
-            <div id="tab-thongbao" class="panel-tab space-y-6 hidden"><div class="led-card p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">🔔 Thông báo</h3><p class="text-slate-400">Tin tức mới nhất từ hệ thống.</p></div></div>
 
             <div id="tab-platform-facebook" class="panel-tab space-y-6 hidden">
                 <div class="led-card p-6 rounded-2xl shadow-xl space-y-4 text-xs">
-                    <h3 class="text-sm font-bold text-white">📘 Dịch Vụ Facebook (Đăng Nhóm & Tương Tác)</h3>
-                    <input type="text" placeholder="Link bài viết / ID Nhóm..." class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
-                    <button onclick="alert('Đã tạo đơn Facebook thành công!')" class="bg-[#6332c5] text-white p-3 rounded-xl font-bold w-full">Tạo đơn dịch vụ</button>
+                    <div class="flex items-center space-x-3 border-b border-[#2d1b54] pb-3">
+                        <span class="text-2xl rgb-icon">📘</span>
+                        <div>
+                            <h3 class="text-sm font-bold text-white">Facebook Pro: Tự Động Đăng Nhóm & Spam Bình Luận</h3>
+                            <p class="text-slate-400 text-[11px]">Hệ thống có tích hợp sẵn độ trễ (Delay) và chống spam kiểm duyệt.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-slate-400 mb-1">Chọn tính năng Facebook:</label>
+                            <select class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
+                                <option>🚀 Tự động đăng bài lên danh sách nhóm</option>
+                                <option>💬 Tự động Spam bình luận theo UID/Link bài viết</option>
+                                <option>🎯 Kết hợp Đăng Nhóm + Spam Bình Luận</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Danh sách ID Nhóm hoặc Link bài viết (mỗi dòng 1 link):</label>
+                            <textarea rows="3" placeholder="https://facebook.com/groups/..." class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Nội dung bình luận / bài viết:</label>
+                            <textarea rows="3" placeholder="Nhập nội dung cần đăng hoặc spam..." class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none"></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Độ trễ nghỉ giữa các lần gửi (Giây):</label>
+                                <input type="number" value="10" placeholder="Ví dụ: 10 - 20 giây" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Chống quét trùng lặp (Anti-Spam):</label>
+                                <select class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-emerald-400 outline-none">
+                                    <option>✅ Bật (Tự động thêm ký tự ngẫu nhiên)</option>
+                                    <option>❌ Tắt</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button onclick="alert('Đã kích hoạt tiến trình Facebook! Hệ thống đang chạy ngầm với độ trễ an toàn chống quét.')" class="bg-[#6332c5] hover:bg-[#723ad6] text-white p-3 rounded-xl font-bold w-full shadow">🚀 Chạy Tiến Trình Tự Động</button>
+                    </div>
                 </div>
             </div>
 
@@ -235,16 +220,6 @@
                 </div>
             </div>
 
-            <div id="tab-platform-generic" class="panel-tab space-y-6 hidden">
-                <div class="led-card p-6 rounded-2xl shadow-xl space-y-4 text-xs text-center">
-                    <span class="text-3xl rgb-icon" id="plat-icon">🚀</span>
-                    <h3 id="plat-title" class="text-sm font-bold text-white">Dịch Vụ Nền Tảng</h3>
-                    <p class="text-slate-400">Tăng view, like, tương tác tự động cho nền tảng này.</p>
-                    <input type="text" placeholder="Link liên kết..." class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
-                    <button onclick="alert('Đã tạo đơn dịch vụ thành công!')" class="bg-[#6332c5] text-white p-3 rounded-xl font-bold w-full">Tạo đơn ngay</button>
-                </div>
-            </div>
-
         </main>
     </div>
 
@@ -255,12 +230,9 @@
             switchTab('admin-thongke');
         };
 
-        // Hàm trượt menu từ bên trái trên mobile
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            if (sidebar) {
-                sidebar.classList.toggle('active');
-            }
+            if (sidebar) sidebar.classList.toggle('active');
         }
 
         function toggleRole() {
@@ -290,24 +262,66 @@
             if(el) el.classList.toggle('hidden');
         }
 
+        const pageData = {
+            'admin-thongke': { title: '📊 Thống Kê Tổng Quan Hệ Thống', desc: 'Báo cáo doanh thu, số lượng thành viên và tổng đơn hàng.' },
+            'admin-khachhang': { title: '👥 Quản Lý Khách Hàng', desc: 'Danh sách toàn bộ thành viên, chỉnh sửa số dư và kiểm tra tài khoản.' },
+            'admin-giaodich': { title: '⏳ Quản Lý Giao Dịch', desc: 'Lịch sử dòng tiền và các giao dịch nạp rút trên hệ thống.' },
+            'admin-donhang': { title: '📄 Quản Lý Đơn Hàng Toàn Hệ Thống', desc: 'Kiểm tra trạng thái chạy đơn, hủy đơn hoặc hoàn tiền dịch vụ.' },
+            'admin-hoantien': { title: '🔄 Quản Lý Hoàn Tiền', desc: 'Danh sách các đơn lỗi được hệ thống tự động hoàn tiền.' },
+            'admin-naptientudong': { title: '⚡ Cài Đặt Nạp Tiền Tự Động (SePay / VietQR)', desc: 'Cấu hình webhook ngân hàng để cộng tiền tự động cho khách.' },
+            'admin-nguondichvu': { title: '🌐 Quản Lý Nguồn Dịch Vụ API', desc: 'Kết nối nguồn tổng để đồng bộ tự động các gói dịch vụ SMM.' },
+            'admin-danhmuc': { title: '🗂️ Quản Lý Danh Mục Nền Tảng', desc: 'Sắp xếp thứ tự hiển thị các danh mục trên trang chủ.' },
+            'admin-quanlygoi': { title: '🗄️ Quản Lý Gói Cước Dịch Vụ', desc: 'Chỉnh sửa giá tiền, số lượng tối thiểu và tối đa mỗi gói.' },
+            'admin-coupons': { title: '🎟️ Quản Lý Mã Giảm Giá (Coupons)', desc: 'Tạo và quản lý các mã khuyến mãi dành cho khách hàng.' },
+            'admin-tiepthilienket': { title: '🤝 Tiếp Thị Liên Kết (Affiliate)', desc: 'Cấu hình % hoa hồng cho người giới thiệu.' },
+            'admin-caidatrang': { title: '⚙️ Cài Đặt Giao Diện & Bot Telegram', desc: 'Tùy chỉnh tiêu đề trang, tỉ giá USD và Token Telegram Bot.' },
+
+            'trangchu': { title: '🏠 Trang Chủ - autopostai.site', desc: '🔔 THÔNG BÁO: Chào mừng bạn đến với hệ thống dịch vụ mạng xã hội tự động hóa thông minh qua AI!' },
+            'quanlydonhang': { title: '📄 Quản Lý Đơn Hàng Của Bạn', desc: 'Theo dõi tiến độ xử lý các đơn hàng dịch vụ mạng xã hội của bạn.' },
+            'luongtien': { title: '⏳ Luồng Tiền', desc: 'Chi tiết biến động số dư và lịch sử thanh toán ví của bạn.' },
+            'taikhoan': { title: '👤 Tài Khoản Của Tôi', desc: 'Cập nhật thông tin cá nhân, thay đổi mật khẩu và bảo mật tài khoản.' },
+            'naptien': { title: '💳 Nạp Tiền Vào Tài Khoản', desc: 'Quét mã QR chuyển khoản ngân hàng tự động cộng tiền sau 30 giây.' },
+            'hoantien': { title: '🔄 Hoàn Tiền Đơn Lỗi', desc: 'Kiểm tra các khoản tiền đã được hoàn lại do đơn không hoàn thành.' },
+            'thongke': { title: '📈 Thống Kê Cá Nhân', desc: 'Biểu đồ phân tích tổng chi tiêu và số lượng dịch vụ bạn đã sử dụng.' },
+            'banggiadichvu': { title: '💎 Bảng Giá Dịch Vụ', desc: 'Bảng giá chi tiết tất cả các gói dịch vụ cập nhật theo thời gian thực.' },
+            'taowebcon': { title: '🌐 Tạo Web Con SMM', desc: 'Đăng ký sở hữu một website dịch vụ mạng xã hội riêng của chính bạn.' },
+            'tailieuapi': { title: '💻 Tài Liệu Tích Hợp API', desc: 'Hướng dẫn kết nối API dành cho các lập trình viên và đối tác.' },
+            'hoptro': { title: '🎧 Hỗ Trợ Khách Hàng', desc: 'Gửi yêu cầu hỗ trợ hoặc khiếu nại trực tiếp đến đội ngũ kỹ thuật 24/7.' },
+            'thongbao': { title: '🔔 Thông Báo Hệ Thống', desc: 'Cập nhật các tin tức, chương trình ưu đãi và bảo trì hệ thống.' },
+
+            'platform-instagram': { title: '📸 Dịch Vụ Instagram', desc: 'Tăng follow, reels view và tương tác Instagram chất lượng cao.' },
+            'platform-youtube': { title: '▶️ Dịch Vụ Youtube', desc: 'Tăng view, sub, giờ xem và tương tác kênh Youtube.' },
+            'platform-shopee': { title: '🛍️ Dịch Vụ Shopee', desc: 'Tăng theo dõi shop, tăng tim sản phẩm và đánh giá uy tín.' },
+            'platform-google': { title: '🌐 Dịch Vụ Google Maps & SEO', desc: 'Tăng đánh giá 5 sao Google Maps và đẩy từ khóa SEO.' },
+            'platform-telegram': { title: '✈️ Dịch Vụ Telegram', desc: 'Tăng thành viên group/channel và tương tác bài viết Telegram.' },
+            'platform-twitter': { title: '🅧 Dịch Vụ X - Twitter', desc: 'Tăng follow, view và retweet bài viết trên X.' },
+            'platform-threads': { title: '🧵 Dịch Vụ Threads', desc: 'Tăng like và follow mạng xã hội Threads của Meta.' },
+            'platform-lazada': { title: '🧡 Dịch Vụ Lazada', desc: 'Tăng follow gian hàng và tương tác sản phẩm Lazada.' }
+        };
+
         function switchTab(tabId) {
-            document.querySelectorAll('.panel-tab').forEach(t => t.classList.add('hidden'));
-            
-            if (tabId.startsWith('platform-') && tabId !== 'platform-facebook' && tabId !== 'platform-tiktok') {
-                document.getElementById('tab-platform-generic').classList.remove('hidden');
-                const name = tabId.replace('platform-', '');
-                document.getElementById('plat-title').innerText = "Dịch Vụ " + name.toUpperCase();
+            document.getElementById('tab-platform-tiktok').classList.add('hidden');
+            document.getElementById('tab-platform-facebook').classList.add('hidden');
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.classList.remove('hidden');
+
+            if (tabId === 'platform-tiktok') {
+                dynamicContent.classList.add('hidden');
+                document.getElementById('tab-platform-tiktok').classList.remove('hidden');
+            } else if (tabId === 'platform-facebook') {
+                dynamicContent.classList.add('hidden');
+                document.getElementById('tab-platform-facebook').classList.remove('hidden');
+            } else if (pageData[tabId]) {
+                document.getElementById('panel-title').innerText = pageData[tabId].title;
+                document.getElementById('panel-desc').innerText = pageData[tabId].desc;
             } else {
-                const target = document.getElementById('tab-' + tabId);
-                if (target) target.classList.remove('hidden');
+                document.getElementById('panel-title').innerText = "🚀 Dịch Vụ Nền Tảng";
+                document.getElementById('panel-desc').innerText = "Hệ thống tự động hóa tăng trưởng tương tác chuyên nghiệp.";
             }
 
-            // Tự động đóng menu khi bấm chọn mục trên mobile
             if (window.innerWidth < 768) {
                 const sidebar = document.getElementById('sidebar');
-                if (sidebar) {
-                    sidebar.classList.remove('active');
-                }
+                if (sidebar) sidebar.classList.remove('active');
             }
         }
 

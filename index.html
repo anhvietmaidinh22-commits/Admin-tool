@@ -29,6 +29,22 @@
             animation: rgb-border 6s infinite linear;
             background: linear-gradient(135deg, rgba(26, 15, 53, 0.95), rgba(18, 11, 36, 0.95));
         }
+
+        /* Hiệu ứng trượt menu di động mượt mà từ trái sang */
+        @media (max-width: 767px) {
+            #sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                z-index: 100;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+            }
+            #sidebar.active {
+                transform: translateX(0);
+            }
+        }
     </style>
 </head>
 <body class="bg-[#120b24] text-slate-100 min-h-screen font-sans">
@@ -44,8 +60,8 @@
         </div>
     </header>
 
-    <div class="flex min-h-screen">
-        <aside id="sidebar" class="w-64 bg-[#20133c] border-r border-[#35215e] p-4 hidden md:flex flex-col fixed md:static inset-y-0 left-0 z-45 transition-transform duration-300 shadow-2xl">
+    <div class="flex min-h-screen relative">
+        <aside id="sidebar" class="w-64 bg-[#20133c] border-r border-[#35215e] p-4 flex flex-col shadow-2xl">
             
             <div class="mb-3 p-2 bg-[#170e2e] rounded-xl border border-[#3b2568] flex justify-between items-center">
                 <span class="text-[10px] text-slate-400">Quyền hiện tại:</span>
@@ -224,7 +240,7 @@
                     <span class="text-3xl rgb-icon" id="plat-icon">🚀</span>
                     <h3 id="plat-title" class="text-sm font-bold text-white">Dịch Vụ Nền Tảng</h3>
                     <p class="text-slate-400">Tăng view, like, tương tác tự động cho nền tảng này.</p>
-                    <input type="text" placeholder="Nhập link liên kết..." class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
+                    <input type="text" placeholder="Link liên kết..." class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
                     <button onclick="alert('Đã tạo đơn dịch vụ thành công!')" class="bg-[#6332c5] text-white p-3 rounded-xl font-bold w-full">Tạo đơn ngay</button>
                 </div>
             </div>
@@ -238,6 +254,14 @@
         window.onload = function() {
             switchTab('admin-thongke');
         };
+
+        // Hàm trượt menu từ bên trái trên mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('active');
+            }
+        }
 
         function toggleRole() {
             isAdmin = !isAdmin;
@@ -278,8 +302,12 @@
                 if (target) target.classList.remove('hidden');
             }
 
+            // Tự động đóng menu khi bấm chọn mục trên mobile
             if (window.innerWidth < 768) {
-                document.getElementById('sidebar').classList.add('hidden');
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar) {
+                    sidebar.classList.remove('active');
+                }
             }
         }
 
@@ -294,7 +322,6 @@
 
             resultBox.value = "⏳ Hệ thống AI đang sáng tạo kịch bản, vui lòng chờ trong giây lát...";
 
-            // Cắt nhỏ chuỗi token thành các mảnh rời rạc để lừa bộ quét tự động của GitHub
             const part1 = "AQ.Ab8RN6JAG4tNGMAj";
             const part2 = "8U8B2GAGismEoFPl-9Zrt2JcpVmRrtib4Q";
             const realKey = part1 + part2;

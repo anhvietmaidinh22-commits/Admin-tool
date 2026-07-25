@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống SMM Panel - Like17</title>
+    <title>Hệ Thống SMM Panel - Like17 Full</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -33,69 +33,42 @@
     </header>
 
     <div class="flex min-h-screen">
-        <!-- Sidebar Phân Quyền Chuẩn Mẫu -->
+        <!-- Sidebar Full Chức Năng -->
         <aside id="sidebar" class="w-64 bg-[#20133c] border-r border-[#35215e] p-4 hidden md:flex flex-col fixed md:static inset-y-0 left-0 z-45 transition-transform duration-300 shadow-2xl">
             <div class="mb-3 px-2 pt-1 flex items-center justify-between">
-                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Hệ thống chính</span>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Hệ thống quản trị</span>
                 <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white text-lg">✕</button>
             </div>
 
-            <div class="space-y-4 overflow-y-auto flex-1 pr-1 text-xs">
-                
-                <!-- 1. QUẢN TRỊ VIÊN (Chỉ Admin thấy) -->
-                <div class="space-y-1">
-                    <div class="px-3 py-2 font-bold text-rose-400 flex items-center justify-between bg-[#2d1b54] rounded-xl shadow-inner">
-                        <span class="flex items-center space-x-2"><span class="rgb-icon">🛡️</span><span>Quản trị viên</span></span>
-                        <span>▾</span>
-                    </div>
-                    <nav class="space-y-0.5 pl-2">
-                        <button onclick="switchTab('admin-thongke')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">📊</span><span>Thống kê hệ thống</span></button>
-                        <button onclick="switchTab('admin-khachhang')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">👥</span><span>Quản lý khách hàng</span></button>
-                        <button onclick="switchTab('admin-caidatrang')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">⚙️</span><span>Cài đặt trang</span></button>
-                    </nav>
-                </div>
-
-                <!-- 2. MENU CHÍNH (Cho Khách hàng & User) -->
-                <div class="space-y-1">
-                    <div class="px-3 py-2 font-bold text-slate-200 flex items-center justify-between bg-[#2d1b54] rounded-xl shadow-inner">
-                        <span class="flex items-center space-x-2"><span class="rgb-icon">🏠</span><span>Menu chính</span></span>
-                        <span>▾</span>
-                    </div>
-                    <nav class="space-y-0.5 pl-2">
-                        <button onclick="switchTab('trangchu')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">🏠</span><span>Trang chủ</span></button>
-                        <button onclick="switchTab('donhang')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">📄</span><span>Quản lý đơn hàng</span></button>
-                        <button onclick="switchTab('naptien')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">💳</span><span>Nạp tiền</span></button>
-                        <button onclick="switchTab('hotro')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">🎧</span><span>Hỗ trợ</span></button>
-                    </nav>
-                </div>
-
-                <!-- 3. NỀN TẢNG DỊCH VỤ -->
-                <div class="space-y-1">
-                    <div class="px-3 py-2 font-bold text-slate-300 uppercase tracking-wider text-[10px]">Nền tảng dịch vụ</div>
-                    <nav class="space-y-0.5 pl-2">
-                        <button onclick="switchTab('platform-facebook')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">📘</span><span>Facebook (Đăng nhóm/Cmt)</span></button>
-                        <button onclick="switchTab('platform-tiktok')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">🎵</span><span>TikTok</span></button>
-                        <button onclick="switchTab('platform-instagram')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">📸</span><span>Instagram</span></button>
-                        <button onclick="switchTab('platform-youtube')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">▶️</span><span>Youtube</span></button>
-                        <button onclick="switchTab('platform-shopee')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">🛍️</span><span>Shopee</span></button>
-                        <button onclick="switchTab('platform-google')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">🌐</span><span>Google</span></button>
-                        <button onclick="switchTab('platform-telegram')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">✈️</span><span>Telegram</span></button>
-                        <button onclick="switchTab('platform-twitter')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">🅧</span><span>X-Twitter</span></button>
-                        <button onclick="switchTab('platform-threads')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">🧵</span><span>Threads</span></button>
-                        <button onclick="switchTab('platform-lazada')" class="menu-btn w-full text-left px-3 py-2 rounded-lg hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-2.5"><span class="rgb-icon">🧡</span><span>Lazada</span></button>
-                    </nav>
-                </div>
-
+            <div class="space-y-1 overflow-y-auto flex-1 pr-1 text-xs">
+                <nav class="space-y-0.5">
+                    <button onclick="switchTab('thongke')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">📊</span><span>Thống kê tổng quan</span></button>
+                    <button onclick="switchTab('khachhang')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">👥</span><span>Khách hàng</span></button>
+                    <button onclick="switchTab('giaodich')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">💱</span><span>Giao dịch</span></button>
+                    <button onclick="switchTab('donhang')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">📄</span><span>Đơn hàng</span></button>
+                    <button onclick="switchTab('hoantien')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">🖼️</span><span>Hoàn tiền</span></button>
+                    <button onclick="switchTab('naptientudong')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">⚡</span><span>Nạp tiền tự động</span></button>
+                    <button onclick="switchTab('caidatnaptien')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">💳</span><span>Cài đặt nạp tiền</span></button>
+                    <button onclick="switchTab('nguondichvu')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">🌐</span><span>Nguồn dịch vụ</span></button>
+                    <button onclick="switchTab('danhmuc')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">🗂️</span><span>Danh mục</span></button>
+                    <button onclick="switchTab('quanlygoi')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">🗄️</span><span>Quản lý gói</span></button>
+                    <button onclick="switchTab('thongbao')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">🔔</span><span>Thông báo</span></button>
+                    <button onclick="switchTab('hoptro')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">🎧</span><span>Hỗ trợ</span></button>
+                    <button onclick="switchTab('coupons')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">🎟️</span><span>Coupons</span></button>
+                    <button onclick="switchTab('tiepthilienket')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">🤝</span><span>Tiếp thị liên kết</span></button>
+                    <button onclick="switchTab('caidatrang')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">⚙️</span><span>Cài đặt trang</span></button>
+                    <button onclick="switchTab('nentang')" class="menu-btn w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#2a1b4e] text-slate-300 transition flex items-center space-x-3"><span class="rgb-icon">📱</span><span>Nền tảng (Đăng bài & Cmt)</span></button>
+                </nav>
             </div>
         </aside>
 
         <!-- Main Content Area -->
         <main class="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full space-y-6 overflow-x-hidden">
             
-            <!-- Tab Thống Kê Admin -->
-            <div id="tab-admin-thongke" class="panel-tab space-y-6">
+            <!-- 1. THỐNG KÊ -->
+            <div id="tab-thongke" class="panel-tab space-y-6">
                 <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl">
-                    <h3 class="text-sm font-bold text-rose-400 mb-4">📊 Thống Kê Tổng Quan (Dành cho Admin)</h3>
+                    <h3 class="text-sm font-bold text-white mb-4">📊 Thống Kê Tổng Quan</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                         <div class="bg-[#120b24] p-4 rounded-xl border border-[#2d1b54]"><p class="text-slate-400">Doanh thu</p><h4 class="text-xl font-bold text-emerald-400 mt-1">1.450.000 đ</h4></div>
                         <div class="bg-[#120b24] p-4 rounded-xl border border-[#2d1b54]"><p class="text-slate-400">Thành viên</p><h4 class="text-xl font-bold text-blue-400 mt-1">128 người</h4></div>
@@ -104,65 +77,91 @@
                 </div>
             </div>
 
-            <!-- Tab Cài Đặt Trang Admin -->
-            <div id="tab-admin-caidatrang" class="panel-tab space-y-6 hidden">
+            <!-- 2. KHÁCH HÀNG -->
+            <div id="tab-khachhang" class="panel-tab space-y-6 hidden">
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs space-y-3">
+                    <h3 class="font-bold text-white text-sm">👥 Quản Lý Khách Hàng</h3>
+                    <div class="bg-[#120b24] p-3 rounded-xl border border-[#2d1b54] flex justify-between items-center">
+                        <div><p class="font-semibold text-slate-200">nguyenvanA@gmail.com</p><p class="text-slate-400">Số dư: <span class="text-emerald-400 font-bold">500.000 đ</span></p></div>
+                        <button onclick="alert('Sửa số dư khách hàng A')" class="bg-[#3b2568] px-3 py-1.5 rounded-lg">Sửa</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. GIAO DỊCH -->
+            <div id="tab-giaodich" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2 text-sm">💱 Lịch sử giao dịch</h3><p class="text-slate-400">Danh sách các giao dịch nạp/trừ tiền.</p></div></div>
+            
+            <!-- 4. ĐƠN HÀNG -->
+            <div id="tab-donhang" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2 text-sm">📄 Quản lý đơn hàng</h3><p class="text-slate-400">Kiểm soát trạng thái chạy dịch vụ.</p></div></div>
+            
+            <!-- 5. HOÀN TIỀN -->
+            <div id="tab-hoantien" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2 text-sm">🖼️ Quản lý hoàn tiền</h3><p class="text-slate-400">Xử lý yêu cầu hoàn tiền lỗi đơn.</p></div></div>
+            
+            <!-- 6. NẠP TIỀN TỰ ĐỘNG -->
+            <div id="tab-naptientudong" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2 text-sm">⚡ Nạp tiền tự động</h3><p class="text-slate-400">Trạng thái kết nối Webhook SePay/VietQR.</p></div></div>
+            
+            <!-- 7. CÀI ĐẶT NẠP TIỀN -->
+            <div id="tab-caidatnaptien" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2 text-sm">💳 Cài đặt nạp tiền</h3><p class="text-slate-400">Cấu hình số tài khoản ngân hàng nhận tiền.</p></div></div>
+            
+            <!-- 8. NGUỒN DỊCH VỤ -->
+            <div id="tab-nguondichvu" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2 text-sm">🌐 Nguồn dịch vụ API</h3><p class="text-slate-400">Kết nối nguồn tổng API SMM khác.</p></div></div>
+            
+            <!-- 9. DANH MỤC -->
+            <div id="tab-danhmuc" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2 text-sm">🗂️ Quản lý danh mục</h3><p class="text-slate-400">Thêm sửa xóa danh mục dịch vụ.</p></div></div>
+            
+            <!-- 10. QUẢN LÝ GÓI -->
+            <div id="tab-quanlygoi" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2 text-sm">🗄️ Quản lý gói cước</h3><p class="text-slate-400">Chỉnh sửa giá tiền dịch vụ.</p></div></div>
+            
+            <!-- 11. THÔNG BÁO -->
+            <div id="tab-thongbao" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2 text-sm">🔔 Gửi thông báo</h3><p class="text-slate-400">Phát thông báo toàn hệ thống.</p></div></div>
+            
+            <!-- 12. HỖ TRỢ -->
+            <div id="tab-hoptro" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2 text-sm">🎧 Hỗ trợ khách hàng</h3><p class="text-slate-400">Tạo ticket hỗ trợ kỹ thuật.</p></div></div>
+            
+            <!-- 13. COUPONS -->
+            <div id="tab-coupons" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2 text-sm">🎟️ Quản lý Coupons</h3><p class="text-slate-400">Tạo mã giảm giá.</p></div></div>
+            
+            <!-- 14. TIẾP THỊ LIÊN KẾT -->
+            <div id="tab-tiepthilienket" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2 text-sm">🤝 Tiếp thị liên kết</h3><p class="text-slate-400">Cấu hình hoa hồng Affiliate.</p></div></div>
+
+            <!-- 15. CÀI ĐẶT TRANG -->
+            <div id="tab-caidatrang" class="panel-tab space-y-6 hidden">
                 <div class="bg-[#1a0f35] border border-[#2d1b54] p-6 rounded-2xl shadow-xl space-y-4 text-xs">
-                    <h3 class="text-sm font-bold text-rose-400">⚙️ Cài Đặt Trang (Chỉ Admin mới có quyền)</h3>
+                    <h3 class="text-sm font-bold text-white">⚙️ Cài Đặt Giao Diện & Thông Tin Trang Web</h3>
                     <div><label class="block text-slate-400 mb-1">Tiêu đề trang:</label><input type="text" value="MẠNG XÃ HỘI VIỆT ANH" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none"></div>
                     <div><label class="block text-slate-400 mb-1">Tỉ giá đô la:</label><input type="text" value="26000" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none"></div>
                     <button onclick="alert('Đã cập nhật cài đặt trang thành công!')" class="bg-[#6332c5] hover:bg-[#723ad6] text-white p-3 rounded-xl font-bold w-full shadow">Cập nhật</button>
                 </div>
             </div>
 
-            <!-- Tab Trang Chủ (User) -->
-            <div id="tab-trangchu" class="panel-tab space-y-6 hidden">
-                <div class="bg-[#1a0f35] border border-[#2d1b54] p-6 rounded-2xl shadow-xl space-y-4 text-xs">
-                    <h3 class="text-sm font-bold text-blue-400">🏠 Trang Chủ Hệ Thống Dịch Vụ</h3>
-                    <p class="text-slate-400">Chào mừng bạn đến với hệ thống tăng tương tác mạng xã hội tự động 24/7.</p>
-                </div>
-            </div>
-
-            <!-- Tab Nền Tảng Facebook (Đăng nhóm & Cmt) -->
-            <div id="tab-platform-facebook" class="panel-tab space-y-6 hidden">
+            <!-- 16. NỀN TẢNG (ĐĂNG NHÓM & CMT) -->
+            <div id="tab-nentang" class="panel-tab space-y-6 hidden">
                 <div class="bg-[#1a0f35] border border-[#2d1b54] p-6 rounded-2xl shadow-xl space-y-4 text-xs">
                     <div class="flex items-center space-x-3 border-b border-[#2d1b54] pb-3">
                         <span class="text-2xl rgb-icon">📘</span>
                         <div>
-                            <h3 class="text-sm font-bold text-white">Dịch Vụ Facebook: Đăng Nhóm & Bình Luận (Auto Cmt)</h3>
-                            <p class="text-slate-400 text-[11px]">Hệ thống AI tự động viết bài, chia sẻ vào hội nhóm và seeding bình luận.</p>
+                            <h3 class="text-sm font-bold text-white">Dịch Vụ Nền Tảng: Đăng Nhóm & Bình Luận (Auto Cmt)</h3>
+                            <p class="text-slate-400 text-[11px]">Hệ thống AI tự động viết bài, chia sẻ hội nhóm và seeding tương tác.</p>
                         </div>
                     </div>
                     <div class="space-y-3">
                         <div>
-                            <label class="block text-slate-400 mb-1">Loại dịch vụ Facebook:</label>
+                            <label class="block text-slate-400 mb-1">Chọn gói nền tảng dịch vụ:</label>
                             <select class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
-                                <option>AI Viết & Đăng bài lên Group Facebook tự động</option>
-                                <option>Auto Comment (Bình luận tự động theo kịch bản)</option>
-                                <option>Tăng Share bài viết vào hội nhóm</option>
+                                <option>Facebook - AI Viết & Đăng bài lên Group tự động</option>
+                                <option>Facebook - Auto Comment (Bình luận tự động theo kịch bản)</option>
+                                <option>TikTok - Tăng view / Auto thả tim bình luận</option>
+                                <option>Telegram - Auto Post kênh tự động</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-slate-400 mb-1">Đường dẫn bài viết / ID Group:</label>
-                            <input type="text" placeholder="https://facebook.com/groups/..." class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
+                            <label class="block text-slate-400 mb-1">Link bài viết / ID Nhóm:</label>
+                            <input type="text" placeholder="Dán link vào đây..." class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
                         </div>
-                        <button onclick="alert('Đã tạo đơn chạy Facebook thành công!')" class="bg-[#6332c5] hover:bg-[#723ad6] text-white p-3 rounded-xl font-bold w-full shadow">Tạo đơn dịch vụ</button>
+                        <button onclick="alert('Đã tạo đơn chạy nền tảng thành công!')" class="bg-[#6332c5] hover:bg-[#723ad6] text-white p-3 rounded-xl font-bold w-full shadow">Tạo đơn dịch vụ</button>
                     </div>
                 </div>
             </div>
-
-            <!-- Tab Dịch vụ chung cho các nền tảng khác -->
-            <div id="tab-platform-generic" class="panel-tab space-y-6 hidden">
-                <div class="bg-[#1a0f35] border border-[#2d1b54] p-6 rounded-2xl shadow-xl space-y-4 text-xs text-center">
-                    <span class="text-3xl rgb-icon">🚀</span>
-                    <h3 id="platform-title" class="text-sm font-bold text-white">Quản lý dịch vụ nền tảng</h3>
-                    <p class="text-slate-400">Chọn gói dịch vụ tương tác, tăng sub/like/view tự động cho nền tảng này.</p>
-                </div>
-            </div>
-
-            <!-- Các tab user cơ bản khác -->
-            <div id="tab-donhang" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">📄 Đơn hàng của bạn</h3><p class="text-slate-400">Chưa có đơn hàng nào.</p></div></div>
-            <div id="tab-naptien" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">💳 Nạp tiền tài khoản</h3><p class="text-slate-400">Quét mã QR VietQR để cộng tiền tự động.</p></div></div>
-            <div id="tab-hotro" class="panel-tab space-y-6 hidden"><div class="bg-[#1a0f35] border border-[#2d1b54] p-5 rounded-2xl shadow-xl text-xs"><h3 class="font-bold text-white mb-2">🎧 Hỗ trợ khách hàng</h3><p class="text-slate-400">Tạo ticket hỗ trợ kỹ thuật.</p></div></div>
 
         </main>
     </div>
@@ -170,14 +169,8 @@
     <script>
         function switchTab(tabId) {
             document.querySelectorAll('.panel-tab').forEach(t => t.classList.add('hidden'));
-            
-            if (tabId.startsWith('platform-') && tabId !== 'platform-facebook') {
-                document.getElementById('tab-platform-generic').classList.remove('hidden');
-                document.getElementById('platform-title').innerText = "Dịch vụ: " + tabId.replace('platform-', '').toUpperCase();
-            } else {
-                const target = document.getElementById('tab-' + tabId);
-                if (target) target.classList.remove('hidden');
-            }
+            const target = document.getElementById('tab-' + tabId);
+            if (target) target.classList.remove('hidden');
 
             if (window.innerWidth < 768) {
                 document.getElementById('sidebar').classList.add('hidden');

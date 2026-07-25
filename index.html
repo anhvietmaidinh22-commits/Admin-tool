@@ -3,66 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Trị Hệ Thống - Admin Panel</title>
+    <title>Hệ Thống Quản Trị Admin</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="bg-slate-950 text-gray-100 min-h-screen flex">
+<body class="bg-slate-950 text-gray-100 min-h-screen">
 
-    <!-- Sidebar Menu -->
-    <aside class="w-64 bg-slate-900 border-r border-slate-800 p-4 hidden md:block">
-        <h1 class="text-xl font-bold text-blue-400 mb-6 px-2">⚡ Quản Trị Hệ Thống</h1>
-        <nav class="space-y-1 text-sm">
-            <a href="#" class="block px-3 py-2.5 rounded-xl bg-blue-600 text-white font-medium">📊 Thống kê</a>
-            <a href="#" class="block px-3 py-2.5 rounded-xl hover:bg-slate-800 text-gray-300">👥 Khách hàng</a>
-            <a href="#" class="block px-3 py-2.5 rounded-xl hover:bg-slate-800 text-gray-300">💳 Giao dịch</a>
-            <a href="#" class="block px-3 py-2.5 rounded-xl hover:bg-slate-800 text-gray-300">📦 Đơn hàng</a>
-            <a href="#" class="block px-3 py-2.5 rounded-xl hover:bg-slate-800 text-gray-300">⚡ Nạp tiền tự động</a>
-            <a href="#" class="block px-3 py-2.5 rounded-xl hover:bg-slate-800 text-gray-300">🌐 Nguồn dịch vụ</a>
-            <a href="#" class="block px-3 py-2.5 rounded-xl hover:bg-slate-800 text-gray-300">🧩 Nền tảng & AI</a>
-            <a href="#" class="block px-3 py-2.5 rounded-xl hover:bg-slate-800 text-gray-300">⚙️ Quản lý gói cước</a>
-            <a href="#" class="block px-3 py-2.5 rounded-xl hover:bg-slate-800 text-gray-300">🎁 Coupons khuyến mãi</a>
-            <a href="#" class="block px-3 py-2.5 rounded-xl hover:bg-slate-800 text-gray-300">🤝 Tiếp thị liên kết</a>
-        </nav>
-    </aside>
+    <!-- Thanh Menu Trên cho Điện Thoại -->
+    <header class="bg-slate-900 border-b border-slate-800 p-4 flex justify-between items-center md:hidden">
+        <h1 class="text-lg font-bold text-blue-400">⚡ Admin Panel</h1>
+        <button onclick="toggleMenu()" class="text-sm bg-slate-800 px-3 py-1.5 rounded-lg">Menu ☰</button>
+    </header>
 
-    <!-- Main Content Area -->
-    <main class="flex-1 p-4 md:p-8">
-        <header class="flex justify-between items-center mb-8 bg-slate-900 p-4 rounded-2xl border border-slate-800">
-            <h2 class="text-lg font-bold">Bảng Điều Khiển Chính</h2>
-            <span class="text-xs bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full font-semibold">Trạng thái: Hoạt động</span>
-        </header>
+    <div class="flex">
+        <!-- Sidebar Menu -->
+        <aside id="sidebar" class="w-64 bg-slate-900 border-r border-slate-800 p-4 min-h-screen hidden md:block">
+            <h1 class="text-xl font-bold text-blue-400 mb-6 px-2 hidden md:block">⚡ Quản Trị Admin</h1>
+            <nav class="space-y-1 text-sm">
+                <button onclick="switchTab('thongke')" class="w-full text-left px-3 py-2.5 rounded-xl bg-blue-600 text-white font-medium">📊 Thống kê</button>
+                <button onclick="switchTab('khachhang')" class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-800 text-gray-300">👥 Quản lý Khách hàng</button>
+                <button onclick="switchTab('caidat')" class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-800 text-gray-300">⚙️ Cài đặt Hệ thống & AI</button>
+            </nav>
+        </aside>
 
-        <!-- Thẻ Thống kê nhanh -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
-                <p class="text-gray-400 text-sm">Tổng doanh thu ngày</p>
-                <h3 class="text-2xl font-bold text-emerald-400 mt-1">1.450.000 đ</h3>
-            </div>
-            <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
-                <p class="text-gray-400 text-sm">Khách hàng mới</p>
-                <h3 class="text-2xl font-bold text-blue-400 mt-1">+24 người</h3>
-            </div>
-            <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
-                <p class="text-gray-400 text-sm">Đơn AI đăng bài</p>
-                <h3 class="text-2xl font-bold text-purple-400 mt-1">182 bài</h3>
-            </div>
-        </div>
-
-        <!-- Khu vực cấu hình dịch vụ AI & Đăng bài -->
-        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-            <h3 class="text-md font-bold mb-4 text-blue-300">Cấu hình Nguồn AI & Đăng Bài Tự Động</h3>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm text-gray-400 mb-1">Trạng thái kết nối Gemini / OpenAI API:</label>
-                    <input type="text" value="Đang kết nối (API Key Active)" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-emerald-400 text-sm outline-none" readonly>
+        <!-- Main Content -->
+        <main class="flex-1 p-4 md:p-8">
+            
+            <!-- Tab Thống Kê -->
+            <div id="tab-thongke" class="space-y-6">
+                <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex justify-between items-center">
+                    <h2 class="font-bold">Bảng Điều Khiển Tổng Quan</h2>
+                    <span class="text-xs bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full font-semibold">Admin Active</span>
                 </div>
-                <div>
-                    <label class="block text-sm text-gray-400 mb-1">Cổng nạp tiền tự động (VietQR / SePay):</label>
-                    <input type="text" value="Đang kích hoạt quét mã QR tự động cộng tiền" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-blue-400 text-sm outline-none" readonly>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+                        <p class="text-gray-400 text-sm">Doanh thu ngày</p>
+                        <h3 class="text-2xl font-bold text-emerald-400 mt-1">1.450.000 đ</h3>
+                    </div>
+                    <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+                        <p class="text-gray-400 text-sm">Tổng Khách hàng</p>
+                        <h3 class="text-2xl font-bold text-blue-400 mt-1">128 người</h3>
+                    </div>
+                    <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+                        <p class="text-gray-400 text-sm">Đơn AI đăng bài</p>
+                        <h3 class="text-2xl font-bold text-purple-400 mt-1">182 bài</h3>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
 
+            <!-- Tab Quản Lý Khách Hàng (Có nút chỉnh sửa) -->
+            <div id="tab-khachhang" class="space-y-6 hidden">
+                <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800">
+                    <h2 class="font-bold mb-4 text-blue-400">Danh Sách Khách Hàng (Chỉnh sửa số dư)</h2>
+                    <div class="space-y-3">
+                        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+                            <div>
+                                <p class="font-semibold text-sm">nguyenvanA@gmail.com</p>
+                                <p class="text-xs text-gray-400">Số dư: <span class="text-emerald-400 font-bold">500.000 đ</span></p>
+                            </div>
+                            <button onclick="editUser('Nguyễn Văn A', '500000')" class="bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded-lg text-xs font-semibold">Sửa số dư</button>
+                        </div>
+                        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+                            <div>
+                                <p class="font-semibold text-sm">tranthib@gmail.com</p>
+                                <p class="text-xs text-gray-400">Số dư: <span class="text-emerald-400 font-bold">120.000 đ</span></p>
+                            </div>
+                            <button onclick="editUser('Trần Thị B', '120000')" class="bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded-lg text-xs font-semibold">Sửa số dư</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Cài Đặt Hệ Thống & API -->
+            <div id="tab-caidat" class="space-y-6 hidden">
+                <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+                    <h2 class="font-bold text-blue-400">Cấu Hình Thông Số Admin</h2>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Gemini AI API Key:</label>
+                        <input type="password" value="AIzaSyDummyKeyForTestingOnly..." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Thông báo toàn hệ thống:</label>
+                        <input type="text" id="announcement" value="Hệ thống hoạt động bình thường!" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm outline-none">
+                    </div>
+                    <button onclick="saveSettings()" class="w-full bg-emerald-600 hover:bg-emerald-500 p-3 rounded-xl font-bold text-sm transition">Lưu Thay Đổi</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            document.getElementById('tab-thongke').classList.add('hidden');
+            document.getElementById('tab-khachhang').classList.add('hidden');
+            document.getElementById('tab-caidat').classList.add('hidden');
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+        }
+
+        function editUser(name, balance) {
+            const newBal = prompt(`Nhập số dư mới cho khách hàng ${name}:`, balance);
+            if (newBal !== null) {
+                alert(`Đã cập nhật số dư thành công thành: ${newBal} đ!`);
+            }
+        }
+
+        function saveSettings() {
+            alert("Đã lưu cấu hình hệ thống thành công!");
+        }
+
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hidden');
+        }
+    </script>
 </body>
 </html>

@@ -90,14 +90,6 @@
         <!-- Main Content Area -->
         <main class="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full space-y-6 overflow-x-hidden">
             
-            <div class="hidden md:flex justify-between items-center bg-[#1a0f35] border border-[#2d1b54] p-4 rounded-2xl shadow-lg">
-                <div>
-                    <h2 id="page-title" class="text-sm font-bold text-white uppercase tracking-wider">📊 Thống Kê Tổng Quan</h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Hệ thống điều hành mạng xã hội tự động</p>
-                </div>
-                <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1.5 rounded-xl font-semibold">● Trực tuyến</span>
-            </div>
-
             <!-- 1. THỐNG KÊ -->
             <div id="tab-thongke" class="panel-tab space-y-6">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -247,26 +239,82 @@
                 </div>
             </div>
 
-            <!-- 16. CÀI ĐẶT TRANG -->
+            <!-- 16. CÀI ĐẶT TRANG (CHUẨN HỆ THỐNG MẪU NHƯ ẢNH) -->
             <div id="tab-caidatrang" class="panel-tab space-y-6 hidden">
-                <div class="bg-[#1a0f35] border border-[#2d1b54] p-6 rounded-2xl shadow-xl space-y-4">
-                    <h3 class="text-sm font-bold text-white">⚙️ Cài Đặt Giao Diện & Thông Tin Trang Web</h3>
-                    <div class="space-y-3 text-xs">
-                        <div>
-                            <label class="block text-slate-400 mb-1">Tên Website:</label>
-                            <input type="text" value="Like17 - Hệ Thống AI & Mạng Xã Hội" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1">Logo URL / Favicon:</label>
-                            <input type="text" value="https://example.com/logo.png" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1">Mã JavaScript tùy chỉnh / Google Analytics:</label>
-                            <textarea rows="3" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none" placeholder="<!-- Chèn mã script tùy biến ở đây -->"></textarea>
-                        </div>
-                        <button onclick="actionAlert('Đã lưu cài đặt trang thành công!')" class="w-full bg-[#6332c5] p-3 rounded-xl font-bold text-white shadow">Lưu Cài Đặt Trang</button>
+                
+                <!-- 3 nút Tab con phía trên -->
+                <div class="grid grid-cols-3 gap-2 bg-[#1a0f35] p-2 rounded-2xl border border-[#2d1b54]">
+                    <button class="bg-[#00b4d8] text-white py-2.5 rounded-xl font-bold text-xs shadow">⚙️ Cài đặt website</button>
+                    <button class="bg-[#120b24] text-slate-400 py-2.5 rounded-xl font-medium text-xs hover:text-white transition">📞 Liên hệ</button>
+                    <button class="bg-[#120b24] text-slate-400 py-2.5 rounded-xl font-medium text-xs hover:text-white transition">🤖 API + BOT</button>
+                </div>
+
+                <!-- Khung form cài đặt trang chuẩn mẫu -->
+                <div class="bg-[#1a0f35] border border-[#2d1b54] p-5 md:p-6 rounded-2xl shadow-xl space-y-4 text-xs">
+                    <h3 class="font-bold text-sm text-white mb-2">Thông tin cấu hình trang web ⓘ</h3>
+                    
+                    <div>
+                        <label class="block text-slate-400 mb-1">Tỉ giá đô la</label>
+                        <input type="text" value="26000" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 mb-1">Tiêu đề trang</label>
+                        <input type="text" value="MẠNG XÃ HỘI VIỆT ANH" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 mb-1">Logo</label>
+                        <input type="text" value="https://sf-static.upanhlaylink.com/img/image.png" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 mb-1">Favicon</label>
+                        <input type="text" value="" placeholder="Đường dẫn Favicon..." class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 mb-1">Bảo trì</label>
+                        <select class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
+                            <option>Tắt</option>
+                            <option>Bật</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 mb-1">Description</label>
+                        <textarea rows="3" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">Chuyên cung cấp các giải pháp tăng tương tác mạng xã hội tự động 24/7.</textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 mb-1">Keyword</label>
+                        <input type="text" value="smm panel, tang tuong tac, like sub" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 mb-1">Header</label>
+                        <textarea rows="2" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none" placeholder="Mã nhúng Header..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 mb-1">Footer</label>
+                        <textarea rows="2" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none" placeholder="Mã nhúng Footer..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 mb-1">Phần trăm hoa hồng tiếp thị liên kết</label>
+                        <input type="text" value="5" class="w-full bg-[#120b24] border border-[#2d1b54] p-3 rounded-xl text-slate-200 outline-none">
+                        <p class="text-[11px] text-slate-500 mt-1">0%: Tắt tiếp thị liên kết. $\ge$ 1%: Bật tiếp thị liên kết.</p>
+                    </div>
+
+                    <div class="pt-2">
+                        <button onclick="actionAlert('Đã cập nhật cài đặt trang thành công!')" class="bg-[#5c52ff] hover:bg-[#6c63ff] text-white px-5 py-3 rounded-xl font-bold flex items-center space-x-2 shadow-lg transition">
+                            <span>💾</span>
+                            <span>Cập nhật</span>
+                        </button>
                     </div>
                 </div>
+
             </div>
 
         </main>

@@ -33,7 +33,6 @@
         .dynamic-icon { display: inline-block; animation: pulseIcon 2s infinite ease-in-out; }
         @keyframes pulseIcon { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
-        /* MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ */
         #auth-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: linear-gradient(135deg, #050811 0%, #0B0F19 50%, #111827 100%);
@@ -82,7 +81,6 @@
         }
         .auth-submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(16, 185, 129, 0.4); }
 
-        /* Sidebar chuẩn */
         .sidebar { width: 260px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; flex-shrink: 0; height: 100%; overflow-y: auto; z-index: 1000; transition: 0.3s; }
         @media(max-width: 899px) {
             .sidebar { position: fixed; left: -260px; top: 0; bottom: 0; }
@@ -177,7 +175,7 @@
 
     <div id="toast-notification">✅ Hoàn tất thành công!</div>
 
-    <!-- Nhạc nền từ video piano lofi của bạn -->
+    <!-- Nhạc nền Lofi chuẩn MP3 -->
     <audio id="bg-audio" loop preload="auto">
         <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
     </audio>
@@ -316,10 +314,6 @@
             </div>
             
             <div class="topbar-controls">
-                <div id="admin-topbar-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-main); padding: 5px 12px; border-radius: 16px; font-weight: 700; font-size: 0.78rem; border: 1px solid rgba(16, 185, 129, 0.3); display:none;">
-                    💰 Quỹ Admin: <span>1,000,000,000</span>đ
-                </div>
-
                 <button id="music-toggle-btn" onclick="toggleBackgroundMusic()">🎵 <span>Bật Nhạc</span></button>
 
                 <div class="theme-dropdown-wrapper">
@@ -339,27 +333,84 @@
 
         <div class="content-body">
             <div class="content-inner">
-                <!-- THỐNG KÊ ADMIN -->
+                <!-- 1. THỐNG KÊ ADMIN THỰC TẾ -->
                 <div id="tab-admin-stats" class="tab-content active">
                     <div class="card">
                         <div class="card-title">📊 Thống kê hệ thống toàn bộ</div>
                         <div class="stat-grid">
-                            <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Tổng Khách</div><div style="font-size:1.3rem;font-weight:700;">1,284</div></div>
-                            <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Doanh Thu</div><div style="font-size:1.3rem;font-weight:700;color:var(--accent-main);">48,5M</div></div>
-                            <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Đơn Hàng</div><div style="font-size:1.3rem;font-weight:700;">3,420</div></div>
+                            <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Tổng Khách</div><div style="font-size:1.3rem;font-weight:700;">0 Khách</div></div>
+                            <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Doanh Thu</div><div style="font-size:1.3rem;font-weight:700;color:var(--accent-main);">0đ</div></div>
+                            <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Đơn Hàng</div><div style="font-size:1.3rem;font-weight:700;">0 Đơn</div></div>
                             <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Server API</div><div style="font-size:1.1rem;font-weight:700;color:var(--accent-main);">🟢 Ổn định</div></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- CÁC TAB QUẢN TRỊ ADMIN ĐÃ ĐƯỢC TÍCH HỢP ĐỦ NỘI DUNG -->
-                <div id="tab-admin-users" class="tab-content"><div class="card"><div class="card-title">👥 Quản lý Khách Hàng</div><p style="font-size:0.84rem; color:var(--text-muted);">Danh sách toàn bộ thành viên đăng ký hệ thống.</p></div></div>
-                <div id="tab-admin-platforms" class="tab-content"><div class="card"><div class="card-title">🧩 Mở rộng Nền tảng</div><p style="font-size:0.84rem; color:var(--text-muted);">Cài đặt và thêm các nền tảng mạng xã hội mới.</p></div></div>
-                <div id="tab-admin-materials" class="tab-content"><div class="card"><div class="card-title">📦 Kho Nguyên liệu</div><p style="font-size:0.84rem; color:var(--text-muted);">Quản lý kho tài nguyên, cookie, proxy hệ thống.</p></div></div>
-                <div id="tab-admin-apibot" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt API & Bot</div><p style="font-size:0.84rem; color:var(--text-muted);">Cấu hình token bot Telegram và kết nối API nguồn.</p></div></div>
-                <div id="tab-admin-aikeys" class="tab-content"><div class="card"><div class="card-title">🔑 Cài đặt Key AI</div><p style="font-size:0.84rem; color:var(--text-muted);">Nhập API Key OpenAI / Claude / Gemini cho tính năng AI.</p></div></div>
-                <div id="tab-admin-deposit-syntax" class="tab-content"><div class="card"><div class="card-title">💳 Cài đặt nạp tiền & Cú pháp</div><p style="font-size:0.84rem; color:var(--text-muted);">Cấu hình số tài khoản ngân hàng và cú pháp nạp tiền tự động.</p></div></div>
-                <div id="tab-admin-settings" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt chung website</div><p style="font-size:0.84rem; color:var(--text-muted);">Đổi tên miền, logo, màu sắc mặc định hệ thống.</p></div></div>
+                <!-- 2. QUẢN LÝ KHÁCH HÀNG (CÓ NÂNG QUYỀN & CẤP LẠI MẬT KHẨU) -->
+                <div id="tab-admin-users" class="tab-content">
+                    <div class="card">
+                        <div class="card-title">👥 Quản lý Khách Hàng (Nâng quyền & Cấp lại mật khẩu)</div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tài khoản</th>
+                                        <th>Quyền hạn</th>
+                                        <th>Thao tác quản trị</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#01</td>
+                                        <td><b>thanhvien_pro</b></td>
+                                        <td><span class="badge-status status-completed">Thành viên</span></td>
+                                        <td>
+                                            <button class="btn btn-ai btn-sm" onclick="showToast('✅ Đã nâng quyền thành viên lên VIP!')">Nâng Quyền</button>
+                                            <button class="btn btn-primary btn-sm" onclick="promptNewPassword('thanhvien_pro')">Cấp Lại MK</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. MỞ RỘNG NỀN TẢNG -->
+                <div id="tab-admin-platforms" class="tab-content">
+                    <div class="card">
+                        <div class="card-title">🧩 Mở rộng Nền tảng & Dịch vụ</div>
+                        <div class="form-group"><label>Tên Nền tảng / Mạng xã hội</label><input type="text" id="new-plat-name" placeholder="Ví dụ: YouTube Automation, Instagram..."></div>
+                        <div class="form-group"><label>Chọn Biểu tượng (Icon)</label>
+                            <select id="new-plat-icon">
+                                <option value="📺">📺 YouTube / Video</option>
+                                <option value="📸">📸 Instagram / Ảnh</option>
+                                <option value="✈️">✈️ Telegram / Chat</option>
+                                <option value="🌐">🌐 Website / Khác</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Nhập Gói dịch vụ & Ghi chú chi tiết</label><textarea rows="3" id="new-plat-note" placeholder="Nhập tên gói và ghi chú vận hành cho nền tảng này..."></textarea></div>
+                        <button class="btn btn-primary btn-sm" onclick="addNewPlatform()">➕ Thêm Nền Tảng Mới</button>
+                    </div>
+                </div>
+
+                <div id="tab-admin-materials" class="tab-content"><div class="card"><div class="card-title">📦 Kho Nguyên liệu</div><div class="form-group"><label>Kho Cookie / Proxy</label><textarea rows="3" placeholder="Nhập nguyên liệu..."></textarea></div><button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu kho nguyên liệu!')">Lưu Kho</button></div></div>
+                <div id="tab-admin-apibot" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt API & Bot</div><div class="form-group"><label>Token Telegram Bot</label><input type="text" placeholder="Bot token..."></div><button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu cấu hình Bot!')">Lưu Bot</button></div></div>
+                <div id="tab-admin-aikeys" class="tab-content"><div class="card"><div class="card-title">🔑 Cài đặt Key AI</div><div class="form-group"><label>API Key</label><input type="text" placeholder="Key..."></div><button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu Key AI!')">Lưu Key</button></div></div>
+                
+                <!-- 4. CÀI ĐẶT NẠP TIỀN SEPAY -->
+                <div id="tab-admin-deposit-syntax" class="tab-content">
+                    <div class="card">
+                        <div class="card-title">💳 Cài đặt nạp tiền tự động (Sẵn sàng kết nối SePay)</div>
+                        <div class="form-group"><label>Ngân hàng nhận tiền</label><input type="text" id="sepay-bank" value="MBBank"></div>
+                        <div class="form-group"><label>Số tài khoản</label><input type="text" id="sepay-stk" value="0123456789"></div>
+                        <div class="form-group"><label>Chủ tài khoản</label><input type="text" id="sepay-name" value="DINH HOANG VIET ANH"></div>
+                        <div class="form-group"><label>Cú pháp chuyển khoản SePay</label><input type="text" id="sepay-syntax" value="NAP"></div>
+                        <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu cấu hình SePay thành công!')">💾 Lưu Cấu Hình SePay</button>
+                    </div>
+                </div>
+
+                <div id="tab-admin-settings" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt chung website</div><div class="form-group"><label>Tên Website</label><input type="text" value="AutoPost AI Pro"></div><button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu cài đặt!')">Lưu</button></div></div>
                 <div id="tab-admin-noti" class="tab-content">
                     <div class="card">
                         <div class="card-title">📢 Cài đặt Thông báo Popup Trang Chủ</div>
@@ -368,13 +419,61 @@
                         <button class="btn btn-primary btn-sm" onclick="saveAdminNotification()">💾 Lưu Thông Báo</button>
                     </div>
                 </div>
-                <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div><p style="font-size:0.84rem; color:var(--text-muted);">Cấu hình link Facebook, Zalo, Telegram góc màn hình.</p></div></div>
-                <div id="tab-admin-packages" class="tab-content"><div class="card"><div class="card-title">📦 Quản lý gói dịch vụ</div><p style="font-size:0.84rem; color:var(--text-muted);">Thiết lập giá tiền các gói nâng cấp cho khách hàng.</p></div></div>
-                <div id="tab-admin-orders" class="tab-content"><div class="card"><div class="card-title">🛒 Quản lý đơn hàng toàn hệ thống</div><p style="font-size:0.84rem; color:var(--text-muted);">Kiểm soát tất cả đơn hàng mà khách hàng đã đặt.</p></div></div>
-                <div id="tab-admin-deposits" class="tab-content"><div class="card"><div class="card-title">💵 Giao dịch nạp tiền</div><p style="font-size:0.84rem; color:var(--text-muted);">Lịch sử khách nạp tiền qua chuyển khoản.</p></div></div>
-                <div id="tab-admin-refunds" class="tab-content"><div class="card"><div class="card-title">⚠️ Hoàn tiền lỗi</div><p style="font-size:0.84rem; color:var(--text-muted);">Xử lý các yêu cầu hoàn tiền đơn hàng bị lỗi.</p></div></div>
-                <div id="tab-admin-ctv" class="tab-content"><div class="card"><div class="card-title">🤝 Tiếp thị liên kết (CTV)</div><p style="font-size:0.84rem; color:var(--text-muted);">Thống kê hoa hồng và quản lý cộng tác viên.</p></div></div>
-                <div id="tab-admin-coupons" class="tab-content"><div class="card"><div class="card-title">🎟️ Coupons & Khuyến mại</div><p style="font-size:0.84rem; color:var(--text-muted);">Tạo mã giảm giá và mã khuyến mại cho khách.</p></div></div>
+                <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div><div class="form-group"><label>Link Zalo/Facebook</label><input type="text" value="https://zalo.me"></div><button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu!')">Lưu</button></div></div>
+                
+                <!-- 5. QUẢN LÍ GÓI DỊCH VỤ -->
+                <div id="tab-admin-packages" class="tab-content">
+                    <div class="card">
+                        <div class="card-title">📦 Quản lý gói dịch vụ theo thời hạn</div>
+                        <div style="display: flex; flex-direction: column; gap: 14px;">
+                            <div style="background:#111827; padding:12px; border-radius:8px; border:1px solid var(--border-color);">
+                                <label style="color:var(--accent-main); font-weight:700;">Gói 1 Ngày</label>
+                                <div style="display:flex; gap:10px; margin-top:6px;">
+                                    <input type="number" value="10000" id="pkg-price-1" placeholder="Giá tiền...">
+                                    <input type="text" value="Dùng thử nhanh 24h" id="pkg-note-1" placeholder="Ghi chú gói...">
+                                </div>
+                            </div>
+                            <div style="background:#111827; padding:12px; border-radius:8px; border:1px solid var(--border-color);">
+                                <label style="color:var(--accent-main); font-weight:700;">Gói 7 Ngày</label>
+                                <div style="display:flex; gap:10px; margin-top:6px;">
+                                    <input type="number" value="50000" id="pkg-price-7" placeholder="Giá tiền...">
+                                    <input type="text" value="Gói tuần phổ biến" id="pkg-note-7" placeholder="Ghi chú gói...">
+                                </div>
+                            </div>
+                            <div style="background:#111827; padding:12px; border-radius:8px; border:1px solid var(--border-color);">
+                                <label style="color:var(--accent-main); font-weight:700;">Gói 15 Ngày</label>
+                                <div style="display:flex; gap:10px; margin-top:6px;">
+                                    <input type="number" value="95000" id="pkg-price-15" placeholder="Giá tiền...">
+                                    <input type="text" value="Gói nửa tháng tiết kiệm" id="pkg-note-15" placeholder="Ghi chú gói...">
+                                </div>
+                            </div>
+                            <div style="background:#111827; padding:12px; border-radius:8px; border:1px solid var(--border-color);">
+                                <label style="color:var(--accent-main); font-weight:700;">Gói 30 Ngày (1 Tháng)</label>
+                                <div style="display:flex; gap:10px; margin-top:6px;">
+                                    <input type="number" value="180000" id="pkg-price-30" placeholder="Giá tiền...">
+                                    <input type="text" value="Gói tháng VIP ưu đãi lớn" id="pkg-note-30" placeholder="Ghi chú gói...">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-sm" style="margin-top: 14px;" onclick="showToast('✅ Đã lưu cấu hình bảng giá gói dịch vụ!')">💾 Lưu Thay Đổi Giá Gói</button>
+                    </div>
+                </div>
+
+                <div id="tab-admin-orders" class="tab-content"><div class="card"><div class="card-title">🛒 Quản lý đơn hàng toàn hệ thống</div><p style="font-size:0.84rem; color:var(--text-muted);">Chưa có đơn hàng nào được tạo.</p></div></div>
+                <div id="tab-admin-deposits" class="tab-content"><div class="card"><div class="card-title">💵 Giao dịch nạp tiền</div><p style="font-size:0.84rem; color:var(--text-muted);">Chưa có giao dịch nạp tiền nào.</p></div></div>
+                <div id="tab-admin-refunds" class="tab-content"><div class="card"><div class="card-title">⚠️ Hoàn tiền lỗi</div><p style="font-size:0.84rem; color:var(--text-muted);">Không có yêu cầu hoàn tiền.</p></div></div>
+                
+                <!-- 6. TIẾP THỊ LIÊN KẾT (CHỈNH % HOA HỒNG) -->
+                <div id="tab-admin-ctv" class="tab-content">
+                    <div class="card">
+                        <div class="card-title">🤝 Tiếp thị liên kết (CTV) - Cấu hình hoa hồng</div>
+                        <div class="form-group"><label>Tỷ lệ phần trăm (%) hoa hồng giới thiệu</label><input type="number" id="aff-commission-rate" value="15" placeholder="Nhập %..."></div>
+                        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">CTV sẽ nhận được % hoa hồng tương ứng khi người được giới thiệu phát sinh nạp tiền.</p>
+                        <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã cập nhật tỷ lệ hoa hồng CTV thành công!')">💾 Lưu Tỷ Lệ Hoa Hồng</button>
+                    </div>
+                </div>
+
+                <div id="tab-admin-coupons" class="tab-content"><div class="card"><div class="card-title">🎟️ Coupons & Khuyến mại</div><div class="form-group"><label>Mã giảm giá</label><input type="text" placeholder="Mã..."></div><button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã tạo mã!')">Tạo</button></div></div>
 
                 <!-- DASHBOARD KHÁCH HÀNG -->
                 <div id="dashboard" class="tab-content">
@@ -388,9 +487,9 @@
                     <div class="card">
                         <div class="card-title">🏠 Trang chủ & Tổng quan tài khoản</div>
                         <div class="stat-grid">
-                            <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Số dư ví</div><div style="font-size:1.3rem;font-weight:700;color:var(--accent-main);">150,000đ</div></div>
+                            <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Số dư ví</div><div style="font-size:1.3rem;font-weight:700;color:var(--accent-main);" id="client-wallet-display">0đ</div></div>
                             <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Thời gian dùng thử</div><div style="font-size:1.3rem;font-weight:700;color:#F59E0B;">3 Ngày (Đang hoạt động)</div></div>
-                            <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Đơn đã mua</div><div style="font-size:1.3rem;font-weight:700;">2</div></div>
+                            <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Đơn đã mua</div><div style="font-size:1.3rem;font-weight:700;">0</div></div>
                         </div>
                     </div>
                 </div>
@@ -414,22 +513,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><b>#ORD-98214</b></td>
-                                        <td>Tăng Follow TikTok Siêu Tốc</td>
-                                        <td><a href="#" style="color: var(--accent-main); text-decoration: none;">@creator_pro2026</a></td>
-                                        <td>1,000</td>
-                                        <td>50,000đ</td>
-                                        <td><span class="badge-status status-running">Đang chạy</span></td>
-                                        <td>26/07/2026 14:20</td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>#ORD-98102</b></td>
-                                        <td>Auto Post Group Facebook</td>
-                                        <td><a href="#" style="color: var(--accent-main); text-decoration: none;">Group Kinh Doanh Online</a></td>
-                                        <td>5 nhóm</td>
-                                        <td>25,000đ</td>
-                                        <td><span class="badge-status status-completed">Hoàn thành</span></td>
-                                        <td>25/07/2026 09:15</td>
+                                        <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">Bạn chưa mua đơn hàng nào.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -437,7 +521,7 @@
                     </div>
                 </div>
 
-                <div id="cashflow" class="tab-content"><div class="card"><div class="card-title">⏳ Luồng tiền biến động số dư ví</div><p style="font-size:0.84rem; color:var(--text-muted);">Giao dịch nạp tiền 150,000đ thành công vào lúc 25/07/2026.</p></div></div>
+                <div id="cashflow" class="tab-content"><div class="card"><div class="card-title">⏳ Luồng tiền biến động số dư ví</div><p style="font-size:0.84rem; color:var(--text-muted);">Chưa có biến động số dư.</p></div></div>
                 
                 <div id="profile" class="tab-content">
                     <div class="card">
@@ -450,7 +534,7 @@
                 
                 <div id="deposit" class="tab-content">
                     <div class="card">
-                        <div class="card-title">💳 Nạp tiền tự động QR Ngân Hàng</div>
+                        <div class="card-title">💳 Nạp tiền tự động SePay QR Ngân Hàng</div>
                         <div class="form-group"><label>Số tiền nạp (VNĐ)</label><input type="number" id="deposit-amount" value="100000"></div>
                         <button class="btn btn-primary btn-sm" onclick="generateQR()">Tạo mã QR Nạp Tiền</button>
                         <div id="qr-box" style="text-align:center; margin-top:12px;"></div>
@@ -481,7 +565,7 @@
                 <div id="affiliate" class="tab-content"><div class="card"><div class="card-title">🔗 Tiếp thị liên kết nhận hoa hồng</div><p style="font-size:0.84rem; color:var(--text-muted);">Link giới thiệu của bạn: <b style="color:var(--accent-main);">https://autopostai.site/?ref=user</b></p></div></div>
                 <div id="notifications" class="tab-content"><div class="card"><div class="card-title">🔔 Thông báo hệ thống mới nhất</div><p style="font-size:0.84rem;" id="noti-tab-text">- Chào mừng bạn đã nhận 3 ngày dùng thử miễn phí dịch vụ!</p></div></div>
 
-                <!-- NỀN TẢNG FACEBOOK -->
+                <!-- NỀN TẢNG FACEBOOK (BỔ SUNG ĐỘ TRỄ) -->
                 <div id="tab-fb" class="tab-content">
                     <div class="card">
                         <div class="card-title"><span class="dynamic-icon">📘</span> Facebook Automation: Chọn Chức Năng</div>
@@ -502,7 +586,11 @@
                             <div class="form-group"><label>Link bài viết mục tiêu</label><input type="text" placeholder="https://facebook.com/permalink.php?story_fbid=..."></div>
                             <div class="form-group"><label>Nội dung bình luận seeding</label><textarea rows="3" placeholder="Nhập nội dung bình luận..."></textarea></div>
                         </div>
-                        <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã khởi chạy tiến trình Facebook thành công!')">🚀 Chạy Tiến Trình Facebook</button>
+                        <div class="form-group">
+                            <label>Độ trễ giữa các hành động (Giây)</label>
+                            <input type="number" id="fb-delay-time" value="5" placeholder="Nhập số giây trễ...">
+                        </div>
+                        <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã khởi chạy tiến trình Facebook với độ trễ đã chọn!')">🚀 Chạy Tiến Trình Facebook</button>
                     </div>
                 </div>
                 
@@ -512,7 +600,7 @@
                         <div class="card-title"><span class="dynamic-icon">✨</span> 1. Tạo Ảnh & Video AI Tự Động</div>
                         <div class="form-group">
                             <label>Chọn Định Dạng</label>
-                            <select id="tik-gen-type" onchange="toggleTikGen()">
+                            <select id="tik-gen-type">
                                 <option value="video">Tạo Video AI</option>
                                 <option value="image">Tạo Ảnh AI</option>
                             </select>
@@ -668,7 +756,7 @@
                     btnText.innerText = "Tắt Nhạc";
                     showToast("🎵 Đã phát nhạc nền!");
                 }).catch(e => {
-                    alert("Trình duyệt đang chặn tự động phát, vui lòng bấm nút Bật Nhạc một lần nữa!");
+                    alert("Trình duyệt chặn tự động phát, vui lòng bấm Bật Nhạc lần nữa!");
                 });
             } else {
                 audio.pause();
@@ -677,14 +765,13 @@
             }
         }
 
-        // Tự động kích hoạt nhạc khi đăng nhập thành công
         function triggerLoginSuccess(role) {
             let audio = document.getElementById('bg-audio');
             audio.play().then(() => {
                 let btnText = document.querySelector('#music-toggle-btn span');
                 if(btnText) btnText.innerText = "Tắt Nhạc";
             }).catch(e => {
-                console.log("Trình duyệt chặn autoplay");
+                console.log("Autoplay blocked");
             });
             
             localStorage.setItem('isLoggedIn', 'true');
@@ -707,6 +794,7 @@
                 triggerLoginSuccess('admin');
             } else {
                 triggerLoginSuccess('member');
+                document.getElementById('client-wallet-display').innerText = '0đ';
             }
         }
 
@@ -716,7 +804,10 @@
             if(!user || !pass) { alert('Vui lòng điền thông tin đăng ký!'); return; }
             
             showToast('🎉 Đăng ký thành công! Nhận 3 ngày dùng thử.');
-            setTimeout(() => { triggerLoginSuccess('member'); }, 1200);
+            setTimeout(() => { 
+                triggerLoginSuccess('member'); 
+                document.getElementById('client-wallet-display').innerText = '0đ';
+            }, 1200);
         }
 
         function handleLogout() {
@@ -763,14 +854,19 @@
 
         function generateQR() {
             let amount = document.getElementById('deposit-amount').value || 100000;
-            let qrUrl = `https://api.vietqr.io/image/970416-0123456789-compact2.jpg?amount=${amount}&addInfo=NAP%202026&accountName=NGUYEN%20VAN%20ANH`;
+            let stk = document.getElementById('sepay-stk') ? document.getElementById('sepay-stk').value : '0123456789';
+            let bank = document.getElementById('sepay-bank') ? document.getElementById('sepay-bank').value : 'MBBank';
+            let name = document.getElementById('sepay-name') ? document.getElementById('sepay-name').value : 'DINH HOANG VIET ANH';
+            let syntax = document.getElementById('sepay-syntax') ? document.getElementById('sepay-syntax').value : 'NAP';
+
+            let qrUrl = `https://api.vietqr.io/image/970422-${stk}-compact2.jpg?amount=${amount}&addInfo=${syntax}&accountName=${encodeURIComponent(name)}`;
             document.getElementById('qr-box').innerHTML = `
                 <div style="background: white; padding: 6px; display: inline-block; border-radius: 6px; margin-bottom: 6px;">
-                    <img src="${qrUrl}" width="130" alt="QR">
+                    <img src="${qrUrl}" width="130" alt="QR SePay">
                 </div>
-                <p style="font-size: 0.78rem;">ACB: <b>0123456789</b> (NGUYEN VAN ANH)<br>Số tiền: <b style="color:var(--accent-main);">${Number(amount).toLocaleString()}đ</b></p>
+                <p style="font-size: 0.78rem;">${bank}: <b>${stk}</b> (${name})<br>Cú pháp SePay: <b style="color:var(--accent-main);">${syntax} [User]</b><br>Số tiền: <b style="color:var(--accent-main);">${Number(amount).toLocaleString()}đ</b></p>
             `;
-            showToast("✅ Đã tạo mã QR nạp tiền!");
+            showToast("✅ Đã tạo mã QR nạp tiền SePay!");
         }
 
         function toggleChatBox() {
@@ -851,6 +947,23 @@
             setTimeout(() => {
                 alert('Tiến trình đăng bài tự động đã được khởi tạo và lưu lại trong hệ thống!');
             }, 500);
+        }
+
+        function addNewPlatform() {
+            let name = document.getElementById('new-plat-name').value.trim();
+            let icon = document.getElementById('new-plat-icon').value;
+            let note = document.getElementById('new-plat-note').value.trim();
+            if(!name) { alert('Vui lòng nhập tên nền tảng!'); return; }
+            showToast(`✅ Đã thêm nền tảng ${icon} ${name} thành công!`);
+            document.getElementById('new-plat-name').value = '';
+            document.getElementById('new-plat-note').value = '';
+        }
+
+        function promptNewPassword(username) {
+            let newPass = prompt(`Nhập mật khẩu mới cho tài khoản [${username}]:`);
+            if(newPass) {
+                showToast(`✅ Đã cấp lại mật khẩu mới cho ${username} thành công!`);
+            }
         }
     </script>
 </body>

@@ -35,7 +35,7 @@
             overflow-x: hidden;
         }
 
-        /* MODAL CHUẨN SANG XỊN MỊN */
+        /* MODAL SANG XỊN */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -114,7 +114,7 @@
             color: #080a10; font-weight: 900; font-size: 15px;
         }
 
-        /* MENU TRƯỢT 3 GẠCH */
+        /* MENU TRƯỢT 3 GẠCH Y HỆT ẢNH MẪU */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(3px);
@@ -123,32 +123,49 @@
         .drawer-overlay.open { display: block; opacity: 1; }
 
         .drawer-menu {
-            position: fixed; top: 0; left: -320px; width: 280px; height: 100vh;
+            position: fixed; top: 0; left: -320px; width: 285px; height: 100vh;
             background: #141728; border-right: 1px solid #222639;
-            z-index: 100; padding: 20px 10px; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; flex-direction: column; gap: 4px; overflow-y: auto;
+            z-index: 100; padding: 15px 10px; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; gap: 3px; overflow-y: auto;
         }
         .drawer-menu.open { left: 0; }
 
         .drawer-header-box {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 5px 10px 15px 10px; border-bottom: 1px solid #222639; margin-bottom: 10px;
+            padding: 8px 10px 12px 10px; border-bottom: 1px solid #222639; margin-bottom: 5px;
         }
 
-        .menu-section-title {
-            padding: 10px 10px 5px 10px; font-size: 11px; text-transform: uppercase;
-            color: #8f9bba; font-weight: 800; letter-spacing: 0.8px;
+        .menu-dropdown-box {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            margin-bottom: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.04);
         }
+
+        .menu-section-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 15px; font-size: 13.5px; font-weight: 700; color: #38bdf8;
+            cursor: pointer; background: rgba(56, 189, 248, 0.05);
+        }
+        .menu-section-header span.arrow { font-size: 12px; transition: transform 0.2s; }
+        .menu-section-header.collapsed span.arrow { transform: rotate(-90deg); }
+
+        .menu-section-content {
+            display: flex; flex-direction: column; gap: 2px; padding: 4px 0;
+        }
+        .menu-section-content.hidden { display: none; }
 
         .drawer-item {
             display: flex; align-items: center; gap: 12px;
-            padding: 11px 15px; color: #c0c7de; text-decoration: none;
-            font-size: 13.5px; font-weight: 600; cursor: pointer; border-radius: 10px;
+            padding: 10px 15px; color: #c0c7de; text-decoration: none;
+            font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 8px;
+            margin: 0 6px;
         }
-        .drawer-item:hover { background: rgba(114, 9, 183, 0.2); color: #00ffcc; }
-        .drawer-item span.icon { font-size: 16px; width: 20px; text-align: center; }
+        .drawer-item:hover { background: rgba(114, 9, 183, 0.25); color: #00ffcc; }
+        .drawer-item span.icon { font-size: 15px; width: 20px; text-align: center; }
 
-        .admin-only-drawer { display: none; }
+        .admin-only-group { display: none; }
 
         /* BREADCRUMB */
         .breadcrumb-section { padding: 15px 20px 5px 20px; max-width: 600px; margin: 0 auto; width: 100%; }
@@ -236,14 +253,13 @@
 </head>
 <body>
 
-    <!-- MODAL CHUNG (THÔNG BÁO / NHẬP PIN ADMIN) -->
+    <!-- MODAL SANG XỊN -->
     <div class="modal-overlay" id="customModal">
         <div class="modal-box">
             <div class="modal-icon" id="modalIcon">✓</div>
             <div class="modal-title" id="modalTitle">Thông báo</div>
             <div class="modal-desc" id="modalDesc">Nội dung thông báo ở đây...</div>
             
-            <!-- Ô nhập mã PIN ẩn hiện linh hoạt -->
             <div id="modalInputContainer" style="display:none;">
                 <input type="password" id="modalPinInput" class="modal-input" placeholder="••••" maxlength="6">
             </div>
@@ -265,7 +281,7 @@
         </div>
     </div>
 
-    <!-- MENU TRƯỢT 3 GẠCH -->
+    <!-- MENU TRƯỢT 3 GẠCH CHUẨN Y HỆT ẢNH MẪU -->
     <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
     <div class="drawer-menu" id="sideDrawer">
         <div class="drawer-header-box">
@@ -273,38 +289,40 @@
             <div style="background: rgba(255,0,85,0.15); color: #ff0055; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;" id="drawerRoleBadge">Khách</div>
         </div>
 
-        <div class="menu-section-title admin-only-drawer">Quản trị hệ thống</div>
-        <div class="drawer-item admin-only-drawer" onclick="navigateFromDrawer('dashboardSection', 'THỐNG KÊ', 'Quản trị > Thống kê')">
-            <span class="icon">📊</span> Thống kê
-        </div>
-        <div class="drawer-item admin-only-drawer" onclick="navigateFromDrawer('dashboardSection', 'KHÁCH HÀNG', 'Quản trị > Khách hàng')">
-            <span class="icon">👥</span> Khách hàng
-        </div>
-        <div class="drawer-item admin-only-drawer" onclick="navigateFromDrawer('historySection', 'GIAO DỊCH', 'Quản trị > Giao dịch')">
-            <span class="icon">⏳</span> Giao dịch
-        </div>
-        <div class="drawer-item admin-only-drawer" onclick="navigateFromDrawer('orderSection', 'ĐƠN HÀNG', 'Quản trị > Đơn hàng')">
-            <span class="icon">📄</span> Đơn hàng
-        </div>
-        <div class="drawer-item admin-only-drawer" onclick="navigateFromDrawer('depositSection', 'NẠP TIỀN TỰ ĐỘNG', 'Quản trị > Nạp tiền')">
-            <span class="icon">⚡</span> Nạp tiền tự động
+        <!-- NHÓM 1: QUẢN TRỊ HỆ THỐNG (CHỈ ADMIN THẤY) -->
+        <div class="menu-dropdown-box admin-only-group">
+            <div class="menu-section-header" onclick="toggleMenuSection(this)">
+                <span>👤 Quản trị hệ thống</span> <span class="arrow">▼</span>
+            </div>
+            <div class="menu-section-content">
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'THỐNG KÊ', 'Quản trị > Thống kê')"><span class="icon">📊</span> Thống kê</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'KHÁCH HÀNG', 'Quản trị > Khách hàng')"><span class="icon">👥</span> Khách hàng</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('historySection', 'GIAO DỊCH', 'Quản trị > Giao dịch')"><span class="icon">⏳</span> Giao dịch</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'ĐƠN HÀNG', 'Quản trị > Đơn hàng')"><span class="icon">📄</span> Đơn hàng</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('depositSection', 'HOÀN TIỀN', 'Quản trị > Hoàn tiền')"><span class="icon">🔄</span> Hoàn tiền</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('depositSection', 'NẠP TIỀN TỰ ĐỘNG', 'Quản trị > Nạp tiền')"><span class="icon">⚡</span> Nạp tiền tự động</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'NGUỒN DỊCH VỤ', 'Quản trị > Nguồn dịch vụ')"><span class="icon">🌐</span> Nguồn dịch vụ</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'DANH MỤC', 'Quản trị > Danh mục')"><span class="icon">📁</span> Danh mục</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'QUẢN LÝ GÓI', 'Quản trị > Quản lý gói')"><span class="icon">📦</span> Quản lý gói</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'COUPONS', 'Quản trị > Coupons')"><span class="icon">🎟️</span> Coupons</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'TIẾP THỊ LIÊN KẾT', 'Quản trị > Tiếp thị liên kết')"><span class="icon">🤝</span> Tiếp thị liên kết</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'CÀI ĐẶT TRANG', 'Quản trị > Cài đặt trang')"><span class="icon">⚙️</span> Cài đặt trang</div>
+            </div>
         </div>
 
-        <div class="menu-section-title">Chức năng</div>
-        <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'BẢNG TIN', 'Chức năng > Bảng tin')">
-            <span class="icon">🏠</span> Bảng tin & Thông báo
-        </div>
-        <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'CHỌN DỊCH VỤ', 'Chức năng > Chọn dịch vụ')">
-            <span class="icon">🚀</span> Chọn dịch vụ tạo đơn
-        </div>
-        <div class="drawer-item" onclick="navigateFromDrawer('historySection', 'LỊCH SỬ', 'Chức năng > Lịch sử')">
-            <span class="icon">📜</span> Lịch sử giao dịch
-        </div>
-        <div class="drawer-item" onclick="navigateFromDrawer('depositSection', 'NẠP TIỀN', 'Chức năng > Nạp tiền')">
-            <span class="icon">💳</span> Nạp tiền mua gói
-        </div>
-        <div class="drawer-item" onclick="navigateFromDrawer('accountSection', 'TÀI KHOẢN', 'Chức năng > Tài khoản')">
-            <span class="icon">👤</span> Tài khoản của tôi
+        <!-- NHÓM 2: CHỨC NĂNG (CHO MỌI NGƯỜI) -->
+        <div class="menu-dropdown-box">
+            <div class="menu-section-header" onclick="toggleMenuSection(this)">
+                <span>📦 Chức năng</span> <span class="arrow">▼</span>
+            </div>
+            <div class="menu-section-content">
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'TRANG CHỦ', 'Chức năng > Trang chủ')"><span class="icon">🏠</span> Trang chủ</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'QUẢN LÝ ĐƠN HÀNG', 'Chức năng > Đơn hàng')"><span class="icon">📄</span> Quản lý đơn hàng</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('historySection', 'LUỒNG TIỀN', 'Chức năng > Luồng tiền')"><span class="icon">⏳</span> Luồng tiền</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('accountSection', 'TÀI KHOẢN CỦA TÔI', 'Chức năng > Tài khoản')"><span class="icon">👤</span> Tài khoản của tôi</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('depositSection', 'NẠP TIỀN', 'Chức năng > Nạp tiền')"><span class="icon">💳</span> Nạp tiền</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('historySection', 'HOÀN TIỀN', 'Chức năng > Hoàn tiền')"><span class="icon">🔄</span> Hoàn tiền</div>
+            </div>
         </div>
     </div>
 
@@ -357,7 +375,7 @@
             <div class="news-box">
                 <h4>📌 Thông báo tài khoản:</h4>
                 <p id="trialStatusInfo">Đang kiểm tra trạng thái dùng thử...</p>
-                <p style="color: #ff0055; font-weight: bold; margin-top: 10px;">👉 Bấm vào 3 gạch (☰) góc trên bên trái để mở menu chọn dịch vụ.</p>
+                <p style="color: #ff0055; font-weight: bold; margin-top: 10px;">👉 Bấm vào 3 gạch (☰) góc trên bên trái để mở menu quản lý dịch vụ.</p>
             </div>
         </div>
 
@@ -456,7 +474,13 @@
 
         let pendingAdminUser = "";
 
-        // Hiển thị Modal thông báo bình thường
+        // Thu gọn/Mở rộng menu dropdown
+        function toggleMenuSection(headerEl) {
+            headerEl.classList.toggle('collapsed');
+            const content = headerEl.nextElementSibling;
+            content.classList.toggle('hidden');
+        }
+
         function showNotification(title, desc, icon = "✓") {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalDesc').innerText = desc;
@@ -467,7 +491,6 @@
             document.getElementById('customModal').classList.add('open');
         }
 
-        // Hiển thị Modal nhập PIN Admin cực kỳ sang xịn mịn
         function showPinModal(username) {
             pendingAdminUser = username;
             document.getElementById('modalTitle').innerText = "Bảo Mật Admin";
@@ -481,7 +504,6 @@
             setTimeout(() => document.getElementById('modalPinInput').focus(), 100);
         }
 
-        // Kiểm tra mã PIN do Admin nhập
         function verifyAdminPin() {
             const enteredPin = document.getElementById('modalPinInput').value.trim();
             if (enteredPin === ADMIN_PIN_CODE) {
@@ -620,7 +642,6 @@
                 return;
             }
 
-            // Nếu đúng tài khoản Admin123 & mật khẩu 2608 -> Bật Modal nhập PIN siêu đẹp thay vì dùng prompt
             if (username.toLowerCase() === REAL_ADMIN_USER.toLowerCase() && password === REAL_ADMIN_PASS) {
                 showPinModal(username);
                 return;
@@ -643,14 +664,14 @@
 
         function applyUserSession(username) {
             document.getElementById('accDisplayUser').innerText = username;
-            const adminDrawers = document.querySelectorAll('.admin-only-drawer');
+            const adminGroups = document.querySelectorAll('.admin-only-group');
 
             if (username.toLowerCase() === REAL_ADMIN_USER.toLowerCase()) {
                 document.getElementById('accDisplayRole').innerText = "Admin Tối Cao";
                 document.getElementById('accDisplayTrial').innerText = "Vĩnh viễn (Admin)";
                 document.getElementById('drawerRoleBadge').innerText = "Admin";
                 document.getElementById('drawerRoleBadge').style.color = "#ff0055";
-                adminDrawers.forEach(el => el.style.display = 'flex');
+                adminGroups.forEach(el => el.style.display = 'block');
                 
                 document.getElementById('expiredNotice').style.display = 'none';
                 document.getElementById('orderExpiredBanner').style.display = 'none';
@@ -662,7 +683,7 @@
             document.getElementById('accDisplayRole').innerText = "Khách hàng";
             document.getElementById('drawerRoleBadge').innerText = "Khách";
             document.getElementById('drawerRoleBadge').style.color = "#00ffcc";
-            adminDrawers.forEach(el => el.style.display = 'none');
+            adminGroups.forEach(el => el.style.display = 'none');
 
             const userObj = userDatabase[username.toLowerCase()];
             if(userObj) {
@@ -691,7 +712,7 @@
 
         function handleLogout() {
             localStorage.removeItem('autopost_current_user');
-            document.querySelectorAll('.admin-only-drawer').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.admin-only-group').forEach(el => el.style.display = 'none');
             switchSection('loginSection', 'ĐĂNG NHẬP', 'Trang chủ > Đăng nhập');
             showNotification("Đăng Xuất", "Bạn đã đăng xuất khỏi hệ thống thành công.", "👋");
         }

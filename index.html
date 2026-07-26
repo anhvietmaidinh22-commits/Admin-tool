@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoPost AI Pro - Hệ Thống Quản Trị & Dịch Vụ Đa Nền Tảng</title>
+    <title>AutoPost AI Pro - Hệ Thống Quản Trị & Khách Hàng</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* --- THEME VARIABLES --- */
         :root[data-theme="dark"] {
             --bg-main: #0b0f19;
             --bg-card: #131b2e;
@@ -20,7 +19,7 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --sidebar-bg: #0f172a;
+            --sidebar-bg: #1e1b4b;
             --header-bg: #111827;
         }
 
@@ -63,6 +62,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
 
         body {
@@ -88,10 +88,10 @@
         .auth-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            padding: 30px 20px;
+            padding: 36px 24px;
             border-radius: 20px;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
@@ -123,7 +123,7 @@
             box-shadow: 0 4px 12px var(--primary-glow);
         }
 
-        /* --- APP LAYOUT & RESPONSIVE FIX --- */
+        /* --- LAYOUT --- */
         #app-container {
             display: none;
             width: 100%;
@@ -131,7 +131,7 @@
         }
 
         aside {
-            width: 260px;
+            width: 270px;
             background-color: var(--sidebar-bg);
             border-right: 1px solid var(--border-color);
             display: flex;
@@ -141,18 +141,16 @@
             bottom: 0;
             left: 0;
             z-index: 100;
-            transition: transform 0.3s ease;
         }
 
-        .brand {
-            padding: 20px;
-            font-size: 17px;
+        .brand-header {
+            padding: 16px 20px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
             font-weight: 800;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
         .menu {
@@ -176,13 +174,12 @@
             border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             color: var(--text-muted);
             cursor: pointer;
             font-weight: 600;
             font-size: 13px;
             margin-bottom: 3px;
-            word-break: break-word;
         }
 
         .menu-item:hover, .menu-item.active {
@@ -192,26 +189,25 @@
 
         .menu-item span.emoji {
             font-size: 15px;
-            min-width: 20px;
+            width: 20px;
             text-align: center;
         }
 
         main {
-            margin-left: 260px;
+            margin-left: 270px;
             flex: 1;
             display: flex;
             flex-direction: column;
-            width: calc(100% - 260px);
         }
 
         header {
-            height: 64px;
+            height: 70px;
             background-color: var(--header-bg);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 20px;
+            padding: 0 24px;
             position: sticky;
             top: 0;
             z-index: 90;
@@ -220,36 +216,26 @@
         .header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
-            overflow: hidden;
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: transparent;
-            border: none;
-            color: var(--text-main);
-            font-size: 20px;
-            cursor: pointer;
+            gap: 16px;
         }
 
         .theme-switcher {
             display: flex;
-            gap: 4px;
+            gap: 6px;
             background: var(--bg-card);
-            padding: 3px;
-            border-radius: 20px;
+            padding: 4px;
+            border-radius: 30px;
             border: 1px solid var(--border-color);
         }
 
         .theme-btn {
-            padding: 5px 8px;
-            border-radius: 16px;
+            padding: 6px 10px;
+            border-radius: 20px;
             border: none;
             background: transparent;
             color: var(--text-muted);
             cursor: pointer;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 700;
         }
 
@@ -262,12 +248,12 @@
         .user-profile {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .avatar {
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             background: var(--primary);
             display: flex;
@@ -276,13 +262,12 @@
             color: white;
             font-weight: 700;
             font-size: 13px;
+            cursor: pointer;
         }
 
         .content-body {
-            padding: 20px;
+            padding: 24px;
             flex: 1;
-            width: 100%;
-            max-width: 1200px;
         }
 
         .tab-content {
@@ -291,7 +276,7 @@
 
         .tab-content.active {
             display: block;
-            animation: fadeIn 0.25s ease;
+            animation: fadeIn 0.3s ease;
         }
 
         @keyframes fadeIn {
@@ -299,20 +284,19 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- COMPONENTS --- */
+        /* --- UI COMPONENTS --- */
         .card {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-            word-break: break-word;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
         }
 
         .grid-4 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 16px;
             margin-bottom: 20px;
         }
@@ -320,24 +304,23 @@
         .stat-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 16px;
+            border-radius: 16px;
+            padding: 18px;
             display: flex;
             align-items: center;
             gap: 14px;
         }
 
         .stat-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
             background: var(--primary-glow);
             color: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
-            flex-shrink: 0;
         }
 
         .stat-info h3 {
@@ -347,7 +330,7 @@
         }
 
         .stat-info p {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 800;
         }
 
@@ -356,16 +339,14 @@
             color: white;
             border: none;
             padding: 10px 18px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 700;
             font-size: 13px;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 6px;
-            box-shadow: 0 4px 10px var(--primary-glow);
-            text-align: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px var(--primary-glow);
         }
 
         .btn:hover {
@@ -400,16 +381,10 @@
             box-shadow: 0 0 0 3px var(--primary-glow);
         }
 
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
-            min-width: 500px;
         }
 
         th, td {
@@ -426,7 +401,7 @@
         }
 
         .badge {
-            padding: 4px 10px;
+            padding: 5px 10px;
             border-radius: 20px;
             font-size: 10px;
             font-weight: 700;
@@ -437,7 +412,7 @@
         .badge-warning { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
         .badge-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
 
-        /* --- FLOATING SUPPORT WIDGET --- */
+        /* --- SUPPORT WIDGET --- */
         .support-float {
             position: fixed;
             bottom: 20px;
@@ -473,60 +448,36 @@
             align-items: center;
             justify-content: center;
             z-index: 2000;
-            padding: 16px;
         }
 
         .success-modal {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            padding: 30px 20px;
+            padding: 30px 24px;
             border-radius: 20px;
             text-align: center;
-            max-width: 360px;
-            width: 100%;
+            max-width: 380px;
+            width: 90%;
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         .success-icon-wrap {
-            width: 64px;
-            height: 64px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             background: rgba(16, 185, 129, 0.15);
             color: var(--success);
-            font-size: 28px;
+            font-size: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 16px;
         }
-
-        /* --- MOBILE RESPONSIVE MEDIA QUERIES --- */
-        @media (max-width: 768px) {
-            aside {
-                transform: translateX(-100%);
-            }
-            aside.mobile-open {
-                transform: translateX(0);
-            }
-            main {
-                margin-left: 0;
-                width: 100%;
-            }
-            .mobile-menu-btn {
-                display: block;
-            }
-            header {
-                padding: 0 16px;
-            }
-            .content-body {
-                padding: 16px;
-            }
-        }
     </style>
 </head>
 <body>
 
-    <!-- AUTH SCREEN -->
+    <!-- 1. AUTH SCREEN -->
     <div id="auth-screen">
         <div class="auth-card">
             <div style="text-align: center; margin-bottom: 20px;">
@@ -541,14 +492,14 @@
 
             <div id="form-login">
                 <div class="form-group">
-                    <label class="form-label">Tài khoản / Email</label>
+                    <label class="form-label">Tài khoản / Email (Nhập <b>admin</b> để test quyền Admin)</label>
                     <input type="text" class="form-control" id="login-user" placeholder="Nhập tên đăng nhập...">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Mật khẩu</label>
                     <input type="password" class="form-control" id="login-pass" placeholder="Nhập mật khẩu...">
                 </div>
-                <button class="btn" style="width: 100%; margin-top: 6px;" onclick="handleLogin()">Đăng Nhập Hệ Thống</button>
+                <button class="btn" style="width: 100%; margin-top: 6px; justify-content: center;" onclick="processLogin()">Đăng Nhập Hệ Thống</button>
             </div>
 
             <div id="form-register" style="display: none;">
@@ -567,43 +518,18 @@
                 <div style="background: var(--bg-main); padding: 8px 12px; border-radius: 8px; margin-bottom: 14px; font-size: 11px; color: var(--success); border: 1px solid var(--border-color);">
                     🎁 Tặng ngay <b>3 ngày dùng thử miễn phí</b> toàn bộ tính năng!
                 </div>
-                <button class="btn" style="width: 100%;" onclick="handleRegister()">Đăng Ký Ngay</button>
+                <button class="btn" style="width: 100%; justify-content: center;" onclick="processRegister()">Đăng Ký Ngay</button>
             </div>
         </div>
     </div>
 
-    <!-- MAIN APP CONTAINER -->
+    <!-- 2. MAIN APP CONTAINER -->
     <div id="app-container">
-        <!-- SIDEBAR -->
-        <aside id="sidebar">
-            <div class="brand">
-                <span class="emoji">🤖</span> AutoPost AI Pro
-            </div>
-            <ul class="menu">
-                <li class="menu-category">Tổng quan</li>
-                <li class="menu-item active" onclick="switchTab('dashboard')"><span class="emoji">📊</span> Thống kê hệ thống</li>
-                <li class="menu-item" onclick="switchTab('notifications')"><span class="emoji">📢</span> Cài đặt Thông báo</li>
-                
-                <li class="menu-category">Khách hàng & Tài chính</li>
-                <li class="menu-item" onclick="switchTab('customers')"><span class="emoji">👥</span> Quản lý khách hàng</li>
-                <li class="menu-item" onclick="switchTab('transactions')"><span class="emoji">💳</span> Giao dịch nạp tiền</li>
-                <li class="menu-item" onclick="switchTab('orders')"><span class="emoji">🛒</span> Quản lý đơn hàng</li>
-                <li class="menu-item" onclick="switchTab('refunds')"><span class="emoji">↩️</span> Hoàn tiền lỗi</li>
-                <li class="menu-item" onclick="switchTab('deposit-config')"><span class="emoji">🏦</span> Nạp tiền tự động ACB QR</li>
-                <li class="menu-item" onclick="switchTab('affiliate')"><span class="emoji">🤝</span> Tiếp thị liên kết (CTV)</li>
-
-                <li class="menu-category">Cấu hình Dịch vụ</li>
-                <li class="menu-item" onclick="switchTab('api-bot')"><span class="emoji">⚡</span> Nguồn dịch vụ & API+Bot</li>
-                <li class="menu-item" onclick="switchTab('platforms')"><span class="emoji">📱</span> Nền tảng & Dịch vụ</li>
-                <li class="menu-item" onclick="switchTab('packages')"><span class="emoji">📦</span> Quản lý Gói & Giá tiền</li>
-                <li class="menu-item" onclick="switchTab('trial-pricing')"><span class="emoji">⏳</span> Gói Dùng thử & Thời gian</li>
-
-                <li class="menu-category">Trải nghiệm Khách hàng</li>
-                <li class="menu-item" onclick="switchTab('client-fb')"><span class="emoji">📘</span> Dịch vụ Facebook (AI)</li>
-                <li class="menu-item" onclick="switchTab('client-tk')"><span class="emoji">🎵</span> Dịch vụ TikTok (AI/Grok)</li>
-                <li class="menu-item" onclick="switchTab('coupons')"><span class="emoji">🎟️</span> Coupons & Khuyến mại</li>
-                <li class="menu-item" onclick="switchTab('support-links')"><span class="emoji">💬</span> Cài đặt Hỗ trợ & Nhóm</li>
-                <li class="menu-item" onclick="switchTab('website-settings')"><span class="emoji">⚙️</span> Cài đặt Website (Tổng quan)</li>
+        <!-- SIDEBAR NAVIGATION -->
+        <aside>
+            <div class="brand-header">Menu Chính</div>
+            <ul class="menu" id="dynamic-menu">
+                <!-- Menu sẽ tự động phân quyền Khách hay Admin qua Javascript -->
             </ul>
         </aside>
 
@@ -611,370 +537,105 @@
         <main>
             <header>
                 <div class="header-left">
-                    <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</button>
-                    <h2 id="page-title" style="font-size: 16px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Thống kê hệ thống</h2>
-                </div>
-                <div style="display: flex; align-items: center; gap: 10px;">
+                    <h2 id="page-title" style="font-size: 16px; font-weight: 700;">Trang chủ</h2>
                     <div class="theme-switcher">
                         <button class="theme-btn active" onclick="setTheme('dark')">Dark</button>
                         <button class="theme-btn" onclick="setTheme('emerald')">Emerald</button>
                         <button class="theme-btn" onclick="setTheme('neon')">Neon</button>
                     </div>
-                    <div class="avatar" onclick="handleLogout()" title="Đăng xuất" style="cursor: pointer;">VA</div>
+                </div>
+                <div class="user-profile">
+                    <div style="text-align: right;">
+                        <div style="font-weight: 700; font-size: 13px;" id="user-display-name">Khách Hàng</div>
+                        <div style="font-size: 10px; color: var(--success);" id="user-role-badge">Tài khoản dùng thử</div>
+                    </div>
+                    <div class="avatar" onclick="handleLogout()" title="Đăng xuất">VA</div>
                 </div>
             </header>
 
             <div class="content-body">
-                <!-- 1. DASHBOARD -->
+
+                <!-- 1. TRANG CHỦ & THÔNG BÁO WEB -->
                 <div id="tab-dashboard" class="tab-content active">
+                    <div class="card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15)); border: 1px solid var(--primary);">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                            <span style="font-size: 24px;">📢</span>
+                            <h3 style="font-size: 16px; color: var(--primary);">Thông Báo Quan Trọng Từ Hệ Thống</h3>
+                        </div>
+                        <p style="font-size: 13px; line-height: 1.6; color: var(--text-main); margin-bottom: 8px;">
+                            🔥 Chào mừng bạn đến với hệ thống <b>AutoPost AI Pro</b>! Hệ thống tích hợp đầy đủ công cụ AI Grok cho TikTok và AutoPost Facebook tự động 24/7.
+                        </p>
+                    </div>
+
                     <div class="grid-4">
-                        <div class="stat-card">
-                            <div class="stat-icon">👥</div>
-                            <div class="stat-info">
-                                <h3>Tổng Khách Hàng</h3>
-                                <p>1,284</p>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">🛒</div>
-                            <div class="stat-info">
-                                <h3>Đơn Hôm Nay</h3>
-                                <p>342</p>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">💰</div>
-                            <div class="stat-info">
-                                <h3>Doanh Thu Tháng</h3>
-                                <p>48,5M</p>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">⚡</div>
-                            <div class="stat-info">
-                                <h3>API Server</h3>
-                                <p style="color: var(--success); font-size: 16px;">99.9%</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <h3 style="margin-bottom: 12px; font-size: 15px;">📈 Biểu đồ tăng trưởng</h3>
-                        <p style="color: var(--text-muted); font-size: 13px;">Hệ thống cập nhật real-time từ các nhánh Facebook, TikTok và QR ACB.</p>
+                        <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-info"><h3>Trạng thái</h3><p style="font-size:15px; color:var(--success);">Đang hoạt động</p></div></div>
+                        <div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-info"><h3>Dùng thử</h3><p style="font-size:15px; color:var(--warning);">Còn 3 ngày</p></div></div>
+                        <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-info"><h3>Số dư</h3><p style="font-size:15px; color:var(--success);">0đ</p></div></div>
+                        <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-info"><h3>Hệ thống</h3><p style="font-size:15px; color:var(--primary);">Ổn định</p></div></div>
                     </div>
                 </div>
 
-                <!-- 2. NOTIFICATIONS -->
-                <div id="tab-notifications" class="tab-content">
-                    <div class="card">
-                        <h3 style="margin-bottom: 16px; font-size: 15px;">📢 Cài đặt Thông báo</h3>
-                        <div class="form-group">
-                            <label class="form-label">Tiêu đề</label>
-                            <input type="text" class="form-control" placeholder="Tiêu đề thông báo...">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Nội dung</label>
-                            <textarea class="form-control" rows="3" placeholder="Nội dung..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label"><input type="checkbox"> Ghim thông báo này</label>
-                        </div>
-                        <button class="btn" onclick="showSuccessModal('Đã đăng thông báo thành công!')">Đăng Thông Báo</button>
-                    </div>
-                </div>
-
-                <!-- 3. CUSTOMERS -->
-                <div id="tab-customers" class="tab-content">
-                    <div class="card">
-                        <h3 style="margin-bottom: 16px; font-size: 15px;">👥 Quản lý Khách hàng</h3>
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Tài khoản</th>
-                                        <th>Dùng thử</th>
-                                        <th>Số dư</th>
-                                        <th>Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><b>khachhang01</b></td>
-                                        <td><span class="badge badge-warning">Còn 1 ngày</span></td>
-                                        <td>250,000đ</td>
-                                        <td><button class="btn" style="padding: 4px 10px; font-size: 11px;" onclick="showSuccessModal('Đã cập nhật!')">Sửa</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. TRANSACTIONS -->
-                <div id="tab-transactions" class="tab-content">
-                    <div class="card">
-                        <h3 style="margin-bottom: 16px; font-size: 15px;">💳 Giao dịch Nạp tiền</h3>
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Mã GD</th>
-                                        <th>Số tiền</th>
-                                        <th>Nội dung</th>
-                                        <th>Trạng thái</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>#ACB982</td>
-                                        <td><b>500,000đ</b></td>
-                                        <td>NAP 98231</td>
-                                        <td><span class="badge badge-success">Thành công</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5. ORDERS -->
-                <div id="tab-orders" class="tab-content">
-                    <div class="card">
-                        <h3 style="margin-bottom: 16px; font-size: 15px;">🛒 Quản lý Đơn hàng</h3>
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Đơn</th>
-                                        <th>Dịch vụ</th>
-                                        <th>Trạng thái</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>#ORD1024</td>
-                                        <td>Facebook Group AI</td>
-                                        <td><span class="badge badge-success">Đang chạy</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 6. REFUNDS -->
-                <div id="tab-refunds" class="tab-content">
-                    <div class="card">
-                        <h3 style="margin-bottom: 16px; font-size: 15px;">↩️ Hoàn tiền lỗi</h3>
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Đơn</th>
-                                        <th>Lý do</th>
-                                        <th>Hoàn</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>#ORD991</td>
-                                        <td>Lỗi API nguồn</td>
-                                        <td><button class="btn" style="background:var(--danger); padding:4px 10px; font-size:11px;" onclick="showSuccessModal('Đã hoàn tiền!')">Hoàn ngay</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 7. DEPOSIT CONFIG -->
-                <div id="tab-deposit-config" class="tab-content">
-                    <div class="card">
-                        <h3 style="margin-bottom: 16px; font-size: 15px;">🏦 Cài đặt ACB QR</h3>
-                        <div class="form-group">
-                            <label class="form-label">STK ACB</label>
-                            <input type="text" class="form-control" value="123456789">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Chủ TK</label>
-                            <input type="text" class="form-control" value="CONG TY AUTOPOST">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Cú pháp</label>
-                            <input type="text" class="form-control" value="NAP [USERNAME]">
-                        </div>
-                        <button class="btn" onclick="showSuccessModal('Đã lưu ACB QR!')">Lưu</button>
-                    </div>
-                </div>
-
-                <!-- 8. AFFILIATE -->
-                <div id="tab-affiliate" class="tab-content">
-                    <div class="card">
-                        <h3 style="margin-bottom: 16px; font-size: 15px;">🤝 Tiếp thị liên kết (CTV)</h3>
-                        <div class="form-group">
-                            <label class="form-label">Hoa hồng (%)</label>
-                            <input type="number" class="form-control" value="10">
-                        </div>
-                        <button class="btn" onclick="showSuccessModal('Đã lưu hoa hồng!')">Lưu</button>
-                    </div>
-                </div>
-
-                <!-- 9. API + BOT -->
-                <div id="tab-api-bot" class="tab-content">
-                    <div class="card">
-                        <h3>⚡ Nguồn dịch vụ & API+Bot</h3>
-                        <div class="form-group">
-                            <label class="form-label">Endpoint</label>
-                            <input type="text" class="form-control" value="https://api.server.com/v1">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Token</label>
-                            <input type="password" class="form-control" value="sk_live_123">
-                        </div>
-                        <button class="btn" onclick="showSuccessModal('Đã lưu API!')">Lưu</button>
-                    </div>
-                </div>
-
-                <!-- 10. PLATFORMS -->
-                <div id="tab-platforms" class="tab-content">
-                    <div class="card">
-                        <h3>📱 Quản lý Nền tảng</h3>
-                        <button class="btn" onclick="showSuccessModal('Đã thêm nền tảng!')">Thêm nền tảng</button>
-                    </div>
-                </div>
-
-                <!-- 11. PACKAGES -->
-                <div id="tab-packages" class="tab-content">
-                    <div class="card">
-                        <h3>📦 Quản lý Gói & Giá</h3>
-                        <div class="form-group">
-                            <label class="form-label">Tên gói</label>
-                            <input type="text" class="form-control" value="Gói VIP">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Giá</label>
-                            <input type="number" class="form-control" value="299000">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Ghi chú</label>
-                            <textarea class="form-control" rows="2">Lưu ý khi chạy...</textarea>
-                        </div>
-                        <button class="btn" onclick="showSuccessModal('Đã cập nhật gói!')">Cập nhật</button>
-                    </div>
-                </div>
-
-                <!-- 12. TRIAL PRICING -->
-                <div id="tab-trial-pricing" class="tab-content">
-                    <div class="card">
-                        <h3>⏳ Cài đặt thời gian gia hạn</h3>
-                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:14px;">
-                            <div style="background:var(--bg-main); padding:12px; border-radius:8px; border:1px solid var(--border-color)">
-                                <h4>1 Ngày</h4>
-                                <input type="number" class="form-control" value="15000" style="margin:6px 0">
-                            </div>
-                            <div style="background:var(--bg-main); padding:12px; border-radius:8px; border:1px solid var(--border-color)">
-                                <h4>7 Ngày</h4>
-                                <input type="number" class="form-control" value="90000" style="margin:6px 0">
-                            </div>
-                            <div style="background:var(--bg-main); padding:12px; border-radius:8px; border:1px solid var(--border-color)">
-                                <h4>15 Ngày</h4>
-                                <input type="number" class="form-control" value="170000" style="margin:6px 0">
-                            </div>
-                            <div style="background:var(--bg-main); padding:12px; border-radius:8px; border:1px solid var(--border-color)">
-                                <h4>1 Tháng</h4>
-                                <input type="number" class="form-control" value="300000" style="margin:6px 0">
-                            </div>
-                        </div>
-                        <button class="btn" onclick="showSuccessModal('Đã lưu giá thời gian!')">Lưu cấu hình</button>
-                    </div>
-                </div>
-
-                <!-- 13. CLIENT FACEBOOK -->
+                <!-- 2. DỊCH VỤ FACEBOOK -->
                 <div id="tab-client-fb" class="tab-content">
                     <div class="card">
-                        <h3>📘 Dịch vụ Facebook (AI)</h3>
-                        <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-                            <button class="btn" onclick="toggleFbBranch('group')">Đăng Group</button>
-                            <button class="btn" style="background:var(--bg-main); color:var(--text-main); border:1px solid var(--border-color)" onclick="toggleFbBranch('spam')">Spam Cmt</button>
+                        <h3>📘 Dịch vụ Facebook - AutoPost & Spam Comment</h3>
+                        <div style="display: flex; gap: 8px; margin: 14px 0;">
+                            <button class="btn" onclick="toggleFbBranch('group')">Đăng bài Group</button>
+                            <button class="btn" style="background:var(--bg-main); color:var(--text-main); border:1px solid var(--border-color)" onclick="toggleFbBranch('spam')">Spam Comment</button>
                         </div>
                         <div id="fb-group-section">
                             <div class="form-group">
-                                <label class="form-label">Ý tưởng AI viết hộ</label>
+                                <label class="form-label">Nội dung bài viết (Tích hợp AI viết hộ)</label>
                                 <div style="display: flex; gap: 6px; margin-bottom: 6px;">
                                     <input type="text" class="form-control" id="fb-idea-input" placeholder="Nhập ý tưởng...">
-                                    <button class="btn" onclick="aiGenerateText('fb')">AI Viết</button>
+                                    <button class="btn" onclick="aiGenerateText('fb')">✨ AI Viết</button>
                                 </div>
-                                <textarea class="form-control" rows="3" id="fb-content-box" placeholder="Nội dung..."></textarea>
+                                <textarea class="form-control" rows="4" id="fb-content-box" placeholder="Nội dung..."></textarea>
                             </div>
                         </div>
                         <div id="fb-comment-section" style="display: none;">
-                            <div class="form-group">
-                                <label class="form-label">Link bài viết</label>
-                                <input type="text" class="form-control" placeholder="https://facebook.com/...">
-                            </div>
+                            <div class="form-group"><label class="form-label">Link bài viết cần comment</label><input type="text" class="form-control" placeholder="https://facebook.com/..."></div>
                         </div>
-                        <button class="btn" style="width: 100%; margin-top: 10px;" onclick="showSuccessModal('Tạo đơn Facebook thành công!')">🚀 Tạo Đơn Facebook</button>
+                        <button class="btn" style="width: 100%; justify-content: center; padding: 12px;" onclick="showSuccessModal('Tạo đơn Facebook thành công!')">🚀 Tạo Đơn Facebook</button>
                     </div>
                 </div>
 
-                <!-- 14. CLIENT TIKTOK -->
+                <!-- 3. DỊCH VỤ TIKTOK -->
                 <div id="tab-client-tk" class="tab-content">
                     <div class="card">
-                        <h3>🎵 Dịch vụ TikTok (AI / Grok)</h3>
+                        <h3>🎵 Dịch vụ TikTok - AI Video (Grok Ready) & Lên Lịch</h3>
                         <div class="form-group">
                             <label class="form-label">Chủ đề video</label>
                             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
                                 <input type="text" class="form-control" id="tk-idea-input" placeholder="Nhập chủ đề...">
-                                <button class="btn" onclick="aiGenerateVideo('tk')">Grok Tạo</button>
+                                <button class="btn" onclick="aiGenerateVideo('tk')">✨ Grok Tạo</button>
                             </div>
                             <textarea class="form-control" rows="3" id="tk-script-box" placeholder="Kịch bản..."></textarea>
                         </div>
-                        <button class="btn" style="width: 100%; margin-top: 10px;" onclick="showSuccessModal('Tạo đơn TikTok thành công!')">🚀 Tạo Đơn TikTok</button>
+                        <button class="btn" style="width: 100%; justify-content: center; padding: 12px;" onclick="showSuccessModal('Tạo đơn TikTok thành công!')">🚀 Tạo Đơn TikTok</button>
                     </div>
                 </div>
 
-                <!-- 15. COUPONS -->
-                <div id="tab-coupons" class="tab-content">
-                    <div class="card">
-                        <h3>🎟️ Cài đặt Coupons</h3>
-                        <div class="form-group">
-                            <label class="form-label">Mã Code</label>
-                            <input type="text" class="form-control" placeholder="SALE2026">
-                        </div>
-                        <button class="btn" onclick="showSuccessModal('Đã tạo mã coupon!')">Tạo mã</button>
-                    </div>
-                </div>
+                <!-- CÁC TAB KHÁC CỦA KHÁCH HÀNG & ADMIN -->
+                <div id="tab-client-orders" class="tab-content"><div class="card"><h3>📋 Quản lý đơn hàng</h3><p style="color:var(--text-muted)">Danh sách đơn hàng của bạn.</p></div></div>
+                <div id="tab-client-wallet" class="tab-content"><div class="card"><h3>⏳ Luồng tiền</h3><p style="color:var(--text-muted)">Biến động số dư tài khoản.</p></div></div>
+                <div id="tab-client-profile" class="tab-content"><div class="card"><h3>👤 Tài khoản của tôi</h3><p style="color:var(--text-muted)">Thời hạn dùng thử 3 ngày.</p></div></div>
+                <div id="tab-client-deposit" class="tab-content"><div class="card"><h3>💳 Nạp tiền tự động ACB QR</h3><p style="color:var(--text-muted)">Quét mã QR chuyển khoản nội dung: <b>NAP [USERNAME]</b></p></div></div>
+                <div id="tab-client-refunds" class="tab-content"><div class="card"><h3>🔄 Hoàn tiền</h3><p style="color:var(--text-muted)">Lịch sử hoàn tiền đơn lỗi.</p></div></div>
+                <div id="tab-client-subweb" class="tab-content"><div class="card"><h3>🌐 Tạo web con</h3><p style="color:var(--text-muted)">Hệ thống White-label.</p></div></div>
+                <div id="tab-client-api" class="tab-content"><div class="card"><h3>💻 Tài liệu API</h3><p style="color:var(--text-muted)">Tài liệu tích hợp.</p></div></div>
+                <div id="tab-client-support" class="tab-content"><div class="card"><h3>🎧 Hỗ trợ khách hàng</h3><p style="color:var(--text-muted)">Liên hệ admin qua Telegram/Zalo.</p></div></div>
+                <div id="tab-client-affiliate" class="tab-content"><div class="card"><h3>🔗 Tiếp thị liên kết</h3><p style="color:var(--text-muted)">Hoa hồng giới thiệu.</p></div></div>
+                <div id="tab-client-notice" class="tab-content"><div class="card"><h3>🔔 Thông báo</h3><p style="color:var(--text-muted)">Tin tức cập nhật.</p></div></div>
 
-                <!-- 16. SUPPORT -->
-                <div id="tab-support-links" class="tab-content">
-                    <div class="card">
-                        <h3>💬 Cài đặt hỗ trợ & Nhóm</h3>
-                        <div class="form-group">
-                            <label class="form-label">Link Telegram</label>
-                            <input type="text" class="form-control" value="https://t.me/group">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Link Zalo</label>
-                            <input type="text" class="form-control" value="https://zalo.me/g/group">
-                        </div>
-                        <button class="btn" onclick="showSuccessModal('Đã lưu link hỗ trợ!')">Lưu</button>
-                    </div>
-                </div>
-
-                <!-- 17. WEBSITE SETTINGS -->
-                <div id="tab-website-settings" class="tab-content">
-                    <div class="card">
-                        <h3>⚙️ Cài đặt Website</h3>
-                        <div class="form-group">
-                            <label class="form-label">Tiêu đề trang</label>
-                            <input type="text" class="form-control" value="MẠNG XÃ HỘI VIỆT ANH">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Tỉ giá $</label>
-                            <input type="number" class="form-control" value="26000">
-                        </div>
-                        <button class="btn" onclick="showSuccessModal('Đã cập nhật website!')">Cập nhật</button>
-                    </div>
-                </div>
+                <!-- PHÂN VÙNG QUẢN TRỊ HỆ THỐNG (CHỈ DÀNH CHO ADMIN) -->
+                <div id="tab-admin-stats" class="tab-content"><div class="card"><h3>📊 Thống kê hệ thống</h3><p style="color:var(--text-muted)">Quản lý tổng quan doanh thu, khách hàng toàn hệ thống.</p></div></div>
+                <div id="tab-admin-customers" class="tab-content"><div class="card"><h3>👥 Quản lý khách hàng</h3><p style="color:var(--text-muted)">Danh sách toàn bộ khách hàng đang dùng thử & gia hạn.</p></div></div>
+                <div id="tab-admin-accounts" class="tab-content"><div class="card"><h3>🛡️ Quản lý tài khoản Admin</h3><p style="color:var(--text-muted)">Phân quyền quản trị viên phụ.</p></div></div>
+                <div id="tab-admin-resources" class="tab-content"><div class="card"><h3>🗂️ Kho tài nguyên (Cookie / Proxy)</h3><p style="color:var(--text-muted)">Thêm và quản lý nguyên liệu đầu vào.</p></div></div>
+                <div id="tab-admin-packages" class="tab-content"><div class="card"><h3>💎 Cài đặt Gói & Thời gian (1 ngày, 7 ngày, 15 ngày, 30 ngày)</h3><p style="color:var(--text-muted)">Tùy chỉnh giá tiền và ghi chú gói gia hạn.</p></div></div>
+                <div id="tab-admin-deposit" class="tab-content"><div class="card"><h3>🏦 Cài đặt ACB QR nạp tiền</h3><p style="color:var(--text-muted)">Cấu hình số tài khoản và cú pháp nhận tiền.</p></div></div>
+                <div id="tab-admin-settings" class="tab-content"><div class="card"><h3>⚙️ Cài đặt trang web tổng quan</h3><p style="color:var(--text-muted)">Cấu hình tiêu đề, logo, bảo trì website.</p></div></div>
 
             </div>
         </main>
@@ -989,13 +650,45 @@
     <div class="modal-overlay" id="successModal">
         <div class="success-modal">
             <div class="success-icon-wrap">✓</div>
-            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 6px;">Tạo đơn thành công!</h3>
+            <h3 id="modal-title" style="font-size: 18px; font-weight: 800; margin-bottom: 6px;">Thành công!</h3>
             <p id="success-message" style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Hệ thống đã xử lý mượt mà.</p>
-            <button class="btn" style="width: 100%;" onclick="closeSuccessModal()">Đóng</button>
+            <button class="btn" style="width: 100%; justify-content: center;" onclick="closeSuccessModal()">Đóng</button>
         </div>
     </div>
 
     <script>
+        let isAuthAction = false;
+        let loggedInUserType = 'client'; // 'client' hoặc 'admin'
+
+        const clientMenuHTML = `
+            <li class="menu-category">Chức Năng</li>
+            <li class="menu-item active" onclick="switchTab('dashboard')"><span class="emoji">🏠</span> Trang chủ</li>
+            <li class="menu-item" onclick="switchTab('client-orders')"><span class="emoji">📋</span> Quản lý đơn hàng</li>
+            <li class="menu-item" onclick="switchTab('client-wallet')"><span class="emoji">⏳</span> Luồng tiền</li>
+            <li class="menu-item" onclick="switchTab('client-profile')"><span class="emoji">👤</span> Tài khoản của tôi</li>
+            <li class="menu-item" onclick="switchTab('client-deposit')"><span class="emoji">💳</span> Nạp tiền</li>
+            <li class="menu-item" onclick="switchTab('client-refunds')"><span class="emoji">🔄</span> Hoàn tiền</li>
+            <li class="menu-item" onclick="switchTab('client-subweb')"><span class="emoji">🌐</span> Tạo web con</li>
+            <li class="menu-item" onclick="switchTab('client-api')"><span class="emoji">💻</span> Tài liệu API</li>
+            <li class="menu-item" onclick="switchTab('client-support')"><span class="emoji">🎧</span> Hỗ trợ</li>
+            <li class="menu-item" onclick="switchTab('client-affiliate')"><span class="emoji">🔗</span> Tiếp thị liên kết</li>
+            <li class="menu-item" onclick="switchTab('client-notice')"><span class="emoji">🔔</span> Thông báo</li>
+            <li class="brand-header" style="margin-top: 10px;">Nền Tảng</li>
+            <li class="menu-item" onclick="switchTab('client-fb')"><span class="emoji">📘</span> Facebook ▾</li>
+            <li class="menu-item" onclick="switchTab('client-tk')"><span class="emoji">🎵</span> TikTok ▾</li>
+        `;
+
+        const adminMenuHTML = clientMenuHTML + `
+            <li class="brand-header" style="margin-top: 10px; color: var(--warning);">Quản Trị Hệ Thống</li>
+            <li class="menu-item" onclick="switchTab('admin-stats')"><span class="emoji">📊</span> Thống kê hệ thống</li>
+            <li class="menu-item" onclick="switchTab('admin-customers')"><span class="emoji">👥</span> Quản lý khách hàng</li>
+            <li class="menu-item" onclick="switchTab('admin-accounts')"><span class="emoji">🛡️</span> Quản lý tài khoản Admin</li>
+            <li class="menu-item" onclick="switchTab('admin-resources')"><span class="emoji">🗂️</span> Kho tài nguyên (Cookie/Proxy)</li>
+            <li class="menu-item" onclick="switchTab('admin-packages')"><span class="emoji">💎</span> Cài đặt Gói & Thời gian</li>
+            <li class="menu-item" onclick="switchTab('admin-deposit')"><span class="emoji">🏦</span> Cài đặt ACB QR nạp tiền</li>
+            <li class="menu-item" onclick="switchTab('admin-settings')"><span class="emoji">⚙️</span> Cài đặt chung website</li>
+        `;
+
         function switchAuthTab(type) {
             if(type === 'login') {
                 document.getElementById('form-login').style.display = 'block';
@@ -1010,64 +703,78 @@
             }
         }
 
-        function handleLogin() {
-            const user = document.getElementById('login-user').value;
+        function processLogin() {
+            const user = document.getElementById('login-user').value.trim();
             if(!user) { alert('Vui lòng nhập tài khoản!'); return; }
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('app-container').style.display = 'flex';
+            
+            isAuthAction = true;
+            if(user.toLowerCase() === 'admin') {
+                loggedInUserType = 'admin';
+                document.getElementById('user-display-name').innerText = 'Admin Việt Anh';
+                document.getElementById('user-role-badge').innerText = 'Quản trị viên tối cao';
+                document.getElementById('dynamic-menu').innerHTML = adminMenuHTML;
+                showSuccessModal('Đăng nhập quyền Admin thành công! Đã mở khóa mục Quản trị hệ thống.', 'Đăng Nhập Admin');
+            } else {
+                loggedInUserType = 'client';
+                document.getElementById('user-display-name').innerText = user;
+                document.getElementById('user-role-badge').innerText = 'Tài khoản dùng thử (3 ngày)';
+                document.getElementById('dynamic-menu').innerHTML = clientMenuHTML;
+                showSuccessModal('Đăng nhập thành công! Chào mừng bạn quay trở lại.', 'Đăng Nhập Thành Công');
+            }
         }
 
-        function handleRegister() {
-            const user = document.getElementById('reg-user').value;
+        function processRegister() {
+            const user = document.getElementById('reg-user').value.trim();
             if(!user) { alert('Vui lòng nhập tên tài khoản!'); return; }
-            alert('Đăng ký thành công! Tặng 3 ngày dùng thử.');
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('app-container').style.display = 'flex';
+            
+            loggedInUserType = 'client';
+            document.getElementById('user-display-name').innerText = user;
+            document.getElementById('user-role-badge').innerText = 'Tài khoản dùng thử (3 ngày)';
+            document.getElementById('dynamic-menu').innerHTML = clientMenuHTML;
+            
+            isAuthAction = true;
+            showSuccessModal('Đăng ký tài khoản thành công! Tặng ngay 3 ngày dùng thử.', 'Đăng Ký Thành Công');
         }
 
         function handleLogout() {
             if(confirm('Đăng xuất khỏi hệ thống?')) {
                 document.getElementById('app-container').style.display = 'none';
                 document.getElementById('auth-screen').style.display = 'flex';
+                isAuthAction = false;
             }
-        }
-
-        function toggleMobileSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('mobile-open');
         }
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
             
-            document.getElementById('tab-' + tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
-
-            if(window.innerWidth <= 768) {
-                document.getElementById('sidebar').classList.remove('mobile-open');
-            }
+            const target = document.getElementById('tab-' + tabId);
+            if(target) target.classList.add('active');
+            if(event && event.currentTarget) event.currentTarget.classList.add('active');
             
             const titles = {
-                'dashboard': 'Thống kê hệ thống',
-                'notifications': 'Cài đặt Thông báo',
-                'customers': 'Quản lý khách hàng',
-                'transactions': 'Giao dịch nạp tiền',
-                'orders': 'Quản lý đơn hàng',
-                'refunds': 'Hoàn tiền lỗi',
-                'deposit-config': 'Nạp tiền tự động ACB QR',
-                'affiliate': 'Tiếp thị liên kết (CTV)',
-                'api-bot': 'Nguồn dịch vụ & API+Bot',
-                'platforms': 'Quản lý Nền tảng',
-                'packages': 'Quản lý Gói & Giá tiền',
-                'trial-pricing': 'Cài đặt Gói Dùng thử & Thời gian',
+                'dashboard': 'Trang chủ',
+                'client-orders': 'Quản lý đơn hàng',
+                'client-wallet': 'Luồng tiền',
+                'client-profile': 'Tài khoản của tôi',
+                'client-deposit': 'Nạp tiền',
+                'client-refunds': 'Hoàn tiền',
+                'client-subweb': 'Tạo web con',
+                'client-api': 'Tài liệu API',
+                'client-support': 'Hỗ trợ khách hàng',
+                'client-affiliate': 'Tiếp thị liên kết',
+                'client-notice': 'Thông báo hệ thống',
                 'client-fb': 'Dịch vụ Facebook (AI)',
-                'client-tk': 'Dịch vụ TikTok (AI/Grok)',
-                'coupons': 'Coupons & Khuyến mại',
-                'support-links': 'Cài đặt Hỗ trợ & Nhóm',
-                'website-settings': 'Cài đặt Website (Tổng quan)'
+                'client-tk': 'Dịch vụ TikTok (AI / Grok)',
+                'admin-stats': 'Thống kê hệ thống',
+                'admin-customers': 'Quản lý khách hàng',
+                'admin-accounts': 'Quản lý tài khoản Admin',
+                'admin-resources': 'Kho tài nguyên (Cookie/Proxy)',
+                'admin-packages': 'Cài đặt Gói & Thời gian',
+                'admin-deposit': 'Cài đặt ACB QR nạp tiền',
+                'admin-settings': 'Cài đặt chung website'
             };
-            document.getElementById('page-title').innerText = titles[tabId] || 'Quản trị';
+            document.getElementById('page-title').innerText = titles[tabId] || 'Hệ thống';
         }
 
         function setTheme(themeName) {
@@ -1077,14 +784,12 @@
         }
 
         function toggleFbBranch(type) {
-            const groupSec = document.getElementById('fb-group-section');
-            const cmtSec = document.getElementById('fb-comment-section');
             if (type === 'group') {
-                groupSec.style.display = 'block';
-                cmtSec.style.display = 'none';
+                document.getElementById('fb-group-section').style.display = 'block';
+                document.getElementById('fb-comment-section').style.display = 'none';
             } else {
-                groupSec.style.display = 'none';
-                cmtSec.style.display = 'block';
+                document.getElementById('fb-group-section').style.display = 'none';
+                document.getElementById('fb-comment-section').style.display = 'block';
             }
         }
 
@@ -1100,13 +805,20 @@
             document.getElementById(type + '-script-box').value = "🎬 [Grok AI Script]: " + idea + "\n- Hook cực mạnh 3s đầu.\n- Nội dung cốt lõi sinh động.";
         }
 
-        function showSuccessModal(msg) {
-            document.getElementById('success-message').innerText = msg || "Đã xử lý thành công.";
+        function showSuccessModal(msg, title = "Thành công!") {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('success-message').innerText = msg;
             document.getElementById('success-modal').style.display = 'flex';
         }
 
         function closeSuccessModal() {
             document.getElementById('success-modal').style.display = 'none';
+            if(isAuthAction) {
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('app-container').style.display = 'flex';
+                switchTab('dashboard');
+                isAuthAction = false;
+            }
         }
     </script>
 </body>

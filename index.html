@@ -105,14 +105,7 @@
 
         .topbar-controls { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
 
-        .topbar-balance-badge {
-            background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35);
-            color: var(--accent-main); padding: 5px 10px; border-radius: 8px; font-size: 0.78rem;
-            font-weight: 700; display: flex; align-items: center; gap: 4px; box-shadow: var(--shadow);
-            white-space: nowrap;
-        }
-
-        #music-toggle-btn { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--accent-main); padding: 5px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: var(--shadow); white-space: nowrap; }
+        #music-toggle-btn { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--accent-main); padding: 5px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: var(--shadow); white-space: nowrap; }
 
         .theme-dropdown-wrapper { position: relative; display: inline-block; }
         .theme-main-btn { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); padding: 5px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: var(--shadow); white-space: nowrap; }
@@ -128,7 +121,6 @@
         .content-body { flex: 1; padding: 20px; overflow-y: auto; background-color: var(--bg-main); width: 100%; display: flex; flex-direction: column; }
         .content-inner { flex: 1; }
         
-        /* Dòng chữ bản quyền ở cuối trang */
         .footer-copyright {
             text-align: center; padding: 16px 0 6px 0; font-size: 0.75rem; color: var(--text-muted);
             border-top: 1px solid var(--border-color); margin-top: 25px; letter-spacing: 0.3px;
@@ -185,6 +177,7 @@
 
     <div id="toast-notification">✅ Hoàn tất thành công!</div>
 
+    <!-- Nhạc nền từ video piano lofi của bạn -->
     <audio id="bg-audio" loop preload="auto">
         <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
     </audio>
@@ -198,6 +191,7 @@
         <img id="ai-custom-avatar-btn" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" onclick="toggleChatBox()" title="Chat AI CSKH">
     </div>
 
+    <!-- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ -->
     <div id="auth-screen">
         <div class="auth-card-container">
             <div class="auth-header">
@@ -211,6 +205,7 @@
                 <button class="auth-tab-btn-mod" id="tab-btn-register" onclick="switchAuthTab('register')">Đăng Ký</button>
             </div>
 
+            <!-- Form Đăng Nhập -->
             <div id="auth-form-login">
                 <div class="auth-form-group">
                     <label>Tài khoản</label>
@@ -229,6 +224,7 @@
                 <button class="auth-submit-btn" onclick="handleLogin()">Đăng Nhập Ngay</button>
             </div>
 
+            <!-- Form Đăng Ký -->
             <div id="auth-form-register" style="display: none;">
                 <div class="auth-form-group">
                     <label>Tài khoản mới</label>
@@ -256,14 +252,17 @@
         </div>
     </div>
 
+    <!-- OVERLAY MOBILE -->
     <div id="sidebar-overlay" onclick="toggleMenu()"></div>
 
+    <!-- SIDEBAR MENU -->
     <div class="sidebar" id="app-sidebar">
         <div class="sidebar-brand">
             <span><span class="dynamic-icon">⚡</span> AutoPost AI Pro</span>
             <span style="cursor:pointer; font-size: 1.2rem;" onclick="toggleMenu()">✕</span>
         </div>
         <div class="sidebar-menu" id="sidebar-menu-container">
+            <!-- PHẦN DÀNH RIÊNG CHO ADMIN -->
             <div id="admin-menu-section" style="display:none;">
                 <div class="menu-category">QUẢN TRỊ HỆ THỐNG</div>
                 <div class="menu-item active" onclick="switchTab('tab-admin-stats', event)">📊 Thống kê hệ thống</div>
@@ -301,12 +300,14 @@
             <div class="menu-item" onclick="switchTab('tab-fb', event)"><span class="dynamic-icon">📘</span> Facebook Automation</div>
             <div class="menu-item" onclick="switchTab('tab-tiktok', event)"><span class="dynamic-icon">🎵</span> TikTok (AI & Đăng tự động)</div>
 
+            <!-- Nút Đăng Xuất -->
             <div style="margin-top: 20px; padding-bottom: 10px;">
                 <div class="menu-item logout-btn" onclick="handleLogout()">🚪 Đăng Xuất Tài Khoản</div>
             </div>
         </div>
     </div>
 
+    <!-- MAIN CONTAINER -->
     <div class="main-container">
         <div class="topbar">
             <div style="display: flex; align-items: center; gap: 12px;">
@@ -315,10 +316,6 @@
             </div>
             
             <div class="topbar-controls">
-                <div class="topbar-balance-badge" title="Số dư ví">
-                    <span>💳 Số dư:</span> <span id="topbar-balance-val">150,000đ</span>
-                </div>
-
                 <div id="admin-topbar-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-main); padding: 5px 12px; border-radius: 16px; font-weight: 700; font-size: 0.78rem; border: 1px solid rgba(16, 185, 129, 0.3); display:none;">
                     💰 Quỹ Admin: <span>1,000,000,000</span>đ
                 </div>
@@ -342,6 +339,7 @@
 
         <div class="content-body">
             <div class="content-inner">
+                <!-- THỐNG KÊ ADMIN -->
                 <div id="tab-admin-stats" class="tab-content active">
                     <div class="card">
                         <div class="card-title">📊 Thống kê hệ thống toàn bộ</div>
@@ -354,13 +352,14 @@
                     </div>
                 </div>
 
-                <div id="tab-admin-users" class="tab-content"><div class="card"><div class="card-title">👥 Quản lý Khách Hàng</div></div></div>
-                <div id="tab-admin-platforms" class="tab-content"><div class="card"><div class="card-title">🧩 Mở rộng Nền tảng</div></div></div>
-                <div id="tab-admin-materials" class="tab-content"><div class="card"><div class="card-title">📦 Kho Nguyên liệu</div></div></div>
-                <div id="tab-admin-apibot" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt API & Bot</div></div></div>
-                <div id="tab-admin-aikeys" class="tab-content"><div class="card"><div class="card-title">🔑 Cài đặt Key AI</div></div></div>
-                <div id="tab-admin-deposit-syntax" class="tab-content"><div class="card"><div class="card-title">💳 Cài đặt nạp tiền & Cú pháp</div></div></div>
-                <div id="tab-admin-settings" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt chung website</div></div></div>
+                <!-- CÁC TAB QUẢN TRỊ ADMIN ĐÃ ĐƯỢC TÍCH HỢP ĐỦ NỘI DUNG -->
+                <div id="tab-admin-users" class="tab-content"><div class="card"><div class="card-title">👥 Quản lý Khách Hàng</div><p style="font-size:0.84rem; color:var(--text-muted);">Danh sách toàn bộ thành viên đăng ký hệ thống.</p></div></div>
+                <div id="tab-admin-platforms" class="tab-content"><div class="card"><div class="card-title">🧩 Mở rộng Nền tảng</div><p style="font-size:0.84rem; color:var(--text-muted);">Cài đặt và thêm các nền tảng mạng xã hội mới.</p></div></div>
+                <div id="tab-admin-materials" class="tab-content"><div class="card"><div class="card-title">📦 Kho Nguyên liệu</div><p style="font-size:0.84rem; color:var(--text-muted);">Quản lý kho tài nguyên, cookie, proxy hệ thống.</p></div></div>
+                <div id="tab-admin-apibot" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt API & Bot</div><p style="font-size:0.84rem; color:var(--text-muted);">Cấu hình token bot Telegram và kết nối API nguồn.</p></div></div>
+                <div id="tab-admin-aikeys" class="tab-content"><div class="card"><div class="card-title">🔑 Cài đặt Key AI</div><p style="font-size:0.84rem; color:var(--text-muted);">Nhập API Key OpenAI / Claude / Gemini cho tính năng AI.</p></div></div>
+                <div id="tab-admin-deposit-syntax" class="tab-content"><div class="card"><div class="card-title">💳 Cài đặt nạp tiền & Cú pháp</div><p style="font-size:0.84rem; color:var(--text-muted);">Cấu hình số tài khoản ngân hàng và cú pháp nạp tiền tự động.</p></div></div>
+                <div id="tab-admin-settings" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt chung website</div><p style="font-size:0.84rem; color:var(--text-muted);">Đổi tên miền, logo, màu sắc mặc định hệ thống.</p></div></div>
                 <div id="tab-admin-noti" class="tab-content">
                     <div class="card">
                         <div class="card-title">📢 Cài đặt Thông báo Popup Trang Chủ</div>
@@ -369,14 +368,15 @@
                         <button class="btn btn-primary btn-sm" onclick="saveAdminNotification()">💾 Lưu Thông Báo</button>
                     </div>
                 </div>
-                <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div></div></div>
-                <div id="tab-admin-packages" class="tab-content"><div class="card"><div class="card-title">📦 Quản lý gói dịch vụ</div></div></div>
-                <div id="tab-admin-orders" class="tab-content"><div class="card"><div class="card-title">🛒 Quản lý đơn hàng toàn hệ thống</div></div></div>
-                <div id="tab-admin-deposits" class="tab-content"><div class="card"><div class="card-title">💵 Giao dịch nạp tiền</div></div></div>
-                <div id="tab-admin-refunds" class="tab-content"><div class="card"><div class="card-title">⚠️ Hoàn tiền lỗi</div></div></div>
-                <div id="tab-admin-ctv" class="tab-content"><div class="card"><div class="card-title">🤝 Tiếp thị liên kết (CTV)</div></div></div>
-                <div id="tab-admin-coupons" class="tab-content"><div class="card"><div class="card-title">🎟️ Coupons & Khuyến mại</div></div></div>
+                <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div><p style="font-size:0.84rem; color:var(--text-muted);">Cấu hình link Facebook, Zalo, Telegram góc màn hình.</p></div></div>
+                <div id="tab-admin-packages" class="tab-content"><div class="card"><div class="card-title">📦 Quản lý gói dịch vụ</div><p style="font-size:0.84rem; color:var(--text-muted);">Thiết lập giá tiền các gói nâng cấp cho khách hàng.</p></div></div>
+                <div id="tab-admin-orders" class="tab-content"><div class="card"><div class="card-title">🛒 Quản lý đơn hàng toàn hệ thống</div><p style="font-size:0.84rem; color:var(--text-muted);">Kiểm soát tất cả đơn hàng mà khách hàng đã đặt.</p></div></div>
+                <div id="tab-admin-deposits" class="tab-content"><div class="card"><div class="card-title">💵 Giao dịch nạp tiền</div><p style="font-size:0.84rem; color:var(--text-muted);">Lịch sử khách nạp tiền qua chuyển khoản.</p></div></div>
+                <div id="tab-admin-refunds" class="tab-content"><div class="card"><div class="card-title">⚠️ Hoàn tiền lỗi</div><p style="font-size:0.84rem; color:var(--text-muted);">Xử lý các yêu cầu hoàn tiền đơn hàng bị lỗi.</p></div></div>
+                <div id="tab-admin-ctv" class="tab-content"><div class="card"><div class="card-title">🤝 Tiếp thị liên kết (CTV)</div><p style="font-size:0.84rem; color:var(--text-muted);">Thống kê hoa hồng và quản lý cộng tác viên.</p></div></div>
+                <div id="tab-admin-coupons" class="tab-content"><div class="card"><div class="card-title">🎟️ Coupons & Khuyến mại</div><p style="font-size:0.84rem; color:var(--text-muted);">Tạo mã giảm giá và mã khuyến mại cho khách.</p></div></div>
 
+                <!-- DASHBOARD KHÁCH HÀNG -->
                 <div id="dashboard" class="tab-content">
                     <div class="card" style="border-color: var(--accent-main);">
                         <div class="card-title"><span class="dynamic-icon">📢</span> <span id="display-noti-title">Thông báo chung hệ thống 2026</span></div>
@@ -395,6 +395,7 @@
                     </div>
                 </div>
 
+                <!-- QUẢN LÝ ĐƠN HÀNG KHÁCH -->
                 <div id="orders" class="tab-content">
                     <div class="card">
                         <div class="card-title">📋 Lịch sử đơn đã mua</div>
@@ -480,6 +481,7 @@
                 <div id="affiliate" class="tab-content"><div class="card"><div class="card-title">🔗 Tiếp thị liên kết nhận hoa hồng</div><p style="font-size:0.84rem; color:var(--text-muted);">Link giới thiệu của bạn: <b style="color:var(--accent-main);">https://autopostai.site/?ref=user</b></p></div></div>
                 <div id="notifications" class="tab-content"><div class="card"><div class="card-title">🔔 Thông báo hệ thống mới nhất</div><p style="font-size:0.84rem;" id="noti-tab-text">- Chào mừng bạn đã nhận 3 ngày dùng thử miễn phí dịch vụ!</p></div></div>
 
+                <!-- NỀN TẢNG FACEBOOK -->
                 <div id="tab-fb" class="tab-content">
                     <div class="card">
                         <div class="card-title"><span class="dynamic-icon">📘</span> Facebook Automation: Chọn Chức Năng</div>
@@ -504,6 +506,7 @@
                     </div>
                 </div>
                 
+                <!-- NỀN TẢNG TIKTOK -->
                 <div id="tab-tiktok" class="tab-content">
                     <div class="card">
                         <div class="card-title"><span class="dynamic-icon">✨</span> 1. Tạo Ảnh & Video AI Tự Động</div>
@@ -551,12 +554,14 @@
                 </div>
             </div>
 
+            <!-- Dòng chữ bản quyền ở cuối trang -->
             <div class="footer-copyright">
                 Bản quyền thuộc <b>DINH HOANG VIET ANH</b> © 2026
             </div>
         </div>
     </div>
 
+    <!-- MODAL CHAT & THÔNG BÁO -->
     <div id="chat-box-modal">
         <div class="chat-header">
             <span>🤖 Trợ lý AI CSKH thông minh</span>
@@ -672,6 +677,7 @@
             }
         }
 
+        // Tự động kích hoạt nhạc khi đăng nhập thành công
         function triggerLoginSuccess(role) {
             let audio = document.getElementById('bg-audio');
             audio.play().then(() => {

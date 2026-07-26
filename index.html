@@ -492,7 +492,7 @@
 
             <div id="form-login">
                 <div class="form-group">
-                    <label class="form-label">Tài khoản / Email (Nhập <b>admin</b> để test quyền Admin)</label>
+                    <label class="form-label">Tài khoản / Email</label>
                     <input type="text" class="form-control" id="login-user" placeholder="Nhập tên đăng nhập...">
                 </div>
                 <div class="form-group">
@@ -529,7 +529,7 @@
         <aside>
             <div class="brand-header">Menu Chính</div>
             <ul class="menu" id="dynamic-menu">
-                <!-- Menu sẽ tự động phân quyền Khách hay Admin qua Javascript -->
+                <!-- Menu tự động phân quyền qua Javascript -->
             </ul>
         </aside>
 
@@ -592,6 +592,10 @@
                                 </div>
                                 <textarea class="form-control" rows="4" id="fb-content-box" placeholder="Nội dung..."></textarea>
                             </div>
+                            <div class="form-group">
+                                <label class="form-label">Danh sách ID Group cần đăng</label>
+                                <textarea class="form-control" rows="2" placeholder="Mỗi ID group 1 dòng..."></textarea>
+                            </div>
                         </div>
                         <div id="fb-comment-section" style="display: none;">
                             <div class="form-group"><label class="form-label">Link bài viết cần comment</label><input type="text" class="form-control" placeholder="https://facebook.com/..."></div>
@@ -612,19 +616,25 @@
                             </div>
                             <textarea class="form-control" rows="3" id="tk-script-box" placeholder="Kịch bản..."></textarea>
                         </div>
+                        <div class="form-group">
+                            <label class="form-label">Đăng nhập tài khoản TikTok & Lên lịch</label>
+                            <button class="btn" style="background: var(--bg-main); color: var(--text-main); border: 1px solid var(--border-color); margin-bottom: 8px;" onclick="openTiktokLoginModal()">🔑 Đăng nhập TikTok & Nhập mã OTP</button>
+                            <input type="file" class="form-control" style="margin-bottom: 8px;">
+                            <input type="datetime-local" class="form-control">
+                        </div>
                         <button class="btn" style="width: 100%; justify-content: center; padding: 12px;" onclick="showSuccessModal('Tạo đơn TikTok thành công!')">🚀 Tạo Đơn TikTok</button>
                     </div>
                 </div>
 
-                <!-- CÁC TAB KHÁC CỦA KHÁCH HÀNG & ADMIN -->
+                <!-- CÁC TAB CHỨC NĂNG KHÁCH HÀNG & ADMIN -->
                 <div id="tab-client-orders" class="tab-content"><div class="card"><h3>📋 Quản lý đơn hàng</h3><p style="color:var(--text-muted)">Danh sách đơn hàng của bạn.</p></div></div>
                 <div id="tab-client-wallet" class="tab-content"><div class="card"><h3>⏳ Luồng tiền</h3><p style="color:var(--text-muted)">Biến động số dư tài khoản.</p></div></div>
-                <div id="tab-client-profile" class="tab-content"><div class="card"><h3>👤 Tài khoản của tôi</h3><p style="color:var(--text-muted)">Thời hạn dùng thử 3 ngày.</p></div></div>
+                <div id="tab-client-profile" class="tab-content"><div class="card"><h3>👤 Tài khoản của tôi</h3><p style="color:var(--text-muted)">Thông tin cá nhân & dùng thử 3 ngày.</p></div></div>
                 <div id="tab-client-deposit" class="tab-content"><div class="card"><h3>💳 Nạp tiền tự động ACB QR</h3><p style="color:var(--text-muted)">Quét mã QR chuyển khoản nội dung: <b>NAP [USERNAME]</b></p></div></div>
                 <div id="tab-client-refunds" class="tab-content"><div class="card"><h3>🔄 Hoàn tiền</h3><p style="color:var(--text-muted)">Lịch sử hoàn tiền đơn lỗi.</p></div></div>
                 <div id="tab-client-subweb" class="tab-content"><div class="card"><h3>🌐 Tạo web con</h3><p style="color:var(--text-muted)">Hệ thống White-label.</p></div></div>
-                <div id="tab-client-api" class="tab-content"><div class="card"><h3>💻 Tài liệu API</h3><p style="color:var(--text-muted)">Tài liệu tích hợp.</p></div></div>
-                <div id="tab-client-support" class="tab-content"><div class="card"><h3>🎧 Hỗ trợ khách hàng</h3><p style="color:var(--text-muted)">Liên hệ admin qua Telegram/Zalo.</p></div></div>
+                <div id="tab-client-api" class="tab-content"><div class="card"><h3>💻 Tài liệu API</h3><p style="color:var(--text-muted)">Tài liệu tích hợp API.</p></div></div>
+                <div id="tab-client-support" class="tab-content"><div class="card"><h3>🎧 Hỗ trợ khách hàng</h3><p style="color:var(--text-muted)">Liên hệ admin.</p></div></div>
                 <div id="tab-client-affiliate" class="tab-content"><div class="card"><h3>🔗 Tiếp thị liên kết</h3><p style="color:var(--text-muted)">Hoa hồng giới thiệu.</p></div></div>
                 <div id="tab-client-notice" class="tab-content"><div class="card"><h3>🔔 Thông báo</h3><p style="color:var(--text-muted)">Tin tức cập nhật.</p></div></div>
 
@@ -658,7 +668,7 @@
 
     <script>
         let isAuthAction = false;
-        let loggedInUserType = 'client'; // 'client' hoặc 'admin'
+        let loggedInUserType = 'client';
 
         const clientMenuHTML = `
             <li class="menu-category">Chức Năng</li>
@@ -713,7 +723,7 @@
                 document.getElementById('user-display-name').innerText = 'Admin Việt Anh';
                 document.getElementById('user-role-badge').innerText = 'Quản trị viên tối cao';
                 document.getElementById('dynamic-menu').innerHTML = adminMenuHTML;
-                showSuccessModal('Đăng nhập quyền Admin thành công! Đã mở khóa mục Quản trị hệ thống.', 'Đăng Nhập Admin');
+                showSuccessModal('Đăng nhập quyền Admin thành công!', 'Đăng Nhập Admin');
             } else {
                 loggedInUserType = 'client';
                 document.getElementById('user-display-name').innerText = user;
@@ -803,6 +813,11 @@
             const idea = document.getElementById(type + '-idea-input').value;
             if(!idea) { alert('Nhập chủ đề video!'); return; }
             document.getElementById(type + '-script-box').value = "🎬 [Grok AI Script]: " + idea + "\n- Hook cực mạnh 3s đầu.\n- Nội dung cốt lõi sinh động.";
+        }
+
+        function openTiktokLoginModal() {
+            const code = prompt("Nhập mã OTP xác thực TikTok:");
+            if(code) alert("Xác thực thành công!");
         }
 
         function showSuccessModal(msg, title = "Thành công!") {

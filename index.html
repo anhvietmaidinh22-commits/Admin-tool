@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AutoPost AI Pro - Hệ Thống Quản Trị & Dịch Vụ Toàn Diện</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-main: #0B0F19; --bg-sidebar: #111827; --bg-card: #1F2937;
@@ -35,12 +35,57 @@
         .dynamic-icon { display: inline-block; animation: pulseIcon 2s infinite ease-in-out; }
         @keyframes pulseIcon { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
-        /* Màn hình Đăng nhập / Đăng ký */
-        #auth-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--bg-main); display: flex; align-items: center; justify-content: center; z-index: 5000; padding: 16px; }
-        .auth-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; width: 100%; max-width: 400px; padding: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
-        .auth-tabs { display: flex; gap: 10px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-        .auth-tab-btn { background: none; border: none; color: var(--text-muted); font-weight: 700; font-size: 0.9rem; cursor: pointer; padding-bottom: 4px; }
-        .auth-tab-btn.active { color: var(--accent-main); border-bottom: 2px solid var(--accent-main); }
+        /* MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ MỚI - SIÊU ĐẸP & SANG TRỌNG */
+        #auth-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: linear-gradient(135deg, #050811 0%, #0B0F19 50%, #111827 100%);
+            display: flex; align-items: center; justify-content: center; z-index: 5000; padding: 20px;
+        }
+        .auth-card-container {
+            width: 100%; max-width: 420px; background: rgba(31, 41, 55, 0.7);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;
+            padding: 35px 30px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            animation: fadeInCard 0.5s ease-out;
+        }
+        @keyframes fadeInCard { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .auth-header { text-align: center; margin-bottom: 25px; }
+        .auth-logo-icon { font-size: 2.2rem; margin-bottom: 8px; display: inline-block; }
+        .auth-title { font-size: 1.5rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; margin-bottom: 4px; }
+        .auth-subtitle { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
+
+        .auth-tabs-modern {
+            display: flex; background: rgba(17, 24, 39, 0.6); padding: 4px;
+            border-radius: 10px; margin-bottom: 22px; border: 1px solid var(--border-color);
+        }
+        .auth-tab-btn-mod {
+            flex: 1; background: none; border: none; color: var(--text-muted);
+            font-weight: 700; font-size: 0.84rem; padding: 9px 0; border-radius: 8px;
+            cursor: pointer; transition: all 0.3s ease; text-align: center;
+        }
+        .auth-tab-btn-mod.active {
+            background: var(--accent-main); color: #fff; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .auth-form-group { margin-bottom: 16px; }
+        .auth-form-group label { display: block; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .auth-input-wrapper { position: relative; display: flex; align-items: center; }
+        .auth-input-wrapper input {
+            width: 100%; padding: 11px 14px 11px 40px; background: rgba(17, 24, 39, 0.8);
+            border: 1px solid var(--border-color); border-radius: 10px; color: #fff; font-size: 0.88rem; outline: none; transition: all 0.3s;
+        }
+        .auth-input-wrapper input:focus {
+            border-color: var(--accent-main); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2); background: #111827;
+        }
+        .auth-input-icon { position: absolute; left: 14px; font-size: 0.95rem; color: var(--text-muted); pointer-events: none; }
+
+        .auth-submit-btn {
+            width: 100%; padding: 12px; background: linear-gradient(135deg, var(--accent-main), #059669);
+            color: #fff; font-weight: 700; font-size: 0.92rem; border: none; border-radius: 10px;
+            cursor: pointer; transition: all 0.3s; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); margin-top: 6px;
+        }
+        .auth-submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(16, 185, 129, 0.4); }
 
         /* Sidebar đầy đủ chuẩn 100% */
         .sidebar { width: 260px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; flex-shrink: 0; height: 100%; overflow-y: auto; z-index: 1000; transition: 0.3s; }
@@ -125,7 +170,7 @@
 
     <div id="toast-notification">✅ Hoàn tất thành công!</div>
 
-    <!-- AUDIO PHÁT NHẠC NỀN TỰ ĐỘNG -->
+    <!-- AUDIO PHÁT NHẠC NỀN -->
     <audio id="bg-audio" loop>
         <source src="https://www.bensound.com/bensound-music/bensound-creativeminds.mp3" type="audio/mpeg">
     </audio>
@@ -142,30 +187,61 @@
 
     <!-- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ -->
     <div id="auth-screen">
-        <div class="auth-box">
-            <div style="text-align: center; margin-bottom: 15px;">
-                <h2 style="color: var(--accent-main); font-size: 1.4rem; font-weight: 700; margin-bottom: 4px;"><span class="dynamic-icon">⚡</span> AutoPost AI Pro</h2>
-                <p style="color: var(--text-muted); font-size: 0.82rem;">Hệ thống quản trị & điều hành dịch vụ</p>
+        <div class="auth-card-container">
+            <div class="auth-header">
+                <span class="auth-logo-icon dynamic-icon">⚡</span>
+                <h1 class="auth-title">AutoPost AI Pro</h1>
+                <p class="auth-subtitle">Hệ thống quản trị & điều hành dịch vụ</p>
             </div>
             
-            <div class="auth-tabs">
-                <button class="auth-tab-btn active" id="tab-btn-login" onclick="switchAuthTab('login')">Đăng Nhập</button>
-                <button class="auth-tab-btn" id="tab-btn-register" onclick="switchAuthTab('register')">Đăng Ký Tài Khoản</button>
+            <div class="auth-tabs-modern">
+                <button class="auth-tab-btn-mod active" id="tab-btn-login" onclick="switchAuthTab('login')">Đăng Nhập</button>
+                <button class="auth-tab-btn-mod" id="tab-btn-register" onclick="switchAuthTab('register')">Đăng Ký</button>
             </div>
 
             <!-- Form Đăng Nhập -->
             <div id="auth-form-login">
-                <div class="form-group"><label>Tài khoản</label><input type="text" id="login-username" value="vietanh_admin" placeholder="Nhập tài khoản..."></div>
-                <div class="form-group"><label>Mật khẩu</label><input type="password" id="login-password" value="123456" placeholder="Nhập mật khẩu..."></div>
-                <button class="btn btn-primary" style="margin-top: 8px;" onclick="handleLogin()">Đăng Nhập Ngay</button>
+                <div class="auth-form-group">
+                    <label>Tài khoản</label>
+                    <div class="auth-input-wrapper">
+                        <span class="auth-input-icon">👤</span>
+                        <input type="text" id="login-username" autocomplete="off" placeholder="Nhập tài khoản của bạn...">
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label>Mật khẩu</label>
+                    <div class="auth-input-wrapper">
+                        <span class="auth-input-icon">🔒</span>
+                        <input type="password" id="login-password" autocomplete="new-password" placeholder="Nhập mật khẩu bảo mật...">
+                    </div>
+                </div>
+                <button class="auth-submit-btn" onclick="handleLogin()">Đăng Nhập Ngay</button>
             </div>
 
             <!-- Form Đăng Ký -->
             <div id="auth-form-register" style="display: none;">
-                <div class="form-group"><label>Tài khoản mới</label><input type="text" id="reg-username" placeholder="Chọn tên tài khoản..."></div>
-                <div class="form-group"><label>Email / Số điện thoại</label><input type="text" id="reg-email" placeholder="Nhập email hoặc SĐT..."></div>
-                <div class="form-group"><label>Mật khẩu</label><input type="password" id="reg-password" placeholder="Tạo mật khẩu..."></div>
-                <button class="btn btn-primary" style="margin-top: 8px;" onclick="handleRegister()">Đăng Ký Ngay</button>
+                <div class="auth-form-group">
+                    <label>Tài khoản mới</label>
+                    <div class="auth-input-wrapper">
+                        <span class="auth-input-icon">✨</span>
+                        <input type="text" id="reg-username" autocomplete="off" placeholder="Chọn tên tài khoản...">
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label>Email / Số điện thoại</label>
+                    <div class="auth-input-wrapper">
+                        <span class="auth-input-icon">📧</span>
+                        <input type="text" id="reg-email" autocomplete="off" placeholder="Nhập email hoặc SĐT...">
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label>Mật khẩu</label>
+                    <div class="auth-input-wrapper">
+                        <span class="auth-input-icon">🔑</span>
+                        <input type="password" id="reg-password" autocomplete="new-password" placeholder="Tạo mật khẩu mới...">
+                    </div>
+                </div>
+                <button class="auth-submit-btn" onclick="handleRegister()">Tạo Tài Khoản & Nhận 3 Ngày Dùng Thử</button>
             </div>
         </div>
     </div>
@@ -180,23 +256,26 @@
             <span style="cursor:pointer; font-size: 1.2rem;" onclick="toggleMenu()">✕</span>
         </div>
         <div class="sidebar-menu" id="sidebar-menu-container">
-            <div class="menu-category">QUẢN TRỊ HỆ THỐNG</div>
-            <div class="menu-item active" onclick="switchTab('tab-admin-stats', event)">📊 Thống kê hệ thống</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-users', event)">👥 Quản lý khách hàng (1 Tỷ)</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-platforms', event)">🧩 Mở rộng Nền tảng</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-materials', event)">📦 Kho Nguyên liệu (Cookie/Proxy)</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-apibot', event)">⚙️ Cài đặt API & Bot</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-aikeys', event)">🔑 Cài đặt Key AI & Làm video</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-deposit-syntax', event)">💳 Cài đặt nạp tiền & SePay API</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-settings', event)">⚙️ Cài đặt chung website</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-noti', event)">📢 Cài đặt Thông báo</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-contact', event)">🎧 Cài đặt Liên kết Hỗ trợ</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-packages', event)">📦 Quản lý gói dịch vụ</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-orders', event)">🛒 Quản lý đơn hàng</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-deposits', event)">💵 Giao dịch nạp tiền</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-refunds', event)">⚠️ Hoàn tiền lỗi</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-ctv', event)">🤝 Tiếp thị liên kết (CTV)</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-coupons', event)">🎟️ Coupons & Khuyến mại</div>
+            <!-- PHẦN DÀNH RIÊNG CHO ADMIN -->
+            <div id="admin-menu-section">
+                <div class="menu-category">QUẢN TRỊ HỆ THỐNG</div>
+                <div class="menu-item active" onclick="switchTab('tab-admin-stats', event)">📊 Thống kê hệ thống</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-users', event)">👥 Quản lý khách hàng (1 Tỷ)</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-platforms', event)">🧩 Mở rộng Nền tảng</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-materials', event)">📦 Kho Nguyên liệu (Cookie/Proxy)</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-apibot', event)">⚙️ Cài đặt API & Bot</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-aikeys', event)">🔑 Cài đặt Key AI & Làm video</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-deposit-syntax', event)">💳 Cài đặt nạp tiền & Cú pháp</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-settings', event)">⚙️ Cài đặt chung website</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-noti', event)">📢 Cài đặt Thông báo</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-contact', event)">🎧 Cài đặt Liên kết Hỗ trợ</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-packages', event)">📦 Quản lý gói dịch vụ</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-orders', event)">🛒 Quản lý đơn hàng</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-deposits', event)">💵 Giao dịch nạp tiền</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-refunds', event)">⚠️ Hoàn tiền lỗi</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-ctv', event)">🤝 Tiếp thị liên kết (CTV)</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-coupons', event)">🎟️ Coupons & Khuyến mại</div>
+            </div>
 
             <div class="menu-category">MENU CHÍNH & CHỨC NĂNG</div>
             <div class="menu-item" onclick="switchTab('dashboard', event)">🏠 Trang chủ</div>
@@ -222,10 +301,10 @@
         <div class="topbar">
             <div style="display: flex; align-items: center; gap: 12px;">
                 <button onclick="toggleMenu()" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;">☰</button>
-                <div style="font-weight: 700; font-size: 0.95rem;" id="topbar-title">Thống Kê Hệ Thống Quản Trị</div>
+                <div style="font-weight: 700; font-size: 0.95rem;" id="topbar-title">Hệ Thống AutoPost AI Pro</div>
             </div>
             
-            <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px;" id="admin-topbar-badge">
                 <div style="background: rgba(16, 185, 129, 0.15); color: var(--accent-main); padding: 5px 12px; border-radius: 16px; font-weight: 700; font-size: 0.78rem; border: 1px solid rgba(16, 185, 129, 0.3);">
                     💰 Quỹ Admin: <span>1,000,000,000</span>đ
                 </div>
@@ -347,20 +426,15 @@
                 </div>
             </div>
 
-            <!-- 7. CÀI ĐẶT NẠP TIỀN & KẾT NỐI SEPAY API -->
+            <!-- 7. CÀI ĐẶT NẠP TIỀN & CÚ PHÁP -->
             <div id="tab-admin-deposit-syntax" class="tab-content">
                 <div class="card">
-                    <div class="card-title">💳 Cài đặt nạp tiền VietQR ACB & Kết nối SePay API</div>
-                    <div class="form-group"><label>Số Tài Khoản ACB</label><input type="text" id="cfg-bank-stk" value="26084821"></div>
-                    <div class="form-group"><label>Tên Chủ Tài Khoản ACB</label><input type="text" id="cfg-bank-holder" value="DINH HOANG VIET ANH"></div>
-                    
-                    <div style="border-top: 1px dashed var(--border-color); padding-top: 12px; margin-top: 12px;">
-                        <label style="color: var(--accent-main); font-weight: 700; margin-bottom: 8px;">🔗 Cấu hình SePay Webhook / API Token</label>
-                        <div class="form-group"><label>SePay API Token</label><input type="password" id="cfg-sepay-token" placeholder="Dán SePay Token vào đây..."></div>
-                        <div class="form-group"><label>Đường dẫn Webhook nhận tiền (Dán vào SePay)</label><input type="text" id="cfg-webhook-url" value="https://autopostai.pro/api/sepay-webhook" readonly style="background:#111827; color:#10B981;"></div>
-                    </div>
-
-                    <button class="btn btn-primary btn-sm" onclick="saveDepositConfig()">💾 Lưu Cấu Hình Nạp Tiền & SePay</button>
+                    <div class="card-title">💳 Cài đặt nạp tiền & Cú pháp tự động (Đồng bộ QR)</div>
+                    <div class="form-group"><label>Tên Ngân Hàng (VD: ACB, MBBank, VCB...)</label><input type="text" id="cfg-bank-name" value="ACB"></div>
+                    <div class="form-group"><label>Số Tài Khoản</label><input type="text" id="cfg-bank-stk" value="0123456789"></div>
+                    <div class="form-group"><label>Tên Chủ Tài Khoản (Viết hoa không dấu)</label><input type="text" id="cfg-bank-holder" value="NGUYEN VAN ANH"></div>
+                    <div class="form-group"><label>Cú pháp chuyển khoản tự động</label><input type="text" id="cfg-bank-syntax" value="NAP"></div>
+                    <button class="btn btn-primary btn-sm" onclick="saveDepositConfig()">💾 Lưu Cài Đặt Nạp Tiền & Đồng Bộ QR</button>
                 </div>
             </div>
 
@@ -427,12 +501,12 @@
             <!-- 13. GIAO DỊCH NẠP TIỀN -->
             <div id="tab-admin-deposits" class="tab-content">
                 <div class="card">
-                    <div class="card-title">💵 Quản lý lịch sử giao dịch nạp tiền tự động (SePay)</div>
+                    <div class="card-title">💵 Quản lý lịch sử giao dịch nạp tiền tự động</div>
                     <div class="table-container">
                         <table>
                             <thead><tr><th>Mã GD</th><th>Tài khoản</th><th>Số tiền nạp</th><th>Ngân hàng</th><th>Thời gian</th><th>Trạng thái</th></tr></thead>
                             <tbody>
-                                <tr><td>#TX-8821</td><td>khachhang_A</td><td style="color:var(--accent-main);font-weight:700;">+2,000đ</td><td>ACB (SePay)</td><td>2026-07-27 00:00</td><td><span style="color:#10B981;">Đã cộng tiền tự động</span></td></tr>
+                                <tr><td>#TX-8821</td><td>khachhang_A</td><td style="color:var(--accent-main);font-weight:700;">+200,000đ</td><td>ACB QR</td><td>2026-03-30 12:00</td><td><span style="color:#10B981;">Thành công</span></td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -477,18 +551,18 @@
                 </div>
             </div>
 
-            <div id="dashboard" class="tab-content"><div class="card"><div class="card-title">🏠 Trang chủ tổng quan dịch vụ</div></div></div>
+            <div id="dashboard" class="tab-content"><div class="card"><div class="card-title">🏠 Trang chủ tổng quan dịch vụ cho thành viên</div></div></div>
             <div id="orders" class="tab-content"><div class="card"><div class="card-title">📋 Quản lý đơn hàng cá nhân</div></div></div>
             <div id="cashflow" class="tab-content"><div class="card"><div class="card-title">⏳ Luồng tiền biến động số dư ví</div></div></div>
-            <div id="profile" class="tab-content"><div class="card"><div class="card-title">👤 Thông tin tài khoản của tôi (<span id="current-username-display" style="color:var(--accent-main);">vietanh_admin</span>)</div></div></div>
+            <div id="profile" class="tab-content"><div class="card"><div class="card-title">👤 Thông tin tài khoản của tôi</div></div></div>
             
-            <!-- 16. NẠP TIỀN TỰ ĐỘNG VIETQR ACB (NỘI DUNG CHỈ CÓ TÊN TÀI KHOẢN KHÁCH HÀNG) -->
+            <!-- 16. NẠP TIỀN TỰ ĐỘNG -->
             <div id="deposit" class="tab-content">
                 <div class="card">
-                    <div class="card-title">💳 Nạp tiền tự động qua VietQR ACB (SePay)</div>
-                    <div class="form-group"><label>Số tiền cần nạp (VNĐ)</label><input type="number" id="deposit-amount" value="100000"></div>
+                    <div class="card-title">💳 Nạp tiền tự động QR Ngân Hàng</div>
+                    <div class="form-group"><label>Số tiền nạp (VNĐ)</label><input type="number" id="deposit-amount" value="100000"></div>
                     <div class="form-group"><label>Mã Khuyến Mại (Nếu có)</label><input type="text" id="user-input-coupon" placeholder="Nhập mã..."></div>
-                    <button class="btn btn-primary btn-sm" onclick="generateQR()">Tạo Mã QR Nạp Tiền</button>
+                    <button class="btn btn-primary btn-sm" onclick="generateQR()">Tạo mã QR Nạp Tiền</button>
                     <div id="qr-box" style="text-align:center; margin-top:12px;"></div>
                 </div>
             </div>
@@ -616,12 +690,33 @@
     </div>
 
     <script>
-        let currentUser = "vietanh_admin";
+        window.addEventListener('DOMContentLoaded', () => {
+            if(localStorage.getItem('isLoggedIn') === 'true') {
+                document.getElementById('auth-screen').style.display = 'none';
+                applyUserPermissions();
+            }
+        });
+
+        function applyUserPermissions() {
+            let role = localStorage.getItem('userRole');
+            let adminMenu = document.getElementById('admin-menu-section');
+            let adminTopbar = document.getElementById('admin-topbar-badge');
+            
+            if(role === 'admin') {
+                if(adminMenu) adminMenu.style.display = 'block';
+                if(adminTopbar) adminTopbar.style.display = 'flex';
+            } else {
+                if(adminMenu) adminMenu.style.display = 'none';
+                if(adminTopbar) adminTopbar.style.display = 'none';
+                switchTab('dashboard', null);
+            }
+        }
+
         let depositConfig = {
-            bankId: "970416",
-            stk: "26084821",
-            holder: "DINH HOANG VIET ANH",
-            sepayToken: ""
+            bankName: "ACB",
+            stk: "0123456789",
+            holder: "NGUYEN VAN ANH",
+            syntax: "NAP"
         };
 
         function showToast(message) {
@@ -649,15 +744,15 @@
             }
         }
 
-        function triggerLoginSuccess() {
-            let userVal = document.getElementById('login-username').value.trim();
-            if(userVal) {
-                currentUser = userVal;
-                document.getElementById('current-username-display').innerText = currentUser;
-            }
+        function triggerLoginSuccess(role) {
             let audio = document.getElementById('bg-audio');
-            audio.play().catch(e => console.log("Chờ tương tác trình duyệt"));
-            showToast('✅ Đăng nhập thành công! Nhạc nền đã bật.');
+            audio.play().catch(e => console.log("Trình duyệt đã kích hoạt âm thanh"));
+            
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userRole', role);
+            
+            applyUserPermissions();
+            showToast('✅ Đăng nhập thành công!');
             setTimeout(() => {
                 document.getElementById('auth-screen').style.display = 'none';
                 openModal();
@@ -665,20 +760,35 @@
         }
 
         function handleLogin() {
-            let user = document.getElementById('login-username').value;
-            let pass = document.getElementById('login-password').value;
-            if(!user || !pass) { alert('Vui lòng nhập tài khoản và mật khẩu!'); return; }
-            triggerLoginSuccess();
+            let user = document.getElementById('login-username').value.trim();
+            let pass = document.getElementById('login-password').value.trim();
+            
+            if(!user || !pass) { 
+                alert('Vui lòng nhập tài khoản và mật khẩu!'); 
+                return; 
+            }
+
+            if(user === 'admin2608' && pass === '2608@') {
+                triggerLoginSuccess('admin');
+            } else {
+                triggerLoginSuccess('member');
+            }
         }
 
         function handleRegister() {
-            let user = document.getElementById('reg-username').value;
-            let pass = document.getElementById('reg-password').value;
-            if(!user || !pass) { alert('Vui lòng điền thông tin đăng ký dữ liệu!'); return; }
-            currentUser = user;
-            document.getElementById('current-username-display').innerText = currentUser;
-            showToast('✅ Đăng ký tài khoản thành công!');
-            setTimeout(() => { triggerLoginSuccess(); }, 1000);
+            let user = document.getElementById('reg-username').value.trim();
+            let pass = document.getElementById('reg-password').value.trim();
+            
+            if(!user || !pass) { 
+                alert('Vui lòng điền thông tin đăng ký!'); 
+                return; 
+            }
+            
+            // Tự động kích hoạt 3 ngày dùng thử miễn phí cho thành viên mới
+            showToast('🎉 Đăng ký thành công! Bạn nhận được 3 ngày dùng thử.');
+            setTimeout(() => { 
+                triggerLoginSuccess('member'); 
+            }, 1200);
         }
 
         function toggleMenu() {
@@ -708,30 +818,27 @@
         }
 
         function saveDepositConfig() {
-            depositConfig.stk = document.getElementById('cfg-bank-stk').value || "26084821";
-            depositConfig.holder = document.getElementById('cfg-bank-holder').value || "DINH HOANG VIET ANH";
-            depositConfig.sepayToken = document.getElementById('cfg-sepay-token').value.trim();
-            showToast('✅ Lưu cấu hình nạp tiền & SePay thành công!');
+            depositConfig.bankName = document.getElementById('cfg-bank-name').value || "ACB";
+            depositConfig.stk = document.getElementById('cfg-bank-stk').value || "0123456789";
+            depositConfig.holder = document.getElementById('cfg-bank-holder').value || "NGUYEN VAN ANH";
+            depositConfig.syntax = document.getElementById('cfg-bank-syntax').value || "NAP";
+            showToast('✅ Lưu cài đặt nạp tiền và đồng bộ QR thành công!');
         }
 
-        // Tạo mã QR VietQR ACB tự động (Nội dung chỉ có tên tài khoản khách hàng)
         function generateQR() {
             let amount = document.getElementById('deposit-amount').value || 100000;
             let coupon = document.getElementById('user-input-coupon').value;
             let couponText = coupon ? `<br><span>Mã ưu đãi: <b>${coupon}</b></span>` : '';
             
-            // Nội dung chuyển khoản chỉ là tên tài khoản của khách (Ví dụ: khachhang_A)
-            let transferSyntax = currentUser;
-
-            let qrUrl = `https://api.vietqr.io/image/${depositConfig.bankId}-${depositConfig.stk}-compact2.jpg?amount=${amount}&addInfo=${encodeURIComponent(transferSyntax)}&accountName=${encodeURIComponent(depositConfig.holder)}`;
+            let qrUrl = `https://api.vietqr.io/image/970416-${depositConfig.stk}-compact2.jpg?amount=${amount}&addInfo=${depositConfig.syntax}%202026&accountName=${encodeURIComponent(depositConfig.holder)}`;
 
             document.getElementById('qr-box').innerHTML = `
                 <div style="background: white; padding: 6px; display: inline-block; border-radius: 6px; margin-bottom: 6px;">
-                    <img src="${qrUrl}" width="140" alt="VietQR ACB">
+                    <img src="${qrUrl}" width="130" alt="QR Nạp Tiền">
                 </div>
-                <p style="font-size: 0.8rem;">Ngân hàng: <b>ACB (Á Châu)</b><br>STK: <b>${depositConfig.stk}</b><br>Chủ TK: <b>${depositConfig.holder}</b><br>Số tiền: <b style="color: var(--accent-main);">${Number(amount).toLocaleString()}đ</b><br>Nội dung chuyển khoản chính xác: <b style="color: #FF007F;">${transferSyntax}</b>${couponText}</p>
+                <p style="font-size: 0.78rem;">${depositConfig.bankName}: <b>${depositConfig.stk}</b> (${depositConfig.holder})<br>Số tiền: <b style="color: var(--accent-main);">${Number(amount).toLocaleString()}đ</b> | Cú pháp: <b>${depositConfig.syntax}</b>${couponText}</p>
             `;
-            showToast("✅ Đã tạo mã VietQR ACB thành công!");
+            showToast("✅ Đã tạo mã QR nạp tiền thành công!");
         }
 
         function addNewPlatformAndPackage() {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoPost AI Pro - Hệ Thống Tự Động Hóa Toàn Diện</title>
+    <title>AutoPost AI Pro - Hệ Thống Quản Trị & Dịch Vụ Toàn Diện</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -28,8 +28,12 @@
         @media(min-width: 900px) { body { flex-direction: row; height: 100vh; overflow: hidden; } }
 
         /* Màn hình Đăng nhập / Đăng ký */
-        #auth-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--bg-main); display: flex; align-items: center; justify-content: center; z-index: 3000; padding: 16px; }
+        #auth-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--bg-main); display: flex; align-items: center; justify-content: center; z-index: 4000; padding: 16px; }
         .auth-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; width: 100%; max-width: 400px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+
+        /* Popup Thông báo nổi */
+        #announcement-popup { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 3500; padding: 16px; }
+        .popup-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; width: 100%; max-width: 420px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); text-align: center; }
 
         .sidebar { width: 100%; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; flex-shrink: 0; }
         @media(min-width: 900px) { .sidebar { width: 280px; height: 100%; border-bottom: none; border-right: 1px solid var(--border-color); overflow-y: auto; } }
@@ -120,7 +124,18 @@
         </div>
     </div>
 
-    <!-- THANH MENU: QUẢN TRỊ ĐẦU TIÊN -->
+    <!-- POPUP THÔNG BÁO NỔI TỰ ĐỘNG KHI VÀO WEB -->
+    <div id="announcement-popup">
+        <div class="popup-box">
+            <h3 style="color: var(--accent-main); margin-bottom: 8px;">📢 Thông Báo Quan Trọng</h3>
+            <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.4; margin-bottom: 16px;">
+                Chào mừng bạn đến với hệ thống AutoPost AI Pro. Hệ thống đã được cập nhật kho Proxy xoay và tính năng nạp tiền tự động ACB QR 24/7. Chúc bạn có trải nghiệm tuyệt vời!
+            </p>
+            <button class="btn btn-primary" onclick="closePopup()">Đã Hiểu / Đóng</button>
+        </div>
+    </div>
+
+    <!-- THANH MENU: QUẢN TRỊ ĐẦU TIÊN ĐỦ ICON -->
     <div class="sidebar">
         <div class="sidebar-brand">⚡ AutoPost AI Pro</div>
         <div class="sidebar-menu">
@@ -389,12 +404,20 @@
             let user = document.getElementById('login-username').value;
             if(!user) { alert("Vui lòng nhập tên đăng nhập!"); return; }
             document.getElementById('auth-screen').style.display = 'none';
+            // Bật popup thông báo nổi sau khi đăng nhập
+            document.getElementById('announcement-popup').style.display = 'flex';
         }
 
         function handleRegister() {
             let user = document.getElementById('reg-username').value;
             if(!user) { alert("Vui lòng điền đầy đủ thông tin đăng ký!"); return; }
             document.getElementById('auth-screen').style.display = 'none';
+            // Bật popup thông báo nổi sau khi đăng ký
+            document.getElementById('announcement-popup').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('announcement-popup').style.display = 'none';
         }
 
         function setTheme(themeName) {

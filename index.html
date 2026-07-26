@@ -3,110 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoPost AI Pro - Hệ Thống Tự Động Hóa & Quản Trị Thông Minh</title>
+    <title>AutoPost AI Pro - Hệ Thống Tự Động Hóa Toàn Diện</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #0B0F19;
-            --bg-sidebar: #111827;
-            --bg-card: #1F2937;
-            --border-color: #374151;
-            --accent-emerald: #10B981;
-            --accent-blue: #3B82F6;
-            --text-main: #F3F4F6;
-            --text-muted: #9CA3AF;
+            --bg-main: #0B0F19; --bg-sidebar: #111827; --bg-card: #1F2937;
+            --border-color: #374151; --accent-emerald: #10B981; --accent-blue: #3B82F6;
+            --text-main: #F3F4F6; --text-muted: #9CA3AF;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
         
-        /* Sidebar */
-        .sidebar { width: 270px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; overflow-y: auto; }
-        .sidebar-brand { padding: 20px; font-size: 1.2rem; font-weight: 700; color: var(--accent-emerald); display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border-color); }
-        .sidebar-menu { padding: 15px; }
-        .menu-category { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin: 15px 0 5px 10px; font-weight: 700; letter-spacing: 0.5px; }
-        .menu-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; color: var(--text-muted); text-decoration: none; border-radius: 8px; margin-bottom: 4px; font-size: 0.9rem; transition: 0.2s; cursor: pointer; }
+        .sidebar { width: 260px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; }
+        .sidebar-brand { padding: 16px; font-size: 1.1rem; font-weight: 700; color: var(--accent-emerald); display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border-color); }
+        .sidebar-menu { padding: 10px; }
+        .menu-category { font-size: 0.68rem; text-transform: uppercase; color: var(--text-muted); margin: 10px 0 3px 8px; font-weight: 700; letter-spacing: 0.5px; }
+        .menu-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; color: var(--text-muted); text-decoration: none; border-radius: 6px; margin-bottom: 2px; font-size: 0.82rem; transition: 0.2s; cursor: pointer; }
         .menu-item:hover, .menu-item.active { background-color: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); font-weight: 600; }
 
-        /* Main Container */
-        .main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .topbar { height: 60px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
-        .user-balance-badge { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+        .topbar { height: 50px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; flex-shrink: 0; }
+        .user-balance-badge { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; border: 1px solid rgba(16, 185, 129, 0.3); white-space: nowrap; }
         
-        .content-body { flex: 1; padding: 25px; overflow-y: auto; background-color: var(--bg-main); }
-        .card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-        .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; color: #fff; }
+        .content-body { flex: 1; padding: 16px; overflow-y: auto; background-color: var(--bg-main); }
+        .card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-bottom: 14px; }
+        .card-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; color: #fff; }
         
-        /* Form controls */
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
-        input, textarea, select { width: 100%; padding: 10px 14px; background-color: #111827; border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 0.9rem; outline: none; }
+        .form-group { margin-bottom: 10px; }
+        label { display: block; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 3px; font-weight: 500; }
+        input, textarea, select { width: 100%; padding: 8px 10px; background-color: #111827; border: 1px solid var(--border-color); border-radius: 6px; color: #fff; font-size: 0.82rem; outline: none; }
         input:focus, textarea:focus, select:focus { border-color: var(--accent-emerald); }
         
-        .btn { padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; transition: 0.2s; }
+        .btn { padding: 8px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.82rem; transition: 0.2s; white-space: nowrap; }
         .btn-primary { background: linear-gradient(135deg, #10B981, #059669); color: #fff; width: 100%; }
-        .btn-primary:hover { opacity: 0.9; }
         .btn-ai { background: linear-gradient(135deg, #3B82F6, #1D4ED8); color: #fff; }
         
-        /* Floating Widget Chat */
-        .floating-actions { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
-        .float-btn { width: 50px; height: 50px; background: var(--accent-emerald); color: #fff; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.4); font-size: 1.2rem; }
-        
-        /* Chat Box Modal */
-        #chat-modal { position: fixed; bottom: 85px; right: 20px; width: 350px; height: 450px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: none; flex-direction: column; z-index: 1000; box-shadow: 0 5px 25px rgba(0,0,0,0.5); overflow: hidden; }
-        .chat-header { background: var(--bg-sidebar); padding: 12px 15px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
-        .chat-body { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.85rem; display: flex; flex-direction: column; gap: 10px; }
-        .chat-footer { padding: 10px; background: var(--bg-sidebar); border-top: 1px solid var(--border-color); display: flex; gap: 8px; }
-        
-        .msg { padding: 8px 12px; border-radius: 8px; max-width: 80%; line-height: 1.4; }
-        .msg-ai { background: #374151; align-self: flex-start; }
-        .msg-user { background: var(--accent-emerald); color: #fff; align-self: flex-end; }
-
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .video-preview-box { border: 2px dashed var(--border-color); border-radius: 8px; padding: 20px; text-align: center; color: var(--text-muted); margin-top: 10px; background: #111827; }
+        .video-preview-box { border: 2px dashed var(--border-color); border-radius: 6px; padding: 12px; text-align: center; color: var(--text-muted); margin-top: 6px; background: #111827; font-size: 0.82rem; }
+
+        /* Floating Chat Widget */
+        .floating-actions { position: fixed; bottom: 16px; right: 16px; z-index: 1000; }
+        .float-btn { width: 45px; height: 45px; background: var(--accent-emerald); color: #fff; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.4); font-size: 1.1rem; }
+        
+        #chat-modal { position: fixed; bottom: 70px; right: 16px; width: 320px; height: 380px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; display: none; flex-direction: column; z-index: 1000; box-shadow: 0 5px 20px rgba(0,0,0,0.5); overflow: hidden; }
+        .chat-header { background: var(--bg-sidebar); padding: 8px 12px; font-weight: 600; font-size: 0.82rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+        .chat-body { flex: 1; padding: 10px; overflow-y: auto; font-size: 0.78rem; display: flex; flex-direction: column; gap: 6px; }
+        .chat-footer { padding: 6px; background: var(--bg-sidebar); border-top: 1px solid var(--border-color); display: flex; gap: 6px; }
+        .msg { padding: 6px 8px; border-radius: 6px; max-width: 85%; line-height: 1.3; }
+        .msg-ai { background: #374151; align-self: flex-start; }
+        .msg-user { background: var(--accent-emerald); color: #fff; align-self: flex-end; }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar Điều Hướng -->
     <div class="sidebar">
-        <div class="sidebar-brand">
-            ⚡ AutoPost AI Pro
-        </div>
+        <div class="sidebar-brand">⚡ AutoPost AI Pro</div>
         <div class="sidebar-menu">
             <div class="menu-category">Trải nghiệm khách hàng</div>
-            <div class="menu-item" onclick="switchTab('fb', event)">🌐 Dịch vụ Facebook (AI)</div>
             <div class="menu-item active" onclick="switchTab('tiktok', event)">🎬 Dịch vụ TikTok (AI & Đăng tự động)</div>
+            <div class="menu-item" onclick="switchTab('fb', event)">🌐 Dịch vụ Facebook (AI)</div>
             <div class="menu-item" onclick="switchTab('deposit', event)">💳 Nạp tiền tự động ACB QR</div>
-            <div class="menu-category">Quản trị & Hệ thống</div>
-            <div class="menu-item" onclick="switchTab('admin', event)">🛡️ Quản lý Nhân sự & Số Dư (1 Tỷ)</div>
-            <div class="menu-item" onclick="switchTab('settings', event)">⚙️ Cài đặt Website, API & Proxy</div>
+            <div class="menu-item" onclick="switchTab('affiliate', event)">🤝 Tiếp thị liên kết (Affiliate)</div>
+            
+            <div class="menu-category">Quản trị & Cài đặt hệ thống</div>
+            <div class="menu-item" onclick="switchTab('settings-general', event)">⚙️ Cài đặt chung & Website</div>
+            <div class="menu-item" onclick="switchTab('settings-apibot', event)">🤖 Cài đặt API + BOT & Nạp tiền</div>
+            <div class="menu-item" onclick="switchTab('settings-proxy', event)">🛡️ Kho Proxy Xoay TikTok</div>
+            <div class="menu-item" onclick="switchTab('admin-balance', event)">👑 Quản lý Số Dư (1 Tỷ & Nhân sự)</div>
+            <div class="menu-item" onclick="switchTab('admin-orders', event)">📦 Quản lý Đơn hàng & Lịch sử</div>
         </div>
     </div>
 
-    <!-- Main Container -->
     <div class="main-container">
         <div class="topbar">
-            <div style="font-weight: 600; font-size: 0.95rem;" id="topbar-title">Dịch vụ TikTok - Tạo Video AI & Đăng Lịch Tự Động</div>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <div class="user-balance-badge">💰 Số dư: <span id="display-balance">1,000,000,000</span>đ</div>
-            </div>
+            <div style="font-weight: 600; font-size: 0.88rem;" id="topbar-title">Dịch vụ TikTok - Tạo Video AI & Đăng Lịch Tự Động</div>
+            <div class="user-balance-badge">💰 Số dư: <span id="display-balance">1,000,000,000</span>đ</div>
         </div>
 
         <div class="content-body">
 
-            <!-- 1. TAB TIKTOK -->
+            <!-- 1. TIKTOK -->
             <div id="tab-tiktok" class="tab-content active">
                 <div class="card">
-                    <div class="card-title">🎬 Nhánh 1: Tạo Video tự động bằng AI (Chọn Key tùy chỉnh)</div>
+                    <div class="card-title">🎬 Nhánh 1: Tạo Video AI & Chọn Key Tùy Chỉnh</div>
                     <div class="form-group">
-                        <label>Nhập ý tưởng / Chủ đề video</label>
-                        <div style="display: flex; gap: 10px;">
-                            <input type="text" placeholder="VD: Review động lực sống, chia sẻ kinh nghiệm..." id="tiktok-idea">
-                            <select id="ai-key-select" style="max-width: 220px;">
-                                <option value="gemini">Gemini Pro API Key</option>
+                        <label>Ý tưởng / Chủ đề video</label>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                            <input type="text" placeholder="VD: Review động lực..." id="tiktok-idea" style="flex: 1; min-width: 150px;">
+                            <select id="ai-key-select" style="width: 140px;">
+                                <option value="gemini">Gemini Pro API</option>
                                 <option value="grok">Grok AI Key</option>
-                                <option value="chatgpt">OpenAI GPT-4 Key</option>
                             </select>
                             <button class="btn btn-ai" onclick="generateTikTokVideo()">Tạo Video</button>
                         </div>
@@ -114,118 +101,159 @@
                     <div class="form-group">
                         <label>Thành quả Video (Xem trước & Tải về)</label>
                         <div class="video-preview-box" id="video-result-area">
-                            🎥 Video AI tạo ra sẽ hiển thị ở đây để bạn xem trước và tải về máy.
+                            🎥 Video AI tạo ra sẽ hiển thị ở đây để xem trước và tải về.
                         </div>
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-title">🚀 Nhánh 2: Đăng nhập, Gán Proxy Xoay & Lên Lịch Đăng Tự Động</div>
+                    <div class="card-title">🚀 Nhánh 2: Đăng nhập, Proxy Xoay & Lên Lịch Tự Động</div>
                     <div class="form-group">
-                        <label>Đăng nhập tài khoản TikTok (Tự động vượt bảo mật / OTP)</label>
-                        <div style="display: flex; gap: 10px;">
-                            <input type="text" placeholder="Nhập Cookie hoặc Username/Password tài khoản TikTok..." id="tiktok-account">
-                            <button class="btn btn-ai" onclick="loginTikTokWithProxy()">Đăng nhập & Gán Proxy</button>
+                        <label>Tài khoản / Cookie TikTok (Vượt OTP/Captcha tự động)</label>
+                        <div style="display: flex; gap: 6px;">
+                            <input type="text" placeholder="Nhập tài khoản TikTok..." id="tiktok-account" style="flex: 1;">
+                            <button class="btn btn-ai" onclick="loginTikTokWithProxy()">Đăng nhập</button>
                         </div>
-                        <div id="login-status" style="font-size: 0.8rem; color: var(--accent-emerald); margin-top: 5px;"></div>
+                        <div id="login-status" style="font-size: 0.72rem; color: var(--accent-emerald); margin-top: 3px;"></div>
                     </div>
                     <div class="form-group">
-                        <label>Tiêu đề video & Hashtag kèm theo</label>
-                        <textarea rows="3" placeholder="Nhập tiêu đề video và hashtag (#xuhuong #tiktok #viral)..."></textarea>
+                        <label>Tiêu đề video & Hashtag</label>
+                        <textarea rows="2" placeholder="Tiêu đề và hashtag (#xuhuong)..."></textarea>
                     </div>
                     <div class="form-group">
                         <label>Tệp video hoặc hình ảnh</label>
                         <input type="file" accept="video/*,image/*">
                     </div>
                     <div class="form-group">
-                        <label>Chọn Ngày & Giờ đăng tự động</label>
+                        <label>Ngày & Giờ đăng tự động</label>
                         <input type="datetime-local">
                     </div>
                     <button class="btn btn-primary" onclick="alert('Đã tạo đơn đăng TikTok thành công!')">🚀 Tạo Đơn & Lên Lịch Đăng</button>
                 </div>
             </div>
 
-            <!-- 2. TAB FACEBOOK -->
+            <!-- 2. FACEBOOK -->
             <div id="tab-fb" class="tab-content">
                 <div class="card">
-                    <div class="card-title">🌐 Dịch vụ Facebook - AutoPost & Spam Comment AI</div>
+                    <div class="card-title">🌐 Dịch vụ Facebook - AutoPost & Spam Comment</div>
                     <div class="form-group">
                         <label>Nội dung bài viết (Tích hợp AI viết hộ)</label>
-                        <div style="display: flex; gap: 10px; margin-bottom: 8px;">
-                            <input type="text" placeholder="Nhập ý tưởng ngắn gọn...">
-                            <button class="btn btn-ai" onclick="alert('AI đã viết xong nội dung bài đăng!')">✨ AI Viết Hộ</button>
+                        <div style="display: flex; gap: 6px; margin-bottom: 5px;">
+                            <input type="text" placeholder="Ý tưởng ngắn gọn..." style="flex: 1;">
+                            <button class="btn btn-ai" onclick="alert('AI đã viết xong nội dung!')">✨ AI Viết Hộ</button>
                         </div>
-                        <textarea rows="4" placeholder="Nội dung hoàn chỉnh sẽ hiển thị ở đây..."></textarea>
+                        <textarea rows="2" placeholder="Nội dung hoàn chỉnh..."></textarea>
                     </div>
                     <div class="form-group">
-                        <label>Danh sách ID Group cần đăng (Mỗi ID 1 dòng)</label>
-                        <textarea rows="3" placeholder="1000123456789&#10;1000987654321"></textarea>
+                        <label>Danh sách ID Group (Mỗi ID 1 dòng)</label>
+                        <textarea rows="2" placeholder="1000123456..."></textarea>
                     </div>
-                    <button class="btn btn-primary" onclick="alert('Đã khởi chạy tiến trình AutoPost Facebook!')">🚀 Tạo Đơn Facebook</button>
+                    <button class="btn btn-primary" onclick="alert('Đã khởi chạy AutoPost Facebook!')">🚀 Tạo Đơn Facebook</button>
                 </div>
             </div>
 
-            <!-- 3. TAB NẠP TIỀN ACB QR -->
+            <!-- 3. NẠP TIỀN ACB QR -->
             <div id="tab-deposit" class="tab-content">
                 <div class="card">
                     <div class="card-title">💳 Nạp tiền tự động qua QR Ngân hàng ACB (24/7)</div>
                     <div class="form-group">
-                        <label>Nhập số tiền muốn nạp (VNĐ)</label>
-                        <input type="number" id="deposit-amount" value="100000" placeholder="VD: 200000">
+                        <label>Số tiền muốn nạp (VNĐ)</label>
+                        <input type="number" id="deposit-amount" value="100000">
                     </div>
-                    <button class="btn btn-primary" style="margin-bottom: 15px;" onclick="generateQR()">Tạo mã QR Chuyển khoản</button>
-                    
-                    <div id="qr-box" style="text-align: center; background: #111827; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color);">
-                        <p style="color: var(--text-muted); margin-bottom: 10px;">Vui lòng nhập số tiền và bấm tạo mã QR.</p>
+                    <button class="btn btn-primary" style="margin-bottom: 10px;" onclick="generateQR()">Tạo mã QR Chuyển khoản</button>
+                    <div id="qr-box" style="text-align: center; background: #111827; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color);">
+                        <p style="color: var(--text-muted); font-size: 0.78rem;">Nhập số tiền và bấm tạo mã QR.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- 4. TAB QUẢN TRỊ ADMIN -->
-            <div id="tab-admin" class="tab-content">
+            <!-- 4. AFFILIATE -->
+            <div id="tab-affiliate" class="tab-content">
                 <div class="card">
-                    <div class="card-title">🛡️ Quản Lý Phân Quyền & Số Dư (Chủ Hệ Thống / Nhân Viên)</div>
+                    <div class="card-title">🤝 Tiếp Thị Liên Kết (Affiliate)</div>
                     <div class="form-group">
-                        <label>Chỉnh sửa số dư ảo cho tài khoản khách hàng</label>
-                        <div style="display: flex; gap: 10px;">
-                            <input type="text" id="target-user" value="khachhang_vip" placeholder="Tên tài khoản khách">
-                            <input type="number" id="add-balance-input" value="500000" placeholder="Số tiền cộng thêm">
-                            <button class="btn btn-primary" style="width: auto;" onclick="updateBalance()">Cập nhật số dư</button>
+                        <label>Link giới thiệu độc quyền của bạn</label>
+                        <input type="text" value="https://autopostai.pro/ref/user123" readonly>
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">
+                        <p>👥 Tổng giới thiệu: <b>0 bạn bè</b></p>
+                        <p>💰 Tổng hoa hồng nhận được: <b style="color: var(--accent-emerald);">0đ</b></p>
+                    </div>
+                    <button class="btn btn-primary" onclick="alert('Đã gửi yêu cầu rút tiền hoa hồng đến Admin!')">💸 Rút Tiền Hoa Hồng</button>
+                </div>
+            </div>
+
+            <!-- 5. CÀI ĐẶT CHUNG -->
+            <div id="tab-settings-general" class="tab-content">
+                <div class="card">
+                    <div class="card-title">⚙️ Cài đặt chung & Website</div>
+                    <div class="form-group"><label>Tỉ giá đô la</label><input type="number" value="26000"></div>
+                    <div class="form-group"><label>Tiêu đề trang</label><input type="text" value="AutoPost AI Pro"></div>
+                    <div class="form-group"><label>Trạng thái Bảo trì</label><select><option>Tắt</option><option>Bật</option></select></div>
+                    <div class="form-group"><label>% Hoa hồng Affiliate</label><input type="number" value="5"></div>
+                    <button class="btn btn-primary" onclick="alert('Đã lưu cài đặt website!')">💾 Cập Nhật</button>
+                </div>
+            </div>
+
+            <!-- 6. API + BOT & NẠP TIỀN -->
+            <div id="tab-settings-apibot" class="tab-content">
+                <div class="card">
+                    <div class="card-title">🤖 Cài đặt API + BOT & Cú pháp nạp tiền</div>
+                    <div class="form-group"><label>Gemini Pro / Grok API Key</label><input type="password" value="AIzaSy_Mock_Key"></div>
+                    <div class="form-group"><label>Bot Telegram Token & Chat ID</label><input type="text" value="7123456789:Token_Bot"></div>
+                    <div class="form-group"><label>Cú pháp nội dung nạp tiền ACB QR</label><input type="text" value="NAP"></div>
+                    <button class="btn btn-primary" onclick="alert('Đã lưu cấu hình API + BOT!')">💾 Lưu Cấu Hình</button>
+                </div>
+            </div>
+
+            <!-- 7. KHO PROXY XOAY -->
+            <div id="tab-settings-proxy" class="tab-content">
+                <div class="card">
+                    <div class="card-title">🛡️ Kho Quản Lý Proxy Xoay Cho TikTok</div>
+                    <div class="form-group">
+                        <label>Danh sách Proxy (IP:Port:User:Pass)</label>
+                        <textarea rows="4" placeholder="103.20.100.55:8000:acc1:pass">103.20.100.55:8000:acc1:pass2026
+103.20.100.88:8000:acc2:pass2026</textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="alert('Đã lưu kho Proxy!')">💾 Lưu Kho Proxy</button>
+                </div>
+            </div>
+
+            <!-- 8. QUẢN LÝ SỐ DƯ & NHÂN SỰ -->
+            <div id="tab-admin-balance" class="tab-content">
+                <div class="card">
+                    <div class="card-title">👑 Quản lý Số Dư (1 Tỷ) & Phân Quyền Nhân Sự</div>
+                    <div class="form-group">
+                        <label>Cộng/Trừ số dư tài khoản khách hàng</label>
+                        <div style="display: flex; gap: 6px;">
+                            <input type="text" id="target-user" value="khachhang_vip" style="flex: 1;">
+                            <input type="number" id="add-balance-input" value="500000" style="width: 100px;">
+                            <button class="btn btn-primary" style="width: auto;" onclick="updateBalance()">Cập nhật</button>
                         </div>
                     </div>
-                    <hr style="border-color: var(--border-color); margin: 20px 0;">
-                    <div style="font-size: 0.9rem; color: var(--text-muted);">
-                        <p>👑 <b>Chủ hệ thống (Super Admin):</b> Toàn quyền quản trị, xem dòng tiền, cấu hình API, phân quyền nhân sự.</p>
-                        <p style="margin-top: 5px;">🛡️ <b>Nhân viên (Staff):</b> Chỉ xử lý đơn hàng, hỗ trợ chat, không thấy các thông số cấu hình nhạy cảm.</p>
-                        <p style="margin-top: 5px; color: var(--accent-emerald);">📋 <b>Nhật ký hoạt động (Audit Log):</b> Hệ thống đang ghi nhận 100% mọi thao tác của nhân viên theo thời gian thực.</p>
+                    <hr style="border-color: var(--border-color); margin: 12px 0;">
+                    <div style="font-size: 0.78rem; color: var(--text-muted);">
+                        <p>👑 <b>Super Admin:</b> Toàn quyền quản trị.</p>
+                        <p style="margin-top: 3px;">🛡️ <b>Nhân viên (Staff):</b> Hỗ trợ xử lý đơn và chat.</p>
+                        <p style="margin-top: 3px; color: var(--accent-emerald);">📋 <b>Audit Log:</b> Đang ghi nhận hoạt động.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- 5. TAB CÀI ĐẶT API & PROXY -->
-            <div id="tab-settings" class="tab-content">
+            <!-- 9. QUẢN LÝ ĐƠN HÀNG -->
+            <div id="tab-admin-orders" class="tab-content">
                 <div class="card">
-                    <div class="card-title">⚙️ Cấu hình API, Bot Telegram & Kho Proxy Xoay TikTok</div>
-                    <div class="form-group">
-                        <label>Gemini Pro / Grok API Key (Dùng cho trợ lý AI)</label>
-                        <input type="password" value="AIzaSy_Mock_Key_Configured_2026">
+                    <div class="card-title">📦 Quản Lý Đơn Hàng & Lịch Sử Giao Dịch</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">
+                        <p>📋 Đang hiển thị danh sách toàn bộ đơn hàng hệ thống TikTok, Facebook, lịch sử nạp tiền ACB QR và lệnh rút tiền Affiliate tự động ghi nhận theo thời gian thực.</p>
                     </div>
-                    <div class="form-group">
-                        <label>Bot Telegram Token & Chat ID (Nhận thông báo đơn hàng & tin nhắn CSKH)</label>
-                        <input type="text" value="7123456789:AAH_Mock_Telegram_Bot_Token">
-                    </div>
-                    <div class="form-group">
-                        <label>Kho Quản Lý Proxy Xoay (Chống khóa tài khoản TikTok hàng loạt)</label>
-                        <textarea rows="4" placeholder="103.20.100.1:8000:user:pass&#10;103.20.100.2:8000:user:pass">103.20.100.55:8000:acc1:pass2026&#10;103.20.100.88:8000:acc2:pass2026</textarea>
-                    </div>
-                    <button class="btn btn-primary" onclick="alert('Đã lưu cấu hình hệ thống thành công!')">💾 Lưu Cấu Hình</button>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <!-- Bong bóng Chat Trực Tuyến & Widget AI/Nhân viên -->
+    <!-- Bong bóng chat trực tuyến -->
     <div class="floating-actions">
         <button class="float-btn" onclick="toggleChat()" title="Mở Hỗ Trợ Trực Tuyến">💬</button>
     </div>
@@ -236,16 +264,15 @@
             <span style="cursor: pointer;" onclick="toggleChat()">✕</span>
         </div>
         <div class="chat-body" id="chat-messages">
-            <div class="msg msg-ai">Xin chào! Tôi là trợ lý AI. Tôi có thể hỗ trợ gì cho bạn về cách nạp tiền hoặc sử dụng dịch vụ trên web?</div>
+            <div class="msg msg-ai">Xin chào! AI sẵn sàng hỗ trợ bạn. Bấm kết nối nếu cần gặp nhân viên.</div>
         </div>
         <div class="chat-footer">
             <input type="text" id="chat-input" placeholder="Nhập tin nhắn..." onkeypress="if(event.key==='Enter') sendChatMessage()">
-            <button class="btn btn-ai" style="padding: 6px 12px;" onclick="sendChatMessage()">Gửi</button>
+            <button class="btn btn-ai" style="padding: 4px 8px;" onclick="sendChatMessage()">Gửi</button>
         </div>
     </div>
 
     <script>
-        // Chuyển Tab giao diện mượt mà
         function switchTab(tabId, event) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.sidebar-menu .menu-item').forEach(el => el.classList.remove('active'));
@@ -257,56 +284,54 @@
                 'tiktok': 'Dịch vụ TikTok - Tạo Video AI & Đăng Lịch Tự Động',
                 'fb': 'Dịch vụ Facebook - AutoPost & Spam Comment',
                 'deposit': 'Nạp Tiền Tự Động Qua Mã QR Ngân Hàng ACB',
-                'admin': 'Quản Lý Quản Trị Viên, Nhân Sự & Số Dư',
-                'settings': 'Cài Đặt Cấu Hình Website, API & Kho Proxy'
+                'affiliate': 'Hệ Thống Tiếp Thị Liên Kết (Affiliate)',
+                'settings-general': 'Cài Đặt Website & Thông Tin Chung',
+                'settings-apibot': 'Cài Đặt API, Bot Telegram & Cú Pháp Nạp Tiền',
+                'settings-proxy': 'Quản Lý Kho Proxy Xoay Cho TikTok',
+                'admin-balance': 'Quản Lý Phân Quyền Nhân Sự & Số Dư (1 Tỷ)',
+                'admin-orders': 'Quản Lý Đơn Hàng & Lịch Sử Giao Dịch'
             };
             document.getElementById('topbar-title').innerText = titles[tabId] || 'Hệ Thống Quản Trị';
         }
 
-        // Mô phỏng tạo video AI
         function generateTikTokVideo() {
             const btn = event.target;
-            btn.innerText = "Đang render video AI...";
+            btn.innerText = "Đang render...";
             setTimeout(() => {
                 document.getElementById('video-result-area').innerHTML = `
-                    <div style="color: #10B981; font-weight: 600; margin-bottom: 10px;">✅ Đã tạo video thành công!</div>
-                    <video width="100%" controls style="max-height: 180px; border-radius: 6px; background: #000;">
+                    <div style="color: #10B981; font-weight: 600; margin-bottom: 5px;">✅ Đã tạo video thành công!</div>
+                    <video width="100%" controls style="max-height: 140px; border-radius: 4px; background: #000;">
                         <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
                     </video>
-                    <div style="margin-top: 8px;"><a href="#" style="color: #3B82F6; text-decoration: underline;">📥 Tải video về máy</a></div>
+                    <div style="margin-top: 5px;"><a href="#" style="color: #3B82F6; text-decoration: underline;">📥 Tải video về máy</a></div>
                 `;
                 btn.innerText = "Tạo Video";
-            }, 1200);
+            }, 800);
         }
 
-        // Đăng nhập TikTok kèm Proxy
         function loginTikTokWithProxy() {
-            document.getElementById('login-status').innerText = "🔄 Đang kết nối Proxy xoay sạch & Xác thực tài khoản...";
+            document.getElementById('login-status').innerText = "🔄 Đang gắn Proxy xoay & Xác thực tài khoản...";
             setTimeout(() => {
                 let otp = prompt("Hệ thống phát hiện bảo mật TikTok. Vui lòng nhập mã OTP hoặc giải Captcha:");
                 if(otp) {
                     document.getElementById('login-status').innerText = "✅ Đăng nhập TikTok thành công qua Proxy sạch!";
                 } else {
-                    document.getElementById('login-status').innerText = "❌ Đăng nhập bị hủy hoặc chưa hoàn tất.";
+                    document.getElementById('login-status').innerText = "❌ Đăng nhập bị hủy.";
                 }
-            }, 1000);
+            }, 600);
         }
 
-        // Tạo QR Nạp tiền
         function generateQR() {
             let amount = document.getElementById('deposit-amount').value || 100000;
             document.getElementById('qr-box').innerHTML = `
-                <div style="background: white; padding: 10px; display: inline-block; border-radius: 6px; margin-bottom: 10px;">
-                    <img src="https://api.vietqr.io/image/970416-0123456789-compact2.jpg?amount=${amount}&addInfo=NAP%202026&accountName=NGUYEN%20VAN%20ANH" width="160" alt="QR ACB">
+                <div style="background: white; padding: 6px; display: inline-block; border-radius: 4px; margin-bottom: 6px;">
+                    <img src="https://api.vietqr.io/image/970416-0123456789-compact2.jpg?amount=${amount}&addInfo=NAP%202026&accountName=NGUYEN%20VAN%20ANH" width="120" alt="QR ACB">
                 </div>
-                <p style="font-size: 0.850rem; color: var(--text-main);">Ngân hàng: <b>ACB</b> | Số TK: <b>0123456789</b></p>
-                <p style="font-size: 0.850rem; color: var(--text-main);">Số tiền: <b style="color: var(--accent-emerald);">${Number(amount).toLocaleString()}đ</b></p>
-                <p style="font-size: 0.850rem; color: var(--accent-blue);">Nội dung chuyển khoản chuẩn: <b>NAP 2026</b></p>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">(Hệ thống tự động cộng tiền ảo sau 2-5 giây khi nhận được tiền)</p>
+                <p style="font-size: 0.78rem; color: var(--text-main);">ACB: <b>0123456789</b> | Số tiền: <b style="color: var(--accent-emerald);">${Number(amount).toLocaleString()}đ</b></p>
+                <p style="font-size: 0.78rem; color: var(--accent-blue);">Cú pháp: <b>NAP</b></p>
             `;
         }
 
-        // Cập nhật số dư ảo
         let currentBalance = 1000000000;
         function updateBalance() {
             let addVal = parseInt(document.getElementById('add-balance-input').value) || 0;
@@ -315,13 +340,11 @@
             alert('Đã cập nhật thành công số dư cho tài khoản!');
         }
 
-        // Mở/đóng khung chat
         function toggleChat() {
             let modal = document.getElementById('chat-modal');
             modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        // Gửi tin nhắn chat
         function sendChatMessage() {
             let input = document.getElementById('chat-input');
             let text = input.value.trim();
@@ -333,9 +356,9 @@
             body.scrollTop = body.scrollHeight;
 
             setTimeout(() => {
-                body.innerHTML += `<div class="msg msg-ai">🤖 AI: Tôi đã ghi nhận yêu cầu của bạn. Nếu cần gặp nhân viên hỗ trợ trực tiếp, vui lòng bấm gọi CSKH!</div>`;
+                body.innerHTML += `<div class="msg msg-ai">🤖 AI: Đã ghi nhận. Bạn cần gặp nhân viên hỗ trợ trực tiếp chứ?</div>`;
                 body.scrollTop = body.scrollHeight;
-            }, 1000);
+            }, 600);
         }
     </script>
 </body>

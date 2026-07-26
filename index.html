@@ -258,7 +258,7 @@
                 </div>
             </div>
 
-            <!-- 2. QUẢN LÝ KHÁCH HÀNG -->
+            <!-- 2. QUẢN LÝ KHÁCH HÀNG (CÓ FORM NHẬP MẬT KHẨU MỚI KHI BẤM ĐỔI MK) -->
             <div id="tab-admin-users" class="tab-content">
                 <div class="card">
                     <div class="card-title">👥 Quản lý Khách Hàng (1 Tỷ)</div>
@@ -286,7 +286,7 @@
                                     <td>
                                         <div style="display:flex; gap:4px; flex-wrap:wrap;">
                                             <button class="btn btn-primary btn-sm" onclick="editUserBalance('101', 'khachhang_A')">Cập nhật số dư</button>
-                                            <button class="btn btn-ai btn-sm" onclick="showToast('✅ Đổi mật khẩu thành công!')">Đổi MK</button>
+                                            <button class="btn btn-ai btn-sm" onclick="openChangePasswordModal('khachhang_A')">Đổi MK</button>
                                             <button class="btn btn-sm" style="background:#EF4444;color:#fff;" onclick="showToast('✅ Đã khóa tài khoản thành công!')">Khóa</button>
                                         </div>
                                     </td>
@@ -297,7 +297,7 @@
                 </div>
             </div>
 
-            <!-- 3. MỞ RỘNG NỀN TẢNG (TẠO NỀN TẢNG KÈM GÓI DỊCH VỤ & GHI CHÚ) -->
+            <!-- 3. MỞ RỘNG NỀN TẢNG -->
             <div id="tab-admin-platforms" class="tab-content">
                 <div class="card">
                     <div class="card-title">🧩 Mở rộng Nền tảng Mới & Tạo Gói Dịch Vụ Đi Kèm</div>
@@ -402,10 +402,56 @@
                 </div>
             </div>
 
-            <div id="tab-admin-orders" class="tab-content"><div class="card"><div class="card-title">🛒 Quản lý đơn hàng dịch vụ toàn hệ thống</div></div></div>
-            <div id="tab-admin-deposits" class="tab-content"><div class="card"><div class="card-title">💵 Quản lý lịch sử giao dịch nạp tiền</div></div></div>
-            <div id="tab-admin-refunds" class="tab-content"><div class="card"><div class="card-title">⚠️ Xử lý yêu cầu hoàn tiền lỗi</div></div></div>
-            <div id="tab-admin-ctv" class="tab-content"><div class="card"><div class="card-title">🤝 Quản lý Tiếp thị liên kết (CTV) & Rút hoa hồng</div></div></div>
+            <!-- 12. QUẢN LÝ ĐƠN HÀNG -->
+            <div id="tab-admin-orders" class="tab-content">
+                <div class="card">
+                    <div class="card-title">🛒 Quản lý đơn hàng dịch vụ toàn hệ thống</div>
+                    <div class="form-group"><input type="text" placeholder="Tìm kiếm theo mã đơn hàng hoặc tài khoản mua..."></div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Mã Đơn</th><th>Khách hàng</th><th>Dịch vụ</th><th>Số lượng</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+                            <tbody>
+                                <tr><td>#ORD-9821</td><td>khachhang_A</td><td>Tăng Follow TikTok</td><td>1,000</td><td><span style="color:var(--accent-main);font-weight:600;">Đang chạy</span></td><td><button class="btn btn-sm btn-primary" onclick="showToast('✅ Đã hủy/hoàn đơn!')">Hủy đơn</button></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 13. GIAO DỊCH NẠP TIỀN -->
+            <div id="tab-admin-deposits" class="tab-content">
+                <div class="card">
+                    <div class="card-title">💵 Quản lý lịch sử giao dịch nạp tiền tự động</div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Mã GD</th><th>Tài khoản</th><th>Số tiền nạp</th><th>Ngân hàng</th><th>Thời gian</th><th>Trạng thái</th></tr></thead>
+                            <tbody>
+                                <tr><td>#TX-8821</td><td>khachhang_A</td><td style="color:var(--accent-main);font-weight:700;">+200,000đ</td><td>ACB QR</td><td>2026-03-30 12:00</td><td><span style="color:#10B981;">Thành công</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 14. HOÀN TIỀN LỖI -->
+            <div id="tab-admin-refunds" class="tab-content">
+                <div class="card">
+                    <div class="card-title">⚠️ Xử lý yêu cầu hoàn tiền đơn lỗi</div>
+                    <div class="form-group"><label>Mã đơn hàng lỗi cần hoàn</label><input type="text" placeholder="VD: #ORD-9821"></div>
+                    <div class="form-group"><label>Số tiền hoàn vào ví (VNĐ)</label><input type="number" placeholder="50000"></div>
+                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã hoàn tiền về ví cho khách thành công!')">🔄 Duyệt Hoàn Tiền</button>
+                </div>
+            </div>
+
+            <!-- 15. TIẾP THỊ LIÊN KẾT CTV -->
+            <div id="tab-admin-ctv" class="tab-content">
+                <div class="card">
+                    <div class="card-title">🤝 Quản lý Tiếp thị liên kết (CTV) & Rút hoa hồng</div>
+                    <div class="form-group"><label>Tỷ lệ hoa hồng chung (%)</label><input type="number" value="10"></div>
+                    <div class="form-group"><label>Ngưỡng rút tiền tối thiểu (VNĐ)</label><input type="number" value="100000"></div>
+                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Lưu cài đặt CTV thành công!')">💾 Lưu Cấu Hình CTV</button>
+                </div>
+            </div>
             
             <!-- COUPONS & KHUYẾN MẠI -->
             <div id="tab-admin-coupons" class="tab-content">
@@ -425,7 +471,6 @@
                 </div>
             </div>
 
-            <!-- MENU CHÍNH & CHỨC NĂNG KHÁCH HÀNG -->
             <div id="dashboard" class="tab-content"><div class="card"><div class="card-title">🏠 Trang chủ tổng quan dịch vụ</div></div></div>
             <div id="orders" class="tab-content"><div class="card"><div class="card-title">📋 Quản lý đơn hàng cá nhân</div></div></div>
             <div id="cashflow" class="tab-content"><div class="card"><div class="card-title">⏳ Luồng tiền biến động số dư ví</div></div></div>
@@ -514,6 +559,18 @@
                     <div class="form-group"><label>Tiêu đề & Hashtag video</label><textarea rows="2" placeholder="#xuhuong #fyp..."></textarea></div>
                     <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã đăng bài và gắn giỏ hàng TikTok thành công!')">🚀 Đăng Lên TikTok Ngay</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ĐỔI MẬT KHẨU KHÁCH HÀNG (MỚI BỔ SUNG KHI BẤM ĐỔI MK) -->
+    <div id="change-password-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 5000; padding: 16px;">
+        <div class="modal-box" style="background: var(--bg-card); border-radius: 12px; width: 100%; max-width: 380px; padding: 20px; border: 1px solid var(--border-color);">
+            <h3 style="color: #fff; font-size: 0.95rem; margin-bottom: 12px;">🔑 Đổi Mật Khẩu Cho Tài Khoản: <span id="modal-target-username" style="color: var(--accent-main);"></span></h3>
+            <div class="form-group"><label>Nhập mật khẩu mới</label><input type="password" id="new-password-input" placeholder="Mật khẩu mới..."></div>
+            <div style="display: flex; gap: 8px; margin-top: 15px;">
+                <button class="btn btn-primary btn-sm" style="flex:1;" onclick="submitChangePassword()">Xác Nhận Đổi</button>
+                <button class="btn btn-sm" style="background: #374151; color: #fff; flex:1;" onclick="closeChangePasswordModal()">Hủy</button>
             </div>
         </div>
     </div>
@@ -624,6 +681,22 @@
             if(window.innerWidth <= 899) toggleMenu();
         }
 
+        // Xử lý bật/tắt Modal đổi mật khẩu khách hàng
+        function openChangePasswordModal(username) {
+            document.getElementById('modal-target-username').innerText = username;
+            document.getElementById('new-password-input').value = '';
+            document.getElementById('change-password-modal').style.display = 'flex';
+        }
+        function closeChangePasswordModal() {
+            document.getElementById('change-password-modal').style.display = 'none';
+        }
+        function submitChangePassword() {
+            let newPass = document.getElementById('new-password-input').value;
+            if(!newPass) { alert('Vui lòng nhập mật khẩu mới!'); return; }
+            closeChangePasswordModal();
+            showToast('✅ Đổi mật khẩu thành công cho tài khoản!');
+        }
+
         function toggleGenInput() {
             let type = document.getElementById('tiktok-gen-type').value;
             let uploadGroup = document.getElementById('upload-file-group');
@@ -668,10 +741,6 @@
                 <p style="font-size: 0.78rem;">ACB: <b>0123456789</b> | Số tiền: <b style="color: var(--accent-main);">${Number(amount).toLocaleString()}đ</b></p>
             `;
             showToast("✅ Tạo mã QR thành công!");
-        }
-
-        function saveSocialLinks() {
-            showToast("✅ Đã cập nhật liên kết hỗ trợ thành công!");
         }
 
         function toggleChatBox() {

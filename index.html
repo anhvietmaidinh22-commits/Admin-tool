@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoPost AI - Dashboard</title>
+    <title>AutoPost AI - Hệ Thống Dịch Vụ Mạng Xã Hội</title>
     <style>
-        @keyframes rgb-text-anim {
-            0% { color: #ff0055; text-shadow: 0 0 10px rgba(255,0,85,0.4); }
-            33% { color: #00ffcc; text-shadow: 0 0 10px rgba(0,255,204,0.4); }
-            66% { color: #b5179e; text-shadow: 0 0 10px rgba(181,23,158,0.4); }
-            100% { color: #ff0055; text-shadow: 0 0 10px rgba(255,0,85,0.4); }
+        @keyframes rgb-border {
+            0% { border-color: #ff0055; box-shadow: 0 0 20px rgba(255, 0, 85, 0.15); }
+            33% { border-color: #00ffcc; box-shadow: 0 0 20px rgba(0, 255, 204, 0.15); }
+            66% { border-color: #7209b7; box-shadow: 0 0 20px rgba(114, 9, 183, 0.15); }
+            100% { border-color: #ff0055; box-shadow: 0 0 20px rgba(255, 0, 85, 0.15); }
         }
 
         * {
@@ -19,174 +19,158 @@
         }
 
         body {
-            background-color: #080a10;
+            background-color: #080a10; /* Tone tối xịn mịn */
             color: #ffffff;
             margin: 0;
             padding: 0;
             display: flex;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* SIDEBAR TRÁI */
-        .sidebar {
-            width: 260px;
-            background: rgba(16, 20, 35, 0.95);
-            backdrop-filter: blur(10px);
-            border-right: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
             flex-direction: column;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            overflow-y: auto;
-            z-index: 100;
+            min-height: 100vh;
+            padding-bottom: 90px;
         }
 
-        .sidebar-header {
-            padding: 22px 20px;
+        /* HEADER TRÊN CÙNG */
+        .top-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(12, 16, 28, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
-        .logo-animated {
-            font-weight: 900;
-            font-size: 16px;
-            animation: rgb-text-anim 5s infinite;
-            letter-spacing: 0.5px;
-        }
-
-        .role-badge {
-            background: linear-gradient(135deg, rgba(255, 0, 85, 0.2), rgba(114, 9, 183, 0.2));
-            color: #ff0055;
-            border: 1px solid rgba(255, 0, 85, 0.4);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .menu-section {
-            padding: 18px 20px 6px 20px;
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #6b7a99;
-            font-weight: 800;
-            letter-spacing: 1px;
-        }
-
-        .menu-item {
+        .header-left, .header-right {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 20px;
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 13.5px;
-            font-weight: 600;
+        }
+
+        .icon-btn {
+            background: #141a2e;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 16px;
             cursor: pointer;
-            margin: 4px 12px;
-            border-radius: 10px;
+            color: #94a3b8;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .menu-item:hover {
-            background: rgba(255, 255, 255, 0.04);
+        .icon-btn:hover {
+            background: #1f2847;
             color: #ffffff;
         }
 
-        .menu-item.active {
-            background: linear-gradient(135deg, rgba(255, 0, 85, 0.15), rgba(114, 9, 183, 0.25));
-            color: #00ffcc;
-            border-left: 3px solid #00ffcc;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .menu-item svg {
-            width: 17px;
-            height: 17px;
-            fill: currentColor;
-        }
-
-        .admin-only {
-            display: none;
-        }
-
-        /* NỘI DUNG CHÍNH */
-        .main-content {
-            margin-left: 260px;
-            flex: 1;
-            padding: 30px;
-            background: #080a10;
-            max-width: calc(100vw - 260px);
-        }
-
-        .top-nav {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .user-info {
-            background: rgba(20, 26, 46, 0.8);
-            padding: 8px 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            font-size: 13px;
-            color: #cbd5e1;
-        }
-
-        /* CARD GIAO DIỆN */
-        .card {
-            background: linear-gradient(145deg, #121629, #0d101d);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+        .btn-support {
+            background: linear-gradient(135deg, #ff0055, #7209b7);
+            color: white;
+            border: none;
+            padding: 7px 16px;
             border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #ffffff;
-        }
-
-        /* KHUNG THÔNG BÁO HỆ THỐNG */
-        .notice-box {
-            background: rgba(0, 255, 204, 0.05);
-            border: 1px solid rgba(0, 255, 204, 0.2);
-            padding: 15px 18px;
-            border-radius: 14px;
-            margin-bottom: 20px;
             font-size: 13px;
-            color: #00ffcc;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 0, 85, 0.3);
+        }
+
+        .avatar-mini {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00ffcc, #7209b7);
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            color: #080a10;
+            font-weight: 900;
+            font-size: 15px;
+        }
+
+        /* BREADCRUMB */
+        .breadcrumb-section {
+            padding: 15px 20px 5px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin: 0 0 4px 0;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .breadcrumb {
+            font-size: 12px;
+            color: #6b7a99;
+        }
+
+        /* CONTAINER CHÍNH */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .auth-card {
+            background: linear-gradient(145deg, #121726, #0c101a);
+            width: 100%;
+            max-width: 420px;
+            border-radius: 24px;
+            padding: 30px;
+            border: 2px solid #ff0055;
+            animation: rgb-border 6s infinite;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 75px;
+            height: 75px;
+            border-radius: 18px;
+            object-fit: cover;
+            margin: 0 auto 15px auto;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 22px;
+            color: #ffffff;
         }
 
         .form-group {
             margin-bottom: 18px;
+            text-align: left;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 13px;
+            margin-bottom: 7px;
+            font-size: 12.5px;
+            font-weight: 700;
             color: #94a3b8;
-            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         input, select, textarea {
             width: 100%;
             padding: 13px 16px;
-            background: #090c15;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #080a10;
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
             color: #ffffff;
             font-size: 14px;
@@ -195,7 +179,8 @@
 
         input:focus, select:focus, textarea:focus {
             border-color: #00ffcc;
-            box-shadow: 0 0 0 3px rgba(0, 255, 204, 0.15);
+            background: #0c101a;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.15);
         }
 
         textarea {
@@ -203,156 +188,273 @@
             height: 95px;
         }
 
-        .btn-main {
-            background: linear-gradient(135deg, #ff0055, #7209b7);
-            color: white;
-            border: none;
-            padding: 14px 20px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
+        .btn-submit {
             width: 100%;
-            box-shadow: 0 4px 15px rgba(255, 0, 85, 0.3);
+            padding: 14px;
+            background: linear-gradient(135deg, #ff0055, #7209b7);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255, 0, 85, 0.35);
+            margin-top: 10px;
         }
 
-        .btn-main:hover {
+        .btn-submit:hover {
             opacity: 0.92;
             transform: translateY(-1px);
         }
 
-        .panel-section {
-            display: none;
+        .btn-passkey {
+            width: 100%;
+            padding: 12px;
+            background: #141a2e;
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            color: #cbd5e1;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .panel-section.active {
+
+        .btn-passkey:hover {
+            background: #1f2847;
+            color: #ffffff;
+        }
+
+        .forgot-link {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #00ffcc;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        /* APP SECTIONS */
+        .app-section {
+            display: none;
+            width: 100%;
+        }
+        .app-section.active {
             display: block;
         }
 
-        /* TABS AUTH */
-        .tab-auth {
+        /* THANH MENU ĐIỀU HƯỚNG DƯỚI MÀN HÌNH (BOTTOM BAR) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(12, 16, 28, 0.95);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
             display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-bottom: 25px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 12px;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0 22px 0;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+            z-index: 100;
         }
 
-        .tab-auth-btn {
+        .nav-item {
             background: none;
             border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
             color: #6b7a99;
-            font-size: 15px;
+            font-size: 11px;
             font-weight: 700;
             cursor: pointer;
+            text-decoration: none;
         }
 
-        .tab-auth-btn.active {
+        .nav-item svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .nav-item.active {
             color: #00ffcc;
             text-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
         }
 
-        .auth-form {
-            display: none;
-        }
-        .auth-form.active {
-            display: block;
+        /* Nút giỏ hàng nổi bật ở giữa */
+        .nav-item-center {
+            position: relative;
+            top: -16px;
         }
 
-        @media(max-width: 768px) {
-            .sidebar { width: 70px; }
-            .sidebar-header .logo-animated, .menu-section, .menu-item span { display: none; }
-            .main-content { margin-left: 70px; max-width: calc(100vw - 70px); padding: 15px; }
+        .nav-circle-btn {
+            width: 54px;
+            height: 54px;
+            background: linear-gradient(135deg, #ff0055, #7209b7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 6px 20px rgba(255, 0, 85, 0.5);
+            border: 4px solid #080a10;
+        }
+
+        .nav-circle-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
         }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR TRÁI -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <span class="logo-animated">AUTOPOST AI</span>
-            <div class="role-badge" id="sidebarRoleBadge">Khách</div>
+    <!-- TOP HEADER -->
+    <div class="top-header">
+        <div class="header-left">
+            <button class="icon-btn" onclick="alert('Menu tùy chọn hệ thống')">☰</button>
+            <button class="btn-support">+ Hỗ trợ</button>
         </div>
-
-        <div class="menu-section admin-only">Quản trị</div>
-        <a class="menu-item admin-only" onclick="switchPanel('statPanel', this)">
-            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-            <span>Thống kê</span>
-        </a>
-        <a class="menu-item admin-only" onclick="switchPanel('materialPanel', this)">
-            <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
-            <span>Kho Nguyên Liệu</span>
-        </a>
-
-        <div class="menu-section">Chức năng</div>
-        <a class="menu-item" onclick="switchPanel('homePanel', this)">
-            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-            <span>Trang chủ tạo đơn</span>
-        </a>
-        <a class="menu-item active" onclick="switchPanel('authPanel', this)">
-            <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-            <span>Tài khoản</span>
-        </a>
+        <div class="header-right">
+            <button class="icon-btn" onclick="alert('Danh mục dịch vụ')">🔲</button>
+            <button class="icon-btn" onclick="alert('Chế độ sáng/tối đang bật tối')">🌙</button>
+            <button class="icon-btn" onclick="alert('Không có thông báo mới')">🔔</button>
+            <div class="avatar-mini">A</div>
+        </div>
     </div>
 
-    <!-- NỘI DUNG CHÍNH -->
-    <div class="main-content">
-        <div class="top-nav">
-            <div class="user-info">Xin chào, <b id="currentUsername" style="color: #00ffcc;">Khách vãng lai</b> (Quyền: <span id="roleText" style="color:#94a3b8">Khách</span>)</div>
-        </div>
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb-section">
+        <h1 class="page-title" id="pageHeaderTitle">ĐĂNG NHẬP</h1>
+        <div class="breadcrumb" id="pageBreadcrumb">Trang chủ &gt; Đăng nhập</div>
+    </div>
 
-        <!-- PANEL TRANG CHỦ -->
-        <div id="homePanel" class="panel-section">
-            <div class="card" style="max-width: 600px; margin: 0 auto;">
-                <div class="card-title">🚀 Tạo Đơn Hàng Tự Động</div>
-                <div class="form-group">
-                    <label>Chọn Dịch Vụ Mạng Xã Hội</label>
-                    <select>
-                        <option>Facebook - Đăng Bài Nhóm Tự Động</option>
-                        <option>TikTok - Tăng Tim / Follow</option>
-                        <option>Instagram - Tăng Tương Tác</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Đường Dẫn (Link Bài Viết / Nhóm / Kênh)</label>
-                    <input type="text" placeholder="Dán link tại đây...">
-                </div>
-                <div class="form-group">
-                    <label>Số Lượng Cần Chạy</label>
-                    <input type="number" placeholder="Ví dụ: 30, 50, 100...">
-                </div>
-                <button class="btn-main" onclick="alert('✅ Đã tạo đơn thành công!')">Gửi Đơn Hàng Ngay</button>
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+
+        <!-- 1. SECTION ĐĂNG NHẬP (MẶC ĐỊNH KHI VÀO WEB) -->
+        <div id="loginSection" class="app-section active auth-card">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=faces" alt="Avatar" class="profile-avatar">
+            <div class="form-title">Đăng nhập tài khoản</div>
+            
+            <div class="form-group">
+                <label>Tên đăng nhập</label>
+                <input type="text" id="loginUser" placeholder="Tên đăng nhập">
             </div>
-        </div>
-
-        <!-- PANEL THỐNG KÊ (ADMIN) -->
-        <div id="statPanel" class="panel-section">
-            <div class="card">
-                <div class="card-title">📊 Thống Kê Tổng Quan Hệ Thống</div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                    <div style="background: #090c15; padding: 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05);">
-                        <div style="color: #6b7a99; font-size: 13px;">Tổng Đơn Hàng</div>
-                        <div style="font-size: 24px; font-weight: bold; color: #00ffcc; margin-top: 5px;">1,280</div>
-                    </div>
-                    <div style="background: #090c15; padding: 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05);">
-                        <div style="color: #6b7a99; font-size: 13px;">Clone Sẵn Sàng</div>
-                        <div style="font-size: 24px; font-weight: bold; color: #ff0055; margin-top: 5px;" id="statAccCount">0</div>
-                    </div>
-                    <div style="background: #090c15; padding: 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05);">
-                        <div style="color: #6b7a99; font-size: 13px;">Trạng Thái Proxy</div>
-                        <div style="font-size: 20px; font-weight: bold; color: #05cd99; margin-top: 5px;">Hoạt Động</div>
-                    </div>
-                </div>
+            
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <input type="password" id="loginPass" placeholder="Mật khẩu">
             </div>
+
+            <button class="btn-submit" onclick="handleLogin()">Đăng nhập</button>
+            
+            <button class="btn-passkey" onclick="alert('Tính năng Passkey đang phát triển')">
+                🔒 Đăng nhập bằng Passkey
+            </button>
+
+            <a href="#" class="forgot-link" onclick="switchSection('registerSection', 'ĐĂNG KÝ', 'Trang chủ > Đăng ký')">Chưa có tài khoản? Đăng ký ngay</a>
         </div>
 
-        <!-- PANEL KHO NGUYÊN LIỆU (ADMIN) -->
-        <div id="materialPanel" class="panel-section">
-            <div class="card" style="max-width: 650px; margin: 0 auto;">
-                <div class="card-title">📦 Nạp Kho Nguyên Liệu & Proxy</div>
+        <!-- 2. SECTION ĐĂNG KÝ -->
+        <div id="registerSection" class="app-section auth-card">
+            <div class="form-title">Đăng ký tài khoản mới</div>
+            
+            <div class="form-group">
+                <label>Tên đăng nhập</label>
+                <input type="text" id="regUser" placeholder="Chọn tên đăng nhập">
+            </div>
+            
+            <div class="form-group">
+                <label>Mật khẩu (Hoa, thường, số, ký tự đặc biệt)</label>
+                <input type="password" id="regPass" placeholder="Ví dụ: Abcd@1234">
+            </div>
+
+            <button class="btn-submit" onclick="handleRegister()">Đăng ký ngay</button>
+
+            <a href="#" class="forgot-link" onclick="switchSection('loginSection', 'ĐĂNG NHẬP', 'Trang chủ > Đăng nhập')">Đã có tài khoản? Đăng nhập</a>
+        </div>
+
+        <!-- 3. SECTION TẠO ĐƠN HÀNG -->
+        <div id="orderSection" class="app-section auth-card" style="max-width: 520px; text-align: left;">
+            <div class="form-title" style="text-align: center;">🚀 Tạo Đơn Hàng Tự Động</div>
+            
+            <div class="form-group">
+                <label>Nền Tảng Dịch Vụ</label>
+                <select>
+                    <option>Facebook - Đăng Bài Nhóm Tự Động</option>
+                    <option>TikTok - Tăng Tim / Follow</option>
+                    <option>Instagram - Tăng Tương Tác</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Đường Dẫn Mục Tiêu (Link)</label>
+                <input type="text" placeholder="Dán link bài viết/nhóm tại đây...">
+            </div>
+
+            <div class="form-group">
+                <label>Số Lượng Cần Chạy</label>
+                <input type="number" placeholder="Ví dụ: 50, 100...">
+            </div>
+
+            <div class="form-group">
+                <label>Độ Trễ Giữa Các Hành Động (Giây - Chống Khóa)</label>
+                <input type="number" value="30">
+            </div>
+
+            <button class="btn-submit" onclick="alert('✅ Đã tạo đơn hàng thành công!')">Gửi Đơn Hàng Ngay</button>
+        </div>
+
+        <!-- 4. SECTION LỊCH SỬ -->
+        <div id="historySection" class="app-section auth-card" style="max-width: 500px; text-align: left;">
+            <div class="form-title" style="text-align: center;">📜 Lịch Sử Giao Dịch</div>
+            <p style="color: #6b7a99; text-align: center; font-size: 14px;">Chưa có lịch sử hoạt động nào gần đây.</p>
+        </div>
+
+        <!-- 5. SECTION NẠP TIỀN -->
+        <div id="depositSection" class="app-section auth-card" style="max-width: 480px; text-align: left;">
+            <div class="form-title" style="text-align: center;">💳 Nạp Tiền Tự Động</div>
+            <div class="form-group">
+                <label>Phương Thức Nạp</label>
+                <select>
+                    <option>Chuyển khoản Ngân Hàng (QR Code)</option>
+                    <option>Ví MoMo</option>
+                    <option>Thẻ Cào Điện Thoại</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Số Tiền Cần Nạp (VNĐ)</label>
+                <input type="number" placeholder="Nhập số tiền...">
+            </div>
+            <button class="btn-submit" onclick="alert('Mã QR nạp tiền đang được tạo...')">Tạo Lệnh Nạp Tiền</button>
+        </div>
+
+        <!-- 6. SECTION TÀI KHOẢN & ADMIN PANEL -->
+        <div id="accountSection" class="app-section auth-card" style="max-width: 550px; text-align: left;">
+            <div class="form-title" style="text-align: center;">👤 Thông Tin Tài Khoản</div>
+            <div style="background: #080a10; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; border: 1px solid rgba(255,255,255,0.06);">
+                <p style="margin: 5px 0;"><b>Tài khoản:</b> <span id="accDisplayUser" style="color: #00ffcc;">Chưa đăng nhập</span></p>
+                <p style="margin: 5px 0;"><b>Quyền hạn:</b> <span id="accDisplayRole" style="color: #ff0055;">Khách vãng lai</span></p>
+            </div>
+
+            <!-- BẢNG QUẢN TRỊ ADMIN (CHỈ HIỆN KHI ĐĂNG NHẬP ADMIN123 & 2608) -->
+            <div id="adminPanelArea" style="display: none; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 15px; margin-top: 15px;">
+                <h3 style="color: #00ffcc; font-size: 15px; margin-bottom: 15px;">👑 Quản Trị Kho Nguyên Liệu & Proxy (Admin)</h3>
                 <div class="form-group">
-                    <label>Nền Tảng</label>
+                    <label>Nền Tảng Nguyên Liệu</label>
                     <select id="accPlatform">
                         <option value="Facebook">Facebook (Cookie / UID|Pass)</option>
                         <option value="TikTok">TikTok (Session Token)</option>
@@ -367,50 +469,42 @@
                     <label>Danh Sách Proxy Đi Kèm</label>
                     <textarea id="proxyList" placeholder="Định dạng IP:Port..."></textarea>
                 </div>
-                <button class="btn-main" onclick="saveAdminData()">Nạp Vào Hệ Thống</button>
+                <button class="btn-submit" onclick="saveAdminData()">Nạp Vào Hệ Thống</button>
+            </div>
+
+            <button class="btn-submit" style="background: #e53e3e; margin-top: 20px; box-shadow: none;" onclick="switchSection('loginSection', 'ĐĂNG NHẬP', 'Trang chủ > Đăng nhập')">Đăng Xuất</button>
+        </div>
+
+    </div>
+
+    <!-- THANH MENU ĐIỀU HƯỚNG DƯỚI MÀN HÌNH (BOTTOM BAR) -->
+    <div class="bottom-nav">
+        <button class="nav-item" onclick="switchSection('orderSection', 'TẠO ĐƠN HÀNG', 'Trang chủ > Tạo đơn')">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+            <span>Đơn hàng</span>
+        </button>
+
+        <button class="nav-item" onclick="switchSection('historySection', 'LỊCH SỬ', 'Trang chủ > Lịch sử')">
+            <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+            <span>Lịch sử</span>
+        </button>
+
+        <!-- Nút giỏ hàng nổi bật ở giữa -->
+        <div class="nav-item nav-item-center" onclick="switchSection('orderSection', 'TẠO ĐƠN HÀNG', 'Trang chủ > Tạo đơn')">
+            <div class="nav-circle-btn">
+                <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </div>
         </div>
 
-        <!-- PANEL ĐĂNG NHẬP / ĐĂNG KÝ (MẶC ĐỊNH MỞ KHI VÀO WEB) -->
-        <div id="authPanel" class="panel-section active">
-            <div class="card" style="max-width: 440px; margin: 0 auto;">
-                <!-- Thông báo hệ thống -->
-                <div class="notice-box">
-                    🔔 <span><b>Thông báo:</b> Chào mừng bạn đến với AutoPost AI. Vui lòng đăng nhập để sử dụng dịch vụ!</span>
-                </div>
+        <button class="nav-item" onclick="switchSection('depositSection', 'NẠP TIỀN', 'Trang chủ > Nạp tiền')">
+            <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            <span>Nạp tiền</span>
+        </button>
 
-                <div class="tab-auth">
-                    <button class="tab-auth-btn active" onclick="switchAuthTab('loginForm', this)">Đăng Nhập</button>
-                    <button class="tab-auth-btn" onclick="switchAuthTab('registerForm', this)">Đăng Ký</button>
-                </div>
-
-                <!-- Form Đăng Nhập -->
-                <div id="loginForm" class="auth-form active">
-                    <div class="form-group">
-                        <label>Tên Tài Khoản</label>
-                        <input type="text" id="loginUser" placeholder="Nhập tên tài khoản...">
-                    </div>
-                    <div class="form-group">
-                        <label>Mật Khẩu</label>
-                        <input type="password" id="loginPass" placeholder="Nhập mật khẩu...">
-                    </div>
-                    <button class="btn-main" onclick="handleLogin()">Đăng Nhập Ngay</button>
-                </div>
-
-                <!-- Form Đăng Ký -->
-                <div id="registerForm" class="auth-form">
-                    <div class="form-group">
-                        <label>Tên Tài Khoản Mới</label>
-                        <input type="text" id="regUser" placeholder="Chọn tên tài khoản...">
-                    </div>
-                    <div class="form-group">
-                        <label>Mật Khẩu (Hoa, thường, số, ký tự đặc biệt)</label>
-                        <input type="password" id="regPass" placeholder="Ví dụ: Abcd@1234">
-                    </div>
-                    <button class="btn-main" onclick="handleRegister()">Đăng Ký Tài Khoản</button>
-                </div>
-            </div>
-        </div>
+        <button class="nav-item" onclick="switchSection('accountSection', 'TÀI KHOẢN', 'Trang chủ > Tài khoản')">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <span>Tài khoản</span>
+        </button>
     </div>
 
     <script>
@@ -418,20 +512,13 @@
         const REAL_ADMIN_PASS = "2608"; 
         let registeredUsers = [REAL_ADMIN_USER.toLowerCase()];
 
-        function switchPanel(panelId, element) {
-            document.querySelectorAll('.panel-section').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+        function switchSection(sectionId, title, breadcrumbText) {
+            document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
 
-            document.getElementById(panelId).classList.add('active');
-            if(element) element.classList.add('active');
-        }
-
-        function switchAuthTab(formId, element) {
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            document.querySelectorAll('.tab-auth-btn').forEach(b => b.classList.remove('active'));
-
-            document.getElementById(formId).classList.add('active');
-            element.classList.add('active');
+            document.getElementById('pageHeaderTitle').innerText = title;
+            document.getElementById('pageBreadcrumb').innerText = breadcrumbText;
+            window.scrollTo(0, 0);
         }
 
         function handleRegister() {
@@ -462,7 +549,7 @@
             alert(`🎉 Đăng ký thành công tài khoản "${username}"!`);
             document.getElementById('regUser').value = '';
             document.getElementById('regPass').value = '';
-            switchAuthTab('loginForm', document.querySelectorAll('.tab-auth-btn')[0]);
+            switchSection('loginSection', 'ĐĂNG NHẬP', 'Trang chủ > Đăng nhập');
         }
 
         function handleLogin() {
@@ -474,30 +561,23 @@
                 return;
             }
 
-            document.getElementById('currentUsername').innerText = username;
-            const adminElements = document.querySelectorAll('.admin-only');
+            document.getElementById('accDisplayUser').innerText = username;
 
             if (username === REAL_ADMIN_USER && password === REAL_ADMIN_PASS) {
-                adminElements.forEach(el => el.style.display = 'flex');
-                document.getElementById('sidebarRoleBadge').innerText = "Admin";
-                document.getElementById('sidebarRoleBadge').style.color = "#ff0055";
-                document.getElementById('roleText').innerText = "Admin Tối Cao";
-                document.getElementById('roleText').style.color = "#ff0055";
+                document.getElementById('accDisplayRole').innerText = "Admin Tối Cao (Chủ Nhân)";
+                document.getElementById('accDisplayRole').style.color = "#00ffcc";
+                document.getElementById('adminPanelArea').style.display = 'block';
                 
-                alert(`👑 Chào mừng Chủ Nhân Admin123.`);
-                switchPanel('statPanel', document.querySelectorAll('.menu-item')[0]);
-                return;
+                alert(`👑 Đăng nhập thành công! Chào mừng Chủ Nhân Admin123.`);
+            } else {
+                document.getElementById('accDisplayRole').innerText = "Khách hàng";
+                document.getElementById('accDisplayRole').style.color = "#ff0055";
+                document.getElementById('adminPanelArea').style.display = 'none';
+                
+                alert(`🎉 Chào mừng ${username} đã đăng nhập.`);
             }
 
-            adminElements.forEach(el => el.style.display = 'none');
-            document.getElementById('sidebarRoleBadge').innerText = "Khách";
-            document.getElementById('sidebarRoleBadge').style.color = "#6b7a99";
-            document.getElementById('roleText').innerText = "Khách hàng";
-            document.getElementById('roleText').style.color = "#00ffcc";
-            
-            alert(`🎉 Chào mừng ${username} đã đăng nhập.`);
-            switchPanel('homePanel', document.querySelectorAll('.menu-item')[0]);
-            
+            switchSection('orderSection', 'TẠO ĐƠN HÀNG', 'Trang chủ > Tạo đơn');
             document.getElementById('loginUser').value = '';
             document.getElementById('loginPass').value = '';
         }
@@ -512,8 +592,7 @@
             }
 
             const total = accs.split('\n').length;
-            document.getElementById('statAccCount').innerText = total;
-            alert(`✅ Nạp thành công ${total} tài khoản ${platform}!`);
+            alert(`✅ Nạp thành công ${total} tài khoản ${platform} vào kho nguyên liệu!`);
             document.getElementById('accList').value = '';
             document.getElementById('proxyList').value = '';
         }

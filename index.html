@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoPost AI - Hệ Thống Dịch Vụ Mạng Xã Hội</title>
+    <title>AutoPost AI - Hệ Thống Quản Trị Đầy Đủ Chi Tiết</title>
     <style>
         @keyframes rgb-border {
             0% { border-color: #ff0055; box-shadow: 0 0 20px rgba(255, 0, 85, 0.15); }
@@ -13,14 +13,13 @@
         }
 
         @keyframes popupScale {
-            0% { transform: scale(0.7); opacity: 0; }
+            0% { transform: scale(0.8); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
 
         * {
             box-sizing: border-box;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            transition: all 0.25s ease;
         }
 
         body {
@@ -35,7 +34,7 @@
             overflow-x: hidden;
         }
 
-        /* MODAL SANG XỊN */
+        /* MODAL SANG XỊN MỊN */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -52,12 +51,12 @@
             background: #121726;
             border: 2px solid #00ffcc;
             width: 90%;
-            max-width: 380px;
+            max-width: 400px;
             border-radius: 20px;
             padding: 30px 20px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0, 255, 204, 0.2);
-            animation: popupScale 0.3s ease-out;
+            animation: popupScale 0.2s ease-out;
         }
 
         .modal-icon {
@@ -114,18 +113,18 @@
             color: #080a10; font-weight: 900; font-size: 15px;
         }
 
-        /* MENU TRƯỢT 3 GẠCH Y HỆT ẢNH MẪU */
+        /* MENU TRƯỢT 3 GẠCH */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(3px);
-            z-index: 99; display: none; opacity: 0; transition: opacity 0.3s;
+            z-index: 99; display: none; opacity: 0;
         }
         .drawer-overlay.open { display: block; opacity: 1; }
 
         .drawer-menu {
             position: fixed; top: 0; left: -320px; width: 285px; height: 100vh;
             background: #141728; border-right: 1px solid #222639;
-            z-index: 100; padding: 15px 10px; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100; padding: 15px 10px; transition: left 0.25s ease-out;
             display: flex; flex-direction: column; gap: 3px; overflow-y: auto;
         }
         .drawer-menu.open { left: 0; }
@@ -137,9 +136,7 @@
 
         .menu-dropdown-box {
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            margin-bottom: 6px;
-            overflow: hidden;
+            border-radius: 12px; margin-bottom: 6px; overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
@@ -151,16 +148,13 @@
         .menu-section-header span.arrow { font-size: 12px; transition: transform 0.2s; }
         .menu-section-header.collapsed span.arrow { transform: rotate(-90deg); }
 
-        .menu-section-content {
-            display: flex; flex-direction: column; gap: 2px; padding: 4px 0;
-        }
+        .menu-section-content { display: flex; flex-direction: column; gap: 2px; padding: 4px 0; }
         .menu-section-content.hidden { display: none; }
 
         .drawer-item {
             display: flex; align-items: center; gap: 12px;
             padding: 10px 15px; color: #c0c7de; text-decoration: none;
-            font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 8px;
-            margin: 0 6px;
+            font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 8px; margin: 0 6px;
         }
         .drawer-item:hover { background: rgba(114, 9, 183, 0.25); color: #00ffcc; }
         .drawer-item span.icon { font-size: 15px; width: 20px; text-align: center; }
@@ -168,16 +162,16 @@
         .admin-only-group { display: none; }
 
         /* BREADCRUMB */
-        .breadcrumb-section { padding: 15px 20px 5px 20px; max-width: 600px; margin: 0 auto; width: 100%; }
+        .breadcrumb-section { padding: 15px 20px 5px 20px; max-width: 650px; margin: 0 auto; width: 100%; }
         .page-title { font-size: 20px; font-weight: 800; margin: 0 0 4px 0; color: #ffffff; }
         .breadcrumb { font-size: 12px; color: #6b7a99; }
 
         /* CONTAINER CHÍNH */
-        .main-container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 15px; }
+        .main-container { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 15px; }
 
         .auth-card {
             background: linear-gradient(145deg, #121726, #0c101a);
-            width: 100%; max-width: 480px; border-radius: 24px; padding: 30px;
+            width: 100%; max-width: 600px; border-radius: 24px; padding: 30px;
             border: 2.5px solid #ff0055; animation: rgb-border 6s infinite; text-align: center;
         }
 
@@ -214,6 +208,22 @@
 
         .app-section { display: none; width: 100%; }
         .app-section.active { display: block; }
+
+        /* BẢNG DỮ LIỆU QUẢN TRỊ (TABLE) */
+        .admin-table {
+            width: 100%; border-collapse: collapse; margin-top: 10px; text-align: left; font-size: 13px;
+        }
+        .admin-table th, .admin-table td {
+            padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.08); color: #cbd5e1;
+        }
+        .admin-table th { color: #00ffcc; font-weight: 700; text-transform: uppercase; font-size: 11px; }
+
+        .action-btn {
+            background: #5c41e8; color: white; border: none; padding: 6px 12px; border-radius: 8px;
+            font-size: 11px; font-weight: bold; cursor: pointer; margin-right: 5px;
+        }
+        .action-btn.del { background: #e53e3e; }
+        .action-btn:hover { opacity: 0.9; }
 
         .news-box {
             background: rgba(0, 255, 204, 0.05); border: 1px solid rgba(0, 255, 204, 0.2);
@@ -253,7 +263,7 @@
 </head>
 <body>
 
-    <!-- MODAL SANG XỊN -->
+    <!-- MODAL SANG XỊN MỊN -->
     <div class="modal-overlay" id="customModal">
         <div class="modal-box">
             <div class="modal-icon" id="modalIcon">✓</div>
@@ -281,7 +291,7 @@
         </div>
     </div>
 
-    <!-- MENU TRƯỢT 3 GẠCH CHUẨN Y HỆT ẢNH MẪU -->
+    <!-- MENU TRƯỢT 3 GẠCH -->
     <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
     <div class="drawer-menu" id="sideDrawer">
         <div class="drawer-header-box">
@@ -295,33 +305,27 @@
                 <span>👤 Quản trị hệ thống</span> <span class="arrow">▼</span>
             </div>
             <div class="menu-section-content">
-                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'THỐNG KÊ', 'Quản trị > Thống kê')"><span class="icon">📊</span> Thống kê</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'KHÁCH HÀNG', 'Quản trị > Khách hàng')"><span class="icon">👥</span> Khách hàng</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('historySection', 'GIAO DỊCH', 'Quản trị > Giao dịch')"><span class="icon">⏳</span> Giao dịch</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'ĐƠN HÀNG', 'Quản trị > Đơn hàng')"><span class="icon">📄</span> Đơn hàng</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('depositSection', 'HOÀN TIỀN', 'Quản trị > Hoàn tiền')"><span class="icon">🔄</span> Hoàn tiền</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('depositSection', 'NẠP TIỀN TỰ ĐỘNG', 'Quản trị > Nạp tiền')"><span class="icon">⚡</span> Nạp tiền tự động</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'NGUỒN DỊCH VỤ', 'Quản trị > Nguồn dịch vụ')"><span class="icon">🌐</span> Nguồn dịch vụ</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'DANH MỤC', 'Quản trị > Danh mục')"><span class="icon">📁</span> Danh mục</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'QUẢN LÝ GÓI', 'Quản trị > Quản lý gói')"><span class="icon">📦</span> Quản lý gói</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'COUPONS', 'Quản trị > Coupons')"><span class="icon">🎟️</span> Coupons</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'TIẾP THỊ LIÊN KẾT', 'Quản trị > Tiếp thị liên kết')"><span class="icon">🤝</span> Tiếp thị liên kết</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'CÀI ĐẶT TRANG', 'Quản trị > Cài đặt trang')"><span class="icon">⚙️</span> Cài đặt trang</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('statSection', 'THỐNG KÊ HỆ THỐNG', 'Quản trị > Thống kê')"><span class="icon">📊</span> Thống kê</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('customerSection', 'QUẢN LÝ KHÁCH HÀNG', 'Quản trị > Khách hàng')"><span class="icon">👥</span> Khách hàng</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('transSection', 'QUẢN LÝ GIAO DỊCH', 'Quản trị > Giao dịch')"><span class="icon">⏳</span> Giao dịch</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderManageSection', 'QUẢN LÝ ĐƠN HÀNG', 'Quản trị > Đơn hàng')"><span class="icon">📄</span> Đơn hàng</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('refundSection', 'YÊU CẦU HOÀN TIỀN', 'Quản trị > Hoàn tiền')"><span class="icon">🔄</span> Hoàn tiền</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('autoDepositSection', 'CÀI ĐẶT NẠP TIỀN', 'Quản trị > Nạp tiền')"><span class="icon">⚡</span> Nạp tiền tự động</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('settingsSection', 'CÀI ĐẶT TRANG', 'Quản trị > Cài đặt trang')"><span class="icon">⚙️</span> Cài đặt trang</div>
             </div>
         </div>
 
-        <!-- NHÓM 2: CHỨC NĂNG (CHO MỌI NGƯỜI) -->
+        <!-- NHÓM 2: CHỨC NĂNG -->
         <div class="menu-dropdown-box">
             <div class="menu-section-header" onclick="toggleMenuSection(this)">
                 <span>📦 Chức năng</span> <span class="arrow">▼</span>
             </div>
             <div class="menu-section-content">
-                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'TRANG CHỦ', 'Chức năng > Trang chủ')"><span class="icon">🏠</span> Trang chủ</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'QUẢN LÝ ĐƠN HÀNG', 'Chức năng > Đơn hàng')"><span class="icon">📄</span> Quản lý đơn hàng</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('historySection', 'LUỒNG TIỀN', 'Chức năng > Luồng tiền')"><span class="icon">⏳</span> Luồng tiền</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'BẢNG TIN', 'Chức năng > Bảng tin')"><span class="icon">🏠</span> Bảng tin</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'CHỌN DỊCH VỤ', 'Chức năng > Chọn dịch vụ')"><span class="icon">🚀</span> Chọn dịch vụ tạo đơn</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('historySection', 'LỊCH SỬ', 'Chức năng > Lịch sử')"><span class="icon">📜</span> Lịch sử giao dịch</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('depositSection', 'NẠP TIỀN', 'Chức năng > Nạp tiền')"><span class="icon">💳</span> Nạp tiền mua gói</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('accountSection', 'TÀI KHOẢN CỦA TÔI', 'Chức năng > Tài khoản')"><span class="icon">👤</span> Tài khoản của tôi</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('depositSection', 'NẠP TIỀN', 'Chức năng > Nạp tiền')"><span class="icon">💳</span> Nạp tiền</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('historySection', 'HOÀN TIỀN', 'Chức năng > Hoàn tiền')"><span class="icon">🔄</span> Hoàn tiền</div>
             </div>
         </div>
     </div>
@@ -375,7 +379,7 @@
             <div class="news-box">
                 <h4>📌 Thông báo tài khoản:</h4>
                 <p id="trialStatusInfo">Đang kiểm tra trạng thái dùng thử...</p>
-                <p style="color: #ff0055; font-weight: bold; margin-top: 10px;">👉 Bấm vào 3 gạch (☰) góc trên bên trái để mở menu quản lý dịch vụ.</p>
+                <p style="color: #ff0055; font-weight: bold; margin-top: 10px;">👉 Bấm vào 3 gạch (☰) góc trên bên trái để mở menu chức năng.</p>
             </div>
         </div>
 
@@ -436,28 +440,102 @@
             </div>
             <button class="btn-submit" style="background: #e53e3e; margin-top: 20px;" onclick="handleLogout()">Đăng Xuất</button>
         </div>
+
+        <!-- ================= QUẢN TRỊ HỆ THỐNG (CHỈ ADMIN THẤY & TƯƠNG TÁC THẬT) ================= -->
+        
+        <!-- THỐNG KÊ -->
+        <div id="statSection" class="app-section auth-card" style="max-width: 600px; text-align: left;">
+            <div class="form-title" style="text-align: center; color: #00ffcc;">📊 Thống Kê Tổng Quan</div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+                <div style="background: #080a10; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                    <div style="color: #94a3b8; font-size: 12px;">Tổng Thành Viên</div>
+                    <div style="font-size: 22px; font-weight: bold; color: #00ffcc;" id="statTotalUsers">1</div>
+                </div>
+                <div style="background: #080a10; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                    <div style="color: #94a3b8; font-size: 12px;">Tổng Đơn Hàng</div>
+                    <div style="font-size: 22px; font-weight: bold; color: #ff0055;" id="statTotalOrders">0</div>
+                </div>
+            </div>
+            <button class="btn-submit" onclick="refreshStats()">Làm Mới Số Liệu</button>
+        </div>
+
+        <!-- KHÁCH HÀNG (QUẢN LÝ USER) -->
+        <div id="customerSection" class="app-section auth-card" style="max-width: 650px; text-align: left;">
+            <div class="form-title" style="text-align: center; color: #00ffcc;">👥 Quản Lý Danh Sách Khách Hàng</div>
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>Tài khoản</th><th>Ngày Đăng Ký</th><th>Trạng Thái</th><th>Thao Tác</th></tr>
+                    </thead>
+                    <tbody id="customerTableBody">
+                        <!-- Render qua JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ĐƠN HÀNG ADMIN -->
+        <div id="orderManageSection" class="app-section auth-card" style="max-width: 650px; text-align: left;">
+            <div class="form-title" style="text-align: center; color: #ff0055;">📄 Quản Lý Đơn Hàng Hệ Thống</div>
+            <p style="color: #94a3b8; font-size: 13px;">Danh sách các đơn hàng chạy tự động từ khách hàng gửi lên.</p>
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>ID Đơn</th><th>Khách Hàng</th><th>Dịch Vụ</th><th>Trạng Thái</th></tr>
+                    </thead>
+                    <tbody id="orderTableBody">
+                        <tr><td colspan="4" style="text-align: center; color: #6b7a99;">Chưa có đơn hàng nào được tạo.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- GIAO DỊCH & HOÀN TIỀN -->
+        <div id="transSection" class="app-section auth-card" style="max-width: 600px; text-align: left;">
+            <div class="form-title" style="text-align: center; color: #00ffcc;">⏳ Nhật Ký Giao Dịch & Hoàn Tiền</div>
+            <p style="color: #94a3b8; font-size: 13px;">Kiểm soát lịch sử nạp tiền và các yêu cầu hoàn tiền của thành viên.</p>
+            <button class="btn-submit" onclick="showNotification('Giao Dịch', 'Không có giao dịch phát sinh lỗi cần xử lý.', '⏳')">Kiểm Tra Lệnh Treo</button>
+        </div>
+
+        <!-- CÀI ĐẶT NẠP TIỀN TỰ ĐỘNG -->
+        <div id="autoDepositSection" class="app-section auth-card" style="max-width: 500px; text-align: left;">
+            <div class="form-title" style="text-align: center; color: #00ffcc;">⚡ Cài Đặt Nạp Tiền Tự Động</div>
+            <div class="form-group"><label>Ngân Hàng Nhận Tiền</label><input type="text" value="MB Bank"></div>
+            <div class="form-group"><label>Số Tài Khoản</label><input type="text" value="0987654321"></div>
+            <div class="form-group"><label>Chủ Tài Khoản</label><input type="text" value="ADMIN AUTOPOST"></div>
+            <button class="btn-submit" onclick="showNotification('Thành Công', 'Đã lưu thông tin cấu hình nạp tiền!', '💾')">Lưu Cấu Hình</button>
+        </div>
+
+        <!-- CÀI ĐẶT TRANG -->
+        <div id="settingsSection" class="app-section auth-card" style="max-width: 500px; text-align: left;">
+            <div class="form-title" style="text-align: center; color: #ff0055;">⚙️ Cài Đặt Trang Web</div>
+            <div class="form-group"><label>Tiêu Đề Website</label><input type="text" id="settingTitle" value="AutoPost AI - Hệ Thống Dịch Vụ"></div>
+            <div class="form-group"><label>Thông Báo Bảng Tin (Popup)</label><textarea id="settingNotice">Chào mừng bạn đến với hệ thống!</textarea></div>
+            <button class="btn-submit" onclick="showNotification('Thành Công', 'Đã cập nhật cài đặt giao diện thành công!', '⚙️')">Lưu Thay Đổi</button>
+        </div>
+
     </div>
 
     <!-- BOTTOM BAR -->
     <div class="bottom-nav">
-        <button class="nav-item" onclick="switchSection('dashboardSection', 'BẢNG TIN', 'Trang chủ > Bảng tin')">
+        <button class="nav-item" onclick="switchSection('dashboardSection', 'BẢNG TIN', 'Chức năng > Bảng tin')">
             <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
             <span>Bảng tin</span>
         </button>
-        <button class="nav-item" onclick="switchSection('historySection', 'LỊCH SỬ', 'Trang chủ > Lịch sử')">
+        <button class="nav-item" onclick="switchSection('historySection', 'LỊCH SỬ', 'Chức năng > Lịch sử')">
             <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
             <span>Lịch sử</span>
         </button>
-        <div class="nav-item nav-item-center" onclick="switchSection('dashboardSection', 'BẢNG TIN', 'Trang chủ > Bảng tin')">
+        <div class="nav-item nav-item-center" onclick="switchSection('dashboardSection', 'BẢNG TIN', 'Chức năng > Bảng tin')">
             <div class="nav-circle-btn">
                 <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
             </div>
         </div>
-        <button class="nav-item" onclick="switchSection('depositSection', 'NẠP TIỀN', 'Trang chủ > Nạp tiền')">
+        <button class="nav-item" onclick="switchSection('depositSection', 'NẠP TIỀN', 'Chức năng > Nạp tiền')">
             <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
             <span>Nạp tiền</span>
         </button>
-        <button class="nav-item" onclick="switchSection('accountSection', 'TÀI KHOẢN', 'Trang chủ > Tài khoản')">
+        <button class="nav-item" onclick="switchSection('accountSection', 'TÀI KHOẢN', 'Chức năng > Tài khoản')">
             <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
             <span>Tài khoản</span>
         </button>
@@ -471,14 +549,12 @@
         let userDatabase = JSON.parse(localStorage.getItem('autopost_users')) || {
             "admin123": { pass: "2608", regTime: 0 }
         };
-
+        let orderList = JSON.parse(localStorage.getItem('autopost_orders')) || [];
         let pendingAdminUser = "";
 
-        // Thu gọn/Mở rộng menu dropdown
         function toggleMenuSection(headerEl) {
             headerEl.classList.toggle('collapsed');
-            const content = headerEl.nextElementSibling;
-            content.classList.toggle('hidden');
+            headerEl.nextElementSibling.classList.toggle('hidden');
         }
 
         function showNotification(title, desc, icon = "✓") {
@@ -511,7 +587,7 @@
                 localStorage.setItem('autopost_current_user', pendingAdminUser);
                 applyUserSession(pendingAdminUser);
                 showNotification("Đăng Nhập Thành Công", "Chào mừng Chủ Nhân Admin123 quay trở lại hệ thống.", "👑");
-                switchSection('dashboardSection', 'BẢNG TIN', 'Trang chủ > Bảng tin');
+                switchSection('dashboardSection', 'BẢNG TIN', 'Chức năng > Bảng tin');
             } else {
                 showNotification("Sai Mã PIN", "Mã PIN xác thực không chính xác! Vui lòng thử lại.", "❌");
             }
@@ -529,6 +605,9 @@
         function navigateFromDrawer(sectionId, title, breadcrumb) {
             toggleDrawer();
             switchSection(sectionId, title, breadcrumb);
+            if(sectionId === 'customerSection') renderCustomerTable();
+            if(sectionId === 'orderManageSection') renderOrderTable();
+            if(sectionId === 'statSection') refreshStats();
         }
 
         function switchSection(sectionId, title, breadcrumbText) {
@@ -575,29 +654,29 @@
 
             if (sub === 'fb_group') {
                 container.innerHTML = `
-                    <div class="form-group"><label>Link Group Facebook</label><input type="text" placeholder="Dán link nhóm..."></div>
-                    <div class="form-group"><label>Nội dung bài viết</label><textarea placeholder="Nhập nội dung..."></textarea></div>
-                    <div class="form-group"><label>Số lượng nhóm cần đăng</label><input type="number" placeholder="Ví dụ: 10"></div>
+                    <div class="form-group"><label>Link Group Facebook</label><input type="text" id="ordInput1" placeholder="Dán link nhóm..."></div>
+                    <div class="form-group"><label>Nội dung bài viết</label><textarea id="ordInput2" placeholder="Nhập nội dung..."></textarea></div>
+                    <div class="form-group"><label>Số lượng nhóm cần đăng</label><input type="number" id="ordInput3" placeholder="Ví dụ: 10"></div>
                 `;
             } else if (sub === 'fb_spam_cmt') {
                 container.innerHTML = `
-                    <div class="form-group"><label>Link Bài Viết Cần Spam Cmt</label><input type="text" placeholder="Dán link bài viết..."></div>
-                    <div class="form-group"><label>Nội dung bình luận</label><textarea placeholder="Mỗi dòng 1 cmt..."></textarea></div>
-                    <div class="form-group"><label>Số lượng cmt</label><input type="number" placeholder="Ví dụ: 50"></div>
+                    <div class="form-group"><label>Link Bài Viết Cần Spam Cmt</label><input type="text" id="ordInput1" placeholder="Dán link bài viết..."></div>
+                    <div class="form-group"><label>Nội dung bình luận</label><textarea id="ordInput2" placeholder="Mỗi dòng 1 cmt..."></textarea></div>
+                    <div class="form-group"><label>Số lượng cmt</label><input type="number" id="ordInput3" placeholder="Ví dụ: 50"></div>
                 `;
             } else if (sub === 'tk_content') {
                 container.innerHTML = `
                     <div style="background: rgba(255,0,85,0.1); border: 1px dashed #ff0055; padding: 12px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; color: #ff0055;">
-                        ⚠️ Tik Tok yêu cầu khách gửi thông tin tài khoản để hệ thống tiến hành đăng bài tự động!
+                        ⚠️ TikTok yêu cầu khách gửi thông tin tài khoản để hệ thống tiến hành đăng bài tự động!
                     </div>
-                    <div class="form-group"><label>Tài Khoản Tik Tok (User / Email)</label><input type="text" placeholder="Nhập tài khoản TikTok..."></div>
-                    <div class="form-group"><label>Mật Khẩu Tik Tok</label><input type="password" placeholder="Nhập mật khẩu..."></div>
-                    <div class="form-group"><label>Nội Dung / Content Video</label><textarea placeholder="Nhập content caption..."></textarea></div>
-                    <div class="form-group"><label>Ngày & Giờ Đăng Hẹn Giờ</label><input type="datetime-local"></div>
+                    <div class="form-group"><label>Tài Khoản TikTok (User / Email)</label><input type="text" id="ordInput1" placeholder="Nhập tài khoản TikTok..."></div>
+                    <div class="form-group"><label>Mật Khẩu TikTok</label><input type="password" id="ordInput2" placeholder="Nhập mật khẩu TikTok..."></div>
+                    <div class="form-group"><label>Nội Dung / Content Video</label><textarea id="ordInput3" placeholder="Nhập content caption..."></textarea></div>
+                    <div class="form-group"><label>Ngày & Giờ Đăng Hẹn Giờ</label><input type="datetime-local" id="ordInput4"></div>
                 `;
             } else {
                 container.innerHTML = `
-                    <div class="form-group"><label>Thông Tin Cấu Hình</label><input type="text" placeholder="Nhập thông số tùy chỉnh..."></div>
+                    <div class="form-group"><label>Thông Tin Cấu Hình</label><input type="text" id="ordInput1" placeholder="Nhập thông số tùy chỉnh..."></div>
                 `;
             }
         }
@@ -657,7 +736,7 @@
             applyUserSession(username);
 
             showNotification("Đăng Nhập Thành Công", `Chào mừng ${username} đã quay trở lại với AutoPost AI!`, "✨");
-            switchSection('dashboardSection', 'BẢNG TIN', 'Trang chủ > Bảng tin');
+            switchSection('dashboardSection', 'BẢNG TIN', 'Chức năng > Bảng tin');
             document.getElementById('loginUser').value = '';
             document.getElementById('loginPass').value = '';
         }
@@ -717,8 +796,90 @@
             showNotification("Đăng Xuất", "Bạn đã đăng xuất khỏi hệ thống thành công.", "👋");
         }
 
+        // TƯƠNG TÁC THẬT CHO TẠO ĐƠN
         function submitServiceOrder() {
-            showNotification("Thành Công", "Đã tiếp nhận yêu cầu chạy dịch vụ của bạn! Hệ thống đang tự động hóa xử lý.", "🚀");
+            const parent = document.getElementById('parentPlatform').value;
+            const sub = document.getElementById('subService').value;
+            const currentUser = localStorage.getItem('autopost_current_user') || "Khách";
+
+            const newOrder = {
+                id: "ORD" + Math.floor(1000 + Math.random() * 9000),
+                user: currentUser,
+                service: `${parent.toUpperCase()} - ${sub}`,
+                status: "Đang xử lý"
+            };
+
+            orderList.push(newOrder);
+            localStorage.setItem('autopost_orders', JSON.stringify(orderList));
+
+            showNotification("Thành Công", `Đã tạo đơn hàng thành công! Mã đơn: ${newOrder.id}`, "🚀");
+        }
+
+        // QUẢN TRỊ: RENDER BẢNG KHÁCH HÀNG THẬT
+        function renderCustomerTable() {
+            const tbody = document.getElementById('customerTableBody');
+            tbody.innerHTML = '';
+            for (let username in userDatabase) {
+                if(username === 'admin123') continue;
+                const regDate = new Date(userDatabase[username].regTime).toLocaleDateString();
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><b>${username}</b></td>
+                    <td>${regDate}</td>
+                    <td style="color: #00ffcc;">Hoạt động (Trial)</td>
+                    <td>
+                        <button class="action-btn" onclick="extendUser('${username}')">Gia hạn</button>
+                        <button class="action-btn del" onclick="deleteUser('${username}')">Xóa</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            }
+        }
+
+        function deleteUser(username) {
+            delete userDatabase[username];
+            localStorage.setItem('autopost_users', JSON.stringify(userDatabase));
+            renderCustomerTable();
+            showNotification("Đã Xóa", `Đã xóa tài khoản ${username} khỏi hệ thống.`, "🗑️");
+        }
+
+        function extendUser(username) {
+            userDatabase[username].regTime = Date.now(); // Reset lại 3 ngày mới
+            localStorage.setItem('autopost_users', JSON.stringify(userDatabase));
+            showNotification("Thành Công", `Đã gia hạn thêm 3 ngày cho tài khoản ${username}!`, "✨");
+        }
+
+        // QUẢN TRỊ: RENDER BẢNG ĐƠN HÀNG THẬT
+        function renderOrderTable() {
+            const tbody = document.getElementById('orderTableBody');
+            tbody.innerHTML = '';
+            if(orderList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #6b7a99;">Chưa có đơn hàng nào được tạo.</td></tr>`;
+                return;
+            }
+            orderList.forEach((ord, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><b>${ord.id}</b></td>
+                    <td>${ord.user}</td>
+                    <td>${ord.service}</td>
+                    <td><span style="color: #ff0055;">${ord.status}</span> <button class="action-btn" style="margin-left: 5px;" onclick="completeOrder(${index})">Duyệt</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function completeOrder(index) {
+            orderList[index].status = "Hoàn thành";
+            localStorage.setItem('autopost_orders', JSON.stringify(orderList));
+            renderOrderTable();
+            showNotification("Đã Duyệt", "Đơn hàng đã được chuyển trạng thái Hoàn thành!", "✅");
+        }
+
+        function refreshStats() {
+            document.getElementById('statTotalUsers').innerText = Object.keys(userDatabase).length - 1;
+            document.getElementById('statTotalOrders').innerText = orderList.length;
+            showNotification("Đã Cập Nhật", "Làm mới số liệu thống kê thành công!", "📊");
         }
     </script>
 </body>

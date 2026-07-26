@@ -161,10 +161,14 @@
         @keyframes floatAvatar { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-8px) rotate(2deg); filter: drop-shadow(0 0 12px var(--accent-main)); } }
         #ai-custom-avatar-btn { width: 54px; height: 54px; border-radius: 50%; border: 2px solid var(--accent-main); cursor: pointer; object-fit: cover; box-shadow: 0 8px 25px rgba(0,0,0,0.5); animation: floatAvatar 2.5s infinite ease-in-out; background: #222; }
         
-        #chat-box-modal { position: fixed; bottom: 90px; right: 20px; width: 320px; height: 420px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: none; flex-direction: column; z-index: 5500; box-shadow: 0 15px 35px rgba(0,0,0,0.5); overflow: hidden; }
+        #chat-box-modal { position: fixed; bottom: 90px; right: 20px; width: 320px; height: 440px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: none; flex-direction: column; z-index: 5500; box-shadow: 0 15px 35px rgba(0,0,0,0.5); overflow: hidden; }
         .chat-header { background: var(--bg-sidebar); padding: 10px 14px; font-weight: 700; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); color: var(--accent-main); }
         .chat-body { flex: 1; padding: 12px; overflow-y: auto; font-size: 0.8rem; display: flex; flex-direction: column; gap: 8px; }
         .chat-footer { padding: 8px 10px; background: var(--bg-sidebar); border-top: 1px solid var(--border-color); display: flex; gap: 6px; }
+
+        .chat-quick-menu { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+        .chat-menu-btn { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: var(--accent-main); padding: 4px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .chat-menu-btn:hover { background: var(--accent-main); color: #fff; }
 
         #announcement-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 4500; padding: 16px; }
         .modal-box { background: var(--bg-card); border-radius: 12px; width: 100%; max-width: 400px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
@@ -175,9 +179,9 @@
 
     <div id="toast-notification">✅ Hoàn tất thành công!</div>
 
-    <!-- Nhạc nền Lofi chuẩn, KHÔNG BỊ CHẶN -->
+    <!-- Nhạc nền Lofi chuẩn MP3 -->
     <audio id="bg-audio" loop preload="auto" crossorigin="anonymous">
-        <source src="https://assets.mixkit.co/music/preview/mixkit-chill-bro-894.mp3" type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
     </audio>
 
     <div id="floating-support-group">
@@ -279,6 +283,8 @@
                 <div class="menu-item" onclick="switchTab('tab-admin-refunds', event)">⚠️ Hoàn tiền lỗi</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-ctv', event)">🤝 Tiếp thị liên kết (CTV)</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-coupons', event)">🎟️ Coupons & Khuyến mại</div>
+                <!-- Mục cài đặt Bot AI CSKH mới cho Admin -->
+                <div class="menu-item" onclick="switchTab('tab-admin-aibot-config', event)">🤖 Cài đặt Trợ lý AI CSKH</div>
             </div>
 
             <div class="menu-category">MENU CHÍNH & CHỨC NĂNG</div>
@@ -349,7 +355,7 @@
                 <!-- 2. QUẢN LÝ KHÁCH HÀNG -->
                 <div id="tab-admin-users" class="tab-content">
                     <div class="card">
-                        <div class="card-title">👥 Quản lý Khách Hàng (Tự động đồng bộ)</div>
+                        <div class="card-title">👥 Quản lý Khách Hàng (Đồng bộ thời gian thực)</div>
                         <div class="table-container">
                             <table>
                                 <thead>
@@ -454,9 +460,20 @@
                 </div>
                 <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div><div class="form-group"><label>Link Zalo/Facebook</label><input type="text" value="https://zalo.me"></div><button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu!')">Lưu</button></div></div>
                 
+                <!-- BỔ SUNG: CÀI ĐẶT TRỢ LÝ AI CSKH CHO ADMIN -->
+                <div id="tab-admin-aibot-config" class="tab-content">
+                    <div class="card">
+                        <div class="card-title">🤖 Cài đặt Nội dung & Kịch bản Trợ lý AI CSKH</div>
+                        <div class="form-group"><label>Câu chào mở đầu của Bot</label><textarea rows="2" id="cfg-bot-greeting">🤖 Chào bạn! Tôi có thể giúp gì cho các dịch vụ nạp tiền, tăng tương tác hoặc đơn hàng của bạn?</textarea></div>
+                        <div class="form-group"><label>Nội dung trả lời khi khách hỏi về Nạp tiền</label><textarea rows="2" id="cfg-bot-deposit">💳 Bạn có thể nạp tiền tự động qua mục 'Nạp tiền tự động' trên menu. Số dư ví sẽ tự động cộng sau khi chuyển khoản!</textarea></div>
+                        <div class="form-group"><label>Nội dung trả lời khi khách hỏi về Dùng thử</label><textarea rows="2" id="cfg-bot-trial">🎉 Khi đăng ký tài khoản thành viên mới, hệ thống tự động kích hoạt ngay 3 ngày dùng thử miễn phí cho bạn!</textarea></div>
+                        <button class="btn btn-primary btn-sm" onclick="saveAIBotConfig()">💾 Lưu Cấu Hình Trợ Lý AI</button>
+                    </div>
+                </div>
+
                 <div id="tab-admin-packages" class="tab-content">
                     <div class="card">
-                        <div class="card-title">📦 Quản lý gói dịch vụ theo thời hạn</div>
+                        <div class="card-title">📦 Quản lý gói dịch vụ theo thời hạn & Ghi chú</div>
                         <div style="display: flex; flex-direction: column; gap: 14px;">
                             <div style="background:#111827; padding:12px; border-radius:8px; border:1px solid var(--border-color);">
                                 <label style="color:var(--accent-main); font-weight:700;">Gói 1 Ngày</label>
@@ -487,7 +504,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-primary btn-sm" style="margin-top: 14px;" onclick="showToast('✅ Đã lưu cấu hình bảng giá gói dịch vụ!')">💾 Lưu Thay Đổi Giá Gói</button>
+                        <button class="btn btn-primary btn-sm" style="margin-top: 14px;" onclick="showToast('✅ Đã lưu cấu hình bảng giá và ghi chú gói dịch vụ!')">💾 Lưu Thay Đổi Gói</button>
                     </div>
                 </div>
 
@@ -563,7 +580,6 @@
                     </div>
                 </div>
                 
-                <!-- NẠP TIỀN TỰ ĐỘNG (NHẬN DIỆN TÊN TÀI KHOẢN KHÁCH & QR TO RÕ) -->
                 <div id="deposit" class="tab-content">
                     <div class="card">
                         <div class="card-title">💳 Nạp tiền tự động SePay QR Ngân Hàng</div>
@@ -681,14 +697,23 @@
         </div>
     </div>
 
-    <!-- MODAL CHAT & THÔNG BÁO -->
+    <!-- MODAL CHAT & CÓ CÁC KHUNG MENU BẤM NHANH -->
     <div id="chat-box-modal">
         <div class="chat-header">
             <span>🤖 Trợ lý AI CSKH thông minh</span>
             <span style="cursor:pointer;" onclick="toggleChatBox()">✕</span>
         </div>
         <div class="chat-body" id="chat-messages-body">
-            <div style="background: rgba(16,185,129,0.15); padding: 8px; border-radius: 6px; color: var(--accent-main);">🤖 Chào bạn! Tôi có thể giúp gì cho các dịch vụ nạp tiền, tăng tương tác hoặc đơn hàng của bạn?</div>
+            <div style="background: rgba(16,185,129,0.15); padding: 8px; border-radius: 6px; color: var(--accent-main);" id="bot-welcome-text">
+                🤖 Chào bạn! Tôi có thể giúp gì cho các dịch vụ nạp tiền, tăng tương tác hoặc đơn hàng của bạn?
+            </div>
+            <!-- CÁC KHUNG MENU BẤM NHANH (QUICK MENU) -->
+            <div class="chat-quick-menu">
+                <button class="chat-menu-btn" onclick="sendQuickMenu('Nạp tiền như thế nào?')">💳 Hướng dẫn nạp tiền</button>
+                <button class="chat-menu-btn" onclick="sendQuickMenu('Kiểm tra đơn hàng ở đâu?')">📋 Xem đơn hàng</button>
+                <button class="chat-menu-btn" onclick="sendQuickMenu('Dùng thử 3 ngày thế nào?')">🎁 Dùng thử miễn phí</button>
+                <button class="chat-menu-btn" onclick="sendQuickMenu('Liên hệ Admin')">🎧 Liên hệ Admin</button>
+            </div>
         </div>
         <div class="chat-footer">
             <input type="text" id="chat-input-text" placeholder="Nhập câu hỏi..." onkeypress="if(event.key==='Enter') sendChatMessage()" style="flex:1;">
@@ -715,7 +740,31 @@
             }
             loadStoredNotifications();
             loadRegisteredUsersToAdminTable();
+            loadAIBotConfig();
         });
+
+        function loadAIBotConfig() {
+            let greeting = localStorage.getItem('botGreeting');
+            if(greeting) {
+                document.getElementById('bot-welcome-text').innerText = greeting;
+                if(document.getElementById('cfg-bot-greeting')) {
+                    document.getElementById('cfg-bot-greeting').value = greeting;
+                }
+            }
+        }
+
+        function saveAIBotConfig() {
+            let greeting = document.getElementById('cfg-bot-greeting').value;
+            let depositAns = document.getElementById('cfg-bot-deposit').value;
+            let trialAns = document.getElementById('cfg-bot-trial').value;
+
+            localStorage.setItem('botGreeting', greeting);
+            localStorage.setItem('botDeposit', depositAns);
+            localStorage.setItem('botTrial', trialAns);
+
+            loadAIBotConfig();
+            showToast('✅ Đã lưu cấu hình Trợ lý AI CSKH thành công!');
+        }
 
         function loadRegisteredUsersToAdminTable() {
             let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
@@ -826,7 +875,7 @@
                     btnText.innerText = "Tắt Nhạc";
                     showToast("🎵 Đã phát nhạc nền!");
                 }).catch(e => {
-                    showToast("⚠️ Đang tải nhạc, vui lòng thử lại sau 1 giây!");
+                    showToast("⚠️ Vui lòng bấm Bật Nhạc lại để thưởng thức!");
                 });
             } else {
                 audio.pause();
@@ -926,7 +975,6 @@
             if(window.innerWidth <= 899) toggleMenu();
         }
 
-        // TẠO MÃ QR NẠP TIỀN TỰ ĐỘNG NHẬN DIỆN TÊN TÀI KHOẢN KHÁCH & QR TO RÕ
         function generateQR() {
             let amount = document.getElementById('deposit-amount').value || 100000;
             let stk = document.getElementById('sepay-stk') ? document.getElementById('sepay-stk').value : '0123456789';
@@ -934,7 +982,6 @@
             let name = document.getElementById('sepay-name') ? document.getElementById('sepay-name').value : 'DINH HOANG VIET ANH';
             let syntax = document.getElementById('sepay-syntax') ? document.getElementById('sepay-syntax').value : 'NAP';
             
-            // Tự động lấy tên tài khoản khách đang đăng nhập
             let currentUsr = localStorage.getItem('currentUsername') || 'thanhvien_pro';
             let fullSyntax = `${syntax} ${currentUsr}`;
 
@@ -954,32 +1001,36 @@
             box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        function sendChatMessage() {
-            let input = document.getElementById('chat-input-text');
-            let text = input.value.trim();
-            if(!text) return;
+        function sendQuickMenu(questionText) {
             let body = document.getElementById('chat-messages-body');
-            body.innerHTML += `<div style="background: var(--accent-main); color: #fff; padding: 6px 10px; border-radius: 6px; align-self: flex-end; max-width: 85%;">${text}</div>`;
-            input.value = '';
+            body.innerHTML += `<div style="background: var(--accent-main); color: #fff; padding: 6px 10px; border-radius: 6px; align-self: flex-end; max-width: 85%;">${questionText}</div>`;
             body.scrollTop = body.scrollHeight;
 
             setTimeout(() => {
                 let reply = "🤖 CSKH: Tôi đã ghi nhận yêu cầu của bạn. Bạn vui lòng thao tác trên menu hoặc liên hệ Admin qua kênh hỗ trợ nhé!";
-                let lowerText = text.toLowerCase();
+                let lower = questionText.toLowerCase();
 
-                if(lowerText.includes('nạp tiền') || lowerText.includes('qr') || lowerText.includes('tiền') || lowerText.includes('số dư')) {
-                    reply = "💳 Bạn có thể nạp tiền tự động qua mục 'Nạp tiền tự động' trên menu. Số dư ví của bạn sẽ được cộng tự động ngay sau khi chuyển khoản đúng cú pháp!";
-                } else if(lowerText.includes('đơn hàng') || lowerText.includes('mua') || lowerText.includes('lịch sử')) {
-                    reply = "📋 Toàn bộ các dịch vụ bạn đặt mua đều được lưu chi tiết tại mục 'Lịch sử đơn đã mua'.";
-                } else if(lowerText.includes('dùng thử') || lowerText.includes('3 ngày')) {
-                    reply = "🎉 Khi đăng ký tài khoản thành viên mới, hệ thống tự động kích hoạt ngay 3 ngày dùng thử miễn phí cho bạn!";
-                } else if(lowerText.includes('chào') || lowerText.includes('hi') || lowerText.includes('hello')) {
-                    reply = "👋 Xin chào! AutoPost AI Pro rất hân hạnh được phục vụ bạn. Bạn cần hỗ trợ tính năng nào?";
+                if(lower.includes('nạp tiền')) {
+                    reply = "💳 Bạn vào mục 'Nạp tiền tự động' trên menu, nhập số tiền và quét mã QR SePay. Hệ thống sẽ tự động cộng số dư ngay sau khi chuyển khoản thành công!";
+                } else if(lower.includes('đơn hàng')) {
+                    reply = "📋 Toàn bộ lịch sử các gói dịch vụ bạn đã mua được hiển thị chi tiết tại mục 'Lịch sử đơn đã mua'.";
+                } else if(lower.includes('dùng thử')) {
+                    reply = "🎁 Khi đăng ký tài khoản thành viên mới, hệ thống tự động kích hoạt ngay 3 ngày dùng thử miễn phí toàn bộ tính năng!";
+                } else if(lower.includes('admin')) {
+                    reply = "🎧 Bạn có thể liên hệ trực tiếp với Admin qua các nút mạng xã hội ở góc màn hình hoặc mục 'Hỗ trợ'.";
                 }
 
                 body.innerHTML += `<div style="background: #374151; padding: 6px 10px; border-radius: 6px; align-self: flex-start; max-width: 85%;">${reply}</div>`;
                 body.scrollTop = body.scrollHeight;
-            }, 600);
+            }, 500);
+        }
+
+        function sendChatMessage() {
+            let input = document.getElementById('chat-input-text');
+            let text = input.value.trim();
+            if(!text) return;
+            sendQuickMenu(text);
+            input.value = '';
         }
 
         function toggleFbFeature() {

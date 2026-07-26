@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoPost AI - Hệ Thống Quản Trị Chuẩn Y Hệt Video</title>
+    <title>AutoPost AI - Hệ Thống Quản Trị Đầy Đủ & Tùy Chỉnh Thông Báo</title>
     <style>
         @keyframes rgb-border {
             0% { border-color: #ff0055; box-shadow: 0 0 20px rgba(255, 0, 85, 0.15); }
@@ -113,7 +113,7 @@
             color: #080a10; font-weight: 900; font-size: 15px;
         }
 
-        /* MENU TRƯỢT 3 GẠCH (DRAWER CHUẨN MẪU VIDEO) */
+        /* MENU TRƯỢT 3 GẠCH */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(3px);
@@ -122,30 +122,35 @@
         .drawer-overlay.open { display: block; opacity: 1; }
 
         .drawer-menu {
-            position: fixed; top: 0; left: -320px; width: 290px; height: 100vh;
+            position: fixed; top: 0; left: -320px; width: 295px; height: 100vh;
             background: #141728; border-right: 1px solid #222639;
             z-index: 100; padding: 15px 10px; transition: left 0.25s ease-out;
-            display: flex; flex-direction: column; gap: 4px; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 8px; 
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #38bdf8 #141728;
         }
         .drawer-menu.open { left: 0; }
 
         .drawer-header-box {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 10px 12px 10px; border-bottom: 1px solid #222639; margin-bottom: 5px;
+            padding: 8px 10px 12px 10px; border-bottom: 1px solid #222639; margin-bottom: 5px; flex-shrink: 0;
         }
 
         .menu-dropdown-box {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 12px; margin-bottom: 6px; overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.04);
+            flex-shrink: 0;
         }
 
         .menu-section-header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 15px; font-size: 13.5px; font-weight: 700; color: #38bdf8;
             cursor: pointer; background: rgba(56, 189, 248, 0.05);
+            user-select: none;
         }
-        .menu-section-header span.arrow { font-size: 12px; transition: transform 0.2s; }
+        .menu-section-header span.arrow { font-size: 11px; transition: transform 0.2s; }
         .menu-section-header.collapsed span.arrow { transform: rotate(-90deg); }
 
         .menu-section-content { display: flex; flex-direction: column; gap: 2px; padding: 4px 0; }
@@ -153,11 +158,12 @@
 
         .drawer-item {
             display: flex; align-items: center; gap: 12px;
-            padding: 10px 15px; color: #c0c7de; text-decoration: none;
+            padding: 11px 15px; color: #c0c7de; text-decoration: none;
             font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 8px; margin: 0 6px;
+            line-height: 1.4;
         }
         .drawer-item:hover { background: rgba(114, 9, 183, 0.25); color: #00ffcc; }
-        .drawer-item span.icon { font-size: 15px; width: 20px; text-align: center; }
+        .drawer-item span.icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
 
         .admin-only-group { display: none; }
 
@@ -310,7 +316,7 @@
                 <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'NỀN TẢNG', 'Quản trị > Nền tảng')"><span class="icon">🔲</span> Nền tảng</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'DANH MỤC', 'Quản trị > Danh mục')"><span class="icon">📁</span> Danh mục</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'QUẢN LÝ GÓI', 'Quản trị > Quản lý gói')"><span class="icon">📦</span> Quản lý gói</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'THÔNG BÁO', 'Quản trị > Thông báo')"><span class="icon">🔔</span> Thông báo</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('noticeSettingSection', 'CÀI ĐẶT THÔNG BÁO', 'Quản trị > Thông báo')"><span class="icon">🔔</span> Cài đặt thông báo</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'HỖ TRỢ', 'Quản trị > Hỗ trợ')"><span class="icon">📞</span> Hỗ trợ</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'COUPONS', 'Quản trị > Coupons')"><span class="icon">🎟️</span> Coupons</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'TIẾP THỊ LIÊN KẾT', 'Quản trị > Tiếp thị liên kết')"><span class="icon">🤝</span> Tiếp thị liên kết</div>
@@ -400,8 +406,8 @@
                 ⚠️ Tài khoản dùng thử 3 ngày của bạn đã hết hạn! Vui lòng mua dịch vụ để tiếp tục sử dụng.
             </div>
             <div class="news-box">
-                <h4>📌 Thông báo tài khoản:</h4>
-                <p id="trialStatusInfo">Đang kiểm tra trạng thái dùng thử...</p>
+                <h4>📌 Thông báo chính thức:</h4>
+                <p id="displayNoticeContent">Đang tải thông báo từ hệ thống...</p>
                 <p style="color: #ff0055; font-weight: bold; margin-top: 10px;">👉 Bấm vào 3 gạch (☰) góc trên bên trái để mở mục Chọn dịch vụ.</p>
             </div>
         </div>
@@ -512,6 +518,15 @@
             <button class="btn-submit" onclick="showNotification('Thành Công', 'Đã lưu cấu hình nạp tiền!', '💾')">Lưu Cấu Hình</button>
         </div>
 
+        <div id="noticeSettingSection" class="app-section auth-card" style="max-width: 550px; text-align: left;">
+            <div class="form-title" style="text-align: center; color: #00ffcc;">🔔 Cài Đặt Nội Dung Bảng Tin</div>
+            <div class="form-group">
+                <label>Soạn Thảo Thông Báo Cho Khách Hàng</label>
+                <textarea id="adminNoticeInput" style="height: 140px;" placeholder="Nhập nội dung thông báo..."></textarea>
+            </div>
+            <button class="btn-submit" onclick="saveAdminNotice()">Lưu & Cập Nhật Lên Web</button>
+        </div>
+
         <div id="settingsSection" class="app-section auth-card" style="max-width: 500px; text-align: left;">
             <div class="form-title" style="text-align: center; color: #ff0055;">⚙️ Cài Đặt Trang Web</div>
             <div class="form-group"><label>Tiêu Đề</label><input type="text" value="AutoPost AI"></div>
@@ -552,6 +567,7 @@
             "admin123": { pass: "2608", regTime: 0 }
         };
         let orderList = JSON.parse(localStorage.getItem('autopost_orders')) || [];
+        let systemNotice = localStorage.getItem('autopost_notice') || "🔔 Chào mừng bạn đến với hệ thống AutoPost AI. Nạp tiền và tạo đơn tự động 24/7!";
         let pendingAdminUser = "";
 
         function toggleMenuSection(headerEl) {
@@ -610,6 +626,9 @@
             if(sectionId === 'customerSection') renderCustomerTable();
             if(sectionId === 'orderManageSection') renderOrderTable();
             if(sectionId === 'statSection') refreshStats();
+            if(sectionId === 'noticeSettingSection') {
+                document.getElementById('adminNoticeInput').value = systemNotice;
+            }
         }
 
         function switchSection(sectionId, title, breadcrumbText) {
@@ -685,6 +704,7 @@
 
         window.onload = function() {
             updateSubServices();
+            document.getElementById('displayNoticeContent').innerText = systemNotice;
             const savedUser = localStorage.getItem('autopost_current_user');
             if (savedUser) {
                 applyUserSession(savedUser);
@@ -796,6 +816,19 @@
             document.querySelectorAll('.admin-only-group').forEach(el => el.style.display = 'none');
             switchSection('loginSection', 'ĐĂNG NHẬP', 'Trang chủ > Đăng nhập');
             showNotification("Đăng Xuất", "Bạn đã đăng xuất khỏi hệ thống thành công.", "👋");
+        }
+
+        // LƯU NỘI DUNG THÔNG BÁO TỪ ADMIN VÀ CẬP NHẬT LÊN WEB
+        function saveAdminNotice() {
+            const newText = document.getElementById('adminNoticeInput').value.trim();
+            if(!newText) {
+                showNotification("Lỗi", "Nội dung thông báo không được để trống!", "⚠️");
+                return;
+            }
+            systemNotice = newText;
+            localStorage.setItem('autopost_notice', systemNotice);
+            document.getElementById('displayNoticeContent').innerText = systemNotice;
+            showNotification("Thành Công", "Đã cập nhật nội dung thông báo hệ thống thành công!", "🔔");
         }
 
         function submitServiceOrder() {

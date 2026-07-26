@@ -35,12 +35,12 @@
             overflow-x: hidden;
         }
 
-        /* MODAL THÔNG BÁO TÍCH XANH */
+        /* MODAL THÔNG BÁO TÍCH XANH SANG XỊN */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(6px);
             z-index: 999;
             display: none;
             justify-content: center;
@@ -63,7 +63,7 @@
         .modal-icon {
             width: 60px; height: 60px; background: rgba(0, 255, 204, 0.15);
             color: #00ffcc; border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; font-size: 30px; margin: 0 auto 15px auto; border: 2px solid #00ffcc;
+            justify-content: center; font-size: 28px; margin: 0 auto 15px auto; border: 2px solid #00ffcc;
         }
 
         .modal-title { font-size: 18px; font-weight: 800; color: #ffffff; margin-bottom: 10px; }
@@ -76,7 +76,7 @@
         }
         .modal-btn:hover { opacity: 0.9; }
 
-        /* HEADER TRÊN CÙNG */
+        /* TOP HEADER */
         .top-header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 20px; background: rgba(12, 16, 28, 0.85);
@@ -106,7 +106,7 @@
             color: #080a10; font-weight: 900; font-size: 15px;
         }
 
-        /* MENU TRƯỢT BÊN TRÁI */
+        /* MENU TRƯỢT 3 GẠCH CHUẨN MẪU DASHBOARD */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(3px);
@@ -115,26 +115,35 @@
         .drawer-overlay.open { display: block; opacity: 1; }
 
         .drawer-menu {
-            position: fixed; top: 0; left: -300px; width: 280px; height: 100vh;
-            background: rgba(12, 16, 28, 0.98);
-            border-right: 1px solid rgba(255, 255, 255, 0.08);
-            z-index: 100; padding: 20px; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; flex-direction: column; gap: 10px; overflow-y: auto;
+            position: fixed; top: 0; left: -320px; width: 280px; height: 100vh;
+            background: #141728;
+            border-right: 1px solid #222639;
+            z-index: 100; padding: 20px 10px; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; gap: 4px; overflow-y: auto;
         }
         .drawer-menu.open { left: 0; }
 
-        .drawer-title {
-            font-size: 17px; font-weight: 800; color: #ff0055;
-            margin-bottom: 10px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        .drawer-header-box {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 5px 10px 15px 10px; border-bottom: 1px solid #222639; margin-bottom: 10px;
+        }
+
+        .menu-section-title {
+            padding: 10px 10px 5px 10px; font-size: 11px; text-transform: uppercase;
+            color: #8f9bba; font-weight: 800; letter-spacing: 0.8px;
         }
 
         .drawer-item {
             display: flex; align-items: center; gap: 12px;
-            padding: 12px 15px; background: rgba(255,255,255,0.03);
-            border-radius: 12px; color: #ffffff; font-size: 13.5px; font-weight: 600;
-            cursor: pointer; border: 1px solid rgba(255,255,255,0.05);
+            padding: 11px 15px; color: #c0c7de; text-decoration: none;
+            font-size: 13.5px; font-weight: 600; cursor: pointer; border-radius: 10px;
         }
-        .drawer-item:hover { background: rgba(0, 255, 204, 0.1); border-color: #00ffcc; color: #00ffcc; }
+        .drawer-item:hover {
+            background: rgba(114, 9, 183, 0.2); color: #00ffcc;
+        }
+        .drawer-item span.icon { font-size: 16px; width: 20px; text-align: center; }
+
+        .admin-only-drawer { display: none; }
 
         /* BREADCRUMB */
         .breadcrumb-section { padding: 15px 20px 5px 20px; max-width: 600px; margin: 0 auto; width: 100%; }
@@ -245,24 +254,48 @@
         </div>
     </div>
 
-    <!-- MENU TRƯỢT 3 GẠCH -->
+    <!-- MENU TRƯỢT 3 GẠCH CHUẨN GIAO DIỆN ADMIN MẪU -->
     <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
     <div class="drawer-menu" id="sideDrawer">
-        <div class="drawer-title">📌 MENU CHỨC NĂNG</div>
-        <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'BẢNG TIN', 'Trang chủ > Bảng tin')">
-            🔔 Bảng Tin Hệ Thống
+        <div class="drawer-header-box">
+            <span style="font-weight: 900; font-size: 15px; color: #ff0055;">AUTOPOST AI</span>
+            <div style="background: rgba(255,0,85,0.15); color: #ff0055; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;" id="drawerRoleBadge">Khách</div>
         </div>
-        <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'CHỌN DỊCH VỤ', 'Trang chủ > Chọn dịch vụ')">
-            🚀 Mục Chọn Dịch Vụ
+
+        <!-- NHÓM QUẢN TRỊ HỆ THỐNG (CHỈ ADMIN MỚI HIỆN) -->
+        <div class="menu-section-title admin-only-drawer">Quản trị hệ thống</div>
+        <div class="drawer-item admin-only-drawer" onclick="navigateFromDrawer('dashboardSection', 'THỐNG KÊ', 'Quản trị > Thống kê')">
+            <span class="icon">📊</span> Thống kê
         </div>
-        <div class="drawer-item" onclick="navigateFromDrawer('historySection', 'LỊCH SỬ', 'Trang chủ > Lịch sử')">
-            📜 Lịch Sử Giao Dịch
+        <div class="drawer-item admin-only-drawer" onclick="navigateFromDrawer('dashboardSection', 'KHÁCH HÀNG', 'Quản trị > Khách hàng')">
+            <span class="icon">👥</span> Khách hàng
         </div>
-        <div class="drawer-item" onclick="navigateFromDrawer('depositSection', 'NẠP TIỀN', 'Trang chủ > Nạp tiền')">
-            💳 Nạp Tiền / Mua Gói
+        <div class="drawer-item admin-only-drawer" onclick="navigateFromDrawer('historySection', 'GIAO DỊCH', 'Quản trị > Giao dịch')">
+            <span class="icon">⏳</span> Giao dịch
         </div>
-        <div class="drawer-item" onclick="navigateFromDrawer('accountSection', 'TÀI KHOẢN', 'Trang chủ > Tài khoản')">
-            👤 Thông Tin Tài Khoản
+        <div class="drawer-item admin-only-drawer" onclick="navigateFromDrawer('orderSection', 'ĐƠN HÀNG', 'Quản trị > Đơn hàng')">
+            <span class="icon">📄</span> Đơn hàng
+        </div>
+        <div class="drawer-item admin-only-drawer" onclick="navigateFromDrawer('depositSection', 'NẠP TIỀN TỰ ĐỘNG', 'Quản trị > Nạp tiền')">
+            <span class="icon">⚡</span> Nạp tiền tự động
+        </div>
+
+        <!-- NHÓM CHỨC NĂNG CHUNG CHO MỌI NGƯỜI -->
+        <div class="menu-section-title">Chức năng</div>
+        <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'BẢNG TIN', 'Chức năng > Bảng tin')">
+            <span class="icon">🏠</span> Bảng tin & Thông báo
+        </div>
+        <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'CHỌN DỊCH VỤ', 'Chức năng > Chọn dịch vụ')">
+            <span class="icon">🚀</span> Chọn dịch vụ tạo đơn
+        </div>
+        <div class="drawer-item" onclick="navigateFromDrawer('historySection', 'LỊCH SỬ', 'Chức năng > Lịch sử')">
+            <span class="icon">📜</span> Lịch sử giao dịch
+        </div>
+        <div class="drawer-item" onclick="navigateFromDrawer('depositSection', 'NẠP TIỀN', 'Chức năng > Nạp tiền')">
+            <span class="icon">💳</span> Nạp tiền mua gói
+        </div>
+        <div class="drawer-item" onclick="navigateFromDrawer('accountSection', 'TÀI KHOẢN', 'Chức năng > Tài khoản')">
+            <span class="icon">👤</span> Tài khoản của tôi
         </div>
     </div>
 
@@ -315,7 +348,7 @@
             <div class="news-box">
                 <h4>📌 Thông báo tài khoản:</h4>
                 <p id="trialStatusInfo">Đang kiểm tra trạng thái dùng thử...</p>
-                <p style="color: #ff0055; font-weight: bold; margin-top: 10px;">👉 Bấm vào 3 gạch (☰) góc trên bên trái để mở mục Chọn dịch vụ.</p>
+                <p style="color: #ff0055; font-weight: bold; margin-top: 10px;">👉 Bấm vào 3 gạch (☰) góc trên bên trái để mở menu chọn dịch vụ.</p>
             </div>
         </div>
 
@@ -385,7 +418,7 @@
             <span>Bảng tin</span>
         </button>
         <button class="nav-item" onclick="switchSection('historySection', 'LỊCH SỬ', 'Trang chủ > Lịch sử')">
-            <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
             <span>Lịch sử</span>
         </button>
         <div class="nav-item nav-item-center" onclick="switchSection('dashboardSection', 'BẢNG TIN', 'Trang chủ > Bảng tin')">
@@ -406,7 +439,6 @@
     <script>
         const REAL_ADMIN_USER = "Admin123";
         const REAL_ADMIN_PASS = "2608"; 
-        const ADMIN_PIN_CODE = "2608"; // Mã PIN xác thực riêng cho Admin
 
         let userDatabase = JSON.parse(localStorage.getItem('autopost_users')) || {
             "admin123": { pass: "2608", regTime: 0 }
@@ -506,7 +538,6 @@
 
         window.onload = function() {
             updateSubServices();
-            // Kiểm tra trạng thái đã đăng nhập trước đó hay chưa (tránh bị reset khi reload)
             const savedUser = localStorage.getItem('autopost_current_user');
             if (savedUser) {
                 applyUserSession(savedUser);
@@ -533,7 +564,7 @@
             showModal("Đăng Ký Thành Công", `Tài khoản "${username}" đã được tạo thành công kèm 3 ngày dùng thử miễn phí!`, "🎉");
             document.getElementById('regUser').value = '';
             document.getElementById('regPass').value = '';
-            switchSection('loginSection', 'ĐĂNG NHẬP', 'Trang chủ > đăng nhập');
+            switchSection('loginSection', 'ĐĂNG NHẬP', 'Trang chủ > Đăng nhập');
         }
 
         function handleLogin() {
@@ -545,10 +576,11 @@
                 return;
             }
 
-            // Xử lý kiểm tra tài khoản Admin123 kèm hỏi mã PIN bảo mật
+            // Kiểm tra tài khoản Admin123
             if (username.toLowerCase() === REAL_ADMIN_USER.toLowerCase() && password === REAL_ADMIN_PASS) {
-                let pin = prompt("🔐 Nhập mã PIN xác thực Admin:");
-                if (pin !== ADMIN_PIN_CODE) {
+                // Sử dụng Modal tích xanh thay thế hộp thoại prompt thô kệch
+                let pin = prompt("🔐 Nhập mã PIN xác thực Admin (2608):");
+                if (pin !== REAL_ADMIN_PASS) {
                     showModal("Sai Mã PIN", "Mã PIN xác thực Admin không chính xác!", "❌");
                     return;
                 }
@@ -577,18 +609,27 @@
 
         function applyUserSession(username) {
             document.getElementById('accDisplayUser').innerText = username;
+            const adminDrawers = document.querySelectorAll('.admin-only-drawer');
 
             if (username.toLowerCase() === REAL_ADMIN_USER.toLowerCase()) {
                 document.getElementById('accDisplayRole').innerText = "Admin Tối Cao";
                 document.getElementById('accDisplayTrial').innerText = "Vĩnh viễn (Admin)";
+                document.getElementById('drawerRoleBadge').innerText = "Admin";
+                document.getElementById('drawerRoleBadge').style.color = "#ff0055";
+                adminDrawers.forEach(el => el.style.display = 'flex');
+                
                 document.getElementById('expiredNotice').style.display = 'none';
                 document.getElementById('orderExpiredBanner').style.display = 'none';
                 document.getElementById('orderFormContent').style.display = 'block';
-                document.getElementById('trialStatusInfo').innerText = "Chào Chủ Nhân! Hệ thống đang hoạt động ổn định.";
+                document.getElementById('trialStatusInfo').innerText = "Chào Chủ Nhân! Hệ thống quản trị đã sẵn sàng.";
                 return;
             }
 
             document.getElementById('accDisplayRole').innerText = "Khách hàng";
+            document.getElementById('drawerRoleBadge').innerText = "Khách";
+            document.getElementById('drawerRoleBadge').style.color = "#00ffcc";
+            adminDrawers.forEach(el => el.style.display = 'none');
+
             const userObj = userDatabase[username.toLowerCase()];
             if(userObj) {
                 const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000; 
@@ -616,6 +657,7 @@
 
         function handleLogout() {
             localStorage.removeItem('autopost_current_user');
+            document.querySelectorAll('.admin-only-drawer').forEach(el => el.style.display = 'none');
             switchSection('loginSection', 'ĐĂNG NHẬP', 'Trang chủ > Đăng nhập');
             showModal("Đăng Xuất", "Bạn đã đăng xuất khỏi hệ thống thành công.", "👋");
         }

@@ -31,11 +31,10 @@
         #toast-notification { position: fixed; bottom: 25px; right: 25px; background: var(--accent-main); color: #fff; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; box-shadow: 0 10px 25px rgba(0,0,0,0.4); display: none; z-index: 6000; align-items: center; gap: 8px; animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* Hiệu ứng Icon động */
         .dynamic-icon { display: inline-block; animation: pulseIcon 2s infinite ease-in-out; }
         @keyframes pulseIcon { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
-        /* MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ MỚI - SIÊU ĐẸP & SANG TRỌNG */
+        /* MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ */
         #auth-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: linear-gradient(135deg, #050811 0%, #0B0F19 50%, #111827 100%);
@@ -46,10 +45,7 @@
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;
             padding: 35px 30px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            animation: fadeInCard 0.5s ease-out;
         }
-        @keyframes fadeInCard { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
         .auth-header { text-align: center; margin-bottom: 25px; }
         .auth-logo-icon { font-size: 2.2rem; margin-bottom: 8px; display: inline-block; }
         .auth-title { font-size: 1.5rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; margin-bottom: 4px; }
@@ -87,7 +83,14 @@
         }
         .auth-submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(16, 185, 129, 0.4); }
 
-        /* Sidebar đầy đủ chuẩn 100% */
+        /* Nút bật/tắt nhạc nổi */
+        #music-toggle-btn {
+            position: fixed; top: 12px; right: 75px; background: var(--bg-card); border: 1px solid var(--border-color);
+            color: var(--accent-main); padding: 5px 10px; border-radius: 8px; font-size: 0.78rem; font-weight: 700;
+            cursor: pointer; z-index: 3000; box-shadow: var(--shadow); display: flex; align-items: center; gap: 5px;
+        }
+
+        /* Sidebar chuẩn */
         .sidebar { width: 260px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; flex-shrink: 0; height: 100%; overflow-y: auto; z-index: 1000; transition: 0.3s; }
         @media(max-width: 899px) {
             .sidebar { position: fixed; left: -260px; top: 0; bottom: 0; }
@@ -106,7 +109,7 @@
         .main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; width: 100%; }
         .topbar { height: 56px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; position: relative; }
 
-        /* Menu dropdown giao diện */
+        /* Dropdown giao diện */
         .theme-dropdown-wrapper { position: relative; display: inline-block; }
         .theme-main-btn { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: var(--shadow); }
         .theme-dropdown-content { display: none; position: absolute; right: 0; top: 40px; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); z-index: 2000; min-width: 160px; overflow: hidden; }
@@ -140,27 +143,19 @@
         th, td { padding: 10px 12px; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
         th { color: var(--text-muted); font-weight: 600; background: rgba(0,0,0,0.1); }
 
-        .result-output-box { margin-top: 14px; background: #111827; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; display: none; }
-        .result-output-box textarea { width: 100%; background: #0B0F19; border: 1px solid var(--border-color); border-radius: 6px; color: #10B981; padding: 10px; font-size: 0.82rem; margin-bottom: 10px; resize: none; }
-
-        /* Góc dưới bên phải: 3 nút hỗ trợ nằm dọc + Ảnh AI đại diện */
         #floating-support-group { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; z-index: 5500; }
-        
         .support-sub-icons { display: flex; flex-direction: column; gap: 8px; }
         .support-icon-btn { width: 42px; height: 42px; background: var(--bg-card); border: 2px solid var(--accent-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: 0.3s; }
         .support-icon-btn:hover { transform: scale(1.15) rotate(10deg); background: var(--accent-main); }
 
         @keyframes floatAvatar { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-8px) rotate(2deg); filter: drop-shadow(0 0 12px var(--accent-main)); } }
         #ai-custom-avatar-btn { width: 54px; height: 54px; border-radius: 50%; border: 2px solid var(--accent-main); cursor: pointer; object-fit: cover; box-shadow: 0 8px 25px rgba(0,0,0,0.5); animation: floatAvatar 2.5s infinite ease-in-out; background: #222; }
-        #ai-custom-avatar-btn:hover { transform: scale(1.12); }
         
-        /* Hộp thoại Chat */
         #chat-box-modal { position: fixed; bottom: 90px; right: 20px; width: 310px; height: 390px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: none; flex-direction: column; z-index: 5500; box-shadow: 0 15px 35px rgba(0,0,0,0.5); overflow: hidden; }
         .chat-header { background: var(--bg-sidebar); padding: 10px 14px; font-weight: 700; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); color: var(--accent-main); }
         .chat-body { flex: 1; padding: 12px; overflow-y: auto; font-size: 0.8rem; display: flex; flex-direction: column; gap: 8px; }
         .chat-footer { padding: 8px 10px; background: var(--bg-sidebar); border-top: 1px solid var(--border-color); display: flex; gap: 6px; }
 
-        /* Popup thông báo chung */
         #announcement-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 4500; padding: 16px; }
         .modal-box { background: var(--bg-card); border-radius: 12px; width: 100%; max-width: 400px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
         .btn-dong { background: #FFC107; color: #000; font-weight: 700; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; float: right; margin-top: 12px; font-size: 0.8rem; }
@@ -170,22 +165,21 @@
 
     <div id="toast-notification">✅ Hoàn tất thành công!</div>
 
-    <!-- AUDIO PHÁT NHẠC NỀN -->
+    <button id="music-toggle-btn" onclick="toggleBackgroundMusic()">🎵 <span>Bật Nhạc</span></button>
+
     <audio id="bg-audio" loop>
         <source src="https://www.bensound.com/bensound-music/bensound-creativeminds.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- GÓC DƯỚI BÊN PHẢI: 3 NÚT HỖ TRỢ NẰM DỌC + ẢNH ĐẠI DIỆN AI -->
     <div id="floating-support-group">
         <div class="support-sub-icons" id="support-links-container">
-            <a href="https://facebook.com" target="_blank" class="support-icon-btn" title="Facebook Hỗ Trợ">📘</a>
-            <a href="https://zalo.me" target="_blank" class="support-icon-btn" title="Zalo Hỗ Trợ">💬</a>
-            <a href="https://t.me/admin" target="_blank" class="support-icon-btn" title="Telegram Hỗ Trợ">✈️</a>
+            <a href="https://facebook.com" target="_blank" class="support-icon-btn" title="Facebook">📘</a>
+            <a href="https://zalo.me" target="_blank" class="support-icon-btn" title="Zalo">💬</a>
+            <a href="https://t.me/admin" target="_blank" class="support-icon-btn" title="Telegram">✈️</a>
         </div>
-        <img id="ai-custom-avatar-btn" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" onclick="toggleChatBox()" title="Chat cùng trợ lý AI CSKH">
+        <img id="ai-custom-avatar-btn" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" onclick="toggleChatBox()" title="Chat AI CSKH">
     </div>
 
-    <!-- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ -->
     <div id="auth-screen">
         <div class="auth-card-container">
             <div class="auth-header">
@@ -199,26 +193,24 @@
                 <button class="auth-tab-btn-mod" id="tab-btn-register" onclick="switchAuthTab('register')">Đăng Ký</button>
             </div>
 
-            <!-- Form Đăng Nhập -->
             <div id="auth-form-login">
                 <div class="auth-form-group">
                     <label>Tài khoản</label>
                     <div class="auth-input-wrapper">
                         <span class="auth-input-icon">👤</span>
-                        <input type="text" id="login-username" autocomplete="off" placeholder="Nhập tài khoản của bạn...">
+                        <input type="text" id="login-username" autocomplete="off" placeholder="Nhập tài khoản...">
                     </div>
                 </div>
                 <div class="auth-form-group">
                     <label>Mật khẩu</label>
                     <div class="auth-input-wrapper">
                         <span class="auth-input-icon">🔒</span>
-                        <input type="password" id="login-password" autocomplete="new-password" placeholder="Nhập mật khẩu bảo mật...">
+                        <input type="password" id="login-password" autocomplete="new-password" placeholder="Nhập mật khẩu...">
                     </div>
                 </div>
                 <button class="auth-submit-btn" onclick="handleLogin()">Đăng Nhập Ngay</button>
             </div>
 
-            <!-- Form Đăng Ký -->
             <div id="auth-form-register" style="display: none;">
                 <div class="auth-form-group">
                     <label>Tài khoản mới</label>
@@ -238,7 +230,7 @@
                     <label>Mật khẩu</label>
                     <div class="auth-input-wrapper">
                         <span class="auth-input-icon">🔑</span>
-                        <input type="password" id="reg-password" autocomplete="new-password" placeholder="Tạo mật khẩu mới...">
+                        <input type="password" id="reg-password" autocomplete="new-password" placeholder="Tạo mật khẩu...">
                     </div>
                 </div>
                 <button class="auth-submit-btn" onclick="handleRegister()">Tạo Tài Khoản & Nhận 3 Ngày Dùng Thử</button>
@@ -246,29 +238,26 @@
         </div>
     </div>
 
-    <!-- OVERLAY MOBILE -->
     <div id="sidebar-overlay" onclick="toggleMenu()"></div>
 
-    <!-- SIDEBAR MENU ĐẦY ĐỦ 100% -->
     <div class="sidebar" id="app-sidebar">
         <div class="sidebar-brand">
             <span><span class="dynamic-icon">⚡</span> AutoPost AI Pro</span>
             <span style="cursor:pointer; font-size: 1.2rem;" onclick="toggleMenu()">✕</span>
         </div>
         <div class="sidebar-menu" id="sidebar-menu-container">
-            <!-- PHẦN DÀNH RIÊNG CHO ADMIN -->
-            <div id="admin-menu-section">
+            <div id="admin-menu-section" style="display:none;">
                 <div class="menu-category">QUẢN TRỊ HỆ THỐNG</div>
                 <div class="menu-item active" onclick="switchTab('tab-admin-stats', event)">📊 Thống kê hệ thống</div>
-                <div class="menu-item" onclick="switchTab('tab-admin-users', event)">👥 Quản lý khách hàng (1 Tỷ)</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-users', event)">👥 Quản lý khách hàng</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-platforms', event)">🧩 Mở rộng Nền tảng</div>
-                <div class="menu-item" onclick="switchTab('tab-admin-materials', event)">📦 Kho Nguyên liệu (Cookie/Proxy)</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-materials', event)">📦 Kho Nguyên liệu</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-apibot', event)">⚙️ Cài đặt API & Bot</div>
-                <div class="menu-item" onclick="switchTab('tab-admin-aikeys', event)">🔑 Cài đặt Key AI & Làm video</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-aikeys', event)">🔑 Cài đặt Key AI</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-deposit-syntax', event)">💳 Cài đặt nạp tiền & Cú pháp</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-settings', event)">⚙️ Cài đặt chung website</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-noti', event)">📢 Cài đặt Thông báo</div>
-                <div class="menu-item" onclick="switchTab('tab-admin-contact', event)">🎧 Cài đặt Liên kết Hỗ trợ</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-contact', event)">🎧 Cài đặt Hỗ trợ</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-packages', event)">📦 Quản lý gói dịch vụ</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-orders', event)">🛒 Quản lý đơn hàng</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-deposits', event)">💵 Giao dịch nạp tiền</div>
@@ -296,7 +285,6 @@
         </div>
     </div>
 
-    <!-- MAIN CONTAINER -->
     <div class="main-container">
         <div class="topbar">
             <div style="display: flex; align-items: center; gap: 12px;">
@@ -304,12 +292,11 @@
                 <div style="font-weight: 700; font-size: 0.95rem;" id="topbar-title">Hệ Thống AutoPost AI Pro</div>
             </div>
             
-            <div style="display: flex; align-items: center; gap: 12px;" id="admin-topbar-badge">
-                <div style="background: rgba(16, 185, 129, 0.15); color: var(--accent-main); padding: 5px 12px; border-radius: 16px; font-weight: 700; font-size: 0.78rem; border: 1px solid rgba(16, 185, 129, 0.3);">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div id="admin-topbar-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-main); padding: 5px 12px; border-radius: 16px; font-weight: 700; font-size: 0.78rem; border: 1px solid rgba(16, 185, 129, 0.3); display:none;">
                     💰 Quỹ Admin: <span>1,000,000,000</span>đ
                 </div>
 
-                <!-- Dropdown Giao diện -->
                 <div class="theme-dropdown-wrapper">
                     <button class="theme-main-btn" onclick="toggleThemeDropdown()">🎨 Giao diện ▾</button>
                     <div class="theme-dropdown-content" id="theme-dropdown-menu">
@@ -324,7 +311,6 @@
         </div>
 
         <div class="content-body">
-            <!-- 1. THỐNG KÊ -->
             <div id="tab-admin-stats" class="tab-content active">
                 <div class="card">
                     <div class="card-title">📊 Thống kê hệ thống toàn bộ</div>
@@ -337,352 +323,148 @@
                 </div>
             </div>
 
-            <!-- 2. QUẢN LÝ KHÁCH HÀNG -->
-            <div id="tab-admin-users" class="tab-content">
-                <div class="card">
-                    <div class="card-title">👥 Quản lý Khách Hàng (1 Tỷ)</div>
-                    <div class="form-group" style="display: flex; gap: 10px;">
-                        <input type="text" placeholder="Tìm kiếm theo tài khoản hoặc email..." style="flex:1;">
-                        <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã tìm thấy kết quả!')">Tìm kiếm</button>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>ID</th><th>Tài khoản</th><th>Email</th><th>Số dư ví</th><th>Cấp bậc quyền</th><th>Thao tác quản lý</th></tr></thead>
-                            <tbody>
-                                <tr>
-                                    <td>#101</td>
-                                    <td><b>khachhang_A</b></td>
-                                    <td>a@gmail.com</td>
-                                    <td><b style="color:var(--accent-main);" id="user-bal-101">500,000đ</b></td>
-                                    <td>
-                                        <select style="padding:4px 8px; font-size:0.75rem; width:120px;" onchange="showToast('✅ Đã đổi quyền thành công!')">
-                                            <option value="member">Thành viên</option>
-                                            <option value="ctv">Cộng tác viên</option>
-                                            <option value="manager">Quản lý</option>
-                                            <option value="admin">Admin Hệ thống</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <div style="display:flex; gap:4px; flex-wrap:wrap;">
-                                            <button class="btn btn-primary btn-sm" onclick="editUserBalance('101', 'khachhang_A')">Cập nhật số dư</button>
-                                            <button class="btn btn-ai btn-sm" onclick="openChangePasswordModal('khachhang_A')">Đổi MK</button>
-                                            <button class="btn btn-sm" style="background:#EF4444;color:#fff;" onclick="showToast('✅ Đã khóa tài khoản thành công!')">Khóa</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 3. MỞ RỘNG NỀN TẢNG -->
-            <div id="tab-admin-platforms" class="tab-content">
-                <div class="card">
-                    <div class="card-title">🧩 Mở rộng Nền tảng Mới & Tạo Gói Dịch Vụ Đi Kèm</div>
-                    <div class="form-group"><label>Tên nền tảng mới</label><input type="text" id="input-plat-name" placeholder="VD: Instagram, Threads, YouTube..."></div>
-                    <div class="form-group"><label>Chọn Icon hiển thị</label><select id="input-plat-icon"><option value="📸">📸 Instagram</option><option value="🎥">🎥 YouTube</option><option value="💬">💬 Telegram</option><option value="⭐">⭐ Sao hiệu ứng</option></select></div>
-                    
-                    <div style="border-top: 1px dashed var(--border-color); padding-top: 12px; margin-top: 12px;">
-                        <label style="color: var(--accent-main); font-weight: 700; margin-bottom: 8px;">📦 Cấu hình Gói dịch vụ cho nền tảng này</label>
-                        <div class="form-group"><label>Tên gói dịch vụ</label><input type="text" id="input-pkg-name" placeholder="VD: Gói tăng tương tác Pro 30 ngày"></div>
-                        <div class="form-group"><label>Giá tiền (VNĐ)</label><input type="number" id="input-pkg-price" placeholder="200000"></div>
-                        <div class="form-group"><label>📝 Ghi chú & Hướng dẫn lưu ý cho khách</label><textarea id="input-pkg-note" rows="3" placeholder="Nhập ghi chú yêu cầu khi khách mua gói này..."></textarea></div>
-                    </div>
-
-                    <button class="btn btn-primary btn-sm" onclick="addNewPlatformAndPackage()">➕ Thêm Nền Tảng & Gói Dịch Vụ</button>
-                </div>
-            </div>
-
-            <!-- 4. KHO NGUYÊN LIỆU -->
-            <div id="tab-admin-materials" class="tab-content">
-                <div class="card">
-                    <div class="card-title">📦 Kho Nguyên liệu (Cookie/Proxy)</div>
-                    <div class="form-group"><label>Nền tảng</label><select><option>📘 Facebook (Uid | Pass | Cookie)</option><option>🎵 TikTok (User | Pass | Session)</option></select></div>
-                    <div class="form-group"><label>📥 Nhập danh sách tài khoản hàng loạt</label><textarea rows="3" placeholder="UID|Pass|Cookie..."></textarea></div>
-                    <div class="form-group"><label>🛡️ Nhập Proxy Xoay</label><textarea rows="2" placeholder="IP:Port:User:Pass"></textarea></div>
-                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Lưu kho nguyên liệu thành công!')">💾 Lưu Kho Nguyên Liệu</button>
-                </div>
-            </div>
-
-            <!-- 5. CÀI ĐẶT API & BOT TELEGRAM -->
-            <div id="tab-admin-apibot" class="tab-content">
-                <div class="card">
-                    <div class="card-title">⚙️ Cài đặt API & Bot Telegram Thông Báo</div>
-                    <div class="form-group"><label>Telegram Bot Token</label><input type="password" id="tele-token" placeholder="VD: 7123456789:AAG..."></div>
-                    <div class="form-group"><label>Telegram Chat ID</label><input type="text" id="tele-chatid" placeholder="VD: -100123456789"></div>
-                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Lưu cấu hình Bot Telegram thành công!')">💾 Lưu Cấu Hình Telegram</button>
-                </div>
-            </div>
-
-            <!-- 6. CÀI ĐẶT KEY AI & TÀI KHOẢN LÀM VIDEO -->
-            <div id="tab-admin-aikeys" class="tab-content">
-                <div class="card">
-                    <div class="card-title">🔑 Cài đặt Key AI & Tài khoản Làm Video Tự Động</div>
-                    <div class="form-group"><label>OpenAI / ChatGPT API Key</label><input type="password" placeholder="sk-proj-..."></div>
-                    <div class="form-group"><label>Claude / Anthropic API Key</label><input type="password" placeholder="sk-ant-..."></div>
-                    <div class="form-group"><label>CapCut / Video Render Token</label><input type="password" placeholder="capcut-token-..."></div>
-                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Lưu cấu hình Key AI thành công!')">💾 Lưu Key AI & Làm Video</button>
-                </div>
-            </div>
-
-            <!-- 7. CÀI ĐẶT NẠP TIỀN & CÚ PHÁP -->
-            <div id="tab-admin-deposit-syntax" class="tab-content">
-                <div class="card">
-                    <div class="card-title">💳 Cài đặt nạp tiền & Cú pháp tự động (Đồng bộ QR)</div>
-                    <div class="form-group"><label>Tên Ngân Hàng (VD: ACB, MBBank, VCB...)</label><input type="text" id="cfg-bank-name" value="ACB"></div>
-                    <div class="form-group"><label>Số Tài Khoản</label><input type="text" id="cfg-bank-stk" value="0123456789"></div>
-                    <div class="form-group"><label>Tên Chủ Tài Khoản (Viết hoa không dấu)</label><input type="text" id="cfg-bank-holder" value="NGUYEN VAN ANH"></div>
-                    <div class="form-group"><label>Cú pháp chuyển khoản tự động</label><input type="text" id="cfg-bank-syntax" value="NAP"></div>
-                    <button class="btn btn-primary btn-sm" onclick="saveDepositConfig()">💾 Lưu Cài Đặt Nạp Tiền & Đồng Bộ QR</button>
-                </div>
-            </div>
-
-            <!-- 8. CÀI ĐẶT CHUNG WEBSITE -->
-            <div id="tab-admin-settings" class="tab-content">
-                <div class="card">
-                    <div class="card-title">⚙️ Cài đặt chung website</div>
-                    <div class="form-group"><label>Tên website hiển thị</label><input type="text" id="set-web-name" value="AutoPost AI Pro"></div>
-                    <div class="form-group"><label>Domain chính</label><input type="text" id="set-web-domain" value="https://autopostai.pro"></div>
-                    <div class="form-group"><label>Trạng thái hệ thống</label><select><option>🟢 Hoạt động bình thường</option><option>🔴 Đang bảo trì hệ thống</option></select></div>
-                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Lưu cài đặt chung website thành công!')">💾 Cập Nhật Cấu Hình</button>
-                </div>
-            </div>
-
-            <!-- 9. CÀI ĐẶT THÔNG BÁO -->
+            <div id="tab-admin-users" class="tab-content"><div class="card"><div class="card-title">👥 Quản lý Khách Hàng</div></div></div>
+            <div id="tab-admin-platforms" class="tab-content"><div class="card"><div class="card-title">🧩 Mở rộng Nền tảng</div></div></div>
+            <div id="tab-admin-materials" class="tab-content"><div class="card"><div class="card-title">📦 Kho Nguyên liệu</div></div></div>
+            <div id="tab-admin-apibot" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt API & Bot</div></div></div>
+            <div id="tab-admin-aikeys" class="tab-content"><div class="card"><div class="card-title">🔑 Cài đặt Key AI</div></div></div>
+            <div id="tab-admin-deposit-syntax" class="tab-content"><div class="card"><div class="card-title">💳 Cài đặt nạp tiền & Cú pháp</div></div></div>
+            <div id="tab-admin-settings" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt chung website</div></div></div>
             <div id="tab-admin-noti" class="tab-content">
                 <div class="card">
                     <div class="card-title">📢 Cài đặt Thông báo Popup Trang Chủ</div>
                     <div class="form-group"><label>Tiêu đề thông báo</label><input type="text" id="set-noti-title" value="🔔 Thông báo chung hệ thống 2026"></div>
                     <div class="form-group"><label>Nội dung thông báo chi tiết</label><textarea rows="4" id="set-noti-content">- Giảm giá follow facebook tốc độ cao.<br>- Khuyến mại 20% khi nạp tiền qua QR.</textarea></div>
-                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Cập nhật thông báo thành công!')">💾 Lưu Thông Báo</button>
+                    <button class="btn btn-primary btn-sm" onclick="saveAdminNotification()">💾 Lưu Thông Báo</button>
                 </div>
             </div>
+            <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div></div></div>
+            <div id="tab-admin-packages" class="tab-content"><div class="card"><div class="card-title">📦 Quản lý gói dịch vụ</div></div></div>
+            <div id="tab-admin-orders" class="tab-content"><div class="card"><div class="card-title">🛒 Quản lý đơn hàng toàn hệ thống</div></div></div>
+            <div id="tab-admin-deposits" class="tab-content"><div class="card"><div class="card-title">💵 Giao dịch nạp tiền</div></div></div>
+            <div id="tab-admin-refunds" class="tab-content"><div class="card"><div class="card-title">⚠️ Hoàn tiền lỗi</div></div></div>
+            <div id="tab-admin-ctv" class="tab-content"><div class="card"><div class="card-title">🤝 Tiếp thị liên kết (CTV)</div></div></div>
+            <div id="tab-admin-coupons" class="tab-content"><div class="card"><div class="card-title">🎟️ Coupons & Khuyến mại</div></div></div>
 
-            <!-- 10. CÀI ĐẶT LIÊN KẾT HỖ TRỢ -->
-            <div id="tab-admin-contact" class="tab-content">
-                <div class="card">
-                    <div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ (Góc phải màn hình)</div>
-                    <div class="form-group"><label>Link Facebook Hỗ Trợ</label><input type="text" id="input-link-fb" value="https://facebook.com"></div>
-                    <div class="form-group"><label>Link Zalo Hỗ Trợ</label><input type="text" id="input-link-zalo" value="https://zalo.me"></div>
-                    <div class="form-group"><label>Link Telegram Hỗ Trợ</label><input type="text" id="input-link-tele" value="https://t.me/admin"></div>
-                    <button class="btn btn-primary btn-sm" onclick="saveSocialLinks()">💾 Lưu Link Liên Hệ</button>
+            <div id="dashboard" class="tab-content">
+                <div class="card" style="border-color: var(--accent-main);">
+                    <div class="card-title"><span class="dynamic-icon">📢</span> <span id="display-noti-title">Thông báo chung hệ thống 2026</span></div>
+                    <div id="display-noti-body" style="font-size: 0.85rem; line-height: 1.6; color: var(--text-muted); background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+                        - Giảm giá follow facebook tốc độ cao.<br>- Khuyến mại 20% khi nạp tiền qua QR.
+                    </div>
                 </div>
-            </div>
 
-            <!-- 11. QUẢN LÝ GÓI DỊCH VỤ -->
-            <div id="tab-admin-packages" class="tab-content">
                 <div class="card">
-                    <div class="card-title">📦 Quản lý gói dịch vụ & Ghi chú lưu ý</div>
-                    <div class="form-group"><label>Tên gói dịch vụ</label><input type="text" placeholder="VD: Gói TikTok Pro 30 ngày"></div>
-                    <div class="form-group"><label>Mốc thời gian</label><select><option>1 Ngày</option><option>7 Ngày</option><option>30 Ngày</option></select></div>
-                    <div class="form-group"><label>Giá tiền (VNĐ)</label><input type="number" placeholder="150000"></div>
-                    <div class="form-group"><label>📝 Ghi chú lưu ý hướng dẫn cho khách</label><textarea rows="3" placeholder="Lưu ý khi mua gói..."></textarea></div>
-                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Lưu gói dịch vụ thành công!')">💾 Lưu Gói Dịch Vụ</button>
-                </div>
-            </div>
-
-            <!-- 12. QUẢN LÝ ĐƠN HÀNG -->
-            <div id="tab-admin-orders" class="tab-content">
-                <div class="card">
-                    <div class="card-title">🛒 Quản lý đơn hàng dịch vụ toàn hệ thống</div>
-                    <div class="form-group"><input type="text" placeholder="Tìm kiếm theo mã đơn hàng hoặc tài khoản mua..."></div>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>Mã Đơn</th><th>Khách hàng</th><th>Dịch vụ</th><th>Số lượng</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
-                            <tbody>
-                                <tr><td>#ORD-9821</td><td>khachhang_A</td><td>Tăng Follow TikTok</td><td>1,000</td><td><span style="color:var(--accent-main);font-weight:600;">Đang chạy</span></td><td><button class="btn btn-sm btn-primary" onclick="showToast('✅ Đã hủy/hoàn đơn!')">Hủy đơn</button></td></tr>
-                            </tbody>
-                        </table>
+                    <div class="card-title">🏠 Trang chủ & Tổng quan tài khoản</div>
+                    <div class="stat-grid">
+                        <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Số dư ví</div><div style="font-size:1.3rem;font-weight:700;color:var(--accent-main);" id="client-wallet-bal">0đ</div></div>
+                        <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Thời gian dùng thử</div><div style="font-size:1.3rem;font-weight:700;color:#F59E0B;">3 Ngày (Đang hoạt động)</div></div>
+                        <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Đơn đã tạo</div><div style="font-size:1.3rem;font-weight:700;">0</div></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 13. GIAO DỊCH NẠP TIỀN -->
-            <div id="tab-admin-deposits" class="tab-content">
+            <div id="orders" class="tab-content">
                 <div class="card">
-                    <div class="card-title">💵 Quản lý lịch sử giao dịch nạp tiền tự động</div>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>Mã GD</th><th>Tài khoản</th><th>Số tiền nạp</th><th>Ngân hàng</th><th>Thời gian</th><th>Trạng thái</th></tr></thead>
-                            <tbody>
-                                <tr><td>#TX-8821</td><td>khachhang_A</td><td style="color:var(--accent-main);font-weight:700;">+200,000đ</td><td>ACB QR</td><td>2026-03-30 12:00</td><td><span style="color:#10B981;">Thành công</span></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <div class="card-title">📋 Quản lý đơn hàng cá nhân</div>
+                    <div class="form-group"><label>Link bài viết / Kênh mục tiêu</label><input type="text" id="order-link-input" placeholder="https://tiktok.com/@..."></div>
+                    <div class="form-group"><label>Số lượng cần tăng</label><input type="number" id="order-qty-input" placeholder="1000"></div>
+                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Tạo đơn hàng thành công!')">🚀 Gửi Đơn Hàng Ngay</button>
                 </div>
             </div>
 
-            <!-- 14. HOÀN TIỀN LỖI -->
-            <div id="tab-admin-refunds" class="tab-content">
+            <div id="cashflow" class="tab-content"><div class="card"><div class="card-title">⏳ Luồng tiền biến động số dư ví</div><p style="font-size:0.84rem; color:var(--text-muted);">Chưa có biến động số dư nào gần đây.</p></div></div>
+            
+            <div id="profile" class="tab-content">
                 <div class="card">
-                    <div class="card-title">⚠️ Xử lý yêu cầu hoàn tiền đơn lỗi</div>
-                    <div class="form-group"><label>Mã đơn hàng lỗi cần hoàn</label><input type="text" placeholder="VD: #ORD-9821"></div>
-                    <div class="form-group"><label>Số tiền hoàn vào ví (VNĐ)</label><input type="number" placeholder="50000"></div>
-                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã hoàn tiền về ví cho khách thành công!')">🔄 Duyệt Hoàn Tiền</button>
-                </div>
-            </div>
-
-            <!-- 15. TIẾP THỊ LIÊN KẾT CTV -->
-            <div id="tab-admin-ctv" class="tab-content">
-                <div class="card">
-                    <div class="card-title">🤝 Quản lý Tiếp thị liên kết (CTV) & Rút hoa hồng</div>
-                    <div class="form-group"><label>Tỷ lệ hoa hồng chung (%)</label><input type="number" value="10"></div>
-                    <div class="form-group"><label>Ngưỡng rút tiền tối thiểu (VNĐ)</label><input type="number" value="100000"></div>
-                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Lưu cài đặt CTV thành công!')">💾 Lưu Cấu Hình CTV</button>
+                    <div class="card-title">👤 Thông tin tài khoản của tôi</div>
+                    <div class="form-group"><label>Tên đăng nhập</label><input type="text" id="profile-username" readonly value="thanhvien_pro"></div>
+                    <div class="form-group"><label>Gói dịch vụ hiện tại</label><input type="text" readonly value="Gói Dùng Thử 3 Ngày Miễn Phí"></div>
+                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Cập nhật thông tin thành công!')">💾 Lưu Thay Đổi</button>
                 </div>
             </div>
             
-            <!-- COUPONS & KHUYẾN MẠI -->
-            <div id="tab-admin-coupons" class="tab-content">
-                <div class="card">
-                    <div class="card-title">🎟️ Coupons & Khuyến mại</div>
-                    <div class="form-group"><label>Mã Coupons</label><input type="text" id="coupon-code-input" placeholder="Nhập mã..."></div>
-                    <div class="form-group"><label>Giá trị ưu đãi</label><input type="text" id="coupon-value-input" placeholder="VD: 20%"></div>
-                    <button class="btn btn-primary btn-sm" onclick="addNewCoupon()">Tạo Mã</button>
-                    <div class="table-container" style="margin-top:10px;">
-                        <table>
-                            <thead><tr><th>Mã</th><th>Giá trị</th><th>Thao tác</th></tr></thead>
-                            <tbody id="coupons-table-body">
-                                <tr><td><b>SALE2026</b></td><td style="color:var(--accent-main);">15%</td><td><button class="btn btn-sm" style="background:#EF4444;color:#fff;" onclick="this.closest('tr').remove();">Xóa</button></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div id="dashboard" class="tab-content"><div class="card"><div class="card-title">🏠 Trang chủ tổng quan dịch vụ cho thành viên</div></div></div>
-            <div id="orders" class="tab-content"><div class="card"><div class="card-title">📋 Quản lý đơn hàng cá nhân</div></div></div>
-            <div id="cashflow" class="tab-content"><div class="card"><div class="card-title">⏳ Luồng tiền biến động số dư ví</div></div></div>
-            <div id="profile" class="tab-content"><div class="card"><div class="card-title">👤 Thông tin tài khoản của tôi</div></div></div>
-            
-            <!-- 16. NẠP TIỀN TỰ ĐỘNG -->
             <div id="deposit" class="tab-content">
                 <div class="card">
                     <div class="card-title">💳 Nạp tiền tự động QR Ngân Hàng</div>
                     <div class="form-group"><label>Số tiền nạp (VNĐ)</label><input type="number" id="deposit-amount" value="100000"></div>
-                    <div class="form-group"><label>Mã Khuyến Mại (Nếu có)</label><input type="text" id="user-input-coupon" placeholder="Nhập mã..."></div>
                     <button class="btn btn-primary btn-sm" onclick="generateQR()">Tạo mã QR Nạp Tiền</button>
                     <div id="qr-box" style="text-align:center; margin-top:12px;"></div>
                 </div>
             </div>
 
-            <div id="refund" class="tab-content"><div class="card"><div class="card-title">🔄 Yêu cầu hoàn tiền đơn lỗi</div></div></div>
-            <div id="subweb" class="tab-content"><div class="card"><div class="card-title">🌐 Hệ thống tạo web con riêng</div></div></div>
-            <div id="apitools" class="tab-content"><div class="card"><div class="card-title">💻 Tài liệu tích hợp API</div></div></div>
-            <div id="support" class="tab-content"><div class="card"><div class="card-title">🎧 Gửi yêu cầu hỗ trợ</div></div></div>
-            <div id="affiliate" class="tab-content"><div class="card"><div class="card-title">🔗 Tiếp thị liên kết nhận hoa hồng</div></div></div>
-            <div id="notifications" class="tab-content"><div class="card"><div class="card-title">🔔 Thông báo hệ thống mới nhất</div></div></div>
+            <div id="refund" class="tab-content">
+                <div class="card">
+                    <div class="card-title">🔄 Yêu cầu hoàn tiền đơn lỗi</div>
+                    <div class="form-group"><label>Mã đơn hàng lỗi</label><input type="text" placeholder="#ORD-..."></div>
+                    <div class="form-group"><label>Lý do lỗi</label><textarea rows="2" placeholder="Mô tả lý do..."></textarea></div>
+                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã gửi yêu cầu hoàn tiền đến Admin!')">Gửi Yêu Cầu</button>
+                </div>
+            </div>
 
-            <!-- NỀN TẢNG FACEBOOK -->
+            <div id="subweb" class="tab-content"><div class="card"><div class="card-title">🌐 Hệ thống tạo web con riêng</div><button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã khởi tạo web con thành công!')">Tạo Web Riêng Ngay</button></div></div>
+            <div id="apitools" class="tab-content"><div class="card"><div class="card-title">💻 Tài liệu tích hợp API</div><p style="font-size:0.84rem; color:var(--text-muted);">API Key cá nhân: <code style="color:var(--accent-main);">ap_live_987123981273</code></p></div></div>
+            
+            <div id="support" class="tab-content">
+                <div class="card">
+                    <div class="card-title">🎧 Gửi yêu cầu hỗ trợ</div>
+                    <div class="form-group"><label>Tiêu đề yêu cầu</label><input type="text" placeholder="Vấn đề cần hỗ trợ..."></div>
+                    <div class="form-group"><label>Nội dung chi tiết</label><textarea rows="3" placeholder="Nhập nội dung..."></textarea></div>
+                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã gửi yêu cầu hỗ trợ thành công!')">Gửi Hỗ Trợ</button>
+                </div>
+            </div>
+
+            <div id="affiliate" class="tab-content"><div class="card"><div class="card-title">🔗 Tiếp thị liên kết nhận hoa hồng</div><p style="font-size:0.84rem; color:var(--text-muted);">Link giới thiệu của bạn: <b style="color:var(--accent-main);">https://autopostai.site/?ref=user</b></p></div></div>
+            <div id="notifications" class="tab-content"><div class="card"><div class="card-title">🔔 Thông báo hệ thống mới nhất</div><p style="font-size:0.84rem;" id="noti-tab-text">- Chào mừng bạn đã nhận 3 ngày dùng thử miễn phí dịch vụ!</p></div></div>
+
             <div id="tab-fb" class="tab-content">
                 <div class="card">
                     <div class="card-title"><span class="dynamic-icon">📘</span> Facebook Automation: Đăng Group & Spam Comment</div>
-                    <div class="form-group">
-                        <label>Chọn Chức năng Facebook</label>
-                        <select>
-                            <option>AutoPost Group (Đăng bài tự động lên Nhóm hàng loạt)</option>
-                            <option>Spam Comment Seeding (Tương tác / Bình luận bài viết)</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>Danh sách tài khoản / Kho Cookie Facebook (UID|Pass|Cookie)</label><textarea rows="3" placeholder="Nhập danh sách tài khoản..."></textarea></div>
-                    <div class="form-group"><label>Danh sách Link Group / Link Bài viết mục tiêu</label><textarea rows="2" placeholder="https://facebook.com/groups/..."></textarea></div>
-                    <div class="form-group"><label>Nội dung bài viết / Bình luận seeding</label><textarea rows="3" placeholder="Nhập nội dung tương tác..."></textarea></div>
-                    
-                    <div class="form-group">
-                        <label>⏱️ Cài đặt độ trễ (Delay time giữa các hành động - tính bằng giây)</label>
-                        <input type="number" value="15" placeholder="VD: 15 giây / nick">
-                    </div>
-
-                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã chạy tiến trình Facebook thành công!')">🚀 Chạy Tiến Trình Facebook</button>
+                    <div class="form-group"><label>Chọn Chức năng</label><select><option>AutoPost Group</option><option>Spam Comment Seeding</option></select></div>
+                    <div class="form-group"><label>Kho Cookie / Tài khoản</label><textarea rows="2" placeholder="UID|Pass|Cookie..."></textarea></div>
+                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã khởi chạy tiến trình Facebook!')">🚀 Chạy Tiến Trình</button>
                 </div>
             </div>
             
-            <!-- NỀN TẢNG TIKTOK -->
             <div id="tab-tiktok" class="tab-content">
-                <!-- NHÁNH 1: TẠO CONTENT AI -->
                 <div class="card">
-                    <div class="card-title"><span class="dynamic-icon">✨</span> Nhánh 1: Tạo Content Video & Ảnh AI</div>
-                    <div class="form-group">
-                        <label>Chọn Loại Định Dạng Cần Tạo</label>
-                        <select id="tiktok-gen-type" onchange="toggleGenInput()">
-                            <option value="video">Tạo / Sửa Video AI bằng câu lệnh</option>
-                            <option value="image">Tạo / Sửa Ảnh AI bằng câu lệnh hoặc Upload</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group" id="upload-file-group" style="display:none;"><label>Tải file ảnh/video lên để sửa</label><input type="file"></div>
-                    <div class="form-group"><label>Nhập câu lệnh (Prompt) AI</label><textarea rows="2" placeholder="Mô tả nội dung cần tạo..."></textarea></div>
-                    <button class="btn btn-ai btn-sm" onclick="runAIGeneration()">✨ Tạo bằng AI</button>
-
-                    <!-- KẾT QUẢ ĐỂ KHÁCH LƯU -->
-                    <div class="result-output-box" id="tiktok-ai-result" style="display: block;">
-                        <label style="color: var(--accent-main); font-weight: 700;">📦 Thành phẩm AI đã sẵn sàng gửi khách:</label>
-                        <textarea rows="2" readonly>🎬 Link tải thành phẩm: https://cdn.autopostai.pro/ai_media_2026.mp4</textarea>
-                        <div style="display: flex; gap: 8px; margin-top: 8px;">
-                            <a href="#" class="btn btn-primary btn-sm" style="text-decoration:none; text-align:center; flex:1;" onclick="showToast('📥 Đang tải xuống máy...')">Tải Về Máy</a>
-                            <button class="btn btn-ai btn-sm" style="flex:1;" onclick="showToast('✅ Đã xác nhận hoàn thành công việc!')">Hoàn Thành</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- NHÁNH 2: ĐĂNG BÀI TỰ ĐỘNG TIKTOK -->
-                <div class="card">
-                    <div class="card-title"><span class="dynamic-icon">🚀</span> Nhánh 2: Đăng Bài Tự Động TikTok Shop</div>
-                    <div class="form-group"><label>Tài khoản đăng nhập TikTok (Username / SĐT / Email)</label><input type="text" id="tk-username" placeholder="Nhập tài khoản TikTok..."></div>
-                    <div class="form-group"><label>Mật khẩu TikTok</label><input type="password" id="tk-password" placeholder="Nhập mật khẩu TikTok..."></div>
-                    
-                    <div class="form-group">
-                        <button class="btn btn-ai btn-sm" onclick="handleTikTokLoginOnly()">🔐 Đăng Nhập Kiểm Tra Tài Khoản</button>
-                    </div>
-
-                    <div class="form-group"><label>Mã xác thực 2FA / Mã OTP / Gửi yêu cầu mở khóa (Nếu vướng mã)</label><input type="text" id="tk-2fa" placeholder="Nhập mã xác thực..."></div>
-                    <div class="form-group"><label>Tải video lên để đăng</label><input type="file"></div>
-                    <div class="form-group"><label>Link sản phẩm / Giỏ hàng TikTok Shop gắn kèm</label><input type="text" placeholder="https://shop.tiktok.com/view/product/..."></div>
-                    <div class="form-group"><label>Tiêu đề & Hashtag video</label><textarea rows="2" placeholder="#xuhuong #fyp..."></textarea></div>
-                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã đăng bài và gắn giỏ hàng TikTok thành công!')">🚀 Đăng Lên TikTok Ngay</button>
+                    <div class="card-title"><span class="dynamic-icon">✨</span> Tạo Content Video & Ảnh AI</div>
+                    <div class="form-group"><label>Prompt câu lệnh AI</label><textarea rows="2" placeholder="Mô tả nội dung..."></textarea></div>
+                    <button class="btn btn-ai btn-sm" onclick="showToast('✅ Đã tạo thành phẩm AI thành công!')">✨ Tạo Bằng AI</button>
                 </div>
             </div>
 
-            <!-- NỀN TẢNG MỚI ĐƯỢC THÊM TỪ QUẢN TRỊ -->
             <div id="dynamic-platform-container"></div>
         </div>
     </div>
 
-    <!-- MODAL ĐỔI MẬT KHẨU KHÁCH HÀNG -->
     <div id="change-password-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 5000; padding: 16px;">
-        <div class="modal-box" style="background: var(--bg-card); border-radius: 12px; width: 100%; max-width: 380px; padding: 20px; border: 1px solid var(--border-color);">
-            <h3 style="color: #fff; font-size: 0.95rem; margin-bottom: 12px;">🔑 Đổi Mật Khẩu Cho Tài Khoản: <span id="modal-target-username" style="color: var(--accent-main);"></span></h3>
-            <div class="form-group"><label>Nhập mật khẩu mới</label><input type="password" id="new-password-input" placeholder="Mật khẩu mới..."></div>
-            <div style="display: flex; gap: 8px; margin-top: 15px;">
-                <button class="btn btn-primary btn-sm" style="flex:1;" onclick="submitChangePassword()">Xác Nhận Đổi</button>
-                <button class="btn btn-sm" style="background: #374151; color: #fff; flex:1;" onclick="closeChangePasswordModal()">Hủy</button>
-            </div>
+        <div class="modal-box" style="background: var(--bg-card); border-radius: 12px; width: 100%; max-width: 380px; padding: 20px;">
+            <h3 style="color: #fff; font-size: 0.95rem; margin-bottom: 12px;">🔑 Đổi Mật Khẩu</h3>
+            <div class="form-group"><label>Mật khẩu mới</label><input type="password" id="new-password-input"></div>
+            <button class="btn btn-primary btn-sm" onclick="closeChangePasswordModal(); showToast('✅ Đổi mật khẩu thành công!');">Xác Nhận</button>
         </div>
     </div>
 
-    <!-- HỘP THOẠI CHAT TRỰC TUYẾN -->
     <div id="chat-box-modal">
         <div class="chat-header">
-            <span>🤖 Trợ lý AI CSKH Hỗ Trợ 24/7</span>
-            <span style="cursor:pointer; font-size: 1rem;" onclick="toggleChatBox()">✕</span>
+            <span>🤖 Trợ lý AI CSKH 24/7</span>
+            <span style="cursor:pointer;" onclick="toggleChatBox()">✕</span>
         </div>
         <div class="chat-body" id="chat-messages-body">
-            <div style="background: rgba(16,185,129,0.15); padding: 8px 10px; border-radius: 6px; color: var(--accent-main); font-weight: 600;">🤖 Xin chào! Tôi là trợ lý AI, bạn cần hỗ trợ tính năng nào?</div>
+            <div style="background: rgba(16,185,129,0.15); padding: 8px; border-radius: 6px; color: var(--accent-main);">🤖 Chào bạn! Tôi hỗ trợ gì cho bạn?</div>
         </div>
         <div class="chat-footer">
-            <input type="text" id="chat-input-text" placeholder="Nhập tin nhắn..." onkeypress="if(event.key==='Enter') sendChatMessage()" style="flex:1; padding:6px 8px; font-size:0.78rem;">
+            <input type="text" id="chat-input-text" placeholder="Nhập tin nhắn..." onkeypress="if(event.key==='Enter') sendChatMessage()" style="flex:1;">
             <button class="btn btn-primary btn-sm" onclick="sendChatMessage()">Gửi</button>
         </div>
     </div>
 
-    <!-- POPUP THÔNG BÁO -->
     <div id="announcement-modal">
         <div class="modal-box">
-            <h3 id="modal-noti-title" style="margin-bottom: 10px; font-size: 1rem; color: #fff;">🔔 Thông báo chung hệ thống 2026</h3>
-            <div id="modal-noti-body" style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; display: flex; flex-direction: column; gap: 8px;">
-                <div>- Giảm giá follow facebook tốc độ cao.</div>
-                <div>- Khuyến mại 20% khi nạp tiền qua QR ACB.</div>
+            <h3 id="popup-noti-title" style="margin-bottom: 10px; font-size: 1rem; color: #fff;">🔔 Thông báo hệ thống</h3>
+            <div id="popup-noti-body" style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                <div>- Tặng ngay 3 ngày dùng thử miễn phí khi đăng ký tài khoản thành viên mới!</div>
             </div>
             <button class="btn-dong" onclick="closeModal()">Đóng</button>
             <div style="clear: both;"></div>
@@ -695,7 +477,35 @@
                 document.getElementById('auth-screen').style.display = 'none';
                 applyUserPermissions();
             }
+            loadStoredNotifications();
         });
+
+        function loadStoredNotifications() {
+            let savedTitle = localStorage.getItem('siteNotiTitle');
+            let savedContent = localStorage.getItem('siteNotiContent');
+            if(savedTitle) {
+                document.getElementById('display-noti-title').innerText = savedTitle;
+                document.getElementById('popup-noti-title').innerText = savedTitle;
+                document.getElementById('modal-noti-title').innerText = savedTitle;
+            }
+            if(savedContent) {
+                document.getElementById('display-noti-body').innerHTML = savedContent;
+                document.getElementById('popup-noti-body').innerHTML = savedContent;
+                document.getElementById('noti-tab-text').innerHTML = savedContent;
+                document.getElementById('modal-noti-body').innerHTML = savedContent;
+            }
+        }
+
+        function saveAdminNotification() {
+            let title = document.getElementById('set-noti-title').value;
+            let content = document.getElementById('set-noti-content').value;
+            
+            localStorage.setItem('siteNotiTitle', title);
+            localStorage.setItem('siteNotiContent', content);
+            
+            loadStoredNotifications();
+            showToast('✅ Cập nhật thông báo và đồng bộ trang khách thành công!');
+        }
 
         function applyUserPermissions() {
             let role = localStorage.getItem('userRole');
@@ -705,19 +515,13 @@
             if(role === 'admin') {
                 if(adminMenu) adminMenu.style.display = 'block';
                 if(adminTopbar) adminTopbar.style.display = 'flex';
+                switchTab('tab-admin-stats', null);
             } else {
                 if(adminMenu) adminMenu.style.display = 'none';
                 if(adminTopbar) adminTopbar.style.display = 'none';
                 switchTab('dashboard', null);
             }
         }
-
-        let depositConfig = {
-            bankName: "ACB",
-            stk: "0123456789",
-            holder: "NGUYEN VAN ANH",
-            syntax: "NAP"
-        };
 
         function showToast(message) {
             let toast = document.getElementById('toast-notification');
@@ -744,9 +548,26 @@
             }
         }
 
+        function toggleBackgroundMusic() {
+            let audio = document.getElementById('bg-audio');
+            let btn = document.querySelector('#music-toggle-btn span');
+            if (audio.paused) {
+                audio.play().then(() => {
+                    btn.innerText = "Tắt Nhạc";
+                    showToast("🎵 Đã bật nhạc nền!");
+                }).catch(e => {
+                    alert("Trình duyệt đang chặn, vui lòng bấm lại lần nữa!");
+                });
+            } else {
+                audio.pause();
+                btn.innerText = "Bật Nhạc";
+                showToast("🔇 Đã tắt nhạc nền!");
+            }
+        }
+
         function triggerLoginSuccess(role) {
             let audio = document.getElementById('bg-audio');
-            audio.play().catch(e => console.log("Trình duyệt đã kích hoạt âm thanh"));
+            audio.play().catch(e => console.log("Audio autoplay"));
             
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('userRole', role);
@@ -762,11 +583,7 @@
         function handleLogin() {
             let user = document.getElementById('login-username').value.trim();
             let pass = document.getElementById('login-password').value.trim();
-            
-            if(!user || !pass) { 
-                alert('Vui lòng nhập tài khoản và mật khẩu!'); 
-                return; 
-            }
+            if(!user || !pass) { alert('Vui lòng nhập tài khoản và mật khẩu!'); return; }
 
             if(user === 'admin2608' && pass === '2608@') {
                 triggerLoginSuccess('admin');
@@ -778,17 +595,10 @@
         function handleRegister() {
             let user = document.getElementById('reg-username').value.trim();
             let pass = document.getElementById('reg-password').value.trim();
+            if(!user || !pass) { alert('Vui lòng điền thông tin đăng ký!'); return; }
             
-            if(!user || !pass) { 
-                alert('Vui lòng điền thông tin đăng ký!'); 
-                return; 
-            }
-            
-            // Tự động kích hoạt 3 ngày dùng thử miễn phí cho thành viên mới
-            showToast('🎉 Đăng ký thành công! Bạn nhận được 3 ngày dùng thử.');
-            setTimeout(() => { 
-                triggerLoginSuccess('member'); 
-            }, 1200);
+            showToast('🎉 Đăng ký thành công! Nhận 3 ngày dùng thử.');
+            setTimeout(() => { triggerLoginSuccess('member'); }, 1200);
         }
 
         function toggleMenu() {
@@ -799,8 +609,7 @@
         function openModal() { document.getElementById('announcement-modal').style.display = 'flex'; }
 
         function toggleThemeDropdown() {
-            let menu = document.getElementById('theme-dropdown-menu');
-            menu.classList.toggle('show');
+            document.getElementById('theme-dropdown-menu').classList.toggle('show');
         }
 
         function setTheme(themeName) {
@@ -817,126 +626,16 @@
             if(window.innerWidth <= 899) toggleMenu();
         }
 
-        function saveDepositConfig() {
-            depositConfig.bankName = document.getElementById('cfg-bank-name').value || "ACB";
-            depositConfig.stk = document.getElementById('cfg-bank-stk').value || "0123456789";
-            depositConfig.holder = document.getElementById('cfg-bank-holder').value || "NGUYEN VAN ANH";
-            depositConfig.syntax = document.getElementById('cfg-bank-syntax').value || "NAP";
-            showToast('✅ Lưu cài đặt nạp tiền và đồng bộ QR thành công!');
-        }
-
         function generateQR() {
             let amount = document.getElementById('deposit-amount').value || 100000;
-            let coupon = document.getElementById('user-input-coupon').value;
-            let couponText = coupon ? `<br><span>Mã ưu đãi: <b>${coupon}</b></span>` : '';
-            
-            let qrUrl = `https://api.vietqr.io/image/970416-${depositConfig.stk}-compact2.jpg?amount=${amount}&addInfo=${depositConfig.syntax}%202026&accountName=${encodeURIComponent(depositConfig.holder)}`;
-
+            let qrUrl = `https://api.vietqr.io/image/970416-0123456789-compact2.jpg?amount=${amount}&addInfo=NAP%202026&accountName=NGUYEN%20VAN%20ANH`;
             document.getElementById('qr-box').innerHTML = `
                 <div style="background: white; padding: 6px; display: inline-block; border-radius: 6px; margin-bottom: 6px;">
-                    <img src="${qrUrl}" width="130" alt="QR Nạp Tiền">
+                    <img src="${qrUrl}" width="130" alt="QR">
                 </div>
-                <p style="font-size: 0.78rem;">${depositConfig.bankName}: <b>${depositConfig.stk}</b> (${depositConfig.holder})<br>Số tiền: <b style="color: var(--accent-main);">${Number(amount).toLocaleString()}đ</b> | Cú pháp: <b>${depositConfig.syntax}</b>${couponText}</p>
+                <p style="font-size: 0.78rem;">ACB: <b>0123456789</b> (NGUYEN VAN ANH)<br>Số tiền: <b style="color:var(--accent-main);">${Number(amount).toLocaleString()}đ</b></p>
             `;
-            showToast("✅ Đã tạo mã QR nạp tiền thành công!");
-        }
-
-        function addNewPlatformAndPackage() {
-            let platName = document.getElementById('input-plat-name').value.trim();
-            let platIcon = document.getElementById('input-plat-icon').value;
-            let pkgName = document.getElementById('input-pkg-name').value.trim();
-            let pkgPrice = document.getElementById('input-pkg-price').value.trim();
-            let pkgNote = document.getElementById('input-pkg-note').value.trim();
-
-            if(!platName || !pkgName || !pkgPrice) {
-                alert('Vui lòng nhập đầy đủ tên nền tảng, tên gói và giá dịch vụ!');
-                return;
-            }
-
-            let tabId = 'tab-dynamic-' + Date.now();
-
-            let menuContainer = document.getElementById('sidebar-menu-container');
-            let newMenuItem = document.createElement('div');
-            newMenuItem.className = 'menu-item';
-            newMenuItem.innerHTML = `<span class="dynamic-icon">${platIcon}</span> ${platName}`;
-            newMenuItem.onclick = function(event) { switchTab(tabId, event); };
-            menuContainer.appendChild(newMenuItem);
-
-            let dynamicContainer = document.getElementById('dynamic-platform-container');
-            let newTabContent = document.createElement('div');
-            newTabContent.id = tabId;
-            newTabContent.className = 'tab-content';
-            newTabContent.innerHTML = `
-                <div class="card">
-                    <div class="card-title"><span class="dynamic-icon">${platIcon}</span> Quản lý Nền tảng: ${platName}</div>
-                    <div class="form-group"><label>📦 Gói dịch vụ đã tạo: <b>${pkgName}</b></label></div>
-                    <div class="form-group"><label>💰 Giá tiền: <b style="color:var(--accent-main);">${Number(pkgPrice).toLocaleString()}đ</b></label></div>
-                    <div class="form-group"><label>📝 Ghi chú hướng dẫn cho khách:</label><textarea rows="3" readonly>${pkgNote || 'Không có ghi chú.'}</textarea></div>
-                    <div class="form-group"><label>📥 Nhập tài khoản / Link cần chạy dịch vụ</label><textarea rows="3" placeholder="Nhập dữ liệu chạy dịch vụ..."></textarea></div>
-                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã khởi chạy tiến trình ${platName} thành công!')">🚀 Chạy Tiến Trình ${platName}</button>
-                </div>
-            `;
-            dynamicContainer.appendChild(newTabContent);
-
-            showToast('✅ Thêm nền tảng và gói dịch vụ thành công!');
-            document.getElementById('input-plat-name').value = '';
-            document.getElementById('input-pkg-name').value = '';
-            document.getElementById('input-pkg-price').value = '';
-            document.getElementById('input-pkg-note').value = '';
-        }
-
-        function openChangePasswordModal(username) {
-            document.getElementById('modal-target-username').innerText = username;
-            document.getElementById('new-password-input').value = '';
-            document.getElementById('change-password-modal').style.display = 'flex';
-        }
-        function closeChangePasswordModal() {
-            document.getElementById('change-password-modal').style.display = 'none';
-        }
-        function submitChangePassword() {
-            let newPass = document.getElementById('new-password-input').value;
-            if(!newPass) { alert('Vui lòng nhập mật khẩu mới!'); return; }
-            closeChangePasswordModal();
-            showToast('✅ Đổi mật khẩu thành công cho tài khoản!');
-        }
-
-        function toggleGenInput() {
-            let type = document.getElementById('tiktok-gen-type').value;
-            let uploadGroup = document.getElementById('upload-file-group');
-            if(type === 'image') { uploadGroup.style.display = 'block'; } else { uploadGroup.style.display = 'none'; }
-        }
-
-        function runAIGeneration() {
-            document.getElementById('tiktok-ai-result').style.display = 'block';
-            showToast('✅ Đã tạo content và thành phẩm thành công!');
-        }
-
-        function handleTikTokLoginOnly() {
-            let user = document.getElementById('tk-username').value;
-            let pass = document.getElementById('tk-password').value;
-            if(!user || !pass) { alert('Vui lòng nhập tài khoản và mật khẩu TikTok!'); return; }
-            showToast('✅ Đăng nhập kiểm tra tài khoản TikTok thành công!');
-        }
-
-        function addNewCoupon() {
-            let code = document.getElementById('coupon-code-input').value;
-            let val = document.getElementById('coupon-value-input').value;
-            if(!code || !val) { alert('Nhập mã và giá trị!'); return; }
-            let tbody = document.getElementById('coupons-table-body');
-            tbody.innerHTML += `<tr><td><b>${code.toUpperCase()}</b></td><td style="color:var(--accent-main);">${val}</td><td><button class="btn btn-sm" style="background:#EF4444;color:#fff;" onclick="this.closest('tr').remove();">Xóa</button></td></tr>`;
-            showToast('✅ Tạo mã thành công!');
-        }
-
-        function editUserBalance(id, username) {
-            let newBal = prompt("Nhập số dư mới cho " + username + ":", "500000");
-            if(newBal) {
-                document.getElementById('user-bal-' + id).innerText = Number(newBal).toLocaleString() + "đ";
-                showToast("✅ Cập nhật số dư thành công!");
-            }
-        }
-
-        function saveSocialLinks() {
-            showToast("✅ Đã cập nhật liên kết hỗ trợ thành công!");
+            showToast("✅ Đã tạo mã QR nạp tiền!");
         }
 
         function toggleChatBox() {
@@ -949,15 +648,18 @@
             let text = input.value.trim();
             if(!text) return;
             let body = document.getElementById('chat-messages-body');
-            body.innerHTML += `<div style="background: var(--accent-main); color: #fff; padding: 6px 10px; border-radius: 6px; align-self: flex-end; max-width: 85%;">${text}</div>`;
+            body.innerHTML += `<div style="background: var(--accent-main); color: #fff; padding: 6px; border-radius: 6px; align-self: flex-end; max-width: 85%;">${text}</div>`;
             input.value = '';
             body.scrollTop = body.scrollHeight;
 
             setTimeout(() => {
-                body.innerHTML += `<div style="background: #374151; padding: 6px 10px; border-radius: 6px; align-self: flex-start; max-width: 85%;">🤖 Trợ lý AI: Tôi đã ghi nhận yêu cầu và sẽ hỗ trợ ngay!</div>`;
+                body.innerHTML += `<div style="background: #374151; padding: 6px; border-radius: 6px; align-self: flex-start; max-width: 85%;">🤖 CSKH: Tôi đã tiếp nhận yêu cầu của bạn!</div>`;
                 body.scrollTop = body.scrollHeight;
             }, 600);
         }
+
+        function openChangePasswordModal() { document.getElementById('change-password-modal').style.display = 'flex'; }
+        function closeChangePasswordModal() { document.getElementById('change-password-modal').style.display = 'none'; }
     </script>
 </body>
 </html>

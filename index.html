@@ -5,25 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AutoPost AI - Dashboard</title>
     <style>
+        @keyframes rgb-text-anim {
+            0% { color: #ff0055; text-shadow: 0 0 10px rgba(255,0,85,0.4); }
+            33% { color: #00ffcc; text-shadow: 0 0 10px rgba(0,255,204,0.4); }
+            66% { color: #b5179e; text-shadow: 0 0 10px rgba(181,23,158,0.4); }
+            100% { color: #ff0055; text-shadow: 0 0 10px rgba(255,0,85,0.4); }
+        }
+
         * {
             box-sizing: border-box;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
         }
 
         body {
-            background-color: #0d0f18;
+            background-color: #080a10;
             color: #ffffff;
             margin: 0;
             padding: 0;
             display: flex;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
+        /* SIDEBAR TRÁI */
         .sidebar {
-            width: 280px;
-            background: #141728;
-            border-right: 1px solid #222639;
+            width: 260px;
+            background: rgba(16, 20, 35, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
             display: flex;
             flex-direction: column;
             position: fixed;
@@ -35,30 +45,37 @@
         }
 
         .sidebar-header {
-            padding: 20px;
+            padding: 22px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #222639;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logo-animated {
+            font-weight: 900;
+            font-size: 16px;
+            animation: rgb-text-anim 5s infinite;
+            letter-spacing: 0.5px;
         }
 
         .role-badge {
-            background: rgba(255, 0, 85, 0.15);
+            background: linear-gradient(135deg, rgba(255, 0, 85, 0.2), rgba(114, 9, 183, 0.2));
             color: #ff0055;
             border: 1px solid rgba(255, 0, 85, 0.4);
             padding: 4px 10px;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
+            font-size: 11px;
+            font-weight: 700;
         }
 
         .menu-section {
-            padding: 15px 20px 5px 20px;
-            font-size: 12px;
+            padding: 18px 20px 6px 20px;
+            font-size: 11px;
             text-transform: uppercase;
-            color: #8f9bba;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+            color: #6b7a99;
+            font-weight: 800;
+            letter-spacing: 1px;
         }
 
         .menu-item {
@@ -66,22 +83,30 @@
             align-items: center;
             gap: 12px;
             padding: 12px 20px;
-            color: #c0c7de;
+            color: #94a3b8;
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 13.5px;
+            font-weight: 600;
             cursor: pointer;
+            margin: 4px 12px;
+            border-radius: 10px;
         }
 
-        .menu-item:hover, .menu-item.active {
-            background: rgba(114, 9, 183, 0.2);
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            color: #ffffff;
+        }
+
+        .menu-item.active {
+            background: linear-gradient(135deg, rgba(255, 0, 85, 0.15), rgba(114, 9, 183, 0.25));
             color: #00ffcc;
-            border-left: 4px solid #00ffcc;
+            border-left: 3px solid #00ffcc;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .menu-item svg {
-            width: 18px;
-            height: 18px;
+            width: 17px;
+            height: 17px;
             fill: currentColor;
         }
 
@@ -89,36 +114,39 @@
             display: none;
         }
 
+        /* NỘI DUNG CHÍNH */
         .main-content {
-            margin-left: 280px;
+            margin-left: 260px;
             flex: 1;
             padding: 30px;
-            background: #0d0f18;
+            background: #080a10;
+            max-width: calc(100vw - 260px);
         }
 
         .top-nav {
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            margin-bottom: 30px;
-            gap: 15px;
+            margin-bottom: 25px;
         }
 
         .user-info {
-            background: #191d30;
+            background: rgba(20, 26, 46, 0.8);
             padding: 8px 16px;
             border-radius: 12px;
-            border: 1px solid #2b314f;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             font-size: 13px;
+            color: #cbd5e1;
         }
 
+        /* CARD GIAO DIỆN */
         .card {
-            background: #141728;
-            border: 1px solid #222639;
-            border-radius: 16px;
-            padding: 25px;
+            background: linear-gradient(145deg, #121629, #0d101d);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            padding: 30px;
             margin-bottom: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
 
         .card-title {
@@ -128,53 +156,69 @@
             color: #ffffff;
         }
 
+        /* KHUNG THÔNG BÁO HỆ THỐNG */
+        .notice-box {
+            background: rgba(0, 255, 204, 0.05);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            padding: 15px 18px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #00ffcc;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .form-group {
             margin-bottom: 18px;
         }
 
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-size: 13px;
-            color: #a0aec0;
+            color: #94a3b8;
             font-weight: 600;
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 12px 15px;
-            background: #1b1f35;
-            border: 1px solid #2b314f;
-            border-radius: 10px;
-            color: #fff;
+            padding: 13px 16px;
+            background: #090c15;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            color: #ffffff;
             font-size: 14px;
             outline: none;
         }
 
         input:focus, select:focus, textarea:focus {
             border-color: #00ffcc;
+            box-shadow: 0 0 0 3px rgba(0, 255, 204, 0.15);
         }
 
         textarea {
             resize: vertical;
-            height: 90px;
+            height: 95px;
         }
 
         .btn-main {
             background: linear-gradient(135deg, #ff0055, #7209b7);
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-weight: bold;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 700;
             font-size: 14px;
             cursor: pointer;
             width: 100%;
-            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(255, 0, 85, 0.3);
         }
 
         .btn-main:hover {
-            opacity: 0.9;
+            opacity: 0.92;
+            transform: translateY(-1px);
         }
 
         .panel-section {
@@ -184,26 +228,28 @@
             display: block;
         }
 
+        /* TABS AUTH */
         .tab-auth {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #2b314f;
-            padding-bottom: 10px;
+            gap: 30px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 12px;
         }
 
         .tab-auth-btn {
             background: none;
             border: none;
-            color: #8f9bba;
+            color: #6b7a99;
             font-size: 15px;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
         }
 
         .tab-auth-btn.active {
             color: #00ffcc;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
         }
 
         .auth-form {
@@ -212,47 +258,53 @@
         .auth-form.active {
             display: block;
         }
+
+        @media(max-width: 768px) {
+            .sidebar { width: 70px; }
+            .sidebar-header .logo-animated, .menu-section, .menu-item span { display: none; }
+            .main-content { margin-left: 70px; max-width: calc(100vw - 70px); padding: 15px; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR MENU TRÁI -->
+    <!-- SIDEBAR TRÁI -->
     <div class="sidebar">
         <div class="sidebar-header">
-            <span style="font-weight: 900; font-size: 16px; color: #ff0055;">AUTOPOST AI</span>
+            <span class="logo-animated">AUTOPOST AI</span>
             <div class="role-badge" id="sidebarRoleBadge">Khách</div>
         </div>
 
-        <div class="menu-section admin-only">Quản trị hệ thống</div>
+        <div class="menu-section admin-only">Quản trị</div>
         <a class="menu-item admin-only" onclick="switchPanel('statPanel', this)">
             <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-            Thống kê
+            <span>Thống kê</span>
         </a>
         <a class="menu-item admin-only" onclick="switchPanel('materialPanel', this)">
             <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
-            Kho Nguyên Liệu & Proxy
+            <span>Kho Nguyên Liệu</span>
         </a>
 
         <div class="menu-section">Chức năng</div>
-        <a class="menu-item active" onclick="switchPanel('homePanel', this)">
+        <a class="menu-item" onclick="switchPanel('homePanel', this)">
             <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-            Trang chủ tạo đơn
+            <span>Trang chủ tạo đơn</span>
         </a>
-        <a class="menu-item" onclick="switchPanel('authPanel', this)">
+        <a class="menu-item active" onclick="switchPanel('authPanel', this)">
             <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-            Đăng nhập / Đăng ký
+            <span>Tài khoản</span>
         </a>
     </div>
 
     <!-- NỘI DUNG CHÍNH -->
     <div class="main-content">
         <div class="top-nav">
-            <div class="user-info">Xin chào, <b id="currentUsername" style="color: #00ffcc;">Khách vãng lai</b> (Quyền: <span id="roleText" style="color:#a0aec0">Khách</span>)</div>
+            <div class="user-info">Xin chào, <b id="currentUsername" style="color: #00ffcc;">Khách vãng lai</b> (Quyền: <span id="roleText" style="color:#94a3b8">Khách</span>)</div>
         </div>
 
         <!-- PANEL TRANG CHỦ -->
-        <div id="homePanel" class="panel-section active">
-            <div class="card">
+        <div id="homePanel" class="panel-section">
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
                 <div class="card-title">🚀 Tạo Đơn Hàng Tự Động</div>
                 <div class="form-group">
                     <label>Chọn Dịch Vụ Mạng Xã Hội</label>
@@ -270,7 +322,7 @@
                     <label>Số Lượng Cần Chạy</label>
                     <input type="number" placeholder="Ví dụ: 30, 50, 100...">
                 </div>
-                <button class="btn-main" onclick="alert('✅ Đã tạo đơn thành công!')">Gửi Đơn Hàng</button>
+                <button class="btn-main" onclick="alert('✅ Đã tạo đơn thành công!')">Gửi Đơn Hàng Ngay</button>
             </div>
         </div>
 
@@ -278,18 +330,18 @@
         <div id="statPanel" class="panel-section">
             <div class="card">
                 <div class="card-title">📊 Thống Kê Tổng Quan Hệ Thống</div>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
-                    <div style="background: #1b1f35; padding: 20px; border-radius: 12px;">
-                        <div style="color: #8f9bba; font-size: 13px;">Tổng Đơn Hàng</div>
-                        <div style="font-size: 24px; font-weight: bold; color: #00ffcc;">1,280</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div style="background: #090c15; padding: 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div style="color: #6b7a99; font-size: 13px;">Tổng Đơn Hàng</div>
+                        <div style="font-size: 24px; font-weight: bold; color: #00ffcc; margin-top: 5px;">1,280</div>
                     </div>
-                    <div style="background: #1b1f35; padding: 20px; border-radius: 12px;">
-                        <div style="color: #8f9bba; font-size: 13px;">Tài Khoản Clone Sẵn Sàng</div>
-                        <div style="font-size: 24px; font-weight: bold; color: #ff0055;" id="statAccCount">0</div>
+                    <div style="background: #090c15; padding: 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div style="color: #6b7a99; font-size: 13px;">Clone Sẵn Sàng</div>
+                        <div style="font-size: 24px; font-weight: bold; color: #ff0055; margin-top: 5px;" id="statAccCount">0</div>
                     </div>
-                    <div style="background: #1b1f35; padding: 20px; border-radius: 12px;">
-                        <div style="color: #8f9bba; font-size: 13px;">Trạng Thái IP Proxy</div>
-                        <div style="font-size: 20px; font-weight: bold; color: #05cd99;">Hoạt Động</div>
+                    <div style="background: #090c15; padding: 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div style="color: #6b7a99; font-size: 13px;">Trạng Thái Proxy</div>
+                        <div style="font-size: 20px; font-weight: bold; color: #05cd99; margin-top: 5px;">Hoạt Động</div>
                     </div>
                 </div>
             </div>
@@ -297,8 +349,8 @@
 
         <!-- PANEL KHO NGUYÊN LIỆU (ADMIN) -->
         <div id="materialPanel" class="panel-section">
-            <div class="card">
-                <div class="card-title">📦 Nạp Kho Nguyên Liệu & Proxy (Admin)</div>
+            <div class="card" style="max-width: 650px; margin: 0 auto;">
+                <div class="card-title">📦 Nạp Kho Nguyên Liệu & Proxy</div>
                 <div class="form-group">
                     <label>Nền Tảng</label>
                     <select id="accPlatform">
@@ -319,9 +371,14 @@
             </div>
         </div>
 
-        <!-- PANEL ĐĂNG NHẬP / ĐĂNG KÝ (TÁCH RIÊNG 2 TAB) -->
-        <div id="authPanel" class="panel-section">
-            <div class="card" style="max-width: 450px; margin: 0 auto;">
+        <!-- PANEL ĐĂNG NHẬP / ĐĂNG KÝ (MẶC ĐỊNH MỞ KHI VÀO WEB) -->
+        <div id="authPanel" class="panel-section active">
+            <div class="card" style="max-width: 440px; margin: 0 auto;">
+                <!-- Thông báo hệ thống -->
+                <div class="notice-box">
+                    🔔 <span><b>Thông báo:</b> Chào mừng bạn đến với AutoPost AI. Vui lòng đăng nhập để sử dụng dịch vụ!</span>
+                </div>
+
                 <div class="tab-auth">
                     <button class="tab-auth-btn active" onclick="switchAuthTab('loginForm', this)">Đăng Nhập</button>
                     <button class="tab-auth-btn" onclick="switchAuthTab('registerForm', this)">Đăng Ký</button>
@@ -337,17 +394,17 @@
                         <label>Mật Khẩu</label>
                         <input type="password" id="loginPass" placeholder="Nhập mật khẩu...">
                     </div>
-                    <button class="btn-main" onclick="handleLogin()">Đăng Nhập</button>
+                    <button class="btn-main" onclick="handleLogin()">Đăng Nhập Ngay</button>
                 </div>
 
-                <!-- Form Đăng Ký (Có kiểm tra trùng tên & độ mạnh mật khẩu) -->
+                <!-- Form Đăng Ký -->
                 <div id="registerForm" class="auth-form">
                     <div class="form-group">
                         <label>Tên Tài Khoản Mới</label>
                         <input type="text" id="regUser" placeholder="Chọn tên tài khoản...">
                     </div>
                     <div class="form-group">
-                        <label>Mật Khẩu (Bắt buộc: Chữ hoa, thường, số, ký tự đặc biệt)</label>
+                        <label>Mật Khẩu (Hoa, thường, số, ký tự đặc biệt)</label>
                         <input type="password" id="regPass" placeholder="Ví dụ: Abcd@1234">
                     </div>
                     <button class="btn-main" onclick="handleRegister()">Đăng Ký Tài Khoản</button>
@@ -359,8 +416,6 @@
     <script>
         const REAL_ADMIN_USER = "Admin123";
         const REAL_ADMIN_PASS = "2608"; 
-
-        // Danh sách lưu trữ các tài khoản đã đăng ký trong hệ thống (ban đầu có sẵn Admin123)
         let registeredUsers = [REAL_ADMIN_USER.toLowerCase()];
 
         function switchPanel(panelId, element) {
@@ -379,56 +434,49 @@
             element.classList.add('active');
         }
 
-        // Xử lý Đăng Ký
         function handleRegister() {
             const username = document.getElementById('regUser').value.trim();
             const password = document.getElementById('regPass').value.trim();
 
             if(!username || !password) {
-                alert("⚠️ Vui lòng điền đầy đủ thông tin đăng ký!");
+                alert("⚠️ Vui lòng điền đầy đủ thông tin!");
                 return;
             }
 
-            // 1. Kiểm tra xem tên đã tồn tại trong list chưa
             if (registeredUsers.includes(username.toLowerCase())) {
-                alert("❌ Tên tài khoản này đã tồn tại trong hệ thống! Vui lòng chọn tên khác.");
+                alert("❌ Tên tài khoản đã tồn tại! Vui lòng chọn tên khác.");
                 return;
             }
 
-            // 2. Kiểm tra độ mạnh mật khẩu: Phải có chữ hoa, chữ thường, số và ký tự đặc biệt
             const hasUpperCase = /[A-Z]/.test(password);
             const hasLowerCase = /[a-z]/.test(password);
             const hasNumber = /[0-9]/.test(password);
             const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
             if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
-                alert("❌ Mật khẩu chưa đủ mạnh!\nYêu cầu mật khẩu phải chứa ít nhất:\n- 1 Chữ cái viết hoa (A-Z)\n- 1 Chữ cái viết thường (a-z)\n- 1 Chữ số (0-9)\n- 1 Ký tự đặc biệt (!@#$%^&...)");
+                alert("❌ Mật khẩu phải chứa ít nhất:\n- 1 chữ hoa\n- 1 chữ thường\n- 1 số\n- 1 ký tự đặc biệt (!@#$...)");
                 return;
             }
 
-            // Lưu tài khoản mới vào list
             registeredUsers.push(username.toLowerCase());
-
-            alert(`🎉 Đăng ký thành công tài khoản "${username}"! Bây giờ bạn có thể chuyển sang tab Đăng Nhập.`);
+            alert(`🎉 Đăng ký thành công tài khoản "${username}"!`);
             document.getElementById('regUser').value = '';
             document.getElementById('regPass').value = '';
             switchAuthTab('loginForm', document.querySelectorAll('.tab-auth-btn')[0]);
         }
 
-        // Xử lý Đăng Nhập
         function handleLogin() {
             const username = document.getElementById('loginUser').value.trim();
             const password = document.getElementById('loginPass').value.trim();
 
             if(!username || !password) {
-                alert("⚠️ Vui lòng nhập đầy đủ Tên tài khoản và Mật khẩu!");
+                alert("⚠️ Vui lòng nhập tài khoản và mật khẩu!");
                 return;
             }
 
             document.getElementById('currentUsername').innerText = username;
             const adminElements = document.querySelectorAll('.admin-only');
 
-            // Kiểm tra quyền Admin tối cao của cậu
             if (username === REAL_ADMIN_USER && password === REAL_ADMIN_PASS) {
                 adminElements.forEach(el => el.style.display = 'flex');
                 document.getElementById('sidebarRoleBadge').innerText = "Admin";
@@ -436,20 +484,19 @@
                 document.getElementById('roleText').innerText = "Admin Tối Cao";
                 document.getElementById('roleText').style.color = "#ff0055";
                 
-                alert(`👑 Đăng nhập thành công! Chào mừng Chủ Nhân Admin123.`);
-                switchPanel('statPanel', document.querySelectorAll('.menu-item')[1]);
+                alert(`👑 Chào mừng Chủ Nhân Admin123.`);
+                switchPanel('statPanel', document.querySelectorAll('.menu-item')[0]);
                 return;
             }
 
-            // Đăng nhập khách hàng bình thường
             adminElements.forEach(el => el.style.display = 'none');
             document.getElementById('sidebarRoleBadge').innerText = "Khách";
-            document.getElementById('sidebarRoleBadge').style.color = "#a0aec0";
+            document.getElementById('sidebarRoleBadge').style.color = "#6b7a99";
             document.getElementById('roleText').innerText = "Khách hàng";
             document.getElementById('roleText').style.color = "#00ffcc";
             
-            alert(`🎉 Đăng nhập thành công! Chào ${username}.`);
-            switchPanel('homePanel', document.querySelectorAll('.menu-item')[2]);
+            alert(`🎉 Chào mừng ${username} đã đăng nhập.`);
+            switchPanel('homePanel', document.querySelectorAll('.menu-item')[0]);
             
             document.getElementById('loginUser').value = '';
             document.getElementById('loginPass').value = '';

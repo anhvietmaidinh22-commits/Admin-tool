@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoPost AI - Hệ Thống Quản Trị Đầy Đủ Chi Tiết</title>
+    <title>AutoPost AI - Hệ Thống Quản Trị Chuẩn Mẫu</title>
     <style>
         @keyframes rgb-border {
             0% { border-color: #ff0055; box-shadow: 0 0 20px rgba(255, 0, 85, 0.15); }
@@ -113,7 +113,7 @@
             color: #080a10; font-weight: 900; font-size: 15px;
         }
 
-        /* MENU TRƯỢT 3 GẠCH */
+        /* MENU TRƯỢT 3 GẠCH (DRAWER CHUẨN MẪU ẢNH) */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(3px);
@@ -125,7 +125,7 @@
             position: fixed; top: 0; left: -320px; width: 285px; height: 100vh;
             background: #141728; border-right: 1px solid #222639;
             z-index: 100; padding: 15px 10px; transition: left 0.25s ease-out;
-            display: flex; flex-direction: column; gap: 3px; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 4px; overflow-y: auto;
         }
         .drawer-menu.open { left: 0; }
 
@@ -209,7 +209,6 @@
         .app-section { display: none; width: 100%; }
         .app-section.active { display: block; }
 
-        /* BẢNG DỮ LIỆU QUẢN TRỊ (TABLE) */
         .admin-table {
             width: 100%; border-collapse: collapse; margin-top: 10px; text-align: left; font-size: 13px;
         }
@@ -263,7 +262,6 @@
 </head>
 <body>
 
-    <!-- MODAL SANG XỊN MỊN -->
     <div class="modal-overlay" id="customModal">
         <div class="modal-box">
             <div class="modal-icon" id="modalIcon">✓</div>
@@ -278,7 +276,6 @@
         </div>
     </div>
 
-    <!-- TOP HEADER -->
     <div class="top-header">
         <div class="header-left">
             <button class="icon-btn" onclick="toggleDrawer()">☰</button>
@@ -291,7 +288,6 @@
         </div>
     </div>
 
-    <!-- MENU TRƯỢT 3 GẠCH -->
     <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
     <div class="drawer-menu" id="sideDrawer">
         <div class="drawer-header-box">
@@ -299,47 +295,61 @@
             <div style="background: rgba(255,0,85,0.15); color: #ff0055; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;" id="drawerRoleBadge">Khách</div>
         </div>
 
-        <!-- NHÓM 1: QUẢN TRỊ HỆ THỐNG (CHỈ ADMIN THẤY) -->
         <div class="menu-dropdown-box admin-only-group">
             <div class="menu-section-header" onclick="toggleMenuSection(this)">
                 <span>👤 Quản trị hệ thống</span> <span class="arrow">▼</span>
             </div>
             <div class="menu-section-content">
-                <div class="drawer-item" onclick="navigateFromDrawer('statSection', 'THỐNG KÊ HỆ THỐNG', 'Quản trị > Thống kê')"><span class="icon">📊</span> Thống kê</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('customerSection', 'QUẢN LÝ KHÁCH HÀNG', 'Quản trị > Khách hàng')"><span class="icon">👥</span> Khách hàng</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('transSection', 'QUẢN LÝ GIAO DỊCH', 'Quản trị > Giao dịch')"><span class="icon">⏳</span> Giao dịch</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('orderManageSection', 'QUẢN LÝ ĐƠN HÀNG', 'Quản trị > Đơn hàng')"><span class="icon">📄</span> Đơn hàng</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('refundSection', 'YÊU CẦU HOÀN TIỀN', 'Quản trị > Hoàn tiền')"><span class="icon">🔄</span> Hoàn tiền</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('autoDepositSection', 'CÀI ĐẶT NẠP TIỀN', 'Quản trị > Nạp tiền')"><span class="icon">⚡</span> Nạp tiền tự động</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('statSection', 'THỐNG KÊ', 'Quản trị > Thống kê')"><span class="icon">📊</span> Thống kê</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('customerSection', 'KHÁCH HÀNG', 'Quản trị > Khách hàng')"><span class="icon">👥</span> Khách hàng</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('transSection', 'GIAO DỊCH', 'Quản trị > Giao dịch')"><span class="icon">⏳</span> Giao dịch</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderManageSection', 'ĐƠN HÀNG', 'Quản trị > Đơn hàng')"><span class="icon">📄</span> Đơn hàng</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('refundSection', 'HOÀN TIỀN', 'Quản trị > Hoàn tiền')"><span class="icon">🔄</span> Hoàn tiền</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('autoDepositSection', 'NẠP TIỀN TỰ ĐỘNG', 'Quản trị > Nạp tiền')"><span class="icon">⚡</span> Nạp tiền tự động</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'NGUỒN DỊCH VỤ', 'Quản trị > Nguồn dịch vụ')"><span class="icon">🌐</span> Nguồn dịch vụ</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'DANH MỤC', 'Quản trị > Danh mục')"><span class="icon">📁</span> Danh mục</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'QUẢN LÝ GÓI', 'Quản trị > Quản lý gói')"><span class="icon">📦</span> Quản lý gói</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'COUPONS', 'Quản trị > Coupons')"><span class="icon">🎟️</span> Coupons</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'TIẾP THỊ LIÊN KẾT', 'Quản trị > Tiếp thị liên kết')"><span class="icon">🤝</span> Tiếp thị liên kết</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('settingsSection', 'CÀI ĐẶT TRANG', 'Quản trị > Cài đặt trang')"><span class="icon">⚙️</span> Cài đặt trang</div>
             </div>
         </div>
 
-        <!-- NHÓM 2: CHỨC NĂNG -->
         <div class="menu-dropdown-box">
             <div class="menu-section-header" onclick="toggleMenuSection(this)">
                 <span>📦 Chức năng</span> <span class="arrow">▼</span>
             </div>
             <div class="menu-section-content">
-                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'BẢNG TIN', 'Chức năng > Bảng tin')"><span class="icon">🏠</span> Bảng tin</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'CHỌN DỊCH VỤ', 'Chức năng > Chọn dịch vụ')"><span class="icon">🚀</span> Chọn dịch vụ tạo đơn</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('historySection', 'LỊCH SỬ', 'Chức năng > Lịch sử')"><span class="icon">📜</span> Lịch sử giao dịch</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('depositSection', 'NẠP TIỀN', 'Chức năng > Nạp tiền')"><span class="icon">💳</span> Nạp tiền mua gói</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'TRANG CHỦ', 'Chức năng > Trang chủ')"><span class="icon">🏠</span> Trang chủ</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderManageSection', 'QUẢN LÝ ĐƠN HÀNG', 'Chức năng > Đơn hàng')"><span class="icon">📄</span> Quản lý đơn hàng</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('transSection', 'LUỒNG TIỀN', 'Chức năng > Luồng tiền')"><span class="icon">⏳</span> Luồng tiền</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('accountSection', 'TÀI KHOẢN CỦA TÔI', 'Chức năng > Tài khoản')"><span class="icon">👤</span> Tài khoản của tôi</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('depositSection', 'NẠP TIỀN', 'Chức năng > Nạp tiền')"><span class="icon">💳</span> Nạp tiền</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('refundSection', 'HOÀN TIỀN', 'Chức năng > Hoàn tiền')"><span class="icon">🔄</span> Hoàn tiền</div>
+            </div>
+        </div>
+
+        <div class="menu-dropdown-box">
+            <div class="menu-section-header" onclick="toggleMenuSection(this)">
+                <span>🌐 Nền tảng</span> <span class="arrow">▼</span>
+            </div>
+            <div class="menu-section-content">
+                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'FACEBOOK', 'Nền tảng > Facebook')"><span class="icon">📘</span> Facebook</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'TIKTOK', 'Nền tảng > TikTok')"><span class="icon">🎵</span> TikTok</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'INSTAGRAM', 'Nền tảng > Instagram')"><span class="icon">📷</span> Instagram</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'YOUTUBE', 'Nền tảng > YouTube')"><span class="icon">📺</span> Youtube</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'TELEGRAM', 'Nền tảng > Telegram')"><span class="icon">✈️</span> Telegram</div>
             </div>
         </div>
     </div>
 
-    <!-- BREADCRUMB -->
     <div class="breadcrumb-section">
         <h1 class="page-title" id="pageHeaderTitle">ĐĂNG NHẬP</h1>
         <div class="breadcrumb" id="pageBreadcrumb">Trang chủ > Đăng nhập</div>
     </div>
 
-    <!-- MAIN CONTAINER -->
     <div class="main-container">
 
-        <!-- 1. ĐĂNG NHẬP -->
         <div id="loginSection" class="app-section active auth-card">
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=faces" alt="Avatar" class="profile-avatar">
             <div class="form-title">Đăng nhập tài khoản</div>
@@ -355,7 +365,6 @@
             <a href="#" class="forgot-link" onclick="switchSection('registerSection', 'ĐĂNG KÝ', 'Trang chủ > Đăng ký')">Chưa có tài khoản? Đăng ký ngay</a>
         </div>
 
-        <!-- 2. ĐĂNG KÝ -->
         <div id="registerSection" class="app-section auth-card">
             <div class="form-title">Đăng ký tài khoản mới</div>
             <div class="form-group">
@@ -370,7 +379,6 @@
             <a href="#" class="forgot-link" onclick="switchSection('loginSection', 'ĐĂNG NHẬP', 'Trang chủ > Đăng nhập')">Đã có tài khoản? Đăng nhập</a>
         </div>
 
-        <!-- 3. BẢNG TIN -->
         <div id="dashboardSection" class="app-section auth-card" style="max-width: 600px; text-align: left;">
             <div class="form-title" style="text-align: center; color: #00ffcc;">🔔 BẢNG TIN HỆ THỐNG</div>
             <div class="expired-banner" id="expiredNotice">
@@ -379,11 +387,10 @@
             <div class="news-box">
                 <h4>📌 Thông báo tài khoản:</h4>
                 <p id="trialStatusInfo">Đang kiểm tra trạng thái dùng thử...</p>
-                <p style="color: #ff0055; font-weight: bold; margin-top: 10px;">👉 Bấm vào 3 gạch (☰) góc trên bên trái để mở menu chức năng.</p>
+                <p style="color: #ff0055; font-weight: bold; margin-top: 10px;">👉 Bấm vào 3 gạch (☰) góc trên bên trái để mở danh mục dịch vụ.</p>
             </div>
         </div>
 
-        <!-- 4. CHỌN DỊCH VỤ -->
         <div id="orderSection" class="app-section auth-card" style="max-width: 520px; text-align: left;">
             <div class="form-title" style="text-align: center; color: #ff0055;">🚀 MỤC CHỌN DỊCH VỤ</div>
             <div class="expired-banner" id="orderExpiredBanner" style="display:none;">
@@ -411,13 +418,11 @@
             </div>
         </div>
 
-        <!-- 5. LỊCH SỬ -->
         <div id="historySection" class="app-section auth-card" style="max-width: 500px; text-align: left;">
             <div class="form-title" style="text-align: center;">📜 Lịch Sử Giao Dịch</div>
             <p style="color: #6b7a99; text-align: center;">Chưa có lịch sử hoạt động.</p>
         </div>
 
-        <!-- 6. NẠP TIỀN -->
         <div id="depositSection" class="app-section auth-card" style="max-width: 480px; text-align: left;">
             <div class="form-title" style="text-align: center;">💳 Mua Gói Dịch Vụ / Nạp Tiền</div>
             <div class="form-group">
@@ -430,7 +435,6 @@
             <button class="btn-submit" onclick="showNotification('Thanh Toán', 'Vui lòng liên hệ Admin để kích hoạt tài khoản vĩnh viễn!', '💳')">Thanh Toán Ngay</button>
         </div>
 
-        <!-- 7. TÀI KHOẢN -->
         <div id="accountSection" class="app-section auth-card" style="max-width: 550px; text-align: left;">
             <div class="form-title" style="text-align: center;">👤 Thông Tin Tài Khoản</div>
             <div style="background: #080a10; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; border: 1px solid rgba(255,255,255,0.06);">
@@ -441,9 +445,6 @@
             <button class="btn-submit" style="background: #e53e3e; margin-top: 20px;" onclick="handleLogout()">Đăng Xuất</button>
         </div>
 
-        <!-- ================= QUẢN TRỊ HỆ THỐNG (CHỈ ADMIN THẤY & TƯƠNG TÁC THẬT) ================= -->
-        
-        <!-- THỐNG KÊ -->
         <div id="statSection" class="app-section auth-card" style="max-width: 600px; text-align: left;">
             <div class="form-title" style="text-align: center; color: #00ffcc;">📊 Thống Kê Tổng Quan</div>
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
@@ -459,7 +460,6 @@
             <button class="btn-submit" onclick="refreshStats()">Làm Mới Số Liệu</button>
         </div>
 
-        <!-- KHÁCH HÀNG (QUẢN LÝ USER) -->
         <div id="customerSection" class="app-section auth-card" style="max-width: 650px; text-align: left;">
             <div class="form-title" style="text-align: center; color: #00ffcc;">👥 Quản Lý Danh Sách Khách Hàng</div>
             <div style="overflow-x: auto;">
@@ -467,17 +467,13 @@
                     <thead>
                         <tr><th>Tài khoản</th><th>Ngày Đăng Ký</th><th>Trạng Thái</th><th>Thao Tác</th></tr>
                     </thead>
-                    <tbody id="customerTableBody">
-                        <!-- Render qua JS -->
-                    </tbody>
+                    <tbody id="customerTableBody"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- ĐƠN HÀNG ADMIN -->
         <div id="orderManageSection" class="app-section auth-card" style="max-width: 650px; text-align: left;">
             <div class="form-title" style="text-align: center; color: #ff0055;">📄 Quản Lý Đơn Hàng Hệ Thống</div>
-            <p style="color: #94a3b8; font-size: 13px;">Danh sách các đơn hàng chạy tự động từ khách hàng gửi lên.</p>
             <div style="overflow-x: auto;">
                 <table class="admin-table">
                     <thead>
@@ -490,33 +486,30 @@
             </div>
         </div>
 
-        <!-- GIAO DỊCH & HOÀN TIỀN -->
         <div id="transSection" class="app-section auth-card" style="max-width: 600px; text-align: left;">
-            <div class="form-title" style="text-align: center; color: #00ffcc;">⏳ Nhật Ký Giao Dịch & Hoàn Tiền</div>
-            <p style="color: #94a3b8; font-size: 13px;">Kiểm soát lịch sử nạp tiền và các yêu cầu hoàn tiền của thành viên.</p>
-            <button class="btn-submit" onclick="showNotification('Giao Dịch', 'Không có giao dịch phát sinh lỗi cần xử lý.', '⏳')">Kiểm Tra Lệnh Treo</button>
+            <div class="form-title" style="text-align: center; color: #00ffcc;">⏳ Nhật Ký Giao Dịch & Luồng Tiền</div>
+            <p style="color: #94a3b8; font-size: 13px;">Kiểm soát toàn bộ biến động số dư và lệnh nạp tiền.</p>
         </div>
 
-        <!-- CÀI ĐẶT NẠP TIỀN TỰ ĐỘNG -->
+        <div id="refundSection" class="app-section auth-card" style="max-width: 600px; text-align: left;">
+            <div class="form-title" style="text-align: center; color: #ff0055;">🔄 Lịch Sử Hoàn Tiền</div>
+            <p style="color: #94a3b8; font-size: 13px;">Xử lý các yêu cầu hoàn tiền đơn lỗi từ phía khách hàng.</p>
+        </div>
+
         <div id="autoDepositSection" class="app-section auth-card" style="max-width: 500px; text-align: left;">
             <div class="form-title" style="text-align: center; color: #00ffcc;">⚡ Cài Đặt Nạp Tiền Tự Động</div>
-            <div class="form-group"><label>Ngân Hàng Nhận Tiền</label><input type="text" value="MB Bank"></div>
+            <div class="form-group"><label>Ngân Hàng Nhận</label><input type="text" value="MB Bank"></div>
             <div class="form-group"><label>Số Tài Khoản</label><input type="text" value="0987654321"></div>
-            <div class="form-group"><label>Chủ Tài Khoản</label><input type="text" value="ADMIN AUTOPOST"></div>
-            <button class="btn-submit" onclick="showNotification('Thành Công', 'Đã lưu thông tin cấu hình nạp tiền!', '💾')">Lưu Cấu Hình</button>
+            <button class="btn-submit" onclick="showNotification('Thành Công', 'Đã lưu cấu hình nạp tiền!', '💾')">Lưu Cấu Hình</button>
         </div>
 
-        <!-- CÀI ĐẶT TRANG -->
         <div id="settingsSection" class="app-section auth-card" style="max-width: 500px; text-align: left;">
             <div class="form-title" style="text-align: center; color: #ff0055;">⚙️ Cài Đặt Trang Web</div>
-            <div class="form-group"><label>Tiêu Đề Website</label><input type="text" id="settingTitle" value="AutoPost AI - Hệ Thống Dịch Vụ"></div>
-            <div class="form-group"><label>Thông Báo Bảng Tin (Popup)</label><textarea id="settingNotice">Chào mừng bạn đến với hệ thống!</textarea></div>
-            <button class="btn-submit" onclick="showNotification('Thành Công', 'Đã cập nhật cài đặt giao diện thành công!', '⚙️')">Lưu Thay Đổi</button>
+            <div class="form-group"><label>Tiêu Đề Website</label><input type="text" value="AutoPost AI"></div>
+            <button class="btn-submit" onclick="showNotification('Thành Công', 'Đã lưu cài đặt giao diện!', '⚙️')">Lưu Thay Đổi</button>
         </div>
-
     </div>
 
-    <!-- BOTTOM BAR -->
     <div class="bottom-nav">
         <button class="nav-item" onclick="switchSection('dashboardSection', 'BẢNG TIN', 'Chức năng > Bảng tin')">
             <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -654,29 +647,29 @@
 
             if (sub === 'fb_group') {
                 container.innerHTML = `
-                    <div class="form-group"><label>Link Group Facebook</label><input type="text" id="ordInput1" placeholder="Dán link nhóm..."></div>
-                    <div class="form-group"><label>Nội dung bài viết</label><textarea id="ordInput2" placeholder="Nhập nội dung..."></textarea></div>
-                    <div class="form-group"><label>Số lượng nhóm cần đăng</label><input type="number" id="ordInput3" placeholder="Ví dụ: 10"></div>
+                    <div class="form-group"><label>Link Group Facebook</label><input type="text" placeholder="Dán link nhóm..."></div>
+                    <div class="form-group"><label>Nội dung bài viết</label><textarea placeholder="Nhập nội dung..."></textarea></div>
+                    <div class="form-group"><label>Số lượng nhóm cần đăng</label><input type="number" placeholder="Ví dụ: 10"></div>
                 `;
             } else if (sub === 'fb_spam_cmt') {
                 container.innerHTML = `
-                    <div class="form-group"><label>Link Bài Viết Cần Spam Cmt</label><input type="text" id="ordInput1" placeholder="Dán link bài viết..."></div>
-                    <div class="form-group"><label>Nội dung bình luận</label><textarea id="ordInput2" placeholder="Mỗi dòng 1 cmt..."></textarea></div>
-                    <div class="form-group"><label>Số lượng cmt</label><input type="number" id="ordInput3" placeholder="Ví dụ: 50"></div>
+                    <div class="form-group"><label>Link Bài Viết Cần Spam Cmt</label><input type="text" placeholder="Dán link bài viết..."></div>
+                    <div class="form-group"><label>Nội dung bình luận</label><textarea placeholder="Mỗi dòng 1 cmt..."></textarea></div>
+                    <div class="form-group"><label>Số lượng cmt</label><input type="number" placeholder="Ví dụ: 50"></div>
                 `;
             } else if (sub === 'tk_content') {
                 container.innerHTML = `
                     <div style="background: rgba(255,0,85,0.1); border: 1px dashed #ff0055; padding: 12px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; color: #ff0055;">
                         ⚠️ TikTok yêu cầu khách gửi thông tin tài khoản để hệ thống tiến hành đăng bài tự động!
                     </div>
-                    <div class="form-group"><label>Tài Khoản TikTok (User / Email)</label><input type="text" id="ordInput1" placeholder="Nhập tài khoản TikTok..."></div>
-                    <div class="form-group"><label>Mật Khẩu TikTok</label><input type="password" id="ordInput2" placeholder="Nhập mật khẩu TikTok..."></div>
-                    <div class="form-group"><label>Nội Dung / Content Video</label><textarea id="ordInput3" placeholder="Nhập content caption..."></textarea></div>
-                    <div class="form-group"><label>Ngày & Giờ Đăng Hẹn Giờ</label><input type="datetime-local" id="ordInput4"></div>
+                    <div class="form-group"><label>Tài Khoản TikTok (User / Email)</label><input type="text" placeholder="Nhập tài khoản TikTok..."></div>
+                    <div class="form-group"><label>Mật Khẩu TikTok</label><input type="password" placeholder="Nhập mật khẩu TikTok..."></div>
+                    <div class="form-group"><label>Nội Dung / Content Video</label><textarea placeholder="Nhập content caption..."></textarea></div>
+                    <div class="form-group"><label>Ngày & Giờ Đăng Hẹn Giờ</label><input type="datetime-local"></div>
                 `;
             } else {
                 container.innerHTML = `
-                    <div class="form-group"><label>Thông Tin Cấu Hình</label><input type="text" id="ordInput1" placeholder="Nhập thông số tùy chỉnh..."></div>
+                    <div class="form-group"><label>Thông Tin Cấu Hình</label><input type="text" placeholder="Nhập thông số tùy chỉnh..."></div>
                 `;
             }
         }
@@ -796,7 +789,6 @@
             showNotification("Đăng Xuất", "Bạn đã đăng xuất khỏi hệ thống thành công.", "👋");
         }
 
-        // TƯƠNG TÁC THẬT CHO TẠO ĐƠN
         function submitServiceOrder() {
             const parent = document.getElementById('parentPlatform').value;
             const sub = document.getElementById('subService').value;
@@ -815,7 +807,6 @@
             showNotification("Thành Công", `Đã tạo đơn hàng thành công! Mã đơn: ${newOrder.id}`, "🚀");
         }
 
-        // QUẢN TRỊ: RENDER BẢNG KHÁCH HÀNG THẬT
         function renderCustomerTable() {
             const tbody = document.getElementById('customerTableBody');
             tbody.innerHTML = '';
@@ -826,7 +817,7 @@
                 row.innerHTML = `
                     <td><b>${username}</b></td>
                     <td>${regDate}</td>
-                    <td style="color: #00ffcc;">Hoạt động (Trial)</td>
+                    <td style="color: #00ffcc;">Hoạt động</td>
                     <td>
                         <button class="action-btn" onclick="extendUser('${username}')">Gia hạn</button>
                         <button class="action-btn del" onclick="deleteUser('${username}')">Xóa</button>
@@ -844,12 +835,11 @@
         }
 
         function extendUser(username) {
-            userDatabase[username].regTime = Date.now(); // Reset lại 3 ngày mới
+            userDatabase[username].regTime = Date.now();
             localStorage.setItem('autopost_users', JSON.stringify(userDatabase));
             showNotification("Thành Công", `Đã gia hạn thêm 3 ngày cho tài khoản ${username}!`, "✨");
         }
 
-        // QUẢN TRỊ: RENDER BẢNG ĐƠN HÀNG THẬT
         function renderOrderTable() {
             const tbody = document.getElementById('orderTableBody');
             tbody.innerHTML = '';
@@ -873,7 +863,7 @@
             orderList[index].status = "Hoàn thành";
             localStorage.setItem('autopost_orders', JSON.stringify(orderList));
             renderOrderTable();
-            showNotification("Đã Duyệt", "Đơn hàng đã được chuyển trạng thái Hoàn thành!", "✅");
+            showNotification("Đã Duyệt", "Đơn hàng đã chuyển sang trạng thái Hoàn thành!", "✅");
         }
 
         function refreshStats() {

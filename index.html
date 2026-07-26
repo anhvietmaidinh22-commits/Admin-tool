@@ -157,9 +157,10 @@
         .action-option:last-child { border-bottom: none; }
         .action-option:hover { background-color: rgba(16, 185, 129, 0.2); color: var(--accent-main); }
 
+        /* ICON HÌNH ẢNH MẠNG XÃ HỘI CHUẨN XÁC Ở GÓC MÀN HÌNH */
         #floating-support-group { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; z-index: 5500; }
-        .support-icon-btn { width: 44px; height: 44px; background: var(--bg-card); border: 2px solid var(--accent-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: 0.3s; }
-        .support-icon-btn:hover { transform: scale(1.15) rotate(10deg); background: var(--accent-main); }
+        .support-icon-img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border: 2px solid var(--accent-main); transition: 0.3s; background: #fff; display: block; }
+        .support-icon-img:hover { transform: scale(1.15) rotate(10deg); }
 
         @keyframes floatAvatar { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-8px) rotate(2deg); filter: drop-shadow(0 0 12px var(--accent-main)); } }
         #ai-custom-avatar-btn { width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--accent-main); cursor: pointer; object-fit: cover; box-shadow: 0 8px 25px rgba(0,0,0,0.5); animation: floatAvatar 2.5s infinite ease-in-out; background: #222; margin-top: 4px; }
@@ -186,10 +187,17 @@
         <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- NÚT ICON ẢNH THẬT CHUẨN XÁC ZALO & TELEGRAM -->
     <div id="floating-support-group">
-        <a href="https://facebook.com" target="_blank" class="support-icon-btn" title="Hỗ trợ qua Facebook">📘</a>
-        <a href="https://zalo.me" target="_blank" class="support-icon-btn" title="Hỗ trợ qua Zalo">💬</a>
-        <a href="https://t.me/admin" target="_blank" class="support-icon-btn" title="Hỗ trợ qua Telegram">✈️</a>
+        <a href="https://zalo.me/0898851000" target="_blank" title="Hỗ trợ Zalo: 0898851000">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_Zalo.svg" class="support-icon-img" alt="Zalo">
+        </a>
+        <a href="https://t.me/Vietanhenter" target="_blank" title="Hỗ trợ Telegram: @Vietanhenter">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" class="support-icon-img" alt="Telegram">
+        </a>
+        <a href="https://www.facebook.com" target="_blank" title="Hỗ trợ Facebook">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="support-icon-img" alt="Facebook">
+        </a>
         <img id="ai-custom-avatar-btn" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" onclick="toggleChatBox()" title="Chat AI CSKH">
     </div>
 
@@ -351,7 +359,7 @@
                     </div>
                 </div>
 
-                <!-- 2. QUẢN LÝ KHÁCH HÀNG (ADMIN Ở DƯỚI CÙNG SỐ TIỀN 1 TỶ, ĐỦ THÔNG TIN NGÀY GIỜ VÀ MENU THAO TÁC) -->
+                <!-- 2. QUẢN LÝ KHÁCH HÀNG (ADMIN DƯỚI CÙNG 1 TỶ) -->
                 <div id="tab-admin-users" class="tab-content">
                     <div class="card">
                         <div class="card-title">👥 Quản lý Khách Hàng</div>
@@ -368,7 +376,6 @@
                                     </tr>
                                 </thead>
                                 <tbody id="admin-users-table-body">
-                                    <!-- Các user khách sẽ hiển thị ở trên -->
                                     <tr>
                                         <td>507925</td>
                                         <td>
@@ -388,7 +395,6 @@
                                         <td>0đ</td>
                                         <td>27/07/2026 03:00</td>
                                     </tr>
-                                    <!-- TÀI KHOẢN ADMIN NẰM DƯỚI CÙNG VỚI SỐ TIỀN 1 TỶ -->
                                     <tr style="background: rgba(16, 185, 129, 0.08);">
                                         <td>01</td>
                                         <td>
@@ -488,58 +494,7 @@
                         <button class="btn btn-primary btn-sm" onclick="saveAdminNotification()">💾 Lưu Thông Báo</button>
                     </div>
                 </div>
-
-                <!-- 4. CÀI ĐẶT LIÊN HỆ HỖ TRỢ (GIỐNG HỆT ẢNH MẪU: THÊM, CHỌN LOGO VÀ BẢNG DANH SÁCH XÓA) -->
-                <div id="tab-admin-contact" class="tab-content">
-                    <div class="card">
-                        <div class="card-title">🎧 Liên hệ mạng xã hội & Hỗ trợ</div>
-                        <div class="form-group"><label>Link liên hệ</label><input type="text" id="contact-link-input" placeholder="https://zalo.me/0898..."></div>
-                        <div class="form-group">
-                            <label>Logo / Icon mạng xã hội</label>
-                            <select id="contact-icon-select">
-                                <option value="💬">💬 Zalo</option>
-                                <option value="✈️">✈️ Telegram</option>
-                                <option value="📘">📘 Facebook</option>
-                                <option value="🎵">🎵 TikTok</option>
-                                <option value="📸">📸 Instagram</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-primary btn-sm" onclick="addContactLink()">Thêm Liên Hệ Mới</button>
-                        
-                        <div class="table-container" style="margin-top: 20px;">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Thao tác</th>
-                                        <th>Logo</th>
-                                        <th>Link</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="admin-contact-table-body">
-                                    <tr>
-                                        <td>1</td>
-                                        <td><a href="javascript:void(0)" style="color:#EF4444; font-weight:700; text-decoration:none;" onclick="removeContact(this)">Xóa</a></td>
-                                        <td>💬</td>
-                                        <td><a href="https://zalo.me/0898" target="_blank" style="color:var(--accent-main); text-decoration:none;">https://zalo.me/0898</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td><a href="javascript:void(0)" style="color:#EF4444; font-weight:700; text-decoration:none;" onclick="removeContact(this)">Xóa</a></td>
-                                        <td>✈️</td>
-                                        <td><a href="https://t.me/Vietanh" target="_blank" style="color:var(--accent-main); text-decoration:none;">https://t.me/Vietanh</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td><a href="javascript:void(0)" style="color:#EF4444; font-weight:700; text-decoration:none;" onclick="removeContact(this)">Xóa</a></td>
-                                        <td>📘</td>
-                                        <td><a href="https://www.facebook.com" target="_blank" style="color:var(--accent-main); text-decoration:none;">https://www.facebook.com</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div><div class="form-group"><label>Link Zalo/Facebook</label><input type="text" value="https://zalo.me"></div><button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu!')">Lưu</button></div></div>
                 
                 <div id="tab-admin-aibot-config" class="tab-content">
                     <div class="card">
@@ -851,31 +806,6 @@
         window.addEventListener('click', () => {
             document.querySelectorAll('.action-dropdown-content').forEach(el => el.classList.remove('show'));
         });
-
-        function addContactLink() {
-            let link = document.getElementById('contact-link-input').value.trim();
-            let icon = document.getElementById('contact-icon-select').value;
-            if(!link) { alert('Vui lòng nhập link liên hệ!'); return; }
-            
-            let tbody = document.getElementById('admin-contact-table-body');
-            let count = tbody.rows.length + 1;
-            
-            let newRow = tbody.insertRow();
-            newRow.innerHTML = `
-                <td>${count}</td>
-                <td><a href="javascript:void(0)" style="color:#EF4444; font-weight:700; text-decoration:none;" onclick="removeContact(this)">Xóa</a></td>
-                <td>${icon}</td>
-                <td><a href="${link}" target="_blank" style="color:var(--accent-main); text-decoration:none;">${link}</a></td>
-            `;
-            document.getElementById('contact-link-input').value = '';
-            showToast('✅ Đã thêm liên hệ mới thành công!');
-        }
-
-        function removeContact(btn) {
-            let row = btn.closest('tr');
-            row.remove();
-            showToast('🗑️ Đã xóa liên hệ!');
-        }
 
         function loadRegisteredUsersToAdminTable() {
             let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');

@@ -149,11 +149,14 @@
         th, td { padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
         th { color: var(--text-muted); font-weight: 600; background: rgba(0,0,0,0.15); }
 
-        .badge-status { padding: 4px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 700; display: inline-block; }
-        .status-running { background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.4); }
-        .status-completed { background: rgba(59, 130, 246, 0.2); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.4); }
+        .dropdown-action-wrap { position: relative; display: inline-block; }
+        .action-dropdown-btn { background: #0EA5E9; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+        .action-dropdown-content { display: none; position: absolute; left: 0; top: 32px; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 3000; min-width: 170px; overflow: hidden; }
+        .action-dropdown-content.show { display: block; }
+        .action-option { padding: 9px 12px; font-size: 0.78rem; color: var(--text-main); cursor: pointer; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 6px; background: none; border: none; width: 100%; text-align: left; font-weight: 500; }
+        .action-option:last-child { border-bottom: none; }
+        .action-option:hover { background-color: rgba(16, 185, 129, 0.2); color: var(--accent-main); }
 
-        /* ĐỦ 3 NÚT HỖ TRỢ RIÊNG BIỆT Ở GÓC PHẢI */
         #floating-support-group { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; z-index: 5500; }
         .support-icon-btn { width: 44px; height: 44px; background: var(--bg-card); border: 2px solid var(--accent-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: 0.3s; }
         .support-icon-btn:hover { transform: scale(1.15) rotate(10deg); background: var(--accent-main); }
@@ -190,6 +193,7 @@
         <img id="ai-custom-avatar-btn" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" onclick="toggleChatBox()" title="Chat AI CSKH">
     </div>
 
+    <!-- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ -->
     <div id="auth-screen">
         <div class="auth-card-container">
             <div class="auth-header">
@@ -203,6 +207,7 @@
                 <button class="auth-tab-btn-mod" id="tab-btn-register" onclick="switchAuthTab('register')">Đăng Ký</button>
             </div>
 
+            <!-- Form Đăng Nhập -->
             <div id="auth-form-login">
                 <div class="auth-form-group">
                     <label>Tài khoản</label>
@@ -221,6 +226,7 @@
                 <button class="auth-submit-btn" onclick="handleLogin()">Đăng Nhập Ngay</button>
             </div>
 
+            <!-- Form Đăng Ký -->
             <div id="auth-form-register" style="display: none;">
                 <div class="auth-form-group">
                     <label>Tài khoản mới</label>
@@ -248,14 +254,17 @@
         </div>
     </div>
 
+    <!-- OVERLAY MOBILE -->
     <div id="sidebar-overlay" onclick="toggleMenu()"></div>
 
+    <!-- SIDEBAR MENU -->
     <div class="sidebar" id="app-sidebar">
         <div class="sidebar-brand">
             <span><span class="dynamic-icon">⚡</span> AutoPost AI Pro</span>
             <span style="cursor:pointer; font-size: 1.2rem;" onclick="toggleMenu()">✕</span>
         </div>
         <div class="sidebar-menu" id="sidebar-menu-container">
+            <!-- PHẦN DÀNH RIÊNG CHO ADMIN -->
             <div id="admin-menu-section" style="display:none;">
                 <div class="menu-category">QUẢN TRỊ HỆ THỐNG</div>
                 <div class="menu-item active" onclick="switchTab('tab-admin-stats', event)">📊 Thống kê hệ thống</div>
@@ -294,12 +303,14 @@
             <div class="menu-item" onclick="switchTab('tab-fb', event)"><span class="dynamic-icon">📘</span> Facebook Automation</div>
             <div class="menu-item" onclick="switchTab('tab-tiktok', event)"><span class="dynamic-icon">🎵</span> TikTok (AI & Đăng tự động)</div>
 
+            <!-- Nút Đăng Xuất -->
             <div style="margin-top: 20px; padding-bottom: 10px;">
                 <div class="menu-item logout-btn" onclick="handleLogout()">🚪 Đăng Xuất Tài Khoản</div>
             </div>
         </div>
     </div>
 
+    <!-- MAIN CONTAINER -->
     <div class="main-container">
         <div class="topbar">
             <div style="display: flex; align-items: center; gap: 12px;">
@@ -327,6 +338,7 @@
 
         <div class="content-body">
             <div class="content-inner">
+                <!-- 1. THỐNG KÊ ADMIN -->
                 <div id="tab-admin-stats" class="tab-content active">
                     <div class="card">
                         <div class="card-title">📊 Thống kê hệ thống toàn bộ</div>
@@ -339,30 +351,60 @@
                     </div>
                 </div>
 
+                <!-- 2. QUẢN LÝ KHÁCH HÀNG (ADMIN Ở DƯỚI CÙNG SỐ TIỀN 1 TỶ, ĐỦ THÔNG TIN NGÀY GIỜ VÀ MENU THAO TÁC) -->
                 <div id="tab-admin-users" class="tab-content">
                     <div class="card">
-                        <div class="card-title">👥 Quản lý Khách Hàng (Chi tiết Ngày giờ & Thao tác)</div>
+                        <div class="card-title">👥 Quản lý Khách Hàng</div>
+                        <p style="font-size: 0.85rem; color: #EF4444; font-weight: 700; margin-bottom: 12px;" id="admin-user-summary">Tổng user 2 - Tổng tiền : 1,000,000,000đ</p>
                         <div class="table-container">
                             <table>
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Tùy chọn</th>
                                         <th>Tài khoản</th>
-                                        <th>Ngày giờ đăng ký</th>
-                                        <th>Quyền hạn</th>
-                                        <th>Thao tác quản trị</th>
+                                        <th>Số dư ví</th>
+                                        <th>Ngày đăng ký</th>
                                     </tr>
                                 </thead>
                                 <tbody id="admin-users-table-body">
+                                    <!-- Các user khách sẽ hiển thị ở trên -->
                                     <tr>
-                                        <td>#01</td>
-                                        <td><b>thanhvien_pro</b></td>
-                                        <td>27/07/2026 03:00</td>
-                                        <td><span class="badge-status status-completed">Thành viên</span></td>
+                                        <td>507925</td>
                                         <td>
-                                            <button class="btn btn-ai btn-sm" onclick="showToast('✅ Đã nâng quyền thành viên lên VIP!')">Nâng Quyền</button>
-                                            <button class="btn btn-primary btn-sm" onclick="promptNewPassword('thanhvien_pro')">Cấp Lại MK</button>
+                                            <div class="dropdown-action-wrap">
+                                                <button class="action-dropdown-btn" onclick="toggleActionDropdown(event)">⚙️ Thao tác ▾</button>
+                                                <div class="action-dropdown-content">
+                                                    <button class="action-option" onclick="showToast('🔍 Xem chi tiết')">👤 Chi tiết</button>
+                                                    <button class="action-option" onclick="showToast('💳 Sửa số dư')">💳 Sửa số dư</button>
+                                                    <button class="action-option" onclick="showToast('⏳ Nhật ký giao dịch')">⏳ Nhật ký giao dịch</button>
+                                                    <button class="action-option" onclick="showToast('📈 Thống kê')">📈 Thống kê</button>
+                                                    <button class="action-option" onclick="showToast('🔑 Khôi phục mật khẩu')">🔑 Khôi phục mật khẩu</button>
+                                                    <button class="action-option" onclick="showToast('🛡️ Cấp quyền')">🛡️ Cấp quyền</button>
+                                                </div>
+                                            </div>
                                         </td>
+                                        <td><b>thanhvien_pro</b></td>
+                                        <td>0đ</td>
+                                        <td>27/07/2026 03:00</td>
+                                    </tr>
+                                    <!-- TÀI KHOẢN ADMIN NẰM DƯỚI CÙNG VỚI SỐ TIỀN 1 TỶ -->
+                                    <tr style="background: rgba(16, 185, 129, 0.08);">
+                                        <td>01</td>
+                                        <td>
+                                            <div class="dropdown-action-wrap">
+                                                <button class="action-dropdown-btn" onclick="toggleActionDropdown(event)">⚙️ Thao tác ▾</button>
+                                                <div class="action-dropdown-content">
+                                                    <button class="action-option" onclick="showToast('🔍 Chi tiết Admin')">👤 Chi tiết</button>
+                                                    <button class="action-option" onclick="showToast('💳 Sửa số dư Admin')">💳 Sửa số dư</button>
+                                                    <button class="action-option" onclick="showToast('⏳ Nhật ký Admin')">⏳ Nhật ký giao dịch</button>
+                                                    <button class="action-option" onclick="showToast('📈 Thống kê Admin')">📈 Thống kê</button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><b>admin2608</b> <span class="badge-status status-running">ADMIN</span></td>
+                                        <td style="color: var(--accent-main); font-weight: 800;">1,000,000,000đ</td>
+                                        <td>01/01/2026 00:00</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -370,6 +412,7 @@
                     </div>
                 </div>
 
+                <!-- 3. MỞ RỘNG NỀN TẢNG -->
                 <div id="tab-admin-platforms" class="tab-content">
                     <div class="card">
                         <div class="card-title">🧩 Mở rộng Nền tảng & Dịch vụ</div>
@@ -445,7 +488,58 @@
                         <button class="btn btn-primary btn-sm" onclick="saveAdminNotification()">💾 Lưu Thông Báo</button>
                     </div>
                 </div>
-                <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div><div class="form-group"><label>Link Zalo/Facebook</label><input type="text" value="https://zalo.me"></div><button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu!')">Lưu</button></div></div>
+
+                <!-- 4. CÀI ĐẶT LIÊN HỆ HỖ TRỢ (GIỐNG HỆT ẢNH MẪU: THÊM, CHỌN LOGO VÀ BẢNG DANH SÁCH XÓA) -->
+                <div id="tab-admin-contact" class="tab-content">
+                    <div class="card">
+                        <div class="card-title">🎧 Liên hệ mạng xã hội & Hỗ trợ</div>
+                        <div class="form-group"><label>Link liên hệ</label><input type="text" id="contact-link-input" placeholder="https://zalo.me/0898..."></div>
+                        <div class="form-group">
+                            <label>Logo / Icon mạng xã hội</label>
+                            <select id="contact-icon-select">
+                                <option value="💬">💬 Zalo</option>
+                                <option value="✈️">✈️ Telegram</option>
+                                <option value="📘">📘 Facebook</option>
+                                <option value="🎵">🎵 TikTok</option>
+                                <option value="📸">📸 Instagram</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary btn-sm" onclick="addContactLink()">Thêm Liên Hệ Mới</button>
+                        
+                        <div class="table-container" style="margin-top: 20px;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Thao tác</th>
+                                        <th>Logo</th>
+                                        <th>Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-contact-table-body">
+                                    <tr>
+                                        <td>1</td>
+                                        <td><a href="javascript:void(0)" style="color:#EF4444; font-weight:700; text-decoration:none;" onclick="removeContact(this)">Xóa</a></td>
+                                        <td>💬</td>
+                                        <td><a href="https://zalo.me/0898" target="_blank" style="color:var(--accent-main); text-decoration:none;">https://zalo.me/0898</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td><a href="javascript:void(0)" style="color:#EF4444; font-weight:700; text-decoration:none;" onclick="removeContact(this)">Xóa</a></td>
+                                        <td>✈️</td>
+                                        <td><a href="https://t.me/Vietanh" target="_blank" style="color:var(--accent-main); text-decoration:none;">https://t.me/Vietanh</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td><a href="javascript:void(0)" style="color:#EF4444; font-weight:700; text-decoration:none;" onclick="removeContact(this)">Xóa</a></td>
+                                        <td>📘</td>
+                                        <td><a href="https://www.facebook.com" target="_blank" style="color:var(--accent-main); text-decoration:none;">https://www.facebook.com</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 
                 <div id="tab-admin-aibot-config" class="tab-content">
                     <div class="card">
@@ -455,6 +549,7 @@
                     </div>
                 </div>
 
+                <!-- QUẢN LÝ GÓI DỊCH VỤ -->
                 <div id="tab-admin-packages" class="tab-content">
                     <div class="card">
                         <div class="card-title">📦 Quản lý gói dịch vụ theo thời hạn & Ghi chú</div>
@@ -507,6 +602,7 @@
 
                 <div id="tab-admin-coupons" class="tab-content"><div class="card"><div class="card-title">🎟️ Coupons & Khuyến mại</div><div class="form-group"><label>Mã giảm giá</label><input type="text" placeholder="Mã..."></div><button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã tạo mã!')">Tạo</button></div></div>
 
+                <!-- DASHBOARD KHÁCH HÀNG -->
                 <div id="dashboard" class="tab-content">
                     <div class="card" style="border-color: var(--accent-main);">
                         <div class="card-title"><span class="dynamic-icon">📢</span> <span id="display-noti-title">Thông báo chung hệ thống 2026</span></div>
@@ -525,6 +621,7 @@
                     </div>
                 </div>
 
+                <!-- QUẢN LÝ ĐƠN HÀNG KHÁCH -->
                 <div id="orders" class="tab-content">
                     <div class="card">
                         <div class="card-title">📋 Lịch sử đơn đã mua</div>
@@ -595,6 +692,7 @@
                 <div id="affiliate" class="tab-content"><div class="card"><div class="card-title">🔗 Tiếp thị liên kết nhận hoa hồng</div><p style="font-size:0.84rem; color:var(--text-muted);">Link giới thiệu của bạn: <b style="color:var(--accent-main);">https://autopostai.site/?ref=user</b></p></div></div>
                 <div id="notifications" class="tab-content"><div class="card"><div class="card-title">🔔 Thông báo hệ thống mới nhất</div><p style="font-size:0.84rem;" id="noti-tab-text">- Chào mừng bạn đã nhận 3 ngày dùng thử miễn phí dịch vụ!</p></div></div>
 
+                <!-- NỀN TẢNG FACEBOOK -->
                 <div id="tab-fb" class="tab-content">
                     <div class="card">
                         <div class="card-title"><span class="dynamic-icon">📘</span> Facebook Automation: Chọn Chức Năng</div>
@@ -623,6 +721,7 @@
                     </div>
                 </div>
                 
+                <!-- NỀN TẢNG TIKTOK -->
                 <div id="tab-tiktok" class="tab-content">
                     <div class="card">
                         <div class="card-title"><span class="dynamic-icon">✨</span> 1. Tạo Ảnh & Video AI Tự Động</div>
@@ -670,12 +769,14 @@
                 </div>
             </div>
 
+            <!-- Dòng chữ bản quyền ở cuối trang -->
             <div class="footer-copyright">
                 Bản quyền thuộc <b>DINH HOANG VIET ANH</b> © 2026
             </div>
         </div>
     </div>
 
+    <!-- MODAL CHAT & CÓ CÁC KHUNG MENU BẤM NHANH -->
     <div id="chat-box-modal">
         <div class="chat-header">
             <span>🤖 Trợ lý AI CSKH thông minh</span>
@@ -685,6 +786,7 @@
             <div style="background: rgba(16,185,129,0.15); padding: 8px; border-radius: 6px; color: var(--accent-main);" id="bot-welcome-text">
                 🤖 Chào bạn! Tôi có thể giúp gì cho các dịch vụ nạp tiền, tăng tương tác hoặc đơn hàng của bạn?
             </div>
+            <!-- CÁC KHUNG MENU BẤM NHANH (QUICK MENU) -->
             <div class="chat-quick-menu">
                 <button class="chat-menu-btn" onclick="sendQuickMenu('Nạp tiền như thế nào?')">💳 Hướng dẫn nạp tiền</button>
                 <button class="chat-menu-btn" onclick="sendQuickMenu('Kiểm tra đơn hàng ở đâu?')">📋 Xem đơn hàng</button>
@@ -737,42 +839,102 @@
             showToast('✅ Đã lưu cấu hình Trợ lý AI CSKH thành công!');
         }
 
+        function toggleActionDropdown(event) {
+            event.stopPropagation();
+            document.querySelectorAll('.action-dropdown-content').forEach(el => {
+                if(el !== event.currentTarget.nextElementSibling) el.classList.remove('show');
+            });
+            let dropdown = event.currentTarget.nextElementSibling;
+            if(dropdown) dropdown.classList.toggle('show');
+        }
+
+        window.addEventListener('click', () => {
+            document.querySelectorAll('.action-dropdown-content').forEach(el => el.classList.remove('show'));
+        });
+
+        function addContactLink() {
+            let link = document.getElementById('contact-link-input').value.trim();
+            let icon = document.getElementById('contact-icon-select').value;
+            if(!link) { alert('Vui lòng nhập link liên hệ!'); return; }
+            
+            let tbody = document.getElementById('admin-contact-table-body');
+            let count = tbody.rows.length + 1;
+            
+            let newRow = tbody.insertRow();
+            newRow.innerHTML = `
+                <td>${count}</td>
+                <td><a href="javascript:void(0)" style="color:#EF4444; font-weight:700; text-decoration:none;" onclick="removeContact(this)">Xóa</a></td>
+                <td>${icon}</td>
+                <td><a href="${link}" target="_blank" style="color:var(--accent-main); text-decoration:none;">${link}</a></td>
+            `;
+            document.getElementById('contact-link-input').value = '';
+            showToast('✅ Đã thêm liên hệ mới thành công!');
+        }
+
+        function removeContact(btn) {
+            let row = btn.closest('tr');
+            row.remove();
+            showToast('🗑️ Đã xóa liên hệ!');
+        }
+
         function loadRegisteredUsersToAdminTable() {
             let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
             let tbody = document.getElementById('admin-users-table-body');
-            let statTotal = document.getElementById('stat-total-users');
+            let summary = document.getElementById('admin-user-summary');
             
-            let html = `
-                <tr>
-                    <td>#01</td>
-                    <td><b>thanhvien_pro</b></td>
-                    <td>27/07/2026 03:00</td>
-                    <td><span class="badge-status status-completed">Thành viên</span></td>
-                    <td>
-                        <button class="btn btn-ai btn-sm" onclick="showToast('✅ Đã nâng quyền thành viên lên VIP!')">Nâng Quyền</button>
-                        <button class="btn btn-primary btn-sm" onclick="promptNewPassword('thanhvien_pro')">Cấp Lại MK</button>
-                    </td>
-                </tr>
-            `;
+            let totalUsers = users.length + 1;
+            if(summary) summary.innerText = `Tổng user ${totalUsers} - Tổng tiền : 1,000,000,000đ`;
+
+            let html = ``;
             
             users.forEach((u, index) => {
                 let regTime = u.time || new Date().toLocaleString('vi-VN');
+                let fakeId = 507925 + index;
                 html += `
                     <tr>
-                        <td>#${index + 2}</td>
-                        <td><b>${u.username}</b></td>
-                        <td>${regTime}</td>
-                        <td><span class="badge-status status-completed">Dùng thử 3 ngày</span></td>
+                        <td>${fakeId}</td>
                         <td>
-                            <button class="btn btn-ai btn-sm" onclick="showToast('✅ Đã nâng quyền ${u.username} lên VIP!')">Nâng Quyền</button>
-                            <button class="btn btn-primary btn-sm" onclick="promptNewPassword('${u.username}')">Cấp Lại MK</button>
+                            <div class="dropdown-action-wrap">
+                                <button class="action-dropdown-btn" onclick="toggleActionDropdown(event)">⚙️ Thao tác ▾</button>
+                                <div class="action-dropdown-content">
+                                    <button class="action-option" onclick="showToast('🔍 Xem chi tiết ${u.username}')">👤 Chi tiết</button>
+                                    <button class="action-option" onclick="showToast('💳 Sửa số dư ${u.username}')">💳 Sửa số dư</button>
+                                    <button class="action-option" onclick="showToast('📜 Xem nhật ký giao dịch')">⏳ Nhật ký giao dịch</button>
+                                    <button class="action-option" onclick="showToast('📊 Xem thống kê user')">📈 Thống kê</button>
+                                    <button class="action-option" onclick="promptNewPassword('${u.username}')">🔑 Khôi phục mật khẩu</button>
+                                    <button class="action-option" onclick="showToast('🛡️ Cấp quyền ${u.username}')">🛡️ Cấp quyền</button>
+                                </div>
+                            </div>
                         </td>
+                        <td><b>${u.username}</b></td>
+                        <td>0đ</td>
+                        <td>${regTime}</td>
                     </tr>
                 `;
             });
+
+            // TÀI KHOẢN ADMIN NẰM DƯỚI CÙNG VỚI SỐ TIỀN 1 TỶ
+            html += `
+                <tr style="background: rgba(16, 185, 129, 0.08);">
+                    <td>01</td>
+                    <td>
+                        <div class="dropdown-action-wrap">
+                            <button class="action-dropdown-btn" onclick="toggleActionDropdown(event)">⚙️ Thao tác ▾</button>
+                            <div class="action-dropdown-content">
+                                <button class="action-option" onclick="showToast('🔍 Chi tiết Admin')">👤 Chi tiết</button>
+                                <button class="action-option" onclick="showToast('💳 Sửa số dư Admin')">💳 Sửa số dư</button>
+                                <button class="action-option" onclick="showToast('⏳ Nhật ký Admin')">⏳ Nhật ký giao dịch</button>
+                                <button class="action-option" onclick="showToast('📈 Thống kê Admin')">📈 Thống kê</button>
+                            </div>
+                        </div>
+                    </td>
+                    <td><b>admin2608</b> <span class="badge-status status-running">ADMIN</span></td>
+                    <td style="color: var(--accent-main); font-weight: 800;">1,000,000,000đ</td>
+                    <td>01/01/2026 00:00</td>
+                </tr>
+            `;
             
             if(tbody) tbody.innerHTML = html;
-            if(statTotal) statTotal.innerText = `${users.length + 1} Khách`;
         }
 
         function loadStoredNotifications() {

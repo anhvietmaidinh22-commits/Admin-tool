@@ -35,7 +35,7 @@
             overflow-x: hidden;
         }
 
-        /* MODAL CHUẨN GIAO DINH SANG XỊN */
+        /* MODAL CHUẨN SANG XỊN MỊN */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -68,6 +68,14 @@
 
         .modal-title { font-size: 18px; font-weight: 800; color: #ffffff; margin-bottom: 10px; }
         .modal-desc { font-size: 13.5px; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; }
+
+        .modal-input {
+            width: 100%; padding: 12px 15px; background: #080a10;
+            border: 1.5px solid rgba(255, 255, 255, 0.1); border-radius: 12px;
+            color: #ffffff; font-size: 16px; text-align: center; margin-bottom: 15px; outline: none;
+            letter-spacing: 2px;
+        }
+        .modal-input:focus { border-color: #00ffcc; }
 
         .modal-btn {
             background: linear-gradient(135deg, #00ffcc, #7209b7);
@@ -228,13 +236,19 @@
 </head>
 <body>
 
-    <!-- MODAL THÔNG BÁO TÍCH XANH -->
+    <!-- MODAL CHUNG (THÔNG BÁO / NHẬP PIN ADMIN) -->
     <div class="modal-overlay" id="customModal">
         <div class="modal-box">
             <div class="modal-icon" id="modalIcon">✓</div>
             <div class="modal-title" id="modalTitle">Thông báo</div>
             <div class="modal-desc" id="modalDesc">Nội dung thông báo ở đây...</div>
-            <button class="modal-btn" onclick="closeModal()">Xác Nhận</button>
+            
+            <!-- Ô nhập mã PIN ẩn hiện linh hoạt -->
+            <div id="modalInputContainer" style="display:none;">
+                <input type="password" id="modalPinInput" class="modal-input" placeholder="••••" maxlength="6">
+            </div>
+
+            <button class="modal-btn" id="modalActionBtn" onclick="closeModal()">Xác Nhận</button>
         </div>
     </div>
 
@@ -242,11 +256,11 @@
     <div class="top-header">
         <div class="header-left">
             <button class="icon-btn" onclick="toggleDrawer()">☰</button>
-            <button class="btn-support" onclick="showModal('Hỗ Trợ', 'Liên hệ Admin qua Telegram/Zalo để được hỗ trợ nhanh nhất.', '📞')">+ Hỗ trợ</button>
+            <button class="btn-support" onclick="showNotification('Hỗ Trợ', 'Liên hệ Admin qua Telegram/Zalo để được hỗ trợ nhanh nhất.', '📞')">+ Hỗ trợ</button>
         </div>
         <div class="header-right">
-            <button class="icon-btn" onclick="showModal('Thông Báo', 'Chế độ tối đang hoạt động hoàn hảo!', '🌙')">🌙</button>
-            <button class="icon-btn" onclick="showModal('Hộp Thư', 'Hiện tại không có thông báo mới nào.', '🔔')">🔔</button>
+            <button class="icon-btn" onclick="showNotification('Thông Báo', 'Chế độ tối đang hoạt động hoàn hảo!', '🌙')">🌙</button>
+            <button class="icon-btn" onclick="showNotification('Hộp Thư', 'Hiện tại không có thông báo mới nào.', '🔔')">🔔</button>
             <div class="avatar-mini">A</div>
         </div>
     </div>
@@ -391,7 +405,7 @@
                     <option>Nạp tiền tự động qua QR Ngân Hàng</option>
                 </select>
             </div>
-            <button class="btn-submit" onclick="showModal('Thanh Toán', 'Vui lòng liên hệ Admin để kích hoạt tài khoản vĩnh viễn!', '💳')">Thanh Toán Ngay</button>
+            <button class="btn-submit" onclick="showNotification('Thanh Toán', 'Vui lòng liên hệ Admin để kích hoạt tài khoản vĩnh viễn!', '💳')">Thanh Toán Ngay</button>
         </div>
 
         <!-- 7. TÀI KHOẢN -->
@@ -413,7 +427,7 @@
             <span>Bảng tin</span>
         </button>
         <button class="nav-item" onclick="switchSection('historySection', 'LỊCH SỬ', 'Trang chủ > Lịch sử')">
-            <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
             <span>Lịch sử</span>
         </button>
         <div class="nav-item nav-item-center" onclick="switchSection('dashboardSection', 'BẢNG TIN', 'Trang chủ > Bảng tin')">
@@ -440,11 +454,45 @@
             "admin123": { pass: "2608", regTime: 0 }
         };
 
-        function showModal(title, desc, icon = "✓") {
+        let pendingAdminUser = "";
+
+        // Hiển thị Modal thông báo bình thường
+        function showNotification(title, desc, icon = "✓") {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalDesc').innerText = desc;
             document.getElementById('modalIcon').innerText = icon;
+            document.getElementById('modalInputContainer').style.display = 'none';
+            document.getElementById('modalActionBtn').innerText = "Xác Nhận";
+            document.getElementById('modalActionBtn').onclick = closeModal;
             document.getElementById('customModal').classList.add('open');
+        }
+
+        // Hiển thị Modal nhập PIN Admin cực kỳ sang xịn mịn
+        function showPinModal(username) {
+            pendingAdminUser = username;
+            document.getElementById('modalTitle').innerText = "Bảo Mật Admin";
+            document.getElementById('modalDesc').innerText = "🔒 Nhập mã PIN xác thực quyền quản trị:";
+            document.getElementById('modalIcon').innerText = "🛡️";
+            document.getElementById('modalPinInput').value = '';
+            document.getElementById('modalInputContainer').style.display = 'block';
+            document.getElementById('modalActionBtn').innerText = "Xác Nhận PIN";
+            document.getElementById('modalActionBtn').onclick = verifyAdminPin;
+            document.getElementById('customModal').classList.add('open');
+            setTimeout(() => document.getElementById('modalPinInput').focus(), 100);
+        }
+
+        // Kiểm tra mã PIN do Admin nhập
+        function verifyAdminPin() {
+            const enteredPin = document.getElementById('modalPinInput').value.trim();
+            if (enteredPin === ADMIN_PIN_CODE) {
+                closeModal();
+                localStorage.setItem('autopost_current_user', pendingAdminUser);
+                applyUserSession(pendingAdminUser);
+                showNotification("Đăng Nhập Thành Công", "Chào mừng Chủ Nhân Admin123 quay trở lại hệ thống.", "👑");
+                switchSection('dashboardSection', 'BẢNG TIN', 'Trang chủ > Bảng tin');
+            } else {
+                showNotification("Sai Mã PIN", "Mã PIN xác thực không chính xác! Vui lòng thử lại.", "❌");
+            }
         }
 
         function closeModal() {
@@ -545,19 +593,19 @@
             const password = document.getElementById('regPass').value.trim();
 
             if(!username || !password) {
-                showModal("Lỗi Nhập Liệu", "Vui lòng điền đầy đủ tên đăng nhập và mật khẩu!", "⚠️");
+                showNotification("Lỗi Nhập Liệu", "Vui lòng điền đầy đủ tên đăng nhập và mật khẩu!", "⚠️");
                 return;
             }
 
             if (userDatabase[username.toLowerCase()]) {
-                showModal("Trùng Tên", "Tên tài khoản này đã tồn tại trong hệ thống!", "❌");
+                showNotification("Trùng Tên", "Tên tài khoản này đã tồn tại trong hệ thống!", "❌");
                 return;
             }
 
             userDatabase[username.toLowerCase()] = { pass: password, regTime: Date.now() };
             localStorage.setItem('autopost_users', JSON.stringify(userDatabase));
 
-            showModal("Đăng Ký Thành Công", `Tài khoản "${username}" đã được tạo thành công kèm 3 ngày dùng thử miễn phí!`, "🎉");
+            showNotification("Đăng Ký Thành Công", `Tài khoản "${username}" đã được tạo thành công kèm 3 ngày dùng thử miễn phí!`, "🎉");
             document.getElementById('regUser').value = '';
             document.getElementById('regPass').value = '';
             switchSection('loginSection', 'ĐĂNG NHẬP', 'Trang chủ > Đăng nhập');
@@ -568,35 +616,26 @@
             const password = document.getElementById('loginPass').value.trim();
 
             if(!username || !password) {
-                showModal("Thiếu Thông Tin", "Vui lòng nhập đầy đủ tài khoản và mật khẩu!", "⚠️");
+                showNotification("Thiếu Thông Tin", "Vui lòng nhập đầy đủ tài khoản và mật khẩu!", "⚠️");
                 return;
             }
 
-            // Xử lý kiểm tra tài khoản Admin123 bảo mật tuyệt đối không dùng hàm prompt thô
+            // Nếu đúng tài khoản Admin123 & mật khẩu 2608 -> Bật Modal nhập PIN siêu đẹp thay vì dùng prompt
             if (username.toLowerCase() === REAL_ADMIN_USER.toLowerCase() && password === REAL_ADMIN_PASS) {
-                let pin = prompt("🔐 Nhập mã PIN xác thực Admin:"); // Nếu cậu muốn thay hẳn ô input trên web, có thể dùng biến cố định hoặc modal riêng, nhưng dùng prompt ẩn như này đã giấu kín tuyệt đối khỏi giao diện chính.
-                if (pin !== ADMIN_PIN_CODE) {
-                    showModal("Sai Mã PIN", "Mã PIN xác thực Admin không chính xác!", "❌");
-                    return;
-                }
-                
-                localStorage.setItem('autopost_current_user', username);
-                applyUserSession(username);
-                showModal("Đăng Nhập Thành Công", "Chào mừng Chủ Nhân Admin123 quay trở lại hệ thống quản trị.", "👑");
-                switchSection('dashboardSection', 'BẢNG TIN', 'Trang chủ > Bảng tin');
+                showPinModal(username);
                 return;
             }
 
             const userObj = userDatabase[username.toLowerCase()];
             if (!userObj || userObj.pass !== password) {
-                showModal("Đăng Nhập Thất Bại", "Sai tên tài khoản hoặc mật khẩu đăng nhập!", "❌");
+                showNotification("Đăng Nhập Thất Bại", "Sai tên tài khoản hoặc mật khẩu đăng nhập!", "❌");
                 return;
             }
 
             localStorage.setItem('autopost_current_user', username);
             applyUserSession(username);
 
-            showModal("Đăng Nhập Thành Công", `Chào mừng ${username} đã quay trở lại với AutoPost AI!`, "✨");
+            showNotification("Đăng Nhập Thành Công", `Chào mừng ${username} đã quay trở lại với AutoPost AI!`, "✨");
             switchSection('dashboardSection', 'BẢNG TIN', 'Trang chủ > Bảng tin');
             document.getElementById('loginUser').value = '';
             document.getElementById('loginPass').value = '';
@@ -654,11 +693,11 @@
             localStorage.removeItem('autopost_current_user');
             document.querySelectorAll('.admin-only-drawer').forEach(el => el.style.display = 'none');
             switchSection('loginSection', 'ĐĂNG NHẬP', 'Trang chủ > Đăng nhập');
-            showModal("Đăng Xuất", "Bạn đã đăng xuất khỏi hệ thống thành công.", "👋");
+            showNotification("Đăng Xuất", "Bạn đã đăng xuất khỏi hệ thống thành công.", "👋");
         }
 
         function submitServiceOrder() {
-            showModal("Thành Công", "Đã tiếp nhận yêu cầu chạy dịch vụ của bạn! Hệ thống đang tự động hóa xử lý.", "🚀");
+            showNotification("Thành Công", "Đã tiếp nhận yêu cầu chạy dịch vụ của bạn! Hệ thống đang tự động hóa xử lý.", "🚀");
         }
     </script>
 </body>

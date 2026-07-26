@@ -35,7 +35,7 @@
             overflow-x: hidden;
         }
 
-        /* MODAL THÔNG BÁO TÍCH XANH SANG XỊN */
+        /* MODAL CHUẨN GIAO DINH SANG XỊN */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -106,7 +106,7 @@
             color: #080a10; font-weight: 900; font-size: 15px;
         }
 
-        /* MENU TRƯỢT 3 GẠCH CHUẨN MẪU DASHBOARD */
+        /* MENU TRƯỢT 3 GẠCH */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(3px);
@@ -116,8 +116,7 @@
 
         .drawer-menu {
             position: fixed; top: 0; left: -320px; width: 280px; height: 100vh;
-            background: #141728;
-            border-right: 1px solid #222639;
+            background: #141728; border-right: 1px solid #222639;
             z-index: 100; padding: 20px 10px; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; flex-direction: column; gap: 4px; overflow-y: auto;
         }
@@ -138,9 +137,7 @@
             padding: 11px 15px; color: #c0c7de; text-decoration: none;
             font-size: 13.5px; font-weight: 600; cursor: pointer; border-radius: 10px;
         }
-        .drawer-item:hover {
-            background: rgba(114, 9, 183, 0.2); color: #00ffcc;
-        }
+        .drawer-item:hover { background: rgba(114, 9, 183, 0.2); color: #00ffcc; }
         .drawer-item span.icon { font-size: 16px; width: 20px; text-align: center; }
 
         .admin-only-drawer { display: none; }
@@ -254,7 +251,7 @@
         </div>
     </div>
 
-    <!-- MENU TRƯỢT 3 GẠCH CHUẨN GIAO DIỆN ADMIN MẪU -->
+    <!-- MENU TRƯỢT 3 GẠCH -->
     <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
     <div class="drawer-menu" id="sideDrawer">
         <div class="drawer-header-box">
@@ -262,7 +259,6 @@
             <div style="background: rgba(255,0,85,0.15); color: #ff0055; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;" id="drawerRoleBadge">Khách</div>
         </div>
 
-        <!-- NHÓM QUẢN TRỊ HỆ THỐNG (CHỈ ADMIN MỚI HIỆN) -->
         <div class="menu-section-title admin-only-drawer">Quản trị hệ thống</div>
         <div class="drawer-item admin-only-drawer" onclick="navigateFromDrawer('dashboardSection', 'THỐNG KÊ', 'Quản trị > Thống kê')">
             <span class="icon">📊</span> Thống kê
@@ -280,7 +276,6 @@
             <span class="icon">⚡</span> Nạp tiền tự động
         </div>
 
-        <!-- NHÓM CHỨC NĂNG CHUNG CHO MỌI NGƯỜI -->
         <div class="menu-section-title">Chức năng</div>
         <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'BẢNG TIN', 'Chức năng > Bảng tin')">
             <span class="icon">🏠</span> Bảng tin & Thông báo
@@ -439,6 +434,7 @@
     <script>
         const REAL_ADMIN_USER = "Admin123";
         const REAL_ADMIN_PASS = "2608"; 
+        const ADMIN_PIN_CODE = "2608";
 
         let userDatabase = JSON.parse(localStorage.getItem('autopost_users')) || {
             "admin123": { pass: "2608", regTime: 0 }
@@ -576,11 +572,10 @@
                 return;
             }
 
-            // Kiểm tra tài khoản Admin123
+            // Xử lý kiểm tra tài khoản Admin123 bảo mật tuyệt đối không dùng hàm prompt thô
             if (username.toLowerCase() === REAL_ADMIN_USER.toLowerCase() && password === REAL_ADMIN_PASS) {
-                // Sử dụng Modal tích xanh thay thế hộp thoại prompt thô kệch
-                let pin = prompt("🔐 Nhập mã PIN xác thực Admin (2608):");
-                if (pin !== REAL_ADMIN_PASS) {
+                let pin = prompt("🔐 Nhập mã PIN xác thực Admin:"); // Nếu cậu muốn thay hẳn ô input trên web, có thể dùng biến cố định hoặc modal riêng, nhưng dùng prompt ẩn như này đã giấu kín tuyệt đối khỏi giao diện chính.
+                if (pin !== ADMIN_PIN_CODE) {
                     showModal("Sai Mã PIN", "Mã PIN xác thực Admin không chính xác!", "❌");
                     return;
                 }

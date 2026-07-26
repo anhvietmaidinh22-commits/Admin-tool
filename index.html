@@ -153,13 +153,13 @@
         .status-running { background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.4); }
         .status-completed { background: rgba(59, 130, 246, 0.2); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.4); }
 
+        /* ĐỦ 3 NÚT HỖ TRỢ RIÊNG BIỆT Ở GÓC PHẢI */
         #floating-support-group { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; z-index: 5500; }
-        .support-sub-icons { display: flex; flex-direction: column; gap: 8px; }
-        .support-icon-btn { width: 42px; height: 42px; background: var(--bg-card); border: 2px solid var(--accent-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: 0.3s; }
+        .support-icon-btn { width: 44px; height: 44px; background: var(--bg-card); border: 2px solid var(--accent-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: 0.3s; }
         .support-icon-btn:hover { transform: scale(1.15) rotate(10deg); background: var(--accent-main); }
 
         @keyframes floatAvatar { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-8px) rotate(2deg); filter: drop-shadow(0 0 12px var(--accent-main)); } }
-        #ai-custom-avatar-btn { width: 54px; height: 54px; border-radius: 50%; border: 2px solid var(--accent-main); cursor: pointer; object-fit: cover; box-shadow: 0 8px 25px rgba(0,0,0,0.5); animation: floatAvatar 2.5s infinite ease-in-out; background: #222; }
+        #ai-custom-avatar-btn { width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--accent-main); cursor: pointer; object-fit: cover; box-shadow: 0 8px 25px rgba(0,0,0,0.5); animation: floatAvatar 2.5s infinite ease-in-out; background: #222; margin-top: 4px; }
         
         #chat-box-modal { position: fixed; bottom: 90px; right: 20px; width: 320px; height: 440px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: none; flex-direction: column; z-index: 5500; box-shadow: 0 15px 35px rgba(0,0,0,0.5); overflow: hidden; }
         .chat-header { background: var(--bg-sidebar); padding: 10px 14px; font-weight: 700; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); color: var(--accent-main); }
@@ -179,21 +179,17 @@
 
     <div id="toast-notification">✅ Hoàn tất thành công!</div>
 
-    <!-- Nhạc nền Lofi chuẩn MP3 -->
     <audio id="bg-audio" loop preload="auto" crossorigin="anonymous">
         <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
     </audio>
 
     <div id="floating-support-group">
-        <div class="support-sub-icons" id="support-links-container">
-            <a href="https://facebook.com" target="_blank" class="support-icon-btn" title="Facebook hỗ trợ">📘</a>
-            <a href="https://zalo.me" target="_blank" class="support-icon-btn" title="Zalo hỗ trợ">💬</a>
-            <a href="https://t.me/admin" target="_blank" class="support-icon-btn" title="Telegram hỗ trợ">✈️</a>
-        </div>
+        <a href="https://facebook.com" target="_blank" class="support-icon-btn" title="Hỗ trợ qua Facebook">📘</a>
+        <a href="https://zalo.me" target="_blank" class="support-icon-btn" title="Hỗ trợ qua Zalo">💬</a>
+        <a href="https://t.me/admin" target="_blank" class="support-icon-btn" title="Hỗ trợ qua Telegram">✈️</a>
         <img id="ai-custom-avatar-btn" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" onclick="toggleChatBox()" title="Chat AI CSKH">
     </div>
 
-    <!-- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ -->
     <div id="auth-screen">
         <div class="auth-card-container">
             <div class="auth-header">
@@ -207,7 +203,6 @@
                 <button class="auth-tab-btn-mod" id="tab-btn-register" onclick="switchAuthTab('register')">Đăng Ký</button>
             </div>
 
-            <!-- Form Đăng Nhập -->
             <div id="auth-form-login">
                 <div class="auth-form-group">
                     <label>Tài khoản</label>
@@ -226,7 +221,6 @@
                 <button class="auth-submit-btn" onclick="handleLogin()">Đăng Nhập Ngay</button>
             </div>
 
-            <!-- Form Đăng Ký -->
             <div id="auth-form-register" style="display: none;">
                 <div class="auth-form-group">
                     <label>Tài khoản mới</label>
@@ -254,17 +248,14 @@
         </div>
     </div>
 
-    <!-- OVERLAY MOBILE -->
     <div id="sidebar-overlay" onclick="toggleMenu()"></div>
 
-    <!-- SIDEBAR MENU -->
     <div class="sidebar" id="app-sidebar">
         <div class="sidebar-brand">
             <span><span class="dynamic-icon">⚡</span> AutoPost AI Pro</span>
             <span style="cursor:pointer; font-size: 1.2rem;" onclick="toggleMenu()">✕</span>
         </div>
         <div class="sidebar-menu" id="sidebar-menu-container">
-            <!-- PHẦN DÀNH RIÊNG CHO ADMIN -->
             <div id="admin-menu-section" style="display:none;">
                 <div class="menu-category">QUẢN TRỊ HỆ THỐNG</div>
                 <div class="menu-item active" onclick="switchTab('tab-admin-stats', event)">📊 Thống kê hệ thống</div>
@@ -283,7 +274,6 @@
                 <div class="menu-item" onclick="switchTab('tab-admin-refunds', event)">⚠️ Hoàn tiền lỗi</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-ctv', event)">🤝 Tiếp thị liên kết (CTV)</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-coupons', event)">🎟️ Coupons & Khuyến mại</div>
-                <!-- Mục cài đặt Bot AI CSKH mới cho Admin -->
                 <div class="menu-item" onclick="switchTab('tab-admin-aibot-config', event)">🤖 Cài đặt Trợ lý AI CSKH</div>
             </div>
 
@@ -304,14 +294,12 @@
             <div class="menu-item" onclick="switchTab('tab-fb', event)"><span class="dynamic-icon">📘</span> Facebook Automation</div>
             <div class="menu-item" onclick="switchTab('tab-tiktok', event)"><span class="dynamic-icon">🎵</span> TikTok (AI & Đăng tự động)</div>
 
-            <!-- Nút Đăng Xuất -->
             <div style="margin-top: 20px; padding-bottom: 10px;">
                 <div class="menu-item logout-btn" onclick="handleLogout()">🚪 Đăng Xuất Tài Khoản</div>
             </div>
         </div>
     </div>
 
-    <!-- MAIN CONTAINER -->
     <div class="main-container">
         <div class="topbar">
             <div style="display: flex; align-items: center; gap: 12px;">
@@ -339,7 +327,6 @@
 
         <div class="content-body">
             <div class="content-inner">
-                <!-- 1. THỐNG KÊ ADMIN -->
                 <div id="tab-admin-stats" class="tab-content active">
                     <div class="card">
                         <div class="card-title">📊 Thống kê hệ thống toàn bộ</div>
@@ -352,16 +339,16 @@
                     </div>
                 </div>
 
-                <!-- 2. QUẢN LÝ KHÁCH HÀNG -->
                 <div id="tab-admin-users" class="tab-content">
                     <div class="card">
-                        <div class="card-title">👥 Quản lý Khách Hàng (Đồng bộ thời gian thực)</div>
+                        <div class="card-title">👥 Quản lý Khách Hàng (Chi tiết Ngày giờ & Thao tác)</div>
                         <div class="table-container">
                             <table>
                                 <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Tài khoản</th>
+                                        <th>Ngày giờ đăng ký</th>
                                         <th>Quyền hạn</th>
                                         <th>Thao tác quản trị</th>
                                     </tr>
@@ -370,6 +357,7 @@
                                     <tr>
                                         <td>#01</td>
                                         <td><b>thanhvien_pro</b></td>
+                                        <td>27/07/2026 03:00</td>
                                         <td><span class="badge-status status-completed">Thành viên</span></td>
                                         <td>
                                             <button class="btn btn-ai btn-sm" onclick="showToast('✅ Đã nâng quyền thành viên lên VIP!')">Nâng Quyền</button>
@@ -382,7 +370,6 @@
                     </div>
                 </div>
 
-                <!-- 3. MỞ RỘNG NỀN TẢNG -->
                 <div id="tab-admin-platforms" class="tab-content">
                     <div class="card">
                         <div class="card-title">🧩 Mở rộng Nền tảng & Dịch vụ</div>
@@ -460,13 +447,10 @@
                 </div>
                 <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div><div class="form-group"><label>Link Zalo/Facebook</label><input type="text" value="https://zalo.me"></div><button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu!')">Lưu</button></div></div>
                 
-                <!-- BỔ SUNG: CÀI ĐẶT TRỢ LÝ AI CSKH CHO ADMIN -->
                 <div id="tab-admin-aibot-config" class="tab-content">
                     <div class="card">
                         <div class="card-title">🤖 Cài đặt Nội dung & Kịch bản Trợ lý AI CSKH</div>
                         <div class="form-group"><label>Câu chào mở đầu của Bot</label><textarea rows="2" id="cfg-bot-greeting">🤖 Chào bạn! Tôi có thể giúp gì cho các dịch vụ nạp tiền, tăng tương tác hoặc đơn hàng của bạn?</textarea></div>
-                        <div class="form-group"><label>Nội dung trả lời khi khách hỏi về Nạp tiền</label><textarea rows="2" id="cfg-bot-deposit">💳 Bạn có thể nạp tiền tự động qua mục 'Nạp tiền tự động' trên menu. Số dư ví sẽ tự động cộng sau khi chuyển khoản!</textarea></div>
-                        <div class="form-group"><label>Nội dung trả lời khi khách hỏi về Dùng thử</label><textarea rows="2" id="cfg-bot-trial">🎉 Khi đăng ký tài khoản thành viên mới, hệ thống tự động kích hoạt ngay 3 ngày dùng thử miễn phí cho bạn!</textarea></div>
                         <button class="btn btn-primary btn-sm" onclick="saveAIBotConfig()">💾 Lưu Cấu Hình Trợ Lý AI</button>
                     </div>
                 </div>
@@ -523,7 +507,6 @@
 
                 <div id="tab-admin-coupons" class="tab-content"><div class="card"><div class="card-title">🎟️ Coupons & Khuyến mại</div><div class="form-group"><label>Mã giảm giá</label><input type="text" placeholder="Mã..."></div><button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã tạo mã!')">Tạo</button></div></div>
 
-                <!-- DASHBOARD KHÁCH HÀNG -->
                 <div id="dashboard" class="tab-content">
                     <div class="card" style="border-color: var(--accent-main);">
                         <div class="card-title"><span class="dynamic-icon">📢</span> <span id="display-noti-title">Thông báo chung hệ thống 2026</span></div>
@@ -542,7 +525,6 @@
                     </div>
                 </div>
 
-                <!-- QUẢN LÝ ĐƠN HÀNG KHÁCH -->
                 <div id="orders" class="tab-content">
                     <div class="card">
                         <div class="card-title">📋 Lịch sử đơn đã mua</div>
@@ -613,7 +595,6 @@
                 <div id="affiliate" class="tab-content"><div class="card"><div class="card-title">🔗 Tiếp thị liên kết nhận hoa hồng</div><p style="font-size:0.84rem; color:var(--text-muted);">Link giới thiệu của bạn: <b style="color:var(--accent-main);">https://autopostai.site/?ref=user</b></p></div></div>
                 <div id="notifications" class="tab-content"><div class="card"><div class="card-title">🔔 Thông báo hệ thống mới nhất</div><p style="font-size:0.84rem;" id="noti-tab-text">- Chào mừng bạn đã nhận 3 ngày dùng thử miễn phí dịch vụ!</p></div></div>
 
-                <!-- NỀN TẢNG FACEBOOK -->
                 <div id="tab-fb" class="tab-content">
                     <div class="card">
                         <div class="card-title"><span class="dynamic-icon">📘</span> Facebook Automation: Chọn Chức Năng</div>
@@ -642,7 +623,6 @@
                     </div>
                 </div>
                 
-                <!-- NỀN TẢNG TIKTOK -->
                 <div id="tab-tiktok" class="tab-content">
                     <div class="card">
                         <div class="card-title"><span class="dynamic-icon">✨</span> 1. Tạo Ảnh & Video AI Tự Động</div>
@@ -690,14 +670,12 @@
                 </div>
             </div>
 
-            <!-- Dòng chữ bản quyền ở cuối trang -->
             <div class="footer-copyright">
                 Bản quyền thuộc <b>DINH HOANG VIET ANH</b> © 2026
             </div>
         </div>
     </div>
 
-    <!-- MODAL CHAT & CÓ CÁC KHUNG MENU BẤM NHANH -->
     <div id="chat-box-modal">
         <div class="chat-header">
             <span>🤖 Trợ lý AI CSKH thông minh</span>
@@ -707,7 +685,6 @@
             <div style="background: rgba(16,185,129,0.15); padding: 8px; border-radius: 6px; color: var(--accent-main);" id="bot-welcome-text">
                 🤖 Chào bạn! Tôi có thể giúp gì cho các dịch vụ nạp tiền, tăng tương tác hoặc đơn hàng của bạn?
             </div>
-            <!-- CÁC KHUNG MENU BẤM NHANH (QUICK MENU) -->
             <div class="chat-quick-menu">
                 <button class="chat-menu-btn" onclick="sendQuickMenu('Nạp tiền như thế nào?')">💳 Hướng dẫn nạp tiền</button>
                 <button class="chat-menu-btn" onclick="sendQuickMenu('Kiểm tra đơn hàng ở đâu?')">📋 Xem đơn hàng</button>
@@ -755,13 +732,7 @@
 
         function saveAIBotConfig() {
             let greeting = document.getElementById('cfg-bot-greeting').value;
-            let depositAns = document.getElementById('cfg-bot-deposit').value;
-            let trialAns = document.getElementById('cfg-bot-trial').value;
-
             localStorage.setItem('botGreeting', greeting);
-            localStorage.setItem('botDeposit', depositAns);
-            localStorage.setItem('botTrial', trialAns);
-
             loadAIBotConfig();
             showToast('✅ Đã lưu cấu hình Trợ lý AI CSKH thành công!');
         }
@@ -775,6 +746,7 @@
                 <tr>
                     <td>#01</td>
                     <td><b>thanhvien_pro</b></td>
+                    <td>27/07/2026 03:00</td>
                     <td><span class="badge-status status-completed">Thành viên</span></td>
                     <td>
                         <button class="btn btn-ai btn-sm" onclick="showToast('✅ Đã nâng quyền thành viên lên VIP!')">Nâng Quyền</button>
@@ -784,10 +756,12 @@
             `;
             
             users.forEach((u, index) => {
+                let regTime = u.time || new Date().toLocaleString('vi-VN');
                 html += `
                     <tr>
                         <td>#${index + 2}</td>
                         <td><b>${u.username}</b></td>
+                        <td>${regTime}</td>
                         <td><span class="badge-status status-completed">Dùng thử 3 ngày</span></td>
                         <td>
                             <button class="btn btn-ai btn-sm" onclick="showToast('✅ Đã nâng quyền ${u.username} lên VIP!')">Nâng Quyền</button>
@@ -920,8 +894,9 @@
             let pass = document.getElementById('reg-password').value.trim();
             if(!user || !pass) { alert('Vui lòng điền thông tin đăng ký!'); return; }
             
+            let timeString = new Date().toLocaleString('vi-VN');
             let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
-            users.push({ username: user, pass: pass });
+            users.push({ username: user, pass: pass, time: timeString });
             localStorage.setItem('registeredUsersList', JSON.stringify(users));
 
             showToast('🎉 Đăng ký thành công! Nhận 3 ngày dùng thử.');
@@ -1011,7 +986,7 @@
                 let lower = questionText.toLowerCase();
 
                 if(lower.includes('nạp tiền')) {
-                    reply = "💳 Bạn vào mục 'Nạp tiền tự động' trên menu, nhập số tiền và quét mã QR SePay. Hệ thống sẽ tự động cộng số dư ngay sau khi chuyển khoản thành công!";
+                    reply = "💳 Bạn vào mục 'Nạp tiền tự động' trên menu, nhập số tiền và quét mã QR SePay. Hệ thống sẽ tự động cộng số dư ngay sau khi chuyển khoản!";
                 } else if(lower.includes('đơn hàng')) {
                     reply = "📋 Toàn bộ lịch sử các gói dịch vụ bạn đã mua được hiển thị chi tiết tại mục 'Lịch sử đơn đã mua'.";
                 } else if(lower.includes('dùng thử')) {

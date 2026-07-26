@@ -179,7 +179,7 @@
             <span><span class="dynamic-icon">⚡</span> AutoPost AI Pro</span>
             <span style="cursor:pointer; font-size: 1.2rem;" onclick="toggleMenu()">✕</span>
         </div>
-        <div class="sidebar-menu">
+        <div class="sidebar-menu" id="sidebar-menu-container">
             <div class="menu-category">QUẢN TRỊ HỆ THỐNG</div>
             <div class="menu-item active" onclick="switchTab('tab-admin-stats', event)">📊 Thống kê hệ thống</div>
             <div class="menu-item" onclick="switchTab('tab-admin-users', event)">👥 Quản lý khách hàng (1 Tỷ)</div>
@@ -187,7 +187,7 @@
             <div class="menu-item" onclick="switchTab('tab-admin-materials', event)">📦 Kho Nguyên liệu (Cookie/Proxy)</div>
             <div class="menu-item" onclick="switchTab('tab-admin-apibot', event)">⚙️ Cài đặt API & Bot</div>
             <div class="menu-item" onclick="switchTab('tab-admin-aikeys', event)">🔑 Cài đặt Key AI & Làm video</div>
-            <div class="menu-item" onclick="switchTab('tab-admin-deposit-syntax', event)">💳 Cài đặt nạp tiền & Cú pháp</div>
+            <div class="menu-item" onclick="switchTab('tab-admin-deposit-syntax', event)">💳 Cài đặt nạp tiền & SePay API</div>
             <div class="menu-item" onclick="switchTab('tab-admin-settings', event)">⚙️ Cài đặt chung website</div>
             <div class="menu-item" onclick="switchTab('tab-admin-noti', event)">📢 Cài đặt Thông báo</div>
             <div class="menu-item" onclick="switchTab('tab-admin-contact', event)">🎧 Cài đặt Liên kết Hỗ trợ</div>
@@ -258,7 +258,7 @@
                 </div>
             </div>
 
-            <!-- 2. QUẢN LÝ KHÁCH HÀNG (CÓ FORM NHẬP MẬT KHẨU MỚI KHI BẤM ĐỔI MK) -->
+            <!-- 2. QUẢN LÝ KHÁCH HÀNG -->
             <div id="tab-admin-users" class="tab-content">
                 <div class="card">
                     <div class="card-title">👥 Quản lý Khách Hàng (1 Tỷ)</div>
@@ -301,17 +301,17 @@
             <div id="tab-admin-platforms" class="tab-content">
                 <div class="card">
                     <div class="card-title">🧩 Mở rộng Nền tảng Mới & Tạo Gói Dịch Vụ Đi Kèm</div>
-                    <div class="form-group"><label>Tên nền tảng mới</label><input type="text" placeholder="VD: Instagram, Threads, YouTube..."></div>
-                    <div class="form-group"><label>Chọn Icon hiển thị</label><select><option>📸 Instagram</option><option>🎥 YouTube</option><option>💬 Telegram</option><option>⭐ Sao hiệu ứng</option></select></div>
+                    <div class="form-group"><label>Tên nền tảng mới</label><input type="text" id="input-plat-name" placeholder="VD: Instagram, Threads, YouTube..."></div>
+                    <div class="form-group"><label>Chọn Icon hiển thị</label><select id="input-plat-icon"><option value="📸">📸 Instagram</option><option value="🎥">🎥 YouTube</option><option value="💬">💬 Telegram</option><option value="⭐">⭐ Sao hiệu ứng</option></select></div>
                     
                     <div style="border-top: 1px dashed var(--border-color); padding-top: 12px; margin-top: 12px;">
                         <label style="color: var(--accent-main); font-weight: 700; margin-bottom: 8px;">📦 Cấu hình Gói dịch vụ cho nền tảng này</label>
-                        <div class="form-group"><label>Tên gói dịch vụ</label><input type="text" placeholder="VD: Gói tăng tương tác Pro 30 ngày"></div>
-                        <div class="form-group"><label>Giá tiền (VNĐ)</label><input type="number" placeholder="200000"></div>
-                        <div class="form-group"><label>📝 Ghi chú & Hướng dẫn lưu ý cho khách</label><textarea rows="3" placeholder="Nhập ghi chú yêu cầu khi khách mua gói này..."></textarea></div>
+                        <div class="form-group"><label>Tên gói dịch vụ</label><input type="text" id="input-pkg-name" placeholder="VD: Gói tăng tương tác Pro 30 ngày"></div>
+                        <div class="form-group"><label>Giá tiền (VNĐ)</label><input type="number" id="input-pkg-price" placeholder="200000"></div>
+                        <div class="form-group"><label>📝 Ghi chú & Hướng dẫn lưu ý cho khách</label><textarea id="input-pkg-note" rows="3" placeholder="Nhập ghi chú yêu cầu khi khách mua gói này..."></textarea></div>
                     </div>
 
-                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Thêm nền tảng và tạo gói dịch vụ thành công!')">➕ Lưu Nền Tảng & Gói Dịch Vụ</button>
+                    <button class="btn btn-primary btn-sm" onclick="addNewPlatformAndPackage()">➕ Thêm Nền Tảng & Gói Dịch Vụ</button>
                 </div>
             </div>
 
@@ -347,14 +347,20 @@
                 </div>
             </div>
 
-            <!-- 7. CÀI ĐẶT NẠP TIỀN & CÚ PHÁP -->
+            <!-- 7. CÀI ĐẶT NẠP TIỀN & KẾT NỐI SEPAY API -->
             <div id="tab-admin-deposit-syntax" class="tab-content">
                 <div class="card">
-                    <div class="card-title">💳 Cài đặt nạp tiền & Cú pháp tự động</div>
-                    <div class="form-group"><label>Ngân hàng</label><input type="text" value="ACB"></div>
-                    <div class="form-group"><label>Số tài khoản</label><input type="text" value="0123456789"></div>
-                    <div class="form-group"><label>Cú pháp chuyển khoản</label><input type="text" value="NAP"></div>
-                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Lưu cài đặt nạp tiền thành công!')">💾 Lưu Cài Đặt</button>
+                    <div class="card-title">💳 Cài đặt nạp tiền VietQR ACB & Kết nối SePay API</div>
+                    <div class="form-group"><label>Số Tài Khoản ACB</label><input type="text" id="cfg-bank-stk" value="26084821"></div>
+                    <div class="form-group"><label>Tên Chủ Tài Khoản ACB</label><input type="text" id="cfg-bank-holder" value="DINH HOANG VIET ANH"></div>
+                    
+                    <div style="border-top: 1px dashed var(--border-color); padding-top: 12px; margin-top: 12px;">
+                        <label style="color: var(--accent-main); font-weight: 700; margin-bottom: 8px;">🔗 Cấu hình SePay Webhook / API Token</label>
+                        <div class="form-group"><label>SePay API Token</label><input type="password" id="cfg-sepay-token" placeholder="Dán SePay Token vào đây..."></div>
+                        <div class="form-group"><label>Đường dẫn Webhook nhận tiền (Dán vào SePay)</label><input type="text" id="cfg-webhook-url" value="https://autopostai.pro/api/sepay-webhook" readonly style="background:#111827; color:#10B981;"></div>
+                    </div>
+
+                    <button class="btn btn-primary btn-sm" onclick="saveDepositConfig()">💾 Lưu Cấu Hình Nạp Tiền & SePay</button>
                 </div>
             </div>
 
@@ -421,12 +427,12 @@
             <!-- 13. GIAO DỊCH NẠP TIỀN -->
             <div id="tab-admin-deposits" class="tab-content">
                 <div class="card">
-                    <div class="card-title">💵 Quản lý lịch sử giao dịch nạp tiền tự động</div>
+                    <div class="card-title">💵 Quản lý lịch sử giao dịch nạp tiền tự động (SePay)</div>
                     <div class="table-container">
                         <table>
                             <thead><tr><th>Mã GD</th><th>Tài khoản</th><th>Số tiền nạp</th><th>Ngân hàng</th><th>Thời gian</th><th>Trạng thái</th></tr></thead>
                             <tbody>
-                                <tr><td>#TX-8821</td><td>khachhang_A</td><td style="color:var(--accent-main);font-weight:700;">+200,000đ</td><td>ACB QR</td><td>2026-03-30 12:00</td><td><span style="color:#10B981;">Thành công</span></td></tr>
+                                <tr><td>#TX-8821</td><td>khachhang_A</td><td style="color:var(--accent-main);font-weight:700;">+2,000đ</td><td>ACB (SePay)</td><td>2026-07-27 00:00</td><td><span style="color:#10B981;">Đã cộng tiền tự động</span></td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -474,16 +480,19 @@
             <div id="dashboard" class="tab-content"><div class="card"><div class="card-title">🏠 Trang chủ tổng quan dịch vụ</div></div></div>
             <div id="orders" class="tab-content"><div class="card"><div class="card-title">📋 Quản lý đơn hàng cá nhân</div></div></div>
             <div id="cashflow" class="tab-content"><div class="card"><div class="card-title">⏳ Luồng tiền biến động số dư ví</div></div></div>
-            <div id="profile" class="tab-content"><div class="card"><div class="card-title">👤 Thông tin tài khoản của tôi</div></div></div>
+            <div id="profile" class="tab-content"><div class="card"><div class="card-title">👤 Thông tin tài khoản của tôi (<span id="current-username-display" style="color:var(--accent-main);">vietanh_admin</span>)</div></div></div>
+            
+            <!-- 16. NẠP TIỀN TỰ ĐỘNG VIETQR ACB (NỘI DUNG CHỈ CÓ TÊN TÀI KHOẢN KHÁCH HÀNG) -->
             <div id="deposit" class="tab-content">
                 <div class="card">
-                    <div class="card-title">💳 Nạp tiền tự động QR ACB</div>
-                    <div class="form-group"><label>Số tiền nạp</label><input type="number" id="deposit-amount" value="100000"></div>
-                    <div class="form-group"><label>Mã Khuyến Mại</label><input type="text" id="user-input-coupon" placeholder="Nhập mã..."></div>
-                    <button class="btn btn-primary btn-sm" onclick="generateQR()">Tạo mã QR</button>
-                    <div id="qr-box" style="text-align:center; margin-top:10px;"></div>
+                    <div class="card-title">💳 Nạp tiền tự động qua VietQR ACB (SePay)</div>
+                    <div class="form-group"><label>Số tiền cần nạp (VNĐ)</label><input type="number" id="deposit-amount" value="100000"></div>
+                    <div class="form-group"><label>Mã Khuyến Mại (Nếu có)</label><input type="text" id="user-input-coupon" placeholder="Nhập mã..."></div>
+                    <button class="btn btn-primary btn-sm" onclick="generateQR()">Tạo Mã QR Nạp Tiền</button>
+                    <div id="qr-box" style="text-align:center; margin-top:12px;"></div>
                 </div>
             </div>
+
             <div id="refund" class="tab-content"><div class="card"><div class="card-title">🔄 Yêu cầu hoàn tiền đơn lỗi</div></div></div>
             <div id="subweb" class="tab-content"><div class="card"><div class="card-title">🌐 Hệ thống tạo web con riêng</div></div></div>
             <div id="apitools" class="tab-content"><div class="card"><div class="card-title">💻 Tài liệu tích hợp API</div></div></div>
@@ -560,10 +569,13 @@
                     <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã đăng bài và gắn giỏ hàng TikTok thành công!')">🚀 Đăng Lên TikTok Ngay</button>
                 </div>
             </div>
+
+            <!-- NỀN TẢNG MỚI ĐƯỢC THÊM TỪ QUẢN TRỊ -->
+            <div id="dynamic-platform-container"></div>
         </div>
     </div>
 
-    <!-- MODAL ĐỔI MẬT KHẨU KHÁCH HÀNG (MỚI BỔ SUNG KHI BẤM ĐỔI MK) -->
+    <!-- MODAL ĐỔI MẬT KHẨU KHÁCH HÀNG -->
     <div id="change-password-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 5000; padding: 16px;">
         <div class="modal-box" style="background: var(--bg-card); border-radius: 12px; width: 100%; max-width: 380px; padding: 20px; border: 1px solid var(--border-color);">
             <h3 style="color: #fff; font-size: 0.95rem; margin-bottom: 12px;">🔑 Đổi Mật Khẩu Cho Tài Khoản: <span id="modal-target-username" style="color: var(--accent-main);"></span></h3>
@@ -604,6 +616,14 @@
     </div>
 
     <script>
+        let currentUser = "vietanh_admin";
+        let depositConfig = {
+            bankId: "970416",
+            stk: "26084821",
+            holder: "DINH HOANG VIET ANH",
+            sepayToken: ""
+        };
+
         function showToast(message) {
             let toast = document.getElementById('toast-notification');
             toast.innerHTML = message;
@@ -629,8 +649,12 @@
             }
         }
 
-        // Bấm đăng nhập/đăng ký thành công sẽ tự động phát nhạc nền ngay lập tức
         function triggerLoginSuccess() {
+            let userVal = document.getElementById('login-username').value.trim();
+            if(userVal) {
+                currentUser = userVal;
+                document.getElementById('current-username-display').innerText = currentUser;
+            }
             let audio = document.getElementById('bg-audio');
             audio.play().catch(e => console.log("Chờ tương tác trình duyệt"));
             showToast('✅ Đăng nhập thành công! Nhạc nền đã bật.');
@@ -650,8 +674,10 @@
         function handleRegister() {
             let user = document.getElementById('reg-username').value;
             let pass = document.getElementById('reg-password').value;
-            if(!user || !pass) { alert('Vui lòng điền thông tin đăng ký!'); return; }
-            showToast('✅ Đăng ký thành công!');
+            if(!user || !pass) { alert('Vui lòng điền thông tin đăng ký dữ liệu!'); return; }
+            currentUser = user;
+            document.getElementById('current-username-display').innerText = currentUser;
+            showToast('✅ Đăng ký tài khoản thành công!');
             setTimeout(() => { triggerLoginSuccess(); }, 1000);
         }
 
@@ -681,7 +707,77 @@
             if(window.innerWidth <= 899) toggleMenu();
         }
 
-        // Xử lý bật/tắt Modal đổi mật khẩu khách hàng
+        function saveDepositConfig() {
+            depositConfig.stk = document.getElementById('cfg-bank-stk').value || "26084821";
+            depositConfig.holder = document.getElementById('cfg-bank-holder').value || "DINH HOANG VIET ANH";
+            depositConfig.sepayToken = document.getElementById('cfg-sepay-token').value.trim();
+            showToast('✅ Lưu cấu hình nạp tiền & SePay thành công!');
+        }
+
+        // Tạo mã QR VietQR ACB tự động (Nội dung chỉ có tên tài khoản khách hàng)
+        function generateQR() {
+            let amount = document.getElementById('deposit-amount').value || 100000;
+            let coupon = document.getElementById('user-input-coupon').value;
+            let couponText = coupon ? `<br><span>Mã ưu đãi: <b>${coupon}</b></span>` : '';
+            
+            // Nội dung chuyển khoản chỉ là tên tài khoản của khách (Ví dụ: khachhang_A)
+            let transferSyntax = currentUser;
+
+            let qrUrl = `https://api.vietqr.io/image/${depositConfig.bankId}-${depositConfig.stk}-compact2.jpg?amount=${amount}&addInfo=${encodeURIComponent(transferSyntax)}&accountName=${encodeURIComponent(depositConfig.holder)}`;
+
+            document.getElementById('qr-box').innerHTML = `
+                <div style="background: white; padding: 6px; display: inline-block; border-radius: 6px; margin-bottom: 6px;">
+                    <img src="${qrUrl}" width="140" alt="VietQR ACB">
+                </div>
+                <p style="font-size: 0.8rem;">Ngân hàng: <b>ACB (Á Châu)</b><br>STK: <b>${depositConfig.stk}</b><br>Chủ TK: <b>${depositConfig.holder}</b><br>Số tiền: <b style="color: var(--accent-main);">${Number(amount).toLocaleString()}đ</b><br>Nội dung chuyển khoản chính xác: <b style="color: #FF007F;">${transferSyntax}</b>${couponText}</p>
+            `;
+            showToast("✅ Đã tạo mã VietQR ACB thành công!");
+        }
+
+        function addNewPlatformAndPackage() {
+            let platName = document.getElementById('input-plat-name').value.trim();
+            let platIcon = document.getElementById('input-plat-icon').value;
+            let pkgName = document.getElementById('input-pkg-name').value.trim();
+            let pkgPrice = document.getElementById('input-pkg-price').value.trim();
+            let pkgNote = document.getElementById('input-pkg-note').value.trim();
+
+            if(!platName || !pkgName || !pkgPrice) {
+                alert('Vui lòng nhập đầy đủ tên nền tảng, tên gói và giá dịch vụ!');
+                return;
+            }
+
+            let tabId = 'tab-dynamic-' + Date.now();
+
+            let menuContainer = document.getElementById('sidebar-menu-container');
+            let newMenuItem = document.createElement('div');
+            newMenuItem.className = 'menu-item';
+            newMenuItem.innerHTML = `<span class="dynamic-icon">${platIcon}</span> ${platName}`;
+            newMenuItem.onclick = function(event) { switchTab(tabId, event); };
+            menuContainer.appendChild(newMenuItem);
+
+            let dynamicContainer = document.getElementById('dynamic-platform-container');
+            let newTabContent = document.createElement('div');
+            newTabContent.id = tabId;
+            newTabContent.className = 'tab-content';
+            newTabContent.innerHTML = `
+                <div class="card">
+                    <div class="card-title"><span class="dynamic-icon">${platIcon}</span> Quản lý Nền tảng: ${platName}</div>
+                    <div class="form-group"><label>📦 Gói dịch vụ đã tạo: <b>${pkgName}</b></label></div>
+                    <div class="form-group"><label>💰 Giá tiền: <b style="color:var(--accent-main);">${Number(pkgPrice).toLocaleString()}đ</b></label></div>
+                    <div class="form-group"><label>📝 Ghi chú hướng dẫn cho khách:</label><textarea rows="3" readonly>${pkgNote || 'Không có ghi chú.'}</textarea></div>
+                    <div class="form-group"><label>📥 Nhập tài khoản / Link cần chạy dịch vụ</label><textarea rows="3" placeholder="Nhập dữ liệu chạy dịch vụ..."></textarea></div>
+                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Đã khởi chạy tiến trình ${platName} thành công!')">🚀 Chạy Tiến Trình ${platName}</button>
+                </div>
+            `;
+            dynamicContainer.appendChild(newTabContent);
+
+            showToast('✅ Thêm nền tảng và gói dịch vụ thành công!');
+            document.getElementById('input-plat-name').value = '';
+            document.getElementById('input-pkg-name').value = '';
+            document.getElementById('input-pkg-price').value = '';
+            document.getElementById('input-pkg-note').value = '';
+        }
+
         function openChangePasswordModal(username) {
             document.getElementById('modal-target-username').innerText = username;
             document.getElementById('new-password-input').value = '';
@@ -732,15 +828,8 @@
             }
         }
 
-        function generateQR() {
-            let amount = document.getElementById('deposit-amount').value || 100000;
-            document.getElementById('qr-box').innerHTML = `
-                <div style="background: white; padding: 6px; display: inline-block; border-radius: 6px; margin-bottom: 6px;">
-                    <img src="https://api.vietqr.io/image/970416-0123456789-compact2.jpg?amount=${amount}&addInfo=NAP%202026&accountName=NGUYEN%20VAN%20ANH" width="120" alt="QR">
-                </div>
-                <p style="font-size: 0.78rem;">ACB: <b>0123456789</b> | Số tiền: <b style="color: var(--accent-main);">${Number(amount).toLocaleString()}đ</b></p>
-            `;
-            showToast("✅ Tạo mã QR thành công!");
+        function saveSocialLinks() {
+            showToast("✅ Đã cập nhật liên kết hỗ trợ thành công!");
         }
 
         function toggleChatBox() {

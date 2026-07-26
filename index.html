@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoPost AI - Hệ Thống Quản Trị Chuẩn Mẫu</title>
+    <title>AutoPost AI - Hệ Thống Quản Trị Chuẩn Y Hệt Video</title>
     <style>
         @keyframes rgb-border {
             0% { border-color: #ff0055; box-shadow: 0 0 20px rgba(255, 0, 85, 0.15); }
@@ -113,7 +113,7 @@
             color: #080a10; font-weight: 900; font-size: 15px;
         }
 
-        /* MENU TRƯỢT 3 GẠCH (DRAWER CHUẨN MẪU ẢNH) */
+        /* MENU TRƯỢT 3 GẠCH (DRAWER CHUẨN MẪU VIDEO) */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(3px);
@@ -122,7 +122,7 @@
         .drawer-overlay.open { display: block; opacity: 1; }
 
         .drawer-menu {
-            position: fixed; top: 0; left: -320px; width: 285px; height: 100vh;
+            position: fixed; top: 0; left: -320px; width: 290px; height: 100vh;
             background: #141728; border-right: 1px solid #222639;
             z-index: 100; padding: 15px 10px; transition: left 0.25s ease-out;
             display: flex; flex-direction: column; gap: 4px; overflow-y: auto;
@@ -307,10 +307,14 @@
                 <div class="drawer-item" onclick="navigateFromDrawer('refundSection', 'HOÀN TIỀN', 'Quản trị > Hoàn tiền')"><span class="icon">🔄</span> Hoàn tiền</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('autoDepositSection', 'NẠP TIỀN TỰ ĐỘNG', 'Quản trị > Nạp tiền')"><span class="icon">⚡</span> Nạp tiền tự động</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'NGUỒN DỊCH VỤ', 'Quản trị > Nguồn dịch vụ')"><span class="icon">🌐</span> Nguồn dịch vụ</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'NỀN TẢNG', 'Quản trị > Nền tảng')"><span class="icon">🔲</span> Nền tảng</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'DANH MỤC', 'Quản trị > Danh mục')"><span class="icon">📁</span> Danh mục</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'QUẢN LÝ GÓI', 'Quản trị > Quản lý gói')"><span class="icon">📦</span> Quản lý gói</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'THÔNG BÁO', 'Quản trị > Thông báo')"><span class="icon">🔔</span> Thông báo</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'HỖ TRỢ', 'Quản trị > Hỗ trợ')"><span class="icon">📞</span> Hỗ trợ</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'COUPONS', 'Quản trị > Coupons')"><span class="icon">🎟️</span> Coupons</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'TIẾP THỊ LIÊN KẾT', 'Quản trị > Tiếp thị liên kết')"><span class="icon">🤝</span> Tiếp thị liên kết</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'NHÓM TELEGRAM', 'Quản trị > Telegram')"><span class="icon">✈️</span> Nhóm Telegram</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('settingsSection', 'CÀI ĐẶT TRANG', 'Quản trị > Cài đặt trang')"><span class="icon">⚙️</span> Cài đặt trang</div>
             </div>
         </div>
@@ -321,11 +325,17 @@
             </div>
             <div class="menu-section-content">
                 <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'TRANG CHỦ', 'Chức năng > Trang chủ')"><span class="icon">🏠</span> Trang chủ</div>
-                <div class="drawer-item" onclick="navigateFromDrawer('orderManageSection', 'QUẢN LÝ ĐƠN HÀNG', 'Chức năng > Đơn hàng')"><span class="icon">📄</span> Quản lý đơn hàng</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderManageSection', 'QUẢN LÝ ĐƠN HÀNG', 'Chức năng > Quản lý đơn hàng')"><span class="icon">📄</span> Quản lý đơn hàng</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('transSection', 'LUỒNG TIỀN', 'Chức năng > Luồng tiền')"><span class="icon">⏳</span> Luồng tiền</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('accountSection', 'TÀI KHOẢN CỦA TÔI', 'Chức năng > Tài khoản')"><span class="icon">👤</span> Tài khoản của tôi</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('depositSection', 'NẠP TIỀN', 'Chức năng > Nạp tiền')"><span class="icon">💳</span> Nạp tiền</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('refundSection', 'HOÀN TIỀN', 'Chức năng > Hoàn tiền')"><span class="icon">🔄</span> Hoàn tiền</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('statSection', 'THỐNG KÊ', 'Chức năng > Thống kê')"><span class="icon">📊</span> Thống kê</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'BẢNG GIÁ DỊCH VỤ', 'Chức năng > Bảng giá')"><span class="icon">💎</span> Bảng giá dịch vụ</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'TẠO WEB CON', 'Chức năng > Tạo web con')"><span class="icon">🌐</span> Tạo web con</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'TÀI LIỆU API', 'Chức năng > API')"><span class="icon">🔌</span> Tài liệu API</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'HỖ TRỢ', 'Chức năng > Hỗ trợ')"><span class="icon">📞</span> Hỗ trợ</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('dashboardSection', 'TIẾP THỊ LIÊN KẾT', 'Chức năng > Affiliate')"><span class="icon">🤝</span> Tiếp thị liên kết</div>
             </div>
         </div>
 
@@ -338,7 +348,12 @@
                 <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'TIKTOK', 'Nền tảng > TikTok')"><span class="icon">🎵</span> TikTok</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'INSTAGRAM', 'Nền tảng > Instagram')"><span class="icon">📷</span> Instagram</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'YOUTUBE', 'Nền tảng > YouTube')"><span class="icon">📺</span> Youtube</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'SHOPEE', 'Nền tảng > Shopee')"><span class="icon">🛍️</span> Shopee</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'GOOGLE', 'Nền tảng > Google')"><span class="icon">🔍</span> Google</div>
                 <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'TELEGRAM', 'Nền tảng > Telegram')"><span class="icon">✈️</span> Telegram</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'TWITTER', 'Nền tảng > X-Twitter')"><span class="icon">✖️</span> X-Twitter</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'THREADS', 'Nền tảng > Threads')"><span class="icon">🧵</span> Threads</div>
+                <div class="drawer-item" onclick="navigateFromDrawer('orderSection', 'LAZADA', 'Nền tảng > Lazada')"><span class="icon">🛒</span> Lazada</div>
             </div>
         </div>
     </div>
@@ -387,7 +402,7 @@
             <div class="news-box">
                 <h4>📌 Thông báo tài khoản:</h4>
                 <p id="trialStatusInfo">Đang kiểm tra trạng thái dùng thử...</p>
-                <p style="color: #ff0055; font-weight: bold; margin-top: 10px;">👉 Bấm vào 3 gạch (☰) góc trên bên trái để mở danh mục dịch vụ.</p>
+                <p style="color: #ff0055; font-weight: bold; margin-top: 10px;">👉 Bấm vào 3 gạch (☰) góc trên bên trái để mở mục Chọn dịch vụ.</p>
             </div>
         </div>
 
@@ -461,52 +476,46 @@
         </div>
 
         <div id="customerSection" class="app-section auth-card" style="max-width: 650px; text-align: left;">
-            <div class="form-title" style="text-align: center; color: #00ffcc;">👥 Quản Lý Danh Sách Khách Hàng</div>
+            <div class="form-title" style="text-align: center; color: #00ffcc;">👥 Quản Lý Khách Hàng</div>
             <div style="overflow-x: auto;">
                 <table class="admin-table">
-                    <thead>
-                        <tr><th>Tài khoản</th><th>Ngày Đăng Ký</th><th>Trạng Thái</th><th>Thao Tác</th></tr>
-                    </thead>
+                    <thead><tr><th>Tài khoản</th><th>Ngày Đăng Ký</th><th>Trạng Thái</th><th>Thao Tác</th></tr></thead>
                     <tbody id="customerTableBody"></tbody>
                 </table>
             </div>
         </div>
 
         <div id="orderManageSection" class="app-section auth-card" style="max-width: 650px; text-align: left;">
-            <div class="form-title" style="text-align: center; color: #ff0055;">📄 Quản Lý Đơn Hàng Hệ Thống</div>
+            <div class="form-title" style="text-align: center; color: #ff0055;">📄 Quản Lý Đơn Hàng</div>
             <div style="overflow-x: auto;">
                 <table class="admin-table">
-                    <thead>
-                        <tr><th>ID Đơn</th><th>Khách Hàng</th><th>Dịch Vụ</th><th>Trạng Thái</th></tr>
-                    </thead>
-                    <tbody id="orderTableBody">
-                        <tr><td colspan="4" style="text-align: center; color: #6b7a99;">Chưa có đơn hàng nào được tạo.</td></tr>
-                    </tbody>
+                    <thead><tr><th>ID Đơn</th><th>Khách Hàng</th><th>Dịch Vụ</th><th>Trạng Thái</th></tr></thead>
+                    <tbody id="orderTableBody"><tr><td colspan="4" style="text-align: center; color: #6b7a99;">Chưa có đơn hàng.</td></tr></tbody>
                 </table>
             </div>
         </div>
 
         <div id="transSection" class="app-section auth-card" style="max-width: 600px; text-align: left;">
-            <div class="form-title" style="text-align: center; color: #00ffcc;">⏳ Nhật Ký Giao Dịch & Luồng Tiền</div>
-            <p style="color: #94a3b8; font-size: 13px;">Kiểm soát toàn bộ biến động số dư và lệnh nạp tiền.</p>
+            <div class="form-title" style="text-align: center; color: #00ffcc;">⏳ Giao Dịch & Luồng Tiền</div>
+            <p style="color: #94a3b8; font-size: 13px;">Theo dõi biến động dòng tiền hệ thống.</p>
         </div>
 
         <div id="refundSection" class="app-section auth-card" style="max-width: 600px; text-align: left;">
-            <div class="form-title" style="text-align: center; color: #ff0055;">🔄 Lịch Sử Hoàn Tiền</div>
-            <p style="color: #94a3b8; font-size: 13px;">Xử lý các yêu cầu hoàn tiền đơn lỗi từ phía khách hàng.</p>
+            <div class="form-title" style="text-align: center; color: #ff0055;">🔄 Hoàn Tiền Đơn Lỗi</div>
+            <p style="color: #94a3b8; font-size: 13px;">Xử lý yêu cầu hoàn tiền của khách hàng.</p>
         </div>
 
         <div id="autoDepositSection" class="app-section auth-card" style="max-width: 500px; text-align: left;">
-            <div class="form-title" style="text-align: center; color: #00ffcc;">⚡ Cài Đặt Nạp Tiền Tự Động</div>
-            <div class="form-group"><label>Ngân Hàng Nhận</label><input type="text" value="MB Bank"></div>
+            <div class="form-title" style="text-align: center; color: #00ffcc;">⚡ Nạp Tiền Tự Động</div>
+            <div class="form-group"><label>Ngân Hàng</label><input type="text" value="MB Bank"></div>
             <div class="form-group"><label>Số Tài Khoản</label><input type="text" value="0987654321"></div>
             <button class="btn-submit" onclick="showNotification('Thành Công', 'Đã lưu cấu hình nạp tiền!', '💾')">Lưu Cấu Hình</button>
         </div>
 
         <div id="settingsSection" class="app-section auth-card" style="max-width: 500px; text-align: left;">
             <div class="form-title" style="text-align: center; color: #ff0055;">⚙️ Cài Đặt Trang Web</div>
-            <div class="form-group"><label>Tiêu Đề Website</label><input type="text" value="AutoPost AI"></div>
-            <button class="btn-submit" onclick="showNotification('Thành Công', 'Đã lưu cài đặt giao diện!', '⚙️')">Lưu Thay Đổi</button>
+            <div class="form-group"><label>Tiêu Đề</label><input type="text" value="AutoPost AI"></div>
+            <button class="btn-submit" onclick="showNotification('Thành Công', 'Đã lưu cài đặt trang!', '⚙️')">Lưu Thay Đổi</button>
         </div>
     </div>
 

@@ -31,9 +31,10 @@
         #toast-notification { position: fixed; bottom: 25px; right: 25px; background: var(--accent-main); color: #fff; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; box-shadow: 0 10px 25px rgba(0,0,0,0.4); display: none; z-index: 6000; align-items: center; gap: 8px; animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* Hiệu ứng Icon động */
-        @keyframes pulseIcon { 0% { transform: scale(1); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 8px var(--accent-main)); } 100% { transform: scale(1); } }
+        /* Hiệu ứng Icon động & Con AI nhún nhảy */
+        @keyframes bounceAI { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-8px) scale(1.1); filter: drop-shadow(0 0 10px var(--accent-main)); } }
         .dynamic-icon { display: inline-block; animation: pulseIcon 2s infinite ease-in-out; }
+        @keyframes pulseIcon { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
         /* Màn hình Đăng nhập / Đăng ký */
         #auth-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--bg-main); display: flex; align-items: center; justify-content: center; z-index: 5000; padding: 16px; }
@@ -42,7 +43,7 @@
         .auth-tab-btn { background: none; border: none; color: var(--text-muted); font-weight: 700; font-size: 0.9rem; cursor: pointer; padding-bottom: 4px; }
         .auth-tab-btn.active { color: var(--accent-main); border-bottom: 2px solid var(--accent-main); }
 
-        /* Sidebar rút gọn khoa học */
+        /* Sidebar đầy đủ chuẩn */
         .sidebar { width: 260px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; flex-shrink: 0; height: 100%; overflow-y: auto; z-index: 1000; transition: 0.3s; }
         @media(max-width: 899px) {
             .sidebar { position: fixed; left: -260px; top: 0; bottom: 0; }
@@ -61,6 +62,10 @@
         .main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; width: 100%; }
         .topbar { height: 56px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; position: relative; }
         
+        /* Trình phát nhạc mini trên Topbar */
+        .bg-music-player { display: flex; align-items: center; gap: 6px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; }
+        .music-btn { background: none; border: none; color: var(--accent-main); cursor: pointer; font-size: 0.9rem; font-weight: 700; }
+
         /* Menu dropdown giao diện */
         .theme-dropdown-wrapper { position: relative; display: inline-block; }
         .theme-main-btn { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: var(--shadow); }
@@ -98,17 +103,19 @@
         .result-output-box { margin-top: 14px; background: #111827; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; display: none; }
         .result-output-box textarea { width: 100%; background: #0B0F19; border: 1px solid var(--border-color); border-radius: 6px; color: #10B981; padding: 10px; font-size: 0.82rem; margin-bottom: 10px; resize: none; }
 
-        /* Các icon liên kết hỗ trợ nổi ở góc dưới bên trái */
-        #floating-social-icons { position: fixed; bottom: 20px; left: 20px; display: flex; flex-direction: column; gap: 8px; z-index: 5500; }
-        .social-icon-btn { width: 42px; height: 42px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: 0.2s; }
-        .social-icon-btn:hover { transform: scale(1.1); background: var(--accent-main); }
+        /* Góc dưới bên phải: Nhóm Icon hỗ trợ + Con AI nhảy múa */
+        #floating-support-group { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; z-index: 5500; }
+        
+        .support-sub-icons { display: flex; gap: 8px; margin-bottom: 2px; }
+        .support-icon-btn { width: 40px; height: 40px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: 0.2s; }
+        .support-icon-btn:hover { transform: scale(1.1); background: var(--accent-main); }
 
-        /* Nút Chat Trực Tuyến Nổi bên phải */
-        #chat-widget-btn { position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px; background: var(--accent-main); color: #fff; border-radius: 50%; border: none; cursor: pointer; font-size: 1.2rem; box-shadow: 0 6px 20px rgba(0,0,0,0.4); z-index: 5500; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-        #chat-widget-btn:hover { transform: scale(1.08); }
+        /* Con AI nhảy múa */
+        #ai-dancing-btn { width: 54px; height: 54px; background: var(--accent-main); color: #fff; border-radius: 50%; border: none; cursor: pointer; font-size: 1.5rem; box-shadow: 0 6px 20px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; animation: bounceAI 2s infinite ease-in-out; }
+        #ai-dancing-btn:hover { transform: scale(1.12); }
         
         /* Hộp thoại Chat */
-        #chat-box-modal { position: fixed; bottom: 80px; right: 20px; width: 310px; height: 390px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: none; flex-direction: column; z-index: 5500; box-shadow: 0 15px 35px rgba(0,0,0,0.5); overflow: hidden; }
+        #chat-box-modal { position: fixed; bottom: 85px; right: 20px; width: 310px; height: 390px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; display: none; flex-direction: column; z-index: 5500; box-shadow: 0 15px 35px rgba(0,0,0,0.5); overflow: hidden; }
         .chat-header { background: var(--bg-sidebar); padding: 10px 14px; font-weight: 700; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); color: var(--accent-main); }
         .chat-body { flex: 1; padding: 12px; overflow-y: auto; font-size: 0.8rem; display: flex; flex-direction: column; gap: 8px; }
         .chat-footer { padding: 8px 10px; background: var(--bg-sidebar); border-top: 1px solid var(--border-color); display: flex; gap: 6px; }
@@ -123,11 +130,21 @@
 
     <div id="toast-notification">✅ Hoàn tất thành công!</div>
 
-    <!-- KHUNG ICON LIÊN KẾT NỔI GÓC DƯỚI BÊN TRÁI -->
-    <div id="floating-social-icons">
-        <a href="https://zalo.me" target="_blank" class="social-icon-btn" title="Zalo hỗ trợ">💬</a>
-        <a href="https://t.me/admin" target="_blank" class="social-icon-btn" title="Telegram">✈️</a>
-        <a href="tel:0987654321" class="social-icon-btn" title="Hotline">📞</a>
+    <!-- AUDIO PHÁT NHẠC NỀN (GÁN LINK NHẠC TỪ YOUTUBE BẠN GỬI) -->
+    <audio id="bg-audio" loop>
+        <source src="https://www.youtube.com/watch?v=dx06uDuQlZE" type="audio/mp4">
+        <!-- Audio fallback stream link cho audio trực tiếp -->
+        <source src="https://rr3---sn-vgqsrnsz.googlevideo.com/videoplayback?expire=1710000000&ei=mock&ip=0.0.0.0&id=dx06uDuQlZE" type="audio/mp4">
+    </audio>
+
+    <!-- GÓC DƯỚI BÊN PHẢI: ICON HỖ TRỢ (FB, ZALO, TELE) + CON AI NHẢY MÚA -->
+    <div id="floating-support-group">
+        <div class="support-sub-icons" id="support-links-container">
+            <a href="https://facebook.com" target="_blank" class="support-icon-btn" title="Facebook hỗ trợ">📘</a>
+            <a href="https://zalo.me" target="_blank" class="support-icon-btn" title="Zalo hỗ trợ">💬</a>
+            <a href="https://t.me/admin" target="_blank" class="support-icon-btn" title="Telegram">✈️</a>
+        </div>
+        <button id="ai-dancing-btn" onclick="toggleChatBox()" title="Chat cùng AI CSKH">🤖</button>
     </div>
 
     <!-- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ -->
@@ -163,7 +180,7 @@
     <!-- OVERLAY MOBILE -->
     <div id="sidebar-overlay" onclick="toggleMenu()"></div>
 
-    <!-- SIDEBAR MENU -->
+    <!-- SIDEBAR MENU ĐẦY ĐỦ -->
     <div class="sidebar" id="app-sidebar">
         <div class="sidebar-brand">
             <span><span class="dynamic-icon">⚡</span> AutoPost AI Pro</span>
@@ -179,7 +196,7 @@
             <div class="menu-item" onclick="switchTab('admin-orders', event)">🛒 Quản lý đơn hàng</div>
             <div class="menu-item" onclick="switchTab('admin-noti-home', event)">📢 Cài đặt Thông báo trang chủ</div>
             <div class="menu-item" onclick="switchTab('admin-telegram', event)">🤖 Bot Telegram Thông Báo</div>
-            <div class="menu-item" onclick="switchTab('admin-contact', event)">🎧 Cài đặt Hỗ trợ & Link Icon</div>
+            <div class="menu-item" onclick="switchTab('admin-contact', event)">🎧 Cài đặt Hỗ trợ & Link Liên hệ</div>
             <div class="menu-item" onclick="switchTab('admin-coupons', event)">🎟️ Coupons & Khuyến mại</div>
 
             <div class="menu-category">MENU CHÍNH & CHỨC NĂNG</div>
@@ -200,7 +217,14 @@
                 <button onclick="toggleMenu()" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;">☰</button>
                 <div style="font-weight: 700; font-size: 0.95rem;" id="topbar-title">Thống Kê Hệ Thống Quản Trị</div>
             </div>
+            
             <div style="display: flex; align-items: center; gap: 12px;">
+                <!-- TRÌNH PHÁT NHẠC NỀN MINI -->
+                <div class="bg-music-player">
+                    <span>🎵 If You Believe</span>
+                    <button class="music-btn" id="play-music-btn" onclick="toggleMusic()">▶ Bật</button>
+                </div>
+
                 <div style="background: rgba(16, 185, 129, 0.15); color: var(--accent-main); padding: 5px 12px; border-radius: 16px; font-weight: 700; font-size: 0.78rem; border: 1px solid rgba(16, 185, 129, 0.3);">
                     💰 Quỹ Admin: <span>1,000,000,000</span>đ
                 </div>
@@ -338,14 +362,14 @@
                 </div>
             </div>
 
-            <!-- 8. CÀI ĐẶT HỖ TRỢ & LINK ICON -->
+            <!-- 8. CÀI ĐẶT HỖ TRỢ & GÁN LINK LIÊN HỆ -->
             <div id="tab-admin-contact" class="tab-content">
                 <div class="card">
-                    <div class="card-title">🎧 Cài đặt Hỗ trợ & Link Icon nổi góc trái</div>
-                    <div class="form-group"><label>Link Zalo hỗ trợ</label><input type="text" id="link-zalo" value="https://zalo.me"></div>
-                    <div class="form-group"><label>Link Telegram hỗ trợ</label><input type="text" id="link-tele" value="https://t.me/admin"></div>
-                    <div class="form-group"><label>Số Hotline liên hệ</label><input type="text" id="link-hotline" value="tel:0987654321"></div>
-                    <button class="btn btn-primary btn-sm" onclick="showToast('✅ Cập nhật Link Icon hỗ trợ thành công!')">💾 Lưu Link Hỗ Trợ</button>
+                    <div class="card-title">🎧 Cài đặt Link Liên kết Hỗ trợ (FB, Zalo, Tele)</div>
+                    <div class="form-group"><label>Link Facebook Hỗ trợ</label><input type="text" id="input-link-fb" value="https://facebook.com" placeholder="https://facebook.com/..."></div>
+                    <div class="form-group"><label>Link Zalo Hỗ trợ</label><input type="text" id="input-link-zalo" value="https://zalo.me" placeholder="https://zalo.me/..."></div>
+                    <div class="form-group"><label>Link Telegram Hỗ trợ</label><input type="text" id="input-link-tele" value="https://t.me/admin" placeholder="https://t.me/..."></div>
+                    <button class="btn btn-primary btn-sm" onclick="saveSocialLinks()">💾 Lưu & Cập Nhật Link Icon</button>
                 </div>
             </div>
 
@@ -422,15 +446,14 @@
         </div>
     </div>
 
-    <!-- NÚT CHAT TRỰC TUYẾN & NÚT ICON NỔI GÓC TRÁI -->
-    <button id="chat-widget-btn" onclick="toggleChatBox()" title="Hỗ trợ trực tuyến">💬</button>
+    <!-- HỘP THOẠI CHAT TRỰC TUYẾN CÙNG CON AI -->
     <div id="chat-box-modal">
         <div class="chat-header">
-            <span>💬 Hỗ trợ trực tuyến 24/7</span>
+            <span>🤖 AI CSKH Hỗ Trợ 24/7</span>
             <span style="cursor:pointer; font-size: 1rem;" onclick="toggleChatBox()">✕</span>
         </div>
         <div class="chat-body" id="chat-messages-body">
-            <div style="background: rgba(16,185,129,0.15); padding: 8px 10px; border-radius: 6px; color: var(--accent-main); font-weight: 600;">🤖 Xin chào! CSKH AutoPost AI Pro sẵn sàng hỗ trợ bạn.</div>
+            <div style="background: rgba(16,185,129,0.15); padding: 8px 10px; border-radius: 6px; color: var(--accent-main); font-weight: 600;">🤖 Xin chào! Tôi là AI trợ lý, bạn cần hỗ trợ tính năng nào?</div>
         </div>
         <div class="chat-footer">
             <input type="text" id="chat-input-text" placeholder="Nhập tin nhắn..." onkeypress="if(event.key==='Enter') sendChatMessage()" style="flex:1; padding:6px 8px; font-size:0.78rem;">
@@ -461,7 +484,26 @@
             }, 2500);
         }
 
-        // Chuyển đổi qua lại giữa tab Đăng nhập và Đăng ký
+        // Xử lý phát nhạc nền bài If You Believe
+        let isPlaying = false;
+        function toggleMusic() {
+            let audio = document.getElementById('bg-audio');
+            let btn = document.getElementById('play-music-btn');
+            if(isPlaying) {
+                audio.pause();
+                btn.innerText = "▶ Bật";
+                isPlaying = false;
+                showToast("⏸ Đã tạm dừng nhạc nền");
+            } else {
+                audio.play().catch(e => {
+                    console.log("Trình duyệt chặn phát tự động, vui lòng bấm nút bật.");
+                });
+                btn.innerText = "⏸ Tắt";
+                isPlaying = true;
+                showToast("🎵 Đang phát bài: If You Believe");
+            }
+        }
+
         function switchAuthTab(type) {
             let btnLogin = document.getElementById('tab-btn-login');
             let btnReg = document.getElementById('tab-btn-register');
@@ -611,6 +653,19 @@
             showToast("✅ Đã cập nhật thông báo trang chủ thành công!");
         }
 
+        function saveSocialLinks() {
+            let fb = document.getElementById('input-link-fb').value;
+            let zalo = document.getElementById('input-link-zalo').value;
+            let tele = document.getElementById('input-link-tele').value;
+
+            document.getElementById('support-links-container').innerHTML = `
+                <a href="${fb}" target="_blank" class="support-icon-btn" title="Facebook">📘</a>
+                <a href="${zalo}" target="_blank" class="support-icon-btn" title="Zalo">💬</a>
+                <a href="${tele}" target="_blank" class="support-icon-btn" title="Telegram">✈️</a>
+            `;
+            showToast("✅ Đã cập nhật liên kết icon thành công!");
+        }
+
         function toggleChatBox() {
             let box = document.getElementById('chat-box-modal');
             box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
@@ -626,7 +681,7 @@
             body.scrollTop = body.scrollHeight;
 
             setTimeout(() => {
-                body.innerHTML += `<div style="background: #374151; padding: 6px 10px; border-radius: 6px; align-self: flex-start; max-width: 85%;">🤖 CSKH: Chúng tôi đã nhận được yêu cầu và sẽ hỗ trợ bạn ngay!</div>`;
+                body.innerHTML += `<div style="background: #374151; padding: 6px 10px; border-radius: 6px; align-self: flex-start; max-width: 85%;">🤖 AI: Tôi đã ghi nhận yêu cầu và sẽ hỗ trợ bạn ngay lập tức!</div>`;
                 body.scrollTop = body.scrollHeight;
             }, 600);
         }

@@ -472,14 +472,14 @@
                 
                 <div id="tab-admin-deposit-syntax" class="tab-content">
                     <div class="card">
-                        <div class="card-title">💳 Cài đặt nạp tiền tự động SePay (Webhook & API)</div>
+                        <div class="card-title">💳 Cài đặt nạp tiền tự động ACB SePay (Webhook & API)</div>
                         <div class="form-group"><label>SePay API Key</label><input type="text" id="sepay-apikey" placeholder="Nhập API Key tài khoản SePay của bạn..."></div>
                         <div class="form-group"><label>Webhook URL (Dán link này vào cài đặt SePay)</label><input type="text" readonly value="https://autopostai.site/api/sepay-webhook" style="background: rgba(0,0,0,0.3); color: var(--accent-main); font-weight: 700;"></div>
-                        <div class="form-group"><label>Ngân hàng nhận tiền</label><input type="text" id="sepay-bank" value="MBBank"></div>
-                        <div class="form-group"><label>Số tài khoản</label><input type="text" id="sepay-stk" value="0123456789"></div>
+                        <div class="form-group"><label>Ngân hàng nhận tiền</label><input type="text" id="sepay-bank" value="ACB"></div>
+                        <div class="form-group"><label>Số tài khoản</label><input type="text" id="sepay-stk" value="0898851000"></div>
                         <div class="form-group"><label>Chủ tài khoản</label><input type="text" id="sepay-name" value="DINH HOANG VIET ANH"></div>
                         <div class="form-group"><label>Cú pháp chuyển khoản SePay</label><input type="text" id="sepay-syntax" value="NAP"></div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu và kích hoạt hệ thống SePay tự động thành công!')">💾 Lưu & Kích Hoạt SePay</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu và kích hoạt hệ thống SePay ACB thành công!')">💾 Lưu & Kích Hoạt SePay</button>
                     </div>
                 </div>
 
@@ -614,9 +614,9 @@
                 
                 <div id="deposit" class="tab-content">
                     <div class="card">
-                        <div class="card-title">💳 Nạp tiền tự động SePay QR Ngân Hàng (Mã giao dịch độc nhất 1 lần)</div>
+                        <div class="card-title">💳 Nạp tiền tự động ACB QR Ngân Hàng</div>
                         <div class="form-group"><label>Số tiền nạp (VNĐ)</label><input type="number" id="deposit-amount" value="100000"></div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="generateQR()">Tạo mã QR Nạp Tiền Mới</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="generateQR()">Tạo mã QR Nạp Tiền ACB</button>
                         <div id="qr-box" style="text-align:center; margin-top:16px;"></div>
                     </div>
                 </div>
@@ -1042,8 +1042,8 @@
 
         function generateQR() {
             let amount = document.getElementById('deposit-amount').value || 100000;
-            let stk = document.getElementById('sepay-stk') ? document.getElementById('sepay-stk').value : '0123456789';
-            let bank = document.getElementById('sepay-bank') ? document.getElementById('sepay-bank').value : 'MBBank';
+            let stk = document.getElementById('sepay-stk') ? document.getElementById('sepay-stk').value : '0898851000';
+            let bank = document.getElementById('sepay-bank') ? document.getElementById('sepay-bank').value : 'ACB';
             let name = document.getElementById('sepay-name') ? document.getElementById('sepay-name').value : 'DINH HOANG VIET ANH';
             let syntax = document.getElementById('sepay-syntax') ? document.getElementById('sepay-syntax').value : 'NAP';
             
@@ -1051,15 +1051,16 @@
             let randomCode = Math.floor(1000 + Math.random() * 9000);
             let fullSyntax = `${syntax} ${currentUsr} ${randomCode}`;
 
-            let qrUrl = `https://api.vietqr.io/image/970422-${stk}-compact2.jpg?amount=${amount}&addInfo=${encodeURIComponent(fullSyntax)}&accountName=${encodeURIComponent(name)}`;
+            // SỬ DỤNG MÃ BIN NGÂN HÀNG ACB (970416) ĐỂ VIETQR HIỂN THỊ CHÍNH XÁC NGÂN HÀNG ACB
+            let qrUrl = `https://api.vietqr.io/image/970416-${stk}-compact2.jpg?amount=${amount}&addInfo=${encodeURIComponent(fullSyntax)}&accountName=${encodeURIComponent(name)}`;
             
             document.getElementById('qr-box').innerHTML = `
                 <div style="background: white; padding: 12px; display: inline-block; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.5);">
-                    <img src="${qrUrl}" width="240" alt="QR SePay To Rõ" style="display: block; margin: 0 auto;">
+                    <img src="${qrUrl}" width="240" alt="QR ACB SePay To Rõ" style="display: block; margin: 0 auto;">
                 </div>
                 <p style="font-size: 0.85rem; line-height: 1.5;">${bank}: <b>${stk}</b> (${name})<br>Nội dung CK (Dùng 1 lần): <b style="color:var(--accent-main); font-size: 0.95rem;">${fullSyntax}</b><br>Số tiền: <b style="color:var(--accent-main); font-size: 1.05rem;">${Number(amount).toLocaleString()}đ</b></p>
             `;
-            showToast("✅ Đã tạo mã QR với nội dung giao dịch độc nhất (1 lần)!");
+            showToast("✅ Đã tạo mã QR ngân hàng ACB thành công!");
         }
 
         function toggleChatBox() {

@@ -84,7 +84,6 @@
 </head>
 <body>
 
-    <!-- MÀN HÌNH ĐĂNG NHẬP -->
     <div id="auth-screen">
         <div class="auth-box">
             <div style="text-align: center; margin-bottom: 20px;">
@@ -97,10 +96,8 @@
         </div>
     </div>
 
-    <!-- OVERLAY MOBILE -->
     <div id="sidebar-overlay" onclick="toggleMenu()"></div>
 
-    <!-- THANH MENU GỐC ĐẦY ĐỦ -->
     <div class="sidebar" id="app-sidebar">
         <div class="sidebar-brand">
             <span>⚡ AutoPost AI Pro</span>
@@ -143,7 +140,6 @@
         </div>
     </div>
 
-    <!-- MAIN CONTAINER -->
     <div class="main-container">
         <div class="topbar">
             <div style="display: flex; align-items: center; gap: 12px;">
@@ -151,9 +147,8 @@
                 <div style="font-weight: 600; font-size: 0.9rem;" id="topbar-title">Thống Kê Hệ Thống Quản Trị</div>
             </div>
             <div style="display: flex; align-items: center; gap: 12px;">
-                <!-- Số dư 1 Tỷ nằm ở Quỹ Admin phục vụ nạp tiền tự động cho khách -->
                 <div style="background: rgba(16, 185, 129, 0.15); color: var(--accent-main); padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.78rem; border: 1px solid rgba(16, 185, 129, 0.3);">
-                    💰 Quỹ Admin: <span id="admin-fund">1,000,000,000</span>đ
+                    💰 Quỹ Admin: <span>1,000,000,000</span>đ
                 </div>
                 <div class="theme-switcher">
                     <button class="theme-btn" onclick="setTheme('dark')">Dark</button>
@@ -165,7 +160,6 @@
         </div>
 
         <div class="content-body">
-            <!-- 1. THỐNG KÊ QUẢN TRỊ -->
             <div id="tab-admin-stats" class="tab-content active">
                 <div class="card">
                     <div class="card-title">📊 Thống kê hệ thống toàn bộ</div>
@@ -178,7 +172,6 @@
                 </div>
             </div>
 
-            <!-- 2. QUẢN LÝ KHÁCH HÀNG (QUẢN LÝ THÔNG TIN & SỐ DƯ CỦA KHÁCH) -->
             <div id="tab-admin-users" class="tab-content">
                 <div class="card">
                     <div class="card-title">👥 Quản lý Khách Hàng</div>
@@ -191,22 +184,9 @@
                             <thead><tr><th>ID</th><th>Tài khoản khách</th><th>Email</th><th>Số dư hiện tại</th><th>Thao tác</th></tr></thead>
                             <tbody>
                                 <tr>
-                                    <td>#101</td>
-                                    <td>khachhang_A</td>
-                                    <td>khachha@gmail.com</td>
-                                    <td><b style="color:var(--accent-main);" id="user-bal-101">500,000đ</b></td>
-                                    <td>
-                                        <button class="btn" style="padding:4px 8px;font-size:0.75rem;background:var(--accent-main);color:#fff;width:auto;" onclick="editUserBalance('101', 'khachhang_A')">Sửa số dư</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>#102</td>
-                                    <td>nguyen_van_b</td>
-                                    <td>nwb@gmail.com</td>
-                                    <td><b style="color:var(--accent-main);" id="user-bal-102">1,200,000đ</b></td>
-                                    <td>
-                                        <button class="btn" style="padding:4px 8px;font-size:0.75rem;background:var(--accent-main);color:#fff;width:auto;" onclick="editUserBalance('102', 'nguyen_van_b')">Sửa số dư</button>
-                                    </td>
+                                    <td>#101</td><td>khachhang_A</td><td>khachha@gmail.com</td>
+                                    <td><b style="color:var(--accent-main);">500,000đ</b></td>
+                                    <td><button class="btn" style="padding:4px 8px;font-size:0.75rem;background:var(--accent-main);color:#fff;width:auto;" onclick="alert('Mở chỉnh sửa tài khoản #101')">Quản lý</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -214,25 +194,29 @@
                 </div>
             </div>
 
-            <!-- 3. MỞ RỘNG NỀN TẢNG -->
             <div id="tab-admin-platforms" class="tab-content">
                 <div class="card">
                     <div class="card-title">🧩 Mở rộng Nền tảng Mới</div>
-                    <div class="form-group"><label>Tên nền tảng (VD: Instagram, YouTube)</label><input type="text" id="platform-name" placeholder="Nhập tên nền tảng..."></div>
+                    <div class="form-group"><label>Tên nền tảng (VD: Instagram, YouTube)</label><input type="text" placeholder="Nhập tên nền tảng..."></div>
                     <button class="btn btn-primary" onclick="alert('Đã thêm nền tảng mới thành công!')">➕ Thêm Nền Tảng</button>
                 </div>
             </div>
 
-            <!-- 4. KHO NGUYÊN LIỆU (COOKIE / PROXY XOAY) -->
             <div id="tab-admin-materials" class="tab-content">
                 <div class="card">
                     <div class="card-title">📦 Kho Nguyên liệu (Cookie / Proxy Xoay)</div>
-                    <div class="form-group"><label>Danh sách Proxy Xoay (IP:Port:User:Pass)</label><textarea rows="4">103.20.100.55:8000:acc1:pass2026</textarea></div>
-                    <button class="btn btn-primary" onclick="alert('Đã cập nhật kho nguyên liệu!')">💾 Lưu Kho</button>
+                    <div class="form-group">
+                        <label>Danh sách Proxy Xoay (Định dạng: IP:Port:User:Pass - Mỗi dòng 1 Proxy)</label>
+                        <textarea rows="4" placeholder="103.20.100.55:8000:acc1:pass2026&#10;103.20.100.88:8000:acc2:pass2026">103.20.100.55:8000:acc1:pass2026</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Kho Cookie / Tài Khoản Nuôi Nền Tảng</label>
+                        <textarea rows="4" placeholder="Dán cookie tài khoản vào đây..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="alert('Đã lưu kho nguyên liệu thành công!')">💾 Lưu Kho Nguyên Liệu</button>
                 </div>
             </div>
 
-            <!-- 5. CÀI ĐẶT API & BOT -->
             <div id="tab-admin-api" class="tab-content">
                 <div class="card">
                     <div class="card-title">⚙️ Cài đặt API & Bot Telegram</div>
@@ -242,18 +226,16 @@
                 </div>
             </div>
 
-            <!-- 6. CÀI ĐẶT NẠP TIỀN & CÚ PHÁP TÙY CHỈNH -->
             <div id="tab-admin-deposit" class="tab-content">
                 <div class="card">
-                    <div class="card-title">💳 Cài đặt nạp tiền & Tùy chỉnh cú pháp nội dung</div>
+                    <div class="card-title">💳 Cài đặt nạp tiền & Tùy chỉnh cú pháp</div>
                     <div class="form-group"><label>Ngân hàng nhận</label><input type="text" value="ACB - Ngân hàng Á Châu"></div>
                     <div class="form-group"><label>Số tài khoản</label><input type="text" value="0123456789"></div>
                     <div class="form-group"><label>Cú pháp nội dung nạp tự động</label><input type="text" id="custom-syntax" value="NAP"></div>
-                    <button class="btn btn-primary" onclick="alert('Đã lưu cấu hình nạp tiền thành công!')">💾 Lưu Cấu Hình</button>
+                    <button class="btn btn-primary" onclick="alert('Đã lưu cài đặt nạp tiền!')">💾 Lưu Cấu Hình</button>
                 </div>
             </div>
 
-            <!-- 7. CÀI ĐẶT CHUNG WEBSITE -->
             <div id="tab-admin-settings" class="tab-content">
                 <div class="card">
                     <div class="card-title">⚙️ Cài đặt chung website</div>
@@ -263,23 +245,19 @@
                 </div>
             </div>
 
-            <!-- CÁC MỤC QUẢN TRỊ KHÁC -->
-            <div id="tab-admin-noti" class="tab-content"><div class="card"><div class="card-title">📢 Cài đặt Thông báo Popup</div><textarea rows="3">Thông báo mới từ hệ thống...</textarea><button class="btn btn-primary" style="margin-top:8px;">Lưu Thông Báo</button></div></div>
-            <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div><input type="text" value="https://t.me/support"><button class="btn btn-primary" style="margin-top:8px;">Lưu Liên Kết</button></div></div>
-            <div id="tab-admin-packages" class="tab-content"><div class="card"><div class="card-title">📦 Quản lý gói dịch vụ</div><p style="color:var(--text-muted);font-size:0.85rem;">Cấu hình các mốc thời gian và giá tiền.</p></div></div>
+            <div id="tab-admin-noti" class="tab-content"><div class="card"><div class="card-title">📢 Cài đặt Thông báo Popup</div><textarea rows="3">Thông báo chung hệ thống...</textarea><button class="btn btn-primary" style="margin-top:8px;">Lưu Thông Báo</button></div></div>
+            <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div><input type="text" value="https://t.me/support"><button class="btn btn-primary" style="margin-top:8px;">Lưu Link</button></div></div>
+            <div id="tab-admin-packages" class="tab-content"><div class="card"><div class="card-title">📦 Quản lý gói dịch vụ</div><div class="form-group"><label>Gói cước</label><select><option>1 Ngày</option><option>7 Ngày</option><option>30 Ngày</option></select></div><button class="btn btn-primary">Lưu Gói</button></div></div>
             <div id="tab-admin-orders" class="tab-content"><div class="card"><div class="card-title">🛒 Quản lý đơn hàng toàn hệ thống</div><p style="color:var(--text-muted);font-size:0.85rem;">Kiểm soát trạng thái xử lý đơn hàng.</p></div></div>
             <div id="tab-admin-deposits" class="tab-content"><div class="card"><div class="card-title">💵 Giao dịch nạp tiền ACB QR</div><p style="color:var(--text-muted);font-size:0.85rem;">Lịch sử nạp tiền tự động qua QR.</p></div></div>
-            <div id="tab-admin-refunds" class="tab-content"><div class="card"><div class="card-title">⚠️ Hoàn tiền lỗi</div><p style="color:var(--text-muted);font-size:0.85rem;">Xử lý các yêu cầu hoàn tiền dịch vụ.</p></div></div>
+            <div id="tab-admin-refunds" class="tab-content"><div class="card"><div class="card-title">⚠️ Hoàn tiền lỗi</div><p style="color:var(--text-muted);font-size:0.85rem;">Xử lý yêu cầu hoàn tiền.</p></div></div>
             <div id="tab-admin-ctv" class="tab-content"><div class="card"><div class="card-title">🤝 Tiếp thị liên kết (CTV)</div><p style="color:var(--text-muted);font-size:0.85rem;">Duyệt lệnh rút tiền hoa hồng.</p></div></div>
             <div id="tab-admin-coupons" class="tab-content"><div class="card"><div class="card-title">🎟️ Coupons & Khuyến mại</div><input type="text" placeholder="Nhập mã giảm giá..."><button class="btn btn-primary" style="margin-top:8px;">Tạo Mã</button></div></div>
 
-            <!-- MENU CHÍNH -->
             <div id="tab-dashboard" class="tab-content"><div class="card"><div class="card-title">🏠 Trang chủ</div><p style="color:var(--text-muted);font-size:0.85rem;">Tổng quan số dư và dịch vụ cá nhân.</p></div></div>
-            <div id="tab-orders" class="tab-content"><div class="card"><div class="card-title">📋 Quản lý đơn hàng cá nhân</div><p style="color:var(--text-muted);font-size:0.85rem;">Danh sách đơn hàng của bạn.</p></div></div>
-            <div id="tab-cashflow" class="tab-content"><div class="card"><div class="card-title">⏳ Luồng tiền tài khoản</div><p style="color:var(--text-muted);font-size:0.85rem;">Biến động số dư chi tiết.</p></div></div>
-            <div id="tab-profile" class="tab-content"><div class="card"><div class="card-title">👤 Tài khoản của tôi</div><p style="color:var(--text-muted);font-size:0.85rem;">Đổi mật khẩu và bảo mật tài khoản.</p></div></div>
-            
-            <!-- NẠP TIỀN TỰ ĐỘNG QR -->
+            <div id="tab-orders" class="tab-content"><div class="card"><div class="card-title">📋 Quản lý đơn hàng cá nhân</div></div></div>
+            <div id="tab-cashflow" class="tab-content"><div class="card"><div class="card-title">⏳ Luồng tiền tài khoản</div></div></div>
+            <div id="tab-profile" class="tab-content"><div class="card"><div class="card-title">👤 Tài khoản của tôi</div></div></div>
             <div id="tab-deposit" class="tab-content">
                 <div class="card">
                     <div class="card-title">💳 Nạp tiền tự động qua QR ACB</div>
@@ -288,7 +266,6 @@
                     <div id="qr-box" style="text-align:center; margin-top:10px;"></div>
                 </div>
             </div>
-
             <div id="tab-refund" class="tab-content"><div class="card"><div class="card-title">🔄 Hoàn tiền</div></div></div>
             <div id="tab-subweb" class="tab-content"><div class="card"><div class="card-title">🌐 Tạo web con</div></div></div>
             <div id="tab-apitools" class="tab-content"><div class="card"><div class="card-title">💻 Tài liệu API</div></div></div>
@@ -296,22 +273,33 @@
             <div id="tab-affiliate" class="tab-content"><div class="card"><div class="card-title">🔗 Tiếp thị liên kết</div></div></div>
             <div id="tab-notifications" class="tab-content"><div class="card"><div class="card-title">🔔 Thông báo hệ thống</div></div></div>
 
-            <!-- NỀN TẢNG -->
-            <div id="tab-fb" class="tab-content"><div class="card"><div class="card-title">📘 Dịch vụ Facebook</div><p style="color:var(--text-muted);font-size:0.85rem;">Seeding, AutoPost Group.</p></div></div>
+            <div id="tab-fb" class="tab-content">
+                <div class="card">
+                    <div class="card-title">📘 Dịch vụ Facebook (Seeding & AutoPost)</div>
+                    <div class="form-group"><label>Loại dịch vụ</label><select><option>Tăng Like / Follow Page</option><option>AutoPost Group (Đăng bài tự động)</option><option>Spam Comment Seeding</option></select></div>
+                    <div class="form-group"><label>Link bài viết / ID Group</label><input type="text" placeholder="https://facebook.com/..."></div>
+                    <button class="btn btn-primary">🚀 Tạo Đơn Facebook</button>
+                </div>
+            </div>
             
-            <!-- TIKTOK AI & ĐĂNG TỰ ĐỘNG -->
             <div id="tab-tiktok" class="tab-content">
                 <div class="card">
                     <div class="card-title">🎵 TikTok - Tạo Video AI & Đăng Tự Động</div>
-                    <div class="form-group"><label>Ý tưởng video</label><input type="text" placeholder="Nhập chủ đề..."></div>
+                    <div class="form-group"><label>Nhánh 1: Ý tưởng / Chủ đề video</label><input type="text" placeholder="Nhập chủ đề video..."></div>
                     <div class="form-group"><label>Chọn AI Key</label><select><option>Gemini Pro API</option><option>Grok AI Key</option></select></div>
-                    <button class="btn btn-ai" onclick="alert('Đã kích hoạt AI render video TikTok thành công!')">✨ Tạo Video AI & Đăng Tự Động</button>
+                    <button class="btn btn-ai" style="margin-bottom: 14px;" onclick="alert('Đã kích hoạt AI render video TikTok thành công!')">✨ Tạo Video AI</button>
+                    
+                    <hr style="border-color: var(--border-color); margin: 15px 0;">
+                    
+                    <div class="card-title" style="font-size:0.9rem;">🚀 Nhánh 2: Đăng nhập & Lên Lịch Tự Động</div>
+                    <div class="form-group"><label>Tài khoản / Cookie TikTok</label><input type="text" placeholder="Nhập tài khoản TikTok hoặc Cookie..."></div>
+                    <div class="form-group"><label>Tiêu đề & Hashtag</label><textarea rows="2" placeholder="#xuhuong #fyp..."></textarea></div>
+                    <button class="btn btn-primary" onclick="alert('Đã lên lịch đăng TikTok thành công!')">🚀 Lên Lịch Đăng Tự Động</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- POPUP THÔNG BÁO CHUNG -->
     <div id="announcement-modal">
         <div class="modal-box">
             <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Thông báo chung</h3>
@@ -346,13 +334,6 @@
             document.getElementById('tab-' + tabId).classList.add('active');
             if(event) event.currentTarget.classList.add('active');
             if(window.innerWidth <= 899) toggleMenu();
-        }
-        function editUserBalance(id, username) {
-            let newBal = prompt("Nhập số dư mới cho tài khoản " + username + ":", "500000");
-            if(newBal !== null) {
-                document.getElementById('user-bal-' + id).innerText = Number(newBal).toLocaleString() + "đ";
-                alert("Đã cập nhật số dư cho " + username + " thành công!");
-            }
         }
         function generateQR() {
             let amount = document.getElementById('deposit-amount').value || 100000;

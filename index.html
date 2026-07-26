@@ -157,7 +157,6 @@
         .action-option:last-child { border-bottom: none; }
         .action-option:hover { background-color: rgba(16, 185, 129, 0.2); color: var(--accent-main); }
 
-        /* ICON HÌNH ẢNH MẠNG XÃ HỘI CHUẨN XÁC Ở GÓC MÀN HÌNH */
         #floating-support-group { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; z-index: 5500; }
         .support-icon-img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border: 2px solid var(--accent-main); transition: 0.3s; background: #fff; display: block; }
         .support-icon-img:hover { transform: scale(1.15) rotate(10deg); }
@@ -187,7 +186,6 @@
         <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- NÚT ICON ẢNH THẬT CHUẨN XÁC ZALO & TELEGRAM -->
     <div id="floating-support-group">
         <a href="https://zalo.me/0898851000" target="_blank" title="Hỗ trợ Zalo: 0898851000">
             <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_Zalo.svg" class="support-icon-img" alt="Zalo">
@@ -616,9 +614,9 @@
                 
                 <div id="deposit" class="tab-content">
                     <div class="card">
-                        <div class="card-title">💳 Nạp tiền tự động SePay QR Ngân Hàng</div>
+                        <div class="card-title">💳 Nạp tiền tự động SePay QR Ngân Hàng (Mã giao dịch độc nhất 1 lần)</div>
                         <div class="form-group"><label>Số tiền nạp (VNĐ)</label><input type="number" id="deposit-amount" value="100000"></div>
-                        <button class="btn btn-primary btn-sm" onclick="generateQR()">Tạo mã QR Nạp Tiền</button>
+                        <button class="btn btn-primary btn-sm" onclick="generateQR()">Tạo mã QR Nạp Tiền Mới</button>
                         <div id="qr-box" style="text-align:center; margin-top:16px;"></div>
                     </div>
                 </div>
@@ -1044,13 +1042,16 @@
 
         function generateQR() {
             let amount = document.getElementById('deposit-amount').value || 100000;
-            let stk = document.getElementById('sepay-stk') ? document.getElementById('sepay-stk').value : '0123456789';
+            let stk = document.getElementById('sepay-stk') ? document.getElementById('sepay-stk'].value : '0123456789';
             let bank = document.getElementById('sepay-bank') ? document.getElementById('sepay-bank').value : 'MBBank';
             let name = document.getElementById('sepay-name') ? document.getElementById('sepay-name').value : 'DINH HOANG VIET ANH';
             let syntax = document.getElementById('sepay-syntax') ? document.getElementById('sepay-syntax').value : 'NAP';
             
             let currentUsr = localStorage.getItem('currentUsername') || 'thanhvien_pro';
-            let fullSyntax = `${syntax} ${currentUsr}`;
+            
+            // TẠO MÃ GIAO DỊCH NGẪU NHIÊN 4 CHỮ SỐ MỚI ĐỘC NHẤT MỖI LẦN BẤM TẠO QR
+            let randomCode = Math.floor(1000 + Math.random() * 9000);
+            let fullSyntax = `${syntax} ${currentUsr} ${randomCode}`;
 
             let qrUrl = `https://api.vietqr.io/image/970422-${stk}-compact2.jpg?amount=${amount}&addInfo=${encodeURIComponent(fullSyntax)}&accountName=${encodeURIComponent(name)}`;
             
@@ -1058,9 +1059,9 @@
                 <div style="background: white; padding: 12px; display: inline-block; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.5);">
                     <img src="${qrUrl}" width="240" alt="QR SePay To Rõ" style="display: block; margin: 0 auto;">
                 </div>
-                <p style="font-size: 0.85rem; line-height: 1.5;">${bank}: <b>${stk}</b> (${name})<br>Nội dung CK chuẩn: <b style="color:var(--accent-main); font-size: 0.95rem;">${fullSyntax}</b><br>Số tiền: <b style="color:var(--accent-main); font-size: 1.05rem;">${Number(amount).toLocaleString()}đ</b></p>
+                <p style="font-size: 0.85rem; line-height: 1.5;">${bank}: <b>${stk}</b> (${name})<br>Nội dung CK (Dùng 1 lần): <b style="color:var(--accent-main); font-size: 0.95rem;">${fullSyntax}</b><br>Số tiền: <b style="color:var(--accent-main); font-size: 1.05rem;">${Number(amount).toLocaleString()}đ</b></p>
             `;
-            showToast("✅ Đã tạo mã QR nạp tiền nhận diện tài khoản!");
+            showToast("✅ Đã tạo mã QR với nội dung giao dịch độc nhất (1 lần)!");
         }
 
         function toggleChatBox() {

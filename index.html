@@ -27,60 +27,46 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
 
-        /* MODAL THÔNG BÁO CHÍNH GIỮA HIỆN ĐẠI */
-        #custom-alert-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 9000; padding: 20px; }
-        .custom-alert-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 18px; width: 100%; max-width: 380px; padding: 28px 22px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.7); animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes scaleUp { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .custom-alert-icon { font-size: 2.8rem; margin-bottom: 12px; display: block; }
-        .custom-alert-title { font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
-        .custom-alert-msg { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 22px; }
-        .custom-alert-btn { width: 100%; padding: 12px; background: var(--accent-main); color: #fff; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; font-size: 0.92rem; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.35); transition: 0.2s; }
-        .custom-alert-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        #toast-notification { position: fixed; bottom: 25px; right: 25px; background: var(--accent-main); color: #fff; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; box-shadow: 0 10px 25px rgba(0,0,0,0.4); display: none; z-index: 6000; align-items: center; gap: 8px; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         .dynamic-icon { display: inline-block; animation: pulseIcon 2s infinite ease-in-out; }
         @keyframes pulseIcon { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
-        /* MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ SANG TRỌNG */
         #auth-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: linear-gradient(135deg, #050811 0%, #0B0F19 50%, #111827 100%);
-            display: flex; align-items: center; justify-content: center; z-index: 5000; padding: 20px; overflow-y: auto;
+            display: flex; align-items: center; justify-content: center; z-index: 5000; padding: 20px;
         }
         .auth-card-container {
-            width: 100%; max-width: 420px; background: rgba(31, 41, 55, 0.75);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px;
-            padding: 30px 28px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+            width: 100%; max-width: 420px; background: rgba(31, 41, 55, 0.7);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;
+            padding: 35px 30px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
         }
-        
-        .auth-avatar-box {
-            width: 75px; height: 75px; border-radius: 50%; overflow: hidden; margin: 0 auto 14px auto;
-            border: 2px solid var(--accent-main); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); background: #111827;
-        }
-        .auth-avatar-box img { width: 100%; height: 100%; object-fit: cover; }
-
-        .auth-header { text-align: center; margin-bottom: 20px; }
-        .auth-title { font-size: 1.4rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; margin-bottom: 4px; }
-        .auth-subtitle { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+        .auth-header { text-align: center; margin-bottom: 25px; }
+        .auth-logo-icon { font-size: 2.2rem; margin-bottom: 8px; display: inline-block; }
+        .auth-title { font-size: 1.5rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; margin-bottom: 4px; }
+        .auth-subtitle { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
 
         .auth-tabs-modern {
-            display: flex; background: rgba(17, 24, 39, 0.7); padding: 4px;
-            border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color);
+            display: flex; background: rgba(17, 24, 39, 0.6); padding: 4px;
+            border-radius: 10px; margin-bottom: 22px; border: 1px solid var(--border-color);
         }
         .auth-tab-btn-mod {
             flex: 1; background: none; border: none; color: var(--text-muted);
-            font-weight: 700; font-size: 0.84rem; padding: 9px 0; border-radius: 9px;
+            font-weight: 700; font-size: 0.84rem; padding: 9px 0; border-radius: 8px;
             cursor: pointer; transition: all 0.3s ease; text-align: center;
         }
         .auth-tab-btn-mod.active {
-            background: var(--accent-main); color: #fff; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+            background: var(--accent-main); color: #fff; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
-        .auth-form-group { margin-bottom: 14px; }
+        .auth-form-group { margin-bottom: 16px; }
         .auth-form-group label { display: block; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
         .auth-input-wrapper { position: relative; display: flex; align-items: center; }
         .auth-input-wrapper input {
-            width: 100%; padding: 11px 14px 11px 40px; background: rgba(17, 24, 39, 0.85);
+            width: 100%; padding: 11px 14px 11px 40px; background: rgba(17, 24, 39, 0.8);
             border: 1px solid var(--border-color); border-radius: 10px; color: #fff; font-size: 0.88rem; outline: none; transition: all 0.3s;
         }
         .auth-input-wrapper input:focus {
@@ -91,25 +77,9 @@
         .auth-submit-btn {
             width: 100%; padding: 12px; background: linear-gradient(135deg, var(--accent-main), #059669);
             color: #fff; font-weight: 700; font-size: 0.92rem; border: none; border-radius: 10px;
-            cursor: pointer; transition: all 0.3s; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); margin-top: 4px;
+            cursor: pointer; transition: all 0.3s; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); margin-top: 6px;
         }
         .auth-submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(16, 185, 129, 0.4); }
-
-        .auth-divider { text-align: center; position: relative; margin: 18px 0; }
-        .auth-divider::before { content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: var(--border-color); }
-        .auth-divider span { position: relative; background: #1F2937; padding: 0 12px; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
-
-        .auth-social-row { display: flex; justify-content: center; gap: 12px; margin-bottom: 14px; }
-        .auth-social-btn {
-            width: 44px; height: 44px; border-radius: 50%; background: #111827; border: 1px solid var(--border-color);
-            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; box-shadow: var(--shadow);
-        }
-        .auth-social-btn:hover { transform: scale(1.1); border-color: var(--accent-main); }
-        .auth-social-btn img { width: 22px; height: 22px; object-fit: contain; }
-
-        .auth-footer-links { text-align: center; margin-top: 10px; }
-        .auth-footer-links a { color: var(--accent-main); font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: 0.2s; }
-        .auth-footer-links a:hover { text-decoration: underline; }
 
         .sidebar { width: 260px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; flex-shrink: 0; height: 100%; overflow-y: auto; z-index: 1000; transition: 0.3s; }
         @media(max-width: 899px) {
@@ -207,23 +177,16 @@
         .chat-menu-btn:hover { background: var(--accent-main); color: #fff; }
 
         #announcement-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 4500; padding: 16px; }
-        .modal-box { background: var(--bg-card); border-radius: 12px; width: 100%; max-width: 420px; padding: 22px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); max-height: 85vh; overflow-y: auto; }
+        .modal-box { background: var(--bg-card); border-radius: 12px; width: 100%; max-width: 400px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
         .btn-dong { background: #FFC107; color: #000; font-weight: 700; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; float: right; margin-top: 12px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-    <div id="custom-alert-modal">
-        <div class="custom-alert-box">
-            <span class="custom-alert-icon" id="alert-icon">⚠️</span>
-            <div class="custom-alert-title" id="alert-title">Thông báo</div>
-            <div class="custom-alert-msg" id="alert-msg">Nội dung thông báo chi tiết...</div>
-            <button type="button" class="custom-alert-btn" onclick="closeCustomAlert()">Đã Hiểu</button>
-        </div>
-    </div>
+    <div id="toast-notification">✅ Hoàn tất thành công!</div>
 
     <audio id="bg-audio" loop preload="auto" crossorigin="anonymous">
-        <source src="https://stream.zeno.fm/f3wvbbqmdg8uv" type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
     </audio>
 
     <div id="floating-support-group">
@@ -239,14 +202,13 @@
         <img id="ai-custom-avatar-btn" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" onclick="toggleChatBox()" title="Chat AI CSKH">
     </div>
 
+    <!-- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ -->
     <div id="auth-screen">
         <div class="auth-card-container">
-            <div class="auth-avatar-box">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80" alt="Avatar Admin">
-            </div>
             <div class="auth-header">
-                <h1 class="auth-title">Đăng Nhập Hệ Thống</h1>
-                <p class="auth-subtitle">AutoPost AI Pro — Quản trị & Dịch vụ toàn diện</p>
+                <span class="auth-logo-icon dynamic-icon">⚡</span>
+                <h1 class="auth-title">AutoPost AI Pro</h1>
+                <p class="auth-subtitle">Hệ thống quản trị & điều hành dịch vụ</p>
             </div>
             
             <div class="auth-tabs-modern">
@@ -254,12 +216,13 @@
                 <button type="button" class="auth-tab-btn-mod" id="tab-btn-register" onclick="switchAuthTab('register')">Đăng Ký</button>
             </div>
 
+            <!-- Form Đăng Nhập -->
             <div id="auth-form-login">
                 <div class="auth-form-group">
-                    <label>Tên đăng nhập</label>
+                    <label>Tài khoản</label>
                     <div class="auth-input-wrapper">
                         <span class="auth-input-icon">👤</span>
-                        <input type="text" id="login-username" autocomplete="off" placeholder="Nhập tên đăng nhập...">
+                        <input type="text" id="login-username" autocomplete="off" placeholder="Nhập tài khoản...">
                     </div>
                 </div>
                 <div class="auth-form-group">
@@ -269,20 +232,10 @@
                         <input type="password" id="login-password" autocomplete="new-password" placeholder="Nhập mật khẩu...">
                     </div>
                 </div>
-                <button type="button" class="auth-submit-btn" onclick="handleLogin()">Đăng Nhập</button>
-                
-                <div class="auth-divider"><span>Hoặc đăng nhập nhanh</span></div>
-                <div class="auth-social-row">
-                    <div class="auth-social-btn" onclick="showCustomAlert('Kết nối Facebook', 'Hệ thống đang kết nối OAuth Facebook...', '📘')"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="FB"></div>
-                    <div class="auth-social-btn" onclick="showCustomAlert('Kết nối Telegram', 'Hệ thống đang kết nối Telegram Bot...', '✈️')"><img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="TG"></div>
-                    <div class="auth-social-btn" onclick="showCustomAlert('Kết nối Zalo', 'Hệ thống đang kết nối Zalo OA...', '💬')"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_Zalo.svg" alt="Zalo"></div>
-                </div>
-
-                <div class="auth-footer-links">
-                    <a href="#" onclick="showCustomAlert('Khôi phục mật khẩu', 'Vui lòng liên hệ Admin qua kênh hỗ trợ Zalo/Telegram ở góc màn hình để được cấp lại mật khẩu!', '🔑')">Quên mật khẩu?</a>
-                </div>
+                <button type="button" class="auth-submit-btn" onclick="handleLogin()">Đăng Nhập Ngay</button>
             </div>
 
+            <!-- Form Đăng Ký -->
             <div id="auth-form-register" style="display: none;">
                 <div class="auth-form-group">
                     <label>Tài khoản mới</label>
@@ -310,25 +263,28 @@
         </div>
     </div>
 
+    <!-- OVERLAY MOBILE -->
     <div id="sidebar-overlay" onclick="toggleMenu()"></div>
 
+    <!-- SIDEBAR MENU -->
     <div class="sidebar" id="app-sidebar">
         <div class="sidebar-brand">
             <span><span class="dynamic-icon">⚡</span> AutoPost AI Pro</span>
             <span style="cursor:pointer; font-size: 1.2rem;" onclick="toggleMenu()">✕</span>
         </div>
         <div class="sidebar-menu" id="sidebar-menu-container">
+            <!-- PHẦN DÀNH RIÊNG CHO ADMIN -->
             <div id="admin-menu-section" style="display:none;">
                 <div class="menu-category">QUẢN TRỊ HỆ THỐNG</div>
                 <div class="menu-item active" onclick="switchTab('tab-admin-stats', event)">📊 Thống kê hệ thống</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-users', event)">👥 Quản lý khách hàng</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-platforms', event)">🧩 Mở rộng Nền tảng</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-materials', event)">📦 Kho Nguyên liệu</div>
-                <div class="menu-item" onclick="switchTab('tab-admin-apibot', event)">⚙️ Cài đặt API & Bot Telegram</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-apibot', event)">⚙️ Cài đặt API & Bot</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-aikeys', event)">🔑 Cài đặt Key AI</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-deposit-syntax', event)">💳 Cài đặt nạp tiền & SePay</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-settings', event)">⚙️ Cài đặt chung website</div>
-                <div class="menu-item" onclick="switchTab('tab-admin-noti', event)">📢 Quản lý Thông báo</div>
+                <div class="menu-item" onclick="switchTab('tab-admin-noti', event)">📢 Cài đặt Thông báo</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-contact', event)">🎧 Cài đặt Hỗ trợ</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-packages', event)">📦 Quản lý gói dịch vụ</div>
                 <div class="menu-item" onclick="switchTab('tab-admin-orders', event)">🛒 Quản lý đơn hàng</div>
@@ -356,12 +312,14 @@
             <div class="menu-item" onclick="switchTab('tab-fb', event)"><span class="dynamic-icon">📘</span> Facebook Automation</div>
             <div class="menu-item" onclick="switchTab('tab-tiktok', event)"><span class="dynamic-icon">🎵</span> TikTok (AI & Đăng tự động)</div>
 
+            <!-- Nút Đăng Xuất -->
             <div style="margin-top: 20px; padding-bottom: 10px;">
                 <div class="menu-item logout-btn" onclick="handleLogout()">🚪 Đăng Xuất Tài Khoản</div>
             </div>
         </div>
     </div>
 
+    <!-- MAIN CONTAINER -->
     <div class="main-container">
         <div class="topbar">
             <div style="display: flex; align-items: center; gap: 12px;">
@@ -389,6 +347,7 @@
 
         <div class="content-body">
             <div class="content-inner">
+                <!-- 1. THỐNG KÊ ADMIN -->
                 <div id="tab-admin-stats" class="tab-content active">
                     <div class="card">
                         <div class="card-title">📊 Thống kê hệ thống toàn bộ</div>
@@ -401,6 +360,7 @@
                     </div>
                 </div>
 
+                <!-- 2. QUẢN LÝ KHÁCH HÀNG -->
                 <div id="tab-admin-users" class="tab-content">
                     <div class="card">
                         <div class="card-title">👥 Quản lý Khách Hàng</div>
@@ -412,18 +372,19 @@
                                         <th>ID</th>
                                         <th>Tùy chọn</th>
                                         <th>Tài khoản</th>
-                                        <th>Vai trò</th>
                                         <th>Số dư ví</th>
                                         <th>Ngày đăng ký</th>
                                     </tr>
                                 </thead>
                                 <tbody id="admin-users-table-body">
-                                    </tbody>
+                                    <!-- Render động bằng JS -->
+                                </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
+                <!-- 3. MỞ RỘNG NỀN TẢNG -->
                 <div id="tab-admin-platforms" class="tab-content">
                     <div class="card">
                         <div class="card-title">🧩 Mở rộng Nền tảng & Dịch vụ</div>
@@ -461,19 +422,11 @@
                                 <option value="paused">🟠 Tạm ngưng</option>
                             </select>
                         </div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="saveMaterialData()">💾 Lưu Kho Nguyên Liệu</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã nhập kho nguyên liệu thành công!')">💾 Lưu Kho Nguyên Liệu</button>
                     </div>
                 </div>
 
-                <div id="tab-admin-apibot" class="tab-content">
-                    <div class="card">
-                        <div class="card-title">⚙️ Cài đặt Bot Telegram Nhận Thông Báo</div>
-                        <div class="form-group"><label>Telegram Bot Token</label><input type="text" id="tele-bot-token" placeholder="Ví dụ: 7123456789:AAHxxxxxx..."></div>
-                        <div class="form-group"><label>Telegram Chat ID (ID cá nhân hoặc Group/Channel)</label><input type="text" id="tele-chat-id" placeholder="Ví dụ: 123456789 hoặc -100xxxxxxx..."></div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="saveTelegramConfig()">💾 Lưu Cấu Hình Bot Telegram</button>
-                        <button type="button" class="btn btn-ai btn-sm" style="margin-top: 10px;" onclick="testTelegramBot()">📤 Gửi Tin Nhắn Test Thử</button>
-                    </div>
-                </div>
+                <div id="tab-admin-apibot" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt API & Bot</div><div class="form-group"><label>Token Telegram Bot</label><input type="text" placeholder="Bot token..."></div><button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu cấu hình Bot!')">Lưu Bot</button></div></div>
                 
                 <div id="tab-admin-aikeys" class="tab-content">
                     <div class="card">
@@ -481,51 +434,33 @@
                         <div class="form-group"><label>OpenAI / ChatGPT API Key (Dùng tạo Content Văn bản)</label><input type="text" id="ai-key-openai" placeholder="sk-proj-..."></div>
                         <div class="form-group"><label>Google Gemini API Key (Dùng cho Trợ lý hỗ trợ AI)</label><input type="text" id="ai-key-gemini" placeholder="AIzaSy..."></div>
                         <div class="form-group"><label>Midjourney / Runway / DALL-E API Key (Dùng tạo Video & Ảnh AI)</label><input type="text" id="ai-key-media" placeholder="key_media_..."></div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Đã lưu toàn bộ các Key AI thành công!', '✅')">💾 Lưu Tất Cả Key AI</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu toàn bộ các Key AI thành công!')">💾 Lưu Tất Cả Key AI</button>
                     </div>
                 </div>
                 
                 <div id="tab-admin-deposit-syntax" class="tab-content">
                     <div class="card">
-                        <div class="card-title">💳 Cài đặt nạp tiền tự động SePay (ACB Cố định)</div>
+                        <div class="card-title">💳 Cài đặt nạp tiền tự động ACB SePay (Webhook & API)</div>
                         <div class="form-group"><label>SePay API Key</label><input type="text" id="sepay-apikey" placeholder="Nhập API Key tài khoản SePay của bạn..."></div>
-                        <div class="form-group"><label>Webhook URL (Dán link Pipedream vào SePay)</label><input type="text" readonly value="https://e6b47a4c09186e61c7c03f092dbfc685.m.pipedream.net" style="background: rgba(0,0,0,0.3); color: var(--accent-main); font-weight: 700;"></div>
+                        <div class="form-group"><label>Webhook URL (Dán link này vào cài đặt SePay)</label><input type="text" readonly value="https://autopostai.site/api/sepay-webhook" style="background: rgba(0,0,0,0.3); color: var(--accent-main); font-weight: 700;"></div>
                         <div class="form-group"><label>Ngân hàng nhận tiền</label><input type="text" id="sepay-bank" value="ACB"></div>
-                        <div class="form-group"><label>Số tài khoản</label><input type="text" id="sepay-stk" value="26084821"></div>
+                        <div class="form-group"><label>Số tài khoản</label><input type="text" id="sepay-stk" value="0898851000"></div>
                         <div class="form-group"><label>Chủ tài khoản</label><input type="text" id="sepay-name" value="DINH HOANG VIET ANH"></div>
                         <div class="form-group"><label>Cú pháp chuyển khoản SePay</label><input type="text" id="sepay-syntax" value="NAP"></div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="saveSepaySettings()">💾 Lưu & Kích Hoạt SePay</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu và kích hoạt hệ thống SePay ACB thành công!')">💾 Lưu & Kích Hoạt SePay</button>
                     </div>
                 </div>
 
-                <div id="tab-admin-settings" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt chung website</div><div class="form-group"><label>Tên Website</label><input type="text" value="AutoPost AI Pro"></div><button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Đã lưu cài đặt website thành công!', '✅')">Lưu</button></div></div>
-                
+                <div id="tab-admin-settings" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt chung website</div><div class="form-group"><label>Tên Website</label><input type="text" value="AutoPost AI Pro"></div><button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu cài đặt!')">Lưu</button></div></div>
                 <div id="tab-admin-noti" class="tab-content">
                     <div class="card">
-                        <div class="card-title">📢 Quản lý Danh sách Thông báo Hệ thống</div>
-                        <div class="form-group"><label>Tiêu đề thông báo mới</label><input type="text" id="new-noti-title" placeholder="VD: 🔔 Khuyến mại nạp thẻ..."></div>
-                        <div class="form-group"><label>Nội dung chi tiết</label><textarea rows="3" id="new-noti-content" placeholder="Nhập nội dung thông báo..."></textarea></div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="addNewSystemNotification()">➕ Thêm Thông Báo Mới</button>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">📋 Danh sách thông báo hiện tại</div>
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Tiêu đề</th>
-                                        <th>Nội dung</th>
-                                        <th>Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="admin-noti-table-body">
-                                    </tbody>
-                            </table>
-                        </div>
+                        <div class="card-title">📢 Cài đặt Thông báo Popup Trang Chủ</div>
+                        <div class="form-group"><label>Tiêu đề thông báo</label><input type="text" id="set-noti-title" value="🔔 Thông báo chung hệ thống 2026"></div>
+                        <div class="form-group"><label>Nội dung thông báo chi tiết</label><textarea rows="4" id="set-noti-content">- Giảm giá follow facebook tốc độ cao.<br>- Khuyến mại 20% khi nạp tiền qua QR.</textarea></div>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="saveAdminNotification()">💾 Lưu Thông Báo</button>
                     </div>
                 </div>
-
-                <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div><div class="form-group"><label>Link Zalo/Facebook</label><input type="text" value="https://zalo.me"></div><button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Đã lưu liên kết hỗ trợ thành công!', '✅')">Lưu</button></div></div>
+                <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div><div class="form-group"><label>Link Zalo/Facebook</label><input type="text" value="https://zalo.me"></div><button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu!')">Lưu</button></div></div>
                 
                 <div id="tab-admin-aibot-config" class="tab-content">
                     <div class="card">
@@ -535,6 +470,7 @@
                     </div>
                 </div>
 
+                <!-- QUẢN LÝ GÓI DỊCH VỤ -->
                 <div id="tab-admin-packages" class="tab-content">
                     <div class="card">
                         <div class="card-title">📦 Quản lý gói dịch vụ theo thời hạn & Ghi chú</div>
@@ -568,7 +504,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary btn-sm" style="margin-top: 14px;" onclick="showCustomAlert('Thành công', 'Đã lưu cấu hình bảng giá và ghi chú gói dịch vụ!', '✅')">💾 Lưu Thay Đổi Gói</button>
+                        <button type="button" class="btn btn-primary btn-sm" style="margin-top: 14px;" onclick="showToast('✅ Đã lưu cấu hình bảng giá và ghi chú gói dịch vụ!')">💾 Lưu Thay Đổi Gói</button>
                     </div>
                 </div>
 
@@ -604,17 +540,19 @@
                         <div class="card-title">🤝 Tiếp thị liên kết (CTV) - Cấu hình hoa hồng</div>
                         <div class="form-group"><label>Tỷ lệ phần trăm (%) hoa hồng giới thiệu</label><input type="number" id="aff-commission-rate" value="15" placeholder="Nhập %..."></div>
                         <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">CTV sẽ nhận được % hoa hồng tương ứng khi người được giới thiệu phát sinh nạp tiền.</p>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Đã cập nhật tỷ lệ hoa hồng CTV thành công!', '✅')">💾 Lưu Tỷ Lệ Hoa Hồng</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã cập nhật tỷ lệ hoa hồng CTV thành công!')">💾 Lưu Tỷ Lệ Hoa Hồng</button>
                     </div>
                 </div>
 
-                <div id="tab-admin-coupons" class="tab-content"><div class="card"><div class="card-title">🎟️ Coupons & Khuyến mại</div><div class="form-group"><label>Mã giảm giá</label><input type="text" placeholder="Mã..."></div><button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Đã tạo mã giảm giá thành công!', '✅')">Tạo</button></div></div>
+                <div id="tab-admin-coupons" class="tab-content"><div class="card"><div class="card-title">🎟️ Coupons & Khuyến mại</div><div class="form-group"><label>Mã giảm giá</label><input type="text" placeholder="Mã..."></div><button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã tạo mã!')">Tạo</button></div></div>
 
+                <!-- DASHBOARD KHÁCH HÀNG -->
                 <div id="dashboard" class="tab-content">
                     <div class="card" style="border-color: var(--accent-main);">
-                        <div class="card-title"><span class="dynamic-icon">📢</span> <span>Bản tin thông báo hệ thống</span></div>
-                        <div id="display-multiple-notis-box" style="display: flex; flex-direction: column; gap: 10px;">
-                            </div>
+                        <div class="card-title"><span class="dynamic-icon">📢</span> <span id="display-noti-title">Thông báo chung hệ thống 2026</span></div>
+                        <div id="display-noti-body" style="font-size: 0.85rem; line-height: 1.6; color: var(--text-muted); background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+                            - Giảm giá follow facebook tốc độ cao.<br>- Khuyến mại 20% khi nạp tiền qua QR.
+                        </div>
                     </div>
 
                     <div class="card">
@@ -627,6 +565,7 @@
                     </div>
                 </div>
 
+                <!-- QUẢN LÝ ĐƠN HÀNG KHÁCH -->
                 <div id="orders" class="tab-content">
                     <div class="card">
                         <div class="card-title">📋 Lịch sử đơn đã mua</div>
@@ -678,7 +617,7 @@
                         <div class="card-title">👤 Thông tin tài khoản của tôi</div>
                         <div class="form-group"><label>Tên đăng nhập</label><input type="text" id="profile-username" readonly value="thanhvien_pro"></div>
                         <div class="form-group"><label>Gói dịch vụ hiện tại</label><input type="text" readonly value="Gói Dùng Thử 3 Ngày Miễn Phí"></div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Cập nhật thông tin thành công!', '✅')">💾 Lưu Thay Đổi</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Cập nhật thông tin thành công!')">💾 Lưu Thay Đổi</button>
                     </div>
                 </div>
                 
@@ -694,27 +633,28 @@
                 <div id="refund" class="tab-content">
                     <div class="card">
                         <div class="card-title">🔄 Yêu cầu hoàn tiền đơn lỗi</div>
-                        <div class="form-group"><label>Mã đơn hàng lỗi</label><input type="text" id="refund-order-id" placeholder="#ORD-..."></div>
-                        <div class="form-group"><label>Lý do lỗi</label><textarea id="refund-reason" rows="2" placeholder="Mô tả lý do..."></textarea></div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="submitRefundRequest()">Gửi Yêu Cầu</button>
+                        <div class="form-group"><label>Mã đơn hàng lỗi</label><input type="text" placeholder="#ORD-..."></div>
+                        <div class="form-group"><label>Lý do lỗi</label><textarea rows="2" placeholder="Mô tả lý do..."></textarea></div>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã gửi yêu cầu hoàn tiền đến Admin!')">Gửi Yêu Cầu</button>
                     </div>
                 </div>
 
-                <div id="subweb" class="tab-content"><div class="card"><div class="card-title">🌐 Hệ thống tạo web con riêng</div><button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Đã khởi tạo web con thành công!', '🌐')">Tạo Web Riêng Ngay</button></div></div>
+                <div id="subweb" class="tab-content"><div class="card"><div class="card-title">🌐 Hệ thống tạo web con riêng</div><button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã khởi tạo web con thành công!')">Tạo Web Riêng Ngay</button></div></div>
                 <div id="apitools" class="tab-content"><div class="card"><div class="card-title">💻 Tài liệu tích hợp API</div><p style="font-size:0.84rem; color:var(--text-muted);">API Key cá nhân: <code style="color:var(--accent-main);">ap_live_987123981273</code></p></div></div>
                 
                 <div id="support" class="tab-content">
                     <div class="card">
                         <div class="card-title">🎧 Gửi yêu cầu hỗ trợ</div>
-                        <div class="form-group"><label>Tiêu đề yêu cầu</label><input type="text" id="sup-title" placeholder="Vấn đề cần hỗ trợ..."></div>
-                        <div class="form-group"><label>Nội dung chi tiết</label><textarea id="sup-content" rows="3" placeholder="Nhập nội dung..."></textarea></div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="submitSupportRequest()">Gửi Hỗ Trợ</button>
+                        <div class="form-group"><label>Tiêu đề yêu cầu</label><input type="text" placeholder="Vấn đề cần hỗ trợ..."></div>
+                        <div class="form-group"><label>Nội dung chi tiết</label><textarea rows="3" placeholder="Nhập nội dung..."></textarea></div>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã gửi yêu cầu hỗ trợ thành công!')">Gửi Hỗ Trợ</button>
                     </div>
                 </div>
 
                 <div id="affiliate" class="tab-content"><div class="card"><div class="card-title">🔗 Tiếp thị liên kết nhận hoa hồng</div><p style="font-size:0.84rem; color:var(--text-muted);">Link giới thiệu của bạn: <b style="color:var(--accent-main);">https://autopostai.site/?ref=user</b></p></div></div>
-                <div id="notifications" class="tab-content"><div class="card"><div class="card-title">🔔 Thông báo hệ thống mới nhất</div><div id="noti-tab-list" style="display: flex; flex-direction: column; gap: 10px;"></div></div></div>
+                <div id="notifications" class="tab-content"><div class="card"><div class="card-title">🔔 Thông báo hệ thống mới nhất</div><p style="font-size:0.84rem;" id="noti-tab-text">- Chào mừng bạn đã nhận 3 ngày dùng thử miễn phí dịch vụ!</p></div></div>
 
+                <!-- NỀN TẢNG FACEBOOK -->
                 <div id="tab-fb" class="tab-content">
                     <div class="card">
                         <div class="card-title"><span class="dynamic-icon">📘</span> Facebook Automation: Chọn Chức Năng</div>
@@ -726,23 +666,24 @@
                             </select>
                         </div>
                         <div id="fb-group-box">
-                            <div class="form-group"><label>Danh sách tài khoản / Kho Cookie (UID|Pass|Cookie)</label><textarea id="fb-group-acc" rows="3" placeholder="Nhập danh sách tài khoản..."></textarea></div>
-                            <div class="form-group"><label>Danh sách Link Group mục tiêu</label><textarea id="fb-group-links" rows="2" placeholder="https://facebook.com/groups/..."></textarea></div>
-                            <div class="form-group"><label>Nội dung bài đăng</label><textarea id="fb-group-msg" rows="3" placeholder="Nhập nội dung bài viết..."></textarea></div>
+                            <div class="form-group"><label>Danh sách tài khoản / Kho Cookie (UID|Pass|Cookie)</label><textarea rows="3" placeholder="Nhập danh sách tài khoản..."></textarea></div>
+                            <div class="form-group"><label>Danh sách Link Group mục tiêu</label><textarea rows="2" placeholder="https://facebook.com/groups/..."></textarea></div>
+                            <div class="form-group"><label>Nội dung bài đăng</label><textarea rows="3" placeholder="Nhập nội dung bài viết..."></textarea></div>
                         </div>
                         <div id="fb-comment-box" style="display:none;">
-                            <div class="form-group"><label>Danh sách tài khoản / Kho Cookie (UID|Pass|Cookie)</label><textarea id="fb-cmt-acc" rows="3" placeholder="Nhập danh sách tài khoản..."></textarea></div>
-                            <div class="form-group"><label>Link bài viết mục tiêu</label><input type="text" id="fb-cmt-link" placeholder="https://facebook.com/permalink.php?story_fbid=..."></div>
-                            <div class="form-group"><label>Nội dung bình luận seeding</label><textarea id="fb-cmt-msg" rows="3" placeholder="Nhập nội dung bình luận..."></textarea></div>
+                            <div class="form-group"><label>Danh sách tài khoản / Kho Cookie (UID|Pass|Cookie)</label><textarea rows="3" placeholder="Nhập danh sách tài khoản..."></textarea></div>
+                            <div class="form-group"><label>Link bài viết mục tiêu</label><input type="text" placeholder="https://facebook.com/permalink.php?story_fbid=..."></div>
+                            <div class="form-group"><label>Nội dung bình luận seeding</label><textarea rows="3" placeholder="Nhập nội dung bình luận..."></textarea></div>
                         </div>
                         <div class="form-group">
                             <label>Độ trễ giữa các hành động (Giây)</label>
                             <input type="number" id="fb-delay-time" value="5" placeholder="Nhập số giây trễ...">
                         </div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="runFacebookAutomation()">🚀 Chạy Tiến Trình Facebook</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã khởi chạy tiến trình Facebook với độ trễ đã chọn!')">🚀 Chạy Tiến Trình Facebook</button>
                     </div>
                 </div>
                 
+                <!-- NỀN TẢNG TIKTOK -->
                 <div id="tab-tiktok" class="tab-content">
                     <div class="card">
                         <div class="card-title"><span class="dynamic-icon">✨</span> 1. Tạo Ảnh & Video AI Tự Động</div>
@@ -753,15 +694,15 @@
                                 <option value="image">Tạo Ảnh AI</option>
                             </select>
                         </div>
-                        <div class="form-group"><label>Nhập câu lệnh (Prompt) mô tả</label><textarea id="tik-prompt-input" rows="2" placeholder="VD: Cô gái bước đi trên phố thời trang Tokyo..."></textarea></div>
+                        <div class="form-group"><label>Nhập câu lệnh (Prompt) mô tả</label><textarea rows="2" placeholder="VD: Cô gái bước đi trên phố thời trang Tokyo..."></textarea></div>
                         <button type="button" class="btn btn-ai btn-sm" onclick="runTikAIGeneration()">✨ Tạo Thành Phẩm Bằng AI</button>
 
                         <div class="result-output-box" id="tik-ai-result-box" style="display: block; margin-top: 14px;">
                             <label style="color: var(--accent-main); font-weight: 700;">📦 Kết quả thành phẩm AI đã sẵn sàng:</label>
                             <textarea rows="2" readonly>🎬 Link tải: https://cdn.autopostai.pro/ai_media_result_2026.mp4</textarea>
                             <div style="display: flex; gap: 8px; margin-top: 8px;">
-                                <a href="#" class="btn btn-primary btn-sm" style="text-decoration:none; text-align:center; flex:1;" onclick="showCustomAlert('Thành công', 'Đang tải xuống máy...', '📥')">Tải Về Máy</a>
-                                <button type="button" class="btn btn-ai btn-sm" style="flex:1;" onclick="showCustomAlert('Thành công', 'Đã xác nhận lưu thành phẩm!', '✅')">Lưu Lại</button>
+                                <a href="#" class="btn btn-primary btn-sm" style="text-decoration:none; text-align:center; flex:1;" onclick="showToast('📥 Đang tải xuống máy...')">Tải Về Máy</a>
+                                <button type="button" class="btn btn-ai btn-sm" style="flex:1;" onclick="showToast('✅ Đã xác nhận lưu thành phẩm!')">Lưu Lại</button>
                             </div>
                         </div>
                     </div>
@@ -780,22 +721,24 @@
                         </div>
                         <div id="tik-content-step" style="display:none; margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 15px;">
                             <div style="background: rgba(16, 185, 129, 0.15); color: var(--accent-main); padding: 8px; border-radius: 6px; font-weight: 700; font-size: 0.78rem; margin-bottom: 12px;">🟢 Đăng nhập thành công! Hãy thiết lập bài đăng:</div>
-                            <div class="form-group"><label>Tải video lên để đăng</label><input type="file" id="tik-file-input"></div>
-                            <div class="form-group"><label>Link sản phẩm / Giỏ hàng TikTok Shop gắn kèm (Nếu có)</label><input type="text" id="tik-shop-link" placeholder="https://shop.tiktok.com/view/product/..."></div>
-                            <div class="form-group"><label>Nội dung kèm Hashtag</label><textarea id="tik-caption" rows="2" placeholder="#xuhuong #fyp #tiktokshop..."></textarea></div>
-                            <div class="form-group"><label>Chọn ngày giờ đăng bài tự động</label><input type="datetime-local" id="tik-datetime"></div>
+                            <div class="form-group"><label>Tải video lên để đăng</label><input type="file"></div>
+                            <div class="form-group"><label>Link sản phẩm / Giỏ hàng TikTok Shop gắn kèm (Nếu có)</label><input type="text" placeholder="https://shop.tiktok.com/view/product/..."></div>
+                            <div class="form-group"><label>Nội dung kèm Hashtag</label><textarea rows="2" placeholder="#xuhuong #fyp #tiktokshop..."></textarea></div>
+                            <div class="form-group"><label>Chọn ngày giờ đăng bài tự động</label><input type="datetime-local"></div>
                             <button type="button" class="btn btn-primary" style="margin-top: 10px; background: linear-gradient(135deg, #10B981, #047857); font-size: 0.95rem; padding: 12px;" onclick="saveTikTokSchedule()">Xong - Lưu Tiến Trình & Hẹn Giờ Đăng</button>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Dòng chữ bản quyền ở cuối trang -->
             <div class="footer-copyright">
                 Bản quyền thuộc <b>DINH HOANG VIET ANH</b> © 2026
             </div>
         </div>
     </div>
 
+    <!-- POPUP CỘNG / TRỪ SỐ DƯ CHO ADMIN -->
     <div id="balance-modal">
         <div class="modal-balance-box">
             <h3 style="font-size: 0.95rem; margin-bottom: 12px; color: #fff;">💳 Điều chỉnh số dư ví</h3>
@@ -818,6 +761,7 @@
         </div>
     </div>
 
+    <!-- MODAL CHAT & CÓ CÁC KHUNG MENU BẤM NHANH -->
     <div id="chat-box-modal">
         <div class="chat-header">
             <span>🤖 Trợ lý AI CSKH thông minh</span>
@@ -842,9 +786,10 @@
 
     <div id="announcement-modal">
         <div class="modal-box">
-            <h3 id="popup-noti-title" style="margin-bottom: 12px; font-size: 1.05rem; color: #fff;">🔔 Thông báo hệ thống</h3>
-            <div id="popup-noti-body" style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; display: flex; flex-direction: column; gap: 10px;">
-                </div>
+            <h3 id="popup-noti-title" style="margin-bottom: 10px; font-size: 1rem; color: #fff;">🔔 Thông báo hệ thống</h3>
+            <div id="popup-noti-body" style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                <div>- Tặng ngay 3 ngày dùng thử miễn phí khi đăng ký tài khoản thành viên mới!</div>
+            </div>
             <button type="button" class="btn-dong" onclick="closeModal()">Đóng</button>
             <div style="clear: both;"></div>
         </div>
@@ -858,23 +803,67 @@
                 document.getElementById('auth-screen').style.display = 'none';
                 applyUserPermissions();
             }
-            loadSystemNotifications();
+            loadStoredNotifications();
             loadRegisteredUsersToAdminTable();
             loadAIBotConfig();
-            loadTelegramSettings();
-            loadSepaySettingsToInputs();
             updateClientWalletDisplay();
+
+            // Khởi chạy bộ lắng nghe tự động cộng tiền từ Google Sheets định kỳ
+            checkAutoDepositSync();
+            setInterval(checkAutoDepositSync, 5000);
         });
 
-        function showCustomAlert(title, message, icon = '⚠️') {
-            document.getElementById('alert-title').innerText = title;
-            document.getElementById('alert-msg').innerText = message;
-            document.getElementById('alert-icon').innerText = icon;
-            document.getElementById('custom-alert-modal').style.display = 'flex';
-        }
+        // HÀM TỰ ĐỘNG ĐỒNG BỘ CỘNG TIỀN TỪ GOOGLE SHEETS
+        async function checkAutoDepositSync() {
+            let currentUsr = localStorage.getItem('currentUsername');
+            if (!currentUsr) return;
 
-        function closeCustomAlert() {
-            document.getElementById('custom-alert-modal').style.display = 'none';
+            let sheetId = '12PFKTR0YV1VXqmpI4iyYGZP1ilKxx8m5WeBQC6LI_us';
+            let url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+
+            try {
+                let res = await fetch(url);
+                let text = await res.text();
+                
+                // Trích xuất JSON từ định dạng phản hồi của Google Sheets
+                let jsonString = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+                let data = JSON.parse(jsonString);
+                
+                let rows = data.table.rows;
+                let processedRows = JSON.parse(localStorage.getItem('processed_sheet_rows') || '[]');
+                let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
+                let hasChange = false;
+
+                rows.forEach((row, index) => {
+                    if (index === 0) return; // Bỏ qua tiêu đề (Username, Balance)
+                    if (processedRows.includes(index)) return; // Đã xử lý cộng tiền dòng này trước đó
+
+                    let sheetUser = (row.c && row.c[0] && row.c[0].v) ? String(row.c[0].v).trim() : '';
+                    let sheetAmount = (row.c && row.c[1] && row.c[1].v) ? Number(row.c[1].v) : 0;
+
+                    if (sheetUser && sheetAmount > 0) {
+                        let userObj = users.find(u => u.username.toLowerCase() === sheetUser.toLowerCase());
+                        if (userObj) {
+                            userObj.balance = (Number(userObj.balance) || 0) + sheetAmount;
+                            hasChange = true;
+
+                            if (currentUsr.toLowerCase() === sheetUser.toLowerCase()) {
+                                showToast(`🎉 Nạp tiền thành công! Đã tự động cộng +${sheetAmount.toLocaleString()}đ vào tài khoản!`);
+                            }
+                        }
+                        processedRows.push(index);
+                    }
+                });
+
+                if (hasChange) {
+                    localStorage.setItem('registeredUsersList', JSON.stringify(users));
+                    localStorage.setItem('processed_sheet_rows', JSON.stringify(processedRows));
+                    updateClientWalletDisplay();
+                    loadRegisteredUsersToAdminTable();
+                }
+            } catch (e) {
+                // Đang tự động kết nối chờ dữ liệu nạp tiền mới...
+            }
         }
 
         function updateClientWalletDisplay() {
@@ -903,153 +892,7 @@
             let greeting = document.getElementById('cfg-bot-greeting').value;
             localStorage.setItem('botGreeting', greeting);
             loadAIBotConfig();
-            showCustomAlert('Thành công', 'Đã lưu cấu hình Trợ lý AI CSKH thành công!', '🤖');
-        }
-
-        function loadTelegramSettings() {
-            let tToken = localStorage.getItem('telegramBotToken') || '';
-            let tChatId = localStorage.getItem('telegramChatId') || '';
-            if(document.getElementById('tele-bot-token')) document.getElementById('tele-bot-token').value = tToken;
-            if(document.getElementById('tele-chat-id')) document.getElementById('tele-chat-id').value = tChatId;
-        }
-
-        function saveTelegramConfig() {
-            let tToken = document.getElementById('tele-bot-token').value.trim();
-            let tChatId = document.getElementById('tele-chat-id').value.trim();
-            if(!tToken || !tChatId) {
-                showCustomAlert('Thiếu thông tin', 'Vui lòng nhập đầy đủ Token Bot và Chat ID Telegram!', '⚠️');
-                return;
-            }
-            localStorage.setItem('telegramBotToken', tToken);
-            localStorage.setItem('telegramChatId', tChatId);
-            showCustomAlert('Thành công', 'Đã lưu cấu hình Bot Telegram thành công!', '🤖');
-        }
-
-        function testTelegramBot() {
-            let tToken = localStorage.getItem('telegramBotToken');
-            let tChatId = localStorage.getItem('telegramChatId');
-            if(!tToken || !tChatId) {
-                showCustomAlert('Chưa cấu hình', 'Vui lòng nhập và lưu Bot Token cùng Chat ID trước khi test!', '⚠️');
-                return;
-            }
-            
-            showCustomAlert('Đang gửi', '📤 Đang gửi tin nhắn test qua Telegram...', '⏳');
-            let msg = encodeURIComponent("🔔 Test thông báo thành công từ hệ thống AutoPost AI Pro!");
-            let url = `https://api.telegram.org/bot${tToken}/sendMessage?chat_id=${tChatId}&text=${msg}`;
-
-            fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                if(data.ok) {
-                    showCustomAlert('Thành công', '✅ Gửi tin nhắn test Telegram thành công! Hãy kiểm tra ứng dụng Telegram của bạn.', '🎉');
-                } else {
-                    showCustomAlert('Lỗi Telegram', `Không gửi được: ${data.description || 'Kiểm tra lại Token hoặc Chat ID'}`, '❌');
-                }
-            })
-            .catch(err => {
-                showCustomAlert('Lỗi kết nối', 'Không thể kết nối đến API Telegram.', '❌');
-            });
-        }
-
-        function loadSepaySettingsToInputs() {
-            if(document.getElementById('sepay-bank')) document.getElementById('sepay-bank').value = localStorage.getItem('sepayBank') || 'ACB';
-            if(document.getElementById('sepay-stk')) document.getElementById('sepay-stk').value = localStorage.getItem('sepayStk') || '26084821';
-            if(document.getElementById('sepay-name')) document.getElementById('sepay-name').value = localStorage.getItem('sepayName') || 'DINH HOANG VIET ANH';
-            if(document.getElementById('sepay-syntax')) document.getElementById('sepay-syntax').value = localStorage.getItem('sepaySyntax') || 'NAP';
-            if(document.getElementById('sepay-apikey')) document.getElementById('sepay-apikey').value = localStorage.getItem('sepayApikey') || '';
-        }
-
-        function saveSepaySettings() {
-            let bank = document.getElementById('sepay-bank').value.trim();
-            let stk = document.getElementById('sepay-stk').value.trim();
-            let name = document.getElementById('sepay-name').value.trim();
-            let syntax = document.getElementById('sepay-syntax').value.trim();
-            let apikey = document.getElementById('sepay-apikey').value.trim();
-
-            if(!bank || !stk || !name) {
-                showCustomAlert('Thiếu thông tin', 'Vui lòng nhập đầy đủ Ngân hàng, Số tài khoản và Chủ tài khoản!', '⚠️');
-                return;
-            }
-
-            localStorage.setItem('sepayBank', bank);
-            localStorage.setItem('sepayStk', stk);
-            localStorage.setItem('sepayName', name);
-            localStorage.setItem('sepaySyntax', syntax);
-            localStorage.setItem('sepayApikey', apikey);
-
-            showCustomAlert('Thành công', '💾 Đã lưu cấu hình nạp tiền ACB thành công! Thông tin QR sẽ cập nhật ngay lập tức.', '✅');
-        }
-
-        function getSystemNotifications() {
-            let defaultNotis = [
-                { id: 1, title: "🔔 Giảm giá follow facebook tốc độ cao.", content: "Áp dụng cho mọi tài khoản thành viên trong tháng này." },
-                { id: 2, title: "🎁 Khuyến mại 20% khi nạp tiền qua QR.", content: "Tự động cộng thêm 20% giá trị nạp vào ví chính." }
-            ];
-            let stored = localStorage.getItem('systemNotisList');
-            return stored ? JSON.parse(stored) : defaultNotis;
-        }
-
-        function loadSystemNotifications() {
-            let notis = getSystemNotifications();
-            
-            let dashBox = document.getElementById('display-multiple-notis-box');
-            let notiTab = document.getElementById('noti-tab-list');
-            let popupBody = document.getElementById('popup-noti-body');
-            
-            let dashHtml = ``;
-            let tabHtml = ``;
-            let popupHtml = ``;
-
-            notis.forEach(n => {
-                dashHtml += `<div style="background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 8px; border-left: 3px solid var(--accent-main);"><b style="color:#fff;">${n.title}</b><div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">${n.content}</div></div>`;
-                tabHtml += `<div style="background: var(--bg-card); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);"><b style="color:var(--accent-main);">${n.title}</b><div style="font-size:0.82rem; color:var(--text-muted); margin-top:4px;">${n.content}</div></div>`;
-                popupHtml += `<div>• <b>${n.title}</b>: ${n.content}</div>`;
-            });
-
-            if(dashBox) dashBox.innerHTML = dashHtml;
-            if(notiTab) notiTab.innerHTML = tabHtml;
-            if(popupBody) popupBody.innerHTML = popupHtml;
-
-            let adminTable = document.getElementById('admin-noti-table-body');
-            if(adminTable) {
-                let adminHtml = ``;
-                notis.forEach(n => {
-                    adminHtml += `
-                        <tr>
-                            <td><b>${n.title}</b></td>
-                            <td>${n.content}</td>
-                            <td><button type="button" class="btn btn-sm" style="background:#EF4444; color:#fff;" onclick="deleteSystemNoti(${n.id})">🗑️ Xóa</button></td>
-                        </tr>
-                    `;
-                });
-                adminTable.innerHTML = adminHtml;
-            }
-        }
-
-        function addNewSystemNotification() {
-            let title = document.getElementById('new-noti-title').value.trim();
-            let content = document.getElementById('new-noti-content').value.trim();
-            if(!title || !content) {
-                showCustomAlert('Thiếu thông tin', 'Vui lòng nhập đầy đủ tiêu đề và nội dung thông báo mới!', '⚠️');
-                return;
-            }
-
-            let notis = getSystemNotifications();
-            notis.push({ id: Date.now(), title: title, content: content });
-            localStorage.setItem('systemNotisList', JSON.stringify(notis));
-
-            document.getElementById('new-noti-title').value = '';
-            document.getElementById('new-noti-content').value = '';
-            loadSystemNotifications();
-            showCustomAlert('Thành công', '📢 Đã thêm thông báo mới vào hệ thống thành công!', '✅');
-        }
-
-        function deleteSystemNoti(id) {
-            let notis = getSystemNotifications();
-            notis = notis.filter(n => n.id !== id);
-            localStorage.setItem('systemNotisList', JSON.stringify(notis));
-            loadSystemNotifications();
-            showCustomAlert('Thành công', '🗑️ Đã xóa thông báo thành công!', '✅');
+            showToast('✅ Đã lưu cấu hình Trợ lý AI CSKH thành công!');
         }
 
         function toggleActionDropdown(event) {
@@ -1081,8 +924,6 @@
                 let regTime = u.time || new Date().toLocaleString('vi-VN');
                 let fakeId = 507925 + index;
                 let userBalance = Number(u.balance || 0).toLocaleString() + 'đ';
-                let roleBadge = u.role === 'admin' ? '<span style="background:var(--accent-main); color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem;">ADMIN</span>' : '<span style="color:var(--text-muted);">Thành viên</span>';
-                
                 html += `
                     <tr>
                         <td>${fakeId}</td>
@@ -1090,21 +931,22 @@
                             <div class="dropdown-action-wrap">
                                 <button type="button" class="action-dropdown-btn" onclick="toggleActionDropdown(event)">⚙️ Thao tác ▾</button>
                                 <div class="action-dropdown-content">
-                                    <button type="button" class="action-option" onclick="showCustomAlert('Chi tiết', 'Tài khoản: ${u.username}', '👤')">👤 Chi tiết</button>
+                                    <button type="button" class="action-option" onclick="showToast('🔍 Chi tiết ${u.username}')">👤 Chi tiết</button>
                                     <button type="button" class="action-option" onclick="openBalanceModal('${u.username}')">💳 Sửa số dư</button>
-                                    <button type="button" class="action-option" onclick="promptChangePassword('${u.username}')">🔑 Đổi mật khẩu</button>
-                                    <button type="button" class="action-option" onclick="toggleUserRole('${u.username}')">🛡️ Nâng/Hạ quyền Admin</button>
+                                    <button type="button" class="action-option" onclick="showToast('📜 Xem nhật ký giao dịch')">⏳ Nhật ký giao dịch</button>
+                                    <button type="button" class="action-option" onclick="showToast('📊 Thống kê user')">📈 Thống kê</button>
+                                    <button type="button" class="action-option" onclick="promptNewPassword('${u.username}')">🔑 Khôi phục mật khẩu</button>
                                 </div>
                             </div>
                         </td>
                         <td><b>${u.username}</b></td>
-                        <td>${roleBadge}</td>
                         <td style="color:var(--accent-main); font-weight:700;">${userBalance}</td>
                         <td>${regTime}</td>
                     </tr>
                 `;
             });
 
+            // TÀI KHOẢN ADMIN NẰM DƯỚI CÙNG VỚI SỐ TIỀN 1 TỶ
             html += `
                 <tr style="background: rgba(16, 185, 129, 0.08);">
                     <td>01</td>
@@ -1112,43 +954,19 @@
                         <div class="dropdown-action-wrap">
                             <button type="button" class="action-dropdown-btn" onclick="toggleActionDropdown(event)">⚙️ Thao tác ▾</button>
                             <div class="action-dropdown-content">
-                                <button type="button" class="action-option" onclick="showCustomAlert('Chi tiết', 'Quản trị viên tối cao hệ thống', '👤')">👤 Chi tiết</button>
+                                <button type="button" class="action-option" onclick="showToast('🔍 Chi tiết Admin')">👤 Chi tiết</button>
                                 <button type="button" class="action-option" onclick="openBalanceModal('admin2608')">💳 Sửa số dư</button>
+                                <button type="button" class="action-option" onclick="showToast('⏳ Nhật ký Admin')">⏳ Nhật ký giao dịch</button>
                             </div>
                         </div>
                     </td>
-                    <td><b>admin2608</b></td>
-                    <td><span style="background:var(--accent-main); color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem;">ADMIN TỐI CAO</span></td>
+                    <td><b>admin2608</b> <span style="background:var(--accent-main); color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem;">ADMIN</span></td>
                     <td style="color: var(--accent-main); font-weight: 800;">1,000,000,000đ</td>
                     <td>01/01/2026 00:00</td>
                 </tr>
             `;
             
             if(tbody) tbody.innerHTML = html;
-        }
-
-        function promptChangePassword(username) {
-            let newPass = prompt(`Nhập mật khẩu mới cho tài khoản [${username}]:`);
-            if(newPass && newPass.trim() !== '') {
-                let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
-                let u = users.find(item => item.username === username);
-                if(u) {
-                    u.pass = newPass.trim();
-                    localStorage.setItem('registeredUsersList', JSON.stringify(users));
-                    showCustomAlert('Thành công', `🔑 Đã thay đổi mật khẩu mới cho tài khoản ${username} thành công!`, '✅');
-                }
-            }
-        }
-
-        function toggleUserRole(username) {
-            let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
-            let u = users.find(item => item.username === username);
-            if(u) {
-                u.role = u.role === 'admin' ? 'member' : 'admin';
-                localStorage.setItem('registeredUsersList', JSON.stringify(users));
-                loadRegisteredUsersToAdminTable();
-                showCustomAlert('Thành công', `🛡️ Đã cập nhật quyền hạn cho tài khoản ${username} thành công!`, '✅');
-            }
         }
 
         function openBalanceModal(username) {
@@ -1167,7 +985,7 @@
             let actionType = document.getElementById('modal-action-type').value;
 
             if(isNaN(amount) || amount <= 0) {
-                showCustomAlert('Lỗi nhập liệu', 'Vui lòng nhập số tiền hợp lệ lớn hơn 0!', '⚠️');
+                alert('Vui lòng nhập số tiền hợp lệ!');
                 return;
             }
 
@@ -1178,18 +996,41 @@
                 if(!users[userIndex].balance) users[userIndex].balance = 0;
                 if(actionType === 'add') {
                     users[userIndex].balance += amount;
-                    showCustomAlert('Thành công', `Đã cộng ${amount.toLocaleString()}đ cho ${currentEditingUser} thành công!`, '✅');
+                    showToast(`✅ Đã cộng ${amount.toLocaleString()}đ cho ${currentEditingUser}!`);
                 } else {
                     users[userIndex].balance = Math.max(0, users[userIndex].balance - amount);
-                    showCustomAlert('Thành công', `Đã trừ ${amount.toLocaleString()}đ của ${currentEditingUser} thành công!`, '✅');
+                    showToast(`✅ Đã trừ ${amount.toLocaleString()}đ của ${currentEditingUser}!`);
                 }
                 localStorage.setItem('registeredUsersList', JSON.stringify(users));
                 loadRegisteredUsersToAdminTable();
                 updateClientWalletDisplay();
             } else {
-                showCustomAlert('Thành công', `Đã thao tác số dư cho ${currentEditingUser} thành công!`, '✅');
+                showToast(`✅ Đã thao tác số dư thành công!`);
             }
             closeBalanceModal();
+        }
+
+        function loadStoredNotifications() {
+            let savedTitle = localStorage.getItem('siteNotiTitle');
+            let savedContent = localStorage.getItem('siteNotiContent');
+            if(savedTitle) {
+                document.getElementById('display-noti-title').innerText = savedTitle;
+                document.getElementById('popup-noti-title').innerText = savedTitle;
+            }
+            if(savedContent) {
+                document.getElementById('display-noti-body').innerHTML = savedContent;
+                document.getElementById('popup-noti-body').innerHTML = savedContent;
+                document.getElementById('noti-tab-text').innerHTML = savedContent;
+            }
+        }
+
+        function saveAdminNotification() {
+            let title = document.getElementById('set-noti-title').value;
+            let content = document.getElementById('set-noti-content').value;
+            localStorage.setItem('siteNotiTitle', title);
+            localStorage.setItem('siteNotiContent', content);
+            loadStoredNotifications();
+            showToast('✅ Cập nhật thông báo thành công!');
         }
 
         function applyUserPermissions() {
@@ -1203,6 +1044,13 @@
                 if(adminMenu) adminMenu.style.display = 'none';
                 switchTab('dashboard', null);
             }
+        }
+
+        function showToast(message) {
+            let toast = document.getElementById('toast-notification');
+            toast.innerHTML = message;
+            toast.style.display = 'flex';
+            setTimeout(() => { toast.style.display = 'none'; }, 2500);
         }
 
         function switchAuthTab(type) {
@@ -1228,16 +1076,17 @@
             let btnText = document.querySelector('#music-toggle-btn span');
 
             if (audio.paused) {
+                if(audio.readyState === 0) audio.load(); 
                 audio.play().then(() => {
                     btnText.innerText = "Tắt Nhạc";
-                    showCustomAlert('Nhạc nền', 'Đã phát nhạc nền lofi thư giãn!', '🎵');
+                    showToast("🎵 Đã phát nhạc nền!");
                 }).catch(e => {
-                    showCustomAlert('Lưu ý', 'Trình duyệt đang chặn tự động phát. Vui lòng bấm Bật Nhạc một lần nữa!', '🔊');
+                    showToast("⚠️ Vui lòng bấm Bật Nhạc lại để thưởng thức!");
                 });
             } else {
                 audio.pause();
                 btnText.innerText = "Bật Nhạc";
-                showCustomAlert('Nhạc nền', 'Đã tạm dừng nhạc nền!', '🔇');
+                showToast("🔇 Đã tắt nhạc nền!");
             }
         }
 
@@ -1253,20 +1102,17 @@
             
             applyUserPermissions();
             updateClientWalletDisplay();
-            showCustomAlert('Đăng nhập thành công', `Chào mừng bạn trở lại, ${username}!`, '🎉');
+            showToast('✅ Đăng nhập thành công!');
             setTimeout(() => {
                 document.getElementById('auth-screen').style.display = 'none';
                 openModal();
-            }, 1000);
+            }, 800);
         }
 
         function handleLogin() {
             let user = document.getElementById('login-username').value.trim();
             let pass = document.getElementById('login-password').value.trim();
-            if(!user || !pass) { 
-                showCustomAlert('Thiếu thông tin', 'Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!', '⚠️'); 
-                return; 
-            }
+            if(!user || !pass) { alert('Vui lòng nhập tài khoản và mật khẩu!'); return; }
 
             if(user === 'admin2608' && pass === '2608@') {
                 triggerLoginSuccess('admin', user);
@@ -1277,38 +1123,34 @@
             let found = users.find(u => u.username === user && u.pass === pass);
 
             if(found) {
-                let role = found.role || 'member';
-                triggerLoginSuccess(role, user);
+                triggerLoginSuccess('member', user);
             } else {
-                showCustomAlert('Đăng nhập thất bại', 'Sai tên đăng nhập hoặc mật khẩu! Vui lòng kiểm tra lại.', '❌');
+                alert('❌ Sai tài khoản hoặc mật khẩu! Vui lòng kiểm tra lại.');
             }
         }
 
         function handleRegister() {
             let user = document.getElementById('reg-username').value.trim();
             let pass = document.getElementById('reg-password').value.trim();
-            if(!user || !pass) { 
-                showCustomAlert('Thiếu thông tin', 'Vui lòng điền đầy đủ tên tài khoản và mật khẩu đăng ký!', '⚠️'); 
-                return; 
-            }
+            if(!user || !pass) { alert('Vui lòng điền thông tin đăng ký!'); return; }
 
             if(user === 'admin2608') {
-                showCustomAlert('Không hợp lệ', 'Tên tài khoản này đã được bảo vệ bởi hệ thống.', '❌');
+                alert('❌ Tên tài khoản này không được phép sử dụng.');
                 return;
             }
 
             let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
             let existed = users.find(u => u.username === user);
             if(existed) {
-                showCustomAlert('Trùng tài khoản', 'Tên tài khoản này đã tồn tại trên hệ thống! Vui lòng chọn tên khác.', '❌');
+                alert('❌ Tên tài khoản này đã tồn tại! Vui lòng chọn tên khác.');
                 return;
             }
             
             let timeString = new Date().toLocaleString('vi-VN');
-            users.push({ username: user, pass: pass, role: 'member', balance: 0, time: timeString });
+            users.push({ username: user, pass: pass, balance: 0, time: timeString });
             localStorage.setItem('registeredUsersList', JSON.stringify(users));
 
-            showCustomAlert('Đăng ký thành công', '🎉 Tài khoản đã được tạo! Tặng ngay 3 ngày dùng thử miễn phí.', '🎁');
+            showToast('🎉 Đăng ký thành công! Nhận 3 ngày dùng thử.');
             setTimeout(() => { 
                 triggerLoginSuccess('member', user); 
                 loadRegisteredUsersToAdminTable();
@@ -1325,12 +1167,12 @@
             let btnText = document.querySelector('#music-toggle-btn span');
             if(btnText) btnText.innerText = "Bật Nhạc";
             
-            showCustomAlert('Đăng xuất', 'Đã đăng xuất tài khoản an toàn khỏi hệ thống!', '🚪');
+            showToast('🚪 Đã đăng xuất tài khoản!');
             setTimeout(() => {
                 document.getElementById('auth-screen').style.display = 'flex';
                 document.getElementById('login-username').value = '';
                 document.getElementById('login-password').value = '';
-            }, 800);
+            }, 600);
         }
 
         function toggleMenu() {
@@ -1346,7 +1188,7 @@
 
         function setTheme(themeName) {
             document.documentElement.setAttribute('data-theme', themeName);
-            showCustomAlert('Giao diện', 'Đã chuyển đổi giao diện thành công!', '🎨');
+            showToast("✅ Đã chuyển đổi giao diện!");
         }
 
         function switchTab(tabId, event) {
@@ -1360,11 +1202,10 @@
 
         function generateQR() {
             let amount = document.getElementById('deposit-amount').value || 100000;
-            
-            let stk = localStorage.getItem('sepayStk') || '26084821';
-            let bank = localStorage.getItem('sepayBank') || 'ACB';
-            let name = localStorage.getItem('sepayName') || 'DINH HOANG VIET ANH';
-            let syntax = localStorage.getItem('sepaySyntax') || 'NAP';
+            let stk = document.getElementById('sepay-stk') ? document.getElementById('sepay-stk').value : '0898851000';
+            let bank = document.getElementById('sepay-bank') ? document.getElementById('sepay-bank').value : 'ACB';
+            let name = document.getElementById('sepay-name') ? document.getElementById('sepay-name').value : 'DINH HOANG VIET ANH';
+            let syntax = document.getElementById('sepay-syntax') ? document.getElementById('sepay-syntax').value : 'NAP';
             
             let currentUsr = localStorage.getItem('currentUsername') || 'thanhvien_pro';
             let randomCode = Math.floor(1000 + Math.random() * 9000);
@@ -1374,11 +1215,11 @@
             
             document.getElementById('qr-box').innerHTML = `
                 <div style="background: white; padding: 12px; display: inline-block; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.5);">
-                    <img src="${qrUrl}" width="240" alt="QR ACB SePay" style="display: block; margin: 0 auto;">
+                    <img src="${qrUrl}" width="240" alt="QR ACB SePay To Rõ" style="display: block; margin: 0 auto;">
                 </div>
                 <p style="font-size: 0.85rem; line-height: 1.5;">${bank}: <b>${stk}</b> (${name})<br>Nội dung CK (Dùng 1 lần): <b style="color:var(--accent-main); font-size: 0.95rem;">${fullSyntax}</b><br>Số tiền: <b style="color:var(--accent-main); font-size: 1.05rem;">${Number(amount).toLocaleString()}đ</b></p>
             `;
-            showCustomAlert('Tạo QR Thành công', 'Mã QR nạp tiền ACB đã được tạo chính xác!', '💳');
+            showToast("✅ Đã tạo mã QR ngân hàng ACB thành công!");
         }
 
         function toggleChatBox() {
@@ -1396,7 +1237,7 @@
                 let lower = questionText.toLowerCase();
 
                 if(lower.includes('nạp tiền')) {
-                    reply = "💳 Bạn vào mục 'Nạp tiền tự động' trên menu, nhập số tiền và quét mã QR. Hệ thống sẽ tự động cộng số dư ngay sau khi chuyển khoản!";
+                    reply = "💳 Bạn vào mục 'Nạp tiền tự động' trên menu, nhập số tiền và quét mã QR SePay. Hệ thống sẽ tự động cộng số dư ngay sau khi chuyển khoản!";
                 } else if(lower.includes('đơn hàng')) {
                     reply = "📋 Toàn bộ lịch sử các gói dịch vụ bạn đã mua được hiển thị chi tiết tại mục 'Lịch sử đơn đã mua'.";
                 } else if(lower.includes('dùng thử')) {
@@ -1429,117 +1270,57 @@
             }
         }
 
-        function runFacebookAutomation() {
-            let val = document.getElementById('fb-feature-select').value;
-            if(val === 'group') {
-                let acc = document.getElementById('fb-group-acc').value.trim();
-                let links = document.getElementById('fb-group-links').value.trim();
-                let msg = document.getElementById('fb-group-msg').value.trim();
-                if(!acc || !links || !msg) {
-                    showCustomAlert('Thiếu thông tin', 'Vui lòng nhập đầy đủ tài khoản, danh sách nhóm và nội dung bài đăng Facebook!', '⚠️');
-                    return;
-                }
-            } else {
-                let acc = document.getElementById('fb-cmt-acc').value.trim();
-                let link = document.getElementById('fb-cmt-link').value.trim();
-                let msg = document.getElementById('fb-cmt-msg').value.trim();
-                if(!acc || !link || !msg) {
-                    showCustomAlert('Thiếu thông tin', 'Vui lòng nhập đầy đủ tài khoản, link bài viết và nội dung bình luận!', '⚠️');
-                    return;
-                }
-            }
-            showCustomAlert('Thành công', '🚀 Tiến trình Facebook Automation đã được khởi chạy thành công!', '📘');
-        }
-
         function runTikAIGeneration() {
-            let prompt = document.getElementById('tik-prompt-input').value.trim();
-            if(!prompt) {
-                showCustomAlert('Thiếu câu lệnh', 'Vui lòng nhập câu lệnh (Prompt) mô tả nội dung bạn muốn tạo!', '⚠️');
-                return;
-            }
-            showCustomAlert('Đang xử lý', '✨ AI đang khởi tạo hình ảnh / video theo yêu cầu của bạn...', '⏳');
+            showToast('✨ AI đang xử lý tạo thành phẩm...');
             setTimeout(() => {
-                document.getElementById('tik-ai-result-box').style.display = 'block';
-                showCustomAlert('Thành công', '✅ Đã tạo thành phẩm AI thành công! Bạn có thể tải về hoặc lưu lại.', '🎉');
-            }, 1200);
+                showToast('✅ Đã tạo xong! Bạn có thể lấy link tải ở bên dưới.');
+            }, 1000);
         }
 
         function handleTikTokLoginCheck() {
             let u = document.getElementById('tik-user-input').value.trim();
             let p = document.getElementById('tik-pass-input').value.trim();
-            if(!u || !p) { 
-                showCustomAlert('Thiếu thông tin', 'Vui lòng nhập tài khoản và mật khẩu TikTok trước khi đăng nhập!', '⚠️'); 
-                return; 
-            }
+            if(!u || !p) { alert('Vui lòng nhập tài khoản và mật khẩu TikTok!'); return; }
             
-            showCustomAlert('Đang kiểm tra', '🔐 Đang kết nối và kiểm tra bảo mật với TikTok...', '⏳');
+            showToast('🔐 Đang kiểm tra đăng nhập TikTok...');
             setTimeout(() => {
                 document.getElementById('tik-otp-step').style.display = 'block';
-                showCustomAlert('Yêu cầu bảo mật', '⚠️ Tài khoản yêu cầu mã xác thực / OTP / 2FA. Vui lòng nhập mã để tiếp tục!', '🛡️');
-            }, 1200);
+                showToast('⚠️ Vui lòng nhập mã xác thực (OTP/2FA) để tiếp tục!');
+            }, 1000);
         }
 
         function verifyTikTokOTP() {
             let otp = document.getElementById('tik-otp-input').value.trim();
-            if(!otp) { 
-                showCustomAlert('Thiếu mã', 'Vui lòng nhập mã xác thực OTP từ TikTok!', '⚠️'); 
-                return; 
-            }
+            if(!otp) { alert('Vui lòng nhập mã xác thực!'); return; }
 
-            showCustomAlert('Thành công', '✅ Xác thực mã thành công! Đã vào phiên làm việc kênh.', '🎉');
+            showToast('✅ Xác thực mã thành công!');
             document.getElementById('tik-otp-step').style.display = 'none';
             document.getElementById('tik-login-step').style.display = 'none';
             document.getElementById('tik-content-step').style.display = 'block';
         }
 
         function saveTikTokSchedule() {
-            showCustomAlert('Thành công', '🚀 Tiến trình đăng bài tự động và hẹn giờ TikTok đã được lưu thành công!', '🎵');
+            showToast('🚀 Đã lưu tiến trình và hẹn giờ đăng TikTok thành công!');
+            setTimeout(() => {
+                alert('Tiến trình đăng bài tự động đã được khởi tạo và lưu lại trong hệ thống!');
+            }, 500);
         }
 
         function addNewPlatform() {
             let name = document.getElementById('new-plat-name').value.trim();
             let icon = document.getElementById('new-plat-icon').value;
             let note = document.getElementById('new-plat-note').value.trim();
-            if(!name) { 
-                showCustomAlert('Thiếu tên', 'Vui lòng nhập tên nền tảng mới!', '⚠️'); 
-                return; 
-            }
-            showCustomAlert('Thành công', `✅ Đã thêm nền tảng ${icon} ${name} vào hệ thống thành công!`, '🧩');
+            if(!name) { alert('Vui lòng nhập tên nền tảng!'); return; }
+            showToast(`✅ Đã thêm nền tảng ${icon} ${name} thành công!`);
             document.getElementById('new-plat-name').value = '';
             document.getElementById('new-plat-note').value = '';
         }
 
-        function saveMaterialData() {
-            let data = document.getElementById('mat-data').value.trim();
-            if(!data) {
-                showCustomAlert('Thiếu dữ liệu', 'Vui lòng dán danh sách nguyên liệu tài nguyên vào ô chi tiết!', '⚠️');
-                return;
+        function promptNewPassword(username) {
+            let newPass = prompt(`Nhập mật khẩu mới cho tài khoản [${username}]:`);
+            if(newPass) {
+                showToast(`✅ Đã cấp lại mật khẩu mới cho ${username} thành công!`);
             }
-            showCustomAlert('Thành công', '📦 Đã nhập kho tài nguyên thành công!', '✅');
-        }
-
-        function submitRefundRequest() {
-            let orderId = document.getElementById('refund-order-id').value.trim();
-            let reason = document.getElementById('refund-reason').value.trim();
-            if(!orderId || !reason) {
-                showCustomAlert('Thiếu thông tin', 'Vui lòng nhập mã đơn hàng và mô tả lý do lỗi cần hoàn tiền!', '⚠️');
-                return;
-            }
-            showCustomAlert('Thành công', '🔄 Yêu cầu hoàn tiền đã được gửi tới Admin xử lý!', '✅');
-            document.getElementById('refund-order-id').value = '';
-            document.getElementById('refund-reason').value = '';
-        }
-
-        function submitSupportRequest() {
-            let title = document.getElementById('sup-title').value.trim();
-            let content = document.getElementById('sup-content').value.trim();
-            if(!title || !content) {
-                showCustomAlert('Thiếu thông tin', 'Vui lòng điền đầy đủ tiêu đề và nội dung cần hỗ trợ!', '⚠️');
-                return;
-            }
-            showCustomAlert('Thành công', '🎧 Yêu cầu hỗ trợ đã được gửi thành công đến đội ngũ CSKH!', '✅');
-            document.getElementById('sup-title').value = '';
-            document.getElementById('sup-content').value = '';
         }
     </script>
 </body>

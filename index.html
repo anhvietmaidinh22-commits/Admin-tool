@@ -27,46 +27,63 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
 
-        #toast-notification { position: fixed; bottom: 25px; right: 25px; background: var(--accent-main); color: #fff; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; box-shadow: 0 10px 25px rgba(0,0,0,0.4); display: none; z-index: 6000; align-items: center; gap: 8px; animation: slideIn 0.3s ease; }
+        #toast-notification { position: fixed; bottom: 25px; right: 25px; background: var(--accent-main); color: #fff; padding: 12px 20px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; box-shadow: 0 10px 25px rgba(0,0,0,0.4); display: none; z-index: 7000; align-items: center; gap: 10px; animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* MODAL THÔNG BÁO HIỆN ĐẠI */
+        #custom-alert-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 8000; padding: 20px; }
+        .custom-alert-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; width: 100%; max-width: 360px; padding: 25px 20px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.6); animation: scaleUp 0.25s ease; }
+        @keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .custom-alert-icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+        .custom-alert-title { font-size: 1.15rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+        .custom-alert-msg { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
+        .custom-alert-btn { width: 100%; padding: 11px; background: var(--accent-main); color: #fff; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; font-size: 0.9rem; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3); transition: 0.2s; }
+        .custom-alert-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
         .dynamic-icon { display: inline-block; animation: pulseIcon 2s infinite ease-in-out; }
         @keyframes pulseIcon { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
+        /* MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ SANG TRỌNG */
         #auth-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: linear-gradient(135deg, #050811 0%, #0B0F19 50%, #111827 100%);
-            display: flex; align-items: center; justify-content: center; z-index: 5000; padding: 20px;
+            display: flex; align-items: center; justify-content: center; z-index: 5000; padding: 20px; overflow-y: auto;
         }
         .auth-card-container {
-            width: 100%; max-width: 420px; background: rgba(31, 41, 55, 0.7);
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;
-            padding: 35px 30px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            width: 100%; max-width: 420px; background: rgba(31, 41, 55, 0.75);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px;
+            padding: 30px 28px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
         }
-        .auth-header { text-align: center; margin-bottom: 25px; }
-        .auth-logo-icon { font-size: 2.2rem; margin-bottom: 8px; display: inline-block; }
-        .auth-title { font-size: 1.5rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; margin-bottom: 4px; }
-        .auth-subtitle { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
+        
+        .auth-avatar-box {
+            width: 75px; height: 75px; border-radius: 50%; overflow: hidden; margin: 0 auto 14px auto;
+            border: 2px solid var(--accent-main); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); background: #111827;
+        }
+        .auth-avatar-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        .auth-header { text-align: center; margin-bottom: 20px; }
+        .auth-title { font-size: 1.4rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; margin-bottom: 4px; }
+        .auth-subtitle { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
 
         .auth-tabs-modern {
-            display: flex; background: rgba(17, 24, 39, 0.6); padding: 4px;
-            border-radius: 10px; margin-bottom: 22px; border: 1px solid var(--border-color);
+            display: flex; background: rgba(17, 24, 39, 0.7); padding: 4px;
+            border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color);
         }
         .auth-tab-btn-mod {
             flex: 1; background: none; border: none; color: var(--text-muted);
-            font-weight: 700; font-size: 0.84rem; padding: 9px 0; border-radius: 8px;
+            font-weight: 700; font-size: 0.84rem; padding: 9px 0; border-radius: 9px;
             cursor: pointer; transition: all 0.3s ease; text-align: center;
         }
         .auth-tab-btn-mod.active {
-            background: var(--accent-main); color: #fff; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            background: var(--accent-main); color: #fff; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
         }
 
-        .auth-form-group { margin-bottom: 16px; }
+        .auth-form-group { margin-bottom: 14px; }
         .auth-form-group label { display: block; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
         .auth-input-wrapper { position: relative; display: flex; align-items: center; }
         .auth-input-wrapper input {
-            width: 100%; padding: 11px 14px 11px 40px; background: rgba(17, 24, 39, 0.8);
+            width: 100%; padding: 11px 14px 11px 40px; background: rgba(17, 24, 39, 0.85);
             border: 1px solid var(--border-color); border-radius: 10px; color: #fff; font-size: 0.88rem; outline: none; transition: all 0.3s;
         }
         .auth-input-wrapper input:focus {
@@ -77,9 +94,25 @@
         .auth-submit-btn {
             width: 100%; padding: 12px; background: linear-gradient(135deg, var(--accent-main), #059669);
             color: #fff; font-weight: 700; font-size: 0.92rem; border: none; border-radius: 10px;
-            cursor: pointer; transition: all 0.3s; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); margin-top: 6px;
+            cursor: pointer; transition: all 0.3s; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); margin-top: 4px;
         }
         .auth-submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(16, 185, 129, 0.4); }
+
+        .auth-divider { text-align: center; position: relative; margin: 18px 0; }
+        .auth-divider::before { content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: var(--border-color); }
+        .auth-divider span { position: relative; background: #1F2937; padding: 0 12px; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+
+        .auth-social-row { display: flex; justify-content: center; gap: 12px; margin-bottom: 14px; }
+        .auth-social-btn {
+            width: 44px; height: 44px; border-radius: 50%; background: #111827; border: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; box-shadow: var(--shadow);
+        }
+        .auth-social-btn:hover { transform: scale(1.1); border-color: var(--accent-main); }
+        .auth-social-btn img { width: 22px; height: 22px; object-fit: contain; }
+
+        .auth-footer-links { text-align: center; margin-top: 10px; }
+        .auth-footer-links a { color: var(--accent-main); font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: 0.2s; }
+        .auth-footer-links a:hover { text-decoration: underline; }
 
         .sidebar { width: 260px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; flex-shrink: 0; height: 100%; overflow-y: auto; z-index: 1000; transition: 0.3s; }
         @media(max-width: 899px) {
@@ -185,6 +218,16 @@
 
     <div id="toast-notification">✅ Hoàn tất thành công!</div>
 
+    <!-- MODAL THÔNG BÁO HIỆN ĐẠI -->
+    <div id="custom-alert-modal">
+        <div class="custom-alert-box">
+            <span class="custom-alert-icon" id="alert-icon">⚠️</span>
+            <div class="custom-alert-title" id="alert-title">Thông báo</div>
+            <div class="custom-alert-msg" id="alert-msg">Nội dung thông báo chi tiết...</div>
+            <button type="button" class="custom-alert-btn" onclick="closeCustomAlert()">Đã Hiểu</button>
+        </div>
+    </div>
+
     <audio id="bg-audio" loop preload="auto" crossorigin="anonymous">
         <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
     </audio>
@@ -202,13 +245,15 @@
         <img id="ai-custom-avatar-btn" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" onclick="toggleChatBox()" title="Chat AI CSKH">
     </div>
 
-    <!-- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ -->
+    <!-- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ SANG TRỌNG -->
     <div id="auth-screen">
         <div class="auth-card-container">
+            <div class="auth-avatar-box">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80" alt="Avatar Admin">
+            </div>
             <div class="auth-header">
-                <span class="auth-logo-icon dynamic-icon">⚡</span>
-                <h1 class="auth-title">AutoPost AI Pro</h1>
-                <p class="auth-subtitle">Hệ thống quản trị & điều hành dịch vụ</p>
+                <h1 class="auth-title">Đăng Nhập Hệ Thống</h1>
+                <p class="auth-subtitle">AutoPost AI Pro — Quản trị & Dịch vụ toàn diện</p>
             </div>
             
             <div class="auth-tabs-modern">
@@ -219,10 +264,10 @@
             <!-- Form Đăng Nhập -->
             <div id="auth-form-login">
                 <div class="auth-form-group">
-                    <label>Tài khoản</label>
+                    <label>Tên đăng nhập</label>
                     <div class="auth-input-wrapper">
                         <span class="auth-input-icon">👤</span>
-                        <input type="text" id="login-username" autocomplete="off" placeholder="Nhập tài khoản...">
+                        <input type="text" id="login-username" autocomplete="off" placeholder="Nhập tên đăng nhập...">
                     </div>
                 </div>
                 <div class="auth-form-group">
@@ -232,7 +277,18 @@
                         <input type="password" id="login-password" autocomplete="new-password" placeholder="Nhập mật khẩu...">
                     </div>
                 </div>
-                <button type="button" class="auth-submit-btn" onclick="handleLogin()">Đăng Nhập Ngay</button>
+                <button type="button" class="auth-submit-btn" onclick="handleLogin()">Đăng Nhập</button>
+                
+                <div class="auth-divider"><span>Hoặc đăng nhập nhanh</span></div>
+                <div class="auth-social-row">
+                    <div class="auth-social-btn" onclick="showToast('🔗 Đang kết nối Facebook...')"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="FB"></div>
+                    <div class="auth-social-btn" onclick="showToast('🔗 Đang kết nối Telegram...')"><img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="TG"></div>
+                    <div class="auth-social-btn" onclick="showToast('🔗 Đang kết nối Zalo...')"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_Zalo.svg" alt="Zalo"></div>
+                </div>
+
+                <div class="auth-footer-links">
+                    <a href="#" onclick="showCustomAlert('Khôi phục mật khẩu', 'Vui lòng liên hệ Admin qua kênh hỗ trợ Zalo/Telegram ở góc màn hình để được cấp lại mật khẩu!', '🔑')">Quên mật khẩu?</a>
+                </div>
             </div>
 
             <!-- Form Đăng Ký -->
@@ -442,7 +498,7 @@
                     <div class="card">
                         <div class="card-title">💳 Cài đặt nạp tiền tự động ACB SePay (Webhook & API)</div>
                         <div class="form-group"><label>SePay API Key</label><input type="text" id="sepay-apikey" placeholder="Nhập API Key tài khoản SePay của bạn..."></div>
-                        <div class="form-group"><label>Webhook URL (Dán link này vào cài đặt SePay)</label><input type="text" readonly value="https://autopostai.site/api/sepay-webhook" style="background: rgba(0,0,0,0.3); color: var(--accent-main); font-weight: 700;"></div>
+                        <div class="form-group"><label>Webhook URL (Dán link Google Apps Script vào SePay)</label><input type="text" readonly value="https://script.google.com/macros/s/AKfycbwJVQr8_7d8KOoEDsjFyl2cbQSo6Ertgbhgz-oLwbeg7vNWdCmti6cVYmIEXoIMoblv/exec" style="background: rgba(0,0,0,0.3); color: var(--accent-main); font-weight: 700;"></div>
                         <div class="form-group"><label>Ngân hàng nhận tiền</label><input type="text" id="sepay-bank" value="ACB"></div>
                         <div class="form-group"><label>Số tài khoản</label><input type="text" id="sepay-stk" value="0898851000"></div>
                         <div class="form-group"><label>Chủ tài khoản</label><input type="text" id="sepay-name" value="DINH HOANG VIET ANH"></div>
@@ -809,6 +865,17 @@
             updateClientWalletDisplay();
         });
 
+        function showCustomAlert(title, message, icon = '⚠️') {
+            document.getElementById('alert-title').innerText = title;
+            document.getElementById('alert-msg').innerText = message;
+            document.getElementById('alert-icon').innerText = icon;
+            document.getElementById('custom-alert-modal').style.display = 'flex';
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('custom-alert-modal').style.display = 'none';
+        }
+
         function updateClientWalletDisplay() {
             let currentUsr = localStorage.getItem('currentUsername') || 'thanhvien_pro';
             let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
@@ -928,7 +995,7 @@
             let actionType = document.getElementById('modal-action-type').value;
 
             if(isNaN(amount) || amount <= 0) {
-                alert('Vui lòng nhập số tiền hợp lệ!');
+                showCustomAlert('Lỗi nhập liệu', 'Vui lòng nhập số tiền hợp lệ!', '⚠️');
                 return;
             }
 
@@ -1052,44 +1119,46 @@
             }, 800);
         }
 
-        // KIỂM TRA ĐĂNG NHẬP CHÍNH XÁC (CHẶN ĐĂNG NHẬP BỪA)
         function handleLogin() {
             let user = document.getElementById('login-username').value.trim();
             let pass = document.getElementById('login-password').value.trim();
-            if(!user || !pass) { alert('Vui lòng nhập tài khoản và mật khẩu!'); return; }
+            if(!user || !pass) { 
+                showCustomAlert('Thiếu thông tin', 'Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!', '⚠️'); 
+                return; 
+            }
 
-            // Kiểm tra tài khoản Admin mặc định
             if(user === 'admin2608' && pass === '2608@') {
                 triggerLoginSuccess('admin', user);
                 return;
             }
 
-            // Kiểm tra trong danh sách các user đã đăng ký thực tế
             let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
             let found = users.find(u => u.username === user && u.pass === pass);
 
             if(found) {
                 triggerLoginSuccess('member', user);
             } else {
-                alert('❌ Sai tài khoản hoặc mật khẩu! Vui lòng kiểm tra lại.');
+                showCustomAlert('Đăng nhập thất bại', 'Sai tên đăng nhập hoặc mật khẩu! Vui lòng kiểm tra lại.', '❌');
             }
         }
 
-        // KIỂM TRA ĐĂNG KÝ (CHẶN TRÙNG TÊN)
         function handleRegister() {
             let user = document.getElementById('reg-username').value.trim();
             let pass = document.getElementById('reg-password').value.trim();
-            if(!user || !pass) { alert('Vui lòng điền thông tin đăng ký!'); return; }
+            if(!user || !pass) { 
+                showCustomAlert('Thiếu thông tin', 'Vui lòng điền đầy đủ thông tin đăng ký!', '⚠️'); 
+                return; 
+            }
 
             if(user === 'admin2608') {
-                alert('❌ Tên tài khoản này không được phép sử dụng.');
+                showCustomAlert('Không hợp lệ', 'Tên tài khoản này đã được bảo vệ bởi hệ thống.', '❌');
                 return;
             }
 
             let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
             let existed = users.find(u => u.username === user);
             if(existed) {
-                alert('❌ Tên tài khoản này đã tồn tại! Vui lòng chọn tên khác.');
+                showCustomAlert('Trùng tài khoản', 'Tên tài khoản này đã tồn tại trên hệ thống! Vui lòng chọn tên khác.', '❌');
                 return;
             }
             
@@ -1227,7 +1296,7 @@
         function handleTikTokLoginCheck() {
             let u = document.getElementById('tik-user-input').value.trim();
             let p = document.getElementById('tik-pass-input').value.trim();
-            if(!u || !p) { alert('Vui lòng nhập tài khoản và mật khẩu TikTok!'); return; }
+            if(!u || !p) { showCustomAlert('Thiếu thông tin', 'Vui lòng nhập tài khoản và mật khẩu TikTok!', '⚠️'); return; }
             
             showToast('🔐 Đang kiểm tra đăng nhập TikTok...');
             setTimeout(() => {
@@ -1238,7 +1307,7 @@
 
         function verifyTikTokOTP() {
             let otp = document.getElementById('tik-otp-input').value.trim();
-            if(!otp) { alert('Vui lòng nhập mã xác thực!'); return; }
+            if(!otp) { showCustomAlert('Thiếu mã', 'Vui lòng nhập mã xác thực!', '⚠️'); return; }
 
             showToast('✅ Xác thực mã thành công!');
             document.getElementById('tik-otp-step').style.display = 'none';
@@ -1249,7 +1318,7 @@
         function saveTikTokSchedule() {
             showToast('🚀 Đã lưu tiến trình và hẹn giờ đăng TikTok thành công!');
             setTimeout(() => {
-                alert('Tiến trình đăng bài tự động đã được khởi tạo và lưu lại trong hệ thống!');
+                showCustomAlert('Thành công', 'Tiến trình đăng bài tự động đã được khởi tạo và lưu lại trong hệ thống!', '🚀');
             }, 500);
         }
 
@@ -1257,7 +1326,7 @@
             let name = document.getElementById('new-plat-name').value.trim();
             let icon = document.getElementById('new-plat-icon').value;
             let note = document.getElementById('new-plat-note').value.trim();
-            if(!name) { alert('Vui lòng nhập tên nền tảng!'); return; }
+            if(!name) { showCustomAlert('Thiếu tên', 'Vui lòng nhập tên nền tảng!', '⚠️'); return; }
             showToast(`✅ Đã thêm nền tảng ${icon} ${name} thành công!`);
             document.getElementById('new-plat-name').value = '';
             document.getElementById('new-plat-note').value = '';

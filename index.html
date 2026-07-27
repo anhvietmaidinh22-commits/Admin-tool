@@ -27,17 +27,14 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
 
-        #toast-notification { position: fixed; bottom: 25px; right: 25px; background: var(--accent-main); color: #fff; padding: 12px 20px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; box-shadow: 0 10px 25px rgba(0,0,0,0.4); display: none; z-index: 7000; align-items: center; gap: 10px; animation: slideIn 0.3s ease; }
-        @keyframes slideIn { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        /* MODAL THÔNG BÁO HIỆN ĐẠI */
-        #custom-alert-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 8000; padding: 20px; }
-        .custom-alert-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; width: 100%; max-width: 360px; padding: 25px 20px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.6); animation: scaleUp 0.25s ease; }
-        @keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .custom-alert-icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
-        .custom-alert-title { font-size: 1.15rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
-        .custom-alert-msg { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
-        .custom-alert-btn { width: 100%; padding: 11px; background: var(--accent-main); color: #fff; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; font-size: 0.9rem; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3); transition: 0.2s; }
+        /* MODAL THÔNG BÁO CHÍNH GIỮA HIỆN ĐẠI */
+        #custom-alert-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 9000; padding: 20px; }
+        .custom-alert-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 18px; width: 100%; max-width: 380px; padding: 28px 22px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.7); animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes scaleUp { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .custom-alert-icon { font-size: 2.8rem; margin-bottom: 12px; display: block; }
+        .custom-alert-title { font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
+        .custom-alert-msg { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 22px; }
+        .custom-alert-btn { width: 100%; padding: 12px; background: var(--accent-main); color: #fff; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; font-size: 0.92rem; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.35); transition: 0.2s; }
         .custom-alert-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
         .dynamic-icon { display: inline-block; animation: pulseIcon 2s infinite ease-in-out; }
@@ -216,9 +213,6 @@
 </head>
 <body>
 
-    <div id="toast-notification">✅ Hoàn tất thành công!</div>
-
-    <!-- MODAL THÔNG BÁO HIỆN ĐẠI -->
     <div id="custom-alert-modal">
         <div class="custom-alert-box">
             <span class="custom-alert-icon" id="alert-icon">⚠️</span>
@@ -245,7 +239,6 @@
         <img id="ai-custom-avatar-btn" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" onclick="toggleChatBox()" title="Chat AI CSKH">
     </div>
 
-    <!-- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ SANG TRỌNG -->
     <div id="auth-screen">
         <div class="auth-card-container">
             <div class="auth-avatar-box">
@@ -261,7 +254,6 @@
                 <button type="button" class="auth-tab-btn-mod" id="tab-btn-register" onclick="switchAuthTab('register')">Đăng Ký</button>
             </div>
 
-            <!-- Form Đăng Nhập -->
             <div id="auth-form-login">
                 <div class="auth-form-group">
                     <label>Tên đăng nhập</label>
@@ -281,9 +273,9 @@
                 
                 <div class="auth-divider"><span>Hoặc đăng nhập nhanh</span></div>
                 <div class="auth-social-row">
-                    <div class="auth-social-btn" onclick="showToast('🔗 Đang kết nối Facebook...')"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="FB"></div>
-                    <div class="auth-social-btn" onclick="showToast('🔗 Đang kết nối Telegram...')"><img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="TG"></div>
-                    <div class="auth-social-btn" onclick="showToast('🔗 Đang kết nối Zalo...')"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_Zalo.svg" alt="Zalo"></div>
+                    <div class="auth-social-btn" onclick="showCustomAlert('Kết nối Facebook', 'Hệ thống đang kết nối OAuth Facebook...', '📘')"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="FB"></div>
+                    <div class="auth-social-btn" onclick="showCustomAlert('Kết nối Telegram', 'Hệ thống đang kết nối Telegram Bot...', '✈️')"><img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="TG"></div>
+                    <div class="auth-social-btn" onclick="showCustomAlert('Kết nối Zalo', 'Hệ thống đang kết nối Zalo OA...', '💬')"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_Zalo.svg" alt="Zalo"></div>
                 </div>
 
                 <div class="auth-footer-links">
@@ -291,7 +283,6 @@
                 </div>
             </div>
 
-            <!-- Form Đăng Ký -->
             <div id="auth-form-register" style="display: none;">
                 <div class="auth-form-group">
                     <label>Tài khoản mới</label>
@@ -319,17 +310,14 @@
         </div>
     </div>
 
-    <!-- OVERLAY MOBILE -->
     <div id="sidebar-overlay" onclick="toggleMenu()"></div>
 
-    <!-- SIDEBAR MENU -->
     <div class="sidebar" id="app-sidebar">
         <div class="sidebar-brand">
             <span><span class="dynamic-icon">⚡</span> AutoPost AI Pro</span>
             <span style="cursor:pointer; font-size: 1.2rem;" onclick="toggleMenu()">✕</span>
         </div>
         <div class="sidebar-menu" id="sidebar-menu-container">
-            <!-- PHẦN DÀNH RIÊNG CHO ADMIN -->
             <div id="admin-menu-section" style="display:none;">
                 <div class="menu-category">QUẢN TRỊ HỆ THỐNG</div>
                 <div class="menu-item active" onclick="switchTab('tab-admin-stats', event)">📊 Thống kê hệ thống</div>
@@ -368,14 +356,12 @@
             <div class="menu-item" onclick="switchTab('tab-fb', event)"><span class="dynamic-icon">📘</span> Facebook Automation</div>
             <div class="menu-item" onclick="switchTab('tab-tiktok', event)"><span class="dynamic-icon">🎵</span> TikTok (AI & Đăng tự động)</div>
 
-            <!-- Nút Đăng Xuất -->
             <div style="margin-top: 20px; padding-bottom: 10px;">
                 <div class="menu-item logout-btn" onclick="handleLogout()">🚪 Đăng Xuất Tài Khoản</div>
             </div>
         </div>
     </div>
 
-    <!-- MAIN CONTAINER -->
     <div class="main-container">
         <div class="topbar">
             <div style="display: flex; align-items: center; gap: 12px;">
@@ -403,7 +389,6 @@
 
         <div class="content-body">
             <div class="content-inner">
-                <!-- 1. THỐNG KÊ ADMIN -->
                 <div id="tab-admin-stats" class="tab-content active">
                     <div class="card">
                         <div class="card-title">📊 Thống kê hệ thống toàn bộ</div>
@@ -416,7 +401,6 @@
                     </div>
                 </div>
 
-                <!-- 2. QUẢN LÝ KHÁCH HÀNG -->
                 <div id="tab-admin-users" class="tab-content">
                     <div class="card">
                         <div class="card-title">👥 Quản lý Khách Hàng</div>
@@ -433,14 +417,12 @@
                                     </tr>
                                 </thead>
                                 <tbody id="admin-users-table-body">
-                                    <!-- Render động bằng JS -->
-                                </tbody>
+                                    </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- 3. MỞ RỘNG NỀN TẢNG -->
                 <div id="tab-admin-platforms" class="tab-content">
                     <div class="card">
                         <div class="card-title">🧩 Mở rộng Nền tảng & Dịch vụ</div>
@@ -478,11 +460,11 @@
                                 <option value="paused">🟠 Tạm ngưng</option>
                             </select>
                         </div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã nhập kho nguyên liệu thành công!')">💾 Lưu Kho Nguyên Liệu</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="saveMaterialData()">💾 Lưu Kho Nguyên Liệu</button>
                     </div>
                 </div>
 
-                <div id="tab-admin-apibot" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt API & Bot</div><div class="form-group"><label>Token Telegram Bot</label><input type="text" placeholder="Bot token..."></div><button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu cấu hình Bot!')">Lưu Bot</button></div></div>
+                <div id="tab-admin-apibot" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt API & Bot</div><div class="form-group"><label>Token Telegram Bot</label><input type="text" placeholder="Bot token..."></div><button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Đã lưu cấu hình Bot thành công!', '✅')">Lưu Bot</button></div></div>
                 
                 <div id="tab-admin-aikeys" class="tab-content">
                     <div class="card">
@@ -490,7 +472,7 @@
                         <div class="form-group"><label>OpenAI / ChatGPT API Key (Dùng tạo Content Văn bản)</label><input type="text" id="ai-key-openai" placeholder="sk-proj-..."></div>
                         <div class="form-group"><label>Google Gemini API Key (Dùng cho Trợ lý hỗ trợ AI)</label><input type="text" id="ai-key-gemini" placeholder="AIzaSy..."></div>
                         <div class="form-group"><label>Midjourney / Runway / DALL-E API Key (Dùng tạo Video & Ảnh AI)</label><input type="text" id="ai-key-media" placeholder="key_media_..."></div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu toàn bộ các Key AI thành công!')">💾 Lưu Tất Cả Key AI</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Đã lưu toàn bộ các Key AI thành công!', '✅')">💾 Lưu Tất Cả Key AI</button>
                     </div>
                 </div>
                 
@@ -498,16 +480,16 @@
                     <div class="card">
                         <div class="card-title">💳 Cài đặt nạp tiền tự động ACB SePay (Webhook & API)</div>
                         <div class="form-group"><label>SePay API Key</label><input type="text" id="sepay-apikey" placeholder="Nhập API Key tài khoản SePay của bạn..."></div>
-                        <div class="form-group"><label>Webhook URL (Dán link Google Apps Script vào SePay)</label><input type="text" readonly value="https://script.google.com/macros/s/AKfycbwJVQr8_7d8KOoEDsjFyl2cbQSo6Ertgbhgz-oLwbeg7vNWdCmti6cVYmIEXoIMoblv/exec" style="background: rgba(0,0,0,0.3); color: var(--accent-main); font-weight: 700;"></div>
+                        <div class="form-group"><label>Webhook URL (Dán link Pipedream vào SePay)</label><input type="text" readonly value="https://e6b47a4c09186e61c7c03f092dbfc685.m.pipedream.net" style="background: rgba(0,0,0,0.3); color: var(--accent-main); font-weight: 700;"></div>
                         <div class="form-group"><label>Ngân hàng nhận tiền</label><input type="text" id="sepay-bank" value="ACB"></div>
                         <div class="form-group"><label>Số tài khoản</label><input type="text" id="sepay-stk" value="0898851000"></div>
                         <div class="form-group"><label>Chủ tài khoản</label><input type="text" id="sepay-name" value="DINH HOANG VIET ANH"></div>
                         <div class="form-group"><label>Cú pháp chuyển khoản SePay</label><input type="text" id="sepay-syntax" value="NAP"></div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu và kích hoạt hệ thống SePay ACB thành công!')">💾 Lưu & Kích Hoạt SePay</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Đã lưu và kích hoạt hệ thống SePay ACB thành công!', '✅')">💾 Lưu & Kích Hoạt SePay</button>
                     </div>
                 </div>
 
-                <div id="tab-admin-settings" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt chung website</div><div class="form-group"><label>Tên Website</label><input type="text" value="AutoPost AI Pro"></div><button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu cài đặt!')">Lưu</button></div></div>
+                <div id="tab-admin-settings" class="tab-content"><div class="card"><div class="card-title">⚙️ Cài đặt chung website</div><div class="form-group"><label>Tên Website</label><input type="text" value="AutoPost AI Pro"></div><button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Đã lưu cài đặt website thành công!', '✅')">Lưu</button></div></div>
                 <div id="tab-admin-noti" class="tab-content">
                     <div class="card">
                         <div class="card-title">📢 Cài đặt Thông báo Popup Trang Chủ</div>
@@ -516,7 +498,7 @@
                         <button type="button" class="btn btn-primary btn-sm" onclick="saveAdminNotification()">💾 Lưu Thông Báo</button>
                     </div>
                 </div>
-                <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div><div class="form-group"><label>Link Zalo/Facebook</label><input type="text" value="https://zalo.me"></div><button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã lưu!')">Lưu</button></div></div>
+                <div id="tab-admin-contact" class="tab-content"><div class="card"><div class="card-title">🎧 Cài đặt Liên kết Hỗ trợ</div><div class="form-group"><label>Link Zalo/Facebook</label><input type="text" value="https://zalo.me"></div><button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Đã lưu liên kết hỗ trợ thành công!', '✅')">Lưu</button></div></div>
                 
                 <div id="tab-admin-aibot-config" class="tab-content">
                     <div class="card">
@@ -526,7 +508,6 @@
                     </div>
                 </div>
 
-                <!-- QUẢN LÝ GÓI DỊCH VỤ -->
                 <div id="tab-admin-packages" class="tab-content">
                     <div class="card">
                         <div class="card-title">📦 Quản lý gói dịch vụ theo thời hạn & Ghi chú</div>
@@ -560,7 +541,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary btn-sm" style="margin-top: 14px;" onclick="showToast('✅ Đã lưu cấu hình bảng giá và ghi chú gói dịch vụ!')">💾 Lưu Thay Đổi Gói</button>
+                        <button type="button" class="btn btn-primary btn-sm" style="margin-top: 14px;" onclick="showCustomAlert('Thành công', 'Đã lưu cấu hình bảng giá và ghi chú gói dịch vụ!', '✅')">💾 Lưu Thay Đổi Gói</button>
                     </div>
                 </div>
 
@@ -596,13 +577,12 @@
                         <div class="card-title">🤝 Tiếp thị liên kết (CTV) - Cấu hình hoa hồng</div>
                         <div class="form-group"><label>Tỷ lệ phần trăm (%) hoa hồng giới thiệu</label><input type="number" id="aff-commission-rate" value="15" placeholder="Nhập %..."></div>
                         <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">CTV sẽ nhận được % hoa hồng tương ứng khi người được giới thiệu phát sinh nạp tiền.</p>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã cập nhật tỷ lệ hoa hồng CTV thành công!')">💾 Lưu Tỷ Lệ Hoa Hồng</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Đã cập nhật tỷ lệ hoa hồng CTV thành công!', '✅')">💾 Lưu Tỷ Lệ Hoa Hồng</button>
                     </div>
                 </div>
 
-                <div id="tab-admin-coupons" class="tab-content"><div class="card"><div class="card-title">🎟️ Coupons & Khuyến mại</div><div class="form-group"><label>Mã giảm giá</label><input type="text" placeholder="Mã..."></div><button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã tạo mã!')">Tạo</button></div></div>
+                <div id="tab-admin-coupons" class="tab-content"><div class="card"><div class="card-title">🎟️ Coupons & Khuyến mại</div><div class="form-group"><label>Mã giảm giá</label><input type="text" placeholder="Mã..."></div><button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Đã tạo mã giảm giá thành công!', '✅')">Tạo</button></div></div>
 
-                <!-- DASHBOARD KHÁCH HÀNG -->
                 <div id="dashboard" class="tab-content">
                     <div class="card" style="border-color: var(--accent-main);">
                         <div class="card-title"><span class="dynamic-icon">📢</span> <span id="display-noti-title">Thông báo chung hệ thống 2026</span></div>
@@ -621,7 +601,6 @@
                     </div>
                 </div>
 
-                <!-- QUẢN LÝ ĐƠN HÀNG KHÁCH -->
                 <div id="orders" class="tab-content">
                     <div class="card">
                         <div class="card-title">📋 Lịch sử đơn đã mua</div>
@@ -673,7 +652,7 @@
                         <div class="card-title">👤 Thông tin tài khoản của tôi</div>
                         <div class="form-group"><label>Tên đăng nhập</label><input type="text" id="profile-username" readonly value="thanhvien_pro"></div>
                         <div class="form-group"><label>Gói dịch vụ hiện tại</label><input type="text" readonly value="Gói Dùng Thử 3 Ngày Miễn Phí"></div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Cập nhật thông tin thành công!')">💾 Lưu Thay Đổi</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Cập nhật thông tin thành công!', '✅')">💾 Lưu Thay Đổi</button>
                     </div>
                 </div>
                 
@@ -689,28 +668,27 @@
                 <div id="refund" class="tab-content">
                     <div class="card">
                         <div class="card-title">🔄 Yêu cầu hoàn tiền đơn lỗi</div>
-                        <div class="form-group"><label>Mã đơn hàng lỗi</label><input type="text" placeholder="#ORD-..."></div>
-                        <div class="form-group"><label>Lý do lỗi</label><textarea rows="2" placeholder="Mô tả lý do..."></textarea></div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã gửi yêu cầu hoàn tiền đến Admin!')">Gửi Yêu Cầu</button>
+                        <div class="form-group"><label>Mã đơn hàng lỗi</label><input type="text" id="refund-order-id" placeholder="#ORD-..."></div>
+                        <div class="form-group"><label>Lý do lỗi</label><textarea id="refund-reason" rows="2" placeholder="Mô tả lý do..."></textarea></div>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="submitRefundRequest()">Gửi Yêu Cầu</button>
                     </div>
                 </div>
 
-                <div id="subweb" class="tab-content"><div class="card"><div class="card-title">🌐 Hệ thống tạo web con riêng</div><button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã khởi tạo web con thành công!')">Tạo Web Riêng Ngay</button></div></div>
+                <div id="subweb" class="tab-content"><div class="card"><div class="card-title">🌐 Hệ thống tạo web con riêng</div><button type="button" class="btn btn-primary btn-sm" onclick="showCustomAlert('Thành công', 'Đã khởi tạo web con thành công!', '🌐')">Tạo Web Riêng Ngay</button></div></div>
                 <div id="apitools" class="tab-content"><div class="card"><div class="card-title">💻 Tài liệu tích hợp API</div><p style="font-size:0.84rem; color:var(--text-muted);">API Key cá nhân: <code style="color:var(--accent-main);">ap_live_987123981273</code></p></div></div>
                 
                 <div id="support" class="tab-content">
                     <div class="card">
                         <div class="card-title">🎧 Gửi yêu cầu hỗ trợ</div>
-                        <div class="form-group"><label>Tiêu đề yêu cầu</label><input type="text" placeholder="Vấn đề cần hỗ trợ..."></div>
-                        <div class="form-group"><label>Nội dung chi tiết</label><textarea rows="3" placeholder="Nhập nội dung..."></textarea></div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã gửi yêu cầu hỗ trợ thành công!')">Gửi Hỗ Trợ</button>
+                        <div class="form-group"><label>Tiêu đề yêu cầu</label><input type="text" id="sup-title" placeholder="Vấn đề cần hỗ trợ..."></div>
+                        <div class="form-group"><label>Nội dung chi tiết</label><textarea id="sup-content" rows="3" placeholder="Nhập nội dung..."></textarea></div>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="submitSupportRequest()">Gửi Hỗ Trợ</button>
                     </div>
                 </div>
 
                 <div id="affiliate" class="tab-content"><div class="card"><div class="card-title">🔗 Tiếp thị liên kết nhận hoa hồng</div><p style="font-size:0.84rem; color:var(--text-muted);">Link giới thiệu của bạn: <b style="color:var(--accent-main);">https://autopostai.site/?ref=user</b></p></div></div>
                 <div id="notifications" class="tab-content"><div class="card"><div class="card-title">🔔 Thông báo hệ thống mới nhất</div><p style="font-size:0.84rem;" id="noti-tab-text">- Chào mừng bạn đã nhận 3 ngày dùng thử miễn phí dịch vụ!</p></div></div>
 
-                <!-- NỀN TẢNG FACEBOOK -->
                 <div id="tab-fb" class="tab-content">
                     <div class="card">
                         <div class="card-title"><span class="dynamic-icon">📘</span> Facebook Automation: Chọn Chức Năng</div>
@@ -722,24 +700,23 @@
                             </select>
                         </div>
                         <div id="fb-group-box">
-                            <div class="form-group"><label>Danh sách tài khoản / Kho Cookie (UID|Pass|Cookie)</label><textarea rows="3" placeholder="Nhập danh sách tài khoản..."></textarea></div>
-                            <div class="form-group"><label>Danh sách Link Group mục tiêu</label><textarea rows="2" placeholder="https://facebook.com/groups/..."></textarea></div>
-                            <div class="form-group"><label>Nội dung bài đăng</label><textarea rows="3" placeholder="Nhập nội dung bài viết..."></textarea></div>
+                            <div class="form-group"><label>Danh sách tài khoản / Kho Cookie (UID|Pass|Cookie)</label><textarea id="fb-group-acc" rows="3" placeholder="Nhập danh sách tài khoản..."></textarea></div>
+                            <div class="form-group"><label>Danh sách Link Group mục tiêu</label><textarea id="fb-group-links" rows="2" placeholder="https://facebook.com/groups/..."></textarea></div>
+                            <div class="form-group"><label>Nội dung bài đăng</label><textarea id="fb-group-msg" rows="3" placeholder="Nhập nội dung bài viết..."></textarea></div>
                         </div>
                         <div id="fb-comment-box" style="display:none;">
-                            <div class="form-group"><label>Danh sách tài khoản / Kho Cookie (UID|Pass|Cookie)</label><textarea rows="3" placeholder="Nhập danh sách tài khoản..."></textarea></div>
-                            <div class="form-group"><label>Link bài viết mục tiêu</label><input type="text" placeholder="https://facebook.com/permalink.php?story_fbid=..."></div>
-                            <div class="form-group"><label>Nội dung bình luận seeding</label><textarea rows="3" placeholder="Nhập nội dung bình luận..."></textarea></div>
+                            <div class="form-group"><label>Danh sách tài khoản / Kho Cookie (UID|Pass|Cookie)</label><textarea id="fb-cmt-acc" rows="3" placeholder="Nhập danh sách tài khoản..."></textarea></div>
+                            <div class="form-group"><label>Link bài viết mục tiêu</label><input type="text" id="fb-cmt-link" placeholder="https://facebook.com/permalink.php?story_fbid=..."></div>
+                            <div class="form-group"><label>Nội dung bình luận seeding</label><textarea id="fb-cmt-msg" rows="3" placeholder="Nhập nội dung bình luận..."></textarea></div>
                         </div>
                         <div class="form-group">
                             <label>Độ trễ giữa các hành động (Giây)</label>
                             <input type="number" id="fb-delay-time" value="5" placeholder="Nhập số giây trễ...">
                         </div>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="showToast('✅ Đã khởi chạy tiến trình Facebook với độ trễ đã chọn!')">🚀 Chạy Tiến Trình Facebook</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="runFacebookAutomation()">🚀 Chạy Tiến Trình Facebook</button>
                     </div>
                 </div>
                 
-                <!-- NỀN TẢNG TIKTOK -->
                 <div id="tab-tiktok" class="tab-content">
                     <div class="card">
                         <div class="card-title"><span class="dynamic-icon">✨</span> 1. Tạo Ảnh & Video AI Tự Động</div>
@@ -750,15 +727,15 @@
                                 <option value="image">Tạo Ảnh AI</option>
                             </select>
                         </div>
-                        <div class="form-group"><label>Nhập câu lệnh (Prompt) mô tả</label><textarea rows="2" placeholder="VD: Cô gái bước đi trên phố thời trang Tokyo..."></textarea></div>
+                        <div class="form-group"><label>Nhập câu lệnh (Prompt) mô tả</label><textarea id="tik-prompt-input" rows="2" placeholder="VD: Cô gái bước đi trên phố thời trang Tokyo..."></textarea></div>
                         <button type="button" class="btn btn-ai btn-sm" onclick="runTikAIGeneration()">✨ Tạo Thành Phẩm Bằng AI</button>
 
-                        <div class="result-output-box" id="tik-ai-result-box" style="display: block; margin-top: 14px;">
+                        <div class="result-output-box" id="tik-ai-result-box" style="display: none; margin-top: 14px;">
                             <label style="color: var(--accent-main); font-weight: 700;">📦 Kết quả thành phẩm AI đã sẵn sàng:</label>
                             <textarea rows="2" readonly>🎬 Link tải: https://cdn.autopostai.pro/ai_media_result_2026.mp4</textarea>
                             <div style="display: flex; gap: 8px; margin-top: 8px;">
-                                <a href="#" class="btn btn-primary btn-sm" style="text-decoration:none; text-align:center; flex:1;" onclick="showToast('📥 Đang tải xuống máy...')">Tải Về Máy</a>
-                                <button type="button" class="btn btn-ai btn-sm" style="flex:1;" onclick="showToast('✅ Đã xác nhận lưu thành phẩm!')">Lưu Lại</button>
+                                <a href="#" class="btn btn-primary btn-sm" style="text-decoration:none; text-align:center; flex:1;" onclick="showCustomAlert('Thành công', 'Đang tải xuống máy...', '📥')">Tải Về Máy</a>
+                                <button type="button" class="btn btn-ai btn-sm" style="flex:1;" onclick="showCustomAlert('Thành công', 'Đã xác nhận lưu thành phẩm!', '✅')">Lưu Lại</button>
                             </div>
                         </div>
                     </div>
@@ -777,24 +754,22 @@
                         </div>
                         <div id="tik-content-step" style="display:none; margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 15px;">
                             <div style="background: rgba(16, 185, 129, 0.15); color: var(--accent-main); padding: 8px; border-radius: 6px; font-weight: 700; font-size: 0.78rem; margin-bottom: 12px;">🟢 Đăng nhập thành công! Hãy thiết lập bài đăng:</div>
-                            <div class="form-group"><label>Tải video lên để đăng</label><input type="file"></div>
-                            <div class="form-group"><label>Link sản phẩm / Giỏ hàng TikTok Shop gắn kèm (Nếu có)</label><input type="text" placeholder="https://shop.tiktok.com/view/product/..."></div>
-                            <div class="form-group"><label>Nội dung kèm Hashtag</label><textarea rows="2" placeholder="#xuhuong #fyp #tiktokshop..."></textarea></div>
-                            <div class="form-group"><label>Chọn ngày giờ đăng bài tự động</label><input type="datetime-local"></div>
+                            <div class="form-group"><label>Tải video lên để đăng</label><input type="file" id="tik-file-input"></div>
+                            <div class="form-group"><label>Link sản phẩm / Giỏ hàng TikTok Shop gắn kèm (Nếu có)</label><input type="text" id="tik-shop-link" placeholder="https://shop.tiktok.com/view/product/..."></div>
+                            <div class="form-group"><label>Nội dung kèm Hashtag</label><textarea id="tik-caption" rows="2" placeholder="#xuhuong #fyp #tiktokshop..."></textarea></div>
+                            <div class="form-group"><label>Chọn ngày giờ đăng bài tự động</label><input type="datetime-local" id="tik-datetime"></div>
                             <button type="button" class="btn btn-primary" style="margin-top: 10px; background: linear-gradient(135deg, #10B981, #047857); font-size: 0.95rem; padding: 12px;" onclick="saveTikTokSchedule()">Xong - Lưu Tiến Trình & Hẹn Giờ Đăng</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Dòng chữ bản quyền ở cuối trang -->
             <div class="footer-copyright">
                 Bản quyền thuộc <b>DINH HOANG VIET ANH</b> © 2026
             </div>
         </div>
     </div>
 
-    <!-- POPUP CỘNG / TRỪ SỐ DƯ CHO ADMIN -->
     <div id="balance-modal">
         <div class="modal-balance-box">
             <h3 style="font-size: 0.95rem; margin-bottom: 12px; color: #fff;">💳 Điều chỉnh số dư ví</h3>
@@ -817,7 +792,6 @@
         </div>
     </div>
 
-    <!-- MODAL CHAT & CÓ CÁC KHUNG MENU BẤM NHANH -->
     <div id="chat-box-modal">
         <div class="chat-header">
             <span>🤖 Trợ lý AI CSKH thông minh</span>
@@ -865,6 +839,7 @@
             updateClientWalletDisplay();
         });
 
+        // HÀM HIỂN THỊ POPUP THÔNG BÁO TRUNG TÂM HIỆN ĐẠI
         function showCustomAlert(title, message, icon = '⚠️') {
             document.getElementById('alert-title').innerText = title;
             document.getElementById('alert-msg').innerText = message;
@@ -902,7 +877,7 @@
             let greeting = document.getElementById('cfg-bot-greeting').value;
             localStorage.setItem('botGreeting', greeting);
             loadAIBotConfig();
-            showToast('✅ Đã lưu cấu hình Trợ lý AI CSKH thành công!');
+            showCustomAlert('Thành công', 'Đã lưu cấu hình Trợ lý AI CSKH thành công!', '🤖');
         }
 
         function toggleActionDropdown(event) {
@@ -941,10 +916,10 @@
                             <div class="dropdown-action-wrap">
                                 <button type="button" class="action-dropdown-btn" onclick="toggleActionDropdown(event)">⚙️ Thao tác ▾</button>
                                 <div class="action-dropdown-content">
-                                    <button type="button" class="action-option" onclick="showToast('🔍 Chi tiết ${u.username}')">👤 Chi tiết</button>
+                                    <button type="button" class="action-option" onclick="showCustomAlert('Chi tiết', 'Tài khoản: ${u.username}', '👤')">👤 Chi tiết</button>
                                     <button type="button" class="action-option" onclick="openBalanceModal('${u.username}')">💳 Sửa số dư</button>
-                                    <button type="button" class="action-option" onclick="showToast('📜 Xem nhật ký giao dịch')">⏳ Nhật ký giao dịch</button>
-                                    <button type="button" class="action-option" onclick="showToast('📊 Thống kê user')">📈 Thống kê</button>
+                                    <button type="button" class="action-option" onclick="showCustomAlert('Nhật ký', 'Xem nhật ký giao dịch của ${u.username}', '⏳')">⏳ Nhật ký giao dịch</button>
+                                    <button type="button" class="action-option" onclick="showCustomAlert('Thống kê', 'Thống kê hoạt động user ${u.username}', '📊')">📈 Thống kê</button>
                                     <button type="button" class="action-option" onclick="promptNewPassword('${u.username}')">🔑 Khôi phục mật khẩu</button>
                                 </div>
                             </div>
@@ -956,7 +931,6 @@
                 `;
             });
 
-            // TÀI KHOẢN ADMIN NẰM DƯỚI CÙNG VỚI SỐ TIỀN 1 TỶ
             html += `
                 <tr style="background: rgba(16, 185, 129, 0.08);">
                     <td>01</td>
@@ -964,9 +938,9 @@
                         <div class="dropdown-action-wrap">
                             <button type="button" class="action-dropdown-btn" onclick="toggleActionDropdown(event)">⚙️ Thao tác ▾</button>
                             <div class="action-dropdown-content">
-                                <button type="button" class="action-option" onclick="showToast('🔍 Chi tiết Admin')">👤 Chi tiết</button>
+                                <button type="button" class="action-option" onclick="showCustomAlert('Chi tiết', 'Quản trị viên hệ thống', '👤')">👤 Chi tiết</button>
                                 <button type="button" class="action-option" onclick="openBalanceModal('admin2608')">💳 Sửa số dư</button>
-                                <button type="button" class="action-option" onclick="showToast('⏳ Nhật ký Admin')">⏳ Nhật ký giao dịch</button>
+                                <button type="button" class="action-option" onclick="showCustomAlert('Nhật ký', 'Nhật ký quản trị tối cao', '⏳')">⏳ Nhật ký giao dịch</button>
                             </div>
                         </div>
                     </td>
@@ -995,7 +969,7 @@
             let actionType = document.getElementById('modal-action-type').value;
 
             if(isNaN(amount) || amount <= 0) {
-                showCustomAlert('Lỗi nhập liệu', 'Vui lòng nhập số tiền hợp lệ!', '⚠️');
+                showCustomAlert('Lỗi nhập liệu', 'Vui lòng nhập số tiền hợp lệ lớn hơn 0!', '⚠️');
                 return;
             }
 
@@ -1006,16 +980,16 @@
                 if(!users[userIndex].balance) users[userIndex].balance = 0;
                 if(actionType === 'add') {
                     users[userIndex].balance += amount;
-                    showToast(`✅ Đã cộng ${amount.toLocaleString()}đ cho ${currentEditingUser}!`);
+                    showCustomAlert('Thành công', `Đã cộng ${amount.toLocaleString()}đ cho ${currentEditingUser} thành công!`, '✅');
                 } else {
                     users[userIndex].balance = Math.max(0, users[userIndex].balance - amount);
-                    showToast(`✅ Đã trừ ${amount.toLocaleString()}đ của ${currentEditingUser}!`);
+                    showCustomAlert('Thành công', `Đã trừ ${amount.toLocaleString()}đ của ${currentEditingUser} thành công!`, '✅');
                 }
                 localStorage.setItem('registeredUsersList', JSON.stringify(users));
                 loadRegisteredUsersToAdminTable();
                 updateClientWalletDisplay();
             } else {
-                showToast(`✅ Đã thao tác số dư thành công!`);
+                showCustomAlert('Thành công', `Đã thao tác số dư cho ${currentEditingUser} thành công!`, '✅');
             }
             closeBalanceModal();
         }
@@ -1040,7 +1014,7 @@
             localStorage.setItem('siteNotiTitle', title);
             localStorage.setItem('siteNotiContent', content);
             loadStoredNotifications();
-            showToast('✅ Cập nhật thông báo thành công!');
+            showCustomAlert('Thành công', 'Cập nhật thông báo hệ thống thành công!', '📢');
         }
 
         function applyUserPermissions() {
@@ -1054,13 +1028,6 @@
                 if(adminMenu) adminMenu.style.display = 'none';
                 switchTab('dashboard', null);
             }
-        }
-
-        function showToast(message) {
-            let toast = document.getElementById('toast-notification');
-            toast.innerHTML = message;
-            toast.style.display = 'flex';
-            setTimeout(() => { toast.style.display = 'none'; }, 2500);
         }
 
         function switchAuthTab(type) {
@@ -1089,14 +1056,14 @@
                 if(audio.readyState === 0) audio.load(); 
                 audio.play().then(() => {
                     btnText.innerText = "Tắt Nhạc";
-                    showToast("🎵 Đã phát nhạc nền!");
+                    showCustomAlert('Nhạc nền', 'Đã phát nhạc nền lofi thư giãn!', '🎵');
                 }).catch(e => {
-                    showToast("⚠️ Vui lòng bấm Bật Nhạc lại để thưởng thức!");
+                    showCustomAlert('Lưu ý', 'Vui lòng bấm Bật Nhạc lại để duyệt trình duyệt phát âm thanh!', '🔊');
                 });
             } else {
                 audio.pause();
                 btnText.innerText = "Bật Nhạc";
-                showToast("🔇 Đã tắt nhạc nền!");
+                showCustomAlert('Nhạc nền', 'Đã tạm dừng nhạc nền!', '🔇');
             }
         }
 
@@ -1112,11 +1079,11 @@
             
             applyUserPermissions();
             updateClientWalletDisplay();
-            showToast('✅ Đăng nhập thành công!');
+            showCustomAlert('Đăng nhập thành công', `Chào mừng bạn trở lại, ${username}!`, '🎉');
             setTimeout(() => {
                 document.getElementById('auth-screen').style.display = 'none';
                 openModal();
-            }, 800);
+            }, 1000);
         }
 
         function handleLogin() {
@@ -1146,7 +1113,7 @@
             let user = document.getElementById('reg-username').value.trim();
             let pass = document.getElementById('reg-password').value.trim();
             if(!user || !pass) { 
-                showCustomAlert('Thiếu thông tin', 'Vui lòng điền đầy đủ thông tin đăng ký!', '⚠️'); 
+                showCustomAlert('Thiếu thông tin', 'Vui lòng điền đầy đủ tên tài khoản và mật khẩu đăng ký!', '⚠️'); 
                 return; 
             }
 
@@ -1166,7 +1133,7 @@
             users.push({ username: user, pass: pass, balance: 0, time: timeString });
             localStorage.setItem('registeredUsersList', JSON.stringify(users));
 
-            showToast('🎉 Đăng ký thành công! Nhận 3 ngày dùng thử.');
+            showCustomAlert('Đăng ký thành công', '🎉 Tài khoản đã được tạo! Tặng ngay 3 ngày dùng thử miễn phí.', '🎁');
             setTimeout(() => { 
                 triggerLoginSuccess('member', user); 
                 loadRegisteredUsersToAdminTable();
@@ -1183,12 +1150,12 @@
             let btnText = document.querySelector('#music-toggle-btn span');
             if(btnText) btnText.innerText = "Bật Nhạc";
             
-            showToast('🚪 Đã đăng xuất tài khoản!');
+            showCustomAlert('Đăng xuất', 'Đã đăng xuất tài khoản an toàn khỏi hệ thống!', '🚪');
             setTimeout(() => {
                 document.getElementById('auth-screen').style.display = 'flex';
                 document.getElementById('login-username').value = '';
                 document.getElementById('login-password').value = '';
-            }, 600);
+            }, 800);
         }
 
         function toggleMenu() {
@@ -1204,7 +1171,7 @@
 
         function setTheme(themeName) {
             document.documentElement.setAttribute('data-theme', themeName);
-            showToast("✅ Đã chuyển đổi giao diện!");
+            showCustomAlert('Giao diện', 'Đã chuyển đổi giao diện thành công!', '🎨');
         }
 
         function switchTab(tabId, event) {
@@ -1218,10 +1185,10 @@
 
         function generateQR() {
             let amount = document.getElementById('deposit-amount').value || 100000;
-            let stk = document.getElementById('sepay-stk') ? document.getElementById('sepay-stk').value : '0898851000';
-            let bank = document.getElementById('sepay-bank') ? document.getElementById('sepay-bank').value : 'ACB';
-            let name = document.getElementById('sepay-name') ? document.getElementById('sepay-name').value : 'DINH HOANG VIET ANH';
-            let syntax = document.getElementById('sepay-syntax') ? document.getElementById('sepay-syntax').value : 'NAP';
+            let stk = '0898851000';
+            let bank = 'ACB';
+            let name = 'DINH HOANG VIET ANH';
+            let syntax = 'NAP';
             
             let currentUsr = localStorage.getItem('currentUsername') || 'thanhvien_pro';
             let randomCode = Math.floor(1000 + Math.random() * 9000);
@@ -1235,7 +1202,7 @@
                 </div>
                 <p style="font-size: 0.85rem; line-height: 1.5;">${bank}: <b>${stk}</b> (${name})<br>Nội dung CK (Dùng 1 lần): <b style="color:var(--accent-main); font-size: 0.95rem;">${fullSyntax}</b><br>Số tiền: <b style="color:var(--accent-main); font-size: 1.05rem;">${Number(amount).toLocaleString()}đ</b></p>
             `;
-            showToast("✅ Đã tạo mã QR ngân hàng ACB thành công!");
+            showCustomAlert('Tạo QR Thành công', 'Mã QR nạp tiền ACB đã được tạo chính xác!', '💳');
         }
 
         function toggleChatBox() {
@@ -1286,56 +1253,123 @@
             }
         }
 
+        function runFacebookAutomation() {
+            let val = document.getElementById('fb-feature-select').value;
+            if(val === 'group') {
+                let acc = document.getElementById('fb-group-acc').value.trim();
+                let links = document.getElementById('fb-group-links').value.trim();
+                let msg = document.getElementById('fb-group-msg').value.trim();
+                if(!acc || !links || !msg) {
+                    showCustomAlert('Thiếu thông tin', 'Vui lòng nhập đầy đủ tài khoản, danh sách nhóm và nội dung bài đăng Facebook!', '⚠️');
+                    return;
+                }
+            } else {
+                let acc = document.getElementById('fb-cmt-acc').value.trim();
+                let link = document.getElementById('fb-cmt-link').value.trim();
+                let msg = document.getElementById('fb-cmt-msg').value.trim();
+                if(!acc || !link || !msg) {
+                    showCustomAlert('Thiếu thông tin', 'Vui lòng nhập đầy đủ tài khoản, link bài viết và nội dung bình luận!', '⚠️');
+                    return;
+                }
+            }
+            showCustomAlert('Thành công', '🚀 Tiến trình Facebook Automation đã được khởi chạy thành công!', '📘');
+        }
+
         function runTikAIGeneration() {
-            showToast('✨ AI đang xử lý tạo thành phẩm...');
+            let prompt = document.getElementById('tik-prompt-input').value.trim();
+            if(!prompt) {
+                showCustomAlert('Thiếu câu lệnh', 'Vui lòng nhập câu lệnh (Prompt) mô tả nội dung bạn muốn tạo!', '⚠️');
+                return;
+            }
+            showCustomAlert('Đang xử lý', '✨ AI đang khởi tạo hình ảnh / video theo yêu cầu của bạn...', '⏳');
             setTimeout(() => {
-                showToast('✅ Đã tạo xong! Bạn có thể lấy link tải ở bên dưới.');
-            }, 1000);
+                document.getElementById('tik-ai-result-box').style.display = 'block';
+                showCustomAlert('Thành công', '✅ Đã tạo thành phẩm AI thành công! Bạn có thể tải về hoặc lưu lại.', '🎉');
+            }, 1200);
         }
 
         function handleTikTokLoginCheck() {
             let u = document.getElementById('tik-user-input').value.trim();
             let p = document.getElementById('tik-pass-input').value.trim();
-            if(!u || !p) { showCustomAlert('Thiếu thông tin', 'Vui lòng nhập tài khoản và mật khẩu TikTok!', '⚠️'); return; }
+            if(!u || !p) { 
+                showCustomAlert('Thiếu thông tin', 'Vui lòng nhập tài khoản và mật khẩu TikTok trước khi đăng nhập!', '⚠️'); 
+                return; 
+            }
             
-            showToast('🔐 Đang kiểm tra đăng nhập TikTok...');
+            showCustomAlert('Đang kiểm tra', '🔐 Đang kết nối và kiểm tra bảo mật với TikTok...', '⏳');
             setTimeout(() => {
                 document.getElementById('tik-otp-step').style.display = 'block';
-                showToast('⚠️ Vui lòng nhập mã xác thực (OTP/2FA) để tiếp tục!');
-            }, 1000);
+                showCustomAlert('Yêu cầu bảo mật', '⚠️ Tài khoản yêu cầu mã xác thực / OTP / 2FA. Vui lòng nhập mã để tiếp tục!', '🛡️');
+            }, 1200);
         }
 
         function verifyTikTokOTP() {
             let otp = document.getElementById('tik-otp-input').value.trim();
-            if(!otp) { showCustomAlert('Thiếu mã', 'Vui lòng nhập mã xác thực!', '⚠️'); return; }
+            if(!otp) { 
+                showCustomAlert('Thiếu mã', 'Vui lòng nhập mã xác thực OTP từ TikTok!', '⚠️'); 
+                return; 
+            }
 
-            showToast('✅ Xác thực mã thành công!');
+            showCustomAlert('Thành công', '✅ Xác thực mã thành công! Đã vào phiên làm việc kênh.', '🎉');
             document.getElementById('tik-otp-step').style.display = 'none';
             document.getElementById('tik-login-step').style.display = 'none';
             document.getElementById('tik-content-step').style.display = 'block';
         }
 
         function saveTikTokSchedule() {
-            showToast('🚀 Đã lưu tiến trình và hẹn giờ đăng TikTok thành công!');
-            setTimeout(() => {
-                showCustomAlert('Thành công', 'Tiến trình đăng bài tự động đã được khởi tạo và lưu lại trong hệ thống!', '🚀');
-            }, 500);
+            showCustomAlert('Thành công', '🚀 Tiến trình đăng bài tự động và hẹn giờ TikTok đã được lưu thành công!', '🎵');
         }
 
         function addNewPlatform() {
             let name = document.getElementById('new-plat-name').value.trim();
             let icon = document.getElementById('new-plat-icon').value;
             let note = document.getElementById('new-plat-note').value.trim();
-            if(!name) { showCustomAlert('Thiếu tên', 'Vui lòng nhập tên nền tảng!', '⚠️'); return; }
-            showToast(`✅ Đã thêm nền tảng ${icon} ${name} thành công!`);
+            if(!name) { 
+                showCustomAlert('Thiếu tên', 'Vui lòng nhập tên nền tảng mới!', '⚠️'); 
+                return; 
+            }
+            showCustomAlert('Thành công', `✅ Đã thêm nền tảng ${icon} ${name} vào hệ thống thành công!`, '🧩');
             document.getElementById('new-plat-name').value = '';
             document.getElementById('new-plat-note').value = '';
         }
 
+        function saveMaterialData() {
+            let data = document.getElementById('mat-data').value.trim();
+            if(!data) {
+                showCustomAlert('Thiếu dữ liệu', 'Vui lòng dán danh sách nguyên liệu tài nguyên vào ô chi tiết!', '⚠️');
+                return;
+            }
+            showCustomAlert('Thành công', '📦 Đã nhập kho tài nguyên thành công!', '✅');
+        }
+
+        function submitRefundRequest() {
+            let orderId = document.getElementById('refund-order-id').value.trim();
+            let reason = document.getElementById('refund-reason').value.trim();
+            if(!orderId || !reason) {
+                showCustomAlert('Thiếu thông tin', 'Vui lòng nhập mã đơn hàng và mô tả lý do lỗi cần hoàn tiền!', '⚠️');
+                return;
+            }
+            showCustomAlert('Thành công', '🔄 Yêu cầu hoàn tiền đã được gửi tới Admin xử lý!', '✅');
+            document.getElementById('refund-order-id').value = '';
+            document.getElementById('refund-reason').value = '';
+        }
+
+        function submitSupportRequest() {
+            let title = document.getElementById('sup-title').value.trim();
+            let content = document.getElementById('sup-content').value.trim();
+            if(!title || !content) {
+                showCustomAlert('Thiếu thông tin', 'Vui lòng điền đầy đủ tiêu đề và nội dung cần hỗ trợ!', '⚠️');
+                return;
+            }
+            showCustomAlert('Thành công', '🎧 Yêu cầu hỗ trợ đã được gửi thành công đến đội ngũ CSKH!', '✅');
+            document.getElementById('sup-title').value = '';
+            document.getElementById('sup-content').value = '';
+        }
+
         function promptNewPassword(username) {
             let newPass = prompt(`Nhập mật khẩu mới cho tài khoản [${username}]:`);
-            if(newPass) {
-                showToast(`✅ Đã cấp lại mật khẩu mới cho ${username} thành công!`);
+            if(newPass && newPass.trim() !== '') {
+                showCustomAlert('Thành công', `🔑 Đã cấp lại mật khẩu mới cho tài khoản ${username} thành công!`, '✅');
             }
         }
     </script>

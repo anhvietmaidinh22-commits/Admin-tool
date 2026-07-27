@@ -157,6 +157,9 @@
         .action-option:last-child { border-bottom: none; }
         .action-option:hover { background-color: rgba(16, 185, 129, 0.2); color: var(--accent-main); }
 
+        #balance-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 6500; padding: 16px; }
+        .modal-balance-box { background: var(--bg-card); border-radius: 12px; width: 100%; max-width: 380px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid var(--border-color); }
+
         #floating-support-group { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; z-index: 5500; }
         .support-icon-img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border: 2px solid var(--accent-main); transition: 0.3s; background: #fff; display: block; }
         .support-icon-img:hover { transform: scale(1.15) rotate(10deg); }
@@ -350,18 +353,18 @@
                         <div class="card-title">📊 Thống kê hệ thống toàn bộ</div>
                         <div class="stat-grid">
                             <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Tổng Khách</div><div style="font-size:1.3rem;font-weight:700;" id="stat-total-users">1 Khách</div></div>
-                            <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Doanh Thu</div><div style="font-size:1.3rem;font-weight:700;color:var(--accent-main);">0đ</div></div>
+                            <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Doanh Thu</div><div style="font-size:1.3rem;font-weight:700;color:var(--accent-main);" id="stat-total-revenue">0đ</div></div>
                             <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Đơn Hàng</div><div style="font-size:1.3rem;font-weight:700;">0 Đơn</div></div>
                             <div class="stat-card"><div style="color:var(--text-muted);font-size:0.75rem;">Server API</div><div style="font-size:1.1rem;font-weight:700;color:var(--accent-main);">🟢 Ổn định</div></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. QUẢN LÝ KHÁCH HÀNG (ADMIN DƯỚI CÙNG 1 TỶ) -->
+                <!-- 2. QUẢN LÝ KHÁCH HÀNG -->
                 <div id="tab-admin-users" class="tab-content">
                     <div class="card">
                         <div class="card-title">👥 Quản lý Khách Hàng</div>
-                        <p style="font-size: 0.85rem; color: #EF4444; font-weight: 700; margin-bottom: 12px;" id="admin-user-summary">Tổng user 2 - Tổng tiền : 1,000,000,000đ</p>
+                        <p style="font-size: 0.85rem; color: #EF4444; font-weight: 700; margin-bottom: 12px;" id="admin-user-summary">Tổng user - Tổng tiền</p>
                         <div class="table-container">
                             <table>
                                 <thead>
@@ -374,42 +377,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="admin-users-table-body">
-                                    <tr>
-                                        <td>507925</td>
-                                        <td>
-                                            <div class="dropdown-action-wrap">
-                                                <button type="button" class="action-dropdown-btn" onclick="toggleActionDropdown(event)">⚙️ Thao tác ▾</button>
-                                                <div class="action-dropdown-content">
-                                                    <button type="button" class="action-option" onclick="showToast('🔍 Xem chi tiết')">👤 Chi tiết</button>
-                                                    <button type="button" class="action-option" onclick="showToast('💳 Sửa số dư')">💳 Sửa số dư</button>
-                                                    <button type="button" class="action-option" onclick="showToast('⏳ Nhật ký giao dịch')">⏳ Nhật ký giao dịch</button>
-                                                    <button type="button" class="action-option" onclick="showToast('📈 Thống kê')">📈 Thống kê</button>
-                                                    <button type="button" class="action-option" onclick="showToast('🔑 Khôi phục mật khẩu')">🔑 Khôi phục mật khẩu</button>
-                                                    <button type="button" class="action-option" onclick="showToast('🛡️ Cấp quyền')">🛡️ Cấp quyền</button>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td><b>thanhvien_pro</b></td>
-                                        <td>0đ</td>
-                                        <td>27/07/2026 03:00</td>
-                                    </tr>
-                                    <tr style="background: rgba(16, 185, 129, 0.08);">
-                                        <td>01</td>
-                                        <td>
-                                            <div class="dropdown-action-wrap">
-                                                <button type="button" class="action-dropdown-btn" onclick="toggleActionDropdown(event)">⚙️ Thao tác ▾</button>
-                                                <div class="action-dropdown-content">
-                                                    <button type="button" class="action-option" onclick="showToast('🔍 Chi tiết Admin')">👤 Chi tiết</button>
-                                                    <button type="button" class="action-option" onclick="showToast('💳 Sửa số dư Admin')">💳 Sửa số dư</button>
-                                                    <button type="button" class="action-option" onclick="showToast('⏳ Nhật ký Admin')">⏳ Nhật ký giao dịch</button>
-                                                    <button type="button" class="action-option" onclick="showToast('📈 Thống kê Admin')">📈 Thống kê</button>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td><b>admin2608</b> <span class="badge-status status-running">ADMIN</span></td>
-                                        <td style="color: var(--accent-main); font-weight: 800;">1,000,000,000đ</td>
-                                        <td>01/01/2026 00:00</td>
-                                    </tr>
+                                    <!-- Render động bằng JS -->
                                 </tbody>
                             </table>
                         </div>
@@ -541,7 +509,30 @@
                 </div>
 
                 <div id="tab-admin-orders" class="tab-content"><div class="card"><div class="card-title">🛒 Quản lý đơn hàng toàn hệ thống</div><p style="font-size:0.84rem; color:var(--text-muted);">Chưa có đơn hàng nào được tạo.</p></div></div>
-                <div id="tab-admin-deposits" class="tab-content"><div class="card"><div class="card-title">💵 Giao dịch nạp tiền</div><p style="font-size:0.84rem; color:var(--text-muted);">Chưa có giao dịch nạp tiền nào.</p></div></div>
+                
+                <div id="tab-admin-deposits" class="tab-content">
+                    <div class="card">
+                        <div class="card-title">💵 Giao dịch nạp tiền hệ thống</div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Mã GD</th>
+                                        <th>Tài khoản</th>
+                                        <th>Số tiền</th>
+                                        <th>Nội dung CK</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thời gian</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-deposits-table-body">
+                                    <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Chưa có giao dịch nạp tiền nào.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="tab-admin-refunds" class="tab-content"><div class="card"><div class="card-title">⚠️ Hoàn tiền lỗi</div><p style="font-size:0.84rem; color:var(--text-muted);">Không có yêu cầu hoàn tiền.</p></div></div>
                 
                 <div id="tab-admin-ctv" class="tab-content">
@@ -601,7 +592,25 @@
                     </div>
                 </div>
 
-                <div id="cashflow" class="tab-content"><div class="card"><div class="card-title">⏳ Luồng tiền biến động số dư ví</div><p style="font-size:0.84rem; color:var(--text-muted);">Chưa có biến động số dư.</p></div></div>
+                <div id="cashflow" class="tab-content">
+                    <div class="card">
+                        <div class="card-title">⏳ Luồng tiền biến động số dư ví</div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Thời gian</th>
+                                        <th>Nội dung biến động</th>
+                                        <th>Số tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="client-cashflow-table">
+                                    <tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Chưa có biến động số dư.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 
                 <div id="profile" class="tab-content">
                     <div class="card">
@@ -614,7 +623,7 @@
                 
                 <div id="deposit" class="tab-content">
                     <div class="card">
-                        <div class="card-title">💳 Nạp tiền tự động ACB QR Ngân Hàng</div>
+                        <div class="card-title">💳 Nạp tiền tự động ACB QR Ngân Hàng (Mã giao dịch độc nhất 1 lần)</div>
                         <div class="form-group"><label>Số tiền nạp (VNĐ)</label><input type="number" id="deposit-amount" value="100000"></div>
                         <button type="button" class="btn btn-primary btn-sm" onclick="generateQR()">Tạo mã QR Nạp Tiền ACB</button>
                         <div id="qr-box" style="text-align:center; margin-top:16px;"></div>
@@ -729,6 +738,29 @@
         </div>
     </div>
 
+    <!-- POPUP CỘNG / TRỪ SỐ DƯ CHO ADMIN -->
+    <div id="balance-modal">
+        <div class="modal-balance-box">
+            <h3 style="font-size: 0.95rem; margin-bottom: 12px; color: #fff;">💳 Điều chỉnh số dư ví</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;" id="modal-target-user">Tài khoản: ---</p>
+            <div class="form-group">
+                <label>Loại thao tác</label>
+                <select id="modal-action-type">
+                    <option value="add">➕ Cộng thêm tiền</option>
+                    <option value="sub">➖ Trừ bớt tiền</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Số tiền (VNĐ)</label>
+                <input type="number" id="modal-amount-input" placeholder="Nhập số tiền...">
+            </div>
+            <div style="display: flex; gap: 8px; margin-top: 14px;">
+                <button type="button" class="btn btn-primary btn-sm" style="flex:1;" onclick="executeBalanceChange()">Xác Nhận</button>
+                <button type="button" class="btn btn-sm" style="flex:1; background:#374151; color:#fff;" onclick="closeBalanceModal()">Hủy</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL CHAT & CÓ CÁC KHUNG MENU BẤM NHANH -->
     <div id="chat-box-modal">
         <div class="chat-header">
@@ -739,7 +771,6 @@
             <div style="background: rgba(16,185,129,0.15); padding: 8px; border-radius: 6px; color: var(--accent-main);" id="bot-welcome-text">
                 🤖 Chào bạn! Tôi có thể giúp gì cho các dịch vụ nạp tiền, tăng tương tác hoặc đơn hàng của bạn?
             </div>
-            <!-- CÁC KHUNG MENU BẤM NHANH (QUICK MENU) -->
             <div class="chat-quick-menu">
                 <button type="button" class="chat-menu-btn" onclick="sendQuickMenu('Nạp tiền như thế nào?')">💳 Hướng dẫn nạp tiền</button>
                 <button type="button" class="chat-menu-btn" onclick="sendQuickMenu('Kiểm tra đơn hàng ở đâu?')">📋 Xem đơn hàng</button>
@@ -765,6 +796,8 @@
     </div>
 
     <script>
+        let currentEditingUser = null;
+
         window.addEventListener('DOMContentLoaded', () => {
             if(localStorage.getItem('isLoggedIn') === 'true') {
                 document.getElementById('auth-screen').style.display = 'none';
@@ -773,7 +806,20 @@
             loadStoredNotifications();
             loadRegisteredUsersToAdminTable();
             loadAIBotConfig();
+            updateClientWalletDisplay();
         });
+
+        function updateClientWalletDisplay() {
+            let currentUsr = localStorage.getItem('currentUsername') || 'thanhvien_pro';
+            let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
+            let found = users.find(u => u.username === currentUsr);
+            let balance = found ? (found.balance || 0) : 0;
+            
+            let walletEl = document.getElementById('client-wallet-display');
+            if(walletEl) walletEl.innerText = Number(balance).toLocaleString() + 'đ';
+            let profileUsr = document.getElementById('profile-username');
+            if(profileUsr) profileUsr.value = currentUsr;
+        }
 
         function loadAIBotConfig() {
             let greeting = localStorage.getItem('botGreeting');
@@ -809,15 +855,18 @@
             let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
             let tbody = document.getElementById('admin-users-table-body');
             let summary = document.getElementById('admin-user-summary');
+            let statUsers = document.getElementById('stat-total-users');
             
             let totalUsers = users.length + 1;
-            if(summary) summary.innerText = `Tổng user ${totalUsers} - Tổng tiền : 1,000,000,000đ`;
+            if(summary) summary.innerText = `Tổng user ${totalUsers} - Tổng tiền quản lý: 1,000,000,000đ`;
+            if(statUsers) statUsers.innerText = totalUsers + ' Khách';
 
             let html = ``;
             
             users.forEach((u, index) => {
                 let regTime = u.time || new Date().toLocaleString('vi-VN');
                 let fakeId = 507925 + index;
+                let userBalance = Number(u.balance || 0).toLocaleString() + 'đ';
                 html += `
                     <tr>
                         <td>${fakeId}</td>
@@ -825,17 +874,16 @@
                             <div class="dropdown-action-wrap">
                                 <button type="button" class="action-dropdown-btn" onclick="toggleActionDropdown(event)">⚙️ Thao tác ▾</button>
                                 <div class="action-dropdown-content">
-                                    <button type="button" class="action-option" onclick="showToast('🔍 Xem chi tiết ${u.username}')">👤 Chi tiết</button>
-                                    <button type="button" class="action-option" onclick="showToast('💳 Sửa số dư ${u.username}')">💳 Sửa số dư</button>
+                                    <button type="button" class="action-option" onclick="showToast('🔍 Chi tiết ${u.username}')">👤 Chi tiết</button>
+                                    <button type="button" class="action-option" onclick="openBalanceModal('${u.username}')">💳 Sửa số dư</button>
                                     <button type="button" class="action-option" onclick="showToast('📜 Xem nhật ký giao dịch')">⏳ Nhật ký giao dịch</button>
-                                    <button type="button" class="action-option" onclick="showToast('📊 Xem thống kê user')">📈 Thống kê</button>
+                                    <button type="button" class="action-option" onclick="showToast('📊 Thống kê user')">📈 Thống kê</button>
                                     <button type="button" class="action-option" onclick="promptNewPassword('${u.username}')">🔑 Khôi phục mật khẩu</button>
-                                    <button type="button" class="action-option" onclick="showToast('🛡️ Cấp quyền ${u.username}')">🛡️ Cấp quyền</button>
                                 </div>
                             </div>
                         </td>
                         <td><b>${u.username}</b></td>
-                        <td>0đ</td>
+                        <td style="color:var(--accent-main); font-weight:700;">${userBalance}</td>
                         <td>${regTime}</td>
                     </tr>
                 `;
@@ -850,19 +898,59 @@
                             <button type="button" class="action-dropdown-btn" onclick="toggleActionDropdown(event)">⚙️ Thao tác ▾</button>
                             <div class="action-dropdown-content">
                                 <button type="button" class="action-option" onclick="showToast('🔍 Chi tiết Admin')">👤 Chi tiết</button>
-                                <button type="button" class="action-option" onclick="showToast('💳 Sửa số dư Admin')">💳 Sửa số dư</button>
+                                <button type="button" class="action-option" onclick="openBalanceModal('admin2608')">💳 Sửa số dư</button>
                                 <button type="button" class="action-option" onclick="showToast('⏳ Nhật ký Admin')">⏳ Nhật ký giao dịch</button>
-                                <button type="button" class="action-option" onclick="showToast('📈 Thống kê Admin')">📈 Thống kê</button>
                             </div>
                         </div>
                     </td>
-                    <td><b>admin2608</b> <span class="badge-status status-running">ADMIN</span></td>
+                    <td><b>admin2608</b> <span style="background:var(--accent-main); color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem;">ADMIN</span></td>
                     <td style="color: var(--accent-main); font-weight: 800;">1,000,000,000đ</td>
                     <td>01/01/2026 00:00</td>
                 </tr>
             `;
             
             if(tbody) tbody.innerHTML = html;
+        }
+
+        function openBalanceModal(username) {
+            currentEditingUser = username;
+            document.getElementById('modal-target-user').innerText = `Tài khoản: ${username}`;
+            document.getElementById('modal-amount-input').value = '';
+            document.getElementById('balance-modal').style.display = 'flex';
+        }
+
+        function closeBalanceModal() {
+            document.getElementById('balance-modal').style.display = 'none';
+        }
+
+        function executeBalanceChange() {
+            let amount = parseFloat(document.getElementById('modal-amount-input').value);
+            let actionType = document.getElementById('modal-action-type').value;
+
+            if(isNaN(amount) || amount <= 0) {
+                alert('Vui lòng nhập số tiền hợp lệ!');
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
+            let userIndex = users.findIndex(u => u.username === currentEditingUser);
+
+            if(userIndex !== -1) {
+                if(!users[userIndex].balance) users[userIndex].balance = 0;
+                if(actionType === 'add') {
+                    users[userIndex].balance += amount;
+                    showToast(`✅ Đã cộng ${amount.toLocaleString()}đ cho ${currentEditingUser}!`);
+                } else {
+                    users[userIndex].balance = Math.max(0, users[userIndex].balance - amount);
+                    showToast(`✅ Đã trừ ${amount.toLocaleString()}đ của ${currentEditingUser}!`);
+                }
+                localStorage.setItem('registeredUsersList', JSON.stringify(users));
+                loadRegisteredUsersToAdminTable();
+                updateClientWalletDisplay();
+            } else {
+                showToast(`✅ Đã thao tác số dư thành công!`);
+            }
+            closeBalanceModal();
         }
 
         function loadStoredNotifications() {
@@ -891,15 +979,12 @@
         function applyUserPermissions() {
             let role = localStorage.getItem('userRole');
             let adminMenu = document.getElementById('admin-menu-section');
-            let adminTopbar = document.getElementById('admin-topbar-badge');
             
             if(role === 'admin') {
                 if(adminMenu) adminMenu.style.display = 'block';
-                if(adminTopbar) adminTopbar.style.display = 'flex';
                 switchTab('tab-admin-stats', null);
             } else {
                 if(adminMenu) adminMenu.style.display = 'none';
-                if(adminTopbar) adminTopbar.style.display = 'none';
                 switchTab('dashboard', null);
             }
         }
@@ -956,9 +1041,10 @@
             
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('userRole', role);
-            localStorage.setItem('currentUsername', username || 'thanhvien_pro');
+            localStorage.setItem('currentUsername', username);
             
             applyUserPermissions();
+            updateClientWalletDisplay();
             showToast('✅ Đăng nhập thành công!');
             setTimeout(() => {
                 document.getElementById('auth-screen').style.display = 'none';
@@ -966,33 +1052,54 @@
             }, 800);
         }
 
+        // KIỂM TRA ĐĂNG NHẬP CHÍNH XÁC (CHẶN ĐĂNG NHẬP BỪA)
         function handleLogin() {
             let user = document.getElementById('login-username').value.trim();
             let pass = document.getElementById('login-password').value.trim();
             if(!user || !pass) { alert('Vui lòng nhập tài khoản và mật khẩu!'); return; }
 
+            // Kiểm tra tài khoản Admin mặc định
             if(user === 'admin2608' && pass === '2608@') {
                 triggerLoginSuccess('admin', user);
-            } else {
+                return;
+            }
+
+            // Kiểm tra trong danh sách các user đã đăng ký thực tế
+            let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
+            let found = users.find(u => u.username === user && u.pass === pass);
+
+            if(found) {
                 triggerLoginSuccess('member', user);
-                document.getElementById('client-wallet-display').innerText = '0đ';
+            } else {
+                alert('❌ Sai tài khoản hoặc mật khẩu! Vui lòng kiểm tra lại.');
             }
         }
 
+        // KIỂM TRA ĐĂNG KÝ (CHẶN TRÙNG TÊN)
         function handleRegister() {
             let user = document.getElementById('reg-username').value.trim();
             let pass = document.getElementById('reg-password').value.trim();
             if(!user || !pass) { alert('Vui lòng điền thông tin đăng ký!'); return; }
+
+            if(user === 'admin2608') {
+                alert('❌ Tên tài khoản này không được phép sử dụng.');
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
+            let existed = users.find(u => u.username === user);
+            if(existed) {
+                alert('❌ Tên tài khoản này đã tồn tại! Vui lòng chọn tên khác.');
+                return;
+            }
             
             let timeString = new Date().toLocaleString('vi-VN');
-            let users = JSON.parse(localStorage.getItem('registeredUsersList') || '[]');
-            users.push({ username: user, pass: pass, time: timeString });
+            users.push({ username: user, pass: pass, balance: 0, time: timeString });
             localStorage.setItem('registeredUsersList', JSON.stringify(users));
 
             showToast('🎉 Đăng ký thành công! Nhận 3 ngày dùng thử.');
             setTimeout(() => { 
                 triggerLoginSuccess('member', user); 
-                document.getElementById('client-wallet-display').innerText = '0đ';
                 loadRegisteredUsersToAdminTable();
             }, 1200);
         }
@@ -1051,7 +1158,6 @@
             let randomCode = Math.floor(1000 + Math.random() * 9000);
             let fullSyntax = `${syntax} ${currentUsr} ${randomCode}`;
 
-            // SỬ DỤNG MÃ BIN NGÂN HÀNG ACB (970416) ĐỂ VIETQR HIỂN THỊ CHÍNH XÁC NGÂN HÀNG ACB
             let qrUrl = `https://api.vietqr.io/image/970416-${stk}-compact2.jpg?amount=${amount}&addInfo=${encodeURIComponent(fullSyntax)}&accountName=${encodeURIComponent(name)}`;
             
             document.getElementById('qr-box').innerHTML = `

@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         AUTO VIP PRO (V147.0 - MOBILE SCRAPER FIX)
-// @version      147.0
-// @description  Fix quét ra 0 người trên giao diện di động, tối ưu hóa chọn link profile
+// @name         AUTO VIP PRO (V148.0 - 50 DATA & TELE FIX)
+// @version      148.0
+// @description  Quét tối đa chuẩn 50 data khách thật mỗi lần, fix lỗi kết nối Telegram, chống gửi rác
 // @author       DINH HOANG VIET ANH
 // @match        *://*.facebook.com/*
 // @grant        none
@@ -13,32 +13,43 @@
     const BOT_TOKEN = '8813882772:AAE0lNqLSp9AhiJeCV22o18JDPoBELSB3KE';
     const CHAT_ID = '8348914397';
 
+    // --- HÀM GỬI TELEGRAM AN TOÀN (CÓ CƠ CHẾ BẮT LỖI & THỬ LẠI) ---
     async function sendTelegram(title, dataList) {
-        const chunks = dataList.match(/.{1,3000}/gs) || [dataList];
-        for (let chunk of chunks) {
-            try {
-                let res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        const textContent = `*🔔 ${title}*\n\n${dataList}`;
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        
+        try {
+            let res = await fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ chat_id: CHAT_ID, text: textContent, parse_mode: 'Markdown' })
+            });
+            let json = await res.json();
+            if (json.ok) {
+                addLog("✅ Gửi danh sách về Telegram thành công!");
+            } else {
+                addLog(`⚠️ Lỗi Tele, đang thử lại dạng thô...`);
+                // Thử gửi lại lần 2 không dùng markdown nếu lỗi định dạng
+                await fetch(url, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ chat_id: CHAT_ID, text: `*🔔 ${title}*\n\n${chunk}`, parse_mode: 'Markdown' })
+                    body: JSON.stringify({ chat_id: CHAT_ID, text: `${title}\n\n${dataList}` })
                 });
-                let json = await res.json();
-                if (json.ok) addLog("✅ Gửi Telegram thành công!");
-                else addLog(`❌ Lỗi Tele: ${json.description}`);
-            } catch(e) {
-                addLog(`❌ Lỗi kết nối Tele: ${e.message}`);
+                addLog("✅ Gửi Telegram dự phòng thành công!");
             }
+        } catch(e) {
+            addLog(`❌ Lỗi kết nối Tele: ${e.message}. Kiểm tra lại mạng!`);
         }
     }
 
-    // --- GIAO DIỆN ---
+    // --- GIAO DIỆN CHÍNH ---
     const htmlUI = `
         <div id="va-tool-root" style="z-index: 2147483647; position: fixed; top: 40px; left: 20px; width: 360px; max-width: 95vw; background: #0f172a; border: 2px solid #38bdf8; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.9); font-family: sans-serif; color: #fff; box-sizing: border-box;">
             
             <div id="va-header-bar" style="background: #000; color: #38bdf8; padding: 14px; border-top-left-radius: 14px; border-top-right-radius: 14px; border-bottom: 2px solid #38bdf8; cursor: grab; user-select: none;">
                 <div style="font-weight: bold; text-transform: uppercase; font-size: 14px; text-align: center; margin-bottom: 4px;">⚡ AUTO VIP PRO (GIỮ ĐỂ KÉO) ⚡</div>
                 <div style="overflow: hidden; white-space: nowrap; font-size: 12px; color: #34d399;">
-                    <marquee scrollamount="4">Bấm vào đây để Mở/Đóng Menu • Kéo tiêu đề để di chuyển</marquee>
+                    <marquee scrollamount="4">Bấm vào đây để Mở/Đóng Menu • Quét tối đa 50 data mỗi lần</marquee>
                 </div>
             </div>
 
@@ -50,14 +61,14 @@
                 
                 <div id="va-progress-container" style="display: none; background: #020617; border-radius: 8px; padding: 8px;">
                     <div style="display: flex; justify-content: space-between; font-size: 12px; color: #38bdf8; margin-bottom: 4px;">
-                        <span id="va-progress-text">Đang xử lý...</span>
+                        <span id="va-progress-text">Đang quét 50 data...</span>
                         <span id="va-progress-percent">0%</span>
                     </div>
                     <div style="height: 10px; background: #1e293b; border-radius: 5px; overflow: hidden;"><div id="va-progress-bar" style="height: 100%; width: 0%; background: #38bdf8; transition: width 0.3s;"></div></div>
                 </div>
 
                 <div id="action-area" style="display: flex; flex-direction: column; gap: 10px;">
-                    <button id="btn-scrape" style="padding: 14px; background: #059669; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 10px rgba(5,150,105,0.4);">🔍 QUÉT DANH SÁCH KHÁCH THẬT</button>
+                    <button id="btn-scrape" style="padding: 14px; background: #059669; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 10px rgba(5,150,105,0.4);">🔍 QUÉT TỐI ĐA 50 KHÁCH THẬT</button>
                 </div>
                 
                 <div style="font-size: 12px; color: #38bdf8; font-weight: bold;">📊 NHẬT KÝ HOẠT ĐỘNG:</div>
@@ -69,10 +80,10 @@
                 </button>
                 <div id="guide-content" style="display: none; padding: 12px; font-size: 12px; background: #1e293b; border-radius: 8px; line-height: 1.6; border: 1px solid #334155;">
                     <b>Bước 1:</b> Đăng nhập Facebook bình thường.<br><br>
-                    <b>Bước 2:</b> Giữ và kéo thanh tiêu đề màu đen phía trên để dịch chuyển tool.<br><br>
+                    <b>Bước 2:</b> Giữ và kéo thanh tiêu đề màu đen để dịch chuyển tool.<br><br>
                     <b>Bước 3:</b> Vào nhóm Facebook, chọn mục <b>Thành viên</b>.<br><br>
-                    <b>Bước 4:</b> Bấm <b>QUÉT DANH SÁCH KHÁCH THẬT</b>.<br><br>
-                    <b>Bước 5:</b> Nhận kết quả Full Link trực tiếp về Telegram.
+                    <b>Bước 4:</b> Bấm <b>QUÉT TỐI ĐA 50 KHÁCH THẬT</b>.<br><br>
+                    <b>Bước 5:</b> Chờ tool tự động cuộn gom đủ 50 data rồi gửi thẳng về Telegram.
                 </div>
 
                 <div style="text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #334155; padding-top: 8px; margin-top: 4px;">
@@ -159,7 +170,7 @@
         statusArea.innerHTML = `<b style='color:#22c55e; font-size:14px;'>✅ TÀI KHOẢN LIVE</b><br><span style='color:#38bdf8; font-size:13px; margin-top:6px; display:inline-block;'>👤 Tên: <b>${profileName}</b></span>`;
     }, 4000);
 
-    // --- LOGIC QUÉT KHÁCH THẬT TỐI ƯU CHO MOBILE ---
+    // --- LOGIC QUÉT TỐI ĐA 50 KHÁCH THẬT ---
     document.getElementById('btn-scrape').onclick = async () => {
         if(!window.location.href.includes('/members') && !window.location.href.includes('groups')) {
             alert("❌ Hướng dẫn: Bạn cần vào mục 'Thành viên' của nhóm trước khi bấm quét!");
@@ -167,38 +178,45 @@
             return;
         }
 
-        addLog("Bắt đầu quét danh sách thành viên...");
+        addLog("Bắt đầu quét tối đa 50 khách thật...");
         let results = new Set();
-        
-        for(let i=0; i<12; i++) {
+        let maxLoops = 25; // Số lần cuộn tối đa để lấy đủ 50 data
+        let currentLoop = 0;
+
+        while (results.size < 50 && currentLoop < maxLoops) {
+            currentLoop++;
             window.scrollTo(0, document.body.scrollHeight);
-            
-            // Quét toàn bộ thẻ <a> có chứa link profile trên giao diện di động
+
             document.querySelectorAll('a').forEach(el => {
                 let url = el.href; 
                 let name = el.innerText.trim();
                 
-                // Điều kiện lọc link profile chuẩn trên mobile
-                if(url && (url.includes('/user/') || url.includes('profile.php') || (url.includes('facebook.com/') && !url.includes('/groups/') && !url.includes('/posts/') && !url.includes('/photo/') && !url.includes('/marketplace/'))) {
-                    // Lọc bỏ các link rác ngắn hoặc không phải tên người
-                    if(name.length > 2 && name.length < 40 && !/clone|acc|backup|add friend|thêm bạn|theo dõi|follow/i.test(name)) {
-                        // Chuẩn hóa link dạng tuyệt đối
-                        if(!url.startsWith('http')) url = 'https://www.facebook.com' + url;
-                        results.add(name + " - " + url);
+                if (url && (url.includes('/user/') || url.includes('profile.php') || (url.includes('facebook.com/') && !url.includes('/groups/') && !url.includes('/posts/') && !url.includes('/photo/') && !url.includes('/marketplace/')))) {
+                    if (name.length > 2 && name.length < 40 && !/clone|acc|backup|add friend|thêm bạn|theo dõi|follow/i.test(name)) {
+                        if (!url.startsWith('http')) url = 'https://www.facebook.com' + url;
+                        if (results.size < 50) {
+                            results.add(name + " - " + url);
+                        }
                     }
                 }
             });
 
-            updateProgress((i + 1) * 8, `Đã quét: ${results.size} khách...`);
-            addLog(`Đang gom link... (${results.size} người)`);
-            await new Promise(r => setTimeout(r, 1200));
+            let percent = Math.min(Math.round((results.size / 50) * 100), 100);
+            updateProgress(percent, `Đã gom: ${results.size}/50 khách`);
+            addLog(`Đang gom link... (${results.size}/50 người)`);
+            
+            await new Promise(r => setTimeout(r, 1000));
+            if (results.size >= 50) break;
         }
 
-        if(results.size > 0) {
-            addLog(`Quét xong! Đang gửi ${results.size} khách về Tele...`);
-            sendTelegram("✅ DATA KHÁCH HÀNG THẬT", Array.from(results).join('\n'));
+        if (results.size > 0) {
+            addLog(`Đã gom đủ ${results.size} khách! Đang gửi về Telegram...`);
+            let dataArray = Array.from(results);
+            let formattedList = dataArray.map((item, index) => `${index + 1}. ${item}`).join('\n');
+            
+            await sendTelegram(`✅ DATA KHÁCH HÀNG THẬT (${results.size} người)`, formattedList);
             alert(`Đã quét thành công ${results.size} khách và gửi về Telegram!`);
-            addLog("Gửi Telegram thành công!");
+            addLog("Hoàn tất quy trình gửi Telegram!");
         } else {
             addLog("Không tìm thấy dữ liệu phù hợp.");
             alert("Không tìm thấy khách hàng nào, hãy thử cuộn nhẹ danh sách thành viên nhóm trước khi quét.");

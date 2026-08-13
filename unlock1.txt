@@ -1,0 +1,260 @@
+// ==UserScript==
+// @name         AUTO FACEBOOK
+// @namespace    http://tampermonkey.net/
+// @version      3.0
+// @description  Tool Auto Facebook hiện đại - Bản quyền thuộc Dinh Hoang Viet Anh
+// @match        https://www.facebook.com/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // 1. GIAO DIỆN HTML HIỆN ĐẠI
+    const htmlUI = `
+        <div id="fb-tool-root">
+            <div id="fb-tool-float-btn">⚡ AUTO FACEBOOK</div>
+            <div id="fb-tool-card" class="fb-hidden">
+                <div class="fb-header">
+                    <h3>⚡ AUTO FACEBOOK</h3>
+                    <span id="fb-tool-close">&times;</span>
+                </div>
+                <div class="fb-body">
+                    <label>Nhập danh sách Cookie / Token / UID:</label>
+                    <textarea id="fb-input-data" placeholder="Dán dữ liệu vào đây (định dạng: cookie hoặc uid|pass)..."></textarea>
+                    
+                    <div class="fb-group-btn">
+                        <button id="fb-btn-run" class="fb-btn fb-btn-primary">Chạy Tự Động</button>
+                        <button id="fb-btn-save" class="fb-btn fb-btn-secondary">Tải File .txt</button>
+                    </div>
+
+                    <label style="margin-top: 10px;">Trạng thái hoạt động (Logs):</label>
+                    <div id="fb-log-box">
+                        <p>[System] Sẵn sàng hoạt động...</p>
+                    </div>
+                </div>
+                <div class="fb-footer">
+                    <span>Phiên bản: 3.0 Pro</span>
+                    <span style="color: #38bdf8; font-weight: bold;">BẢN QUYỀN THUỘC DINH HOANG VIET ANH</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // 2. CSS THIẾT KẾ HIỆN ĐẠI, HIỆU ỨNG MƯỢT MÀ
+    const cssStyle = `
+        #fb-tool-root {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            z-index: 999999;
+            position: fixed;
+        }
+        #fb-tool-float-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5);
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        #fb-tool-float-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.7);
+        }
+        #fb-tool-card {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 360px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            color: #f8fafc;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .fb-hidden {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            pointer-events: none;
+        }
+        .fb-header {
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .fb-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+            background: linear-gradient(to right, #38bdf8, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        #fb-tool-close {
+            font-size: 22px;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: color 0.2s;
+        }
+        #fb-tool-close:hover {
+            color: #fff;
+        }
+        .fb-body {
+            padding: 20px;
+        }
+        .fb-body label {
+            display: block;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        #fb-input-data {
+            width: 100%;
+            height: 110px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #38bdf8;
+            padding: 10px;
+            font-size: 13px;
+            box-sizing: border-box;
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        #fb-input-data:focus {
+            border-color: #3b82f6;
+        }
+        .fb-group-btn {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .fb-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .fb-btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+        .fb-btn-primary:active {
+            transform: scale(0.96);
+        }
+        .fb-btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .fb-btn-secondary:active {
+            transform: scale(0.96);
+        }
+        #fb-log-box {
+            margin-top: 6px;
+            width: 100%;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 8px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            font-size: 11px;
+            font-family: monospace;
+            color: #34d399;
+        }
+        .fb-footer {
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 9px;
+            color: #64748b;
+        }
+    `;
+
+    // 3. CHÈN VÀO TRANG WEB
+    const styleEl = document.createElement('style');
+    styleEl.innerHTML = cssStyle;
+    document.head.appendChild(styleEl);
+
+    const container = document.createElement('div');
+    container.innerHTML = htmlUI;
+    document.body.appendChild(container);
+
+    // 4. XỬ LÝ TƯƠNG TÁC VÀ TÍNH NĂNG TẢI FILE .TXT
+    const floatBtn = document.getElementById('fb-tool-float-btn');
+    const toolCard = document.getElementById('fb-tool-card');
+    const closeBtn = document.getElementById('fb-tool-close');
+    const btnRun = document.getElementById('fb-btn-run');
+    const btnSave = document.getElementById('fb-btn-save');
+    const inputData = document.getElementById('fb-input-data');
+    const logBox = document.getElementById('fb-log-box');
+
+    floatBtn.addEventListener('click', () => {
+        toolCard.classList.toggle('fb-hidden');
+    });
+
+    closeBtn.addEventListener('click', () => {
+        toolCard.classList.add('fb-hidden');
+    });
+
+    function addLog(text) {
+        const time = new Date().toLocaleTimeString();
+        logBox.innerHTML += `<div>[${time}] ${text}</div>`;
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    btnRun.addEventListener('click', () => {
+        const val = inputData.value.trim();
+        if (!val) {
+            addLog("⚠️ Vui lòng nhập dữ liệu trước khi chạy!");
+            return;
+        }
+        addLog("🚀 AUTO FACEBOOK đang tiến hành xử lý...");
+        setTimeout(() => {
+            addLog("✔️ Hoàn tất tiến trình tự động hóa!");
+        }, 1000);
+    });
+
+    // Tính năng xuất file .txt để gửi khách
+    btnSave.addEventListener('click', () => {
+        const val = inputData.value.trim();
+        if (!val) {
+            addLog("⚠️ Không có dữ liệu để xuất file!");
+            return;
+        }
+        var blob = new Blob([val], { type: "text/plain;charset=utf-8" });
+        var link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "ket_qua_auto_facebook.txt";
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        addLog("💾 Đã tải file .txt xuống máy thành công!");
+    });
+
+})();

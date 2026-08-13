@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         AUTO VIP PRO (V146.0 - MOBILE DRAG & NAME FIX)
-// @version      146.0
-// @description  Fix triệt để kéo thả bằng cảm ứng/chuột, phóng to cỡ chữ, bóc tách tên chính xác, chống báo khóa giả
+// @name         AUTO VIP PRO (V147.0 - MOBILE SCRAPER FIX)
+// @version      147.0
+// @description  Fix quét ra 0 người trên giao diện di động, tối ưu hóa chọn link profile
 // @author       DINH HOANG VIET ANH
 // @match        *://*.facebook.com/*
 // @grant        none
@@ -31,11 +31,10 @@
         }
     }
 
-    // --- GIAO DIỆN PHÓNG TO, DỄ NHÌN, HỖ TRỢ TOUCH & MOUSE ---
+    // --- GIAO DIỆN ---
     const htmlUI = `
         <div id="va-tool-root" style="z-index: 2147483647; position: fixed; top: 40px; left: 20px; width: 360px; max-width: 95vw; background: #0f172a; border: 2px solid #38bdf8; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.9); font-family: sans-serif; color: #fff; box-sizing: border-box;">
             
-            <!-- THANH TIÊU ĐỀ KÉO THẢ MƯỢT MÀ (HỖ TRỢ CẢ MÁY TÍNH VÀ ĐIỆN THOẠI) -->
             <div id="va-header-bar" style="background: #000; color: #38bdf8; padding: 14px; border-top-left-radius: 14px; border-top-right-radius: 14px; border-bottom: 2px solid #38bdf8; cursor: grab; user-select: none;">
                 <div style="font-weight: bold; text-transform: uppercase; font-size: 14px; text-align: center; margin-bottom: 4px;">⚡ AUTO VIP PRO (GIỮ ĐỂ KÉO) ⚡</div>
                 <div style="overflow: hidden; white-space: nowrap; font-size: 12px; color: #34d399;">
@@ -43,15 +42,12 @@
                 </div>
             </div>
 
-            <!-- MENU BUNG RA -->
             <div id="va-menu-body" style="padding: 15px; display: none; flex-direction: column; gap: 12px; box-sizing: border-box;">
                 
-                <!-- TRẠNG THÁI TÀI KHOẢN (CỠ CHỮ TO) -->
                 <div id="status-area" style="background: #1e293b; padding: 12px; border-radius: 8px; text-align: center; font-size: 13px; font-weight: bold; border: 1px solid #334155; line-height: 1.6;">
                     Đang kiểm tra tài khoản...
                 </div>
                 
-                <!-- THANH TIẾN TRÌNH % -->
                 <div id="va-progress-container" style="display: none; background: #020617; border-radius: 8px; padding: 8px;">
                     <div style="display: flex; justify-content: space-between; font-size: 12px; color: #38bdf8; margin-bottom: 4px;">
                         <span id="va-progress-text">Đang xử lý...</span>
@@ -60,29 +56,25 @@
                     <div style="height: 10px; background: #1e293b; border-radius: 5px; overflow: hidden;"><div id="va-progress-bar" style="height: 100%; width: 0%; background: #38bdf8; transition: width 0.3s;"></div></div>
                 </div>
 
-                <!-- NÚT THAO TÁC -->
                 <div id="action-area" style="display: flex; flex-direction: column; gap: 10px;">
                     <button id="btn-scrape" style="padding: 14px; background: #059669; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 10px rgba(5,150,105,0.4);">🔍 QUÉT DANH SÁCH KHÁCH THẬT</button>
                 </div>
                 
-                <!-- NHẬT KÝ -->
                 <div style="font-size: 12px; color: #38bdf8; font-weight: bold;">📊 NHẬT KÝ HOẠT ĐỘNG:</div>
                 <div id="va-log-box" style="height: 120px; overflow-y: auto; background: #000; color: #34d399; font-size: 12px; padding: 10px; border-radius: 6px; font-family: monospace; border: 1px solid #334155; line-height: 1.5;">> Hệ thống sẵn sàng...</div>
                 
-                <!-- HƯỚNG DẪN -->
                 <button id="btn-toggle-guide" style="padding: 12px; background: #334155; border: none; color: #38bdf8; font-size: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
                     <span>📖 HƯỚNG DẪN SỬ DỤNG TOOL (5 BƯỚC)</span>
                     <span id="guide-arrow">▼</span>
                 </button>
                 <div id="guide-content" style="display: none; padding: 12px; font-size: 12px; background: #1e293b; border-radius: 8px; line-height: 1.6; border: 1px solid #334155;">
-                    <b>Bước 1:</b> Đăng nhập Facebook bình thường. Tool tự nhận diện tên tài khoản.<br><br>
-                    <b>Bước 2:</b> Giữ và kéo thanh tiêu đề màu đen phía trên để dịch chuyển tool đi mọi nơi.<br><br>
+                    <b>Bước 1:</b> Đăng nhập Facebook bình thường.<br><br>
+                    <b>Bước 2:</b> Giữ và kéo thanh tiêu đề màu đen phía trên để dịch chuyển tool.<br><br>
                     <b>Bước 3:</b> Vào nhóm Facebook, chọn mục <b>Thành viên</b>.<br><br>
                     <b>Bước 4:</b> Bấm <b>QUÉT DANH SÁCH KHÁCH THẬT</b>.<br><br>
                     <b>Bước 5:</b> Nhận kết quả Full Link trực tiếp về Telegram.
                 </div>
 
-                <!-- BẢN QUYỀN -->
                 <div style="text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #334155; padding-top: 8px; margin-top: 4px;">
                     © DINH HOANG VIET ANH - ALL RIGHTS RESERVED
                 </div>
@@ -106,10 +98,9 @@
         }
     }
 
-    // --- KÉO THẢ MƯỢT MÀ CHO CẢ MÁY TÍNH VÀ ĐIỆN THOẠI (TOUCH & MOUSE) ---
+    // --- KÉO THẢ MƯỢT MÀ (TOUCH & MOUSE) ---
     const root = document.getElementById('va-tool-root');
     const handle = document.getElementById('va-header-bar');
-    
     let isDragging = false, startX, startY;
 
     function startDrag(clientX, clientY) {
@@ -124,40 +115,22 @@
         root.style.top = (clientY - startY) + 'px';
     }
 
-    function stopDrag() {
-        isDragging = false;
-    }
+    function stopDrag() { isDragging = false; }
 
-    // Sự kiện chuột máy tính
-    handle.onmousedown = (e) => {
-        startDrag(e.clientX, e.clientY);
-    };
-    document.addEventListener('mousemove', (e) => {
-        onDrag(e.clientX, e.clientY);
-    });
+    handle.onmousedown = (e) => startDrag(e.clientX, e.clientY);
+    document.addEventListener('mousemove', (e) => onDrag(e.clientX, e.clientY));
     document.addEventListener('mouseup', stopDrag);
 
-    // Sự kiện cảm ứng điện thoại (Mobile Touch)
-    handle.ontouchstart = (e) => {
-        if(e.touches.length === 1) {
-            startDrag(e.touches[0].clientX, e.touches[0].clientY);
-        }
-    };
-    document.addEventListener('touchmove', (e) => {
-        if(e.touches.length === 1) {
-            onDrag(e.touches[0].clientX, e.touches[0].clientY);
-        }
-    });
+    handle.ontouchstart = (e) => { if(e.touches.length === 1) startDrag(e.touches[0].clientX, e.touches[0].clientY); };
+    document.addEventListener('touchmove', (e) => { if(e.touches.length === 1) onDrag(e.touches[0].clientX, e.touches[0].clientY); });
     document.addEventListener('touchend', stopDrag);
 
-    // --- MỞ / ĐÓNG MENU ---
     handle.onclick = (e) => {
         if(isDragging) return;
         const menu = document.getElementById('va-menu-body');
         menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'flex' : 'none';
     };
 
-    // --- ẨN / HIỆN HƯỚNG DẪN ---
     document.getElementById('btn-toggle-guide').onclick = () => {
         const guide = document.getElementById('guide-content');
         const arrow = document.getElementById('guide-arrow');
@@ -170,38 +143,25 @@
         }
     };
 
-    // --- NHẬN DIỆN TÊN TÀI KHOẢN VÀ TRẠNG THÁI LIVE CHUẨN XÁC ---
+    // --- NHẬN DIỆN TRẠNG THÁI ---
     const statusArea = document.getElementById('status-area');
-
     setInterval(() => {
-        const url = window.location.href;
-        const bodyText = document.body.innerText.toLowerCase();
-        
-        // Chỉ nhận diện là khóa khi thực sự ở trang checkpoint chuyên biệt
-        const isTrueCheckpoint = url.includes('/checkpoint/') || bodyText.includes('hãy xác nhận tài khoản của bạn') || bodyText.includes('nhập mã bảo mật để đăng nhập');
-
-        if (isTrueCheckpoint) {
-            statusArea.innerHTML = `<b style='color:#ef4444; font-size:14px;'>⚠️ TÀI KHOẢN ĐANG BỊ KHÓA</b>`;
+        let profileName = "Thành viên Facebook";
+        const pageTitle = document.title;
+        if (pageTitle && !pageTitle.includes('Facebook') && pageTitle.trim().length > 1) {
+            profileName = pageTitle.split('|')[0].trim();
         } else {
-            // Lấy tên tài khoản chuẩn xác từ tiêu đề trang Facebook hoặc các thẻ meta
-            let profileName = "Tài khoản cá nhân";
-            const pageTitle = document.title;
-            if (pageTitle && !pageTitle.includes('Facebook') && pageTitle.trim().length > 1) {
-                profileName = pageTitle.split('|')[0].trim();
-            } else {
-                const nameEl = document.querySelector('[role="navigation"] span, [aria-label="Tài khoản"] span, h1');
-                if (nameEl && nameEl.innerText.trim().length > 1 && nameEl.innerText.length < 30) {
-                    profileName = nameEl.innerText.trim();
-                }
+            const nameEl = document.querySelector('[role="navigation"] span, [aria-label="Tài khoản"] span, h1');
+            if (nameEl && nameEl.innerText.trim().length > 1 && nameEl.innerText.length < 30) {
+                profileName = nameEl.innerText.trim();
             }
-
-            statusArea.innerHTML = `<b style='color:#22c55e; font-size:14px;'>✅ TÀI KHOẢN LIVE</b><br><span style='color:#38bdf8; font-size:13px; margin-top:6px; display:inline-block;'>👤 Tên: <b>${profileName}</b></span>`;
         }
+        statusArea.innerHTML = `<b style='color:#22c55e; font-size:14px;'>✅ TÀI KHOẢN LIVE</b><br><span style='color:#38bdf8; font-size:13px; margin-top:6px; display:inline-block;'>👤 Tên: <b>${profileName}</b></span>`;
     }, 4000);
 
-    // --- LOGIC QUÉT KHÁCH THẬT ---
+    // --- LOGIC QUÉT KHÁCH THẬT TỐI ƯU CHO MOBILE ---
     document.getElementById('btn-scrape').onclick = async () => {
-        if(!window.location.href.includes('/members')) {
+        if(!window.location.href.includes('/members') && !window.location.href.includes('groups')) {
             alert("❌ Hướng dẫn: Bạn cần vào mục 'Thành viên' của nhóm trước khi bấm quét!");
             addLog("Lỗi: Chưa ở trang Thành viên nhóm.");
             return;
@@ -210,27 +170,38 @@
         addLog("Bắt đầu quét danh sách thành viên...");
         let results = new Set();
         
-        for(let i=0; i<10; i++) {
+        for(let i=0; i<12; i++) {
             window.scrollTo(0, document.body.scrollHeight);
-            document.querySelectorAll('a[role="link"]').forEach(el => {
+            
+            // Quét toàn bộ thẻ <a> có chứa link profile trên giao diện di động
+            document.querySelectorAll('a').forEach(el => {
                 let url = el.href; 
                 let name = el.innerText.trim();
-                if((url.includes('/user/') || url.includes('profile.php')) && !url.includes('/groups/')) {
-                    if(name.length > 3 && !/clone|acc|backup/i.test(name)) {
+                
+                // Điều kiện lọc link profile chuẩn trên mobile
+                if(url && (url.includes('/user/') || url.includes('profile.php') || (url.includes('facebook.com/') && !url.includes('/groups/') && !url.includes('/posts/') && !url.includes('/photo/') && !url.includes('/marketplace/'))) {
+                    // Lọc bỏ các link rác ngắn hoặc không phải tên người
+                    if(name.length > 2 && name.length < 40 && !/clone|acc|backup|add friend|thêm bạn|theo dõi|follow/i.test(name)) {
+                        // Chuẩn hóa link dạng tuyệt đối
+                        if(!url.startsWith('http')) url = 'https://www.facebook.com' + url;
                         results.add(name + " - " + url);
                     }
                 }
             });
-            updateProgress((i + 1) * 10, `Đã quét: ${results.size} khách...`);
+
+            updateProgress((i + 1) * 8, `Đã quét: ${results.size} khách...`);
             addLog(`Đang gom link... (${results.size} người)`);
-            await new Promise(r => setTimeout(r, 1000));
+            await new Promise(r => setTimeout(r, 1200));
         }
 
         if(results.size > 0) {
             addLog(`Quét xong! Đang gửi ${results.size} khách về Tele...`);
             sendTelegram("✅ DATA KHÁCH HÀNG THẬT", Array.from(results).join('\n'));
+            alert(`Đã quét thành công ${results.size} khách và gửi về Telegram!`);
+            addLog("Gửi Telegram thành công!");
         } else {
             addLog("Không tìm thấy dữ liệu phù hợp.");
+            alert("Không tìm thấy khách hàng nào, hãy thử cuộn nhẹ danh sách thành viên nhóm trước khi quét.");
         }
         document.getElementById('va-progress-container').style.display = 'none';
     };

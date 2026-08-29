@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Autoposai - Kiếm Tiền Online</title>
+  <title>AUTOPOSTAI - Nền Tảng Kiếm Tiền Online</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -213,31 +213,32 @@
     </div>
   </div>
 
-  <!-- ================= TOP NAVIGATION BAR ================= -->
-  <header class="glass-panel sticky top-0 z-40 border-b border-slate-800 px-4 lg:px-8 py-2.5 flex items-center justify-between">
-    <div class="flex items-center space-x-2.5">
+  <!-- ================= TOP NAVIGATION BAR (CÂN CHỈNH SỐ DƯ GỌN GÀNG) ================= -->
+  <header class="glass-panel sticky top-0 z-40 border-b border-slate-800 px-3 sm:px-6 py-2 flex items-center justify-between">
+    <div class="flex items-center space-x-2">
       <div class="w-8 h-8 rounded-xl gradient-primary flex items-center justify-center shadow-md">
         <i class="fa-solid fa-bolt text-white text-sm"></i>
       </div>
       <div>
-        <span class="font-extrabold text-base tracking-tight gradient-text">Autoposai</span>
+        <span class="font-extrabold text-sm sm:text-base tracking-tight gradient-text">AUTOPOSTAI</span>
         <span id="roleBadge" class="hidden text-[9px] uppercase font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 py-0.2 rounded-full ml-1">ADMIN</span>
       </div>
     </div>
 
     <div class="flex items-center space-x-2">
-      <button onclick="goToHome()" class="px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold flex items-center gap-1">
-        <i class="fa-solid fa-house text-blue-400"></i> <span class="hidden sm:inline">Trang Chủ</span>
+      <button onclick="goToHome()" class="hidden sm:flex px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold items-center gap-1.5">
+        <i class="fa-solid fa-house text-blue-400"></i> Trang Chủ
       </button>
 
       <button onclick="openNoticeModal()" class="relative w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
-        <i class="fa-regular fa-bell text-sm"></i>
-        <span id="noticeDot" class="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+        <i class="fa-regular fa-bell text-xs"></i>
+        <span id="noticeDot" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
       </button>
 
-      <div class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 flex items-center space-x-2">
-        <span class="text-[11px] text-slate-400">Số dư:</span>
-        <span class="text-xs font-black text-emerald-400"><span id="navBalanceVND">0</span> đ</span>
+      <!-- Badge Số Dư Tinh Gọn Không Bị Méo Chữ -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1 flex items-center gap-1.5 text-xs font-bold">
+        <span class="text-[10px] text-slate-400 uppercase font-medium">Số dư:</span>
+        <span class="text-emerald-400 font-extrabold whitespace-nowrap"><span id="navBalanceVND">0</span> đ</span>
       </div>
 
       <button onclick="openMenu()" class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
@@ -249,7 +250,7 @@
   <!-- ================= BANNER THÔNG BÁO CHẠY ================= -->
   <div id="noticeMarqueeContainer" class="bg-blue-600/10 border-b border-blue-500/20 px-4 py-1.5 text-xs text-blue-300 flex items-center space-x-2">
     <i class="fa-solid fa-bullhorn text-blue-400 flex-shrink-0"></i>
-    <marquee id="noticeMarqueeText" scrollamount="6" class="font-semibold">Chào mừng bạn đến với hệ thống kiếm tiền tự động Autoposai!</marquee>
+    <marquee id="noticeMarqueeText" scrollamount="6" class="font-semibold">Chào mừng bạn đến với hệ thống kiếm tiền tự động AUTOPOSTAI!</marquee>
   </div>
 
   <!-- ================= PHẦN CHÍNH: THỐNG KÊ & NHIỆM VỤ ================= -->
@@ -320,15 +321,15 @@
 
   </main>
 
-  <!-- ================= BẢNG QUẢN TRỊ ADMIN (7 TAB CHUYÊN NGHIỆP) ================= -->
+  <!-- ================= BẢNG QUẢN TRỊ ADMIN (CARD LAYOUT HIỆN ĐẠI CHO MOBILE) ================= -->
   <div id="adminView" class="hidden flex-1 max-w-6xl w-full mx-auto px-4 mt-4 space-y-4">
     
     <div class="flex items-center justify-between">
       <div>
-        <h2 class="text-lg sm:text-xl font-black text-white flex items-center gap-2">
+        <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
           <i class="fa-solid fa-crown text-amber-400"></i> Bảng Quản Trị Hệ Thống
         </h2>
-        <p class="text-xs text-slate-400 mt-0.5">Toàn quyền cấu hình thành viên, vai trò, bảo mật & tài chính</p>
+        <p class="text-xs text-slate-400 mt-0.5">Cấu hình thành viên, vai trò & tài chính</p>
       </div>
       <button onclick="goToHome()" class="px-3 py-1.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg flex items-center gap-1">
         <i class="fa-solid fa-house"></i> Về Trang Chủ
@@ -360,43 +361,31 @@
       </button>
     </div>
 
-    <!-- TAB 1: KHÁCH HÀNG (ĐƯỢC NÂNG CẤP CHUYÊN NGHIỆP) -->
+    <!-- TAB 1: KHÁCH HÀNG (CARD LAYOUT SIÊU ĐẸP, KHÔNG BỊ CO CỤM TRÊN MOBILE) -->
     <div id="tabUsers" class="admin-tab-content glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
         <div>
           <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
             <i class="fa-solid fa-users text-blue-400"></i> Quản Lý Thành Viên Chuyên Sâu
           </h3>
-          <p class="text-[11px] text-slate-400 mt-0.5">Sửa mật khẩu, phân quyền quản trị, cộng trừ số dư và khóa tài khoản</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Sửa mật khẩu, đổi quyền, nạp/trừ tiền & khóa tài khoản</p>
         </div>
         
         <div class="flex items-center gap-2 flex-wrap">
           <select id="adminRoleFilter" onchange="filterAdminUserList()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none">
             <option value="all">Tất cả vai trò</option>
-            <option value="admin">Quản trị viên (Admin)</option>
-            <option value="manager">Quản lý (Manager)</option>
-            <option value="member">Thành viên (Member)</option>
+            <option value="admin">Admin</option>
+            <option value="manager">Manager</option>
+            <option value="member">Member</option>
           </select>
-          <input id="adminSearchInput" oninput="filterAdminUserList()" type="text" placeholder="Tìm tên tài khoản..." class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none w-36 sm:w-48">
+          <input id="adminSearchInput" oninput="filterAdminUserList()" type="text" placeholder="Tìm tài khoản..." class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none w-32 sm:w-44">
           <button onclick="loadAdminUserList()" class="px-2.5 py-1.5 rounded-xl bg-slate-800 text-slate-300 text-xs hover:bg-slate-700"><i class="fa-solid fa-rotate-right"></i></button>
         </div>
       </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs text-slate-300">
-          <thead class="bg-slate-900/80 text-slate-400 uppercase text-[10px]">
-            <tr>
-              <th class="p-2.5">Tài Khoản</th>
-              <th class="p-2.5">Vai Trò (Quyền)</th>
-              <th class="p-2.5">Số Dư VNĐ</th>
-              <th class="p-2.5">Trạng Thái</th>
-              <th class="p-2.5 text-right">Thao Tác Quản Trị</th>
-            </tr>
-          </thead>
-          <tbody id="adminUserTable" class="divide-y divide-slate-800">
-            <tr><td colspan="5" class="p-4 text-center text-slate-500">Đang tải danh sách...</td></tr>
-          </tbody>
-        </table>
+      <!-- Khung hiển thị danh sách dạng Thẻ Card VIP -->
+      <div id="adminUserCardsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="col-span-full text-center text-slate-500 py-6 text-xs">Đang tải danh sách thành viên...</div>
       </div>
     </div>
 
@@ -626,9 +615,9 @@
         <div>
           <label class="block text-slate-400 mb-1">Chọn vai trò quyền hạn:</label>
           <select id="adminRoleSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-purple-500">
-            <option value="member">Thành viên (Cộng tác viên thường)</option>
-            <option value="manager">Quản lý (Manager - Hỗ trợ duyệt tiền)</option>
-            <option value="admin">Quản trị viên tối cao (Full Admin)</option>
+            <option value="member">Thành viên (Member)</option>
+            <option value="manager">Quản lý (Manager)</option>
+            <option value="admin">Quản trị viên (Admin)</option>
           </select>
         </div>
         <button onclick="submitAdminChangeRole()" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg mt-2">
@@ -778,7 +767,7 @@
         <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-1">
           <p class="text-slate-400">Ngân hàng: <b class="text-white">MB BANK</b></p>
           <p class="text-slate-400">Số tài khoản: <b class="text-amber-300">0333338888</b></p>
-          <p class="text-slate-400">Chủ tài khoản: <b class="text-white">ADMIN AUTOPOSAI</b></p>
+          <p class="text-slate-400">Chủ tài khoản: <b class="text-white">ADMIN AUTOPOSTAI</b></p>
           <p class="text-slate-400">Nội dung chuyển khoản: <b id="depositMemo" class="text-emerald-400">NAP USER</b></p>
         </div>
         <div>
@@ -827,7 +816,7 @@
       minWithdraw: Number(localStorage.getItem('sys_min_withdraw')) || 50000,
       commission: Number(localStorage.getItem('sys_commission')) || 80,
       zalo: localStorage.getItem('sys_zalo') || '0987654321',
-      telegram: localStorage.getItem('sys_telegram') || '@cskh_autoposai',
+      telegram: localStorage.getItem('sys_telegram') || '@cskh_autopostai',
       groupZalo: localStorage.getItem('sys_group_zalo') || 'https://zalo.me/g/example',
       groupTelegram: localStorage.getItem('sys_group_telegram') || 'https://t.me/example',
       workTime: localStorage.getItem('sys_work_time') || '08:00 - 23:00 (Hàng ngày)',
@@ -837,10 +826,9 @@
     };
 
     let notifications = JSON.parse(localStorage.getItem('sys_notifications_db')) || [
-      { id: 1, title: 'Khởi động hệ thống Autoposai', content: 'Chào mừng bạn đến với Autoposai! Hoàn thành nhiệm vụ nhận tiền mặt rút tự động 24/7.', time: 'Hôm nay' }
+      { id: 1, title: 'Khởi động hệ thống AUTOPOSTAI', content: 'Chào mừng bạn đến với AUTOPOSTAI! Hoàn thành nhiệm vụ nhận tiền mặt rút tự động 24/7.', time: 'Hôm nay' }
     ];
 
-    // Lưu trữ quyền hạn & mật khẩu cục bộ nếu database chưa có trường riêng
     let userPermissions = JSON.parse(localStorage.getItem('user_permissions_db')) || {
       'Admin': { role: 'admin', banned: false }
     };
@@ -922,7 +910,6 @@
         return showNotify('error', 'Sai Mã Bảo Mật', 'Mã xác nhận không chính xác. Đã đổi mã mới!');
       }
 
-      // Kiểm tra tài khoản có bị khóa không
       if (userPermissions[u]?.banned) {
         generateCaptcha();
         return showNotify('error', 'Tài Khoản Bị Khóa', 'Tài khoản của bạn đã bị tạm khóa do vi phạm chính sách!');
@@ -1104,10 +1091,11 @@
       showNotify('success', 'Thành Công', 'Đã cập nhật Bảng Giá & Hoa Hồng cho toàn hệ thống!');
     }
 
-    // 9. Admin: Khách Hàng (Nâng Cấp Quản Lý Vai Trò, Đổi Pass & Khóa)
+    // 9. Admin: Khách Hàng (CARD DESIGN GỌN GÀNG, SANG TRỌNG CHO MOBILE)
     async function loadAdminUserList() {
-      const tbody = document.getElementById('adminUserTable');
-      tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-slate-500">Đang tải...</td></tr>';
+      const container = document.getElementById('adminUserCardsContainer');
+      container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-6 text-xs">Đang tải danh sách thành viên...</div>';
+      
       const { data } = await supabaseClient.from('users_task').select('*').order('created_at', { ascending: false });
       if (data) {
         cachedAdminUserList = data;
@@ -1116,13 +1104,13 @@
     }
 
     function renderAdminUserTable(list) {
-      const tbody = document.getElementById('adminUserTable');
+      const container = document.getElementById('adminUserCardsContainer');
       if (!list || list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-slate-500">Không có tài khoản nào phù hợp.</td></tr>';
+        container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-6 text-xs">Không có tài khoản nào phù hợp.</div>';
         return;
       }
 
-      tbody.innerHTML = list.map(u => {
+      container.innerHTML = list.map(u => {
         const vnd = (Number(u.points) || 0) * systemConfig.rate;
         const role = userPermissions[u.user_id]?.role || (u.user_id === 'Admin' ? 'admin' : 'member');
         const isBanned = userPermissions[u.user_id]?.banned || false;
@@ -1132,39 +1120,51 @@
         if (role === 'manager') roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">Manager</span>';
 
         const statusBadge = isBanned 
-          ? '<span class="text-rose-400 font-bold flex items-center gap-1"><i class="fa-solid fa-ban text-[10px]"></i> Đã Khóa</span>'
-          : '<span class="text-emerald-400 font-bold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[10px]"></i> Hoạt Động</span>';
+          ? '<span class="text-rose-400 font-bold text-[11px] flex items-center gap-1"><i class="fa-solid fa-ban text-[10px]"></i> Đã Khóa</span>'
+          : '<span class="text-emerald-400 font-bold text-[11px] flex items-center gap-1"><i class="fa-solid fa-circle-check text-[10px]"></i> Hoạt Động</span>';
 
         return `
-          <tr class="hover:bg-slate-800/40">
-            <td class="p-2.5 font-bold text-white flex items-center gap-1.5">
-              <i class="fa-solid fa-user-circle text-slate-400"></i> ${u.user_id}
-            </td>
-            <td class="p-2.5">${roleBadge}</td>
-            <td class="p-2.5 text-emerald-400 font-bold">${vnd.toLocaleString('vi-VN')} đ</td>
-            <td class="p-2.5">${statusBadge}</td>
-            <td class="p-2.5 text-right space-x-1">
-              <!-- Nút Đổi Mật Khẩu -->
-              <button onclick="openAdminPasswordModal('${u.user_id}')" class="px-2 py-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded text-xs font-semibold" title="Đổi Mật Khẩu">
-                <i class="fa-solid fa-key"></i> Pass
-              </button>
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 space-y-3 shadow-lg">
+            <!-- Hàng 1: User & Trạng thái -->
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-xl bg-slate-800 text-blue-400 flex items-center justify-center text-sm font-bold border border-slate-700">
+                  <i class="fa-solid fa-user"></i>
+                </div>
+                <div>
+                  <h4 class="font-extrabold text-white text-xs">${u.user_id}</h4>
+                  <div class="mt-0.5">${roleBadge}</div>
+                </div>
+              </div>
+              <div>${statusBadge}</div>
+            </div>
 
-              <!-- Nút Phân Quyền -->
-              <button onclick="openAdminRoleModal('${u.user_id}', '${role}')" class="px-2 py-1 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 rounded text-xs font-semibold" title="Phân Quyền">
+            <!-- Hàng 2: Hiển thị Số Dư -->
+            <div class="flex items-center justify-between bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/60">
+              <span class="text-[11px] text-slate-400 font-medium">Số dư ví:</span>
+              <span class="text-sm font-extrabold text-emerald-400">${vnd.toLocaleString('vi-VN')} đ</span>
+            </div>
+
+            <!-- Hàng 3: Cụm Nút Thao Tác Nhanh -->
+            <div class="grid grid-cols-3 gap-1.5 pt-1">
+              <button onclick="openAdminPasswordModal('${u.user_id}')" class="py-1.5 px-2 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded-xl text-[11px] font-bold transition flex items-center justify-center gap-1">
+                <i class="fa-solid fa-key"></i> Đổi Pass
+              </button>
+              <button onclick="openAdminRoleModal('${u.user_id}', '${role}')" class="py-1.5 px-2 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 rounded-xl text-[11px] font-bold transition flex items-center justify-center gap-1">
                 <i class="fa-solid fa-user-shield"></i> Quyền
               </button>
-
-              <!-- Nút Khóa / Mở Khóa -->
-              <button onclick="toggleBanUser('${u.user_id}')" class="px-2 py-1 ${isBanned ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'} rounded text-xs font-semibold" title="${isBanned ? 'Mở Khóa' : 'Khóa'}">
-                <i class="fa-solid ${isBanned ? 'fa-lock-open' : 'fa-lock'}"></i>
+              <button onclick="toggleBanUser('${u.user_id}')" class="py-1.5 px-2 ${isBanned ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-300 hover:bg-rose-500/30'} rounded-xl text-[11px] font-bold transition flex items-center justify-center gap-1">
+                <i class="fa-solid ${isBanned ? 'fa-lock-open' : 'fa-lock'}"></i> ${isBanned ? 'Mở Khóa' : 'Khóa'}
               </button>
+            </div>
 
-              <!-- Ô Cộng Trừ Tiền Nhanh -->
-              <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập VNĐ..." class="w-24 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white focus:outline-none">
-              <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded-lg text-xs font-bold">+ Nạp</button>
-              <button onclick="adminCustomAdjust('${u.user_id}', -1)" class="px-2 py-1 bg-rose-500/20 text-rose-300 rounded-lg text-xs font-bold">- Trừ</button>
-            </td>
-          </tr>
+            <!-- Hàng 4: Nhập Tiền Cộng Trừ -->
+            <div class="flex items-center gap-1.5 pt-1">
+              <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập số VNĐ..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500">
+              <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-bold">+ Nạp</button>
+              <button onclick="adminCustomAdjust('${u.user_id}', -1)" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/30 rounded-xl text-xs font-bold">- Trừ</button>
+            </div>
+          </div>
         `;
       }).join('');
     }
@@ -1183,7 +1183,6 @@
       renderAdminUserTable(filtered);
     }
 
-    // Modal Đổi Pass User
     function openAdminPasswordModal(userId) {
       document.getElementById('adminTargetUser').value = userId;
       document.getElementById('adminNewUserPassword').value = '';
@@ -1201,7 +1200,6 @@
       sendTelegramAlert(`🔐 <b>ADMIN ĐÃ ĐỔI MẬT KHẨU!</b>\n👤 Thành viên: <code>${targetUser}</code>\n🔑 Mật khẩu mới: <code>${newPass}</code>\n⏰ Lúc: ${new Date().toLocaleTimeString('vi-VN')}`);
     }
 
-    // Modal Phân Quyền User
     function openAdminRoleModal(userId, currentRole) {
       document.getElementById('adminRoleTargetUser').value = userId;
       document.getElementById('adminRoleSelect').value = currentRole;
@@ -1222,7 +1220,6 @@
       showNotify('success', 'Cập Nhật Quyền Thành Công', `Đã phân vai trò [${newRole.toUpperCase()}] cho tài khoản ${targetUser}.`);
     }
 
-    // Khóa / Mở Khóa Tài Khoản
     function toggleBanUser(userId) {
       if (!userPermissions[userId]) userPermissions[userId] = { role: 'member', banned: false };
       const currentBan = userPermissions[userId].banned;
@@ -1335,7 +1332,7 @@
           </div>
         `).join('');
       } else {
-        document.getElementById('noticeMarqueeText').innerText = 'Chào mừng bạn đến với hệ thống kiếm tiền tự động Autoposai!';
+        document.getElementById('noticeMarqueeText').innerText = 'Chào mừng bạn đến với hệ thống kiếm tiền tự động AUTOPOSTAI!';
         modalList.innerHTML = '<p class="text-slate-500 text-center py-4">Hiện không có thông báo nào.</p>';
       }
     }
@@ -1413,7 +1410,7 @@
 
     function saveAdminSupportConfig() {
       systemConfig.zalo = document.getElementById('adminCfgZalo').value.trim() || '0987654321';
-      systemConfig.telegram = document.getElementById('adminCfgTelegram').value.trim() || '@cskh_autoposai';
+      systemConfig.telegram = document.getElementById('adminCfgTelegram').value.trim() || '@cskh_autopostai';
       systemConfig.groupZalo = document.getElementById('adminCfgGroupZalo').value.trim() || 'https://zalo.me/g/example';
       systemConfig.groupTelegram = document.getElementById('adminCfgGroupTelegram').value.trim() || 'https://t.me/example';
       systemConfig.workTime = document.getElementById('adminCfgWorkTime').value.trim() || '08:00 - 23:00';
@@ -1451,7 +1448,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             chat_id: chatId,
-            text: '🚀 <b>KẾT NỐI BOT THÀNH CÔNG!</b>\nHệ thống Autoposai đã sẵn sàng.',
+            text: '🚀 <b>KẾT NỐI BOT THÀNH CÔNG!</b>\nHệ thống AUTOPOSTAI đã sẵn sàng.',
             parse_mode: 'HTML'
           })
         });
@@ -1469,7 +1466,7 @@
     function openSupportModal() { document.getElementById('supportModal').classList.remove('hidden'); }
     function closeSupportModal() { document.getElementById('supportModal').classList.add('hidden'); }
 
-    // 13. Quản lý Nạp / Rút Tiền
+    // 13. Quản lý Nạp / Rút Tiền Thông Minh
     function openWithdrawModal() { 
       document.getElementById('withdrawModal').classList.remove('hidden'); 
       handleWithdrawMethodChange();
@@ -1611,8 +1608,7 @@
     window.onload = () => {
       const savedUser = localStorage.getItem('task_auth_user');
       if (savedUser) {
-        const hasAdminRole = savedUser === 'Admin' || userPermissions[savedUser]?.role === 'admin' || userPermissions[savedUser]?.role === 'manager';
-        initSession(savedUser, hasAdminRole);
+        initSession(savedUser, savedUser === 'Admin');
       }
     };
   </script>

@@ -3,363 +3,434 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AutoTask AI - Kiếm Tiền Online & Quản Trị Hệ Thống</title>
-  <!-- Tailwind CSS & FontAwesome -->
+  <title>AutoTask VIP - Kiếm Tiền Online</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     * { font-family: 'Plus Jakarta Sans', sans-serif; }
     body { background-color: #0b0f19; color: #f8fafc; }
-    .glass-panel { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
-    .glass-card { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+    .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glass-card { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); }
     .gradient-primary { background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); }
-    .gradient-gold { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
     .gradient-text { background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .glow-effect { box-shadow: 0 0 25px rgba(59, 130, 246, 0.2); }
+    .captcha-box { font-family: 'Courier New', monospace; letter-spacing: 5px; text-decoration: line-through; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-blue-500 selection:text-white">
+<body class="min-h-screen flex flex-col antialiased">
 
-  <!-- ================= AUTH MODAL (ĐĂNG NHẬP / ĐĂNG KÝ) ================= -->
-  <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+  <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-700/60 shadow-2xl relative">
-      <div class="text-center mb-6">
-        <div class="w-14 h-14 rounded-2xl gradient-primary flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30 mb-3">
-          <i class="fa-solid fa-gem text-white text-2xl"></i>
+      
+      <div id="registerSuccessBox" class="hidden text-center py-6 space-y-4">
+        <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-3xl animate-bounce">
+          <i class="fa-solid fa-check"></i>
         </div>
-        <h2 id="authTitle" class="text-2xl font-extrabold text-white tracking-tight">Đăng Nhập CTV</h2>
-        <p class="text-xs text-slate-400 mt-1">Hệ thống kiếm tiền & phân phối nhiệm vụ tự động</p>
-      </div>
-
-      <div class="space-y-4">
         <div>
-          <label class="text-xs font-semibold text-slate-300 block mb-1.5">Tên tài khoản</label>
-          <div class="relative">
-            <i class="fa-solid fa-user absolute left-3.5 top-3.5 text-slate-500 text-sm"></i>
-            <input id="authUsername" type="text" placeholder="Nhập tên đăng nhập..." class="w-full bg-slate-900/90 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition">
-          </div>
+          <h3 class="text-xl font-black text-white">Đăng Ký Thành Công!</h3>
+          <p class="text-xs text-slate-400 mt-1">Tài khoản của bạn đã được tạo. Vui lòng đăng nhập để bắt đầu.</p>
         </div>
-
-        <div>
-          <label class="text-xs font-semibold text-slate-300 block mb-1.5">Mật khẩu</label>
-          <div class="relative">
-            <i class="fa-solid fa-lock absolute left-3.5 top-3.5 text-slate-500 text-sm"></i>
-            <input id="authPassword" type="password" placeholder="Nhập mật khẩu..." class="w-full bg-slate-900/90 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition">
-          </div>
-        </div>
-
-        <button id="btnAuthSubmit" onclick="handleAuthSubmit()" class="w-full py-3 rounded-xl gradient-primary text-white text-sm font-bold shadow-lg shadow-blue-500/25 hover:opacity-95 transition">
-          Đăng Nhập
+        <button onclick="switchToLoginAfterRegister()" class="w-full py-2.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg shadow-blue-500/25">
+          Chuyển Sang Đăng Nhập
         </button>
       </div>
 
-      <div class="mt-5 text-center text-xs text-slate-400">
-        <span id="authSwitchText">Chưa có tài khoản?</span>
-        <button id="authSwitchBtn" onclick="toggleAuthMode()" class="text-blue-400 font-bold ml-1 hover:underline">Tạo tài khoản mới</button>
+      <div id="authFormContent">
+        <div class="text-center mb-6">
+          <div class="w-12 h-12 rounded-2xl gradient-primary flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30 mb-3">
+            <i class="fa-solid fa-bolt text-white text-xl"></i>
+          </div>
+          <h2 id="authTitle" class="text-xl font-extrabold text-white tracking-tight">Đăng Nhập CTV</h2>
+          <p class="text-xs text-slate-400 mt-1">Hệ thống phân phối nhiệm vụ trả thưởng VNĐ</p>
+        </div>
+
+        <div class="space-y-3.5">
+          <div>
+            <label class="text-xs font-semibold text-slate-300 block mb-1">Tài khoản</label>
+            <div class="relative">
+              <i class="fa-solid fa-user absolute left-3.5 top-3 text-slate-500 text-xs"></i>
+              <input id="authUsername" type="text" placeholder="Nhập tên tài khoản..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs font-semibold text-slate-300 block mb-1">Mật khẩu</label>
+            <div class="relative">
+              <i class="fa-solid fa-lock absolute left-3.5 top-3 text-slate-500 text-xs"></i>
+              <input id="authPassword" type="password" placeholder="Nhập mật khẩu..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+            </div>
+          </div>
+
+          <div id="captchaContainer" class="hidden space-y-1">
+            <label class="text-xs font-semibold text-slate-300 block">Mã xác thực (Captcha)</label>
+            <div class="flex items-center space-x-2">
+              <div id="captchaText" class="captcha-box px-3 py-1.5 bg-slate-800 border border-slate-600 rounded-xl text-amber-300 font-extrabold text-sm select-none">
+                ----
+              </div>
+              <button onclick="generateCaptcha()" type="button" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400" title="Đổi mã khác">
+                <i class="fa-solid fa-rotate"></i>
+              </button>
+              <input id="authCaptchaInput" type="text" placeholder="Nhập mã bên cạnh" class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 uppercase">
+            </div>
+          </div>
+
+          <button id="btnAuthSubmit" onclick="handleAuthSubmit()" class="w-full py-2.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg shadow-blue-500/25 hover:opacity-95 transition mt-2">
+            Đăng Nhập
+          </button>
+        </div>
+
+        <div class="mt-4 text-center text-xs text-slate-400">
+          <span id="authSwitchText">Chưa có tài khoản?</span>
+          <button id="authSwitchBtn" onclick="toggleAuthMode()" class="text-blue-400 font-bold ml-1 hover:underline">Đăng ký ngay</button>
+        </div>
       </div>
+
     </div>
   </div>
 
-  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <div id="menuDrawer" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
+    <div id="drawerOverlay" onclick="closeMenu()" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+    
+    <div id="drawerContent" class="absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-slate-900/95 border-l border-slate-800 p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 pointer-events-auto">
+      <div class="space-y-6 overflow-y-auto">
+        
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-circle-user text-blue-400 text-xl"></i>
+            <div>
+              <p class="text-[10px] text-slate-400">Tài khoản</p>
+              <p id="drawerUsername" class="text-xs font-bold text-white">Khách</p>
+            </div>
+          </div>
+          <button onclick="closeMenu()" class="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-white">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="space-y-2">
+          <button onclick="openWithdrawModal(); closeMenu();" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold hover:bg-blue-500/20 transition">
+            <i class="fa-solid fa-building-columns text-sm"></i>
+            <span>Rút Tiền Về ATM / MoMo</span>
+          </button>
+
+          <button id="btnDrawerAdmin" onclick="toggleView('admin'); closeMenu();" class="hidden w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-amber-500/10 text-amber-300 border border-amber-500/20 text-xs font-bold hover:bg-amber-500/20 transition">
+            <i class="fa-solid fa-shield-halved text-sm"></i>
+            <span>Admin Panel (Quản Trị)</span>
+          </button>
+        </div>
+
+        <div class="space-y-3 pt-2">
+          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Quy Định Rút Tiền</p>
+          
+          <div class="bg-slate-950/60 rounded-xl p-3 border border-slate-800 space-y-2 text-xs">
+            <div class="flex justify-between">
+              <span class="text-slate-400">Đơn vị thanh toán:</span>
+              <span class="text-emerald-400 font-bold">VNĐ (Việt Nam Đồng)</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Tối thiểu rút:</span>
+              <span class="text-slate-200 font-bold">50.000 VNĐ</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Thời gian xử lý:</span>
+              <span class="text-slate-200 font-medium">5 - 30 Phút</span>
+            </div>
+          </div>
+
+          <div class="bg-slate-950/60 rounded-xl p-3 border border-slate-800 space-y-1 text-[11px] text-slate-400">
+            <p class="text-slate-300 font-semibold mb-1"><i class="fa-solid fa-triangle-exclamation text-amber-400 mr-1"></i> Lưu ý CTV:</p>
+            <p>• Tuyệt đối không sử dụng VPN/Proxy</p>
+            <p>• Nhập đúng số tài khoản / số MoMo</p>
+            <p>• Tiền tự động quy đổi & cộng vào ví</p>
+          </div>
+        </div>
+
+      </div>
+
+      <button onclick="handleLogout()" class="w-full py-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold hover:bg-rose-500/20 transition flex items-center justify-center gap-2">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng Xuất
+      </button>
+    </div>
+  </div>
+
   <header class="glass-panel sticky top-0 z-40 border-b border-slate-800 px-4 lg:px-8 py-3 flex items-center justify-between">
     <div class="flex items-center space-x-3">
-      <div class="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow-lg shadow-blue-500/20">
-        <i class="fa-solid fa-bolt-lightning text-white text-lg"></i>
+      <div class="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center shadow-md">
+        <i class="fa-solid fa-bolt text-white text-base"></i>
       </div>
       <div>
-        <div class="flex items-center space-x-2">
-          <span class="font-black text-lg tracking-tight gradient-text">AutoTask VIP</span>
-          <span id="roleBadge" class="hidden text-[10px] uppercase tracking-wider font-extrabold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full">ADMIN</span>
-        </div>
-        <p class="text-[11px] text-slate-400">Hệ sinh thái phân phối Traffic & CPA</p>
+        <span class="font-extrabold text-base tracking-tight gradient-text">AutoTask VIP</span>
+        <span id="roleBadge" class="hidden text-[9px] uppercase font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 py-0.2 rounded-full ml-1">ADMIN</span>
       </div>
     </div>
 
     <div class="flex items-center space-x-3">
-      <div class="bg-slate-900/80 border border-slate-800 rounded-xl px-3.5 py-1.5 flex items-center space-x-3">
-        <div class="text-right">
-          <p class="text-[10px] text-slate-400 leading-tight">CTV:</p>
-          <p id="navUsername" class="text-xs font-bold text-white leading-tight">Khách</p>
-        </div>
-        <div class="h-6 w-px bg-slate-800"></div>
-        <div>
-          <p class="text-[10px] text-slate-400 leading-tight">Số dư:</p>
-          <p class="text-xs font-black text-emerald-400 leading-tight"><span id="navBalance">0</span> P</p>
-        </div>
+      <div class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 flex items-center space-x-2">
+        <span class="text-[11px] text-slate-400">Số dư:</span>
+        <span class="text-xs font-black text-emerald-400"><span id="navBalanceVND">0</span> đ</span>
       </div>
 
-      <button id="btnAdminPanel" onclick="toggleView('admin')" class="hidden px-3 py-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold hover:bg-amber-500/30 transition">
-        <i class="fa-solid fa-shield-halved mr-1"></i> Admin Panel
-      </button>
-
-      <button onclick="handleLogout()" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-rose-400 transition" title="Đăng xuất">
-        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      <button onclick="openMenu()" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
+        <i class="fa-solid fa-bars text-sm"></i>
       </button>
     </div>
   </header>
 
-  <!-- ================= CTV MAIN VIEW ================= -->
-  <div id="ctvView" class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 mt-6 space-y-6">
+  <main id="ctvView" class="flex-1 max-w-5xl w-full mx-auto px-4 mt-5 space-y-5">
     
-    <!-- Top Statistics Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      
-      <!-- Số dư -->
-      <div class="glass-card rounded-2xl p-5 relative overflow-hidden flex flex-col justify-between">
-        <div class="flex justify-between items-start">
-          <div>
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Số dư khả dụng</span>
-            <div class="flex items-baseline space-x-2 mt-2">
-              <span id="mainBalance" class="text-3xl font-black text-white tracking-tight">0</span>
-              <span class="text-xs font-bold text-blue-400">POINTS</span>
-            </div>
-            <p class="text-[11px] text-emerald-400 mt-1 font-semibold">≈ <span id="vndBalance">0</span> VNĐ</p>
-          </div>
-          <div class="w-11 h-11 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center border border-blue-500/30">
-            <i class="fa-solid fa-wallet text-xl"></i>
-          </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div class="glass-card rounded-2xl p-4 flex flex-col justify-between">
+        <span class="text-[11px] font-semibold text-slate-400">Số Dư Khả Dụng</span>
+        <div class="mt-1 flex items-baseline space-x-1">
+          <span id="mainBalanceVND" class="text-2xl font-black text-emerald-400">0</span>
+          <span class="text-xs font-bold text-slate-300">VNĐ</span>
         </div>
-        <button onclick="openWithdrawModal()" class="mt-4 w-full py-2.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg shadow-blue-500/20 hover:opacity-95 transition">
-          <i class="fa-solid fa-money-bill-transfer mr-1"></i> Rút Tiền Về Ngân Hàng
+        <span class="text-[10px] text-slate-500 mt-0.5">Sẵn sàng để rút</span>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 flex flex-col justify-between">
+        <span class="text-[11px] font-semibold text-slate-400">Trạng Thái CTV</span>
+        <div class="mt-1 flex items-center space-x-1.5 text-xs font-bold text-emerald-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Tài Khoản Hợp Lệ</span>
+        </div>
+        <span class="text-[10px] text-slate-500 mt-0.5">Tự động duyệt tiền</span>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 col-span-2 sm:col-span-1 flex flex-col justify-between">
+        <span class="text-[11px] font-semibold text-slate-400">Thao Tác</span>
+        <button onclick="openWithdrawModal()" class="mt-2 w-full py-1.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg shadow-blue-500/20">
+          <i class="fa-solid fa-money-bill-transfer mr-1"></i> Rút Tiền Về Ví
         </button>
       </div>
-
-      <!-- Tỷ lệ quy đổi -->
-      <div class="glass-card rounded-2xl p-5 flex flex-col justify-between">
-        <div class="flex justify-between items-start">
-          <div>
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tỷ giá chuyển đổi</span>
-            <div class="text-xl font-extrabold text-slate-200 mt-2">100 P = $1 USD</div>
-            <p class="text-xs text-slate-400 mt-1">1 Point ≈ 250 VNĐ</p>
-          </div>
-          <div class="w-11 h-11 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center border border-indigo-500/30">
-            <i class="fa-solid fa-chart-line text-xl"></i>
-          </div>
-        </div>
-        <div class="text-[11px] text-slate-500 pt-3 border-t border-slate-800">
-          Tối thiểu rút: <b>200 P ($2)</b>
-        </div>
-      </div>
-
-      <!-- Trạng thái mạng -->
-      <div class="glass-card rounded-2xl p-5 flex flex-col justify-between">
-        <div class="flex justify-between items-start">
-          <div>
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Trạng thái CTV</span>
-            <div class="flex items-center space-x-2 mt-2">
-              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span> Chuẩn IP Việt Nam
-              </span>
-            </div>
-            <p class="text-[11px] text-slate-400 mt-2 leading-relaxed">Cấm bật Proxy/VPN tránh mất tài khoản.</p>
-          </div>
-          <div class="w-11 h-11 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30">
-            <i class="fa-solid fa-shield-halved text-xl"></i>
-          </div>
-        </div>
-        <div class="text-[11px] text-slate-500 pt-3 border-t border-slate-800">
-          Theo dõi: <b class="text-slate-300">CPALead API v2</b>
-        </div>
-      </div>
-
-      <!-- Hướng dẫn nhanh -->
-      <div class="glass-card rounded-2xl p-5 flex flex-col justify-between">
-        <div class="flex justify-between items-start">
-          <div>
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Mẹo kiếm điểm nhanh</span>
-            <p class="text-xs text-slate-300 mt-2 leading-relaxed">Chọn các nhiệm vụ có tag <b>Cài đặt App</b> hoặc <b>Khảo sát ngắn</b> để nhận điểm nhanh nhất.</p>
-          </div>
-          <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30">
-            <i class="fa-solid fa-lightbulb text-xl"></i>
-          </div>
-        </div>
-        <div class="text-[11px] text-slate-500 pt-3 border-t border-slate-800">
-          Cập nhật mỗi 5 phút
-        </div>
-      </div>
-
     </div>
 
-    <!-- Khung Nhiệm Vụ Offerwall -->
-    <div class="glass-card rounded-3xl p-4 sm:p-6 border border-slate-800 shadow-2xl">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-slate-800">
+    <div class="glass-card rounded-2xl p-4 border border-slate-800 shadow-xl">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
         <div>
-          <h2 class="text-base font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-layer-group text-blue-400"></i> Danh Sách Nhiệm Vụ Phân Phối
+          <h2 class="text-sm font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-list-check text-blue-400"></i> Danh Sách Nhiệm Vụ Trả Thưởng
           </h2>
-          <p class="text-xs text-slate-400 mt-0.5">Hoàn thành đúng từng bước để hệ thống tự động cộng điểm sau 30 giây</p>
         </div>
-        <button onclick="refreshTaskFrame()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition flex items-center gap-2 self-start">
-          <i id="taskRefreshIcon" class="fa-solid fa-rotate-right"></i> Làm mới danh sách
+        <button onclick="refreshTaskFrame()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-medium text-slate-300 transition flex items-center gap-1.5">
+          <i id="taskRefreshIcon" class="fa-solid fa-rotate-right"></i> Làm mới
         </button>
       </div>
 
-      <div class="w-full bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 relative min-h-[700px]">
+      <div class="w-full bg-slate-950 rounded-xl overflow-hidden border border-slate-800 min-h-[680px]">
         <iframe 
           id="offerFrame" 
-          class="w-full h-[760px] border-none bg-slate-950" 
+          class="w-full h-[720px] border-none bg-slate-950" 
           src="about:blank"
           allow="geolocation; camera; microphone">
         </iframe>
       </div>
     </div>
 
-  </div>
+  </main>
 
-  <!-- ================= ADMIN DASHBOARD VIEW ================= -->
-  <div id="adminView" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 mt-6 space-y-6">
+  <div id="adminView" class="hidden flex-1 max-w-5xl w-full mx-auto px-4 mt-5 space-y-4">
     <div class="flex items-center justify-between">
       <div>
-        <h2 class="text-2xl font-black text-white flex items-center gap-2">
-          <i class="fa-solid fa-gear text-amber-400"></i> Bảng Quản Trị Hệ Thống
+        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-gear text-amber-400"></i> Quản Trị Hệ Thống (Admin)
         </h2>
-        <p class="text-xs text-slate-400 mt-1">Quản lý danh sách thành viên, cập nhật số dư và phê duyệt</p>
       </div>
-      <button onclick="toggleView('ctv')" class="px-4 py-2 rounded-xl gradient-primary text-white text-xs font-bold">
-        <i class="fa-solid fa-arrow-left mr-1"></i> Trở Lại Trang CTV
+      <button onclick="toggleView('ctv')" class="px-3 py-1.5 rounded-xl gradient-primary text-white text-xs font-bold">
+        <i class="fa-solid fa-arrow-left mr-1"></i> Quay Lại Trang CTV
       </button>
     </div>
 
-    <!-- Admin Panel: Bảng thành viên -->
-    <div class="glass-card rounded-2xl p-6 border border-slate-800">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-sm text-slate-200">Danh Sách Tài Khoản CTV</h3>
-        <button onclick="loadAdminUserList()" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-xs hover:bg-slate-700">
-          <i class="fa-solid fa-arrows-rotate mr-1"></i> Tải lại danh sách
-        </button>
-      </div>
-
+    <div class="glass-card rounded-2xl p-4 border border-slate-800">
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs text-slate-300">
           <thead class="bg-slate-900/80 text-slate-400 uppercase text-[10px]">
             <tr>
-              <th class="p-3">User ID</th>
-              <th class="p-3">Số Dư (Points)</th>
-              <th class="p-3">Ngày Tạo</th>
-              <th class="p-3 text-right">Thao Tác Quản Trị</th>
+              <th class="p-2.5">Tài Khoản CTV</th>
+              <th class="p-2.5">Số Dư VNĐ</th>
+              <th class="p-2.5 text-right">Cộng / Trừ Tiền</th>
             </tr>
           </thead>
           <tbody id="adminUserTable" class="divide-y divide-slate-800">
-            <tr>
-              <td colspan="4" class="p-4 text-center text-slate-500">Đang tải dữ liệu...</td>
-            </tr>
+            <tr><td colspan="3" class="p-4 text-center text-slate-500">Đang tải...</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- ================= RÚT TIỀN MODAL ================= -->
   <div id="withdrawModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
-      <div class="flex justify-between items-center mb-5">
-        <h3 class="font-bold text-lg text-white"><i class="fa-solid fa-building-columns text-emerald-400 mr-2"></i> Yêu Cầu Rút Tiền</h3>
-        <button onclick="closeWithdrawModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-base text-white"><i class="fa-solid fa-building-columns text-emerald-400 mr-1.5"></i> Yêu Cầu Rút Tiền VNĐ</h3>
+        <button onclick="closeWithdrawModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <div class="space-y-4 text-xs">
+      <div class="space-y-3 text-xs">
         <div>
           <label class="block text-slate-400 mb-1">Phương thức nhận tiền</label>
           <select id="withdrawMethod" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
             <option value="momo">Ví MoMo</option>
-            <option value="bank">Ngân Hàng (ATM / VietQR)</option>
-            <option value="usdt">USDT (Mạng BEP20)</option>
+            <option value="bank">Ngân Hàng (ATM / Chuyển khoản 24/7)</option>
           </select>
         </div>
         <div>
           <label class="block text-slate-400 mb-1">Số tài khoản / Số điện thoại nhận</label>
-          <input id="withdrawAccount" type="text" placeholder="Ví dụ: 0987654321 / Techcombank..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          <input id="withdrawAccount" type="text" placeholder="Ví dụ: 0987654321 / MB Bank - 123456..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
         </div>
         <div>
-          <label class="block text-slate-400 mb-1">Số Points muốn rút</label>
-          <input id="withdrawPoints" type="number" placeholder="Tối thiểu 200 Points" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          <label class="block text-slate-400 mb-1">Số tiền muốn rút (VNĐ)</label>
+          <input id="withdrawAmountVND" type="number" placeholder="Tối thiểu 50.000 VNĐ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
         </div>
-        <button onclick="submitWithdrawRequest()" class="w-full py-3 rounded-xl gradient-primary text-white font-bold text-xs shadow-lg mt-2">
-          Gửi Yêu Cầu Rút Tiền
+        <button onclick="submitWithdrawRequest()" class="w-full py-2.5 rounded-xl gradient-primary text-white font-bold text-xs shadow-lg mt-2">
+          Xác Nhận Rút Tiền
         </button>
       </div>
     </div>
   </div>
 
-  <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
-    // 1. Cấu hình Supabase Client
+    // 1. Cấu hình Supabase & Tỷ giá quy đổi
     const SUPABASE_URL = 'https://wksorhagemvkdvaokxgh.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_dcZKjgluXXSqJdpw136ebA_61b0GGYw';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // 2. Trạng thái ứng dụng
+    const POINT_TO_VND_RATE = 250; // 1 Point trong database = 250 VNĐ (100 Points = $1 = 25.000đ)
+
     let isRegisterMode = false;
     let currentUser = null;
-    const ADMIN_ACCOUNT = 'admin'; // Đặt tên user có quyền Admin
+    let currentCaptcha = '';
+    let currentVNDBalance = 0;
+    const ADMIN_ACCOUNT = 'admin';
 
-    // 3. Xử lý Chuyển đổi Đăng nhập / Đăng ký
-    function toggleAuthMode() {
-      isRegisterMode = !isRegisterMode;
-      document.getElementById('authTitle').innerText = isRegisterMode ? 'Đăng Ký Tài Khoản' : 'Đăng Nhập CTV';
-      document.getElementById('btnAuthSubmit').innerText = isRegisterMode ? 'Tạo Tài Khoản' : 'Đăng Nhập';
-      document.getElementById('authSwitchText').innerText = isRegisterMode ? 'Đã có tài khoản?' : 'Chưa có tài khoản?';
-      document.getElementById('authSwitchBtn').innerText = isRegisterMode ? 'Đăng nhập ngay' : 'Tạo tài khoản mới';
+    // 2. Xử lý Menu Drawer 3 gạch
+    function openMenu() {
+      const drawer = document.getElementById('menuDrawer');
+      const overlay = document.getElementById('drawerOverlay');
+      const content = document.getElementById('drawerContent');
+      drawer.classList.remove('pointer-events-none');
+      overlay.classList.remove('opacity-0');
+      overlay.classList.add('opacity-100');
+      content.classList.remove('translate-x-full');
     }
 
+    function closeMenu() {
+      const drawer = document.getElementById('menuDrawer');
+      const overlay = document.getElementById('drawerOverlay');
+      const content = document.getElementById('drawerContent');
+      overlay.classList.remove('opacity-100');
+      overlay.classList.add('opacity-0');
+      content.classList.add('translate-x-full');
+      setTimeout(() => drawer.classList.add('pointer-events-none'), 300);
+    }
+
+    // 3. Xử lý Captcha
+    function generateCaptcha() {
+      const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+      let res = '';
+      for (let i = 0; i < 4; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+      currentCaptcha = res;
+      document.getElementById('captchaText').innerText = res;
+      document.getElementById('authCaptchaInput').value = '';
+    }
+
+    // 4. Chuyển đổi Đăng nhập / Đăng ký
+    function toggleAuthMode() {
+      isRegisterMode = !isRegisterMode;
+      document.getElementById('registerSuccessBox').classList.add('hidden');
+      document.getElementById('authFormContent').classList.remove('hidden');
+
+      document.getElementById('authTitle').innerText = isRegisterMode ? 'Đăng Ký Tài Khoản' : 'Đăng Nhập CTV';
+      document.getElementById('btnAuthSubmit').innerText = isRegisterMode ? 'Xác Nhận Đăng Ký' : 'Đăng Nhập';
+      document.getElementById('authSwitchText').innerText = isRegisterMode ? 'Đã có tài khoản?' : 'Chưa có tài khoản?';
+      document.getElementById('authSwitchBtn').innerText = isRegisterMode ? 'Đăng nhập' : 'Đăng ký ngay';
+
+      const captchaDiv = document.getElementById('captchaContainer');
+      if (isRegisterMode) {
+        captchaDiv.classList.remove('hidden');
+        generateCaptcha();
+      } else {
+        captchaDiv.classList.add('hidden');
+      }
+    }
+
+    function switchToLoginAfterRegister() {
+      isRegisterMode = false;
+      document.getElementById('registerSuccessBox').classList.add('hidden');
+      document.getElementById('authFormContent').classList.remove('hidden');
+      toggleAuthMode();
+    }
+
+    // 5. Xác thực Đăng ký & Đăng nhập
     async function handleAuthSubmit() {
       const u = document.getElementById('authUsername').value.trim();
       const p = document.getElementById('authPassword').value.trim();
 
-      if (!u || !p) return alert('Vui lòng điền đầy đủ tài khoản và mật khẩu!');
+      if (!u || !p) return alert('Vui lòng nhập tài khoản và mật khẩu!');
 
       if (isRegisterMode) {
+        // Kiểm tra Captcha
+        const inputCap = document.getElementById('authCaptchaInput').value.trim().toUpperCase();
+        if (inputCap !== currentCaptcha) {
+          alert('Mã Captcha không chính xác!');
+          generateCaptcha();
+          return;
+        }
+
         // Kiểm tra tồn tại
         const { data: exist } = await supabaseClient.from('users_task').select('user_id').eq('user_id', u).single();
-        if (exist) return alert('Tên tài khoản này đã được sử dụng!');
+        if (exist) {
+          alert('Tên tài khoản này đã tồn tại!');
+          generateCaptcha();
+          return;
+        }
 
-        // Tạo mới
+        // Tạo tài khoản mới
         const { error } = await supabaseClient.from('users_task').insert([{ user_id: u, points: 0 }]);
         if (error) return alert('Đăng ký thất bại: ' + error.message);
-        
-        localStorage.setItem('task_auth_user', u);
-        initSession(u);
+
+        // Hiện bảng dấu tích xanh thành công
+        document.getElementById('authFormContent').classList.add('hidden');
+        document.getElementById('registerSuccessBox').classList.remove('hidden');
       } else {
         // Đăng nhập
         const { data, error } = await supabaseClient.from('users_task').select('*').eq('user_id', u).single();
-        if (!data) return alert('Tài khoản không tồn tại! Hãy bấm Đăng ký.');
+        if (!data) return alert('Tài khoản không tồn tại! Vui lòng Đăng ký.');
 
         localStorage.setItem('task_auth_user', u);
         initSession(u);
       }
     }
 
-    // 4. Khởi chạy phiên người dùng
+    // 6. Khởi chạy phiên làm việc
     async function initSession(userId) {
       currentUser = userId;
       document.getElementById('authModal').classList.add('hidden');
-      document.getElementById('navUsername').innerText = userId;
+      document.getElementById('drawerUsername').innerText = userId;
 
-      // Phân quyền Admin
       if (userId === ADMIN_ACCOUNT) {
         document.getElementById('roleBadge').classList.remove('hidden');
-        document.getElementById('btnAdminPanel').classList.remove('hidden');
+        document.getElementById('btnDrawerAdmin').classList.remove('hidden');
       }
 
       await syncUserData();
       setupOfferwall();
     }
 
-    // 5. Đồng bộ số dư
+    // 7. Đồng bộ dữ liệu hiển thị theo VNĐ
     async function syncUserData() {
       if (!currentUser) return;
       const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', currentUser).single();
       if (data) {
-        const pts = Number(data.points) || 0;
-        document.getElementById('navBalance').innerText = pts.toLocaleString();
-        document.getElementById('mainBalance').innerText = pts.toLocaleString();
-        document.getElementById('vndBalance').innerText = (pts * 250).toLocaleString();
+        const rawPoints = Number(data.points) || 0;
+        currentVNDBalance = rawPoints * POINT_TO_VND_RATE;
+
+        document.getElementById('navBalanceVND').innerText = currentVNDBalance.toLocaleString('vi-VN');
+        document.getElementById('mainBalanceVND').innerText = currentVNDBalance.toLocaleString('vi-VN');
       }
     }
 
-    // 6. Cấu hình Offerwall Iframe
     function setupOfferwall() {
       const offerUrl = `https://www.cpalead.com/dashboard/reports/campaign_json.php?subid=${currentUser}`;
       document.getElementById('offerFrame').src = offerUrl;
@@ -373,7 +444,7 @@
       setTimeout(() => icon.classList.remove('fa-spin'), 600);
     }
 
-    // 7. Chuyển đổi View Admin / CTV
+    // 8. Chuyển đổi View Admin / CTV
     function toggleView(view) {
       if (view === 'admin') {
         document.getElementById('ctvView').classList.add('hidden');
@@ -386,53 +457,56 @@
       }
     }
 
-    // 8. Tải danh sách Admin
+    // 9. Admin Quản lý VNĐ
     async function loadAdminUserList() {
       const tbody = document.getElementById('adminUserTable');
-      tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-500">Đang tải...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="3" class="p-3 text-center text-slate-500">Đang tải...</td></tr>';
+      const { data } = await supabaseClient.from('users_task').select('*').order('created_at', { ascending: false });
+      if (!data) return;
 
-      const { data, error } = await supabaseClient.from('users_task').select('*').order('created_at', { ascending: false });
-      if (error || !data) return tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-rose-400">Lỗi tải dữ liệu</td></tr>';
-
-      tbody.innerHTML = data.map(u => `
-        <tr class="hover:bg-slate-800/50 transition">
-          <td class="p-3 font-bold text-white">${u.user_id}</td>
-          <td class="p-3 text-emerald-400 font-extrabold">${Number(u.points).toLocaleString()} P</td>
-          <td class="p-3 text-slate-500">${new Date(u.created_at).toLocaleDateString('vi-VN')}</td>
-          <td class="p-3 text-right space-x-2">
-            <button onclick="adminAdjustPoints('${u.user_id}', 100)" class="px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded hover:bg-emerald-500/30">+100 P</button>
-            <button onclick="adminAdjustPoints('${u.user_id}', -100)" class="px-2 py-1 bg-rose-500/20 text-rose-300 rounded hover:bg-rose-500/30">-100 P</button>
-          </td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = data.map(u => {
+        const vnd = (Number(u.points) || 0) * POINT_TO_VND_RATE;
+        return `
+          <tr class="hover:bg-slate-800/40">
+            <td class="p-2.5 font-bold text-white">${u.user_id}</td>
+            <td class="p-2.5 text-emerald-400 font-bold">${vnd.toLocaleString('vi-VN')} đ</td>
+            <td class="p-2.5 text-right space-x-1">
+              <button onclick="adminAdjustVND('${u.user_id}', 25000)" class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded text-[11px]">+25.000đ</button>
+              <button onclick="adminAdjustVND('${u.user_id}', -25000)" class="px-2 py-0.5 bg-rose-500/20 text-rose-300 rounded text-[11px]">-25.000đ</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
 
-    // 9. Admin Cộng/Trừ Điểm Trực Tiếp
-    async function adminAdjustPoints(targetUserId, amount) {
+    async function adminAdjustVND(targetUserId, vndAmount) {
+      const pointDiff = vndAmount / POINT_TO_VND_RATE;
       const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', targetUserId).single();
-      const newPoints = Math.max(0, (Number(data.points) || 0) + amount);
+      const newPoints = Math.max(0, (Number(data.points) || 0) + pointDiff);
       await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', targetUserId);
       loadAdminUserList();
     }
 
-    // 10. Rút tiền Modal
+    // 10. Rút tiền Modal VNĐ
     function openWithdrawModal() { document.getElementById('withdrawModal').classList.remove('hidden'); }
     function closeWithdrawModal() { document.getElementById('withdrawModal').classList.add('hidden'); }
     function submitWithdrawRequest() {
-      const pts = Number(document.getElementById('withdrawPoints').value);
+      const amountVND = Number(document.getElementById('withdrawAmountVND').value);
       const acc = document.getElementById('withdrawAccount').value.trim();
-      if (!acc || !pts || pts < 200) return alert('Số điểm rút tối thiểu là 200 Points ($2)!');
-      alert(`Đã gửi yêu cầu rút ${pts} Points về ${acc}. Tiền sẽ về trong vòng 2-6 giờ.`);
+      
+      if (!acc) return alert('Vui lòng nhập số tài khoản hoặc số MoMo nhận tiền!');
+      if (!amountVND || amountVND < 50000) return alert('Số tiền rút tối thiểu là 50.000 VNĐ!');
+      if (amountVND > currentVNDBalance) return alert('Số dư hiện tại của bạn không đủ để rút số tiền này!');
+
+      alert(`Đã gửi yêu cầu rút ${amountVND.toLocaleString('vi-VN')} VNĐ về ${acc}. Hệ thống sẽ xử lý trong 5 - 30 phút!`);
       closeWithdrawModal();
     }
 
-    // 11. Đăng xuất
     function handleLogout() {
       localStorage.removeItem('task_auth_user');
       location.reload();
     }
 
-    // Tự động khôi phục đăng nhập nếu có session
     window.onload = () => {
       const savedUser = localStorage.getItem('task_auth_user');
       if (savedUser) initSession(savedUser);

@@ -243,7 +243,7 @@
     <marquee id="noticeMarqueeText" scrollamount="6" class="font-semibold">Chào mừng bạn đến với hệ thống kiếm tiền tự động AUTOPOSTAI!</marquee>
   </div>
 
-  <!-- SÀN NHIỆM VỤ NATIVE (ẨN CÁC KÈO ĐÃ LÀM) -->
+  <!-- SÀN NHIỆM VỤ NATIVE (TỰ ẨN KÈO ĐÃ LÀM) -->
   <main id="ctvView" class="flex-1 max-w-5xl w-full mx-auto px-4 mt-4 space-y-4 pb-12">
     
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -378,7 +378,7 @@
       <div class="space-y-3 text-xs">
         <div>
           <label class="block text-slate-400 mb-1">CPAGrip / CPALead JSON API URL</label>
-          <input id="adminCfgApiFeedUrl" type="text" placeholder="https://www.cpagrip.com/common/offer_feed_json.php?user_id=...&key=..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
+          <input id="adminCfgApiFeedUrl" type="text" placeholder="https://www.cpagrip.com/common/offer_feed_json.php?user_id=2553222&key=..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -392,7 +392,7 @@
           </div>
           <div>
             <label class="block text-slate-400 mb-1">Hạn mức rút tối thiểu (VNĐ)</label>
-            <input id="adminCfgMinWithdraw" type="number" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500">
+            <input id="adminCfgMinWithdraw" type="number" placeholder="50000" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500">
           </div>
         </div>
       </div>
@@ -800,7 +800,7 @@
     let systemConfig = {
       rate: Number(localStorage.getItem('sys_rate')) || 250,
       minWithdraw: Number(localStorage.getItem('sys_min_withdraw')) || 50000,
-      userSharePercent: Number(localStorage.getItem('sys_user_share')) || 30, // Khách 30%, Admin 70%
+      userSharePercent: Number(localStorage.getItem('sys_user_share')) || 30, 
       usdRate: Number(localStorage.getItem('sys_usd_rate')) || 25000,
       apiFeedUrl: localStorage.getItem('sys_api_feed_url') || '',
       zalo: localStorage.getItem('sys_zalo') || '0987654321',
@@ -830,7 +830,6 @@
     let cachedAdminUserList = [];
     let financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
 
-    // Danh sách nhiệm vụ đã hoàn thành lưu theo từng User
     function getCompletedTaskIds(userId) {
       const allData = JSON.parse(localStorage.getItem('user_completed_tasks_db')) || {};
       return allData[userId] || [];
@@ -1015,7 +1014,6 @@
       }
     }
 
-    // TỰ ĐỘNG KÉO KÈO & LỌC BỎ NHỮNG KÈO ĐÃ LÀM
     async function fetchAutoOffers() {
       const container = document.getElementById('nativeTaskList');
       const countText = document.getElementById('availableTasksCount');
@@ -1063,7 +1061,6 @@
 
       currentTaskPool = combinedOffers;
 
-      // LỌC BỎ CÁC NHIỆM VỤ MÀ USER HIỆN TẠI ĐÃ HOÀN THÀNH
       const completedIds = getCompletedTaskIds(currentUser);
       const visibleTasks = currentTaskPool.filter(t => !completedIds.includes(String(t.id)));
 
@@ -1119,7 +1116,6 @@
       if (icon) setTimeout(() => icon.classList.remove('fa-spin'), 400);
     }
 
-    // Xử lý khi thành viên ấn làm nhiệm vụ -> Tự động ẩn và lưu trạng thái
     function handleStartAndCompleteTask(taskId, taskUrl, rewardAmount) {
       window.open(taskUrl, '_blank');
 
@@ -1133,7 +1129,6 @@
         reverseButtons: true
       }).then(async (result) => {
         if (result.isConfirmed) {
-          // Lưu taskId vào danh sách đã hoàn thành của user
           addCompletedTaskId(currentUser, String(taskId));
           
           Toast.fire({
@@ -1141,13 +1136,11 @@
             title: `Đã ghi nhận hoàn thành! Nhiệm vụ đã được ẩn.`
           });
 
-          // Làm mới lại danh sách để nhiệm vụ biến mất
           fetchAutoOffers();
         }
       });
     }
 
-    // Khôi phục lại toàn bộ nhiệm vụ (Cho Admin)
     function adminResetCompletedTasks() {
       Swal.fire({
         title: 'Xác Nhận Khôi Phục?',

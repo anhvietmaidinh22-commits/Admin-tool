@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nhiệm Vụ Kiếm Tiền Online</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f0f2f5; margin: 0; padding: 15px; }
+    .container { max-width: 900px; margin: auto; }
+    .header { 
+      background: #ffffff; 
+      padding: 16px 20px; 
+      border-radius: 12px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+      margin-bottom: 20px; 
+    }
+    .user-info { font-size: 15px; color: #333; }
+    .balance-box { 
+      background: #e8f5e9; 
+      color: #2e7d32; 
+      padding: 8px 16px; 
+      border-radius: 8px; 
+      font-weight: bold; 
+      font-size: 16px; 
+    }
+    .notice {
+      background: #e3f2fd;
+      color: #0d47a1;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    .offerwall-container {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      min-height: 700px;
+    }
+    iframe { width: 100%; height: 750px; border: none; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <div class="user-info">Mã CTV: <b id="displayUserId">Đang tải...</b></div>
+      <div class="balance-box">Số dư: <span id="displayBalance">0</span> Points</div>
+    </div>
+
+    <div class="notice">
+      Hoàn thành nhiệm vụ bên dưới để nhận điểm thưởng. Điểm sẽ tự động cộng vào tài khoản sau khi hoàn tất.
+    </div>
+
+    <div class="offerwall-container">
+      <iframe id="offerFrame" src="about:blank"></iframe>
+    </div>
+  </div>
+
+  <script>
+    // 1. Cấu hình Supabase của bạn
+    const SUPABASE_URL = 'https://wksorhagemvkdvaokxgh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_dcZKjgluXXSqJdpw136ebA_61b0GGYw';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // 2. Khởi tạo mã định danh duy nhất cho CTV
+    let currentUserId = localStorage.getItem('task_user_id');
+    if (!currentUserId) {
+      currentUserId = 'ctv_' + Math.floor(100000 + Math.random() * 900000);
+      localStorage.setItem('task_user_id', currentUserId);
+    }
+    document.getElementById('displayUserId').innerText = currentUserId;
+
+    // 3. Đồng bộ tài khoản với Database
+    async function initUser() {
+      const { data, error } = await supabaseClient
+        .from('users_task')
+        .select('points')
+        .eq('user_id', currentUserId)
+        .single();
+
+      if (data) {
+        document.getElementById('displayBalance').innerText = data.points;
+      } else {
+        await supabaseClient.from('users_task').insert([{ user_id: currentUserId, points: 0 }]);
+      }
+    }
+    initUser();
+
+    // 4. Cấu hình link Offerwall (Sau khi CPALead duyệt, dán App ID hoặc Offerwall URL vào đây)
+    const offerwallBaseUrl = 'https://www.cpalead.com/dashboard/reports/campaign_json.php'; // Thay bằng URL Offerwall được cấp
+    document.getElementById('offerFrame').src = `${offerwallBaseUrl}?subid=${currentUserId}`;
+  </script>
+</body>
+</html>

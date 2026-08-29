@@ -6,7 +6,6 @@
   <title>Autoposai - Kiếm Tiền Online</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Thư viện Thông báo VIP SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -41,6 +40,8 @@
       font-size: 13px !important;
       padding: 10px 24px !important;
     }
+    .custom-tabs-scroll::-webkit-scrollbar { display: none; }
+    .custom-tabs-scroll { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased relative">
@@ -52,11 +53,26 @@
     </button>
   </div>
 
+  <!-- ================= POPUP THÔNG BÁO BUNG RA KHI VÀO TRANG CHỦ ================= -->
+  <div id="welcomeNoticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700/80 shadow-2xl relative animate-fade-in">
+      <div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center mx-auto mb-3 text-xl">
+        <i class="fa-solid fa-bullhorn"></i>
+      </div>
+      <h3 id="welcomeNoticeTitle" class="text-base font-extrabold text-white text-center">Thông Báo Hệ Thống</h3>
+      <div id="welcomeNoticeBody" class="mt-2 text-xs text-slate-300 leading-relaxed text-center bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800">
+        Chào mừng bạn đến với nền tảng kiếm tiền tự động Autoposai!
+      </div>
+      <button onclick="closeWelcomeNotice()" class="mt-4 w-full py-2.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg">
+        Đã Hiểu & Đóng
+      </button>
+    </div>
+  </div>
+
   <!-- ================= AUTH MODAL ================= -->
   <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-700/70 shadow-2xl relative overflow-hidden">
       
-      <!-- Form Auth -->
       <div id="authFormContent">
         <div class="text-center mb-5">
           <div class="w-12 h-12 rounded-2xl gradient-primary flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30 mb-2.5">
@@ -83,7 +99,7 @@
             </div>
           </div>
 
-          <!-- Captcha: Ô nhập bên TRÁI, Mã bên PHẢI -->
+          <!-- Captcha -->
           <div id="captchaContainer" class="space-y-1 pt-1">
             <label class="text-[11px] font-semibold text-slate-300 block">Mã bảo mật</label>
             <div class="flex items-center space-x-2">
@@ -134,6 +150,11 @@
         </div>
 
         <div class="space-y-2">
+          <button onclick="toggleView('ctv'); closeMenu();" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-slate-800/80 text-slate-200 border border-slate-700/60 text-xs font-bold hover:bg-slate-700 transition">
+            <i class="fa-solid fa-house text-sm text-blue-400"></i>
+            <span>Trang Chủ</span>
+          </button>
+
           <button onclick="openWithdrawModal(); closeMenu();" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold hover:bg-blue-500/20 transition">
             <i class="fa-solid fa-building-columns text-sm"></i>
             <span>Rút Tiền ATM / MoMo</span>
@@ -190,6 +211,10 @@
     </div>
 
     <div class="flex items-center space-x-2">
+      <button onclick="toggleView('ctv')" class="px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold flex items-center gap-1">
+        <i class="fa-solid fa-house text-blue-400"></i> <span class="hidden sm:inline">Trang Chủ</span>
+      </button>
+
       <button onclick="openNoticeModal()" class="relative w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
         <i class="fa-regular fa-bell text-sm"></i>
         <span id="noticeDot" class="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
@@ -280,36 +305,55 @@
 
   </main>
 
-  <!-- ================= BẢNG QUẢN TRỊ ADMIN ================= -->
-  <div id="adminView" class="hidden flex-1 max-w-6xl w-full mx-auto px-4 mt-4 space-y-5">
+  <!-- ================= BẢNG QUẢN TRỊ ADMIN (7 TAB RIÊNG BIỆT) ================= -->
+  <div id="adminView" class="hidden flex-1 max-w-6xl w-full mx-auto px-4 mt-4 space-y-4">
     
     <div class="flex items-center justify-between">
       <div>
-        <h2 class="text-xl font-black text-white flex items-center gap-2">
-          <i class="fa-solid fa-crown text-amber-400"></i> Bảng Điều Khiển Quản Trị (Admin Master)
+        <h2 class="text-lg sm:text-xl font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-crown text-amber-400"></i> Bảng Quản Trị Hệ Thống
         </h2>
-        <p class="text-xs text-slate-400 mt-0.5">Toàn quyền kiểm soát tài chính, giá, thông báo và Bot Telegram</p>
+        <p class="text-xs text-slate-400 mt-0.5">Chọn từng mục để cấu hình chi tiết</p>
       </div>
-      <button onclick="toggleView('ctv')" class="px-3 py-1.5 rounded-xl gradient-primary text-white text-xs font-bold">
-        <i class="fa-solid fa-arrow-left mr-1"></i> Về Màn Hình Chính
+      <button onclick="toggleView('ctv')" class="px-3 py-1.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg flex items-center gap-1">
+        <i class="fa-solid fa-house"></i> Về Trang Chủ
       </button>
     </div>
 
-    <div class="flex space-x-2 overflow-x-auto pb-1 text-xs font-bold">
-      <button onclick="switchAdminTab('tabUsers')" id="btnTabUsers" class="px-3 py-2 rounded-xl bg-blue-600 text-white shadow whitespace-nowrap">1. Khách Hàng</button>
-      <button onclick="switchAdminTab('tabPricing')" id="btnTabPricing" class="px-3 py-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white whitespace-nowrap">2. Sửa Giá & Hoa Hồng</button>
-      <button onclick="switchAdminTab('tabAddOffer')" id="btnTabAddOffer" class="px-3 py-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white whitespace-nowrap">3. Thêm Kèo Mới</button>
-      <button onclick="switchAdminTab('tabFinance')" id="btnTabFinance" class="px-3 py-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white whitespace-nowrap">4. Quản Lý Nạp / Rút</button>
-      <button onclick="switchAdminTab('tabNoticesSupport')" id="btnTabNoticesSupport" class="px-3 py-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white whitespace-nowrap">5. Thông Báo, Hỗ Trợ & Bot Tele</button>
+    <!-- 7 Tab Admin -->
+    <div class="flex space-x-2 overflow-x-auto pb-2 text-xs font-bold custom-tabs-scroll">
+      <button onclick="switchAdminTab('tabUsers')" id="btnTabUsers" class="px-3.5 py-2 rounded-xl bg-blue-600 text-white shadow whitespace-nowrap flex items-center gap-1.5">
+        <i class="fa-solid fa-users"></i> 1. Khách Hàng
+      </button>
+      <button onclick="switchAdminTab('tabPricing')" id="btnTabPricing" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5">
+        <i class="fa-solid fa-tags"></i> 2. Sửa Giá
+      </button>
+      <button onclick="switchAdminTab('tabAddOffer')" id="btnTabAddOffer" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5">
+        <i class="fa-solid fa-plus-circle"></i> 3. Thêm Kèo
+      </button>
+      <button onclick="switchAdminTab('tabFinance')" id="btnTabFinance" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5">
+        <i class="fa-solid fa-money-bill-transfer"></i> 4. Nạp / Rút
+      </button>
+      <button onclick="switchAdminTab('tabTelegramBot')" id="btnTabTelegramBot" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5">
+        <i class="fa-brands fa-telegram"></i> 5. Bot Telegram
+      </button>
+      <button onclick="switchAdminTab('tabNotices')" id="btnTabNotices" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5">
+        <i class="fa-solid fa-bullhorn"></i> 6. Thông Báo
+      </button>
+      <button onclick="switchAdminTab('tabSupport')" id="btnTabSupport" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5">
+        <i class="fa-solid fa-headset"></i> 7. Kênh Hỗ Trợ
+      </button>
     </div>
 
     <!-- TAB 1: KHÁCH HÀNG -->
-    <div id="tabUsers" class="admin-tab-content glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+    <div id="tabUsers" class="admin-tab-content glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <h3 class="text-sm font-bold text-slate-200"><i class="fa-solid fa-users text-blue-400 mr-1.5"></i> Danh Sách Khách Hàng</h3>
+        <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+          <i class="fa-solid fa-users text-blue-400"></i> Danh Sách Thành Viên & Quản Lý Số Dư
+        </h3>
         <div class="flex items-center space-x-2">
-          <input id="adminSearchInput" oninput="filterAdminUserList()" type="text" placeholder="Tìm tên khách..." class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1 text-xs text-white focus:outline-none">
-          <button onclick="loadAdminUserList()" class="px-2.5 py-1 rounded-xl bg-slate-800 text-slate-300 text-xs hover:bg-slate-700"><i class="fa-solid fa-rotate-right"></i></button>
+          <input id="adminSearchInput" oninput="filterAdminUserList()" type="text" placeholder="Tìm tên khách..." class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none">
+          <button onclick="loadAdminUserList()" class="px-2.5 py-1.5 rounded-xl bg-slate-800 text-slate-300 text-xs hover:bg-slate-700"><i class="fa-solid fa-rotate-right"></i></button>
         </div>
       </div>
 
@@ -319,7 +363,7 @@
             <tr>
               <th class="p-2.5">Tài Khoản</th>
               <th class="p-2.5">Số Dư Hiện Tại</th>
-              <th class="p-2.5 text-right">Điều Chỉnh Tiền Trực Tiếp (VNĐ)</th>
+              <th class="p-2.5 text-right">Điều Chỉnh Tiền (VNĐ)</th>
             </tr>
           </thead>
           <tbody id="adminUserTable" class="divide-y divide-slate-800">
@@ -330,69 +374,75 @@
     </div>
 
     <!-- TAB 2: SỬA GIÁ & HOA HỒNG -->
-    <div id="tabPricing" class="admin-tab-content hidden glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
-      <h3 class="text-sm font-bold text-slate-200"><i class="fa-solid fa-tags text-emerald-400 mr-1.5"></i> Cấu Hình Giá & Hoa Hồng</h3>
+    <div id="tabPricing" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
+      <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+        <i class="fa-solid fa-tags text-emerald-400"></i> Cấu Hình Giá & Hoa Hồng
+      </h3>
       
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
         <div>
           <label class="block text-slate-400 mb-1">Tỷ giá 1 Point (VNĐ)</label>
-          <input id="adminCfgRate" type="number" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white focus:outline-none focus:border-blue-500">
+          <input id="adminCfgRate" type="number" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500">
         </div>
         <div>
-          <label class="block text-slate-400 mb-1">Hoa Hồng Chia Sẻ Cho Khách (%)</label>
-          <input id="adminCfgCommission" type="number" placeholder="Ví dụ: 80" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white focus:outline-none focus:border-blue-500">
+          <label class="block text-slate-400 mb-1">Hoa Hồng Khách Hưởng (%)</label>
+          <input id="adminCfgCommission" type="number" placeholder="80" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500">
         </div>
         <div>
           <label class="block text-slate-400 mb-1">Hạn mức rút tối thiểu (VNĐ)</label>
-          <input id="adminCfgMinWithdraw" type="number" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white focus:outline-none focus:border-blue-500">
+          <input id="adminCfgMinWithdraw" type="number" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500">
         </div>
       </div>
 
       <div class="text-right">
         <button onclick="saveAdminPricingSettings()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg transition">
-          Lưu Bảng Giá & Hoa Hồng
+          <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu Cấu Hình Giá
         </button>
       </div>
     </div>
 
     <!-- TAB 3: THÊM KÈO MỚI -->
-    <div id="tabAddOffer" class="admin-tab-content hidden glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
-      <h3 class="text-sm font-bold text-slate-200"><i class="fa-solid fa-plus-circle text-amber-400 mr-1.5"></i> Thêm Kèo Nhiệm Vụ Mới</h3>
+    <div id="tabAddOffer" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
+      <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+        <i class="fa-solid fa-plus-circle text-amber-400"></i> Thêm Kèo Nhiệm Vụ Mới
+      </h3>
       
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
         <div>
           <label class="block text-slate-400 mb-1">Tên Kèo / Nhiệm vụ</label>
-          <input id="newOfferTitle" type="text" placeholder="Ví dụ: Đăng ký Cake VPBank" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white focus:outline-none">
+          <input id="newOfferTitle" type="text" placeholder="Ví dụ: Đăng ký Cake VPBank" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
         </div>
         <div>
           <label class="block text-slate-400 mb-1">Thưởng Khách Nhận (VNĐ)</label>
-          <input id="newOfferReward" type="number" placeholder="Ví dụ: 35000" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white focus:outline-none">
+          <input id="newOfferReward" type="number" placeholder="Ví dụ: 35000" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
         </div>
         <div class="sm:col-span-2">
           <label class="block text-slate-400 mb-1">Link Đích (Tracking URL)</label>
-          <input id="newOfferUrl" type="text" placeholder="https://..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white focus:outline-none">
+          <input id="newOfferUrl" type="text" placeholder="https://..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
         </div>
         <div class="sm:col-span-2">
           <label class="block text-slate-400 mb-1">Mô tả nhiệm vụ</label>
-          <input id="newOfferDesc" type="text" placeholder="Mô tả các bước..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white focus:outline-none">
+          <input id="newOfferDesc" type="text" placeholder="Mô tả các bước thực hiện..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
         </div>
       </div>
 
       <div class="text-right">
         <button onclick="adminAddNewOffer()" class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-lg transition">
-          Đăng Kèo Nhiệm Vụ Ngay
+          <i class="fa-solid fa-paper-plane mr-1"></i> Đăng Kèo Ngay
         </button>
       </div>
 
-      <div class="pt-4 border-t border-slate-800">
-        <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Kèo Đang Chạy</h4>
+      <div class="pt-3 border-t border-slate-800">
+        <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Danh Sách Kèo Đang Chạy</h4>
         <div id="adminOfferManageList" class="space-y-2"></div>
       </div>
     </div>
 
-    <!-- TAB 4: QUẢN LÝ NẠP / RÚT -->
-    <div id="tabFinance" class="admin-tab-content hidden glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
-      <h3 class="text-sm font-bold text-slate-200"><i class="fa-solid fa-money-check-dollar text-purple-400 mr-1.5"></i> Danh Sách Yêu Cầu Rút Tiền & Nạp Tiền</h3>
+    <!-- TAB 4: QUẢN LÝ NẠP / RÚT TIỀN -->
+    <div id="tabFinance" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
+      <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+        <i class="fa-solid fa-money-check-dollar text-purple-400"></i> Quản Lý Yêu Cầu Nạp / Rút Tiền
+      </h3>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs text-slate-300">
           <thead class="bg-slate-900/80 text-slate-400 uppercase text-[10px]">
@@ -412,81 +462,94 @@
       </div>
     </div>
 
-    <!-- TAB 5: THÔNG BÁO, HỖ TRỢ & TELEGRAM BOT -->
-    <div id="tabNoticesSupport" class="admin-tab-content hidden glass-card rounded-2xl p-5 border border-slate-800 space-y-6">
+    <!-- TAB 5: BOT TELEGRAM -->
+    <div id="tabTelegramBot" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-sm font-bold text-sky-400 flex items-center gap-2">
+          <i class="fa-brands fa-telegram text-base"></i> Cấu Hình Bot Telegram Tự Động
+        </h3>
+        <span class="text-[11px] text-slate-400">Tự động báo khi có User đăng ký, nạp/rút tiền</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <div>
+          <label class="block text-slate-400 mb-1">Telegram Bot Token (Lấy từ @BotFather)</label>
+          <input id="adminCfgTeleToken" type="text" placeholder="Ví dụ: 123456789:ABCdefGhIJKlmNoPQRsTUV..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-sky-500">
+        </div>
+        <div>
+          <label class="block text-slate-400 mb-1">Telegram Chat ID (Lấy từ @userinfobot hoặc ID Group)</label>
+          <input id="adminCfgTeleChatId" type="text" placeholder="Ví dụ: 987654321 hoặc -10012345678" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-sky-500">
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="testTelegramBotAlert()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 font-bold text-xs transition">
+          <i class="fa-solid fa-paper-plane mr-1"></i> Bắn Tin Thử Nghiệm
+        </button>
+        <button onclick="saveTelegramBotConfig()" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs shadow-lg transition">
+          <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu Cấu Hình Bot
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 6: THÔNG BÁO HỆ THỐNG -->
+    <div id="tabNotices" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
+      <h3 class="text-sm font-bold text-blue-400 flex items-center gap-2">
+        <i class="fa-solid fa-bullhorn"></i> Phát & Quản Lý Danh Sách Thông Báo
+      </h3>
       
-      <!-- CÀI ĐẶT TELEGRAM BOT THÔNG BÁO TỰ ĐỘNG -->
-      <div class="space-y-3">
-        <div class="flex items-center justify-between">
-          <h3 class="text-sm font-bold text-sky-400 flex items-center gap-2">
-            <i class="fa-brands fa-telegram text-base"></i> Tích Hợp Bot Telegram Thông Báo Tự Động
-          </h3>
-          <span class="text-[11px] text-slate-400">Bắn tin nhắn khi có User đăng ký, Nạp/Rút tiền</span>
+      <div class="space-y-2 text-xs">
+        <div>
+          <label class="block text-slate-400 mb-1">Tiêu đề thông báo</label>
+          <input id="adminNoticeTitle" type="text" placeholder="Ví dụ: Sự kiện tặng thưởng cuối tuần..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
         </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div>
-            <label class="block text-slate-400 mb-1">Telegram Bot Token (Lấy từ @BotFather)</label>
-            <input id="adminCfgTeleToken" type="text" placeholder="Ví dụ: 123456789:ABCdefGhIJKlmNoPQRsTUV..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-sky-500">
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1">Telegram Chat ID (Lấy từ @userinfobot hoặc ID Group)</label>
-            <input id="adminCfgTeleChatId" type="text" placeholder="Ví dụ: 987654321 hoặc -10012345678" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-sky-500">
-          </div>
-        </div>
-
-        <div class="flex justify-end gap-2">
-          <button onclick="testTelegramBotAlert()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 font-bold text-xs transition">
-            <i class="fa-solid fa-paper-plane mr-1"></i> Bắn Tin Thử Nghiệm
-          </button>
-          <button onclick="saveTelegramBotConfig()" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs shadow-lg transition">
-            Lưu Cấu Hình Bot
-          </button>
+        <div>
+          <label class="block text-slate-400 mb-1">Nội dung chi tiết</label>
+          <textarea id="adminNoticeInput" rows="2" placeholder="Nhập nội dung chi tiết sẽ bung ra cho người dùng..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500"></textarea>
         </div>
       </div>
-
-      <!-- Đăng thông báo mới -->
-      <div class="space-y-3 pt-4 border-t border-slate-800">
-        <h3 class="text-sm font-bold text-blue-400"><i class="fa-solid fa-bullhorn mr-1.5"></i> Đăng / Cập Nhật Thông Báo Mới</h3>
-        <div class="grid grid-cols-1 gap-2 text-xs">
-          <input id="adminNoticeInput" type="text" placeholder="Nhập nội dung thông báo hiển thị cho toàn bộ thành viên..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500">
-        </div>
-        <div class="text-right">
-          <button onclick="adminPublishNotice()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg transition">
-            Phát Thông Báo Ngay
-          </button>
-        </div>
+      
+      <div class="text-right">
+        <button onclick="adminPublishNotice()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg transition">
+          <i class="fa-solid fa-bullhorn mr-1"></i> Thêm Thông Báo Mới
+        </button>
       </div>
 
-      <!-- Cài đặt kênh hỗ trợ -->
-      <div class="space-y-3 pt-4 border-t border-slate-800">
-        <h3 class="text-sm font-bold text-emerald-400"><i class="fa-solid fa-headset mr-1.5"></i> Cài Đặt Kênh Hỗ Trợ Khách Hàng</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <div>
-            <label class="block text-slate-400 mb-1">Số Zalo / Hotline Hỗ Trợ</label>
-            <input id="adminCfgZalo" type="text" placeholder="Ví dụ: 0987654321" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1">Username / Link Telegram</label>
-            <input id="adminCfgTelegram" type="text" placeholder="Ví dụ: @cskh_autoposai" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1">Thời gian trực hỗ trợ</label>
-            <input id="adminCfgWorkTime" type="text" placeholder="Ví dụ: 08:00 - 23:00" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white focus:outline-none">
-          </div>
+      <div class="pt-3 border-t border-slate-800 space-y-2">
+        <h4 class="text-xs font-bold text-slate-400 uppercase">Danh Sách Thông Báo Đang Có</h4>
+        <div id="adminNoticeManageList" class="space-y-2"></div>
+      </div>
+    </div>
+
+    <!-- TAB 7: KÊNH HỖ TRỢ KHÁCH HÀNG -->
+    <div id="tabSupport" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
+      <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
+        <i class="fa-solid fa-headset"></i> Cài Đặt Thông Tin Kênh Hỗ Trợ
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+        <div>
+          <label class="block text-slate-400 mb-1">Số Zalo / Hotline Hỗ Trợ</label>
+          <input id="adminCfgZalo" type="text" placeholder="0987654321" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-emerald-500">
         </div>
-        <div class="text-right">
-          <button onclick="saveAdminSupportConfig()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg transition">
-            Lưu Kênh Hỗ Trợ
-          </button>
+        <div>
+          <label class="block text-slate-400 mb-1">Username / Link Telegram CSKH</label>
+          <input id="adminCfgTelegram" type="text" placeholder="@cskh_autoposai" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-emerald-500">
+        </div>
+        <div>
+          <label class="block text-slate-400 mb-1">Thời gian trực hỗ trợ</label>
+          <input id="adminCfgWorkTime" type="text" placeholder="08:00 - 23:00 (Hàng ngày)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-emerald-500">
         </div>
       </div>
-
+      <div class="text-right">
+        <button onclick="saveAdminSupportConfig()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg transition">
+          <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu Thông Tin Kênh Hỗ Trợ
+        </button>
+      </div>
     </div>
 
   </div>
 
-  <!-- ================= MODAL THÔNG BÁO ================= -->
+  <!-- ================= MODAL XEM TOÀN BỘ THÔNG BÁO ================= -->
   <div id="noticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -541,31 +604,79 @@
     </div>
   </div>
 
-  <!-- ================= MODAL RÚT TIỀN ================= -->
+  <!-- ================= MODAL RÚT TIỀN THÔNG MINH (CHỌN NGÂN HÀNG HOẶC MOMO) ================= -->
   <div id="withdrawModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-base text-white"><i class="fa-solid fa-building-columns text-emerald-400 mr-1.5"></i> Yêu Cầu Rút Tiền VNĐ</h3>
+        <h3 class="font-bold text-base text-white"><i class="fa-solid fa-building-columns text-emerald-400 mr-1.5"></i> Rút Tiền Về Tài Khoản</h3>
         <button onclick="closeWithdrawModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
       </div>
+      
       <div class="space-y-3 text-xs">
+        <!-- 1. Chọn Phương thức -->
         <div>
-          <label class="block text-slate-400 mb-1">Phương thức nhận</label>
-          <select id="withdrawMethod" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
-            <option value="momo">Ví MoMo</option>
-            <option value="bank">Ngân Hàng (ATM / VietQR 24/7)</option>
+          <label class="block text-slate-400 mb-1">Phương thức nhận tiền</label>
+          <select id="withdrawMethod" onchange="handleWithdrawMethodChange()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500">
+            <option value="bank">Ngân Hàng (Chuyển khoản nhanh 24/7)</option>
+            <option value="momo">Ví Điện Tử MoMo</option>
           </select>
         </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Số tài khoản / SĐT nhận</label>
-          <input id="withdrawAccount" type="text" placeholder="0987654321 / MB Bank - 123456..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+
+        <!-- 2. Khung Nhập Ngân Hàng (Mặc định hiện) -->
+        <div id="withdrawBankFields" class="space-y-2.5">
+          <div>
+            <label class="block text-slate-400 mb-1">Chọn Ngân hàng thụ hưởng</label>
+            <select id="withdrawBankName" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500">
+              <option value="MBBank">MBBank (Quân Đội)</option>
+              <option value="Vietcombank">Vietcombank (Ngoại Thương)</option>
+              <option value="Techcombank">Techcombank (Kỹ Thương)</option>
+              <option value="VPBank">VPBank (Việt Nam Thịnh Vượng)</option>
+              <option value="ACB">ACB (Á Châu)</option>
+              <option value="BIDV">BIDV (Đầu Tư & Phát Triển)</option>
+              <option value="VietinBank">VietinBank (Công Thương)</option>
+              <option value="TPBank">TPBank (Tiên Phong)</option>
+              <option value="VIB">VIB (Quốc Tế)</option>
+              <option value="Sacombank">Sacombank (Sài Gòn Thương Tín)</option>
+              <option value="HDBank">HDBank (Phát Triển TP.HCM)</option>
+              <option value="MSB">MSB (Hàng Hải)</option>
+              <option value="SHB">SHB (Sài Gòn - Hà Nội)</option>
+              <option value="SeABank">SeABank (Đông Nam Á)</option>
+              <option value="OCB">OCB (Phương Đông)</option>
+              <option value="LienVietPostBank">LPBank (Lộc Phát VN)</option>
+              <option value="Cake">Cake by VPBank</option>
+              <option value="Timo">Timo Digital Bank</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">Số tài khoản ngân hàng</label>
+            <input id="withdrawBankNumber" type="text" placeholder="Nhập số tài khoản..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">Tên chủ tài khoản (Viết in hoa không dấu)</label>
+            <input id="withdrawBankOwner" type="text" placeholder="NGUYEN VAN A" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500 uppercase">
+          </div>
         </div>
+
+        <!-- 3. Khung Nhập MoMo (Mặc định ẩn) -->
+        <div id="withdrawMomoFields" class="hidden space-y-2.5">
+          <div>
+            <label class="block text-slate-400 mb-1">Số điện thoại đăng ký MoMo</label>
+            <input id="withdrawMomoPhone" type="text" placeholder="Ví dụ: 0987654321..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-pink-500">
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">Tên chủ ví MoMo</label>
+            <input id="withdrawMomoOwner" type="text" placeholder="NGUYEN VAN A" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-pink-500 uppercase">
+          </div>
+        </div>
+
+        <!-- 4. Số tiền rút -->
         <div>
           <label class="block text-slate-400 mb-1">Số tiền muốn rút (VNĐ)</label>
-          <input id="withdrawAmountVND" type="number" placeholder="Nhập số tiền..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          <input id="withdrawAmountVND" type="number" placeholder="Tối thiểu 50.000 VNĐ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500">
         </div>
+
         <button onclick="submitWithdrawRequest()" class="w-full py-2.5 rounded-xl gradient-primary text-white font-bold text-xs shadow-lg mt-2">
-          Xác Nhận Rút Tiền
+          Tạo Lệnh Rút Tiền
         </button>
       </div>
     </div>
@@ -602,7 +713,6 @@
     const SUPABASE_KEY = 'sb_publishable_dcZKjgluXXSqJdpw136ebA_61b0GGYw';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // HỆ THỐNG THÔNG BÁO VIP SWEETALERT2
     const Toast = Swal.mixin({
       toast: true,
       position: 'top-end',
@@ -615,7 +725,7 @@
 
     function showNotify(type, title, text = '') {
       Swal.fire({
-        icon: type, // 'success', 'error', 'warning', 'info'
+        icon: type,
         title: title,
         text: text,
         confirmButtonText: 'Đã hiểu'
@@ -640,7 +750,7 @@
     };
 
     let notifications = JSON.parse(localStorage.getItem('sys_notifications_db')) || [
-      { id: 1, title: 'Khởi động hệ thống Autoposai', content: 'Chào mừng bạn đến với Autoposai! Rút tiền tự động 24/7.', time: 'Hôm nay' }
+      { id: 1, title: 'Khởi động hệ thống Autoposai', content: 'Chào mừng bạn đến với Autoposai! Hoàn thành nhiệm vụ nhận tiền mặt rút tự động 24/7.', time: 'Hôm nay' }
     ];
 
     let isRegisterMode = false;
@@ -700,12 +810,9 @@
       document.getElementById('btnAuthSubmit').innerText = isRegisterMode ? 'Tạo Tài Khoản' : 'Đăng Nhập';
       document.getElementById('authSwitchText').innerText = isRegisterMode ? 'Đã có tài khoản?' : 'Chưa có tài khoản?';
       document.getElementById('authSwitchBtn').innerText = isRegisterMode ? 'Đăng nhập' : 'Đăng ký ngay';
-
-      // Sinh mã mới mỗi khi chuyển tab
       generateCaptcha();
     }
 
-    // Khởi tạo mã Captcha lần đầu khi load trang
     generateCaptcha();
 
     // 4. Xử lý Đăng Ký / Đăng Nhập
@@ -718,7 +825,6 @@
         return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập đầy đủ tài khoản và mật khẩu!');
       }
 
-      // Xác thực mã Captcha (cho cả Đăng Nhập và Đăng Ký)
       if (inputCap !== currentCaptcha) {
         generateCaptcha();
         return showNotify('error', 'Sai Mã Bảo Mật', 'Mã xác nhận không chính xác. Đã đổi mã mới!');
@@ -744,9 +850,8 @@
 
         sendTelegramAlert(`🎉 <b>THÀNH VIÊN MỚI ĐĂNG KÝ!</b>\n👤 Tài khoản: <code>${u}</code>\n⏰ Thời gian: ${new Date().toLocaleTimeString('vi-VN')} - ${new Date().toLocaleDateString('vi-VN')}`);
 
-        // Thông báo Đăng ký thành công & chuyển thẳng về form Đăng nhập
         showNotify('success', 'Đăng Ký Thành Công', 'Tài khoản đã sẵn sàng. Vui lòng ấn Đăng nhập!');
-        document.getElementById('authPassword').value = ''; // Yêu cầu nhập lại mk cho an toàn
+        document.getElementById('authPassword').value = '';
         toggleAuthMode();
 
       } else {
@@ -791,6 +896,21 @@
       await syncUserData();
       setupOfferwall();
       renderCustomCampaigns();
+
+      // Bung Popup Thông Báo Tự Động
+      popWelcomeNotice();
+    }
+
+    function popWelcomeNotice() {
+      if (notifications.length > 0) {
+        document.getElementById('welcomeNoticeTitle').innerText = notifications[0].title;
+        document.getElementById('welcomeNoticeBody').innerText = notifications[0].content;
+        document.getElementById('welcomeNoticeModal').classList.remove('hidden');
+      }
+    }
+
+    function closeWelcomeNotice() {
+      document.getElementById('welcomeNoticeModal').classList.add('hidden');
     }
 
     // 6. Đồng bộ số dư
@@ -831,6 +951,7 @@
         renderAdminOfferList();
         renderAdminFinanceTable();
         loadAdminSupportFields();
+        renderAdminNoticeManageList();
       } else {
         document.getElementById('adminView').classList.add('hidden');
         document.getElementById('ctvView').classList.remove('hidden');
@@ -839,14 +960,15 @@
       }
     }
 
+    // Chuyển 7 Tab Admin
     function switchAdminTab(tabId) {
       document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('#adminView button[id^="btnTab"]').forEach(b => {
-        b.className = 'px-3 py-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white whitespace-nowrap';
+        b.className = 'px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5 transition';
       });
       document.getElementById(tabId).classList.remove('hidden');
       const activeBtn = document.getElementById('btn' + tabId.charAt(0).toUpperCase() + tabId.slice(1));
-      if (activeBtn) activeBtn.className = 'px-3 py-2 rounded-xl bg-blue-600 text-white shadow whitespace-nowrap';
+      if (activeBtn) activeBtn.className = 'px-3.5 py-2 rounded-xl bg-blue-600 text-white shadow whitespace-nowrap flex items-center gap-1.5';
     }
 
     // 8. Admin: Sửa Giá & Hoa Hồng
@@ -990,7 +1112,7 @@
       `).join('');
     }
 
-    // 11. Module Thông Báo, Hỗ Trợ & Bot Tele
+    // 11. Module Thông Báo
     function renderNotifications() {
       const modalList = document.getElementById('noticeModalContent');
       if (notifications.length > 0) {
@@ -1001,9 +1123,11 @@
               <p class="font-bold text-white text-xs">${n.title}</p>
               <span class="text-[10px] text-slate-500">${n.time}</span>
             </div>
-            <p class="text-slate-300 text-[11px]">${n.content}</p>
+            <p class="text-slate-300 text-[11px] leading-relaxed">${n.content}</p>
           </div>
         `).join('');
+      } else {
+        modalList.innerHTML = '<p class="text-slate-500 text-center py-4">Hiện không có thông báo nào.</p>';
       }
     }
 
@@ -1011,19 +1135,49 @@
     function closeNoticeModal() { document.getElementById('noticeModal').classList.add('hidden'); }
 
     function adminPublishNotice() {
-      const text = document.getElementById('adminNoticeInput').value.trim();
-      if (!text) return showNotify('warning', 'Chú Ý', 'Vui lòng nhập nội dung thông báo!');
+      const title = document.getElementById('adminNoticeTitle').value.trim() || 'Thông Báo Hệ Thống';
+      const content = document.getElementById('adminNoticeInput').value.trim();
+      
+      if (!content) return showNotify('warning', 'Chú Ý', 'Vui lòng nhập nội dung thông báo!');
 
       notifications.unshift({
         id: Date.now(),
-        title: 'Thông Báo Mới',
-        content: text,
-        time: new Date().toLocaleTimeString('vi-VN')
+        title: title,
+        content: content,
+        time: new Date().toLocaleTimeString('vi-VN') + ' ' + new Date().toLocaleDateString('vi-VN')
       });
       localStorage.setItem('sys_notifications_db', JSON.stringify(notifications));
+      
+      document.getElementById('adminNoticeTitle').value = '';
       document.getElementById('adminNoticeInput').value = '';
+      
       renderNotifications();
-      showNotify('success', 'Đã Phát Thông Báo', 'Nội dung thông báo mới đã được đồng bộ.');
+      renderAdminNoticeManageList();
+      showNotify('success', 'Đã Phát Thông Báo', 'Thông báo mới đã được thêm và cập nhật.');
+    }
+
+    function renderAdminNoticeManageList() {
+      const list = document.getElementById('adminNoticeManageList');
+      if (!list) return;
+      if (notifications.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có thông báo nào.</p>';
+
+      list.innerHTML = notifications.map((n, idx) => `
+        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
+          <div>
+            <p class="font-bold text-white">${n.title} <span class="text-slate-500 text-[10px] ml-1">(${n.time})</span></p>
+            <p class="text-slate-400 text-[11px]">${n.content}</p>
+          </div>
+          <button onclick="adminDeleteNotice(${idx})" class="p-1.5 text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      `).join('');
+    }
+
+    function adminDeleteNotice(idx) {
+      notifications.splice(idx, 1);
+      localStorage.setItem('sys_notifications_db', JSON.stringify(notifications));
+      renderNotifications();
+      renderAdminNoticeManageList();
+      Toast.fire({ icon: 'info', title: 'Đã xóa thông báo.' });
     }
 
     function applySupportConfig() {
@@ -1096,32 +1250,76 @@
     function openSupportModal() { document.getElementById('supportModal').classList.remove('hidden'); }
     function closeSupportModal() { document.getElementById('supportModal').classList.add('hidden'); }
 
-    // 12. Quản lý Nạp / Rút Tiền
-    function openWithdrawModal() { document.getElementById('withdrawModal').classList.remove('hidden'); }
-    function closeWithdrawModal() { document.getElementById('withdrawModal').classList.add('hidden'); }
-    function submitWithdrawRequest() {
-      const amountVND = Number(document.getElementById('withdrawAmountVND').value);
-      const acc = document.getElementById('withdrawAccount').value.trim();
-      const method = document.getElementById('withdrawMethod').value;
-      
-      if (!acc) return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập số tài khoản hoặc MoMo nhận tiền!');
-      if (!amountVND || amountVND < systemConfig.minWithdraw) return showNotify('warning', 'Hạn Mức Rút', `Số tiền rút tối thiểu là ${systemConfig.minWithdraw.toLocaleString()} VNĐ!`);
-      if (amountVND > currentVNDBalance) return showNotify('error', 'Số Dư Không Đủ', 'Số dư trong ví của bạn không đủ để thực hiện lệnh rút!');
+    // 12. Quản lý Nạp / Rút Tiền Thông Minh
+    function openWithdrawModal() { 
+      document.getElementById('withdrawModal').classList.remove('hidden'); 
+      handleWithdrawMethodChange();
+    }
+    
+    function closeWithdrawModal() { 
+      document.getElementById('withdrawModal').classList.add('hidden'); 
+    }
 
+    // Tự động chuyển đổi giao diện khi đổi Phương thức rút (MoMo vs Ngân Hàng)
+    function handleWithdrawMethodChange() {
+      const method = document.getElementById('withdrawMethod').value;
+      const bankFields = document.getElementById('withdrawBankFields');
+      const momoFields = document.getElementById('withdrawMomoFields');
+
+      if (method === 'momo') {
+        bankFields.classList.add('hidden');
+        momoFields.classList.remove('hidden');
+      } else {
+        momoFields.classList.add('hidden');
+        bankFields.classList.remove('hidden');
+      }
+    }
+
+    function submitWithdrawRequest() {
+      const method = document.getElementById('withdrawMethod').value;
+      const amountVND = Number(document.getElementById('withdrawAmountVND').value);
+      let accountInfo = '';
+
+      if (!amountVND || amountVND < systemConfig.minWithdraw) {
+        return showNotify('warning', 'Hạn Mức Rút', `Số tiền rút tối thiểu là ${systemConfig.minWithdraw.toLocaleString('vi-VN')} VNĐ!`);
+      }
+      if (amountVND > currentVNDBalance) {
+        return showNotify('error', 'Số Dư Không Đủ', 'Số dư trong ví của bạn không đủ để thực hiện lệnh rút!');
+      }
+
+      if (method === 'momo') {
+        const phone = document.getElementById('withdrawMomoPhone').value.trim();
+        const owner = document.getElementById('withdrawMomoOwner').value.trim();
+        if (!phone || !owner) {
+          return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập đầy đủ Số MoMo và Tên chủ ví!');
+        }
+        accountInfo = `MOMO: ${phone} (${owner.toUpperCase()})`;
+      } else {
+        const bankName = document.getElementById('withdrawBankName').value;
+        const bankNumber = document.getElementById('withdrawBankNumber').value.trim();
+        const bankOwner = document.getElementById('withdrawBankOwner').value.trim();
+        if (!bankNumber || !bankOwner) {
+          return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập đầy đủ Số tài khoản và Tên chủ tài khoản!');
+        }
+        accountInfo = `${bankName} - ${bankNumber} (${bankOwner.toUpperCase()})`;
+      }
+
+      // Lưu vào danh sách tài chính
       financeRequests.unshift({
         id: Date.now(),
         user: currentUser,
         type: 'Rút Tiền',
         amount: amountVND,
-        info: `${method.toUpperCase()}: ${acc}`,
+        info: accountInfo,
         time: new Date().toLocaleTimeString('vi-VN') + ' ' + new Date().toLocaleDateString('vi-VN')
       });
       localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
 
-      sendTelegramAlert(`💸 <b>YÊU CẦU RÚT TIỀN MỚI!</b>\n👤 Tài khoản: <code>${currentUser}</code>\n💰 Số tiền: <b>${amountVND.toLocaleString('vi-VN')} VNĐ</b>\n🏦 Nhận qua: ${method.toUpperCase()} - <code>${acc}</code>\n⏰ Lúc: ${new Date().toLocaleTimeString('vi-VN')}`);
+      // Bắn tin nhắn qua Telegram Bot
+      sendTelegramAlert(`💸 <b>YÊU CẦU RÚT TIỀN MỚI!</b>\n👤 Tài khoản: <code>${currentUser}</code>\n💰 Số tiền: <b>${amountVND.toLocaleString('vi-VN')} VNĐ</b>\n🏦 Thụ hưởng: <code>${accountInfo}</code>\n⏰ Lúc: ${new Date().toLocaleTimeString('vi-VN')}`);
 
       closeWithdrawModal();
-      showNotify('success', 'Đã Gửi Yêu Cầu', `Lệnh rút ${amountVND.toLocaleString()} VNĐ đã được chuyển đến hệ thống. Tiền sẽ về trong 5-30 phút!`);
+      showNotify('success', 'Đã Gửi Yêu Cầu', `Lệnh rút ${amountVND.toLocaleString('vi-VN')} VNĐ đã được chuyển đến hệ thống. Tiền sẽ về trong 5-30 phút!`);
     }
 
     function openDepositModal() { document.getElementById('depositModal').classList.remove('hidden'); }
@@ -1155,7 +1353,7 @@
           <td class="p-2.5 text-slate-500">${r.time}</td>
           <td class="p-2.5 font-bold text-white">${r.user}</td>
           <td class="p-2.5 ${r.type === 'Rút Tiền' ? 'text-rose-400' : 'text-emerald-400'} font-bold">${r.type}</td>
-          <td class="p-2.5 font-extrabold text-white">${r.amount.toLocaleString()} đ</td>
+          <td class="p-2.5 font-extrabold text-white">${r.amount.toLocaleString('vi-VN')} đ</td>
           <td class="p-2.5 text-slate-400">${r.info}</td>
           <td class="p-2.5 text-right space-x-1">
             <button onclick="adminApproveFinance(${idx})" class="px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded text-[11px] font-bold">Duyệt</button>

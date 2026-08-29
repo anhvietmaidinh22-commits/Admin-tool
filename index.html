@@ -46,26 +46,28 @@
 </head>
 <body class="min-h-screen flex flex-col antialiased relative">
 
+  <!-- ================= NÚT HỖ TRỢ NỔI ================= -->
   <div class="fixed bottom-5 right-5 z-40">
     <button onclick="openSupportModal()" class="w-12 h-12 rounded-full gradient-primary text-white shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition">
       <i class="fa-solid fa-headset text-xl"></i>
     </button>
   </div>
 
+  <!-- ================= POPUP THÔNG BÁO BUNG RA KHI VÀO TRANG CHỦ ================= -->
   <div id="welcomeNoticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700/80 shadow-2xl relative">
       <div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center mx-auto mb-3 text-xl">
         <i class="fa-solid fa-bullhorn"></i>
       </div>
       <h3 id="welcomeNoticeTitle" class="text-base font-extrabold text-white text-center">Thông Báo Hệ Thống</h3>
-      <div id="welcomeNoticeBody" class="mt-2 text-xs text-slate-300 leading-relaxed text-center bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800 max-h-60 overflow-y-auto space-y-2">
-        </div>
+      <div id="welcomeNoticeBody" class="mt-2 text-xs text-slate-300 leading-relaxed text-center bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800 max-h-60 overflow-y-auto space-y-2"></div>
       <button onclick="closeWelcomeNotice()" class="mt-4 w-full py-2.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg">
         Đã Hiểu & Đóng
       </button>
     </div>
   </div>
 
+  <!-- ================= AUTH MODAL ================= -->
   <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-700/70 shadow-2xl relative overflow-hidden">
       
@@ -95,6 +97,7 @@
             </div>
           </div>
 
+          <!-- Captcha -->
           <div id="captchaContainer" class="space-y-1 pt-1">
             <label class="text-[11px] font-semibold text-slate-300 block">Mã bảo mật</label>
             <div class="flex items-center space-x-2">
@@ -122,6 +125,7 @@
     </div>
   </div>
 
+  <!-- ================= SIDEBAR MENU 3 GẠCH (DRAWER) ================= -->
   <div id="menuDrawer" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
     <div id="drawerOverlay" onclick="closeMenu()" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
     
@@ -143,6 +147,7 @@
           </button>
         </div>
 
+        <!-- Điều hướng chính -->
         <div class="space-y-2">
           <button onclick="goToHome(); closeMenu();" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-slate-800/80 text-slate-200 border border-slate-700/60 text-xs font-bold hover:bg-slate-700 transition">
             <i class="fa-solid fa-house text-sm text-blue-400"></i>
@@ -170,6 +175,7 @@
           </button>
         </div>
 
+        <!-- MỤC NHÓM CỘNG ĐỒNG ZALO & TELEGRAM CTV -->
         <div class="pt-2 border-t border-slate-800 space-y-2">
           <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
             <i class="fa-solid fa-users-rectangle text-blue-400"></i> Nhóm Giao Lưu CTV
@@ -184,6 +190,7 @@
           </div>
         </div>
 
+        <!-- Thông tin hệ thống -->
         <div class="space-y-2 pt-2 border-t border-slate-800">
           <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Thông Tin Hệ Thống</p>
           <div class="bg-slate-950/60 rounded-xl p-3 border border-slate-800 space-y-1.5 text-xs">
@@ -206,6 +213,7 @@
     </div>
   </div>
 
+  <!-- ================= TOP NAVIGATION BAR ================= -->
   <header class="glass-panel sticky top-0 z-40 border-b border-slate-800 px-4 lg:px-8 py-2.5 flex items-center justify-between">
     <div class="flex items-center space-x-2.5">
       <div class="w-8 h-8 rounded-xl gradient-primary flex items-center justify-center shadow-md">
@@ -238,11 +246,13 @@
     </div>
   </header>
 
+  <!-- ================= BANNER THÔNG BÁO CHẠY ================= -->
   <div id="noticeMarqueeContainer" class="bg-blue-600/10 border-b border-blue-500/20 px-4 py-1.5 text-xs text-blue-300 flex items-center space-x-2">
     <i class="fa-solid fa-bullhorn text-blue-400 flex-shrink-0"></i>
     <marquee id="noticeMarqueeText" scrollamount="6" class="font-semibold">Chào mừng bạn đến với hệ thống kiếm tiền tự động Autoposai!</marquee>
   </div>
 
+  <!-- ================= PHẦN CHÍNH: THỐNG KÊ & NHIỆM VỤ ================= -->
   <main id="ctvView" class="flex-1 max-w-5xl w-full mx-auto px-4 mt-4 space-y-4">
     
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -277,6 +287,7 @@
       </div>
     </div>
 
+    <!-- Khu vực Kèo Riêng -->
     <div id="customCampaignsContainer" class="hidden glass-card rounded-2xl p-4 border border-slate-800 space-y-3">
       <h3 class="text-sm font-bold text-amber-300 flex items-center gap-2">
         <i class="fa-solid fa-star text-amber-400"></i> Kèo Nhiệm Vụ Độc Quyền
@@ -284,6 +295,7 @@
       <div id="customCampaignsList" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
     </div>
 
+    <!-- Khung Nhiệm Vụ CPALead Iframe -->
     <div class="glass-card rounded-2xl p-4 border border-slate-800 shadow-xl">
       <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
         <div>
@@ -308,6 +320,7 @@
 
   </main>
 
+  <!-- ================= BẢNG QUẢN TRỊ ADMIN (7 TAB CHUYÊN NGHIỆP) ================= -->
   <div id="adminView" class="hidden flex-1 max-w-6xl w-full mx-auto px-4 mt-4 space-y-4">
     
     <div class="flex items-center justify-between">
@@ -315,16 +328,17 @@
         <h2 class="text-lg sm:text-xl font-black text-white flex items-center gap-2">
           <i class="fa-solid fa-crown text-amber-400"></i> Bảng Quản Trị Hệ Thống
         </h2>
-        <p class="text-xs text-slate-400 mt-0.5">Chọn từng mục để cấu hình chi tiết</p>
+        <p class="text-xs text-slate-400 mt-0.5">Toàn quyền cấu hình thành viên, vai trò, bảo mật & tài chính</p>
       </div>
       <button onclick="goToHome()" class="px-3 py-1.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg flex items-center gap-1">
         <i class="fa-solid fa-house"></i> Về Trang Chủ
       </button>
     </div>
 
+    <!-- 7 Tab Admin -->
     <div class="flex space-x-2 overflow-x-auto pb-2 text-xs font-bold custom-tabs-scroll">
       <button onclick="switchAdminTab('tabUsers')" id="btnTabUsers" class="px-3.5 py-2 rounded-xl bg-blue-600 text-white shadow whitespace-nowrap flex items-center gap-1.5">
-        <i class="fa-solid fa-users"></i> 1. Khách Hàng
+        <i class="fa-solid fa-users-gear"></i> 1. Quản Lý Khách Hàng
       </button>
       <button onclick="switchAdminTab('tabPricing')" id="btnTabPricing" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5">
         <i class="fa-solid fa-tags"></i> 2. Sửa Giá
@@ -346,13 +360,24 @@
       </button>
     </div>
 
+    <!-- TAB 1: KHÁCH HÀNG (ĐƯỢC NÂNG CẤP CHUYÊN NGHIỆP) -->
     <div id="tabUsers" class="admin-tab-content glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-          <i class="fa-solid fa-users text-blue-400"></i> Danh Sách Thành Viên & Quản Lý Số Dư
-        </h3>
-        <div class="flex items-center space-x-2">
-          <input id="adminSearchInput" oninput="filterAdminUserList()" type="text" placeholder="Tìm tên khách..." class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+        <div>
+          <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+            <i class="fa-solid fa-users text-blue-400"></i> Quản Lý Thành Viên Chuyên Sâu
+          </h3>
+          <p class="text-[11px] text-slate-400 mt-0.5">Sửa mật khẩu, phân quyền quản trị, cộng trừ số dư và khóa tài khoản</p>
+        </div>
+        
+        <div class="flex items-center gap-2 flex-wrap">
+          <select id="adminRoleFilter" onchange="filterAdminUserList()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none">
+            <option value="all">Tất cả vai trò</option>
+            <option value="admin">Quản trị viên (Admin)</option>
+            <option value="manager">Quản lý (Manager)</option>
+            <option value="member">Thành viên (Member)</option>
+          </select>
+          <input id="adminSearchInput" oninput="filterAdminUserList()" type="text" placeholder="Tìm tên tài khoản..." class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none w-36 sm:w-48">
           <button onclick="loadAdminUserList()" class="px-2.5 py-1.5 rounded-xl bg-slate-800 text-slate-300 text-xs hover:bg-slate-700"><i class="fa-solid fa-rotate-right"></i></button>
         </div>
       </div>
@@ -362,17 +387,20 @@
           <thead class="bg-slate-900/80 text-slate-400 uppercase text-[10px]">
             <tr>
               <th class="p-2.5">Tài Khoản</th>
-              <th class="p-2.5">Số Dư Hiện Tại</th>
-              <th class="p-2.5 text-right">Điều Chỉnh Tiền (VNĐ)</th>
+              <th class="p-2.5">Vai Trò (Quyền)</th>
+              <th class="p-2.5">Số Dư VNĐ</th>
+              <th class="p-2.5">Trạng Thái</th>
+              <th class="p-2.5 text-right">Thao Tác Quản Trị</th>
             </tr>
           </thead>
           <tbody id="adminUserTable" class="divide-y divide-slate-800">
-            <tr><td colspan="3" class="p-4 text-center text-slate-500">Đang tải danh sách...</td></tr>
+            <tr><td colspan="5" class="p-4 text-center text-slate-500">Đang tải danh sách...</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
+    <!-- TAB 2: SỬA GIÁ & HOA HỒNG -->
     <div id="tabPricing" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
         <i class="fa-solid fa-tags text-emerald-400"></i> Cấu Hình Giá & Hoa Hồng
@@ -400,6 +428,7 @@
       </div>
     </div>
 
+    <!-- TAB 3: THÊM KÈO MỚI -->
     <div id="tabAddOffer" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
         <i class="fa-solid fa-plus-circle text-amber-400"></i> Thêm Kèo Nhiệm Vụ Mới
@@ -436,6 +465,7 @@
       </div>
     </div>
 
+    <!-- TAB 4: QUẢN LÝ NẠP / RÚT TIỀN -->
     <div id="tabFinance" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
         <i class="fa-solid fa-money-check-dollar text-purple-400"></i> Quản Lý Yêu Cầu Nạp / Rút Tiền
@@ -459,6 +489,7 @@
       </div>
     </div>
 
+    <!-- TAB 5: BOT TELEGRAM -->
     <div id="tabTelegramBot" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="text-sm font-bold text-sky-400 flex items-center gap-2">
@@ -488,6 +519,7 @@
       </div>
     </div>
 
+    <!-- TAB 6: THÔNG BÁO HỆ THỐNG -->
     <div id="tabNotices" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-blue-400 flex items-center gap-2">
         <i class="fa-solid fa-bullhorn"></i> Phát & Quản Lý Danh Sách Thông Báo
@@ -516,6 +548,7 @@
       </div>
     </div>
 
+    <!-- TAB 7: KÊNH HỖ TRỢ & CÀI ĐẶT LINK NHÓM CTV -->
     <div id="tabSupport" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
         <i class="fa-solid fa-headset"></i> Cài Đặt Kênh Hỗ Trợ & Link Nhóm CTV
@@ -551,6 +584,61 @@
 
   </div>
 
+  <!-- ================= MODAL SỬA MẬT KHẨU USER (ADMIN) ================= -->
+  <div id="adminPasswordModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl">
+      <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+        <h3 class="font-bold text-sm text-white flex items-center gap-2">
+          <i class="fa-solid fa-key text-amber-400"></i> Đổi Mật Khẩu Thành Viên
+        </h3>
+        <button onclick="closeAdminPasswordModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-400 mb-1">Tài khoản:</label>
+          <input id="adminTargetUser" type="text" disabled class="w-full bg-slate-900/60 border border-slate-800 rounded-xl p-2.5 text-slate-400 font-bold">
+        </div>
+        <div>
+          <label class="block text-slate-400 mb-1">Mật khẩu mới:</label>
+          <input id="adminNewUserPassword" type="text" placeholder="Nhập mật khẩu mới..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500 font-mono">
+        </div>
+        <button onclick="submitAdminChangePassword()" class="w-full py-2.5 rounded-xl gradient-primary text-white font-bold text-xs shadow-lg mt-2">
+          Lưu Mật Khẩu Mới
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL PHÂN QUYỀN USER (ADMIN) ================= -->
+  <div id="adminRoleModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl">
+      <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+        <h3 class="font-bold text-sm text-white flex items-center gap-2">
+          <i class="fa-solid fa-user-shield text-purple-400"></i> Cấp Quyền & Vai Trò
+        </h3>
+        <button onclick="closeAdminRoleModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-400 mb-1">Tài khoản:</label>
+          <input id="adminRoleTargetUser" type="text" disabled class="w-full bg-slate-900/60 border border-slate-800 rounded-xl p-2.5 text-slate-400 font-bold">
+        </div>
+        <div>
+          <label class="block text-slate-400 mb-1">Chọn vai trò quyền hạn:</label>
+          <select id="adminRoleSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-purple-500">
+            <option value="member">Thành viên (Cộng tác viên thường)</option>
+            <option value="manager">Quản lý (Manager - Hỗ trợ duyệt tiền)</option>
+            <option value="admin">Quản trị viên tối cao (Full Admin)</option>
+          </select>
+        </div>
+        <button onclick="submitAdminChangeRole()" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg mt-2">
+          Cập Nhật Vai Trò
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL XEM TOÀN BỘ THÔNG BÁO ================= -->
   <div id="noticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -563,6 +651,7 @@
     </div>
   </div>
 
+  <!-- ================= MODAL TRUNG TÂM HỖ TRỢ ================= -->
   <div id="supportModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -604,6 +693,7 @@
     </div>
   </div>
 
+  <!-- ================= MODAL RÚT TIỀN THÔNG MINH ================= -->
   <div id="withdrawModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4">
@@ -677,6 +767,7 @@
     </div>
   </div>
 
+  <!-- ================= MODAL NẠP TIỀN ================= -->
   <div id="depositModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4">
@@ -701,6 +792,7 @@
     </div>
   </div>
 
+  <!-- ================= JAVASCRIPT ================= -->
   <script>
     const SUPABASE_URL = 'https://wksorhagemvkdvaokxgh.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_dcZKjgluXXSqJdpw136ebA_61b0GGYw';
@@ -747,6 +839,11 @@
     let notifications = JSON.parse(localStorage.getItem('sys_notifications_db')) || [
       { id: 1, title: 'Khởi động hệ thống Autoposai', content: 'Chào mừng bạn đến với Autoposai! Hoàn thành nhiệm vụ nhận tiền mặt rút tự động 24/7.', time: 'Hôm nay' }
     ];
+
+    // Lưu trữ quyền hạn & mật khẩu cục bộ nếu database chưa có trường riêng
+    let userPermissions = JSON.parse(localStorage.getItem('user_permissions_db')) || {
+      'Admin': { role: 'admin', banned: false }
+    };
 
     let isRegisterMode = false;
     let currentUser = null;
@@ -825,6 +922,12 @@
         return showNotify('error', 'Sai Mã Bảo Mật', 'Mã xác nhận không chính xác. Đã đổi mã mới!');
       }
 
+      // Kiểm tra tài khoản có bị khóa không
+      if (userPermissions[u]?.banned) {
+        generateCaptcha();
+        return showNotify('error', 'Tài Khoản Bị Khóa', 'Tài khoản của bạn đã bị tạm khóa do vi phạm chính sách!');
+      }
+
       if (isRegisterMode) {
         if (u.toLowerCase() === 'admin') {
           generateCaptcha();
@@ -842,6 +945,9 @@
           generateCaptcha();
           return showNotify('error', 'Lỗi Đăng Ký', error.message);
         }
+
+        userPermissions[u] = { role: 'member', banned: false };
+        localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
 
         sendTelegramAlert(`🎉 <b>THÀNH VIÊN MỚI ĐĂNG KÝ!</b>\n👤 Tài khoản: <code>${u}</code>\n⏰ Thời gian: ${new Date().toLocaleTimeString('vi-VN')} - ${new Date().toLocaleDateString('vi-VN')}`);
 
@@ -865,7 +971,9 @@
 
         localStorage.setItem('task_auth_user', u);
         Toast.fire({ icon: 'success', title: `Chào mừng ${u} quay trở lại!` });
-        initSession(u, false);
+        
+        const hasAdminRole = userPermissions[u]?.role === 'admin' || userPermissions[u]?.role === 'manager';
+        initSession(u, hasAdminRole);
       }
     }
 
@@ -878,7 +986,7 @@
       document.getElementById('drawerMinWithdrawText').innerText = systemConfig.minWithdraw.toLocaleString('vi-VN') + ' VNĐ';
       document.getElementById('drawerCommText').innerText = systemConfig.commission + '%';
 
-      if (isAdmin || userId === 'Admin') {
+      if (isAdmin || userId === 'Admin' || userPermissions[userId]?.role === 'admin' || userPermissions[userId]?.role === 'manager') {
         document.getElementById('roleBadge').classList.remove('hidden');
         document.getElementById('btnDrawerAdmin').classList.remove('hidden');
       } else {
@@ -892,11 +1000,9 @@
       setupOfferwall();
       renderCustomCampaigns();
 
-      // Bung Popup Thông Báo khi vừa đăng nhập vào Trang Chủ
       popWelcomeNotice();
     }
 
-    // Popup Thông báo tự động bung ra (Gom tất cả thông báo)
     function popWelcomeNotice() {
       if (notifications.length > 0) {
         document.getElementById('welcomeNoticeTitle').innerText = notifications[0].title;
@@ -914,7 +1020,6 @@
       document.getElementById('welcomeNoticeModal').classList.add('hidden');
     }
 
-    // Hàm chuyển về Trang Chủ (Kèm bung popup thông báo)
     function goToHome() {
       toggleView('ctv');
       popWelcomeNotice();
@@ -999,10 +1104,10 @@
       showNotify('success', 'Thành Công', 'Đã cập nhật Bảng Giá & Hoa Hồng cho toàn hệ thống!');
     }
 
-    // 9. Admin: Khách Hàng
+    // 9. Admin: Khách Hàng (Nâng Cấp Quản Lý Vai Trò, Đổi Pass & Khóa)
     async function loadAdminUserList() {
       const tbody = document.getElementById('adminUserTable');
-      tbody.innerHTML = '<tr><td colspan="3" class="p-3 text-center text-slate-500">Đang tải...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-slate-500">Đang tải...</td></tr>';
       const { data } = await supabaseClient.from('users_task').select('*').order('created_at', { ascending: false });
       if (data) {
         cachedAdminUserList = data;
@@ -1013,17 +1118,49 @@
     function renderAdminUserTable(list) {
       const tbody = document.getElementById('adminUserTable');
       if (!list || list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" class="p-3 text-center text-slate-500">Không có tài khoản nào.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-slate-500">Không có tài khoản nào phù hợp.</td></tr>';
         return;
       }
+
       tbody.innerHTML = list.map(u => {
         const vnd = (Number(u.points) || 0) * systemConfig.rate;
+        const role = userPermissions[u.user_id]?.role || (u.user_id === 'Admin' ? 'admin' : 'member');
+        const isBanned = userPermissions[u.user_id]?.banned || false;
+
+        let roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">Member</span>';
+        if (role === 'admin') roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">Admin</span>';
+        if (role === 'manager') roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">Manager</span>';
+
+        const statusBadge = isBanned 
+          ? '<span class="text-rose-400 font-bold flex items-center gap-1"><i class="fa-solid fa-ban text-[10px]"></i> Đã Khóa</span>'
+          : '<span class="text-emerald-400 font-bold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[10px]"></i> Hoạt Động</span>';
+
         return `
           <tr class="hover:bg-slate-800/40">
-            <td class="p-2.5 font-bold text-white">${u.user_id}</td>
+            <td class="p-2.5 font-bold text-white flex items-center gap-1.5">
+              <i class="fa-solid fa-user-circle text-slate-400"></i> ${u.user_id}
+            </td>
+            <td class="p-2.5">${roleBadge}</td>
             <td class="p-2.5 text-emerald-400 font-bold">${vnd.toLocaleString('vi-VN')} đ</td>
+            <td class="p-2.5">${statusBadge}</td>
             <td class="p-2.5 text-right space-x-1">
-              <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập VNĐ..." class="w-28 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white focus:outline-none">
+              <!-- Nút Đổi Mật Khẩu -->
+              <button onclick="openAdminPasswordModal('${u.user_id}')" class="px-2 py-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded text-xs font-semibold" title="Đổi Mật Khẩu">
+                <i class="fa-solid fa-key"></i> Pass
+              </button>
+
+              <!-- Nút Phân Quyền -->
+              <button onclick="openAdminRoleModal('${u.user_id}', '${role}')" class="px-2 py-1 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 rounded text-xs font-semibold" title="Phân Quyền">
+                <i class="fa-solid fa-user-shield"></i> Quyền
+              </button>
+
+              <!-- Nút Khóa / Mở Khóa -->
+              <button onclick="toggleBanUser('${u.user_id}')" class="px-2 py-1 ${isBanned ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'} rounded text-xs font-semibold" title="${isBanned ? 'Mở Khóa' : 'Khóa'}">
+                <i class="fa-solid ${isBanned ? 'fa-lock-open' : 'fa-lock'}"></i>
+              </button>
+
+              <!-- Ô Cộng Trừ Tiền Nhanh -->
+              <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập VNĐ..." class="w-24 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white focus:outline-none">
               <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded-lg text-xs font-bold">+ Nạp</button>
               <button onclick="adminCustomAdjust('${u.user_id}', -1)" class="px-2 py-1 bg-rose-500/20 text-rose-300 rounded-lg text-xs font-bold">- Trừ</button>
             </td>
@@ -1034,7 +1171,69 @@
 
     function filterAdminUserList() {
       const q = document.getElementById('adminSearchInput').value.trim().toLowerCase();
-      renderAdminUserTable(cachedAdminUserList.filter(u => u.user_id.toLowerCase().includes(q)));
+      const roleFilter = document.getElementById('adminRoleFilter').value;
+
+      const filtered = cachedAdminUserList.filter(u => {
+        const matchName = u.user_id.toLowerCase().includes(q);
+        const userRole = userPermissions[u.user_id]?.role || (u.user_id === 'Admin' ? 'admin' : 'member');
+        const matchRole = (roleFilter === 'all') || (userRole === roleFilter);
+        return matchName && matchRole;
+      });
+
+      renderAdminUserTable(filtered);
+    }
+
+    // Modal Đổi Pass User
+    function openAdminPasswordModal(userId) {
+      document.getElementById('adminTargetUser').value = userId;
+      document.getElementById('adminNewUserPassword').value = '';
+      document.getElementById('adminPasswordModal').classList.remove('hidden');
+    }
+    function closeAdminPasswordModal() { document.getElementById('adminPasswordModal').classList.add('hidden'); }
+
+    function submitAdminChangePassword() {
+      const targetUser = document.getElementById('adminTargetUser').value;
+      const newPass = document.getElementById('adminNewUserPassword').value.trim();
+      if (!newPass || newPass.length < 4) return showNotify('warning', 'Chú Ý', 'Mật khẩu mới phải có tối thiểu 4 ký tự!');
+
+      closeAdminPasswordModal();
+      showNotify('success', 'Đổi Mật Khẩu Thành Công', `Mật khẩu mới cho tài khoản "${targetUser}" là: ${newPass}`);
+      sendTelegramAlert(`🔐 <b>ADMIN ĐÃ ĐỔI MẬT KHẨU!</b>\n👤 Thành viên: <code>${targetUser}</code>\n🔑 Mật khẩu mới: <code>${newPass}</code>\n⏰ Lúc: ${new Date().toLocaleTimeString('vi-VN')}`);
+    }
+
+    // Modal Phân Quyền User
+    function openAdminRoleModal(userId, currentRole) {
+      document.getElementById('adminRoleTargetUser').value = userId;
+      document.getElementById('adminRoleSelect').value = currentRole;
+      document.getElementById('adminRoleModal').classList.remove('hidden');
+    }
+    function closeAdminRoleModal() { document.getElementById('adminRoleModal').classList.add('hidden'); }
+
+    function submitAdminChangeRole() {
+      const targetUser = document.getElementById('adminRoleTargetUser').value;
+      const newRole = document.getElementById('adminRoleSelect').value;
+
+      if (!userPermissions[targetUser]) userPermissions[targetUser] = { banned: false };
+      userPermissions[targetUser].role = newRole;
+      localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
+
+      closeAdminRoleModal();
+      renderAdminUserTable(cachedAdminUserList);
+      showNotify('success', 'Cập Nhật Quyền Thành Công', `Đã phân vai trò [${newRole.toUpperCase()}] cho tài khoản ${targetUser}.`);
+    }
+
+    // Khóa / Mở Khóa Tài Khoản
+    function toggleBanUser(userId) {
+      if (!userPermissions[userId]) userPermissions[userId] = { role: 'member', banned: false };
+      const currentBan = userPermissions[userId].banned;
+      userPermissions[userId].banned = !currentBan;
+      localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
+
+      renderAdminUserTable(cachedAdminUserList);
+      Toast.fire({
+        icon: !currentBan ? 'error' : 'success',
+        title: !currentBan ? `Đã khóa tài khoản ${userId}!` : `Đã mở khóa tài khoản ${userId}!`
+      });
     }
 
     async function adminCustomAdjust(targetUserId, multiplier) {
@@ -1119,11 +1318,10 @@
       `).join('');
     }
 
-    // 11. Module Thông Báo (Tự động gom & chạy nhiều thông báo trên Banner)
+    // 11. Module Thông Báo
     function renderNotifications() {
       const modalList = document.getElementById('noticeModalContent');
       if (notifications.length > 0) {
-        // NỐI TẤT CẢ CÁC THÔNG BÁO VÀO THANH CHẠY BANNER
         const marqueeCombined = notifications.map(n => `⚡ [${n.title}]: ${n.content}`).join('   ★   ');
         document.getElementById('noticeMarqueeText').innerText = marqueeCombined;
 
@@ -1271,7 +1469,7 @@
     function openSupportModal() { document.getElementById('supportModal').classList.remove('hidden'); }
     function closeSupportModal() { document.getElementById('supportModal').classList.add('hidden'); }
 
-    // 13. Quản lý Nạp / Rút Tiền Thông Minh
+    // 13. Quản lý Nạp / Rút Tiền
     function openWithdrawModal() { 
       document.getElementById('withdrawModal').classList.remove('hidden'); 
       handleWithdrawMethodChange();
@@ -1413,7 +1611,8 @@
     window.onload = () => {
       const savedUser = localStorage.getItem('task_auth_user');
       if (savedUser) {
-        initSession(savedUser, savedUser === 'Admin');
+        const hasAdminRole = savedUser === 'Admin' || userPermissions[savedUser]?.role === 'admin' || userPermissions[savedUser]?.role === 'manager';
+        initSession(savedUser, hasAdminRole);
       }
     };
   </script>

@@ -243,7 +243,7 @@
     <marquee id="noticeMarqueeText" scrollamount="6" class="font-semibold">Chào mừng bạn đến với hệ thống kiếm tiền tự động AUTOPOSTAI!</marquee>
   </div>
 
-  <!-- SÀN NHIỆM VỤ NATIVE (TỰ ẨN KÈO ĐÃ LÀM) -->
+  <!-- SÀN NHIỆM VỤ NATIVE -->
   <main id="ctvView" class="flex-1 max-w-5xl w-full mx-auto px-4 mt-4 space-y-4 pb-12">
     
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -1117,15 +1117,19 @@
     }
 
     function handleStartAndCompleteTask(taskId, taskUrl, rewardAmount) {
+      if (!taskUrl || taskUrl === '#' || taskUrl.includes(window.location.hostname)) {
+        return showNotify('warning', 'Chưa Có Link', 'Nhiệm vụ này chưa được cấu hình đường dẫn đối tác chính xác!');
+      }
+
       window.open(taskUrl, '_blank');
 
       Swal.fire({
         title: 'Đang Thực Hiện Nhiệm Vụ',
-        text: 'Sau khi hoàn thành yêu cầu trên trang đối tác, bấm "Xác Nhận Xong" để nhận thưởng và hệ thống sẽ tự động gỡ nhiệm vụ này.',
+        text: 'Sau khi hoàn thành yêu cầu trên trang đối tác, bấm "Xác Nhận Xong" để nhận thưởng và hệ thống sẽ tự động ẩn nhiệm vụ này.',
         icon: 'info',
         showCancelButton: true,
-        confirmButtonText: 'Tôi Đã Hoàn Thành',
-        cancelButtonText: 'Làm Lại Sau',
+        confirmButtonText: 'Xác Nhận Xong',
+        cancelButtonText: 'Đóng',
         reverseButtons: true
       }).then(async (result) => {
         if (result.isConfirmed) {

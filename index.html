@@ -299,7 +299,7 @@
       </button>
     </div>
 
-    <!-- 7 Tab Admin (Bỏ mục Nạp tiền, giữ lại Rút tiền) -->
+    <!-- 7 Tab Admin -->
     <div class="flex space-x-2 overflow-x-auto pb-2 text-xs font-bold custom-tabs-scroll">
       <button onclick="switchAdminTab('tabUsers')" id="btnTabUsers" class="px-3.5 py-2 rounded-xl bg-blue-600 text-white shadow whitespace-nowrap flex items-center gap-1.5">
         <i class="fa-solid fa-users-gear"></i> 1. Quản Lý Khách Hàng
@@ -430,7 +430,7 @@
       </div>
     </div>
 
-    <!-- TAB 4: QUẢN LÝ RÚT TIỀN (ĐÃ BỎ NẠP) -->
+    <!-- TAB 4: QUẢN LÝ RÚT TIỀN -->
     <div id="tabFinance" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
         <i class="fa-solid fa-money-check-dollar text-purple-400"></i> Quản Lý Yêu Cầu Rút Tiền Của CTV
@@ -657,7 +657,7 @@
     </div>
   </div>
 
-  <!-- MODAL RÚT TIỀN -->
+  <!-- MODAL RÚT TIỀN (ĐÃ CẬP NHẬT ĐẦY ĐỦ TẤT CẢ NGÂN HÀNG VIỆT NAM) -->
   <div id="withdrawModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4">
@@ -677,18 +677,45 @@
         <div id="withdrawBankFields" class="space-y-2.5">
           <div>
             <label class="block text-slate-400 mb-1">Chọn Ngân hàng thụ hưởng</label>
-            <select id="withdrawBankName" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500">
-              <option value="MBBank">MBBank (Quân Đội)</option>
-              <option value="Vietcombank">Vietcombank (Ngoại Thương)</option>
-              <option value="Techcombank">Techcombank (Kỹ Thương)</option>
-              <option value="VPBank">VPBank (Việt Nam Thịnh Vượng)</option>
-              <option value="ACB">ACB (Á Châu)</option>
-              <option value="BIDV">BIDV (Đầu Tư & Phát Triển)</option>
-              <option value="VietinBank">VietinBank (Công Thương)</option>
-              <option value="TPBank">TPBank (Tiên Phong)</option>
-              <option value="VIB">VIB (Quốc Tế)</option>
-              <option value="Sacombank">Sacombank (Sài Gòn Thương Tín)</option>
+            <select id="withdrawBankName" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500 max-h-48">
+              <option value="MBBank">MBBank - Ngân hàng Quân Đội</option>
+              <option value="Vietcombank">VCB - Ngân hàng Ngoại Thương</option>
+              <option value="Techcombank">TCB - Ngân hàng Kỹ Thương</option>
+              <option value="VPBank">VPBank - Ngân hàng Việt Nam Thịnh Vượng</option>
+              <option value="ACB">ACB - Ngân hàng Á Châu</option>
+              <option value="BIDV">BIDV - Ngân hàng Đầu Tư & Phát Triển</option>
+              <option value="VietinBank">VietinBank - Ngân hàng Công Thương</option>
+              <option value="TPBank">TPBank - Ngân hàng Tiên Phong</option>
+              <option value="VIB">VIB - Ngân hàng Quốc Tế</option>
+              <option value="Sacombank">Sacombank - Sài Gòn Thương Tín</option>
+              <option value="Agribank">Agribank - Ngân hàng Nông Nghiệp</option>
+              <option value="HDBank">HDBank - Phát Triển TP.HCM</option>
+              <option value="SHB">SHB - Sài Gòn - Hà Nội</option>
+              <option value="STB">STB - Sacombank</option>
+              <option value="OCB">OCB - Ngân hàng Phương Đông</option>
+              <option value="MSB">MSB - Ngân hàng Hàng Hải</option>
+              <option value="SeABank">SeABank - Ngân hàng Đông Nam Á</option>
+              <option value="LPBank">LPBank - Ngân hàng Lộc Phát Việt Nam</option>
+              <option value="Eximbank">Eximbank - Ngân hàng Xuất Nhập Khẩu</option>
               <option value="Cake">Cake by VPBank</option>
+              <option value="Timo">Timo Digital Bank</option>
+              <option value="BacABank">Bac A Bank - Ngân hàng Bắc Á</option>
+              <option value="NamABank">Nam A Bank - Ngân hàng Nam Á</option>
+              <option value="PVcomBank">PVcomBank - Đại Chúng Dầu Khí</option>
+              <option value="SaigonBank">SaigonBank - Sài Gòn Công Thương</option>
+              <option value="VietABank">Viet A Bank - Ngân hàng Việt Á</option>
+              <option value="PGBank">PGBank - Ngân hàng Thịnh Vượng và Phát Triển</option>
+              <option value="KienLongBank">KienLongBank - Kiên Long</option>
+              <option value="BaoVietBank">BaoViet Bank - Ngân hàng Bảo Việt</option>
+              <option value="GPBank">GPBank - Dầu Khí Toàn Cầu</option>
+              <option value="CBBank">CBBank - Thương Mại TNHH MTV Xây Dựng</option>
+              <option value="OceanBank">OceanBank - Ngân hàng Đại Dương</option>
+              <option value="ShinhanBank">Shinhan Bank - Ngân hàng Hàn Quốc</option>
+              <option value="StandardChartered">Standard Chartered - Anh Quốc</option>
+              <option value="HSBC">HSBC - Ngân hàng Hồng Kông & Thượng Hải</option>
+              <option value="UOB">UOB - United Overseas Bank</option>
+              <option value="CIMB">CIMB Bank - Malaysia</option>
+              <option value="Woori">Woori Bank - Hàn Quốc</option>
             </select>
           </div>
           <div>

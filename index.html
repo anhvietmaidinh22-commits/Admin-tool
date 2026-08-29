@@ -52,6 +52,7 @@
     </button>
   </div>
 
+  <!-- POPUP THÔNG BÁO -->
   <div id="welcomeNoticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700/80 shadow-2xl relative">
       <div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center mx-auto mb-3 text-xl">
@@ -65,6 +66,7 @@
     </div>
   </div>
 
+  <!-- AUTH MODAL -->
   <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-700/70 shadow-2xl relative overflow-hidden">
       <div id="authFormContent">
@@ -119,6 +121,7 @@
     </div>
   </div>
 
+  <!-- MENU DRAWER -->
   <div id="menuDrawer" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
     <div id="drawerOverlay" onclick="closeMenu()" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
     
@@ -147,10 +150,6 @@
           <button onclick="openWithdrawModal(); closeMenu();" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold hover:bg-blue-500/20 transition">
             <i class="fa-solid fa-building-columns text-sm"></i>
             <span>Rút Tiền ATM / MoMo</span>
-          </button>
-          <button onclick="openDepositModal(); closeMenu();" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold hover:bg-emerald-500/20 transition">
-            <i class="fa-solid fa-circle-dollar-to-slot text-sm"></i>
-            <span>Nạp Tiền Vào Ví</span>
           </button>
           <button onclick="openSupportModal(); closeMenu();" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold hover:bg-purple-500/20 transition">
             <i class="fa-solid fa-headset text-sm"></i>
@@ -201,6 +200,7 @@
     </div>
   </div>
 
+  <!-- TOPBAR -->
   <header class="glass-panel sticky top-0 z-40 border-b border-slate-800 px-3 sm:px-6 py-2 flex items-center justify-between">
     <div class="flex items-center space-x-2">
       <div class="w-8 h-8 rounded-xl gradient-primary flex items-center justify-center shadow-md">
@@ -233,14 +233,16 @@
     </div>
   </header>
 
+  <!-- BANNER MARQUEE -->
   <div id="noticeMarqueeContainer" class="bg-blue-600/10 border-b border-blue-500/20 px-4 py-1.5 text-xs text-blue-300 flex items-center space-x-2">
     <i class="fa-solid fa-bullhorn text-blue-400 flex-shrink-0"></i>
     <marquee id="noticeMarqueeText" scrollamount="6" class="font-semibold">Chào mừng bạn đến với hệ thống kiếm tiền tự động AUTOPOSTAI!</marquee>
   </div>
 
+  <!-- SÀN NHIỆM VỤ NATIVE -->
   <main id="ctvView" class="flex-1 max-w-5xl w-full mx-auto px-4 mt-4 space-y-4 pb-12">
     
-    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+    <div class="grid grid-cols-2 sm:grid-cols-2 gap-3">
       <div class="glass-card rounded-2xl p-4 flex flex-col justify-between">
         <span class="text-[11px] font-semibold text-slate-400">Số Dư Khả Dụng</span>
         <div class="mt-1 flex items-baseline space-x-1">
@@ -258,20 +260,9 @@
         </div>
         <span class="text-[10px] text-slate-500 mt-0.5">Tự ẩn sau khi làm xong</span>
       </div>
-
-      <div class="glass-card rounded-2xl p-4 col-span-2 sm:col-span-1 flex flex-col justify-between">
-        <span class="text-[11px] font-semibold text-slate-400">Thao Tác Ví</span>
-        <div class="grid grid-cols-2 gap-2 mt-2">
-          <button onclick="openWithdrawModal()" class="py-1.5 rounded-xl gradient-primary text-white text-[11px] font-bold shadow-md">
-            Rút Tiền
-          </button>
-          <button onclick="openDepositModal()" class="py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold shadow-md">
-            Nạp Tiền
-          </button>
-        </div>
-      </div>
     </div>
 
+    <!-- KHUNG NHIỆM VỤ NATIVE -->
     <div class="glass-card rounded-3xl p-4 sm:p-6 border border-slate-800 space-y-4 shadow-2xl">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800 gap-2">
         <div>
@@ -293,6 +284,7 @@
 
   </main>
 
+  <!-- BẢNG QUẢN TRỊ ADMIN -->
   <div id="adminView" class="hidden flex-1 max-w-6xl w-full mx-auto px-4 mt-4 space-y-4 pb-12">
     
     <div class="flex items-center justify-between">
@@ -307,6 +299,7 @@
       </button>
     </div>
 
+    <!-- 7 Tab Admin (Bỏ mục Nạp tiền, giữ lại Rút tiền) -->
     <div class="flex space-x-2 overflow-x-auto pb-2 text-xs font-bold custom-tabs-scroll">
       <button onclick="switchAdminTab('tabUsers')" id="btnTabUsers" class="px-3.5 py-2 rounded-xl bg-blue-600 text-white shadow whitespace-nowrap flex items-center gap-1.5">
         <i class="fa-solid fa-users-gear"></i> 1. Quản Lý Khách Hàng
@@ -318,7 +311,7 @@
         <i class="fa-solid fa-plus-circle"></i> 3. Đăng Kèo & Reset
       </button>
       <button onclick="switchAdminTab('tabFinance')" id="btnTabFinance" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5">
-        <i class="fa-solid fa-money-bill-transfer"></i> 4. Nạp / Rút
+        <i class="fa-solid fa-money-bill-transfer"></i> 4. Duyệt Lệnh Rút
       </button>
       <button onclick="switchAdminTab('tabTelegramBot')" id="btnTabTelegramBot" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5">
         <i class="fa-brands fa-telegram"></i> 5. Bot Telegram
@@ -331,13 +324,14 @@
       </button>
     </div>
 
+    <!-- TAB 1: KHÁCH HÀNG -->
     <div id="tabUsers" class="admin-tab-content glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
         <div>
           <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
             <i class="fa-solid fa-users text-blue-400"></i> Quản Lý Thành Viên Chuyên Sâu
           </h3>
-          <p class="text-[11px] text-slate-400 mt-0.5">Sửa mật khẩu, đổi quyền, nạp/trừ tiền & khóa tài khoản</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Sửa mật khẩu, đổi quyền, chỉnh tiền & khóa tài khoản</p>
         </div>
         
         <div class="flex items-center gap-2 flex-wrap">
@@ -357,6 +351,7 @@
       </div>
     </div>
 
+    <!-- TAB 2: CÀI ĐẶT API TỰ ĐỘNG & GIÁ -->
     <div id="tabPricing" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
         <i class="fa-solid fa-plug text-emerald-400"></i> Cấu Hình API Tự Động Kéo Kèo & Tỷ Giá
@@ -391,6 +386,7 @@
       </div>
     </div>
 
+    <!-- TAB 3: ĐĂNG KÈO RIÊNG & KHÔI PHỤC NHIỆM VỤ -->
     <div id="tabAddOffer" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-6">
       <div class="space-y-3 bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
         <div class="flex items-center justify-between">
@@ -434,9 +430,10 @@
       </div>
     </div>
 
+    <!-- TAB 4: QUẢN LÝ RÚT TIỀN (ĐÃ BỎ NẠP) -->
     <div id="tabFinance" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-        <i class="fa-solid fa-money-check-dollar text-purple-400"></i> Quản Lý Yêu Cầu Nạp / Rút Tiền
+        <i class="fa-solid fa-money-check-dollar text-purple-400"></i> Quản Lý Yêu Cầu Rút Tiền Của CTV
       </h3>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs text-slate-300">
@@ -444,25 +441,25 @@
             <tr>
               <th class="p-2.5">Thời Gian</th>
               <th class="p-2.5">Tài Khoản</th>
-              <th class="p-2.5">Loại</th>
-              <th class="p-2.5">Số Tiền</th>
-              <th class="p-2.5">Thông Tin</th>
+              <th class="p-2.5">Số Tiền Rút</th>
+              <th class="p-2.5">Thông Tin Nhận Tiền</th>
               <th class="p-2.5 text-right">Thao Tác</th>
             </tr>
           </thead>
           <tbody id="adminFinanceTable" class="divide-y border-slate-800">
-            <tr><td colspan="6" class="p-4 text-center text-slate-500">Chưa có yêu cầu phát sinh.</td></tr>
+            <tr><td colspan="5" class="p-4 text-center text-slate-500">Chưa có yêu cầu rút tiền nào.</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
+    <!-- TAB 5: BOT TELEGRAM -->
     <div id="tabTelegramBot" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="text-sm font-bold text-sky-400 flex items-center gap-2">
           <i class="fa-brands fa-telegram text-base"></i> Cấu Hình Bot Telegram Tự Động
         </h3>
-        <span class="text-[11px] text-slate-400">Tự động báo khi có User đăng ký, nạp/rút tiền</span>
+        <span class="text-[11px] text-slate-400">Tự động báo khi có User đăng ký, rút tiền</span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -486,6 +483,7 @@
       </div>
     </div>
 
+    <!-- TAB 6: THÔNG BÁO HỆ THỐNG -->
     <div id="tabNotices" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-blue-400 flex items-center gap-2">
         <i class="fa-solid fa-bullhorn"></i> Phát & Quản Lý Danh Sách Thông Báo
@@ -514,6 +512,7 @@
       </div>
     </div>
 
+    <!-- TAB 7: KÊNH HỖ TRỢ & CÀI ĐẶT LINK NHÓM CTV -->
     <div id="tabSupport" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
         <i class="fa-solid fa-headset"></i> Cài Đặt Kênh Hỗ Trợ & Link Nhóm CTV
@@ -549,6 +548,7 @@
 
   </div>
 
+  <!-- MODAL ĐỔI PASS -->
   <div id="adminPasswordModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -573,6 +573,7 @@
     </div>
   </div>
 
+  <!-- MODAL PHÂN QUYỀN -->
   <div id="adminRoleModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -601,6 +602,7 @@
     </div>
   </div>
 
+  <!-- MODAL THÔNG BÁO -->
   <div id="noticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -613,6 +615,7 @@
     </div>
   </div>
 
+  <!-- MODAL HỖ TRỢ -->
   <div id="supportModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -622,7 +625,7 @@
         <button onclick="closeSupportModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="space-y-3 text-xs">
-        <p class="text-slate-400">Gặp khó khăn khi làm nhiệm vụ, nạp tiền hoặc rút tiền? Liên hệ ngay:</p>
+        <p class="text-slate-400">Gặp khó khăn khi làm nhiệm vụ hoặc rút tiền? Liên hệ ngay:</p>
         
         <a id="supportZaloLink" href="#" target="_blank" class="flex items-center justify-between p-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/20 transition">
           <div class="flex items-center space-x-3">
@@ -654,6 +657,7 @@
     </div>
   </div>
 
+  <!-- MODAL RÚT TIỀN -->
   <div id="withdrawModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4">
@@ -715,30 +719,6 @@
 
         <button onclick="submitWithdrawRequest()" class="w-full py-2.5 rounded-xl gradient-primary text-white font-bold text-xs shadow-lg mt-2">
           Tạo Lệnh Rút Tiền
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div id="depositModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-base text-white"><i class="fa-solid fa-qrcode text-blue-400 mr-1.5"></i> Nạp Tiền Vào Tài Khoản</h3>
-        <button onclick="closeDepositModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="space-y-3 text-xs">
-        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-1">
-          <p class="text-slate-400">Ngân hàng: <b class="text-white">MB BANK</b></p>
-          <p class="text-slate-400">Số tài khoản: <b class="text-amber-300">0333338888</b></p>
-          <p class="text-slate-400">Chủ tài khoản: <b class="text-white">ADMIN AUTOPOSTAI</b></p>
-          <p class="text-slate-400">Nội dung chuyển khoản: <b id="depositMemo" class="text-emerald-400">NAP USER</b></p>
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Số tiền bạn đã nạp (VNĐ)</label>
-          <input id="depositAmountVND" type="number" placeholder="Ví dụ: 100000" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
-        </div>
-        <button onclick="submitDepositRequest()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg mt-2">
-          Tôi Đã Chuyển Khoản
         </button>
       </div>
     </div>
@@ -937,7 +917,6 @@
       currentUser = userId;
       document.getElementById('authModal').classList.add('hidden');
       document.getElementById('drawerUsername').innerText = userId;
-      document.getElementById('depositMemo').innerText = `NAP ${userId.toUpperCase()}`;
       document.getElementById('drawerMinWithdrawText').innerText = systemConfig.minWithdraw.toLocaleString('vi-VN') + ' VNĐ';
 
       if (isAdmin || userId === 'Admin' || userPermissions[userId]?.role === 'admin' || userPermissions[userId]?.role === 'manager') {
@@ -1009,7 +988,6 @@
               const usdPayout = parseFloat(o.payout) || 0.5;
               const rewardVND = Math.round(usdPayout * systemConfig.usdRate * (systemConfig.userSharePercent / 100));
               
-              // Đảm bảo link đúng chuẩn offerwall của CPAGrip hoặc link API trả về
               let offerUrl = o.link || o.url || '';
               if (!offerUrl || offerUrl.includes(window.location.hostname)) {
                 const campId = o.campid || o.id || '2553222';
@@ -1261,7 +1239,7 @@
 
             <div class="flex items-center gap-1.5 pt-1">
               <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập số VNĐ..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500">
-              <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-bold">+ Nạp</button>
+              <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-bold">+ Cộng</button>
               <button onclick="adminCustomAdjust('${u.user_id}', -1)" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/30 rounded-xl text-xs font-bold">- Trừ</button>
             </div>
           </div>
@@ -1609,38 +1587,15 @@
       showNotify('success', 'Đã Gửi Yêu Cầu', `Lệnh rút ${amountVND.toLocaleString('vi-VN')} VNĐ đã được chuyển đến hệ thống. Tiền sẽ về trong 5-30 phút!`);
     }
 
-    function openDepositModal() { document.getElementById('depositModal').classList.remove('hidden'); }
-    function closeDepositModal() { document.getElementById('depositModal').classList.add('hidden'); }
-    function submitDepositRequest() {
-      const amountVND = Number(document.getElementById('depositAmountVND').value);
-      if (!amountVND || amountVND <= 0) return showNotify('warning', 'Chú Ý', 'Vui lòng nhập số tiền bạn đã nạp!');
-
-      financeRequests.unshift({
-        id: Date.now(),
-        user: currentUser,
-        type: 'Nạp Tiền',
-        amount: amountVND,
-        info: `Memo: NAP ${currentUser.toUpperCase()}`,
-        time: new Date().toLocaleTimeString('vi-VN') + ' ' + new Date().toLocaleDateString('vi-VN')
-      });
-      localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
-
-      sendTelegramAlert(`📥 <b>YÊU CẦU NẠP TIỀN MỚI!</b>\n👤 Tài khoản: <code>${currentUser}</code>\n💵 Số tiền: <b>${amountVND.toLocaleString('vi-VN')} VNĐ</b>\n📝 Nội dung CK: <code>NAP ${currentUser.toUpperCase()}</code>\n⏰ Lúc: ${new Date().toLocaleTimeString('vi-VN')}`);
-
-      closeDepositModal();
-      showNotify('success', 'Báo Nạp Thành Công', 'Admin sẽ kiểm tra giao dịch và cộng tiền vào tài khoản trong 5 phút.');
-    }
-
     function renderAdminFinanceTable() {
       const tbody = document.getElementById('adminFinanceTable');
-      if (financeRequests.length === 0) return tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-500">Chưa có yêu cầu phát sinh.</td></tr>';
+      if (financeRequests.length === 0) return tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">Chưa có yêu cầu rút tiền nào.</td></tr>';
 
       tbody.innerHTML = financeRequests.map((r, idx) => `
         <tr class="hover:bg-slate-800/40">
           <td class="p-2.5 text-slate-500">${r.time}</td>
           <td class="p-2.5 font-bold text-white">${r.user}</td>
-          <td class="p-2.5 ${r.type === 'Rút Tiền' ? 'text-rose-400' : 'text-emerald-400'} font-bold">${r.type}</td>
-          <td class="p-2.5 font-extrabold text-white">${r.amount.toLocaleString('vi-VN')} đ</td>
+          <td class="p-2.5 font-extrabold text-emerald-400">${r.amount.toLocaleString('vi-VN')} đ</td>
           <td class="p-2.5 text-slate-400">${r.info}</td>
           <td class="p-2.5 text-right space-x-1">
             <button onclick="adminApproveFinance(${idx})" class="px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded text-[11px] font-bold">Duyệt</button>
@@ -1652,19 +1607,14 @@
 
     async function adminApproveFinance(idx) {
       const req = financeRequests[idx];
-      if (req.type === 'Nạp Tiền') {
-        const pointDiff = req.amount / systemConfig.rate;
-        const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', req.user).single();
-        await supabaseClient.from('users_task').update({ points: (Number(data?.points) || 0) + pointDiff }).eq('user_id', req.user);
-      } else {
-        const pointDiff = req.amount / systemConfig.rate;
-        const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', req.user).single();
-        await supabaseClient.from('users_task').update({ points: Math.max(0, (Number(data?.points) || 0) - pointDiff) }).eq('user_id', req.user);
-      }
+      const pointDiff = req.amount / systemConfig.rate;
+      const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', req.user).single();
+      await supabaseClient.from('users_task').update({ points: Math.max(0, (Number(data?.points) || 0) - pointDiff) }).eq('user_id', req.user);
+      
       financeRequests.splice(idx, 1);
       localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
       renderAdminFinanceTable();
-      Toast.fire({ icon: 'success', title: 'Đã phê duyệt lệnh thành công!' });
+      Toast.fire({ icon: 'success', title: 'Đã phê duyệt lệnh rút tiền!' });
     }
 
     function adminRejectFinance(idx) {

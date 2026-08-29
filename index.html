@@ -46,14 +46,12 @@
 </head>
 <body class="min-h-screen flex flex-col antialiased relative">
 
-  <!-- ================= NÚT HỖ TRỢ NỔI ================= -->
   <div class="fixed bottom-5 right-5 z-40">
     <button onclick="openSupportModal()" class="w-12 h-12 rounded-full gradient-primary text-white shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition">
       <i class="fa-solid fa-headset text-xl"></i>
     </button>
   </div>
 
-  <!-- ================= POPUP THÔNG BÁO BUNG RA KHI VÀO TRANG CHỦ ================= -->
   <div id="welcomeNoticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700/80 shadow-2xl relative">
       <div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center mx-auto mb-3 text-xl">
@@ -67,7 +65,6 @@
     </div>
   </div>
 
-  <!-- ================= AUTH MODAL ================= -->
   <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-700/70 shadow-2xl relative overflow-hidden">
       
@@ -97,7 +94,6 @@
             </div>
           </div>
 
-          <!-- Captcha -->
           <div id="captchaContainer" class="space-y-1 pt-1">
             <label class="text-[11px] font-semibold text-slate-300 block">Mã bảo mật</label>
             <div class="flex items-center space-x-2">
@@ -125,7 +121,6 @@
     </div>
   </div>
 
-  <!-- ================= SIDEBAR MENU 3 GẠCH (DRAWER - ĐÃ XÓA HOA HỒNG) ================= -->
   <div id="menuDrawer" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
     <div id="drawerOverlay" onclick="closeMenu()" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
     
@@ -147,7 +142,6 @@
           </button>
         </div>
 
-        <!-- Điều hướng chính -->
         <div class="space-y-2">
           <button onclick="goToHome(); closeMenu();" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-slate-800/80 text-slate-200 border border-slate-700/60 text-xs font-bold hover:bg-slate-700 transition">
             <i class="fa-solid fa-house text-sm text-blue-400"></i>
@@ -175,7 +169,6 @@
           </button>
         </div>
 
-        <!-- MỤC NHÓM CỘNG ĐỒNG ZALO & TELEGRAM CTV -->
         <div class="pt-2 border-t border-slate-800 space-y-2">
           <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
             <i class="fa-solid fa-users-rectangle text-blue-400"></i> Nhóm Giao Lưu CTV
@@ -190,7 +183,6 @@
           </div>
         </div>
 
-        <!-- Thông tin hệ thống (Đã gỡ bỏ dòng hoa hồng) -->
         <div class="space-y-2 pt-2 border-t border-slate-800">
           <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Thông Tin Thanh Toán</p>
           <div class="bg-slate-950/60 rounded-xl p-3 border border-slate-800 space-y-2 text-xs">
@@ -217,7 +209,6 @@
     </div>
   </div>
 
-  <!-- ================= TOP NAVIGATION BAR ================= -->
   <header class="glass-panel sticky top-0 z-40 border-b border-slate-800 px-3 sm:px-6 py-2 flex items-center justify-between">
     <div class="flex items-center space-x-2">
       <div class="w-8 h-8 rounded-xl gradient-primary flex items-center justify-center shadow-md">
@@ -239,7 +230,6 @@
         <span id="noticeDot" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
       </button>
 
-      <!-- Badge Số Dư Tinh Gọn -->
       <div class="bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1 flex items-center gap-1.5 text-xs font-bold">
         <span class="text-[10px] text-slate-400 uppercase font-medium">Số dư:</span>
         <span class="text-emerald-400 font-extrabold whitespace-nowrap"><span id="navBalanceVND">0</span> đ</span>
@@ -251,13 +241,11 @@
     </div>
   </header>
 
-  <!-- ================= BANNER THÔNG BÁO CHẠY ================= -->
   <div id="noticeMarqueeContainer" class="bg-blue-600/10 border-b border-blue-500/20 px-4 py-1.5 text-xs text-blue-300 flex items-center space-x-2">
     <i class="fa-solid fa-bullhorn text-blue-400 flex-shrink-0"></i>
     <marquee id="noticeMarqueeText" scrollamount="6" class="font-semibold">Chào mừng bạn đến với hệ thống kiếm tiền tự động AUTOPOSTAI!</marquee>
   </div>
 
-  <!-- ================= PHẦN CHÍNH: THỐNG KÊ & NHIỆM VỤ ================= -->
   <main id="ctvView" class="flex-1 max-w-5xl w-full mx-auto px-4 mt-4 space-y-4">
     
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -292,7 +280,6 @@
       </div>
     </div>
 
-    <!-- Khu vực Kèo Riêng -->
     <div id="customCampaignsContainer" class="hidden glass-card rounded-2xl p-4 border border-slate-800 space-y-3">
       <h3 class="text-sm font-bold text-amber-300 flex items-center gap-2">
         <i class="fa-solid fa-star text-amber-400"></i> Kèo Nhiệm Vụ Độc Quyền
@@ -300,17 +287,21 @@
       <div id="customCampaignsList" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
     </div>
 
-    <!-- Khung Nhiệm Vụ CPALead Iframe -->
-    <div class="glass-card rounded-2xl p-4 border border-slate-800 shadow-xl">
-      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+    <div class="glass-card rounded-2xl p-4 border border-slate-800 shadow-xl space-y-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800 gap-2">
         <div>
           <h2 class="text-sm font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-list-check text-blue-400"></i> Danh Sách Nhiệm Vụ Quốc Tế
+            <i class="fa-solid fa-list-check text-blue-400"></i> Danh Sách Nhiệm Vụ Trực Tuyến
           </h2>
+          <p class="text-[11px] text-slate-400 mt-0.5">Chọn mạng đối tác bên dưới để làm nhiệm vụ</p>
         </div>
-        <button onclick="refreshTaskFrame()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-medium text-slate-300 transition flex items-center gap-1.5">
-          <i id="taskRefreshIcon" class="fa-solid fa-rotate-right"></i> Làm mới
-        </button>
+        
+        <div class="flex items-center gap-2">
+          <div id="partnerNetworkSelector" class="flex space-x-1 overflow-x-auto custom-tabs-scroll"></div>
+          <button onclick="refreshTaskFrame()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-medium text-slate-300 transition flex items-center gap-1.5 whitespace-nowrap">
+            <i id="taskRefreshIcon" class="fa-solid fa-rotate-right"></i> Làm mới
+          </button>
+        </div>
       </div>
 
       <div class="w-full bg-slate-950 rounded-xl overflow-hidden border border-slate-800 min-h-[680px]">
@@ -325,7 +316,6 @@
 
   </main>
 
-  <!-- ================= BẢNG QUẢN TRỊ ADMIN (7 TAB CHUYÊN NGHIỆP) ================= -->
   <div id="adminView" class="hidden flex-1 max-w-6xl w-full mx-auto px-4 mt-4 space-y-4">
     
     <div class="flex items-center justify-between">
@@ -333,23 +323,22 @@
         <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
           <i class="fa-solid fa-crown text-amber-400"></i> Bảng Quản Trị Hệ Thống
         </h2>
-        <p class="text-xs text-slate-400 mt-0.5">Cấu hình thành viên, vai trò & tài chính</p>
+        <p class="text-xs text-slate-400 mt-0.5">Cấu hình thành viên, vai trò, đối tác & tài chính</p>
       </div>
       <button onclick="goToHome()" class="px-3 py-1.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg flex items-center gap-1">
         <i class="fa-solid fa-house"></i> Về Trang Chủ
       </button>
     </div>
 
-    <!-- 7 Tab Admin -->
     <div class="flex space-x-2 overflow-x-auto pb-2 text-xs font-bold custom-tabs-scroll">
       <button onclick="switchAdminTab('tabUsers')" id="btnTabUsers" class="px-3.5 py-2 rounded-xl bg-blue-600 text-white shadow whitespace-nowrap flex items-center gap-1.5">
-        <i class="fa-solid fa-users-gear"></i> 1. Quản Lý Khách Hàng
+        <i class="fa-solid fa-users-gear"></i> 1. Khách Hàng
       </button>
       <button onclick="switchAdminTab('tabPricing')" id="btnTabPricing" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5">
         <i class="fa-solid fa-tags"></i> 2. Sửa Giá
       </button>
       <button onclick="switchAdminTab('tabAddOffer')" id="btnTabAddOffer" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5">
-        <i class="fa-solid fa-plus-circle"></i> 3. Thêm Kèo
+        <i class="fa-solid fa-network-wired"></i> 3. Quản Lý Đối Tác & Kèo
       </button>
       <button onclick="switchAdminTab('tabFinance')" id="btnTabFinance" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5">
         <i class="fa-solid fa-money-bill-transfer"></i> 4. Nạp / Rút
@@ -365,7 +354,6 @@
       </button>
     </div>
 
-    <!-- TAB 1: KHÁCH HÀNG (CARD LAYOUT) -->
     <div id="tabUsers" class="admin-tab-content glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
         <div>
@@ -392,20 +380,15 @@
       </div>
     </div>
 
-    <!-- TAB 2: SỬA GIÁ & HOA HỒNG -->
     <div id="tabPricing" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-        <i class="fa-solid fa-tags text-emerald-400"></i> Cấu Hình Giá & Hoa Hồng
+        <i class="fa-solid fa-tags text-emerald-400"></i> Cấu Hình Giá & Tỷ Lệ Ăn Chia
       </h3>
       
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
         <div>
           <label class="block text-slate-400 mb-1">Tỷ giá 1 Point (VNĐ)</label>
           <input id="adminCfgRate" type="number" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Hoa Hồng Khách Hưởng (%)</label>
-          <input id="adminCfgCommission" type="number" placeholder="80" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500">
         </div>
         <div>
           <label class="block text-slate-400 mb-1">Hạn mức rút tối thiểu (VNĐ)</label>
@@ -420,44 +403,77 @@
       </div>
     </div>
 
-    <!-- TAB 3: THÊM KÈO MỚI -->
-    <div id="tabAddOffer" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
-      <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-        <i class="fa-solid fa-plus-circle text-amber-400"></i> Thêm Kèo Nhiệm Vụ Mới
-      </h3>
+    <div id="tabAddOffer" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-6">
       
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-        <div>
-          <label class="block text-slate-400 mb-1">Tên Kèo / Nhiệm vụ</label>
-          <input id="newOfferTitle" type="text" placeholder="Ví dụ: Đăng ký Cake VPBank" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+      <div class="space-y-3 bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-sky-400 flex items-center gap-2">
+            <i class="fa-solid fa-globe"></i> Thêm Mạng Đối Tác Offerwall Mới (CPAGrip, CPALead, MyLead...)
+          </h3>
         </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Thưởng Khách Nhận (VNĐ)</label>
-          <input id="newOfferReward" type="number" placeholder="Ví dụ: 35000" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+        <p class="text-[11px] text-slate-400">Nhập link iframe/locker lấy từ các trang đối tác để nhúng thẳng vào trang chủ mà không cần sửa code.</p>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div>
+            <label class="block text-slate-400 mb-1">Tên Mạng Đối Tác</label>
+            <input id="newNetworkName" type="text" placeholder="Ví dụ: CPAGrip, MyLead, CPALead..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-sky-500">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-slate-400 mb-1">Link URL Locker / Offerwall (Ví dụ: https://optilinklock.com/...)</label>
+            <input id="newNetworkUrl" type="text" placeholder="https://..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-sky-500">
+          </div>
         </div>
-        <div class="sm:col-span-2">
-          <label class="block text-slate-400 mb-1">Link Đích (Tracking URL)</label>
-          <input id="newOfferUrl" type="text" placeholder="https://..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+
+        <div class="text-right">
+          <button onclick="adminAddNewNetwork()" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs shadow-lg transition">
+            <i class="fa-solid fa-plus mr-1"></i> Thêm Mạng Đối Tác Ngay
+          </button>
         </div>
-        <div class="sm:col-span-2">
-          <label class="block text-slate-400 mb-1">Mô tả nhiệm vụ</label>
-          <input id="newOfferDesc" type="text" placeholder="Mô tả các bước thực hiện..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+
+        <div class="pt-3 border-t border-slate-800">
+          <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Danh Sách Mạng Đối Tác Đang Nhúng</h4>
+          <div id="adminNetworkManageList" class="space-y-2"></div>
         </div>
       </div>
 
-      <div class="text-right">
-        <button onclick="adminAddNewOffer()" class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-lg transition">
-          <i class="fa-solid fa-paper-plane mr-1"></i> Đăng Kèo Ngay
-        </button>
+      <div class="space-y-3 bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
+        <h3 class="text-sm font-bold text-amber-400 flex items-center gap-2">
+          <i class="fa-solid fa-plus-circle"></i> Thêm Kèo Nhiệm Vụ Riêng Lẻ (Affiliate / Ngân Hàng / App)
+        </h3>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block text-slate-400 mb-1">Tên Kèo / Nhiệm vụ</label>
+            <input id="newOfferTitle" type="text" placeholder="Ví dụ: Đăng ký Cake VPBank" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">Thưởng Khách Nhận (VNĐ)</label>
+            <input id="newOfferReward" type="number" placeholder="Ví dụ: 35000" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-slate-400 mb-1">Link Đích (Tracking URL)</label>
+            <input id="newOfferUrl" type="text" placeholder="https://..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-slate-400 mb-1">Mô tả nhiệm vụ</label>
+            <input id="newOfferDesc" type="text" placeholder="Mô tả các bước thực hiện..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          </div>
+        </div>
+
+        <div class="text-right">
+          <button onclick="adminAddNewOffer()" class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-lg transition">
+            <i class="fa-solid fa-paper-plane mr-1"></i> Đăng Kèo Riêng Ngay
+          </button>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800">
+          <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Danh Sách Kèo Đang Chạy</h4>
+          <div id="adminOfferManageList" class="space-y-2"></div>
+        </div>
       </div>
 
-      <div class="pt-3 border-t border-slate-800">
-        <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Danh Sách Kèo Đang Chạy</h4>
-        <div id="adminOfferManageList" class="space-y-2"></div>
-      </div>
     </div>
 
-    <!-- TAB 4: QUẢN LÝ NẠP / RÚT TIỀN -->
     <div id="tabFinance" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
         <i class="fa-solid fa-money-check-dollar text-purple-400"></i> Quản Lý Yêu Cầu Nạp / Rút Tiền
@@ -481,7 +497,6 @@
       </div>
     </div>
 
-    <!-- TAB 5: BOT TELEGRAM -->
     <div id="tabTelegramBot" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="text-sm font-bold text-sky-400 flex items-center gap-2">
@@ -511,7 +526,6 @@
       </div>
     </div>
 
-    <!-- TAB 6: THÔNG BÁO HỆ THỐNG -->
     <div id="tabNotices" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-blue-400 flex items-center gap-2">
         <i class="fa-solid fa-bullhorn"></i> Phát & Quản Lý Danh Sách Thông Báo
@@ -540,7 +554,6 @@
       </div>
     </div>
 
-    <!-- TAB 7: KÊNH HỖ TRỢ & CÀI ĐẶT LINK NHÓM CTV -->
     <div id="tabSupport" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
         <i class="fa-solid fa-headset"></i> Cài Đặt Kênh Hỗ Trợ & Link Nhóm CTV
@@ -576,7 +589,6 @@
 
   </div>
 
-  <!-- ================= MODAL SỬA MẬT KHẨU USER (ADMIN) ================= -->
   <div id="adminPasswordModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -601,7 +613,6 @@
     </div>
   </div>
 
-  <!-- ================= MODAL PHÂN QUYỀN USER (ADMIN) ================= -->
   <div id="adminRoleModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -630,7 +641,6 @@
     </div>
   </div>
 
-  <!-- ================= MODAL XEM TOÀN BỘ THÔNG BÁO ================= -->
   <div id="noticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -643,7 +653,6 @@
     </div>
   </div>
 
-  <!-- ================= MODAL TRUNG TÂM HỖ TRỢ ================= -->
   <div id="supportModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -685,7 +694,6 @@
     </div>
   </div>
 
-  <!-- ================= MODAL RÚT TIỀN THÔNG MINH ================= -->
   <div id="withdrawModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4">
@@ -759,7 +767,6 @@
     </div>
   </div>
 
-  <!-- ================= MODAL NẠP TIỀN ================= -->
   <div id="depositModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4">
@@ -784,7 +791,6 @@
     </div>
   </div>
 
-  <!-- ================= JAVASCRIPT ================= -->
   <script>
     const SUPABASE_URL = 'https://wksorhagemvkdvaokxgh.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_dcZKjgluXXSqJdpw136ebA_61b0GGYw';
@@ -817,7 +823,6 @@
     let systemConfig = {
       rate: Number(localStorage.getItem('sys_rate')) || 250,
       minWithdraw: Number(localStorage.getItem('sys_min_withdraw')) || 50000,
-      commission: Number(localStorage.getItem('sys_commission')) || 80,
       zalo: localStorage.getItem('sys_zalo') || '0987654321',
       telegram: localStorage.getItem('sys_telegram') || '@cskh_autopostai',
       groupZalo: localStorage.getItem('sys_group_zalo') || 'https://zalo.me/g/example',
@@ -825,8 +830,13 @@
       workTime: localStorage.getItem('sys_work_time') || '08:00 - 23:00 (Hàng ngày)',
       teleToken: localStorage.getItem('sys_tele_token') || '',
       teleChatId: localStorage.getItem('sys_tele_chat_id') || '',
-      offerwallUrl: 'https://www.cpalead.com/dashboard/reports/campaign_json.php'
+      activeNetworkIndex: Number(localStorage.getItem('active_network_idx')) || 0
     };
+
+    let partnerNetworks = JSON.parse(localStorage.getItem('partner_networks_db')) || [
+      { id: 1, name: 'CPAGrip VIP', url: 'https://optilinklock.com/1911233' },
+      { id: 2, name: 'CPALead Global', url: 'https://www.cpalead.com/dashboard/reports/campaign_json.php' }
+    ];
 
     let notifications = JSON.parse(localStorage.getItem('sys_notifications_db')) || [
       { id: 1, title: 'Khởi động hệ thống AUTOPOSTAI', content: 'Chào mừng bạn đến với AUTOPOSTAI! Hoàn thành nhiệm vụ nhận tiền mặt rút tự động 24/7.', time: 'Hôm nay' }
@@ -844,7 +854,6 @@
     let customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
     let financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
 
-    // 0. Bắn Tin Nhắn Telegram Bot
     async function sendTelegramAlert(messageText) {
       if (!systemConfig.teleToken || !systemConfig.teleChatId) return;
       try {
@@ -861,7 +870,6 @@
       } catch (err) {}
     }
 
-    // 1. Menu Drawer
     function openMenu() {
       const drawer = document.getElementById('menuDrawer');
       drawer.classList.remove('pointer-events-none');
@@ -876,7 +884,6 @@
       setTimeout(() => drawer.classList.add('pointer-events-none'), 300);
     }
 
-    // 2. Captcha
     function generateCaptcha() {
       const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
       let res = '';
@@ -886,7 +893,6 @@
       document.getElementById('authCaptchaInput').value = '';
     }
 
-    // 3. Chuyển đổi Auth
     function toggleAuthMode() {
       isRegisterMode = !isRegisterMode;
       document.getElementById('authTitle').innerText = isRegisterMode ? 'Đăng Ký' : 'Đăng Nhập';
@@ -898,7 +904,6 @@
 
     generateCaptcha();
 
-    // 4. Xử lý Đăng Ký / Đăng Nhập
     async function handleAuthSubmit() {
       const u = document.getElementById('authUsername').value.trim();
       const p = document.getElementById('authPassword').value.trim();
@@ -967,7 +972,6 @@
       }
     }
 
-    // 5. Khởi tạo phiên
     async function initSession(userId, isAdmin = false) {
       currentUser = userId;
       document.getElementById('authModal').classList.add('hidden');
@@ -985,6 +989,7 @@
 
       applySupportConfig();
       renderNotifications();
+      renderPartnerNetworkButtons();
       await syncUserData();
       setupOfferwall();
       renderCustomCampaigns();
@@ -1014,7 +1019,6 @@
       popWelcomeNotice();
     }
 
-    // 6. Đồng bộ số dư
     async function syncUserData() {
       if (!currentUser) return;
       const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', currentUser).single();
@@ -1027,8 +1031,34 @@
       }
     }
 
+    function renderPartnerNetworkButtons() {
+      const container = document.getElementById('partnerNetworkSelector');
+      if (!container) return;
+      if (partnerNetworks.length === 0) {
+        container.innerHTML = '<span class="text-xs text-slate-500">Chưa có mạng đối tác</span>';
+        return;
+      }
+
+      container.innerHTML = partnerNetworks.map((net, idx) => `
+        <button onclick="selectPartnerNetwork(${idx})" class="px-2.5 py-1 rounded-lg text-xs font-bold whitespace-nowrap transition ${systemConfig.activeNetworkIndex === idx ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'}">
+          ${net.name}
+        </button>
+      `).join('');
+    }
+
+    function selectPartnerNetwork(idx) {
+      systemConfig.activeNetworkIndex = idx;
+      localStorage.setItem('active_network_idx', idx);
+      renderPartnerNetworkButtons();
+      setupOfferwall();
+      Toast.fire({ icon: 'info', title: `Đang tải mạng đối tác: ${partnerNetworks[idx].name}` });
+    }
+
     function setupOfferwall() {
-      document.getElementById('offerFrame').src = `${systemConfig.offerwallUrl}?subid=${currentUser}`;
+      if (partnerNetworks.length === 0) return;
+      const currentNet = partnerNetworks[systemConfig.activeNetworkIndex] || partnerNetworks[0];
+      const sep = currentNet.url.includes('?') ? '&' : '?';
+      document.getElementById('offerFrame').src = `${currentNet.url}${sep}tracking_id=${currentUser}&subid=${currentUser}`;
     }
 
     function refreshTaskFrame() {
@@ -1042,7 +1072,6 @@
       }, 600);
     }
 
-    // 7. Chuyển đổi View Admin / CTV
     function toggleView(view) {
       if (view === 'admin') {
         document.getElementById('ctvView').classList.add('hidden');
@@ -1050,6 +1079,7 @@
         loadAdminPricingSettings();
         loadAdminUserList();
         renderAdminOfferList();
+        renderAdminNetworkManageList();
         renderAdminFinanceTable();
         loadAdminSupportFields();
         renderAdminNoticeManageList();
@@ -1057,6 +1087,8 @@
         document.getElementById('adminView').classList.add('hidden');
         document.getElementById('ctvView').classList.remove('hidden');
         syncUserData();
+        renderPartnerNetworkButtons();
+        setupOfferwall();
         renderCustomCampaigns();
       }
     }
@@ -1071,27 +1103,22 @@
       if (activeBtn) activeBtn.className = 'px-3.5 py-2 rounded-xl bg-blue-600 text-white shadow whitespace-nowrap flex items-center gap-1.5';
     }
 
-    // 8. Admin: Sửa Giá & Hoa Hồng
     function loadAdminPricingSettings() {
       document.getElementById('adminCfgRate').value = systemConfig.rate;
-      document.getElementById('adminCfgCommission').value = systemConfig.commission;
       document.getElementById('adminCfgMinWithdraw').value = systemConfig.minWithdraw;
     }
 
     function saveAdminPricingSettings() {
       systemConfig.rate = Number(document.getElementById('adminCfgRate').value) || 250;
-      systemConfig.commission = Number(document.getElementById('adminCfgCommission').value) || 80;
       systemConfig.minWithdraw = Number(document.getElementById('adminCfgMinWithdraw').value) || 50000;
 
       localStorage.setItem('sys_rate', systemConfig.rate);
-      localStorage.setItem('sys_commission', systemConfig.commission);
       localStorage.setItem('sys_min_withdraw', systemConfig.minWithdraw);
 
       document.getElementById('drawerMinWithdrawText').innerText = systemConfig.minWithdraw.toLocaleString('vi-VN') + ' VNĐ';
-      showNotify('success', 'Thành Công', 'Đã cập nhật Bảng Giá & Hoa Hồng cho toàn hệ thống!');
+      showNotify('success', 'Thành Công', 'Đã cập nhật Bảng Giá cho toàn hệ thống!');
     }
 
-    // 9. Admin: Khách Hàng (CARD DESIGN GỌN GÀNG)
     async function loadAdminUserList() {
       const container = document.getElementById('adminUserCardsContainer');
       container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-6 text-xs">Đang tải danh sách thành viên...</div>';
@@ -1244,7 +1271,54 @@
       Toast.fire({ icon: 'success', title: `Đã cập nhật số dư cho ${targetUserId}!` });
     }
 
-    // 10. Admin: Thêm Kèo Mới
+    function adminAddNewNetwork() {
+      const name = document.getElementById('newNetworkName').value.trim();
+      const url = document.getElementById('newNetworkUrl').value.trim();
+
+      if (!name || !url) return showNotify('warning', 'Thiếu Dữ Liệu', 'Vui lòng nhập Tên mạng và Link Offerwall URL!');
+
+      partnerNetworks.push({ id: Date.now(), name, url });
+      localStorage.setItem('partner_networks_db', JSON.stringify(partnerNetworks));
+
+      document.getElementById('newNetworkName').value = '';
+      document.getElementById('newNetworkUrl').value = '';
+
+      renderAdminNetworkManageList();
+      renderPartnerNetworkButtons();
+      showNotify('success', 'Thêm Thành Công', `Đã thêm mạng đối tác "${name}" vào web.`);
+    }
+
+    function renderAdminNetworkManageList() {
+      const list = document.getElementById('adminNetworkManageList');
+      if (!list) return;
+      if (partnerNetworks.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có mạng đối tác nào.</p>';
+
+      list.innerHTML = partnerNetworks.map((net, idx) => `
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
+          <div>
+            <p class="font-bold text-white flex items-center gap-2">
+              <span>${net.name}</span>
+              ${systemConfig.activeNetworkIndex === idx ? '<span class="text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 font-bold">Đang hiển thị chính</span>' : ''}
+            </p>
+            <p class="text-slate-400 text-[11px] truncate max-w-xs sm:max-w-md mt-0.5">${net.url}</p>
+          </div>
+          <button onclick="adminDeleteNetwork(${idx})" class="p-1.5 text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      `).join('');
+    }
+
+    function adminDeleteNetwork(index) {
+      if (partnerNetworks.length <= 1) return showNotify('warning', 'Không Thể Xóa', 'Bạn phải giữ lại ít nhất 1 mạng đối tác!');
+      partnerNetworks.splice(index, 1);
+      if (systemConfig.activeNetworkIndex >= partnerNetworks.length) systemConfig.activeNetworkIndex = 0;
+      localStorage.setItem('partner_networks_db', JSON.stringify(partnerNetworks));
+      localStorage.setItem('active_network_idx', systemConfig.activeNetworkIndex);
+      renderAdminNetworkManageList();
+      renderPartnerNetworkButtons();
+      setupOfferwall();
+      Toast.fire({ icon: 'info', title: 'Đã xóa mạng đối tác.' });
+    }
+
     function adminAddNewOffer() {
       const title = document.getElementById('newOfferTitle').value.trim();
       const reward = Number(document.getElementById('newOfferReward').value);
@@ -1270,7 +1344,7 @@
       if (customOffers.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có kèo riêng nào.</p>';
 
       list.innerHTML = customOffers.map((o, idx) => `
-        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
           <div>
             <p class="font-bold text-white">${o.title} <span class="text-emerald-400 font-extrabold ml-2">+${o.reward.toLocaleString('vi-VN')}đ</span></p>
             <p class="text-slate-400 text-[11px]">${o.desc || 'Không có mô tả'}</p>
@@ -1311,7 +1385,6 @@
       `).join('');
     }
 
-    // 11. Module Thông Báo
     function renderNotifications() {
       const modalList = document.getElementById('noticeModalContent');
       if (notifications.length > 0) {
@@ -1382,7 +1455,6 @@
       Toast.fire({ icon: 'info', title: 'Đã xóa thông báo.' });
     }
 
-    // 12. Kênh hỗ trợ & Link Nhóm CTV
     function applySupportConfig() {
       document.getElementById('supportZaloText').innerText = systemConfig.zalo;
       document.getElementById('supportZaloLink').href = `https://zalo.me/${systemConfig.zalo}`;
@@ -1462,7 +1534,6 @@
     function openSupportModal() { document.getElementById('supportModal').classList.remove('hidden'); }
     function closeSupportModal() { document.getElementById('supportModal').classList.add('hidden'); }
 
-    // 13. Quản lý Nạp / Rút Tiền Thông Minh
     function openWithdrawModal() { 
       document.getElementById('withdrawModal').classList.remove('hidden'); 
       handleWithdrawMethodChange();

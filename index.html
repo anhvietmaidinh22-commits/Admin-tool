@@ -218,7 +218,7 @@
     </div>
   </div>
 
-  <!-- TOPBAR (Cân đối hoàn hảo, không bị đè các nút chức năng trên mobile) -->
+  <!-- TOPBAR -->
   <header class="glass-panel sticky top-0 z-40 border-b border-slate-800 px-3 sm:px-8 py-3.5 flex items-center justify-between">
     <div class="flex items-center space-x-2.5 sm:space-x-3">
       <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl gradient-primary flex items-center justify-center shadow-lg shadow-blue-500/30 flex-shrink-0">
@@ -231,11 +231,11 @@
     </div>
 
     <div class="flex items-center space-x-2 sm:space-x-3">
-      <button onclick="goToHome()" class="hidden md:flex px-3.5 py-2 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold items-center gap-2 cursor-pointer transition">
+      <button onclick="goToHome()" class="hidden md:flex px-3.5 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-house text-blue-400"></i> Trang Chủ
       </button>
 
-      <button onclick="openHistoryModal()" class="hidden md:flex px-3.5 py-2 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold items-center gap-2 cursor-pointer transition">
+      <button onclick="openHistoryModal()" class="hidden md:flex px-3.5 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Lịch Sử
       </button>
 
@@ -799,7 +799,6 @@
     let cachedAdminUserList = [];
     let financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
 
-    // Quản lý Lịch sử giao dịch tài chính
     function getTransactionHistoryForUser(userId) {
       const db = JSON.parse(localStorage.getItem('user_tx_history_db')) || {};
       return db[userId] || [];
@@ -813,7 +812,6 @@
       localStorage.setItem('user_tx_history_db', JSON.stringify(db));
     }
 
-    // Kiểm tra thông báo Kèo Mới cho CTV
     function checkNewOffersNotification() {
       if (!currentUser || currentUser === 'Admin') return;
       const lastSeenOfferId = localStorage.getItem(`last_seen_offer_${currentUser}`) || '';
@@ -1068,7 +1066,6 @@
     }
     function closeNoticeModal() { const m = document.getElementById('noticeModal'); if (m) m.classList.add('hidden'); }
     
-    // Mở Modal Lịch sử giao dịch chi tiết
     function openHistoryModal() {
       const m = document.getElementById('historyModal');
       const content = document.getElementById('historyModalContent');
@@ -1438,10 +1435,10 @@
           : '<span class="text-emerald-400 font-bold text-[11px] flex items-center gap-1"><i class="fa-solid fa-circle-check text-[10px]"></i> Hoạt Động</span>';
 
         return `
-          <div class="glass-card rounded-3xl p-5 space-y-3.5 shadow-xl border border-slate-800">
+          <div class="glass-card rounded-3xl p-4 sm:p-5 space-y-3.5 shadow-xl border border-slate-800">
             <div class="flex items-center justify-between pb-3 border-b border-slate-800">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-2xl bg-slate-800 text-blue-400 flex items-center justify-center text-sm font-bold border border-slate-700 shadow-inner">
+                <div class="w-10 h-10 rounded-2xl bg-slate-800 text-blue-400 flex items-center justify-center text-sm font-bold border border-slate-700 shadow-inner flex-shrink-0">
                   <i class="fa-solid fa-user"></i>
                 </div>
                 <div>
@@ -1449,7 +1446,7 @@
                   <div class="mt-0.5 flex items-center gap-1">${roleBadge}</div>
                 </div>
               </div>
-              <div>${statusBadge}</div>
+              <div class="flex-shrink-0">${statusBadge}</div>
             </div>
 
             <div class="flex items-center justify-between bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/80 shadow-inner">
@@ -1458,21 +1455,21 @@
             </div>
 
             <div class="grid grid-cols-3 gap-2 pt-1">
-              <button onclick="openAdminPasswordModal('${u.user_id}')" class="py-2.5 px-2 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
-                <i class="fa-solid fa-key"></i> Đổi Pass
+              <button onclick="openAdminPasswordModal('${u.user_id}')" class="py-2.5 px-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
+                <i class="fa-solid fa-key"></i> Pass
               </button>
-              <button onclick="openAdminRoleModal('${u.user_id}', '${role}')" class="py-2.5 px-2 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
+              <button onclick="openAdminRoleModal('${u.user_id}', '${role}')" class="py-2.5 px-1 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
                 <i class="fa-solid fa-user-shield"></i> Quyền
               </button>
-              <button onclick="toggleBanUser('${u.user_id}')" class="py-2.5 px-2 ${isBanned ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-300 hover:bg-rose-500/30'} rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
-                <i class="fa-solid ${isBanned ? 'fa-lock-open' : 'fa-lock'}"></i> ${isBanned ? 'Mở Khóa' : 'Khóa'}
+              <button onclick="toggleBanUser('${u.user_id}')" class="py-2.5 px-1 ${isBanned ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-300 hover:bg-rose-500/30'} rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
+                <i class="fa-solid ${isBanned ? 'fa-lock-open' : 'fa-lock'}"></i> ${isBanned ? 'Mở' : 'Khóa'}
               </button>
             </div>
 
             <div class="flex items-center gap-2 pt-1">
-              <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập VNĐ..." class="flex-1 bg-slate-950 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 shadow-inner">
-              <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-4 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-2xl text-xs font-extrabold cursor-pointer transition">+ Cộng</button>
-              <button onclick="adminCustomAdjust('${u.user_id}', -1)" class="px-4 py-2.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/30 rounded-2xl text-xs font-extrabold cursor-pointer transition">- Trừ</button>
+              <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập VNĐ..." class="w-full min-w-0 flex-1 bg-slate-950 border border-slate-700 rounded-2xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 shadow-inner">
+              <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-3 sm:px-4 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-2xl text-xs font-extrabold cursor-pointer transition flex-shrink-0">+ Cộng</button>
+              <button onclick="adminCustomAdjust('${u.user_id}', -1)" class="px-3 sm:px-4 py-2.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/30 rounded-2xl text-xs font-extrabold cursor-pointer transition flex-shrink-0">- Trừ</button>
             </div>
           </div>
         `;
@@ -1645,7 +1642,7 @@
       localStorage.setItem('sys_group_telegram', systemConfig.groupTelegram);
       localStorage.setItem('sys_work_time', systemConfig.workTime);
       applySupportConfig();
-      showNotify('success', 'Thành Công', 'Đã lưu cấu hình hỗ trợ!');
+      showNotify('success', 'Thành Công', 'Đã lưu cài đặt hỗ trợ!');
     }
 
     function saveTelegramBotConfig() {

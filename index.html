@@ -772,6 +772,7 @@
       const capInput = document.getElementById('authCaptchaInput');
       if (capInput) capInput.value = '';
     }
+    generateCaptcha();
 
     function toggleAuthMode() {
       isRegisterMode = !isRegisterMode;
@@ -794,6 +795,13 @@
 
       if (!u || !p) return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập tài khoản và mật khẩu!');
       if (inputCap !== currentCaptcha) { generateCaptcha(); return showNotify('error', 'Sai Mã', 'Mã xác nhận không đúng!'); }
+
+      // Cập nhật lại quyền từ localStorage mới nhất
+      userPermissions = JSON.parse(localStorage.getItem('user_permissions_db')) || userPermissions;
+      if (userPermissions[u]?.banned) {
+        generateCaptcha();
+        return showNotify('error', 'Tài Khoản Bị Khóa', 'Tài khoản của bạn đã bị khóa bởi quản trị viên!');
+      }
 
       if (isRegisterMode) {
         if (u.toLowerCase() === 'admin') { generateCaptcha(); return showNotify('error', 'Lỗi', 'Tài khoản này được bảo lưu!'); }
@@ -825,6 +833,13 @@
     }
 
     async function initSession(userId, isAdmin = false) {
+      userPermissions = JSON.parse(localStorage.getItem('user_permissions_db')) || userPermissions;
+      if (userPermissions[userId]?.banned && userId !== 'Admin') {
+        localStorage.removeItem('task_auth_user');
+        showNotify('error', 'Tài Khoản Bị Khóa', 'Tài khoản này đã bị khóa!');
+        return;
+      }
+
       currentUser = userId;
       const modal = document.getElementById('authModal');
       if (modal) modal.classList.add('hidden');
@@ -1080,6 +1095,7 @@
     }
 
     function renderAdminTaskApprovals() {
+      pendingTaskSubmissions = JSON.parse(localStorage.getItem('pending_task_sub_db')) || [];
       const tbody = document.getElementById('adminTaskApprovalsTable');
       const badge = document.getElementById('pendingTaskBadgeCount');
       if (badge) badge.innerText = pendingTaskSubmissions.length;
@@ -1111,7 +1127,9 @@
     }
 
     async function approveTaskSubmission(idx) {
+      pendingTaskSubmissions = JSON.parse(localStorage.getItem('pending_task_sub_db')) || [];
       const sub = pendingTaskSubmissions[idx];
+      if (!sub) return;
       const pointDiff = sub.reward / systemConfig.rate;
 
       let { data } = await supabaseClient.from('users_task').select('points').eq('user_id', sub.user).single();
@@ -1138,6 +1156,7 @@
     }
 
     function rejectTaskSubmission(idx) {
+      pendingTaskSubmissions = JSON.parse(localStorage.getItem('pending_task_sub_db')) || [];
       pendingTaskSubmissions.splice(idx, 1);
       localStorage.setItem('pending_task_sub_db', JSON.stringify(pendingTaskSubmissions));
       renderAdminTaskApprovals();
@@ -1354,6 +1373,7 @@
     }
 
     function renderAdminFinanceTable() {
+      financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
       const tbody = document.getElementById('adminFinanceTable');
       if (!tbody) return;
       if (financeRequests.length === 0) return tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">Chưa có lệnh rút.</td></tr>';
@@ -1369,7 +1389,9 @@
     }
 
     async function adminApproveFinance(idx) {
+      financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
       const req = financeRequests[idx];
+      if (!req) return;
       const pointDiff = req.amount / systemConfig.rate;
       const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', req.user).single();
       await supabaseClient.from('users_task').update({ points: Math.max(0, (Number(data?.points)||0) - pointDiff) }).eq('user_id', req.user);

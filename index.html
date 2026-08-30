@@ -473,7 +473,7 @@
     <div id="tabTelegramBot" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="text-sm font-extrabold text-sky-400 flex items-center gap-2">
-          <i class="fa-brands fa-telegram text-base"></i> Cấu Hình Bot Telegram Tự Động
+          <i class="fa-brands fa-telegram text-base"></i> Cấu Hình Bot Telegram Tự Động (Đồng bộ Cloud)
         </h3>
         <span class="text-[11px] text-slate-400">Tự động báo khi có User đăng ký, rút tiền</span>
       </div>
@@ -494,7 +494,7 @@
           <i class="fa-solid fa-paper-plane mr-1"></i> Bắn Tin Thử Nghiệm
         </button>
         <button onclick="saveTelegramBotConfig()" class="px-6 py-3 rounded-2xl bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs shadow-lg shadow-sky-600/25 transition cursor-pointer">
-          <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu Cấu Hình Bot
+          <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu Cấu Hình Lên Cloud
         </button>
       </div>
     </div>
@@ -778,14 +778,14 @@
 
     let systemConfig = {
       rate: 1,
-      minWithdraw: Number(localStorage.getItem('sys_min_withdraw')) || 50000,
-      zalo: localStorage.getItem('sys_zalo') || '0987654321',
-      telegram: localStorage.getItem('sys_telegram') || '@cskh',
-      groupZalo: localStorage.getItem('sys_group_zalo') || 'https://zalo.me/g/example',
-      groupTelegram: localStorage.getItem('sys_group_telegram') || 'https://t.me/example',
-      workTime: localStorage.getItem('sys_work_time') || '08:00 - 23:00 (Hàng ngày)',
-      teleToken: localStorage.getItem('sys_tele_token') || '',
-      teleChatId: localStorage.getItem('sys_tele_chat_id') || ''
+      minWithdraw: 50000,
+      zalo: '0987654321',
+      telegram: '@cskh',
+      groupZalo: 'https://zalo.me/g/example',
+      groupTelegram: 'https://t.me/example',
+      workTime: '08:00 - 23:00 (Hàng ngày)',
+      teleToken: '',
+      teleChatId: ''
     };
 
     let customOffers = [];
@@ -798,6 +798,30 @@
     let currentVNDBalance = 0;
     let cachedAdminUserList = [];
     let financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
+
+    // Tải toàn bộ cấu hình hệ thống từ Cloud (Supabase) để đồng bộ giữa các máy
+    async function loadSystemConfigFromCloud() {
+      try {
+        const { data, error } = await supabaseClient.from('system_settings').select('*');
+        if (data && data.length > 0) {
+          data.forEach(item => {
+            if (item.key === 'tele_token') systemConfig.teleToken = item.value;
+            if (item.key === 'tele_chat_id') systemConfig.teleChatId = item.value;
+            if (item.key === 'sys_zalo') systemConfig.zalo = item.value;
+            if (item.key === 'sys_telegram') systemConfig.telegram = item.value;
+            if (item.key === 'sys_group_zalo') systemConfig.groupZalo = item.value;
+            if (item.key === 'sys_group_telegram') systemConfig.groupTelegram = item.value;
+            if (item.key === 'sys_work_time') systemConfig.workTime = item.value;
+          });
+        }
+      } catch (err) {}
+    }
+
+    async function saveSystemConfigToCloud(key, value) {
+      try {
+        await supabaseClient.from('system_settings').upsert({ key: key, value: value }, { onConflict: 'key' });
+      } catch (err) {}
+    }
 
     function getTransactionHistoryForUser(userId) {
       const db = JSON.parse(localStorage.getItem('user_tx_history_db')) || {};
@@ -849,6 +873,7 @@
     }
 
     async function fetchCloudData() {
+      await loadSystemConfigFromCloud();
       try {
         const { data: offersData } = await supabaseClient.from('system_offers').select('*').order('created_at', { ascending: false });
         if (offersData) {
@@ -877,22 +902,18 @@
       } catch (err) {}
     }
 
-    // Hàm gửi tin nhắn qua Bot Telegram nâng cấp (Đảm bảo luôn đồng bộ token và chat ID mới nhất)
     async function sendTelegramAlert(messageText) {
-      // Đọc trực tiếp từ cấu hình localStorage để luôn lấy token mới nhất khi admin vừa bấm lưu
-      const tToken = systemConfig.teleToken || localStorage.getItem('sys_tele_token') || '';
-      const tChatId = systemConfig.teleChatId || localStorage.getItem('sys_tele_chat_id') || '';
-      
-      if (!tToken || !tChatId) return;
+      await loadSystemConfigFromCloud();
+      if (!systemConfig.teleToken || !systemConfig.teleChatId) return;
       try {
-        const url = `https://api.telegram.org/bot${tToken}/sendMessage`;
+        const url = `https://api.telegram.org/bot${systemConfig.teleToken}/sendMessage`;
         const webUrl = window.location.href.split('?')[0];
         
         await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            chat_id: tChatId,
+            chat_id: systemConfig.teleChatId,
             text: messageText,
             parse_mode: 'HTML',
             reply_markup: {
@@ -1450,7 +1471,6 @@
       showNotify('info', 'Đã Hủy', 'Đã từ chối bằng chứng nhiệm vụ.');
     }
 
-    // ĐÃ SỬA: Hàm đăng ký kèo mới gọi sendTelegramAlert chuẩn xác 100%
     async function adminAddNewOffer() {
       const title = document.getElementById('newOfferTitle').value.trim();
       const reward = Number(document.getElementById('newOfferReward').value);
@@ -1468,7 +1488,6 @@
       
       localStorage.removeItem('last_seen_offer_all');
 
-      // Bắn tin Telegram thông báo có kèo mới
       const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
       await sendTelegramAlert(`
 🔥 <b>CÓ KÈO NHIỆM VỤ MỚI TRÊN SÀN!</b>
@@ -1738,7 +1757,8 @@
       showNotify('success', 'Thành Công', `Đã duyệt lệnh rút tiền cho tài khoản ${req.user}`);
     }
 
-    function loadAdminSupportFields() {
+    async function loadAdminSupportFields() {
+      await loadSystemConfigFromCloud();
       const z = document.getElementById('adminCfgZalo');
       const t = document.getElementById('adminCfgTelegram');
       const gz = document.getElementById('adminCfgGroupZalo');
@@ -1756,28 +1776,31 @@
       if (tc) tc.value = systemConfig.teleChatId;
     }
 
-    function saveAdminSupportConfig() {
+    async function saveAdminSupportConfig() {
       systemConfig.zalo = document.getElementById('adminCfgZalo')?.value.trim() || '0987654321';
       systemConfig.telegram = document.getElementById('adminCfgTelegram')?.value.trim() || '@cskh';
       systemConfig.groupZalo = document.getElementById('adminCfgGroupZalo')?.value.trim() || 'https://zalo.me/g/example';
       systemConfig.groupTelegram = document.getElementById('adminCfgGroupTelegram')?.value.trim() || 'https://t.me/example';
       systemConfig.workTime = document.getElementById('adminCfgWorkTime')?.value.trim() || '08:00 - 23:00 (Hàng ngày)';
 
-      localStorage.setItem('sys_zalo', systemConfig.zalo);
-      localStorage.setItem('sys_telegram', systemConfig.telegram);
-      localStorage.setItem('sys_group_zalo', systemConfig.groupZalo);
-      localStorage.setItem('sys_group_telegram', systemConfig.groupTelegram);
-      localStorage.setItem('sys_work_time', systemConfig.workTime);
+      await saveSystemConfigToCloud('sys_zalo', systemConfig.zalo);
+      await saveSystemConfigToCloud('sys_telegram', systemConfig.telegram);
+      await saveSystemConfigToCloud('sys_group_zalo', systemConfig.groupZalo);
+      await saveSystemConfigToCloud('sys_group_telegram', systemConfig.groupTelegram);
+      await saveSystemConfigToCloud('sys_work_time', systemConfig.workTime);
+
       applySupportConfig();
-      showNotify('success', 'Thành Công', 'Đã lưu cài đặt hỗ trợ!');
+      showNotify('success', 'Thành Công', 'Đã lưu cấu hình hỗ trợ lên Cloud!');
     }
 
-    function saveTelegramBotConfig() {
+    async function saveTelegramBotConfig() {
       systemConfig.teleToken = document.getElementById('adminCfgTeleToken')?.value.trim() || '';
       systemConfig.teleChatId = document.getElementById('adminCfgTeleChatId')?.value.trim() || '';
-      localStorage.setItem('sys_tele_token', systemConfig.teleToken);
-      localStorage.setItem('sys_tele_chat_id', systemConfig.teleChatId);
-      showNotify('success', 'Thành Công', 'Đã lưu cấu hình Bot Telegram!');
+
+      await saveSystemConfigToCloud('tele_token', systemConfig.teleToken);
+      await saveSystemConfigToCloud('tele_chat_id', systemConfig.teleChatId);
+
+      showNotify('success', 'Thành Công', 'Đã lưu cấu hình Bot Telegram lên Cloud thành công!');
     }
 
     async function adminPublishNotice() {

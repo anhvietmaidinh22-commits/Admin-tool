@@ -343,7 +343,7 @@
       </div>
     </div>
 
-    <!-- TAB 2: KHÁCH HÀNG -->
+    <!-- TAB 2: KHÁCH HÀNG (ĐÃ CÓ ĐẦY ĐỦ CÁC NÚT ĐỔI PASS, QUYỀN, KHÓA, CỘNG TRỪ TIỀN) -->
     <div id="tabUsers" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
         <div>
@@ -1000,6 +1000,158 @@
       Toast.fire({ icon: 'info', title: 'Đã từ chối bằng chứng.' });
     }
 
+    async function loadAdminUserList() {
+      const container = document.getElementById('adminUserCardsContainer');
+      container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-6 text-xs">Đang tải danh sách thành viên...</div>';
+      
+      const { data } = await supabaseClient.from('users_task').select('*').order('created_at', { ascending: false });
+      if (data) {
+        cachedAdminUserList = data;
+        renderAdminUserTable(cachedAdminUserList);
+      }
+    }
+
+    function renderAdminUserTable(list) {
+      const container = document.getElementById('adminUserCardsContainer');
+      if (!list || list.length === 0) {
+        container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-6 text-xs">Không có tài khoản nào phù hợp.</div>';
+        return;
+      }
+
+      container.innerHTML = list.map(u => {
+        const vnd = (Number(u.points) || 0) * systemConfig.rate;
+        const role = userPermissions[u.user_id]?.role || (u.user_id === 'Admin' ? 'admin' : 'member');
+        const isBanned = userPermissions[u.user_id]?.banned || false;
+
+        let roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">Member</span>';
+        if (role === 'admin') roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">Admin</span>';
+        if (role === 'manager') roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">Manager</span>';
+
+        const statusBadge = isBanned 
+          ? '<span class="text-rose-400 font-bold text-[11px] flex items-center gap-1"><i class="fa-solid fa-ban text-[10px]"></i> Đã Khóa</span>'
+          : '<span class="text-emerald-400 font-bold text-[11px] flex items-center gap-1"><i class="fa-solid fa-circle-check text-[10px]"></i> Hoạt Động</span>';
+
+        return `
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 space-y-3 shadow-lg">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-xl bg-slate-800 text-blue-400 flex items-center justify-center text-sm font-bold border border-slate-700">
+                  <i class="fa-solid fa-user"></i>
+                </div>
+                <div>
+                  <h4 class="font-extrabold text-white text-xs">${u.user_id}</h4>
+                  <div class="mt-0.5 flex items-center gap-1">${roleBadge}</div>
+                </div>
+              </div>
+              <div>${statusBadge}</div>
+            </div>
+
+            <div class="flex items-center justify-between bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/60">
+              <span class="text-[11px] text-slate-400 font-medium">Số dư ví:</span>
+              <span class="text-sm font-extrabold text-emerald-400">${vnd.toLocaleString('vi-VN')} đ</span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-1.5 pt-1">
+              <button onclick="openAdminPasswordModal('${u.user_id}')" class="py-1.5 px-2 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded-xl text-[11px] font-bold transition flex items-center justify-center gap-1">
+                <i class="fa-solid fa-key"></i> Đổi Pass
+              </button>
+              <button onclick="openAdminRoleModal('${u.user_id}', '${role}')" class="py-1.5 px-2 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 rounded-xl text-[11px] font-bold transition flex items-center justify-center gap-1">
+                <i class="fa-solid fa-user-shield"></i> Quyền
+              </button>
+              <button onclick="toggleBanUser('${u.user_id}')" class="py-1.5 px-2 ${isBanned ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-300 hover:bg-rose-500/30'} rounded-xl text-[11px] font-bold transition flex items-center justify-center gap-1">
+                <i class="fa-solid ${isBanned ? 'fa-lock-open' : 'fa-lock'}"></i> ${isBanned ? 'Mở Khóa' : 'Khóa'}
+              </button>
+            </div>
+
+            <div class="flex items-center gap-1.5 pt-1">
+              <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập số VNĐ..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500">
+              <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-bold">+ Cộng</button>
+              <button onclick="adminCustomAdjust('${u.user_id}', -1)" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/30 rounded-xl text-xs font-bold">- Trừ</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterAdminUserList() {
+      const q = document.getElementById('adminSearchInput').value.trim().toLowerCase();
+      const roleFilter = document.getElementById('adminRoleFilter').value;
+
+      const filtered = cachedAdminUserList.filter(u => {
+        const matchName = u.user_id.toLowerCase().includes(q);
+        const userRole = userPermissions[u.user_id]?.role || (u.user_id === 'Admin' ? 'admin' : 'member');
+        const matchRole = (roleFilter === 'all') || (userRole === roleFilter);
+        return matchName && matchRole;
+      });
+
+      renderAdminUserTable(filtered);
+    }
+
+    function openAdminPasswordModal(userId) {
+      document.getElementById('adminTargetUser').value = userId;
+      document.getElementById('adminNewUserPassword').value = '';
+      document.getElementById('adminPasswordModal').classList.remove('hidden');
+    }
+    function closeAdminPasswordModal() { document.getElementById('adminPasswordModal').classList.add('hidden'); }
+
+    function submitAdminChangePassword() {
+      const targetUser = document.getElementById('adminTargetUser').value;
+      const newPass = document.getElementById('adminNewUserPassword').value.trim();
+      if (!newPass || newPass.length < 4) return showNotify('warning', 'Chú Ý', 'Mật khẩu mới phải có tối thiểu 4 ký tự!');
+
+      closeAdminPasswordModal();
+      showNotify('success', 'Đổi Mật Khẩu Thành Công', `Mật khẩu mới cho tài khoản "${targetUser}" là: ${newPass}`);
+      sendTelegramAlert(`🔐 <b>ADMIN ĐÃ ĐỔI MẬT KHẨU!</b>\n👤 Thành viên: <code>${targetUser}</code>\n🔑 Mật khẩu mới: <code>${newPass}</code>`);
+    }
+
+    function openAdminRoleModal(userId, currentRole) {
+      document.getElementById('adminRoleTargetUser').value = userId;
+      document.getElementById('adminRoleSelect').value = currentRole;
+      document.getElementById('adminRoleModal').classList.remove('hidden');
+    }
+    function closeAdminRoleModal() { document.getElementById('adminRoleModal').classList.add('hidden'); }
+
+    function submitAdminChangeRole() {
+      const targetUser = document.getElementById('adminRoleTargetUser').value;
+      const newRole = document.getElementById('adminRoleSelect').value;
+
+      if (!userPermissions[targetUser]) userPermissions[targetUser] = { banned: false };
+      userPermissions[targetUser].role = newRole;
+      localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
+
+      closeAdminRoleModal();
+      renderAdminUserTable(cachedAdminUserList);
+      showNotify('success', 'Cập Nhật Quyền Thành Công', `Đã phân vai trò [${newRole.toUpperCase()}] cho tài khoản ${targetUser}.`);
+    }
+
+    function toggleBanUser(userId) {
+      if (!userPermissions[userId]) userPermissions[userId] = { role: 'member', banned: false };
+      const currentBan = userPermissions[userId].banned;
+      userPermissions[userId].banned = !currentBan;
+      localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
+
+      renderAdminUserTable(cachedAdminUserList);
+      Toast.fire({
+        icon: !currentBan ? 'error' : 'success',
+        title: !currentBan ? `Đã khóa tài khoản ${userId}!` : `Đã mở khóa tài khoản ${userId}!`
+      });
+    }
+
+    async function adminCustomAdjust(targetUserId, multiplier) {
+      const input = document.getElementById(`input_adjust_${targetUserId}`);
+      const valVND = Number(input.value);
+      if (!valVND || valVND <= 0) return showNotify('warning', 'Chú Ý', 'Vui lòng nhập số tiền VNĐ hợp lệ!');
+
+      const pointDiff = (valVND / systemConfig.rate) * multiplier;
+      const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', targetUserId).single();
+      const newPoints = Math.max(0, (Number(data.points) || 0) + pointDiff);
+
+      await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', targetUserId);
+      input.value = '';
+      loadAdminUserList();
+      Toast.fire({ icon: 'success', title: `Đã cập nhật số dư cho ${targetUserId}!` });
+    }
+
     function adminAddNewOffer() {
       const title = document.getElementById('newOfferTitle').value.trim();
       const reward = Number(document.getElementById('newOfferReward').value);
@@ -1035,38 +1187,6 @@
       renderAdminOfferList();
       fetchAutoOffers();
       Toast.fire({ icon: 'info', title: 'Đã xóa kèo.' });
-    }
-
-    async function loadAdminUserList() {
-      const { data } = await supabaseClient.from('users_task').select('*').order('created_at', { ascending: false });
-      if (data) {
-        cachedAdminUserList = data;
-        renderAdminUserTable(cachedAdminUserList);
-      }
-    }
-
-    function renderAdminUserTable(list) {
-      const container = document.getElementById('adminUserCardsContainer');
-      container.innerHTML = list.map(u => `
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 space-y-3 shadow-lg">
-          <h4 class="font-extrabold text-white text-xs">${u.user_id} - Số dư: <span class="text-emerald-400">${((Number(u.points)||0)*systemConfig.rate).toLocaleString('vi-VN')}đ</span></h4>
-          <div class="flex gap-1.5">
-            <input id="input_adjust_${u.user_id}" type="number" placeholder="VNĐ..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1 text-xs text-white">
-            <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded text-xs font-bold">+ Cộng</button>
-            <button onclick="adminCustomAdjust('${u.user_id}', -1)" class="px-2 py-1 bg-rose-500/20 text-rose-400 rounded text-xs font-bold">- Trừ</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    async function adminCustomAdjust(userId, mult) {
-      const val = Number(document.getElementById(`input_adjust_${userId}`).value);
-      if (!val) return;
-      const pointDiff = (val / systemConfig.rate) * mult;
-      const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', userId).single();
-      await supabaseClient.from('users_task').update({ points: Math.max(0, (Number(data?.points)||0) + pointDiff) }).eq('user_id', userId);
-      loadAdminUserList();
-      Toast.fire({ icon: 'success', title: 'Đã cập nhật số dư!' });
     }
 
     function renderAdminFinanceTable() {
@@ -1213,3 +1333,4 @@
   </script>
 </body>
 </html>
+8

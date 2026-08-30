@@ -13,9 +13,9 @@
   <style>
     * { font-family: 'Plus Jakarta Sans', sans-serif; }
     body { background-color: #030712; color: #f8fafc; }
-    .glass-panel { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
-    .glass-card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .glass-card:hover { border-color: rgba(59, 130, 246, 0.4); transform: translateY(-3px); box-shadow: 0 12px 30px -10px rgba(59, 130, 246, 0.15); }
+    .glass-panel { background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
+    .glass-card { background: rgba(30, 41, 59, 0.55); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .glass-card:hover { border-color: rgba(59, 130, 246, 0.4); transform: translateY(-3px); box-shadow: 0 15px 35px -10px rgba(59, 130, 246, 0.15); }
     .gradient-primary { background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); }
     .gradient-text { background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .captcha-clean {
@@ -51,8 +51,8 @@
 
   <!-- HỖ TRỢ NỔI -->
   <div class="fixed bottom-6 right-6 z-40">
-    <button onclick="openSupportModal()" class="w-13 h-13 rounded-full gradient-primary text-white shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition cursor-pointer shadow-blue-500/50">
-      <i class="fa-solid fa-headset text-xl"></i>
+    <button onclick="openSupportModal()" class="w-14 h-14 rounded-full gradient-primary text-white shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition cursor-pointer shadow-blue-500/60 border-2 border-white/20">
+      <i class="fa-solid fa-headset text-2xl"></i>
     </button>
   </div>
 
@@ -86,28 +86,28 @@
           <div>
             <label class="text-[11px] font-bold text-slate-300 block mb-1.5 uppercase tracking-wider">Tên tài khoản</label>
             <div class="relative">
-              <i class="fa-solid fa-user absolute left-3.5 top-3.5 text-slate-500 text-xs"></i>
-              <input id="authUsername" type="text" placeholder="Nhập tài khoản..." class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 transition shadow-inner">
+              <i class="fa-solid fa-user absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+              <input id="authUsername" type="text" placeholder="Nhập tài khoản..." class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl pl-11 pr-4 py-3 text-xs text-white focus:outline-none focus:border-blue-500 transition shadow-inner">
             </div>
           </div>
 
           <div>
             <label class="text-[11px] font-bold text-slate-300 block mb-1.5 uppercase tracking-wider">Mật khẩu</label>
             <div class="relative">
-              <i class="fa-solid fa-lock absolute left-3.5 top-3.5 text-slate-500 text-xs"></i>
-              <input id="authPassword" type="password" placeholder="Nhập mật khẩu..." class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 transition shadow-inner">
+              <i class="fa-solid fa-lock absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+              <input id="authPassword" type="password" placeholder="Nhập mật khẩu..." class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl pl-11 pr-4 py-3 text-xs text-white focus:outline-none focus:border-blue-500 transition shadow-inner">
             </div>
           </div>
 
           <div id="captchaContainer" class="space-y-1.5 pt-1">
             <label class="text-[11px] font-bold text-slate-300 block uppercase tracking-wider">Mã bảo mật</label>
             <div class="flex items-center space-x-2.5">
-              <input id="authCaptchaInput" type="text" placeholder="Nhập mã" class="flex-1 bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 uppercase tracking-widest font-mono">
-              <div id="captchaText" class="captcha-clean px-3 py-2.5 rounded-2xl border border-blue-500/30 text-blue-400 font-black text-sm tracking-widest shadow-inner w-28 text-center">
+              <input id="authCaptchaInput" type="text" placeholder="Nhập mã" class="flex-1 bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-3 text-xs text-white focus:outline-none focus:border-blue-500 uppercase tracking-widest font-mono">
+              <div id="captchaText" class="captcha-clean px-3 py-3 rounded-2xl border border-blue-500/30 text-blue-400 font-black text-sm tracking-widest shadow-inner w-28 text-center">
                 ----
               </div>
-              <button onclick="generateCaptcha()" type="button" class="p-3 rounded-2xl bg-slate-900 border border-slate-700 text-slate-400 hover:text-white cursor-pointer transition" title="Đổi mã">
-                <i class="fa-solid fa-rotate-right text-xs"></i>
+              <button onclick="generateCaptcha()" type="button" class="p-3.5 rounded-2xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white cursor-pointer transition" title="Đổi mã">
+                <i class="fa-solid fa-rotate-right text-sm"></i>
               </button>
             </div>
           </div>
@@ -136,16 +136,16 @@
         <div class="pb-4 border-b border-slate-800 bg-slate-950/60 p-4 rounded-3xl border border-slate-800/80 shadow-inner">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-2xl gradient-primary text-white flex items-center justify-center font-black text-sm shadow-md shadow-blue-500/20">
+              <div class="w-11 h-11 rounded-2xl gradient-primary text-white flex items-center justify-center font-black text-base shadow-md shadow-blue-500/20">
                 <i class="fa-solid fa-user-shield"></i>
               </div>
               <div>
                 <p id="drawerUsername" class="text-xs font-black text-white tracking-wide">--</p>
-                <span id="drawerRoleTag" class="text-[9px] px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-extrabold border border-blue-500/30">CTV Active</span>
+                <span id="drawerRoleTag" class="text-[10px] px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-extrabold border border-blue-500/30">CTV Active</span>
               </div>
             </div>
-            <button onclick="closeMenu()" class="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white cursor-pointer transition">
-              <i class="fa-solid fa-xmark text-sm"></i>
+            <button onclick="closeMenu()" class="p-2.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white cursor-pointer transition">
+              <i class="fa-solid fa-xmark text-base"></i>
             </button>
           </div>
           
@@ -161,20 +161,20 @@
           </div>
         </div>
 
-        <div class="space-y-2">
-          <button onclick="goToHome(); closeMenu();" class="w-full flex items-center space-x-3 px-4 py-3 rounded-2xl bg-slate-800/80 text-slate-200 border border-slate-700/60 text-xs font-bold hover:bg-slate-700 transition cursor-pointer">
+        <div class="space-y-2.5">
+          <button onclick="goToHome(); closeMenu();" class="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-slate-800/80 text-slate-200 border border-slate-700/60 text-xs font-bold hover:bg-slate-700 transition cursor-pointer">
             <i class="fa-solid fa-house text-sm text-blue-400"></i>
             <span>Trang Chủ Sàn Kèo</span>
           </button>
-          <button onclick="openWithdrawModal(); closeMenu();" class="w-full flex items-center space-x-3 px-4 py-3 rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold hover:bg-blue-500/20 transition cursor-pointer">
+          <button onclick="openWithdrawModal(); closeMenu();" class="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold hover:bg-blue-500/20 transition cursor-pointer">
             <i class="fa-solid fa-building-columns text-sm"></i>
             <span>Rút Tiền ATM / MoMo</span>
           </button>
-          <button onclick="openSupportModal(); closeMenu();" class="w-full flex items-center space-x-3 px-4 py-3 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold hover:bg-purple-500/20 transition cursor-pointer">
+          <button onclick="openSupportModal(); closeMenu();" class="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold hover:bg-purple-500/20 transition cursor-pointer">
             <i class="fa-solid fa-headset text-sm"></i>
             <span>Trung Tâm Hỗ Trợ 24/7</span>
           </button>
-          <button id="btnDrawerAdmin" onclick="toggleView('admin'); closeMenu();" class="hidden w-full flex items-center space-x-3 px-4 py-3 rounded-2xl bg-amber-500/10 text-amber-300 border border-amber-500/20 text-xs font-bold hover:bg-amber-500/20 transition cursor-pointer">
+          <button id="btnDrawerAdmin" onclick="toggleView('admin'); closeMenu();" class="hidden w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-amber-500/10 text-amber-300 border border-amber-500/20 text-xs font-bold hover:bg-amber-500/20 transition cursor-pointer">
             <i class="fa-solid fa-crown text-sm"></i>
             <span>Bảng Quản Trị Hệ Thống</span>
           </button>
@@ -185,10 +185,10 @@
             <i class="fa-solid fa-users-rectangle text-blue-400"></i> Nhóm Giao Lưu CTV
           </p>
           <div class="grid grid-cols-2 gap-2">
-            <a id="drawerGroupZaloLink" href="#" target="_blank" class="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-blue-600/20 border border-blue-500/30 text-blue-400 text-xs font-bold hover:bg-blue-600/30 transition">
+            <a id="drawerGroupZaloLink" href="#" target="_blank" class="flex items-center justify-center gap-1.5 px-3.5 py-3 rounded-2xl bg-blue-600/20 border border-blue-500/30 text-blue-400 text-xs font-bold hover:bg-blue-600/30 transition">
               <span class="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center text-[10px]">Z</span> Nhóm Zalo
             </a>
-            <a id="drawerGroupTelegramLink" href="#" target="_blank" class="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-sky-600/20 border border-sky-500/30 text-sky-400 text-xs font-bold hover:bg-sky-600/30 transition">
+            <a id="drawerGroupTelegramLink" href="#" target="_blank" class="flex items-center justify-center gap-1.5 px-3.5 py-3 rounded-2xl bg-sky-600/20 border border-sky-500/30 text-sky-400 text-xs font-bold hover:bg-sky-600/30 transition">
               <i class="fa-brands fa-telegram text-sm text-sky-400"></i> Nhóm Tele
             </a>
           </div>
@@ -196,7 +196,7 @@
 
         <div class="space-y-2 pt-2 border-t border-slate-800">
           <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Thông Tin Thanh Toán</p>
-          <div class="bg-slate-950/60 rounded-2xl p-3.5 border border-slate-800 space-y-2 text-xs">
+          <div class="bg-slate-950/60 rounded-2xl p-4 border border-slate-800 space-y-2 text-xs">
             <div class="flex justify-between">
               <span class="text-slate-400">Tối thiểu rút:</span>
               <span id="drawerMinWithdrawText" class="text-slate-200 font-bold">50.000 VNĐ</span>
@@ -209,7 +209,7 @@
         </div>
       </div>
 
-      <button onclick="handleLogout()" class="w-full py-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-extrabold hover:bg-rose-500/20 transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-rose-500/5">
+      <button onclick="handleLogout()" class="w-full py-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-extrabold hover:bg-rose-500/20 transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-rose-500/5">
         <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng Xuất Hệ Thống
       </button>
     </div>
@@ -218,23 +218,23 @@
   <!-- TOPBAR -->
   <header class="glass-panel sticky top-0 z-40 border-b border-slate-800 px-4 sm:px-8 py-3.5 flex items-center justify-between">
     <div class="flex items-center space-x-3">
-      <div class="w-10 h-10 rounded-2xl gradient-primary flex items-center justify-center shadow-lg shadow-blue-500/30">
-        <i class="fa-solid fa-bolt text-white text-base"></i>
+      <div class="w-11 h-11 rounded-2xl gradient-primary flex items-center justify-center shadow-lg shadow-blue-500/30">
+        <i class="fa-solid fa-bolt text-white text-lg"></i>
       </div>
       <div>
         <span class="font-black text-base sm:text-lg tracking-tight gradient-text">AUTOPOSTAI</span>
-        <span id="roleBadge" class="hidden text-[9px] uppercase font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full ml-1.5">ADMIN</span>
+        <span id="roleBadge" class="hidden text-[10px] uppercase font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-0.5 rounded-full ml-1.5">ADMIN</span>
       </div>
     </div>
 
-    <div class="flex items-center space-x-3">
-      <button onclick="goToHome()" class="hidden sm:flex px-3.5 py-2 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold items-center gap-2 cursor-pointer transition">
+    <div class="flex items-center space-x-2.5 sm:space-x-3">
+      <button onclick="goToHome()" class="hidden sm:flex px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-house text-blue-400"></i> Trang Chủ
       </button>
 
-      <button onclick="openNoticeModal()" class="relative w-10 h-10 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer">
+      <button onclick="openNoticeModal()" class="relative w-11 h-11 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer">
         <i class="fa-regular fa-bell text-sm"></i>
-        <span id="noticeDot" class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+        <span id="noticeDot" class="absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse shadow-md shadow-rose-500/50"></span>
       </button>
 
       <div class="bg-slate-900 border border-slate-800 rounded-2xl px-4 py-2 flex items-center gap-2 text-xs font-bold shadow-inner">
@@ -242,19 +242,19 @@
         <span class="text-emerald-400 font-black whitespace-nowrap"><span id="navBalanceVND">0</span> đ</span>
       </div>
 
-      <button onclick="openMenu()" class="w-10 h-10 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer">
-        <i class="fa-solid fa-bars text-sm"></i>
+      <button onclick="openMenu()" class="w-11 h-11 rounded-2xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white flex items-center justify-center transition cursor-pointer shadow-md hover:bg-slate-800">
+        <i class="fa-solid fa-bars text-base"></i>
       </button>
     </div>
   </header>
 
-  <!-- BANNER MARQUEE (Chạy mượt mà từ phải sang trái chuẩn 100%) -->
-  <div class="w-full bg-gradient-to-r from-blue-600/10 via-indigo-600/15 to-purple-600/10 border-b border-blue-500/20 py-2 px-4 overflow-hidden shadow-inner flex items-center">
-    <div class="max-w-7xl mx-auto w-full flex items-center space-x-3 text-xs text-blue-300">
-      <div class="flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 font-extrabold flex-shrink-0 shadow-sm">
-        <i class="fa-solid fa-bullhorn text-blue-400"></i> THÔNG BÁO
+  <!-- BANNER MARQUEE (Thay chữ thành icon chuông, chữ to hơn, chạy chậm hơn) -->
+  <div class="w-full bg-gradient-to-r from-blue-600/10 via-indigo-600/15 to-purple-600/10 border-b border-blue-500/20 py-2.5 px-4 overflow-hidden shadow-inner flex items-center">
+    <div class="max-w-7xl mx-auto w-full flex items-center space-x-3 text-sm text-slate-200 font-bold">
+      <div class="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 flex items-center justify-center flex-shrink-0 shadow-sm animate-pulse">
+        <i class="fa-regular fa-bell text-sm"></i>
       </div>
-      <marquee direction="left" scrollamount="6" scrolldelay="60" class="font-bold tracking-wide text-slate-200">
+      <marquee direction="left" scrollamount="4" scrolldelay="80" class="tracking-wide text-slate-200 text-xs sm:text-sm">
         🚀 Chào mừng bạn đến với nền tảng kiếm tiền tự động AUTOPOSTAI! Hoàn thành nhiệm vụ chính xác để nhận thưởng uy tín 24/7. ★ Chúc anh em làm việc hiệu quả và bội thu!
       </marquee>
     </div>
@@ -927,14 +927,14 @@
         if (drawerAdmin) drawerAdmin.classList.remove('hidden');
         if (drawerRoleTag) {
           drawerRoleTag.innerText = 'Administrator';
-          drawerRoleTag.className = 'text-[9px] px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-extrabold border border-amber-500/30';
+          drawerRoleTag.className = 'text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-extrabold border border-amber-500/30';
         }
       } else {
         if (roleBadge) roleBadge.classList.add('hidden');
         if (drawerAdmin) drawerAdmin.classList.add('hidden');
         if (drawerRoleTag) {
           drawerRoleTag.innerText = 'Thành Viên CTV';
-          drawerRoleTag.className = 'text-[9px] px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-extrabold border border-blue-500/30';
+          drawerRoleTag.className = 'text-[10px] px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-extrabold border border-blue-500/30';
         }
       }
 

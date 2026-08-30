@@ -12,7 +12,7 @@
 
   <style>
     * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
-    body { background-color: #030712; color: #f8fafc; }
+    body { background-color: #030712; color: #f8fafc; margin: 0; }
     .glass-panel { background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
     .glass-card { background: rgba(30, 41, 59, 0.55); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.2s ease-in-out; }
     .glass-card:hover { border-color: rgba(59, 130, 246, 0.4); transform: translateY(-1px); }
@@ -47,14 +47,12 @@
 </head>
 <body class="min-h-screen flex flex-col antialiased relative selection:bg-blue-600 selection:text-white">
 
-  <!-- HỖ TRỢ NỔI -->
   <div class="fixed bottom-6 right-6 z-40">
     <button id="btnSupportFloat" class="w-14 h-14 rounded-full gradient-primary text-white shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition cursor-pointer shadow-blue-500/60 border-2 border-white/20">
       <i class="fa-solid fa-headset text-2xl"></i>
     </button>
   </div>
 
-  <!-- POPUP THÔNG BÁO CHÀO MỪNG -->
   <div id="welcomeNoticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 pointer-events-auto">
     <div class="glass-panel w-full max-w-lg p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative">
       <div class="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg shadow-blue-500/10">
@@ -68,7 +66,6 @@
     </div>
   </div>
 
-  <!-- AUTH MODAL -->
   <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-xl flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-700/70 shadow-2xl relative overflow-hidden">
       <div id="authFormContent" class="w-full">
@@ -123,7 +120,6 @@
     </div>
   </div>
 
-  <!-- MENU DRAWER -->
   <div id="menuDrawer" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
     <div id="drawerOverlay" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
     
@@ -210,7 +206,6 @@
     </div>
   </div>
 
-  <!-- TOPBAR -->
   <header class="glass-panel sticky top-0 z-40 border-b border-slate-800 px-3 sm:px-8 py-3.5 flex items-center justify-between">
     <div class="flex items-center space-x-2.5 sm:space-x-3">
       <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl gradient-primary flex items-center justify-center shadow-lg shadow-blue-500/30 flex-shrink-0">
@@ -247,7 +242,6 @@
     </div>
   </header>
 
-  <!-- BANNER MARQUEE -->
   <div class="w-full bg-gradient-to-r from-blue-600/10 via-indigo-600/15 to-purple-600/10 border-b border-blue-500/20 py-2.5 px-4 overflow-hidden shadow-inner flex items-center">
     <div class="max-w-7xl mx-auto w-full flex items-center space-x-3 text-sm text-slate-200 font-bold">
       <div class="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 flex items-center justify-center flex-shrink-0 shadow-sm animate-pulse">
@@ -259,7 +253,6 @@
     </div>
   </div>
 
-  <!-- SÀN NHIỆM VỤ NATIVE -->
   <main id="ctvView" class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-8 mt-6 space-y-6 pb-20">
     
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -287,7 +280,6 @@
       </div>
     </div>
 
-    <!-- KHUNG NHIỆM VỤ NATIVE -->
     <div class="glass-card rounded-3xl p-6 sm:p-8 border border-slate-800 space-y-5 shadow-2xl">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
         <div>
@@ -309,7 +301,6 @@
 
   </main>
 
-  <!-- BẢNG QUẢN TRỊ ADMIN -->
   <div id="adminView" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 mt-6 space-y-6 pb-20">
     
     <div class="flex items-center justify-between">
@@ -324,7 +315,6 @@
       </button>
     </div>
 
-    <!-- 9 Tab Admin Đầy Đủ -->
     <div class="flex space-x-2.5 overflow-x-auto pb-2 text-xs font-bold custom-tabs-scroll">
       <button id="btnTabTaskApprovals" class="px-4 py-3 rounded-2xl bg-blue-600 text-white shadow-lg whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-list-check"></i> 1. Duyệt Kèo (<span id="pendingTaskBadgeCount">0</span>)
@@ -355,7 +345,6 @@
       </button>
     </div>
 
-    <!-- TAB 1: DUYỆT NHIỆM VỤ -->
     <div id="tabTaskApprovals" class="admin-tab-content glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-4">
       <h3 class="text-sm font-extrabold text-slate-200 flex items-center gap-2">
         <i class="fa-solid fa-clipboard-check text-blue-400"></i> Duyệt Ảnh Bằng Chứng Hoàn Thành Nhiệm Vụ Của CTV
@@ -378,7 +367,6 @@
       </div>
     </div>
 
-    <!-- TAB 2: KHÁCH HÀNG -->
     <div id="tabUsers" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
         <div>
@@ -405,7 +393,6 @@
       </div>
     </div>
 
-    <!-- TAB 3: ĐĂNG KÈO MỚI -->
     <div id="tabAddOffer" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-6">
       <div class="space-y-4 bg-slate-900/60 p-6 rounded-3xl border border-slate-800 shadow-inner">
         <h3 class="text-sm font-extrabold text-amber-400 flex items-center gap-2">
@@ -444,7 +431,6 @@
       </div>
     </div>
 
-    <!-- TAB 4: RÚT TIỀN -->
     <div id="tabFinance" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-4">
       <h3 class="text-sm font-extrabold text-slate-200 flex items-center gap-2">
         <i class="fa-solid fa-money-check-dollar text-purple-400"></i> Quản Lý Yêu Cầu Rút Tiền Của CTV
@@ -467,7 +453,6 @@
       </div>
     </div>
 
-    <!-- TAB 5: BOT TELEGRAM -->
     <div id="tabTelegramBot" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-6">
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <h3 class="text-sm font-extrabold text-sky-400 flex items-center gap-2">
@@ -518,7 +503,6 @@
       </div>
     </div>
 
-    <!-- TAB 6: TẠO LỆNH RÚT ẢO -->
     <div id="tabFakeWithdraw" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <h3 class="text-sm font-extrabold text-emerald-400 flex items-center gap-2">
@@ -563,7 +547,6 @@
       </div>
     </div>
 
-    <!-- TAB 7: BILL THANH TOÁN (GỬI ẢNH TÍCH XANH THÀNH CÔNG) -->
     <div id="tabFakeBill" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <h3 class="text-sm font-extrabold text-amber-400 flex items-center gap-2">
@@ -607,7 +590,6 @@
       </div>
     </div>
 
-    <!-- TAB 8: THÔNG BÁO HỆ THỐNG -->
     <div id="tabNotices" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-4">
       <div class="flex items-center justify-between pb-2 border-b border-slate-800">
         <h3 class="text-sm font-extrabold text-blue-400 flex items-center gap-2">
@@ -641,7 +623,6 @@
       </div>
     </div>
 
-    <!-- TAB 9: HỖ TRỢ & NHÓM CTV -->
     <div id="tabSupport" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-4">
       <h3 class="text-sm font-extrabold text-emerald-400 flex items-center gap-2">
         <i class="fa-solid fa-headset"></i> Cài Đặt Kênh Hỗ Trợ & Link Nhóm CTV
@@ -677,7 +658,6 @@
 
   </div>
 
-  <!-- MODAL LỊCH SỬ GIAO DỊCH -->
   <div id="historyModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-lg p-6 rounded-3xl border border-slate-700 shadow-2xl relative">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -692,7 +672,6 @@
     </div>
   </div>
 
-  <!-- MODAL ĐỔI PASS -->
   <div id="adminPasswordModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -717,7 +696,6 @@
     </div>
   </div>
 
-  <!-- MODAL PHÂN QUYỀN -->
   <div id="adminRoleModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -746,7 +724,6 @@
     </div>
   </div>
 
-  <!-- MODAL THÔNG BÁO -->
   <div id="noticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -759,7 +736,6 @@
     </div>
   </div>
 
-  <!-- MODAL HỖ TRỢ -->
   <div id="supportModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -801,7 +777,6 @@
     </div>
   </div>
 
-  <!-- MODAL RÚT TIỀN -->
   <div id="withdrawModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4">
@@ -1147,7 +1122,7 @@
       if (autoFakeIntervalId) {
         clearInterval(autoFakeIntervalId);
         autoFakeIntervalId = null;
-        if (btn) { btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Bật Auto Ảo'; btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md'; }
+        if (btn) { btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Bật Auto Ảo'; btn.className = 'px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold cursor-pointer'; }
         showNotify('info', 'Đã Tắt Auto', 'Đã dừng tự động bắn lệnh rút ảo.');
       } else {
         const sec = Number(selectSec?.value || 60) * 1000;
@@ -1163,7 +1138,7 @@
           triggerSyncedWithdrawSuccess(randUser, randAmount, randInfo);
         }, sec);
 
-        if (btn) { btn.innerHTML = '<i class="fa-solid fa-stop mr-1"></i> Dừng Auto'; btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md animate-pulse'; }
+        if (btn) { btn.innerHTML = '<i class="fa-solid fa-stop mr-1"></i> Dừng Auto'; btn.className = 'px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold cursor-pointer animate-pulse'; }
         showNotify('success', 'Đã Bật Auto', `Đang tự động bắn lệnh rút ngẫu nhiên mỗi ${selectSec.value} giây!`);
       }
     }
@@ -1239,7 +1214,6 @@
       }
     }
 
-    // ĐẦY ĐỦ CÁC HÀM TIỆN ÍCH CHO GIAO DIỆN VÀ ADMIN
     let currentCaptcha = '';
     function generateCaptcha() {
       const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
@@ -1248,8 +1222,6 @@
       currentCaptcha = res;
       const capEl = document.getElementById('captchaText');
       if (capEl) capEl.innerText = res;
-      const capInput = document.getElementById('authCaptchaInput');
-      if (capInput) capInput.value = '';
     }
 
     function toggleAuthMode() {
@@ -1356,6 +1328,61 @@
       }
     }
 
+    // KHAI BÁO ĐẦY ĐỦ CÁC HÀM TIỆN ÍCH MENU & DRAWER ĐỂ TRÁNH LỖI TREO SCRIPT
+    function openMenu() {
+      document.getElementById('menuDrawer')?.classList.remove('pointer-events-none');
+      document.getElementById('drawerOverlay')?.classList.remove('opacity-0');
+      document.getElementById('drawerContent')?.classList.remove('translate-x-full');
+    }
+
+    function closeMenu() {
+      document.getElementById('drawerOverlay')?.classList.add('opacity-0');
+      document.getElementById('drawerContent')?.classList.add('translate-x-full');
+      setTimeout(() => { document.getElementById('menuDrawer')?.classList.add('pointer-events-none'); }, 300);
+    }
+
+    function goToHome() {
+      toggleView('ctv');
+      markOffersAsSeen();
+      popWelcomeNotice();
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('task_auth_user');
+      location.reload();
+    }
+
+    function submitAdminChangePassword() {
+      const u = document.getElementById('adminTargetUser').value;
+      const p = document.getElementById('adminNewUserPassword').value.trim();
+      if (!p) return showNotify('warning', 'Lỗi', 'Nhập mật khẩu mới!');
+      closeAdminPasswordModal();
+      showNotify('success', 'Thành Công', `Đã đổi mật khẩu cho ${u}`);
+    }
+
+    function submitAdminChangeRole() {
+      const u = document.getElementById('adminRoleTargetUser').value;
+      const r = document.getElementById('adminRoleSelect').value;
+      userPermissions[u] = userPermissions[u] || {};
+      userPermissions[u].role = r;
+      localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
+      closeAdminRoleModal();
+      showNotify('success', 'Thành Công', `Đã cập nhật quyền ${r}`);
+    }
+
+    function submitWithdrawRequest() {
+      const a = Number(document.getElementById('withdrawAmountVND').value);
+      const n = document.getElementById('withdrawBankNumber').value.trim();
+      const o = document.getElementById('withdrawBankOwner').value.trim();
+      if (!a || !n || !o) return showNotify('warning', 'Thiếu', 'Điền đủ thông tin rút!');
+      if (a > currentVNDBalance) return showNotify('error', 'Lỗi', 'Số dư không đủ!');
+      financeRequests.unshift({ user: currentUser, amount: a, info: `${n} (${o})`, time: new Date().toLocaleTimeString('vi-VN') });
+      localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
+      sendAdminAlert(`💳 Yêu cầu rút mới từ <b>${currentUser}</b> (${a}đ)`);
+      closeWithdrawModal();
+      showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền!');
+    }
+
     // GẮN SỰ KIỆN AN TOÀN TUYỆT ĐỐI BẰNG ADDEVENTLISTENER
     document.addEventListener('DOMContentLoaded', () => {
       generateCaptcha();
@@ -1403,12 +1430,14 @@
       document.getElementById('btnSaveSupport').addEventListener('click', saveAdminSupportConfig);
       document.getElementById('submitWithdraw').addEventListener('click', submitWithdrawRequest);
       document.getElementById('submitPassChange').addEventListener('click', submitAdminChangePassword);
+      document.getElementById('submitRoleChange').addEventListener('click', submitAdminChangeRole);
 
       document.getElementById('closeHistory').addEventListener('click', closeHistoryModal);
       document.getElementById('closeWithdrawModalBtn').addEventListener('click', closeWithdrawModal);
       document.getElementById('closeNotice').addEventListener('click', closeNoticeModal);
       document.getElementById('closeSupport').addEventListener('click', closeSupportModal);
       document.getElementById('closePassModal').addEventListener('click', closeAdminPasswordModal);
+      document.getElementById('closeRoleModal').addEventListener('click', closeAdminRoleModal);
       document.getElementById('btnCloseWelcome').addEventListener('click', closeWelcomeNotice);
 
       const saved = localStorage.getItem('task_auth_user');

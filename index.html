@@ -889,6 +889,31 @@
       } catch (err) {}
     }
 
+    // Hàm bắn tin thử nghiệm bot Telegram (ĐÃ ĐƯỢC BỔ SUNG CHUẨN XÁC)
+    async function testTelegramBotAlert() {
+      const token = document.getElementById('adminCfgTeleToken')?.value.trim();
+      const chatId = document.getElementById('adminCfgTeleChatId')?.value.trim();
+      if (!token || !chatId) {
+        return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập đầy đủ Bot Token và Chat ID trước khi thử nghiệm!');
+      }
+      try {
+        const url = `https://api.telegram.org/bot${token}/sendMessage`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: chatId, text: '🔔 <b>TEST BOT TELEGRAM THÀNH CÔNG!</b>\nHệ thống AUTOPOSTAI đã kết nối bot mượt mà.', parse_mode: 'HTML' })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showNotify('success', 'Thành Công', 'Đã bắn tin thử nghiệm thành công! Hãy kiểm tra Telegram.');
+        } else {
+          showNotify('error', 'Lỗi Gửi Tin', data.description || 'Kiểm tra lại Token hoặc Chat ID (hoặc chưa bấm /start với bot).');
+        }
+      } catch (err) {
+        showNotify('error', 'Lỗi Kết Nối', 'Không thể kết nối đến máy chủ Telegram.');
+      }
+    }
+
     let currentCaptcha = '';
     function generateCaptcha() {
       const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
@@ -1426,23 +1451,23 @@
         const role = userPermissions[u.user_id]?.role || (u.user_id === 'Admin' ? 'admin' : 'member');
         const isBanned = userPermissions[u.user_id]?.banned || false;
 
-        let roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/35">Member</span>';
-        if (role === 'admin') roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/35">Admin</span>';
-        if (role === 'manager') roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/35">Manager</span>';
+        let roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/35">Member</span>';
+        if (role === 'admin') roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/35">Admin</span>';
+        if (role === 'manager') roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/35">Manager</span>';
 
         const statusBadge = isBanned 
-          ? '<span class="text-rose-400 font-bold text-[11px] flex items-center gap-1"><i class="fa-solid fa-ban text-[10px]"></i> Đã Khóa</span>'
-          : '<span class="text-emerald-400 font-bold text-[11px] flex items-center gap-1"><i class="fa-solid fa-circle-check text-[10px]"></i> Hoạt Động</span>';
+          ? '<span class="text-rose-400 font-bold text-[10px] sm:text-[11px] flex items-center gap-1 whitespace-nowrap"><i class="fa-solid fa-ban text-[9px]"></i> Khóa</span>'
+          : '<span class="text-emerald-400 font-bold text-[10px] sm:text-[11px] flex items-center gap-1 whitespace-nowrap"><i class="fa-solid fa-circle-check text-[9px]"></i> Hoạt Động</span>';
 
         return `
           <div class="glass-card rounded-3xl p-4 sm:p-5 space-y-3.5 shadow-xl border border-slate-800">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-2xl bg-slate-800 text-blue-400 flex items-center justify-center text-sm font-bold border border-slate-700 shadow-inner flex-shrink-0">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 gap-2">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-slate-800 text-blue-400 flex items-center justify-center text-sm font-bold border border-slate-700 shadow-inner flex-shrink-0">
                   <i class="fa-solid fa-user"></i>
                 </div>
-                <div>
-                  <h4 class="font-black text-white text-xs sm:text-sm">${u.user_id}</h4>
+                <div class="min-w-0">
+                  <h4 class="font-black text-white text-xs sm:text-sm truncate">${u.user_id}</h4>
                   <div class="mt-0.5 flex items-center gap-1">${roleBadge}</div>
                 </div>
               </div>
@@ -1454,7 +1479,8 @@
               <span class="text-sm font-black text-emerald-400">${vnd.toLocaleString('vi-VN')} đ</span>
             </div>
 
-            <div class="grid grid-cols-3 gap-2 pt-1">
+            <!-- Các nút bấm Đổi Pass, Quyền, Khóa cân đối hoàn hảo trên di động -->
+            <div class="grid grid-cols-3 gap-1.5 sm:gap-2 pt-1">
               <button onclick="openAdminPasswordModal('${u.user_id}')" class="py-2.5 px-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
                 <i class="fa-solid fa-key"></i> Pass
               </button>
@@ -1466,6 +1492,7 @@
               </button>
             </div>
 
+            <!-- Ô nhập tiền và nút Cộng / Trừ cố định chuẩn khung, không bị tràn lề -->
             <div class="flex items-center gap-2 pt-1">
               <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập VNĐ..." class="w-full min-w-0 flex-1 bg-slate-950 border border-slate-700 rounded-2xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 shadow-inner">
               <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-3 sm:px-4 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-2xl text-xs font-extrabold cursor-pointer transition flex-shrink-0">+ Cộng</button>

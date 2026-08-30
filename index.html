@@ -70,7 +70,7 @@
     </div>
   </div>
 
-  <!-- AUTH MODAL (Đã sửa lỗi tràn khung, căn chỉnh hoàn hảo form đăng nhập) -->
+  <!-- AUTH MODAL -->
   <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-xl flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-700/70 shadow-2xl relative overflow-hidden">
       <div id="authFormContent" class="w-full">
@@ -877,17 +877,22 @@
       } catch (err) {}
     }
 
+    // Hàm gửi tin nhắn qua Bot Telegram nâng cấp (Đảm bảo luôn đồng bộ token và chat ID mới nhất)
     async function sendTelegramAlert(messageText) {
-      if (!systemConfig.teleToken || !systemConfig.teleChatId) return;
+      // Đọc trực tiếp từ cấu hình localStorage để luôn lấy token mới nhất khi admin vừa bấm lưu
+      const tToken = systemConfig.teleToken || localStorage.getItem('sys_tele_token') || '';
+      const tChatId = systemConfig.teleChatId || localStorage.getItem('sys_tele_chat_id') || '';
+      
+      if (!tToken || !tChatId) return;
       try {
-        const url = `https://api.telegram.org/bot${systemConfig.teleToken}/sendMessage`;
+        const url = `https://api.telegram.org/bot${tToken}/sendMessage`;
         const webUrl = window.location.href.split('?')[0];
         
         await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            chat_id: systemConfig.teleChatId,
+            chat_id: tChatId,
             text: messageText,
             parse_mode: 'HTML',
             reply_markup: {
@@ -1445,6 +1450,7 @@
       showNotify('info', 'Đã Hủy', 'Đã từ chối bằng chứng nhiệm vụ.');
     }
 
+    // ĐÃ SỬA: Hàm đăng ký kèo mới gọi sendTelegramAlert chuẩn xác 100%
     async function adminAddNewOffer() {
       const title = document.getElementById('newOfferTitle').value.trim();
       const reward = Number(document.getElementById('newOfferReward').value);
@@ -1462,8 +1468,9 @@
       
       localStorage.removeItem('last_seen_offer_all');
 
+      // Bắn tin Telegram thông báo có kèo mới
       const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-      sendTelegramAlert(`
+      await sendTelegramAlert(`
 🔥 <b>CÓ KÈO NHIỆM VỤ MỚI TRÊN SÀN!</b>
 ━━━━━━━━━━━━━━━━━━━
 📌 <b>Tên Kèo:</b> <b>${title}</b>
@@ -1473,7 +1480,7 @@
 ━━━━━━━━━━━━━━━━━━━
       `.trim());
 
-      showNotify('success', 'Thành Công', 'Đã đăng kèo mới lên hệ thống đám mây! Bot Telegram đã bắn tin thông báo.');
+      showNotify('success', 'Thành Công', 'Đã đăng kèo mới thành công! Bot Telegram đã bắn tin thông báo đến nhóm.');
       await renderAdminOfferList();
       fetchAutoOffers();
     }

@@ -55,8 +55,8 @@
   </div>
 
   <!-- POPUP THÔNG BÁO CHÀO MỪNG -->
-  <div id="welcomeNoticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 pointer-events-none">
-    <div class="glass-panel w-full max-w-lg p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative pointer-events-auto">
+  <div id="welcomeNoticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-lg p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative">
       <div class="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg shadow-blue-500/10">
         <i class="fa-solid fa-bullhorn"></i>
       </div>
@@ -76,7 +76,7 @@
           <div class="w-14 h-14 rounded-2xl gradient-primary flex items-center justify-center mx-auto shadow-xl shadow-blue-500/30 mb-3">
             <i class="fa-solid fa-bolt text-white text-2xl"></i>
           </div>
-          <h2 id="authTitle" class="text-2xl font-black text-white tracking-tight">AUTOPOSTAI PORTAL</h2>
+          <h2 id="authTitle" class="text-2xl font-black text-white tracking-tight">ĐĂNG NHẬP HỆ THỐNG</h2>
           <p class="text-xs text-slate-400 mt-1">Hệ thống phân phối và kiếm tiền online uy tín</p>
         </div>
 
@@ -909,7 +909,7 @@
 
     async function loadSystemConfigFromCloud() {
       try {
-        const { data, error } = await supabaseClient.from('system_settings').select('*');
+        const { data } = await supabaseClient.from('system_settings').select('*');
         if (data && data.length > 0) {
           data.forEach(item => {
             if (item.key === 'admin_token') systemConfig.adminToken = item.value;
@@ -1071,7 +1071,6 @@
       } catch (err) {}
     }
 
-    // Gửi lệnh rút ảo ra nhóm (Tab 6)
     async function sendFakeWithdrawAlert() {
       const fakeUser = document.getElementById('fakeUser')?.value.trim();
       const fakeAmount = Number(document.getElementById('fakeAmount')?.value);
@@ -1100,7 +1099,6 @@
       showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền ảo ra nhóm Telegram thành công!');
     }
 
-    // Tự động tạo ảnh bill chuyển khoản và bắn kèm caption (Tab 7)
     async function generateAndSendAutoBill() {
       const bank = document.getElementById('genBillBank')?.value;
       const amount = Number(document.getElementById('genBillAmount')?.value);
@@ -1205,13 +1203,12 @@
       const capInput = document.getElementById('authCaptchaInput');
       if (capInput) capInput.value = '';
     }
-    generateCaptcha();
 
     function toggleAuthMode() {
       isRegisterMode = !isRegisterMode;
       const titleEl = document.getElementById('authTitle');
       const btnEl = document.getElementById('btnAuthSubmit');
-      if (titleEl) titleEl.innerText = isRegisterMode ? 'Đăng Ký Thành Viên' : 'AUTOPOSTAI PORTAL';
+      if (titleEl) titleEl.innerText = isRegisterMode ? 'ĐĂNG KÝ HỆ THỐNG' : 'ĐĂNG NHẬP HỆ THỐNG';
       if (btnEl) btnEl.innerText = isRegisterMode ? 'Tạo Tài Khoản' : 'Đăng Nhập Hệ Thống';
       generateCaptcha();
     }
@@ -2155,6 +2152,7 @@ ${desc || 'Làm nhiệm vụ ngay để nhận thưởng!'}
     function handleLogout() { localStorage.removeItem('task_auth_user'); location.reload(); }
 
     window.onload = async () => {
+      generateCaptcha();
       await loadSystemConfigFromCloud();
       await fetchCloudData();
       const savedUser = localStorage.getItem('task_auth_user');

@@ -14,8 +14,8 @@
     * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
     body { background-color: #030712; color: #f8fafc; }
     .glass-panel { background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
-    .glass-card { background: rgba(30, 41, 59, 0.55); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .glass-card:hover { border-color: rgba(59, 130, 246, 0.4); transform: translateY(-2px); box-shadow: 0 15px 35px -10px rgba(59, 130, 246, 0.15); }
+    .glass-card { background: rgba(30, 41, 59, 0.55); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.2s ease-in-out; }
+    .glass-card:hover { border-color: rgba(59, 130, 246, 0.4); transform: translateY(-1px); }
     .gradient-primary { background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); }
     .gradient-text { background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .captcha-clean {
@@ -31,7 +31,6 @@
       border-radius: 32px !important;
       color: #f8fafc !important;
       font-family: 'Plus Jakarta Sans', sans-serif !important;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8) !important;
     }
     .swal2-title { color: #ffffff !important; font-size: 20px !important; font-weight: 800 !important; }
     .swal2-html-container { color: #94a3b8 !important; font-size: 13px !important; }
@@ -41,7 +40,6 @@
       font-weight: 700 !important;
       font-size: 13px !important;
       padding: 12px 28px !important;
-      box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5) !important;
     }
     .custom-tabs-scroll::-webkit-scrollbar { display: none; }
     .custom-tabs-scroll { -ms-overflow-style: none; scrollbar-width: none; }
@@ -56,15 +54,15 @@
     </button>
   </div>
 
-  <!-- POPUP THÔNG BÁO CHÀO MỪNG -->
+  <!-- POPUP THÔNG BÁO CHÀO MỪNG (ĐÃ MỞ RỘNG TO HƠN, THOẢI MÁI ĐỌC NỘI DUNG) -->
   <div id="welcomeNoticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 pointer-events-auto">
-    <div class="glass-panel w-full max-w-md p-6 sm:p-7 rounded-3xl border border-slate-700/80 shadow-2xl relative">
+    <div class="glass-panel w-full max-w-lg p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative">
       <div class="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg shadow-blue-500/10">
         <i class="fa-solid fa-bullhorn"></i>
       </div>
-      <h3 id="welcomeNoticeTitle" class="text-base font-extrabold text-white text-center">Thông Báo Hệ Thống</h3>
-      <div id="welcomeNoticeBody" class="mt-3 text-xs text-slate-300 leading-relaxed text-center bg-slate-900/80 p-4 rounded-2xl border border-slate-800 max-h-60 overflow-y-auto space-y-2"></div>
-      <button onclick="closeWelcomeNotice()" class="mt-5 w-full py-3 rounded-2xl gradient-primary text-white text-xs font-bold shadow-lg cursor-pointer hover:opacity-90 transition">
+      <h3 id="welcomeNoticeTitle" class="text-lg font-extrabold text-white text-center">Thông Báo Hệ Thống</h3>
+      <div id="welcomeNoticeBody" class="mt-4 text-xs sm:text-sm text-slate-300 leading-relaxed text-left bg-slate-900/80 p-5 rounded-2xl border border-slate-800 max-h-96 overflow-y-auto space-y-3"></div>
+      <button onclick="closeWelcomeNotice()" class="mt-6 w-full py-3.5 rounded-2xl gradient-primary text-white text-xs sm:text-sm font-bold shadow-lg cursor-pointer hover:opacity-90 transition">
         Đã Hiểu & Đóng
       </button>
     </div>
@@ -407,7 +405,7 @@
       </div>
     </div>
 
-    <!-- TAB 3: ĐĂNG KÈO MỚI (ĐÃ SỬA Ô MÔ TẢ THÀNH TEXTAREA ĐỂ XUỐNG DÒNG THOẢI MÁI) -->
+    <!-- TAB 3: ĐĂNG KÈO MỚI -->
     <div id="tabAddOffer" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-6">
       <div class="space-y-4 bg-slate-900/60 p-6 rounded-3xl border border-slate-800 shadow-inner">
         <h3 class="text-sm font-extrabold text-amber-400 flex items-center gap-2">
@@ -1109,9 +1107,9 @@
         if (titleEl) titleEl.innerText = latest.title;
         if (bodyEl) {
           bodyEl.innerHTML = notifications.map(n => `
-            <div class="p-3 bg-slate-950/70 border border-slate-800 rounded-2xl text-left">
-              <p class="font-bold text-white text-xs mb-1">${n.title}</p>
-              <p class="text-slate-300 text-[11px] leading-relaxed">${n.content}</p>
+            <div class="p-3.5 bg-slate-950/70 border border-slate-800 rounded-2xl text-left space-y-1">
+              <p class="font-black text-white text-xs sm:text-sm">${n.title}</p>
+              <p class="text-slate-300 text-xs leading-relaxed whitespace-pre-line">${n.content}</p>
             </div>
           `).join('');
         }
@@ -1144,7 +1142,7 @@
     function renderNotifications() {
       const modalList = document.getElementById('noticeModalContent');
       if (notifications.length > 0 && modalList) {
-        modalList.innerHTML = notifications.map(n => `<div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-800"><p class="font-bold text-white text-xs">${n.title}</p><p class="text-slate-300 text-[11px] mt-1">${n.content}</p></div>`).join('');
+        modalList.innerHTML = notifications.map(n => `<div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-800"><p class="font-bold text-white text-xs">${n.title}</p><p class="text-slate-300 text-[11px] mt-1 whitespace-pre-line">${n.content}</p></div>`).join('');
       }
     }
 
@@ -1778,23 +1776,24 @@ ${desc || 'Làm nhiệm vụ ngay để nhận thưởng!'}
       showNotify('success', 'Thành Công', `Đã duyệt lệnh rút tiền cho tài khoản ${req.user}`);
     }
 
-    async function loadAdminSupportFields() {
-      await loadSystemConfigFromCloud();
-      const z = document.getElementById('adminCfgZalo');
-      const t = document.getElementById('adminCfgTelegram');
-      const gz = document.getElementById('adminCfgGroupZalo');
-      const gt = document.getElementById('adminCfgGroupTelegram');
-      const wt = document.getElementById('adminCfgWorkTime');
-      const tt = document.getElementById('adminCfgTeleToken');
-      const tc = document.getElementById('adminCfgTeleChatId');
+    function loadAdminSupportFields() {
+      loadSystemConfigFromCloud().then(() => {
+        const z = document.getElementById('adminCfgZalo');
+        const t = document.getElementById('adminCfgTelegram');
+        const gz = document.getElementById('adminCfgGroupZalo');
+        const gt = document.getElementById('adminCfgGroupTelegram');
+        const wt = document.getElementById('adminCfgWorkTime');
+        const tt = document.getElementById('adminCfgTeleToken');
+        const tc = document.getElementById('adminCfgTeleChatId');
 
-      if (z) z.value = systemConfig.zalo;
-      if (t) t.value = systemConfig.telegram;
-      if (gz) gz.value = systemConfig.groupZalo;
-      if (gt) gt.value = systemConfig.groupTelegram;
-      if (wt) wt.value = systemConfig.workTime;
-      if (tt) tt.value = systemConfig.teleToken;
-      if (tc) tc.value = systemConfig.teleChatId;
+        if (z) z.value = systemConfig.zalo;
+        if (t) t.value = systemConfig.telegram;
+        if (gz) gz.value = systemConfig.groupZalo;
+        if (gt) gt.value = systemConfig.groupTelegram;
+        if (wt) wt.value = systemConfig.workTime;
+        if (tt) tt.value = systemConfig.teleToken;
+        if (tc) tc.value = systemConfig.teleChatId;
+      });
     }
 
     async function saveAdminSupportConfig() {
@@ -1930,6 +1929,7 @@ ${desc || 'Làm nhiệm vụ ngay để nhận thưởng!'}
     function handleLogout() { localStorage.removeItem('task_auth_user'); location.reload(); }
 
     window.onload = async () => {
+      await loadSystemConfigFromCloud();
       await fetchCloudData();
       const savedUser = localStorage.getItem('task_auth_user');
       if (savedUser) {

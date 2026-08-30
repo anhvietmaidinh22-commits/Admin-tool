@@ -54,7 +54,7 @@
     </button>
   </div>
 
-  <!-- POPUP THÔNG BÁO CHÀO MỪNG (ĐÃ MỞ RỘNG TO HƠN, THOẢI MÁI ĐỌC NỘI DUNG) -->
+  <!-- POPUP THÔNG BÁO CHÀO MỪNG -->
   <div id="welcomeNoticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 pointer-events-auto">
     <div class="glass-panel w-full max-w-lg p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative">
       <div class="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg shadow-blue-500/10">
@@ -497,11 +497,16 @@
       </div>
     </div>
 
-    <!-- TAB 6: THÔNG BÁO HỆ THỐNG -->
+    <!-- TAB 6: THÔNG BÁO HỆ THỐNG (ĐÃ BỔ SUNG NÚT XÓA TẤT CẢ THÔNG BÁO) -->
     <div id="tabNotices" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-4">
-      <h3 class="text-sm font-extrabold text-blue-400 flex items-center gap-2">
-        <i class="fa-solid fa-bullhorn"></i> Phát & Quản Lý Danh Sách Thông Báo
-      </h3>
+      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+        <h3 class="text-sm font-extrabold text-blue-400 flex items-center gap-2">
+          <i class="fa-solid fa-bullhorn"></i> Phát & Quản Lý Danh Sách Thông Báo
+        </h3>
+        <button onclick="adminClearAllNotices()" class="px-3 py-1.5 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-trash-can"></i> Xóa Tất Cả Thông Báo
+        </button>
+      </div>
       
       <div class="space-y-3 text-xs">
         <div>
@@ -1154,6 +1159,25 @@
     }
     function closeNoticeModal() { const m = document.getElementById('noticeModal'); if (m) m.classList.add('hidden'); }
     
+    // Xóa tất cả thông báo cũ trên đám mây
+    async function adminClearAllNotices() {
+      const confirm = await Swal.fire({
+        title: 'Xác Nhận Xóa?',
+        text: 'Bạn có chắc chắn muốn xóa toàn bộ thông báo hệ thống không?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Đồng ý xóa',
+        cancelButtonText: 'Hủy'
+      });
+      if (confirm.isConfirmed) {
+        await supabaseClient.from('system_notices').delete().neq('id', 0);
+        notifications = [];
+        renderAdminNoticeManageList();
+        renderNotifications();
+        showNotify('success', 'Đã Xóa', 'Đã xóa toàn bộ thông báo cũ.');
+      }
+    }
+
     function openHistoryModal() {
       const m = document.getElementById('historyModal');
       const content = document.getElementById('historyModalContent');
@@ -1858,7 +1882,7 @@ ${desc || 'Làm nhiệm vụ ngay để nhận thưởng!'}
       if (notifications.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có thông báo nào.</p>';
       list.innerHTML = notifications.map((n) => `
         <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex justify-between items-center text-xs shadow-inner">
-          <div><p class="font-black text-white text-sm">${n.title}</p><p class="text-slate-400 text-xs mt-1 leading-relaxed">${n.content}</p></div>
+          <div><p class="font-black text-white text-sm">${n.title}</p><p class="text-slate-400 text-xs mt-1 leading-relaxed whitespace-pre-line">${n.content}</p></div>
           <button onclick="adminDeleteNotice('${n.id}')" class="p-2.5 text-rose-400 hover:text-rose-300 cursor-pointer transition"><i class="fa-solid fa-trash"></i></button>
         </div>
       `).join('');

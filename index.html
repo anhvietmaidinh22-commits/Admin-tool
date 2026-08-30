@@ -747,30 +747,19 @@
     let cachedAdminUserList = [];
     let financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
 
-    // Tải dữ liệu dùng chung trực tiếp từ Supabase để đồng bộ mọi thiết bị
     async function fetchCloudData() {
       try {
-        // Tải danh sách Kèo
         const { data: offersData } = await supabaseClient.from('system_offers').select('*').order('created_at', { ascending: false });
-        if (offersData && offersData.length > 0) {
+        if (offersData) {
           customOffers = offersData.map(o => ({ id: o.id, title: o.title, reward: o.reward, url: o.url, desc: o.description }));
-        } else {
-          customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
         }
-
-        // Tải danh sách Thông báo
         const { data: noticesData } = await supabaseClient.from('system_notices').select('*').order('created_at', { ascending: false });
         if (noticesData && noticesData.length > 0) {
-          notifications = noticesData.map(n => ({ id: n.id, title: n.title, content: n.content, time: n.time }));
+          notifications = noticesData.map(n => ({ id: n.id, title: n.title, content: n.content, time: n.time || 'Hôm nay' }));
         } else {
-          notifications = JSON.parse(localStorage.getItem('sys_notifications_db')) || [
-            { id: 1, title: 'Thông báo hệ thống', content: 'Hoàn thành nhiệm vụ và tải ảnh chứng chỉ lên để Admin duyệt cộng tiền.', time: 'Hôm nay' }
-          ];
+          notifications = [{ id: 1, title: 'Thông báo hệ thống', content: 'Hoàn thành nhiệm vụ và tải ảnh chứng chỉ lên để Admin duyệt cộng tiền.', time: 'Hôm nay' }];
         }
-      } catch (err) {
-        customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
-        notifications = JSON.parse(localStorage.getItem('sys_notifications_db')) || [];
-      }
+      } catch (err) {}
     }
 
     async function sendTelegramAlert(messageText) {
@@ -1210,7 +1199,7 @@
       const list = document.getElementById('adminOfferManageList');
       if (!list) return;
       if (customOffers.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có kèo nào.</p>';
-      list.innerHTML = customOffers.map((o, idx) => `
+      list.innerHTML = customOffers.map((o) => `
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
           <div><p class="font-bold text-white">${o.title} <span class="text-emerald-400 font-extrabold ml-2">+${Number(o.reward).toLocaleString('vi-VN')}đ</span></p></div>
           <button onclick="adminDeleteOffer('${o.id}')" class="p-1.5 text-rose-400 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
@@ -1491,7 +1480,7 @@
       const list = document.getElementById('adminNoticeManageList');
       if (!list) return;
       if (notifications.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có thông báo nào.</p>';
-      list.innerHTML = notifications.map((n, idx) => `
+      list.innerHTML = notifications.map((n) => `
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
           <div><p class="font-bold text-white">${n.title}</p><p class="text-slate-400 text-[11px]">${n.content}</p></div>
           <button onclick="adminDeleteNotice('${n.id}')" class="p-1.5 text-rose-400 cursor-pointer"><i class="fa-solid fa-trash"></i></button>

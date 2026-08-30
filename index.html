@@ -407,7 +407,7 @@
       </div>
     </div>
 
-    <!-- TAB 3: ĐĂNG KÈO MỚI -->
+    <!-- TAB 3: ĐĂNG KÈO MỚI (ĐÃ SỬA Ô MÔ TẢ THÀNH TEXTAREA ĐỂ XUỐNG DÒNG THOẢI MÁI) -->
     <div id="tabAddOffer" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-6">
       <div class="space-y-4 bg-slate-900/60 p-6 rounded-3xl border border-slate-800 shadow-inner">
         <h3 class="text-sm font-extrabold text-amber-400 flex items-center gap-2">
@@ -428,8 +428,8 @@
             <input id="newOfferUrl" type="text" placeholder="https://..." class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none focus:border-amber-500">
           </div>
           <div class="sm:col-span-2">
-            <label class="block text-slate-400 mb-1 font-bold">Mô tả hướng dẫn</label>
-            <input id="newOfferDesc" type="text" placeholder="Tải app, eKYC thành công..." class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none focus:border-amber-500">
+            <label class="block text-slate-400 mb-1 font-bold">Mô tả hướng dẫn (Có thể xuống dòng thoải mái)</label>
+            <textarea id="newOfferDesc" rows="4" placeholder="1. Bước 1: Click link tải app&#10;2. Bước 2: Đăng ký tài khoản eKYC&#10;3. Bước 3: Chụp ảnh gửi bằng chứng" class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none focus:border-amber-500 leading-relaxed"></textarea>
           </div>
         </div>
 
@@ -475,7 +475,7 @@
         <h3 class="text-sm font-extrabold text-sky-400 flex items-center gap-2">
           <i class="fa-brands fa-telegram text-base"></i> Cấu Hình Bot Telegram Tự Động (Đồng bộ Cloud)
         </h3>
-        <span class="text-[11px] text-slate-400">Tự động báo khi có User đăng ký, rút tiền</span>
+        <span class="text-[11px] text-slate-400">Tự động báo mọi hoạt động hệ thống</span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
@@ -799,7 +799,6 @@
     let cachedAdminUserList = [];
     let financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
 
-    // Tải toàn bộ cấu hình hệ thống từ Cloud (Supabase) để đồng bộ giữa các máy
     async function loadSystemConfigFromCloud() {
       try {
         const { data, error } = await supabaseClient.from('system_settings').select('*');
@@ -944,7 +943,7 @@
 ⏰ <b>Thời gian:</b> <code>${timeNow}</code>
 🤖 <b>Trạng thái:</b> Kết nối thành công & hoạt động ổn định!
 ━━━━━━━━━━━━━━━━━━━
-💡 <i>Bot sẽ tự động gửi thông báo chi tiết khi có kèo mới, thành viên đăng ký, gửi bằng chứng hoặc rút tiền!</i>
+💡 <i>Bot sẽ tự động gửi thông báo chi tiết khi có kèo mới, thông báo hệ thống, thành viên đăng ký, gửi bằng chứng hoặc rút tiền!</i>
         `.trim();
 
         const res = await fetch(url, {
@@ -1273,7 +1272,7 @@
           <div>
             <span class="px-2.5 py-1 rounded-xl bg-emerald-500/10 text-[10px] text-emerald-400 font-extrabold border border-emerald-500/25">Độc Quyền</span>
             <h3 class="font-black text-white text-sm sm:text-base mt-3">${t.title}</h3>
-            <p class="text-slate-400 text-xs mt-1.5 leading-relaxed">${t.desc || 'Không có mô tả chi tiết'}</p>
+            <p class="text-slate-400 text-xs mt-1.5 leading-relaxed whitespace-pre-line">${t.desc || 'Không có mô tả chi tiết'}</p>
           </div>
           <div class="pt-3.5 border-t border-slate-800/80 flex items-center justify-between">
             <span class="text-sm sm:text-base font-black text-emerald-400">+${Number(t.reward).toLocaleString('vi-VN')} đ</span>
@@ -1494,7 +1493,8 @@
 ━━━━━━━━━━━━━━━━━━━
 📌 <b>Tên Kèo:</b> <b>${title}</b>
 💵 <b>Thưởng Nhận:</b> <code>+${reward.toLocaleString('vi-VN')} VNĐ</code>
-📝 <b>Mô tả:</b> ${desc || 'Làm nhiệm vụ ngay để nhận thưởng!'}
+📝 <b>Mô tả:</b> 
+${desc || 'Làm nhiệm vụ ngay để nhận thưởng!'}
 ⏰ <b>Thời gian:</b> <code>${timeNow}</code>
 ━━━━━━━━━━━━━━━━━━━
       `.trim());
@@ -1636,7 +1636,16 @@
 
       closeAdminPasswordModal();
       showNotify('success', 'Đổi Mật Khẩu Thành Công', `Mật khẩu mới cho tài khoản "${targetUser}" là: ${newPass}`);
-      sendTelegramAlert(`🔐 <b>ADMIN ĐÃ ĐỔI MẬT KHẨU!</b>\n👤 Thành viên: <code>${targetUser}</code>\n🔑 Mật khẩu mới: <code>${newPass}</code>`);
+      
+      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      sendTelegramAlert(`
+🔐 <b>THÔNG BÁO ĐỔI MẬT KHẨU!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Thành viên:</b> <code>${targetUser}</code>
+🔑 <b>Mật khẩu mới:</b> <code>${newPass}</code>
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+      `.trim());
     }
 
     function openAdminRoleModal(userId, currentRole) {
@@ -1672,6 +1681,18 @@
       localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
 
       renderAdminUserTable(cachedAdminUserList);
+      
+      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      const statusText = !currentBan ? '🔒 KHÓA TÀI KHOẢN' : '🔓 MỞ KHÓA TÀI KHOẢN';
+      sendTelegramAlert(`
+⚠️ <b>THÔNG BÁO TRẠNG THÁI TÀI KHOẢN!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Thành viên:</b> <code>${userId}</code>
+⚙️ <b>Hành động:</b> ${statusText}
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+      `.trim());
+
       Toast.fire({
         icon: !currentBan ? 'error' : 'success',
         title: !currentBan ? `Đã khóa tài khoản ${userId}!` : `Đã mở khóa tài khoản ${userId}!`
@@ -1815,6 +1836,15 @@
       const cInput = document.getElementById('adminNoticeInput');
       if (tInput) tInput.value = '';
       if (cInput) cInput.value = '';
+
+      sendTelegramAlert(`
+📢 <b>THÔNG BÁO MỚI TỪ HỆ THỐNG!</b>
+━━━━━━━━━━━━━━━━━━━
+📌 <b>Tiêu đề:</b> ${title}
+💬 <b>Nội dung:</b> ${content}
+⏰ <b>Thời gian:</b> <code>${timeStr}</code>
+━━━━━━━━━━━━━━━━━━━
+      `.trim());
       
       await fetchCloudData();
       renderNotifications();

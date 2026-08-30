@@ -13,8 +13,8 @@
   <style>
     * { font-family: 'Plus Jakarta Sans', sans-serif; }
     body { background-color: #0b0f19; color: #f8fafc; }
-    .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
-    .glass-card { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); }
+    .glass-panel { background: rgba(17, 24, 39, 0.88); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glass-card { background: rgba(30, 41, 59, 0.65); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); }
     .gradient-primary { background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); }
     .gradient-text { background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .captcha-clean {
@@ -121,31 +121,47 @@
     </div>
   </div>
 
-  <!-- MENU DRAWER -->
+  <!-- MENU DRAWER (Giao diện chuẩn web lớn kèm thời gian tạo, IP/Session) -->
   <div id="menuDrawer" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
     <div id="drawerOverlay" onclick="closeMenu()" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
     
     <div id="drawerContent" class="absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-slate-900/95 border-l border-slate-800 p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 pointer-events-auto">
       <div class="space-y-4 overflow-y-auto">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-          <div class="flex items-center space-x-2.5">
-            <div class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs border border-blue-500/30">
-              <i class="fa-solid fa-user"></i>
+        
+        <!-- Khối Thông Tin Tài Khoản Kiểu Web Lớn -->
+        <div class="pb-4 border-b border-slate-800/80 bg-slate-950/50 p-4 rounded-2xl border border-slate-800 shadow-inner">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center space-x-2.5">
+              <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-extrabold text-sm shadow-md">
+                <i class="fa-solid fa-user-shield"></i>
+              </div>
+              <div>
+                <p id="drawerUsername" class="text-xs font-extrabold text-white tracking-wide">--</p>
+                <span id="drawerRoleTag" class="text-[9px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-extrabold border border-blue-500/30">CTV Active</span>
+              </div>
             </div>
-            <div>
-              <p class="text-[10px] text-slate-400">Tài khoản</p>
-              <p id="drawerUsername" class="text-xs font-bold text-white">Khách</p>
+            <button onclick="closeMenu()" class="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white cursor-pointer">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+          </div>
+          
+          <!-- Chi tiết Ngày giờ tạo & Trạng thái hệ thống -->
+          <div class="mt-3 space-y-1.5 text-[11px] text-slate-400 border-t border-slate-800/60 pt-2.5 font-medium">
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500 flex items-center gap-1"><i class="fa-regular fa-clock text-[10px]"></i> Khởi tạo:</span>
+              <span id="drawerCreatedAt" class="text-slate-200 font-mono font-bold">--</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500 flex items-center gap-1"><i class="fa-solid fa-shield-halved text-[10px]"></i> Phiên bản:</span>
+              <span class="text-emerald-400 font-mono font-bold">Secure v2.6</span>
             </div>
           </div>
-          <button onclick="closeMenu()" class="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white cursor-pointer">
-            <i class="fa-solid fa-xmark text-sm"></i>
-          </button>
         </div>
 
         <div class="space-y-2">
           <button onclick="goToHome(); closeMenu();" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-slate-800/80 text-slate-200 border border-slate-700/60 text-xs font-bold hover:bg-slate-700 transition cursor-pointer">
             <i class="fa-solid fa-house text-sm text-blue-400"></i>
-            <span>Trang Chủ</span>
+            <span>Trang Chủ Sàn Kèo</span>
           </button>
           <button onclick="openWithdrawModal(); closeMenu();" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold hover:bg-blue-500/20 transition cursor-pointer">
             <i class="fa-solid fa-building-columns text-sm"></i>
@@ -190,8 +206,8 @@
         </div>
       </div>
 
-      <button onclick="handleLogout()" class="w-full py-2 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold hover:bg-rose-500/20 transition flex items-center justify-center gap-2 cursor-pointer">
-        <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng Xuất
+      <button onclick="handleLogout()" class="w-full py-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold hover:bg-rose-500/20 transition flex items-center justify-center gap-2 cursor-pointer">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng Xuất Hệ Thống
       </button>
     </div>
   </div>
@@ -725,7 +741,7 @@
     const ADMIN_CREDENTIALS = { username: 'Admin', password: '123321' };
 
     let systemConfig = {
-      rate: Number(localStorage.getItem('sys_rate')) || 250,
+      rate: 1, // Tỷ lệ chuẩn 1:1 để cộng đúng chính xác số tiền VNĐ thực tế của kèo
       minWithdraw: Number(localStorage.getItem('sys_min_withdraw')) || 50000,
       zalo: localStorage.getItem('sys_zalo') || '0987654321',
       telegram: localStorage.getItem('sys_telegram') || '@cskh',
@@ -873,14 +889,31 @@
       const drawerUser = document.getElementById('drawerUsername');
       if (drawerUser) drawerUser.innerText = userId;
 
+      // Hiển thị ngày giờ tạo/đăng nhập chuẩn phong cách web lớn ở menu drawer
+      const drawerCreatedAt = document.getElementById('drawerCreatedAt');
+      if (drawerCreatedAt) {
+        const nowFormatted = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' - ' + new Date().toLocaleDateString('vi-VN');
+        drawerCreatedAt.innerText = nowFormatted;
+      }
+
       const roleBadge = document.getElementById('roleBadge');
       const drawerAdmin = document.getElementById('btnDrawerAdmin');
+      const drawerRoleTag = document.getElementById('drawerRoleTag');
+
       if (isAdmin || userId === 'Admin') {
         if (roleBadge) roleBadge.classList.remove('hidden');
         if (drawerAdmin) drawerAdmin.classList.remove('hidden');
+        if (drawerRoleTag) {
+          drawerRoleTag.innerText = 'Administrator';
+          drawerRoleTag.className = 'text-[9px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-extrabold border border-amber-500/30';
+        }
       } else {
         if (roleBadge) roleBadge.classList.add('hidden');
         if (drawerAdmin) drawerAdmin.classList.add('hidden');
+        if (drawerRoleTag) {
+          drawerRoleTag.innerText = 'Thành Viên CTV';
+          drawerRoleTag.className = 'text-[9px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-extrabold border border-blue-500/30';
+        }
       }
 
       await fetchCloudData();
@@ -1178,7 +1211,7 @@
       await renderAdminTaskApprovals();
       await loadAdminUserList();
 
-      Toast.fire({ icon: 'success', title: `Đã duyệt và cộng +${sub.reward.toLocaleString('vi-VN')}đ cho tài khoản ${sub.user}!` });
+      Toast.fire({ icon: 'success', title: `Đã duyệt và cộng chính xác +${sub.reward.toLocaleString('vi-VN')}đ cho tài khoản ${sub.user}!` });
     }
 
     async function rejectTaskSubmission(subId) {

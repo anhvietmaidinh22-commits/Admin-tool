@@ -869,12 +869,18 @@
 
     async function syncUserData() {
       if (!currentUser) return;
-      const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', currentUser).single();
-      if (data) {
-        currentVNDBalance = (Number(data.points) || 0) * systemConfig.rate;
-        document.getElementById('navBalanceVND').innerText = currentVNDBalance.toLocaleString('vi-VN');
-        document.getElementById('mainBalanceVND').innerText = currentVNDBalance.toLocaleString('vi-VN');
+      try {
+        const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', currentUser).single();
+        if (data) {
+          currentVNDBalance = (Number(data.points) || 0) * systemConfig.rate;
+        } else {
+          currentVNDBalance = 0;
+        }
+      } catch (e) {
+        currentVNDBalance = 0;
       }
+      document.getElementById('navBalanceVND').innerText = currentVNDBalance.toLocaleString('vi-VN');
+      document.getElementById('mainBalanceVND').innerText = currentVNDBalance.toLocaleString('vi-VN');
     }
 
     function fetchAutoOffers() {
@@ -883,7 +889,6 @@
       const icon = document.getElementById('taskRefreshIcon');
       if (icon) icon.classList.add('fa-spin');
 
-      // Tải lại danh sách từ localStorage để đảm bảo đồng bộ mới nhất từ Admin
       customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
 
       if (customOffers.length === 0) {

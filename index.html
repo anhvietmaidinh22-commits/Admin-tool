@@ -12,10 +12,10 @@
 
   <style>
     * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
-    body { background-color: #030712; color: #f8fafc; margin: 0; }
-    .glass-panel { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
-    .glass-card { background: rgba(30, 41, 59, 0.55); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .glass-card:hover { border-color: rgba(59, 130, 246, 0.4); transform: translateY(-2px); box-shadow: 0 15px 35px -10px rgba(59, 130, 246, 0.15); }
+    body { background-color: #030712; color: #f8fafc; }
+    .glass-panel { background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
+    .glass-card { background: rgba(30, 41, 59, 0.55); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.2s ease-in-out; }
+    .glass-card:hover { border-color: rgba(59, 130, 246, 0.4); transform: translateY(-1px); }
     .gradient-primary { background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); }
     .gradient-text { background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .captcha-clean {
@@ -31,7 +31,6 @@
       border-radius: 32px !important;
       color: #f8fafc !important;
       font-family: 'Plus Jakarta Sans', sans-serif !important;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8) !important;
     }
     .swal2-title { color: #ffffff !important; font-size: 20px !important; font-weight: 800 !important; }
     .swal2-html-container { color: #94a3b8 !important; font-size: 13px !important; }
@@ -41,7 +40,6 @@
       font-weight: 700 !important;
       font-size: 13px !important;
       padding: 12px 28px !important;
-      box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5) !important;
     }
     .custom-tabs-scroll::-webkit-scrollbar { display: none; }
     .custom-tabs-scroll { -ms-overflow-style: none; scrollbar-width: none; }
@@ -51,7 +49,7 @@
 
   <!-- HỖ TRỢ NỔI -->
   <div class="fixed bottom-6 right-6 z-40">
-    <button onclick="openSupportModal()" class="w-14 h-14 rounded-full gradient-primary text-white shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition cursor-pointer shadow-blue-500/60 border-2 border-white/20">
+    <button id="btnSupportFloat" class="w-14 h-14 rounded-full gradient-primary text-white shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition cursor-pointer shadow-blue-500/60 border-2 border-white/20">
       <i class="fa-solid fa-headset text-2xl"></i>
     </button>
   </div>
@@ -64,14 +62,14 @@
       </div>
       <h3 id="welcomeNoticeTitle" class="text-lg font-extrabold text-white text-center">Thông Báo Hệ Thống</h3>
       <div id="welcomeNoticeBody" class="mt-4 text-xs sm:text-sm text-slate-300 leading-relaxed text-left bg-slate-900/80 p-5 rounded-2xl border border-slate-800 max-h-96 overflow-y-auto space-y-3"></div>
-      <button onclick="closeWelcomeNotice()" class="mt-6 w-full py-3.5 rounded-2xl gradient-primary text-white text-xs sm:text-sm font-bold shadow-lg cursor-pointer hover:opacity-90 transition">
+      <button id="btnCloseWelcome" class="mt-6 w-full py-3.5 rounded-2xl gradient-primary text-white text-xs sm:text-sm font-bold shadow-lg cursor-pointer hover:opacity-90 transition">
         Đã Hiểu & Đóng
       </button>
     </div>
   </div>
 
   <!-- AUTH MODAL -->
-  <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex items-center justify-center p-4">
+  <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-xl flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-700/70 shadow-2xl relative overflow-hidden">
       <div id="authFormContent" class="w-full">
         <div class="text-center mb-6">
@@ -106,20 +104,20 @@
               <div id="captchaText" class="col-span-5 captcha-clean py-3 rounded-2xl border border-blue-500/30 text-blue-400 font-black text-sm tracking-widest shadow-inner text-center">
                 ----
               </div>
-              <button onclick="generateCaptcha()" type="button" class="col-span-2 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white cursor-pointer transition flex items-center justify-center" title="Đổi mã">
+              <button id="btnRefreshCaptcha" type="button" class="col-span-2 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white cursor-pointer transition flex items-center justify-center" title="Đổi mã">
                 <i class="fa-solid fa-rotate-right text-sm"></i>
               </button>
             </div>
           </div>
 
-          <button id="btnAuthSubmit" onclick="handleAuthSubmit()" class="w-full py-3.5 rounded-2xl gradient-primary text-white text-xs font-extrabold shadow-xl shadow-blue-500/25 hover:opacity-95 transition cursor-pointer mt-2">
+          <button id="btnAuthSubmit" type="button" class="w-full py-3.5 rounded-2xl gradient-primary text-white text-xs font-extrabold shadow-xl shadow-blue-500/25 hover:opacity-95 transition cursor-pointer mt-2">
             Đăng Nhập Hệ Thống
           </button>
         </div>
 
         <div class="mt-5 text-center text-xs text-slate-400 border-t border-slate-800/80 pt-4">
           <span id="authSwitchText">Chưa có tài khoản?</span>
-          <button id="authSwitchBtn" onclick="toggleAuthMode()" class="text-blue-400 font-extrabold ml-1 hover:underline cursor-pointer">Đăng ký thành viên</button>
+          <button id="authSwitchBtn" type="button" class="text-blue-400 font-extrabold ml-1 hover:underline cursor-pointer">Đăng ký thành viên</button>
         </div>
       </div>
     </div>
@@ -127,11 +125,10 @@
 
   <!-- MENU DRAWER -->
   <div id="menuDrawer" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
-    <div id="drawerOverlay" onclick="closeMenu()" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+    <div id="drawerOverlay" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
     
     <div id="drawerContent" class="absolute top-0 right-0 h-full w-84 max-w-[90vw] bg-slate-900/98 border-l border-slate-800 p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 pointer-events-auto shadow-2xl">
       <div class="space-y-4 overflow-y-auto">
-        
         <div class="pb-4 border-b border-slate-800 bg-slate-950/60 p-4 rounded-3xl border border-slate-800/80 shadow-inner">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center space-x-3">
@@ -143,7 +140,7 @@
                 <span id="drawerRoleTag" class="text-[10px] px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-extrabold border border-blue-500/30">CTV Active</span>
               </div>
             </div>
-            <button onclick="closeMenu()" class="p-2.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white cursor-pointer transition">
+            <button id="btnCloseDrawer" class="p-2.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white cursor-pointer transition">
               <i class="fa-solid fa-xmark text-base"></i>
             </button>
           </div>
@@ -161,23 +158,23 @@
         </div>
 
         <div class="space-y-2.5">
-          <button onclick="goToHome(); closeMenu();" class="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-slate-800/80 text-slate-200 border border-slate-700/60 text-xs font-bold hover:bg-slate-700 transition cursor-pointer">
+          <button id="menuHome" class="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-slate-800/80 text-slate-200 border border-slate-700/60 text-xs font-bold hover:bg-slate-700 transition cursor-pointer">
             <i class="fa-solid fa-house text-sm text-blue-400 w-5"></i>
             <span>Trang Chủ Sàn Kèo</span>
           </button>
-          <button onclick="openHistoryModal(); closeMenu();" class="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold hover:bg-emerald-500/20 transition cursor-pointer">
+          <button id="menuHistory" class="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold hover:bg-emerald-500/20 transition cursor-pointer">
             <i class="fa-solid fa-clock-rotate-left text-sm text-emerald-400 w-5"></i>
             <span>Lịch Sử Giao Dịch Tài Chính</span>
           </button>
-          <button onclick="openWithdrawModal(); closeMenu();" class="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold hover:bg-blue-500/20 transition cursor-pointer">
+          <button id="menuWithdraw" class="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold hover:bg-blue-500/20 transition cursor-pointer">
             <i class="fa-solid fa-building-columns text-sm text-blue-400 w-5"></i>
             <span>Rút Tiền ATM / MoMo</span>
           </button>
-          <button onclick="openSupportModal(); closeMenu();" class="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold hover:bg-purple-500/20 transition cursor-pointer">
+          <button id="menuSupport" class="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold hover:bg-purple-500/20 transition cursor-pointer">
             <i class="fa-solid fa-headset text-sm text-purple-400 w-5"></i>
             <span>Trung Tâm Hỗ Trợ 24/7</span>
           </button>
-          <button id="btnDrawerAdmin" onclick="toggleView('admin'); closeMenu();" class="hidden w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-amber-500/10 text-amber-300 border border-amber-500/20 text-xs font-bold hover:bg-amber-500/20 transition cursor-pointer">
+          <button id="btnDrawerAdmin" class="hidden w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-amber-500/10 text-amber-300 border border-amber-500/20 text-xs font-bold hover:bg-amber-500/20 transition cursor-pointer">
             <i class="fa-solid fa-crown text-sm text-amber-400 w-5"></i>
             <span>Bảng Quản Trị Hệ Thống</span>
           </button>
@@ -212,7 +209,7 @@
         </div>
       </div>
 
-      <button onclick="handleLogout()" class="w-full py-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-extrabold hover:bg-rose-500/20 transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-rose-500/5">
+      <button id="btnLogout" class="w-full py-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-extrabold hover:bg-rose-500/20 transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-rose-500/5">
         <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng Xuất Hệ Thống
       </button>
     </div>
@@ -231,15 +228,15 @@
     </div>
 
     <div class="flex items-center space-x-2 sm:space-x-3">
-      <button onclick="goToHome()" class="hidden md:flex px-3.5 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold items-center gap-2 cursor-pointer transition">
+      <button id="btnNavHome" class="hidden md:flex px-3.5 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-house text-blue-400"></i> Trang Chủ
       </button>
 
-      <button onclick="openHistoryModal()" class="hidden md:flex px-3.5 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold items-center gap-2 cursor-pointer transition">
+      <button id="btnNavHistory" class="hidden md:flex px-3.5 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Lịch Sử
       </button>
 
-      <button onclick="openNoticeModal()" class="relative w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer flex-shrink-0">
+      <button id="btnNavNotice" class="relative w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer flex-shrink-0">
         <i class="fa-regular fa-bell text-sm"></i>
         <span id="noticeDot" class="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse shadow-md shadow-rose-500/50"></span>
       </button>
@@ -249,7 +246,7 @@
         <span class="text-emerald-400 font-black whitespace-nowrap"><span id="navBalanceVND">0</span> đ</span>
       </div>
 
-      <button onclick="openMenu()" class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white flex items-center justify-center transition cursor-pointer shadow-md hover:bg-slate-800 flex-shrink-0">
+      <button id="btnOpenMenu" class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white flex items-center justify-center transition cursor-pointer shadow-md hover:bg-slate-800 flex-shrink-0">
         <i class="fa-solid fa-bars text-base"></i>
       </button>
     </div>
@@ -306,7 +303,7 @@
         </div>
 
         <div class="flex items-center space-x-2">
-          <button onclick="fetchAutoOffers()" class="px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-xs font-bold text-slate-300 flex items-center gap-2 cursor-pointer transition shadow-md">
+          <button id="btnRefreshTasks" class="px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-xs font-bold text-slate-300 flex items-center gap-2 cursor-pointer transition shadow-md">
             <i id="taskRefreshIcon" class="fa-solid fa-rotate-right"></i> Làm Mới Sàn
           </button>
         </div>
@@ -327,38 +324,38 @@
         </h2>
         <p class="text-xs text-slate-400 mt-0.5">Duyệt ảnh chứng chỉ nhiệm vụ, quản lý thành viên, tài chính & cài đặt</p>
       </div>
-      <button onclick="goToHome()" class="px-4 py-2.5 rounded-2xl gradient-primary text-white text-xs font-bold shadow-lg flex items-center gap-2 cursor-pointer">
+      <button id="btnAdminHome" class="px-4 py-2.5 rounded-2xl gradient-primary text-white text-xs font-bold shadow-lg flex items-center gap-2 cursor-pointer">
         <i class="fa-solid fa-house"></i> Về Trang Chủ
       </button>
     </div>
 
     <!-- 9 Tab Admin Đầy Đủ -->
     <div class="flex space-x-2.5 overflow-x-auto pb-2 text-xs font-bold custom-tabs-scroll">
-      <button onclick="switchAdminTab('tabTaskApprovals')" id="btnTabTaskApprovals" class="px-4 py-3 rounded-2xl bg-blue-600 text-white shadow-lg whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
+      <button id="btnTabTaskApprovals" class="px-4 py-3 rounded-2xl bg-blue-600 text-white shadow-lg whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-list-check"></i> 1. Duyệt Kèo (<span id="pendingTaskBadgeCount">0</span>)
       </button>
-      <button onclick="switchAdminTab('tabUsers')" id="btnTabUsers" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
+      <button id="btnTabUsers" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-users-gear"></i> 2. Khách Hàng
       </button>
-      <button onclick="switchAdminTab('tabAddOffer')" id="btnTabAddOffer" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
+      <button id="btnTabAddOffer" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-plus-circle"></i> 3. Đăng Kèo Mới
       </button>
-      <button onclick="switchAdminTab('tabFinance')" id="btnTabFinance" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
+      <button id="btnTabFinance" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-money-bill-transfer"></i> 4. Duyệt Rút
       </button>
-      <button onclick="switchAdminTab('tabTelegramBot')" id="btnTabTelegramBot" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
+      <button id="btnTabTelegramBot" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-brands fa-telegram"></i> 5. Bot Telegram
       </button>
-      <button onclick="switchAdminTab('tabFakeWithdraw')" id="btnTabFakeWithdraw" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
+      <button id="btnTabFakeWithdraw" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-wand-magic-sparkles"></i> 6. Tạo Lệnh Rút Ảo
       </button>
-      <button onclick="switchAdminTab('tabFakeBill')" id="btnTabFakeBill" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
+      <button id="btnTabFakeBill" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-receipt"></i> 7. Bill Thanh Toán (Tự Tạo Ảnh Bill)
       </button>
-      <button onclick="switchAdminTab('tabNotices')" id="btnTabNotices" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
+      <button id="btnTabNotices" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-bullhorn"></i> 8. Thông Báo
       </button>
-      <button onclick="switchAdminTab('tabSupport')" id="btnTabSupport" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
+      <button id="btnTabSupport" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-headset"></i> 9. Hỗ Trợ
       </button>
     </div>
@@ -397,14 +394,14 @@
         </div>
         
         <div class="flex items-center gap-2 flex-wrap">
-          <select id="adminRoleFilter" onchange="filterAdminUserList()" class="bg-slate-900 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-xs text-white focus:outline-none">
+          <select id="adminRoleFilter" class="bg-slate-900 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-xs text-white focus:outline-none">
             <option value="all">Tất cả vai trò</option>
             <option value="admin">Admin</option>
             <option value="manager">Manager</option>
             <option value="member">Member</option>
           </select>
-          <input id="adminSearchInput" oninput="filterAdminUserList()" type="text" placeholder="Tìm tài khoản..." class="bg-slate-900 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-xs text-white focus:outline-none w-40 sm:w-52">
-          <button onclick="loadAdminUserList()" class="px-3.5 py-2.5 rounded-2xl bg-slate-800 text-slate-300 text-xs hover:bg-slate-700 cursor-pointer"><i class="fa-solid fa-rotate-right"></i></button>
+          <input id="adminSearchInput" type="text" placeholder="Tìm tài khoản..." class="bg-slate-900 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-xs text-white focus:outline-none w-40 sm:w-52">
+          <button id="btnRefreshUsers" class="px-3.5 py-2.5 rounded-2xl bg-slate-800 text-slate-300 text-xs hover:bg-slate-700 cursor-pointer"><i class="fa-solid fa-rotate-right"></i></button>
         </div>
       </div>
 
@@ -440,7 +437,7 @@
         </div>
 
         <div class="text-right">
-          <button onclick="adminAddNewOffer()" class="px-6 py-3 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-extrabold text-xs shadow-lg shadow-amber-600/25 transition cursor-pointer">
+          <button id="btnAddOfferSubmit" class="px-6 py-3 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-extrabold text-xs shadow-lg shadow-amber-600/25 transition cursor-pointer">
             <i class="fa-solid fa-paper-plane mr-1"></i> Đăng Kèo Ngay Lập Tức
           </button>
         </div>
@@ -517,10 +514,10 @@
       </div>
 
       <div class="flex justify-end gap-2.5 pt-2">
-        <button onclick="testTelegramBotAlert()" class="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-sky-400 font-extrabold text-xs transition cursor-pointer">
+        <button id="btnTestTelegram" class="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-sky-400 font-extrabold text-xs transition cursor-pointer">
           <i class="fa-solid fa-paper-plane mr-1"></i> Bắn Tin Thử Nghiệm Cả 2 Bot
         </button>
-        <button onclick="saveTelegramBotConfig()" class="px-6 py-3 rounded-2xl bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs shadow-lg shadow-sky-600/25 transition cursor-pointer">
+        <button id="btnSaveTelegram" class="px-6 py-3 rounded-2xl bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs shadow-lg shadow-sky-600/25 transition cursor-pointer">
           <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu Cấu Hình Lên Cloud
         </button>
       </div>
@@ -532,7 +529,7 @@
         <h3 class="text-sm font-extrabold text-emerald-400 flex items-center gap-2">
           <i class="fa-solid fa-wand-magic-sparkles"></i> Tạo Lệnh Rút Tiền Ảo Vào Nhóm
         </h3>
-        <span class="text-[11px] text-slate-400">Tạo yêu cầu rút tiền giả lập & Tự động chạy ngầm</span>
+        <span class="text-[11px] text-slate-400">Sau 60s bot tự động gửi ảnh tích xanh thành công</span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
@@ -559,35 +556,35 @@
             <option value="180">180 giây (3 phút)</option>
           </select>
         </div>
-        <button id="btnToggleAutoFake" onclick="toggleAutoFakeWithdraw()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md">
+        <button id="btnToggleAutoFake" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md">
           <i class="fa-solid fa-play mr-1"></i> Bật Auto Tự Động
         </button>
       </div>
 
       <div class="text-right pt-2">
-        <button onclick="sendFakeWithdrawAlert()" class="px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-600/25 transition cursor-pointer">
+        <button id="btnSendFakeWithdraw" class="px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-600/25 transition cursor-pointer">
           <i class="fa-solid fa-paper-plane mr-1"></i> Gửi Lệnh Rút Ảo Ngay Lập Tức
         </button>
       </div>
     </div>
 
-    <!-- TAB 7: BILL THANH TOÁN (CÓ AUTO BILL) -->
+    <!-- TAB 7: BILL THANH TOÁN (GỬI ẢNH TÍCH XANH THÀNH CÔNG) -->
     <div id="tabFakeBill" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <h3 class="text-sm font-extrabold text-amber-400 flex items-center gap-2">
-          <i class="fa-solid fa-receipt"></i> Tự Động Tạo Bill Thanh Toán & Gửi Kèm Ảnh
+          <i class="fa-solid fa-receipt"></i> Gửi Ảnh Xác Nhận "Thành Công" Kèm Lệnh
         </h3>
-        <span class="text-[11px] text-slate-400">Tạo biên lai tự động kèm ảnh & Auto chạy ngầm</span>
+        <span class="text-[11px] text-slate-400">Dùng mẫu tích xanh chuẩn chuyên nghiệp</span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
         <div>
           <label class="block text-slate-400 mb-1 font-bold">Ngân hàng thanh toán</label>
           <select id="genBillBank" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-            <option value="vcb">Vietcombank</option>
-            <option value="mbbank">MB Bank</option>
-            <option value="techcombank">Techcombank</option>
-            <option value="acb">ACB Bank</option>
+            <option value="MBBank">MB Bank</option>
+            <option value="Vietcombank">Vietcombank</option>
+            <option value="Techcombank">Techcombank</option>
+            <option value="Ví MoMo">Ví MoMo</option>
           </select>
         </div>
         <div>
@@ -599,7 +596,7 @@
           <input id="genBillName" type="text" placeholder="NGUYEN VAN A" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none uppercase">
         </div>
         <div>
-          <label class="block text-slate-400 mb-1 font-bold">Số tài khoản nhận</label>
+          <label class="block text-slate-400 mb-1 font-bold">Số tài khoản / SĐT nhận</label>
           <input id="genBillStk" type="text" placeholder="0987654321..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
         </div>
         <div class="sm:col-span-2">
@@ -608,24 +605,9 @@
         </div>
       </div>
 
-      <!-- ĐIỀU KHIỂN AUTO BILL -->
-      <div class="bg-slate-950/70 p-4 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="flex items-center gap-2 text-xs">
-          <span class="text-slate-300 font-bold">🔄 Tự động tạo & bắn ảnh bill ngẫu nhiên mỗi:</span>
-          <select id="autoBillInterval" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold focus:outline-none">
-            <option value="45">45 giây</option>
-            <option value="90" selected>90 giây</option>
-            <option value="180">180 giây</option>
-          </select>
-        </div>
-        <button id="btnToggleAutoBill" onclick="toggleAutoBill()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md">
-          <i class="fa-solid fa-play mr-1"></i> Bật Auto Bill
-        </button>
-      </div>
-
       <div class="text-right pt-2">
-        <button onclick="generateAndSendAutoBill()" class="px-6 py-3.5 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-extrabold text-xs shadow-lg shadow-amber-600/25 transition cursor-pointer">
-          <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Tự Động Tạo Ảnh Bill & Bắn Ra Nhóm
+        <button id="btnSendAutoBill" class="px-6 py-3.5 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-extrabold text-xs shadow-lg shadow-amber-600/25 transition cursor-pointer">
+          <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Gửi Lệnh Kèm Ảnh "Thành Công"
         </button>
       </div>
     </div>
@@ -653,7 +635,7 @@
       </div>
       
       <div class="text-right">
-        <button onclick="adminPublishNotice()" class="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-lg shadow-blue-600/25 transition cursor-pointer">
+        <button id="btnPublishNotice" class="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-lg shadow-blue-600/25 transition cursor-pointer">
           <i class="fa-solid fa-bullhorn mr-1"></i> Thêm Thông Báo Mới
         </button>
       </div>
@@ -692,7 +674,7 @@
         </div>
       </div>
       <div class="text-right">
-        <button onclick="saveAdminSupportConfig()" class="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-600/25 transition cursor-pointer">
+        <button id="btnSaveSupport" class="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-600/25 transition cursor-pointer">
           <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu Cấu Hình Hỗ Trợ & Nhóm CTV
         </button>
       </div>
@@ -707,7 +689,7 @@
         <h3 class="font-bold text-base text-white flex items-center gap-2">
           <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Lịch Sử Giao Dịch Tài Chính
         </h3>
-        <button onclick="closeHistoryModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
+        <button id="closeHistory" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
       </div>
       <div id="historyModalContent" class="space-y-2.5 max-h-80 overflow-y-auto text-xs">
         <p class="text-center text-slate-500 py-4">Chưa có giao dịch nào được ghi nhận.</p>
@@ -722,7 +704,7 @@
         <h3 class="font-bold text-sm text-white flex items-center gap-2">
           <i class="fa-solid fa-key text-amber-400"></i> Đổi Mật Khẩu Thành Viên
         </h3>
-        <button onclick="closeAdminPasswordModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+        <button id="closePassModal" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="space-y-3 text-xs">
         <div>
@@ -733,7 +715,7 @@
           <label class="block text-slate-400 mb-1">Mật khẩu mới:</label>
           <input id="adminNewUserPassword" type="text" placeholder="Nhập mật khẩu mới..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
         </div>
-        <button onclick="submitAdminChangePassword()" class="w-full py-3 rounded-2xl gradient-primary text-white font-bold text-xs shadow-lg mt-2 cursor-pointer">
+        <button id="submitPassChange" class="w-full py-3 rounded-2xl gradient-primary text-white font-bold text-xs shadow-lg mt-2 cursor-pointer">
           Lưu Mật Khẩu Mới
         </button>
       </div>
@@ -747,7 +729,7 @@
         <h3 class="font-bold text-sm text-white flex items-center gap-2">
           <i class="fa-solid fa-user-shield text-purple-400"></i> Cấp Quyền & Vai Trò
         </h3>
-        <button onclick="closeAdminRoleModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+        <button id="closeRoleModal" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="space-y-3 text-xs">
         <div>
@@ -762,7 +744,7 @@
             <option value="admin">Quản trị viên (Admin)</option>
           </select>
         </div>
-        <button onclick="submitAdminChangeRole()" class="w-full py-3 rounded-2xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg mt-2 cursor-pointer">
+        <button id="submitRoleChange" class="w-full py-3 rounded-2xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg mt-2 cursor-pointer">
           Cập Nhật Vai Trò
         </button>
       </div>
@@ -776,7 +758,7 @@
         <h3 class="font-bold text-base text-white flex items-center gap-2">
           <i class="fa-solid fa-bell text-amber-400"></i> Bảng Thông Báo Hệ Thống
         </h3>
-        <button onclick="closeNoticeModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+        <button id="closeNotice" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div id="noticeModalContent" class="space-y-3 text-xs max-h-72 overflow-y-auto"></div>
     </div>
@@ -789,7 +771,7 @@
         <h3 class="font-bold text-base text-white flex items-center gap-2">
           <i class="fa-solid fa-headset text-blue-400"></i> Trung Tâm Hỗ Trợ Trực Tuyến
         </h3>
-        <button onclick="closeSupportModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+        <button id="closeSupport" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="space-y-3 text-xs">
         <p class="text-slate-400">Gặp khó khăn khi làm nhiệm vụ hoặc rút tiền? Liên hệ ngay:</p>
@@ -829,7 +811,7 @@
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4">
         <h3 class="font-bold text-base text-white"><i class="fa-solid fa-building-columns text-emerald-400 mr-1.5"></i> Rút Tiền Về Tài Khoản</h3>
-        <button onclick="closeWithdrawModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+        <button id="closeWithdrawModalBtn" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
       </div>
       
       <div class="space-y-3.5 text-xs">
@@ -884,7 +866,7 @@
           <input id="withdrawAmountVND" type="number" placeholder="Tối thiểu 50.000 VNĐ" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
         </div>
 
-        <button onclick="submitWithdrawRequest()" class="w-full py-3.5 rounded-2xl gradient-primary text-white font-bold text-xs shadow-lg mt-3 cursor-pointer">
+        <button id="submitWithdraw" class="w-full py-3.5 rounded-2xl gradient-primary text-white font-bold text-xs shadow-lg mt-3 cursor-pointer">
           Tạo Lệnh Rút Tiền
         </button>
       </div>
@@ -895,6 +877,8 @@
     const SUPABASE_URL = 'https://wksorhagemvkdvaokxgh.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_dcZKjgluXXSqJdpw136ebA_61b0GGYw';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const SUCCESS_IMAGE_URL = 'https://i.ibb.co/689L56L/1000000081.png';
 
     const Toast = Swal.mixin({
       toast: true,
@@ -937,112 +921,9 @@
     let cachedAdminUserList = [];
     let financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
 
-    // TÍNH NĂNG 1: AUTO RÚT ẢO (MỤC 6)
-    let autoFakeIntervalId = null;
-    function toggleAutoFakeWithdraw() {
-      const btn = document.getElementById('btnToggleAutoFake');
-      const selectSec = document.getElementById('autoFakeInterval');
-      
-      if (autoFakeIntervalId) {
-        clearInterval(autoFakeIntervalId);
-        autoFakeIntervalId = null;
-        if (btn) {
-          btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Bật Auto Tự Động';
-          btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md';
-        }
-        showNotify('info', 'Đã Tắt Auto', 'Đã dừng tính năng tự động bắn lệnh rút ảo.');
-      } else {
-        const sec = Number(selectSec?.value || 60) * 1000;
-        const randomNames = ['hoangnam99', 'ductuan88', 'thanhhang68', 'vanminh123', 'ngocanh79', 'tuanKini', 'phuongthao9x', 'quanghuy2k', 'ducminhpro', 'thanhdat55', 'hoanganh2k1', 'linhchi555'];
-        const randomBanks = ['MBBank - 0987654321', 'VCB - 1029384756', 'Techcombank - 987654321', 'Momo - 0359123456', 'ACB - 5566778899', 'VPBank - 8822334455'];
-
-        autoFakeIntervalId = setInterval(() => {
-          const randUser = randomNames[Math.floor(Math.random() * randomNames.length)];
-          const baseAmount = Math.floor(Math.random() * 8) * 50000 + 80000;
-          const randomOdd = Math.floor(Math.random() * 890) + 110;
-          const randAmount = baseAmount + randomOdd;
-          const randBank = randomBanks[Math.floor(Math.random() * randomBanks.length)];
-          const randInfo = `${randBank} (NGUYEN VAN ${randUser.toUpperCase()})`;
-          const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-          
-          sendGroupAlert(`
-💳 <b>YÊU CẦU RÚT TIỀN MỚI!</b>
-━━━━━━━━━━━━━━━━━━━
-👤 <b>Thành viên:</b> <code>${randUser}</code>
-💰 <b>Số tiền rút:</b> <code>${randAmount.toLocaleString('vi-VN')} VNĐ</code>
-🏦 <b>Thụ hưởng:</b> <code>${randInfo}</code>
-⏰ <b>Thời gian:</b> <code>${timeNow}</code>
-━━━━━━━━━━━━━━━━━━━
-          `.trim());
-        }, sec);
-
-        if (btn) {
-          btn.innerHTML = '<i class="fa-solid fa-stop mr-1"></i> Dừng Auto';
-          btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md animate-pulse';
-        }
-        showNotify('success', 'Đã Bật Auto Tự Động', `Hệ thống tự động bắn lệnh rút ảo ngẫu nhiên mỗi ${selectSec.value} giây!`);
-      }
-    }
-
-    // TÍNH NĂNG 2: AUTO BILL THANH TOÁN (MỤC 7)
-    let autoBillIntervalId = null;
-    function toggleAutoBill() {
-      const btn = document.getElementById('btnToggleAutoBill');
-      const selectSec = document.getElementById('autoBillInterval');
-      
-      if (autoBillIntervalId) {
-        clearInterval(autoBillIntervalId);
-        autoBillIntervalId = null;
-        if (btn) {
-          btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Bật Auto Bill';
-          btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md';
-        }
-        showNotify('info', 'Đã Tắt Auto Bill', 'Đã dừng tính năng tự động tạo và bắn bill thanh toán.');
-      } else {
-        const sec = Number(selectSec?.value || 90) * 1000;
-        const randomNames = ['HOANG NAM', 'DUC TUAN', 'THANH HANG', 'VAN MINH', 'NGOC ANH', 'TUAN KINI', 'PHUONG THAO', 'QUANG HUY', 'DUC MINH', 'THANH DAT'];
-        const randomBanks = ['vcb', 'mbbank', 'techcombank', 'acb'];
-
-        autoBillIntervalId = setInterval(() => {
-          const randName = randomNames[Math.floor(Math.random() * randomNames.length)];
-          const randBank = randomBanks[Math.floor(Math.random() * randomBanks.length)];
-          const base = Math.floor(Math.random() * 8) * 50000 + 80000;
-          const odd = Math.floor(Math.random() * 890) + 110;
-          const randAmount = base + odd;
-          const randStk = '09' + Math.floor(10000000 + Math.random() * 90000000);
-          const randNote = 'THANH TOAN THUONG KEO AUTOPOSTAI';
-
-          let apiUrl = `https://img.vietqr.io/image/VCB-${randStk}-compact2.jpg?amount=${randAmount}&addInfo=${encodeURIComponent(randNote)}&accountName=${encodeURIComponent(randName)}`;
-          if (randBank === 'mbbank') apiUrl = `https://img.vietqr.io/image/MB-${randStk}-compact2.jpg?amount=${randAmount}&addInfo=${encodeURIComponent(randNote)}&accountName=${encodeURIComponent(randName)}`;
-          else if (randBank === 'techcombank') apiUrl = `https://img.vietqr.io/image/TCB-${randStk}-compact2.jpg?amount=${randAmount}&addInfo=${encodeURIComponent(randNote)}&accountName=${encodeURIComponent(randName)}`;
-
-          const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-          const caption = `
-✅ <b>RÚT TIỀN THÀNH CÔNG!</b>
-━━━━━━━━━━━━━━━━━━━
-👤 <b>Tài khoản / Tên:</b> <b>${randName}</b>
-💰 <b>Số tiền nhận:</b> <code>+${randAmount.toLocaleString('vi-VN')} VNĐ</code>
-🏦 <b>Tài khoản:</b> <code>${randStk} (${randBank.toUpperCase()})</code>
-📝 <b>Nội dung:</b> ${randNote}
-📌 <b>Trạng thái:</b> <b style="color:#22c55e">Thành công</b>
-⏰ <b>Thời gian:</b> <code>${timeNow}</code>
-━━━━━━━━━━━━━━━━━━━
-          `.trim();
-
-          sendGroupPhotoAlert(apiUrl, caption);
-        }, sec);
-
-        if (btn) {
-          btn.innerHTML = '<i class="fa-solid fa-stop mr-1"></i> Dừng Auto Bill';
-          btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md animate-pulse';
-        }
-        showNotify('success', 'Đã Bật Auto Bill', `Hệ thống tự động tạo ảnh bill chuyển khoản ngẫu nhiên mỗi ${selectSec.value} giây!`);
-      }
-    }
-
     async function loadSystemConfigFromCloud() {
       try {
-        const { data, error } = await supabaseClient.from('system_settings').select('*');
+        const { data } = await supabaseClient.from('system_settings').select('*');
         if (data && data.length > 0) {
           data.forEach(item => {
             if (item.key === 'admin_token') systemConfig.adminToken = item.value;
@@ -1204,45 +1085,111 @@
       } catch (err) {}
     }
 
-    async function testTelegramBotAlert() {
-      const aToken = document.getElementById('adminCfgAdminToken')?.value.trim();
-      const aChatId = document.getElementById('adminCfgAdminChatId')?.value.trim();
-      const gToken = document.getElementById('adminCfgGroupToken')?.value.trim();
-      const gChatId = document.getElementById('adminCfgGroupChatId')?.value.trim();
+    const vietnameseFullNames = [
+      "NGUYỄN VĂN ANH", "TRẦN THỊ HỒNG", "LÊ VĂN HOÀNG", "PHẠM THỊ LAN", 
+      "HOÀNG VĂN NAM", "VŨ THỊ MAI", "ĐẶNG VĂN LONG", "BÙI THỊ THẢO", 
+      "HỒ VĂN QUÂN", "NGÔ THỊ YẾN", "DƯƠNG VĂN SƠN", "LÝ THỊ KIM"
+    ];
+    function getRandomVietnameseName() {
+      return vietnameseFullNames[Math.floor(Math.random() * vietnameseFullNames.length)];
+    }
 
-      if ((!aToken || !aChatId) && (!gToken || !gChatId)) {
-        return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập đầy đủ Bot Token và Chat ID trước khi thử nghiệm!');
+    function triggerSyncedWithdrawSuccess(user, amount, info) {
+      const timeOrder = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      
+      sendGroupAlert(`
+💳 <b>YÊU CẦU RÚT TIỀN MỚI!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Thành viên:</b> <code>${user}</code>
+💰 <b>Số tiền rút:</b> <code>${amount.toLocaleString('vi-VN')} VNĐ</code>
+🏦 <b>Thụ hưởng:</b> <code>${info}</code>
+⏰ <b>Thời gian:</b> <code>${timeOrder}</code>
+━━━━━━━━━━━━━━━━━━━
+      `.trim());
+
+      setTimeout(async () => {
+        const timeSuccess = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+        const successCaption = `
+✅ <b>RÚT TIỀN THÀNH CÔNG!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Tài khoản / Tên:</b> <b>${user.toUpperCase()}</b>
+💰 <b>Số tiền nhận:</b> <code>+${amount.toLocaleString('vi-VN')} VNĐ</code>
+🏦 <b>Thụ hưởng:</b> <code>${info}</code>
+📌 <b>Trạng thái:</b> <b style="color:#22c55e">Thành công</b>
+⏰ <b>Thời gian:</b> <code>${timeSuccess}</code>
+━━━━━━━━━━━━━━━━━━━
+        `.trim());
+        await sendGroupPhotoAlert(SUCCESS_IMAGE_URL, successCaption);
+      }, 60000); 
+    }
+
+    let autoFakeIntervalId = null;
+    function toggleAutoFakeWithdraw() {
+      const btn = document.getElementById('btnToggleAutoFake');
+      const selectSec = document.getElementById('autoFakeInterval');
+      if (autoFakeIntervalId) {
+        clearInterval(autoFakeIntervalId);
+        autoFakeIntervalId = null;
+        if (btn) { btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Bật Auto Ảo'; btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md'; }
+        showNotify('info', 'Đã Tắt Auto', 'Đã dừng tính năng tự động bắn lệnh rút ảo.');
+      } else {
+        const sec = Number(selectSec?.value || 60) * 1000;
+        const randomUsernames = ['hoangnam99', 'ductuan88', 'thanhhang68', 'vanminh123', 'ngocanh79', 'tuanKini', 'phuongthao9x', 'quanghuy2k', 'ducminhpro', 'thanhdat55'];
+        const randomBanks = ['MBBank - 0987654321', 'VCB - 1029384756', 'Techcombank - 987654321', 'Momo - 0359123456', 'ACB - 5566778899'];
+
+        autoFakeIntervalId = setInterval(() => {
+          const randUser = randomUsernames[Math.floor(Math.random() * randomUsernames.length)];
+          const baseAmount = Math.floor(Math.random() * 8) * 50000 + 80000;
+          const randomOdd = Math.floor(Math.random() * 890) + 110;
+          const randAmount = baseAmount + randomOdd;
+          const randBank = randomBanks[Math.floor(Math.random() * randomBanks.length)];
+          const realName = getRandomVietnameseName();
+          const randInfo = `${randBank} (${realName})`;
+
+          triggerSyncedWithdrawSuccess(randUser, randAmount, randInfo);
+        }, sec);
+
+        if (btn) { btn.innerHTML = '<i class="fa-solid fa-stop mr-1"></i> Dừng Auto'; btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md animate-pulse'; }
+        showNotify('success', 'Đã Bật Auto', `Đang tự động bắn lệnh rút ảo mỗi ${selectSec.value} giây!`);
       }
-      try {
-        const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-        if (aToken && aChatId) {
-          await fetch(`https://api.telegram.org/bot${aToken}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: aChatId, text: `👑 <b>TEST ADMIN BOT THÀNH CÔNG!</b>\n⏰ <code>${timeNow}</code>`, parse_mode: 'HTML' })
-          });
-        }
-        if (gToken && gChatId) {
-          const webUrl = window.location.href.split('?')[0];
-          await fetch(`https://api.telegram.org/bot${gToken}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: gChatId,
-              text: `🔔 <b>TEST GROUP BOT THÀNH CÔNG!</b>\n⏰ <code>${timeNow}</code>`,
-              parse_mode: 'HTML',
-              reply_markup: {
-                inline_keyboard: [
-                  [{ text: '🌐 Truy Cập Ngay Vào Web', url: webUrl }]
-                ]
-              }
-            })
-          });
-        }
-        showNotify('success', 'Thành Công', 'Đã bắn tin thử nghiệm thành công! Hãy kiểm tra Telegram.');
-      } catch (err) {
-        showNotify('error', 'Lỗi Kết Nối', 'Không thể kết nối đến máy chủ Telegram.');
+    }
+
+    async function sendFakeWithdrawAlert() {
+      const u = document.getElementById('fakeUser').value.trim();
+      let a = Number(document.getElementById('fakeAmount').value);
+      const i = document.getElementById('fakeInfo').value.trim();
+      if (!u || !i) return showNotify('warning', 'Thiếu', 'Điền đủ tên CTV và thông tin nhận!');
+      if (!a || a <= 0) {
+        a = (Math.floor(Math.random() * 8) * 50000 + 80000) + (Math.floor(Math.random() * 890) + 110);
       }
+      
+      triggerSyncedWithdrawSuccess(u, a, i);
+
+      document.getElementById('fakeUser').value = '';
+      document.getElementById('fakeAmount').value = '';
+      document.getElementById('fakeInfo').value = '';
+      showNotify('success', 'Thành Công', 'Đã gửi lệnh rút ảo! Sau 60s bot sẽ tự động gửi ảnh tích xanh thành công.');
+    }
+
+    async function generateAndSendAutoBill() {
+      const b = document.getElementById('genBillBank').value;
+      let a = Number(document.getElementById('genBillAmount').value);
+      const n = document.getElementById('genBillName').value.trim();
+      const s = document.getElementById('genBillStk').value.trim();
+      const nt = document.getElementById('genBillNote').value.trim();
+      if (!n || !s || !nt) return showNotify('warning', 'Thiếu', 'Điền đủ tên, STK và nội dung!');
+      if (!a || a <= 0) {
+        a = (Math.floor(Math.random() * 8) * 50000 + 80000) + (Math.floor(Math.random() * 890) + 110);
+      }
+
+      const infoText = `${b} - ${s} (${n.toUpperCase()})`;
+      triggerSyncedWithdrawSuccess(n.toLowerCase().replace(/\s+/g, ''), a, infoText);
+
+      document.getElementById('genBillAmount').value = '';
+      document.getElementById('genBillName').value = '';
+      document.getElementById('genBillStk').value = '';
+      document.getElementById('genBillNote').value = '';
+      showNotify('success', 'Thành Công', 'Đã gửi lệnh! Sau 60s bot sẽ tự động gửi ảnh tích xanh.');
     }
 
     let currentCaptcha = '';
@@ -1253,55 +1200,34 @@
       currentCaptcha = res;
       const capEl = document.getElementById('captchaText');
       if (capEl) capEl.innerText = res;
-      const capInput = document.getElementById('authCaptchaInput');
-      if (capInput) capInput.value = '';
     }
 
     function toggleAuthMode() {
       isRegisterMode = !isRegisterMode;
-      const titleEl = document.getElementById('authTitle');
-      const btnEl = document.getElementById('btnAuthSubmit');
-      if (titleEl) titleEl.innerText = isRegisterMode ? 'ĐĂNG KÝ HỆ THỐNG' : 'ĐĂNG NHẬP HỆ THỐNG';
-      if (btnEl) btnEl.innerText = isRegisterMode ? 'Tạo Tài Khoản' : 'Đăng Nhập Hệ Thống';
+      document.getElementById('authTitle').innerText = isRegisterMode ? 'ĐĂNG KÝ HỆ THỐNG' : 'ĐĂNG NHẬP HỆ THỐNG';
+      document.getElementById('btnAuthSubmit').innerText = isRegisterMode ? 'Tạo Tài Khoản' : 'Đăng Nhập Hệ Thống';
+      document.getElementById('authSwitchText').innerText = isRegisterMode ? 'Đã có tài khoản?' : 'Chưa có tài khoản?';
+      document.getElementById('authSwitchBtn').innerText = isRegisterMode ? 'Đăng nhập ngay' : 'Đăng ký thành viên';
       generateCaptcha();
     }
 
     async function handleAuthSubmit() {
-      const uInput = document.getElementById('authUsername');
-      const pInput = document.getElementById('authPassword');
-      const capInput = document.getElementById('authCaptchaInput');
-      
-      if (!uInput || !pInput || !capInput) return;
-      const u = uInput.value.trim();
-      const p = pInput.value.trim();
-      const inputCap = capInput.value.trim().toUpperCase();
+      const u = document.getElementById('authUsername').value.trim();
+      const p = document.getElementById('authPassword').value.trim();
+      const cap = document.getElementById('authCaptchaInput').value.trim().toUpperCase();
 
-      if (!u || !p) return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập tài khoản và mật khẩu!');
-      if (inputCap !== currentCaptcha) { generateCaptcha(); return showNotify('error', 'Sai Mã', 'Mã xác nhận bảo mật không đúng!'); }
+      if (!u || !p) return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng điền đầy đủ tài khoản và mật khẩu!');
+      if (cap !== currentCaptcha) { generateCaptcha(); return showNotify('error', 'Sai Mã', 'Mã bảo mật không đúng!'); }
 
       userPermissions = JSON.parse(localStorage.getItem('user_permissions_db')) || userPermissions;
-      if (userPermissions[u]?.banned) {
-        generateCaptcha();
-        return showNotify('error', 'Tài Khoản Bị Khóa', 'Tài khoản của bạn đã bị khóa bởi quản trị viên hệ thống!');
-      }
+      if (userPermissions[u]?.banned) return showNotify('error', 'Bị Khóa', 'Tài khoản đã bị khóa!');
 
       if (isRegisterMode) {
-        if (u.toLowerCase() === 'admin') { generateCaptcha(); return showNotify('error', 'Lỗi', 'Tài khoản này được bảo lưu!'); }
-        const { error } = await supabaseClient.from('users_task').insert([{ user_id: u, points: 0 }]);
-        if (error) { generateCaptcha(); return showNotify('error', 'Lỗi Đăng Ký', error.message); }
+        if (u.toLowerCase() === 'admin') return showNotify('error', 'Lỗi', 'Tên tài khoản bảo lưu!');
+        await supabaseClient.from('users_task').insert([{ user_id: u, points: 0 }]);
         userPermissions[u] = { role: 'member', banned: false };
         localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
-        
-        const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-        sendAdminAlert(`
-🎉 <b>THÀNH VIÊN MỚI ĐĂNG KÝ!</b>
-━━━━━━━━━━━━━━━━━━━
-👤 <b>Tài khoản:</b> <code>${u}</code>
-⏰ <b>Thời gian:</b> <code>${timeNow}</code>
-━━━━━━━━━━━━━━━━━━━
-        `.trim());
-        
-        showNotify('success', 'Thành Công', 'Đăng ký thành công, vui lòng đăng nhập!');
+        showNotify('success', 'Thành Công', 'Đăng ký thành công, hãy đăng nhập!');
         toggleAuthMode();
       } else {
         if (u === ADMIN_CREDENTIALS.username && p === ADMIN_CREDENTIALS.password) {
@@ -1309,937 +1235,95 @@
           initSession('Admin', true);
           return;
         }
-        
         let { data } = await supabaseClient.from('users_task').select('*').eq('user_id', u).single();
-        if (!data) {
-          await supabaseClient.from('users_task').insert([{ user_id: u, points: 0 }]);
-        }
-
+        if (!data) await supabaseClient.from('users_task').insert([{ user_id: u, points: 0 }]);
         localStorage.setItem('task_auth_user', u);
-        const isAdmin = userPermissions[u]?.role === 'admin' || userPermissions[u]?.role === 'manager' || u === 'Admin';
-        initSession(u, isAdmin);
+        initSession(u, userPermissions[u]?.role === 'admin' || userPermissions[u]?.role === 'manager');
       }
     }
 
-    async function initSession(userId, isAdmin = false) {
-      userPermissions = JSON.parse(localStorage.getItem('user_permissions_db')) || userPermissions;
-      if (userPermissions[userId]?.banned && userId !== 'Admin') {
-        localStorage.removeItem('task_auth_user');
-        showNotify('error', 'Tài Khoản Bị Khóa', 'Tài khoản này đã bị khóa!');
-        return;
-      }
-
+    async function initSession(userId, isAdmin) {
       currentUser = userId;
-      const modal = document.getElementById('authModal');
-      if (modal) modal.classList.add('hidden');
-      
-      const drawerUser = document.getElementById('drawerUsername');
-      if (drawerUser) drawerUser.innerText = userId;
-
-      const drawerCreatedAt = document.getElementById('drawerCreatedAt');
-      if (drawerCreatedAt) {
-        const nowFormatted = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-        drawerCreatedAt.innerText = nowFormatted;
-      }
-
-      const roleBadge = document.getElementById('roleBadge');
-      const drawerAdmin = document.getElementById('btnDrawerAdmin');
-      const drawerRoleTag = document.getElementById('drawerRoleTag');
+      document.getElementById('authModal').classList.add('hidden');
+      document.getElementById('drawerUsername').innerText = userId;
+      document.getElementById('drawerCreatedAt').innerText = new Date().toLocaleTimeString('vi-VN');
 
       if (isAdmin || userId === 'Admin') {
-        if (roleBadge) roleBadge.classList.remove('hidden');
-        if (drawerAdmin) drawerAdmin.classList.remove('hidden');
-        if (drawerRoleTag) {
-          drawerRoleTag.innerText = 'Administrator';
-          drawerRoleTag.className = 'text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-extrabold border border-amber-500/30';
-        }
-      } else {
-        if (roleBadge) roleBadge.classList.add('hidden');
-        if (drawerAdmin) drawerAdmin.classList.add('hidden');
-        if (drawerRoleTag) {
-          drawerRoleTag.innerText = 'Thành Viên CTV';
-          drawerRoleTag.className = 'text-[10px] px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-extrabold border border-blue-500/30';
-        }
+        document.getElementById('roleBadge').classList.remove('hidden');
+        document.getElementById('btnDrawerAdmin').classList.remove('hidden');
+        document.getElementById('drawerRoleTag').innerText = 'Administrator';
       }
 
+      await loadSystemConfigFromCloud();
       await fetchCloudData();
       applySupportConfig();
-      renderNotifications();
       await syncUserData();
-      checkNewOffersNotification();
       fetchAutoOffers();
       popWelcomeNotice();
     }
 
-    function popWelcomeNotice() {
-      if (notifications.length > 0) {
-        const titleEl = document.getElementById('welcomeNoticeTitle');
-        const bodyEl = document.getElementById('welcomeNoticeBody');
-        const noticeModal = document.getElementById('welcomeNoticeModal');
-        
-        const latest = notifications[0];
-        if (titleEl) titleEl.innerText = latest.title;
-        if (bodyEl) {
-          bodyEl.innerHTML = notifications.map(n => `
-            <div class="p-3.5 bg-slate-950/70 border border-slate-800 rounded-2xl text-left space-y-1">
-              <p class="font-black text-white text-xs sm:text-sm">${n.title}</p>
-              <p class="text-slate-300 text-xs leading-relaxed whitespace-pre-line">${n.content}</p>
-            </div>
-          `).join('');
-        }
-        if (noticeModal) noticeModal.classList.remove('hidden');
-      }
-    }
-    function closeWelcomeNotice() { 
-      const m = document.getElementById('welcomeNoticeModal');
-      if (m) m.classList.add('hidden'); 
-    }
-
-    function applySupportConfig() {
-      const zText = document.getElementById('supportZaloText');
-      const zLink = document.getElementById('supportZaloLink');
-      const tText = document.getElementById('supportTelegramText');
-      const tLink = document.getElementById('supportTelegramLink');
-      const wText = document.getElementById('supportWorkTimeText');
-      const gZalo = document.getElementById('drawerGroupZaloLink');
-      const gTele = document.getElementById('drawerGroupTelegramLink');
-
-      if (zText) zText.innerText = systemConfig.zalo;
-      if (zLink) zLink.href = `https://zalo.me/${systemConfig.zalo}`;
-      if (tText) tText.innerText = systemConfig.telegram;
-      if (tLink) tLink.href = `https://t.me/${systemConfig.telegram.replace('@', '')}`;
-      if (wText) wText.innerText = systemConfig.workTime;
-      if (gZalo) gZalo.href = systemConfig.groupZalo;
-      if (gTele) gTele.href = systemConfig.groupTelegram;
-    }
-
-    function renderNotifications() {
-      const modalList = document.getElementById('noticeModalContent');
-      if (notifications.length > 0 && modalList) {
-        modalList.innerHTML = notifications.map(n => `<div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-800"><p class="font-bold text-white text-xs">${n.title}</p><p class="text-slate-300 text-[11px] mt-1 whitespace-pre-line">${n.content}</p></div>`).join('');
-      }
-    }
-
-    async function openNoticeModal() { 
-      await fetchCloudData();
-      renderNotifications();
-      const m = document.getElementById('noticeModal'); 
-      if (m) m.classList.remove('hidden'); 
-    }
-    function closeNoticeModal() { const m = document.getElementById('noticeModal'); if (m) m.classList.add('hidden'); }
-    
-    async function adminClearAllNotices() {
-      const confirm = await Swal.fire({
-        title: 'Xác Nhận Xóa?',
-        text: 'Bạn có chắc chắn muốn xóa toàn bộ thông báo hệ thống không?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Đồng ý xóa',
-        cancelButtonText: 'Hủy'
-      });
-      if (confirm.isConfirmed) {
-        await supabaseClient.from('system_notices').delete().neq('id', 0);
-        notifications = [];
-        renderAdminNoticeManageList();
-        renderNotifications();
-        showNotify('success', 'Đã Xóa', 'Đã xóa toàn bộ thông báo cũ.');
-      }
-    }
-
-    function openHistoryModal() {
-      const m = document.getElementById('historyModal');
-      const content = document.getElementById('historyModalContent');
-      if (!m || !content) return;
-      
-      const txList = getTransactionHistoryForUser(currentUser);
-      if (txList.length === 0) {
-        content.innerHTML = '<p class="text-center text-slate-500 py-6 text-xs">Chưa có giao dịch nào được ghi nhận.</p>';
-      } else {
-        content.innerHTML = txList.map(tx => {
-          let badgeColor = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-          let sign = '+';
-          if (tx.type === 'withdraw') {
-            badgeColor = 'bg-rose-500/10 text-rose-400 border-rose-500/20';
-            sign = '-';
-          } else if (tx.type === 'admin_deduct') {
-            badgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-            sign = '-';
-          }
-          return `
-            <div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between">
-              <div>
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${badgeColor}">${tx.type.toUpperCase()}</span>
-                <p class="font-bold text-white text-xs mt-1.5">${tx.desc}</p>
-                <p class="text-[10px] text-slate-500 font-mono mt-0.5">${tx.time}</p>
-              </div>
-              <div class="text-right font-black text-sm ${sign === '+' ? 'text-emerald-400' : 'text-rose-400'}">
-                ${sign}${tx.amount.toLocaleString('vi-VN')} đ
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-      m.classList.remove('hidden');
-    }
-    function closeHistoryModal() { const m = document.getElementById('historyModal'); if (m) m.classList.add('hidden'); }
-
-    function openSupportModal() { const m = document.getElementById('supportModal'); if (m) m.classList.remove('hidden'); }
-    function closeSupportModal() { const m = document.getElementById('supportModal'); if (m) m.classList.add('hidden'); }
-    
-    function openMenu() { 
-      const drawer = document.getElementById('menuDrawer'); 
-      const overlay = document.getElementById('drawerOverlay');
-      const content = document.getElementById('drawerContent');
-      if (drawer) drawer.classList.remove('pointer-events-none'); 
-      if (overlay) overlay.classList.remove('opacity-0'); 
-      if (content) content.classList.remove('translate-x-full'); 
-    }
-    
-    function closeMenu() { 
-      const overlay = document.getElementById('drawerOverlay');
-      const content = document.getElementById('drawerContent');
-      const drawer = document.getElementById('menuDrawer');
-      if (overlay) overlay.classList.add('opacity-0'); 
-      if (content) content.classList.add('translate-x-full'); 
-      setTimeout(() => { if (drawer) drawer.classList.add('pointer-events-none'); }, 300); 
-    }
-
-    function goToHome() { 
-      toggleView('ctv'); 
-      markOffersAsSeen();
-      popWelcomeNotice(); 
-    }
-
-    async function syncUserData() {
-      if (!currentUser) return;
-      try {
-        const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', currentUser).single();
-        if (data) {
-          currentVNDBalance = (Number(data.points) || 0) * systemConfig.rate;
-        } else {
-          currentVNDBalance = 0;
-        }
-      } catch (e) {
-        currentVNDBalance = 0;
-      }
-      const navB = document.getElementById('navBalanceVND');
-      const mainB = document.getElementById('mainBalanceVND');
-      if (navB) navB.innerText = currentVNDBalance.toLocaleString('vi-VN');
-      if (mainB) mainB.innerText = currentVNDBalance.toLocaleString('vi-VN');
-    }
-
-    async function fetchAutoOffers() {
-      markOffersAsSeen();
-      const container = document.getElementById('nativeTaskList');
-      const countText = document.getElementById('availableTasksCount');
-      const icon = document.getElementById('taskRefreshIcon');
-      if (!container) return;
-      if (icon) icon.classList.add('fa-spin');
-
-      await fetchCloudData();
-
-      const completedIds = getCompletedTasksForUser(currentUser);
-      const availableOffers = customOffers.filter(o => !completedIds.includes(o.id));
-
-      if (availableOffers.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full text-center py-14 space-y-3">
-            <div class="w-14 h-14 bg-slate-800 text-slate-400 rounded-3xl flex items-center justify-center mx-auto text-2xl border border-slate-700 shadow-inner">
-              <i class="fa-solid fa-circle-check text-emerald-400"></i>
-            </div>
-            <p class="text-white font-black text-sm">Bạn đã hoàn thành tất cả nhiệm vụ!</p>
-            <p class="text-slate-500 text-xs">Vui lòng quay lại sau khi Admin đăng thêm chiến dịch mới.</p>
-          </div>
-        `;
-        if (countText) countText.innerText = `0 Kèo sẵn sàng`;
-        if (icon) setTimeout(() => icon.classList.remove('fa-spin'), 400);
-        return;
-      }
-
-      if (countText) countText.innerText = `${availableOffers.length} Kèo sẵn sàng`;
-      container.innerHTML = availableOffers.map(t => `
-        <div class="glass-card rounded-3xl p-5 flex flex-col justify-between space-y-4 shadow-xl">
-          <div>
-            <span class="px-2.5 py-1 rounded-xl bg-emerald-500/10 text-[10px] text-emerald-400 font-extrabold border border-emerald-500/25">Độc Quyền</span>
-            <h3 class="font-black text-white text-sm sm:text-base mt-3">${t.title}</h3>
-            <p class="text-slate-400 text-xs mt-1.5 leading-relaxed whitespace-pre-line">${t.desc || 'Không có mô tả chi tiết'}</p>
-          </div>
-          <div class="pt-3.5 border-t border-slate-800/80 flex items-center justify-between">
-            <span class="text-sm sm:text-base font-black text-emerald-400">+${Number(t.reward).toLocaleString('vi-VN')} đ</span>
-            <button onclick="handleStartTask('${t.id}', '${t.title}', '${t.url}', ${t.reward})" class="px-4.5 py-2.5 rounded-2xl gradient-primary text-white text-xs font-extrabold shadow-md cursor-pointer hover:opacity-90 transition">
-              Làm Kèo <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-            </button>
-          </div>
-        </div>
-      `).join('');
-
-      if (icon) setTimeout(() => icon.classList.remove('fa-spin'), 400);
-    }
-
-    async function handleStartTask(taskId, taskTitle, taskUrl, rewardAmount) {
-      if (!taskUrl || taskUrl === '#') return showNotify('warning', 'Thiếu Link', 'Kèo này chưa có đường dẫn đối tác!');
-      window.open(taskUrl, '_blank');
-
-      const { value: formValues } = await Swal.fire({
-        title: 'Xác Nhận Hoàn Thành Kèo',
-        html: `
-          <div class="text-left space-y-3.5 text-xs">
-            <p class="text-slate-300 font-medium">Nhập ghi chú hoặc mã giao dịch (SĐT / Email đăng ký):</p>
-            <input id="swal-input1" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none" placeholder="Ví dụ: 0987654321...">
-            <p class="text-slate-300 font-medium pt-1">Tải lên ảnh chụp màn hình (Chứng chỉ / Bằng chứng):</p>
-            <input type="file" id="swal-input2" accept="image/*" class="w-full text-slate-400 text-xs file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer">
-          </div>
-        `,
-        focusConfirm: false,
-        showCancelButton: true,
-        confirmButtonText: 'Gửi Bằng Chứng',
-        cancelButtonText: 'Hủy',
-        preConfirm: () => {
-          const note = document.getElementById('swal-input1').value;
-          const fileInput = document.getElementById('swal-input2');
-          return new Promise((resolve, reject) => {
-            if (fileInput.files.length > 0) {
-              const reader = new FileReader();
-              reader.onload = e => resolve({ note, image: e.target.result });
-              reader.onerror = error => reject(error);
-              reader.readAsDataURL(fileInput.files[0]);
-            } else {
-              resolve({ note: note || 'Không có ghi chú', image: null });
-            }
-          });
-        }
-      });
-
-      if (formValues) {
-        const newSubId = Date.now();
-        const timeStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-        
-        await supabaseClient.from('pending_tasks').insert([{
-          id: newSubId,
-          user_id: currentUser,
-          title: taskTitle,
-          reward: rewardAmount,
-          proof_text: formValues.note,
-          proof_image: formValues.image,
-          time: timeStr
-        }]);
-
-        markTaskAsCompletedForUser(currentUser, taskId);
-        
-        const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-        sendAdminAlert(`
-📥 <b>CÓ BẰNG CHỨNG NHIỆM VỤ MỚI CẦN DUYỆT!</b>
-━━━━━━━━━━━━━━━━━━━
-👤 <b>Thành viên:</b> <code>${currentUser}</code>
-🎯 <b>Tên Kèo:</b> ${taskTitle}
-💰 <b>Thưởng:</b> <code>+${rewardAmount.toLocaleString('vi-VN')} VNĐ</code>
-💬 <b>Ghi chú:</b> <code>${formValues.note}</code>
-⏰ <b>Thời gian:</b> <code>${timeNow}</code>
-━━━━━━━━━━━━━━━━━━━
-        `.trim());
-
-        showNotify('success', 'Đã Gửi Bằng Chứng', 'Yêu cầu của bạn đã được gửi cho Admin duyệt.');
-        fetchAutoOffers();
-      }
-    }
-
-    async function toggleView(view) {
-      const ctvV = document.getElementById('ctvView');
-      const adminV = document.getElementById('adminView');
-      if (view === 'admin') {
-        if (ctvV) ctvV.classList.add('hidden');
-        if (adminV) adminV.classList.remove('hidden');
-        await fetchCloudData();
-        await loadAdminUserList();
-        renderAdminOfferList();
-        renderAdminFinanceTable();
-        renderAdminTaskApprovals();
-        loadAdminSupportFields();
-        renderAdminNoticeManageList();
-      } else {
-        if (adminV) adminV.classList.add('hidden');
-        if (ctvV) ctvV.classList.remove('hidden');
-        await syncUserData();
-        fetchAutoOffers();
-      }
-    }
-
-    function switchAdminTab(tabId) {
-      document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('#adminView button[id^="btnTab"]').forEach(b => {
-        b.className = 'px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition';
-      });
-      const targetTab = document.getElementById(tabId);
-      if (targetTab) targetTab.classList.remove('hidden');
-      const btnId = 'btn' + tabId.charAt(0).toUpperCase() + tabId.slice(1);
-      const targetBtn = document.getElementById(btnId);
-      if (targetBtn) targetBtn.className = 'px-4 py-3 rounded-2xl bg-blue-600 text-white shadow-lg whitespace-nowrap flex items-center gap-2 cursor-pointer transition';
-    }
-
-    async function renderAdminTaskApprovals() {
-      await fetchCloudData();
-      const tbody = document.getElementById('adminTaskApprovalsTable');
-      const badge = document.getElementById('pendingTaskBadgeCount');
-      if (badge) badge.innerText = pendingTaskSubmissions.length;
-      if (!tbody) return;
-
-      if (pendingTaskSubmissions.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-slate-500">Chưa có bằng chứng nào chờ duyệt.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = pendingTaskSubmissions.map((s) => {
-        const imgTag = s.proofImage ? `<a href="${s.proofImage}" target="_blank"><img src="${s.proofImage}" class="w-16 h-16 object-cover rounded-2xl border border-slate-700 hover:scale-105 transition shadow"></a>` : '<span class="text-slate-500">Không có ảnh</span>';
-        return `
-          <tr class="hover:bg-slate-800/40">
-            <td class="p-3.5 text-slate-400 font-mono text-[11px]">${s.time}</td>
-            <td class="p-3.5 font-black text-white">${s.user}</td>
-            <td class="p-3.5 text-slate-300">${s.title} <b class="text-emerald-400 font-black">(+${s.reward.toLocaleString('vi-VN')}đ)</b></td>
-            <td class="p-3.5 space-y-1">
-              <p class="font-mono text-amber-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">${s.proofText || ''}</p>
-              ${imgTag}
-            </td>
-            <td class="p-3.5 text-right space-x-2">
-              <button onclick="approveTaskSubmission('${s.id}')" class="px-3.5 py-2 bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 rounded-xl font-bold cursor-pointer transition">Duyệt Cộng</button>
-              <button onclick="rejectTaskSubmission('${s.id}')" class="px-3.5 py-2 bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 rounded-xl font-bold cursor-pointer transition">Hủy</button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    async function approveTaskSubmission(subId) {
-      await fetchCloudData();
-      const sub = pendingTaskSubmissions.find(p => String(p.id) === String(subId));
-      if (!sub) return;
-      const pointDiff = sub.reward / systemConfig.rate;
-
-      let { data } = await supabaseClient.from('users_task').select('points').eq('user_id', sub.user).single();
-      if (!data) {
-        await supabaseClient.from('users_task').insert([{ user_id: sub.user, points: 0 }]);
-        data = { points: 0 };
-      }
-
-      const currentPoints = Number(data.points) || 0;
-      const newPoints = currentPoints + pointDiff;
-
-      const { error } = await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', sub.user);
-      if (error) return showNotify('error', 'Lỗi Duyệt', error.message);
-
-      addTransactionHistory(sub.user, 'earn', sub.reward, `Hoàn thành nhiệm vụ: ${sub.title}`);
-
-      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-      sendAdminAlert(`✅ Admin đã duyệt thưởng cho <b>${sub.user}</b> (+${sub.reward.toLocaleString('vi-VN')}đ)`);
-      sendGroupAlert(`
-🎉 <b>CHÚ MỪNG THÀNH VIÊN NHẬN THƯỞNG!</b>
-━━━━━━━━━━━━━━━━━━━
-👤 <b>Thành viên:</b> <code>${sub.user}</code>
-🎯 <b>Hoàn thành kèo:</b> ${sub.title}
-💰 <b>Nhận thưởng:</b> <code>+${sub.reward.toLocaleString('vi-VN')} VNĐ</code>
-⏰ <b>Thời gian:</b> <code>${timeNow}</code>
-━━━━━━━━━━━━━━━━━━━
-      `.trim());
-
-      await supabaseClient.from('pending_tasks').delete().eq('id', subId);
-
-      await renderAdminTaskApprovals();
-      await loadAdminUserList();
-
-      Toast.fire({ icon: 'success', title: `Đã duyệt và cộng +${sub.reward.toLocaleString('vi-VN')}đ cho tài khoản ${sub.user}!` });
-      showNotify('success', 'Thành Công', `Đã duyệt cộng +${sub.reward.toLocaleString('vi-VN')}đ cho thành viên ${sub.user}`);
-    }
-
-    async function rejectTaskSubmission(subId) {
-      await fetchCloudData();
-      const sub = pendingTaskSubmissions.find(p => String(p.id) === String(subId));
-      if (sub) {
-        addTransactionHistory(sub.user, 'reject', 0, `Bằng chứng nhiệm vụ "${sub.title}" bị từ chối.`);
-      }
-      await supabaseClient.from('pending_tasks').delete().eq('id', subId);
-      await renderAdminTaskApprovals();
-      Toast.fire({ icon: 'info', title: 'Đã từ chối bằng chứng nhiệm vụ.' });
-      showNotify('info', 'Đã Hủy', 'Đã từ chối bằng chứng nhiệm vụ.');
-    }
-
-    async function adminAddNewOffer() {
-      const title = document.getElementById('newOfferTitle').value.trim();
-      const reward = Number(document.getElementById('newOfferReward').value);
-      const url = document.getElementById('newOfferUrl').value.trim();
-      const desc = document.getElementById('newOfferDesc').value.trim();
-      if (!title || !reward || !url) return showNotify('warning', 'Thiếu Dữ Liệu', 'Nhập đủ thông tin kèo!');
-
-      const { error } = await supabaseClient.from('system_offers').insert([{ title, reward, url, description: desc }]);
-      if (error) return showNotify('error', 'Lỗi Đăng Kèo', error.message);
-
-      document.getElementById('newOfferTitle').value = '';
-      document.getElementById('newOfferReward').value = '';
-      document.getElementById('newOfferUrl').value = '';
-      document.getElementById('newOfferDesc').value = '';
-      
-      localStorage.removeItem('last_seen_offer_all');
-
-      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-      await sendGroupAlert(`
-🔥 <b>CÓ KÈO NHIỆM VỤ MỚI TRÊN SÀN!</b>
-━━━━━━━━━━━━━━━━━━━
-📌 <b>Tên Kèo:</b> <b>${title}</b>
-💵 <b>Thưởng Nhận:</b> <code>+${reward.toLocaleString('vi-VN')} VNĐ</code>
-📝 <b>Mô tả:</b> 
-${desc || 'Làm nhiệm vụ ngay để nhận thưởng!'}
-⏰ <b>Thời gian:</b> <code>${timeNow}</code>
-━━━━━━━━━━━━━━━━━━━
-      `.trim());
-
-      showNotify('success', 'Thành Công', 'Đã đăng kèo mới thành công! Bot công khai đã bắn tin báo về nhóm.');
-      await renderAdminOfferList();
-      fetchAutoOffers();
-    }
-
-    async function renderAdminOfferList() {
-      await fetchCloudData();
-      const list = document.getElementById('adminOfferManageList');
-      if (!list) return;
-      if (customOffers.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có kèo nào.</p>';
-      list.innerHTML = customOffers.map((o) => `
-        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex justify-between items-center text-xs shadow-inner">
-          <div><p class="font-black text-white text-sm">${o.title} <span class="text-emerald-400 font-black ml-2">+${Number(o.reward).toLocaleString('vi-VN')}đ</span></p></div>
-          <button onclick="adminDeleteOffer('${o.id}')" class="p-2.5 text-rose-400 hover:text-rose-300 cursor-pointer transition"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      `).join('');
-    }
-
-    async function adminDeleteOffer(offerId) {
-      await supabaseClient.from('system_offers').delete().eq('id', offerId);
-      await renderAdminOfferList();
-      fetchAutoOffers();
-      Toast.fire({ icon: 'info', title: 'Đã xóa kèo.' });
-    }
-
-    async function loadAdminUserList() {
-      const container = document.getElementById('adminUserCardsContainer');
-      if (!container) return;
-      container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-8 text-xs">Đang tải danh sách thành viên...</div>';
-      
-      const { data } = await supabaseClient.from('users_task').select('*').order('created_at', { ascending: false });
-      if (data) {
-        cachedAdminUserList = data;
-        renderAdminUserTable(cachedAdminUserList);
-      }
-    }
-
-    function renderAdminUserTable(list) {
-      const container = document.getElementById('adminUserCardsContainer');
-      if (!container) return;
-      if (!list || list.length === 0) {
-        container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-8 text-xs">Không có tài khoản nào phù hợp.</div>';
-        return;
-      }
-
-      container.innerHTML = list.map(u => {
-        const vnd = (Number(u.points) || 0) * systemConfig.rate;
-        const role = userPermissions[u.user_id]?.role || (u.user_id === 'Admin' ? 'admin' : 'member');
-        const isBanned = userPermissions[u.user_id]?.banned || false;
-
-        let roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/35">Member</span>';
-        if (role === 'admin') roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/35">Admin</span>';
-        if (role === 'manager') roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/35">Manager</span>';
-
-        const statusBadge = isBanned 
-          ? '<span class="text-rose-400 font-bold text-[10px] sm:text-[11px] flex items-center gap-1 whitespace-nowrap"><i class="fa-solid fa-ban text-[9px]"></i> Khóa</span>'
-          : '<span class="text-emerald-400 font-bold text-[10px] sm:text-[11px] flex items-center gap-1 whitespace-nowrap"><i class="fa-solid fa-circle-check text-[9px]"></i> Hoạt Động</span>';
-
-        return `
-          <div class="glass-card rounded-3xl p-4 sm:p-5 space-y-3.5 shadow-xl border border-slate-800">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800 gap-2">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-slate-800 text-blue-400 flex items-center justify-center text-sm font-bold border border-slate-700 shadow-inner flex-shrink-0">
-                  <i class="fa-solid fa-user"></i>
-                </div>
-                <div class="min-w-0">
-                  <h4 class="font-black text-white text-xs sm:text-sm truncate">${u.user_id}</h4>
-                  <div class="mt-0.5 flex items-center gap-1">${roleBadge}</div>
-                </div>
-              </div>
-              <div class="flex-shrink-0">${statusBadge}</div>
-            </div>
-
-            <div class="flex items-center justify-between bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/80 shadow-inner">
-              <span class="text-[11px] text-slate-400 font-semibold">Số dư ví:</span>
-              <span class="text-sm font-black text-emerald-400">${vnd.toLocaleString('vi-VN')} đ</span>
-            </div>
-
-            <div class="grid grid-cols-3 gap-1.5 sm:gap-2 pt-1">
-              <button onclick="openAdminPasswordModal('${u.user_id}')" class="py-2.5 px-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
-                <i class="fa-solid fa-key"></i> Pass
-              </button>
-              <button onclick="openAdminRoleModal('${u.user_id}', '${role}')" class="py-2.5 px-1 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
-                <i class="fa-solid fa-user-shield"></i> Quyền
-              </button>
-              <button onclick="toggleBanUser('${u.user_id}')" class="py-2.5 px-1 ${isBanned ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-300 hover:bg-rose-500/30'} rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
-                <i class="fa-solid ${isBanned ? 'fa-lock-open' : 'fa-lock'}"></i> ${isBanned ? 'Mở' : 'Khóa'}
-              </button>
-            </div>
-
-            <div class="flex items-center gap-2 pt-1">
-              <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập VNĐ..." class="w-full min-w-0 flex-1 bg-slate-950 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 shadow-inner">
-              <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-3 sm:px-4 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-2xl text-xs font-extrabold cursor-pointer transition flex-shrink-0">+ Cộng</button>
-              <button onclick="adminCustomAdjust('${u.user_id}', -1)" class="px-3 sm:px-4 py-2.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/30 rounded-2xl text-xs font-extrabold cursor-pointer transition flex-shrink-0">- Trừ</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function filterAdminUserList() {
-      const qInput = document.getElementById('adminSearchInput');
-      const roleFilterEl = document.getElementById('adminRoleFilter');
-      if (!qInput || !roleFilterEl) return;
-      const q = qInput.value.trim().toLowerCase();
-      const roleFilter = roleFilterEl.value;
-
-      const filtered = cachedAdminUserList.filter(u => {
-        const matchName = u.user_id.toLowerCase().includes(q);
-        const userRole = userPermissions[u.user_id]?.role || (u.user_id === 'Admin' ? 'admin' : 'member');
-        const matchRole = (roleFilter === 'all') || (userRole === roleFilter);
-        return matchName && matchRole;
-      });
-
-      renderAdminUserTable(filtered);
-    }
-
-    function openAdminPasswordModal(userId) {
-      const targetUser = document.getElementById('adminTargetUser');
-      const newPass = document.getElementById('adminNewUserPassword');
-      const modal = document.getElementById('adminPasswordModal');
-      if (targetUser) targetUser.value = userId;
-      if (newPass) newPass.value = '';
-      if (modal) modal.classList.remove('hidden');
-    }
-    function closeAdminPasswordModal() { 
-      const m = document.getElementById('adminPasswordModal');
-      if (m) m.classList.add('hidden'); 
-    }
-
-    function submitAdminChangePassword() {
-      const targetUser = document.getElementById('adminTargetUser').value;
-      const newPass = document.getElementById('adminNewUserPassword').value.trim();
-      if (!newPass || newPass.length < 4) return showNotify('warning', 'Chú Ý', 'Mật khẩu mới phải có tối thiểu 4 ký tự!');
-
-      closeAdminPasswordModal();
-      showNotify('success', 'Đổi Mật Khẩu Thành Công', `Mật khẩu mới cho tài khoản "${targetUser}" là: ${newPass}`);
-      
-      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-      sendAdminAlert(`
-🔐 <b>THÔNG BÁO ĐỔI MẬT KHẨU!</b>
-━━━━━━━━━━━━━━━━━━━
-👤 <b>Thành viên:</b> <code>${targetUser}</code>
-🔑 <b>Mật khẩu mới:</b> <code>${newPass}</code>
-⏰ <b>Thời gian:</b> <code>${timeNow}</code>
-━━━━━━━━━━━━━━━━━━━
-      `.trim());
-    }
-
-    function openAdminRoleModal(userId, currentRole) {
-      const uEl = document.getElementById('adminRoleTargetUser');
-      const sEl = document.getElementById('adminRoleSelect');
-      const mEl = document.getElementById('adminRoleModal');
-      if (uEl) uEl.value = userId;
-      if (sEl) sEl.value = currentRole;
-      if (mEl) mEl.classList.remove('hidden');
-    }
-    function closeAdminRoleModal() { 
-      const m = document.getElementById('adminRoleModal');
-      if (m) m.classList.add('hidden'); 
-    }
-
-    function submitAdminChangeRole() {
-      const targetUser = document.getElementById('adminRoleTargetUser').value;
-      const newRole = document.getElementById('adminRoleSelect').value;
-
-      if (!userPermissions[targetUser]) userPermissions[targetUser] = { banned: false };
-      userPermissions[targetUser].role = newRole;
-      localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
-
-      closeAdminRoleModal();
-      renderAdminUserTable(cachedAdminUserList);
-      showNotify('success', 'Cập Nhật Quyền Thành Công', `Đã phân vai trò [${newRole.toUpperCase()}] cho tài khoản ${targetUser}.`);
-    }
-
-    function toggleBanUser(userId) {
-      if (!userPermissions[userId]) userPermissions[userId] = { role: 'member', banned: false };
-      const currentBan = userPermissions[userId].banned;
-      userPermissions[userId].banned = !currentBan;
-      localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
-
-      renderAdminUserTable(cachedAdminUserList);
-      
-      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-      const statusText = !currentBan ? '🔒 KHÓA TÀI KHOẢN' : '🔓 MỞ KHÓA TÀI KHOẢN';
-      sendAdminAlert(`
-⚠️ <b>THÔNG BÁO TRẠNG THÁI TÀI KHOẢN!</b>
-━━━━━━━━━━━━━━━━━━━
-👤 <b>Thành viên:</b> <code>${userId}</code>
-⚙️ <b>Hành động:</b> ${statusText}
-⏰ <b>Thời gian:</b> <code>${timeNow}</code>
-━━━━━━━━━━━━━━━━━━━
-      `.trim());
-
-      Toast.fire({
-        icon: !currentBan ? 'error' : 'success',
-        title: !currentBan ? `Đã khóa tài khoản ${userId}!` : `Đã mở khóa tài khoản ${userId}!`
-      });
-    }
-
-    async function adminCustomAdjust(targetUserId, multiplier) {
-      const input = document.getElementById(`input_adjust_${targetUserId}`);
-      if (!input) return;
-      const valVND = Number(input.value);
-      if (!valVND || valVND <= 0) return showNotify('warning', 'Chú Ý', 'Vui lòng nhập số tiền VNĐ hợp lệ!');
-
-      const pointDiff = (valVND / systemConfig.rate) * multiplier;
-      const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', targetUserId).single();
-      const newPoints = Math.max(0, (Number(data.points) || 0) + pointDiff);
-
-      await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', targetUserId);
-      
-      const txType = multiplier > 0 ? 'admin_add' : 'admin_deduct';
-      const descText = multiplier > 0 ? `Admin cộng trực tiếp +${valVND.toLocaleString('vi-VN')}đ` : `Admin trừ trực tiếp -${valVND.toLocaleString('vi-VN')}đ`;
-      addTransactionHistory(targetUserId, txType, valVND, descText);
-
-      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-      const actionName = multiplier > 0 ? 'CỘNG TIỀN VÀO VÍ' : 'TRỪ TIỀN TỪ VÍ';
-      sendAdminAlert(`
-💰 <b>THÔNG BÁO BIẾN ĐỘNG SỐ DƯ!</b>
-━━━━━━━━━━━━━━━━━━━
-👤 <b>Thành viên:</b> <code>${targetUserId}</code>
-⚙️ <b>Hành động:</b> ${actionName}
-💵 <b>Số tiền:</b> <code>${multiplier > 0 ? '+' : '-'}${valVND.toLocaleString('vi-VN')} VNĐ</code>
-⏰ <b>Thời gian:</b> <code>${timeNow}</code>
-━━━━━━━━━━━━━━━━━━━
-      `.trim());
-
-      input.value = '';
-      await loadAdminUserList();
-      Toast.fire({ icon: 'success', title: `Đã cập nhật số dư cho ${targetUserId}!` });
-      showNotify('success', 'Thành Công', `Đã cập nhật số dư thành công cho tài khoản ${targetUserId}`);
-    }
-
-    function renderAdminFinanceTable() {
-      financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
-      const tbody = document.getElementById('adminFinanceTable');
-      if (!tbody) return;
-      if (financeRequests.length === 0) return tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-slate-500">Chưa có yêu cầu rút tiền nào.</td></tr>';
-      tbody.innerHTML = financeRequests.map((r, idx) => `
-        <tr class="hover:bg-slate-800/40">
-          <td class="p-3.5 text-slate-400 font-mono text-[11px]">${r.time}</td>
-          <td class="p-3.5 font-black text-white">${r.user}</td>
-          <td class="p-3.5 font-black text-emerald-400">${r.amount.toLocaleString('vi-VN')}đ</td>
-          <td class="p-3.5 text-slate-300 font-mono">${r.info}</td>
-          <td class="p-3.5 text-right"><button onclick="adminApproveFinance(${idx})" class="px-3.5 py-2 bg-emerald-500/20 text-emerald-300 rounded-xl text-xs font-bold cursor-pointer transition">Duyệt Rút</button></td>
-        </tr>
-      `).join('');
-    }
-
-    async function adminApproveFinance(idx) {
-      financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
-      const req = financeRequests[idx];
-      if (!req) return;
-      const pointDiff = req.amount / systemConfig.rate;
-      const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', req.user).single();
-      await supabaseClient.from('users_task').update({ points: Math.max(0, (Number(data?.points)||0) - pointDiff) }).eq('user_id', req.user);
-      
-      addTransactionHistory(req.user, 'withdraw', req.amount, `Rút tiền thành công về: ${req.info}`);
-
-      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-      sendGroupAlert(`
-💸 <b>RÚT TIỀN THÀNH CÔNG!</b>
-━━━━━━━━━━━━━━━━━━━
-👤 <b>Thành viên:</b> <code>${req.user}</code>
-💰 <b>Số tiền:</b> <code>${req.amount.toLocaleString('vi-VN')} VNĐ</code>
-🏦 <b>Thụ hưởng:</b> <code>${req.info}</code>
-⏰ <b>Thời gian:</b> <code>${timeNow}</code>
-━━━━━━━━━━━━━━━━━━━
-      `.trim());
-
-      financeRequests.splice(idx, 1);
-      localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
-      renderAdminFinanceTable();
-      await loadAdminUserList();
-      Toast.fire({ icon: 'success', title: 'Đã duyệt lệnh rút tiền!' });
-      showNotify('success', 'Thành Công', `Đã duyệt lệnh rút tiền cho tài khoản ${req.user}`);
-    }
-
-    function loadAdminSupportFields() {
-      loadSystemConfigFromCloud().then(() => {
-        const z = document.getElementById('adminCfgZalo');
-        const t = document.getElementById('adminCfgTelegram');
-        const gz = document.getElementById('adminCfgGroupZalo');
-        const gt = document.getElementById('adminCfgGroupTelegram');
-        const wt = document.getElementById('adminCfgWorkTime');
-        const at = document.getElementById('adminCfgAdminToken');
-        const ac = document.getElementById('adminCfgAdminChatId');
-        const gtkn = document.getElementById('adminCfgGroupToken');
-        const gcid = document.getElementById('adminCfgGroupChatId');
-
-        if (z) z.value = systemConfig.zalo;
-        if (t) t.value = systemConfig.telegram;
-        if (gz) gz.value = systemConfig.groupZalo;
-        if (gt) gt.value = systemConfig.groupTelegram;
-        if (wt) wt.value = systemConfig.workTime;
-        if (at) at.value = systemConfig.adminToken;
-        if (ac) ac.value = systemConfig.adminChatId;
-        if (gtkn) gtkn.value = systemConfig.groupToken;
-        if (gcid) gcid.value = systemConfig.groupChatId;
-      });
-    }
-
-    async function saveAdminSupportConfig() {
-      systemConfig.zalo = document.getElementById('adminCfgZalo')?.value.trim() || '0987654321';
-      systemConfig.telegram = document.getElementById('adminCfgTelegram')?.value.trim() || '@cskh';
-      systemConfig.groupZalo = document.getElementById('adminCfgGroupZalo')?.value.trim() || 'https://zalo.me/g/example';
-      systemConfig.groupTelegram = document.getElementById('adminCfgGroupTelegram')?.value.trim() || 'https://t.me/example';
-      systemConfig.workTime = document.getElementById('adminCfgWorkTime')?.value.trim() || '08:00 - 23:00 (Hàng ngày)';
-
-      await saveSystemConfigToCloud('sys_zalo', systemConfig.zalo);
-      await saveSystemConfigToCloud('sys_telegram', systemConfig.telegram);
-      await saveSystemConfigToCloud('sys_group_zalo', systemConfig.groupZalo);
-      await saveSystemConfigToCloud('sys_group_telegram', systemConfig.groupTelegram);
-      await saveSystemConfigToCloud('sys_work_time', systemConfig.workTime);
-
-      applySupportConfig();
-      showNotify('success', 'Thành Công', 'Đã lưu cấu hình hỗ trợ lên Cloud!');
-    }
-
-    async function saveTelegramBotConfig() {
-      systemConfig.adminToken = document.getElementById('adminCfgAdminToken')?.value.trim() || '';
-      systemConfig.adminChatId = document.getElementById('adminCfgAdminChatId')?.value.trim() || '';
-      systemConfig.groupToken = document.getElementById('adminCfgGroupToken')?.value.trim() || '';
-      systemConfig.groupChatId = document.getElementById('adminCfgGroupChatId')?.value.trim() || '';
-
-      await saveSystemConfigToCloud('admin_token', systemConfig.adminToken);
-      await saveSystemConfigToCloud('admin_chat_id', systemConfig.adminChatId);
-      await saveSystemConfigToCloud('group_token', systemConfig.groupToken);
-      await saveSystemConfigToCloud('group_chat_id', systemConfig.groupChatId);
-
-      showNotify('success', 'Thành Công', 'Đã lưu cấu hình 2 Bot Telegram lên Cloud thành công!');
-    }
-
-    async function adminPublishNotice() {
-      const title = document.getElementById('adminNoticeTitle')?.value.trim() || 'Thông báo';
-      const content = document.getElementById('adminNoticeInput')?.value.trim();
-      if (!content) return showNotify('warning', 'Thiếu Dữ Liệu', 'Nhập nội dung thông báo!');
-      
-      const timeStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-      await supabaseClient.from('system_notices').insert([{ title, content, time: timeStr }]);
-      
-      const tInput = document.getElementById('adminNoticeTitle');
-      const cInput = document.getElementById('adminNoticeInput');
-      if (tInput) tInput.value = '';
-      if (cInput) cInput.value = '';
-
-      sendGroupAlert(`
-📢 <b>THÔNG BÁO MỚI TỪ HỆ THỐNG!</b>
-━━━━━━━━━━━━━━━━━━━
-📌 <b>Tiêu đề:</b> ${title}
-💬 <b>Nội dung:</b> ${content}
-⏰ <b>Thời gian:</b> <code>${timeStr}</code>
-━━━━━━━━━━━━━━━━━━━
-      `.trim());
-      
-      await fetchCloudData();
-      renderNotifications();
-      renderAdminNoticeManageList();
-      showNotify('success', 'Thành Công', 'Đã phát thông báo mới lên hệ thống đám mây!');
-    }
-
-    async function renderAdminNoticeManageList() {
-      await fetchCloudData();
-      const list = document.getElementById('adminNoticeManageList');
-      if (!list) return;
-      if (notifications.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có thông báo nào.</p>';
-      list.innerHTML = notifications.map((n) => `
-        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex justify-between items-center text-xs shadow-inner">
-          <div><p class="font-black text-white text-sm">${n.title}</p><p class="text-slate-400 text-xs mt-1 leading-relaxed whitespace-pre-line">${n.content}</p></div>
-          <button onclick="adminDeleteNotice('${n.id}')" class="p-2.5 text-rose-400 hover:text-rose-300 cursor-pointer transition"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      `).join('');
-    }
-
-    async function adminDeleteNotice(noticeId) {
-      await supabaseClient.from('system_notices').delete().eq('id', noticeId);
-      await renderAdminNoticeManageList();
-      renderNotifications();
-      Toast.fire({ icon: 'info', title: 'Đã xóa thông báo.' });
-    }
-
-    function openWithdrawModal() { const m = document.getElementById('withdrawModal'); if (m) m.classList.remove('hidden'); }
-    function closeWithdrawModal() { const m = document.getElementById('withdrawModal'); if (m) m.classList.add('hidden'); }
-
-    function handleWithdrawMethodChange() {
-      const method = document.getElementById('withdrawMethod')?.value;
-      const bFields = document.getElementById('withdrawBankFields');
-      const mFields = document.getElementById('withdrawMomoFields');
-      if (method === 'momo') {
-        if (bFields) bFields.classList.add('hidden');
-        if (mFields) mFields.classList.remove('hidden');
-      } else {
-        if (mFields) mFields.classList.add('hidden');
-        if (bFields) bFields.classList.remove('hidden');
-      }
-    }
-
-    function submitWithdrawRequest() {
-      const method = document.getElementById('withdrawMethod')?.value;
-      const amountVND = Number(document.getElementById('withdrawAmountVND')?.value);
-      let accountInfo = '';
-
-      if (!amountVND || amountVND < systemConfig.minWithdraw) return showNotify('warning', 'Hạn Mức', `Tối thiểu rút ${systemConfig.minWithdraw.toLocaleString('vi-VN')} VNĐ`);
-      if (amountVND > currentVNDBalance) return showNotify('error', 'Số Dư', 'Số dư trong ví không đủ!');
-
-      if (method === 'momo') {
-        const phone = document.getElementById('withdrawMomoPhone')?.value.trim();
-        const owner = document.getElementById('withdrawMomoOwner')?.value.trim();
-        if (!phone || !owner) return showNotify('warning', 'Thiếu', 'Nhập đủ thông tin MoMo!');
-        accountInfo = `MOMO: ${phone} (${owner.toUpperCase()})`;
-      } else {
-        const bankName = document.getElementById('withdrawBankName')?.value;
-        const bankNumber = document.getElementById('withdrawBankNumber')?.value.trim();
-        const bankOwner = document.getElementById('withdrawBankOwner')?.value.trim();
-        if (!bankNumber || !bankOwner) return showNotify('warning', 'Thiếu', 'Nhập đủ thông tin ngân hàng!');
-        accountInfo = `${bankName} - ${bankNumber} (${bankOwner.toUpperCase()})`;
-      }
-
-      financeRequests.unshift({ id: Date.now(), user: currentUser, amount: amountVND, info: accountInfo, time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN') });
-      localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
-      
-      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-      
-      sendAdminAlert(`💳 Có yêu cầu rút tiền mới từ <b>${currentUser}</b> (${amountVND.toLocaleString('vi-VN')}đ)`);
-      sendGroupAlert(`
-💳 <b>YÊU CẦU RÚT TIỀN MỚI!</b>
-━━━━━━━━━━━━━━━━━━━
-👤 <b>Thành viên:</b> <code>${currentUser}</code>
-💰 <b>Số tiền rút:</b> <code>${amountVND.toLocaleString('vi-VN')} VNĐ</code>
-🏦 <b>Thụ hưởng:</b> <code>${accountInfo}</code>
-⏰ <b>Thời gian:</b> <code>${timeNow}</code>
-━━━━━━━━━━━━━━━━━━━
-      `.trim());
-
-      closeWithdrawModal();
-      showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền thành công! Hệ thống đang chờ Admin xét duyệt.');
-    }
-
-    function handleLogout() { localStorage.removeItem('task_auth_user'); location.reload(); }
-
-    window.onload = async () => {
+    // GẮN SỰ KIỆN AN TOÀN TUYỆT ĐỐI BẰNG ADDEVENTLISTENER CHO TOÀN BỘ NÚT BẤM
+    document.addEventListener('DOMContentLoaded', () => {
       generateCaptcha();
-      await loadSystemConfigFromCloud();
-      await fetchCloudData();
-      const savedUser = localStorage.getItem('task_auth_user');
-      if (savedUser) {
-        initSession(savedUser, savedUser === 'Admin' || userPermissions[savedUser]?.role === 'admin');
+
+      document.getElementById('btnAuthSubmit').addEventListener('click', handleAuthSubmit);
+      document.getElementById('authSwitchBtn').addEventListener('click', toggleAuthMode);
+      document.getElementById('btnRefreshCaptcha').addEventListener('click', generateCaptcha);
+
+      document.getElementById('btnOpenMenu').addEventListener('click', openMenu);
+      document.getElementById('btnCloseDrawer').addEventListener('click', closeMenu);
+      document.getElementById('drawerOverlay').addEventListener('click', closeMenu);
+      document.getElementById('btnLogout').addEventListener('click', handleLogout);
+
+      document.getElementById('menuHome').addEventListener('click', () => { goToHome(); closeMenu(); });
+      document.getElementById('menuHistory').addEventListener('click', () => { openHistoryModal(); closeMenu(); });
+      document.getElementById('menuWithdraw').addEventListener('click', () => { openWithdrawModal(); closeMenu(); });
+      document.getElementById('menuSupport').addEventListener('click', () => { openSupportModal(); closeMenu(); });
+      document.getElementById('btnDrawerAdmin').addEventListener('click', () => { toggleView('admin'); closeMenu(); });
+      document.getElementById('btnAdminHome').addEventListener('click', goToHome);
+
+      document.getElementById('btnNavHome').addEventListener('click', goToHome);
+      document.getElementById('btnNavHistory').addEventListener('click', openHistoryModal);
+      document.getElementById('btnNavNotice').addEventListener('click', openNoticeModal);
+      document.getElementById('btnRefreshTasks').addEventListener('click', fetchAutoOffers);
+      document.getElementById('btnSupportFloat').addEventListener('click', openSupportModal);
+      document.getElementById('btnRefreshUsers').addEventListener('click', loadAdminUserList);
+
+      document.getElementById('btnTabTaskApprovals').addEventListener('click', () => { switchAdminTab('tabTaskApprovals'); renderAdminTaskApprovals(); });
+      document.getElementById('btnTabUsers').addEventListener('click', () => { switchAdminTab('tabUsers'); loadAdminUserList(); });
+      document.getElementById('btnTabAddOffer').addEventListener('click', () => { switchAdminTab('tabAddOffer'); renderAdminOfferList(); });
+      document.getElementById('btnTabFinance').addEventListener('click', () => { switchAdminTab('tabFinance'); renderAdminFinanceTable(); });
+      document.getElementById('btnTabTelegramBot').addEventListener('click', () => switchAdminTab('tabTelegramBot'));
+      document.getElementById('btnTabFakeWithdraw').addEventListener('click', () => switchAdminTab('tabFakeWithdraw'));
+      document.getElementById('btnTabFakeBill').addEventListener('click', () => switchAdminTab('tabFakeBill'));
+      document.getElementById('btnTabNotices').addEventListener('click', () => { switchAdminTab('tabNotices'); renderAdminNoticeManageList(); });
+      document.getElementById('btnTabSupport').addEventListener('click', () => { switchAdminTab('tabSupport'); loadAdminSupportFields(); });
+
+      document.getElementById('btnAddOfferSubmit').addEventListener('click', adminAddNewOffer);
+      document.getElementById('btnTestTelegram').addEventListener('click', testTelegramBotAlert);
+      document.getElementById('btnSaveTelegram').addEventListener('click', saveTelegramBotConfig);
+      document.getElementById('btnSendFakeWithdraw').addEventListener('click', sendFakeWithdrawAlert);
+      document.getElementById('btnToggleAutoFake').addEventListener('click', toggleAutoFakeWithdraw);
+      document.getElementById('btnSendAutoBill').addEventListener('click', generateAndSendAutoBill);
+      document.getElementById('btnPublishNotice').addEventListener('click', adminPublishNotice);
+      document.getElementById('btnSaveSupport').addEventListener('click', saveAdminSupportConfig);
+      document.getElementById('submitWithdraw').addEventListener('click', submitWithdrawRequest);
+      document.getElementById('submitPassChange').addEventListener('click', submitAdminChangePassword);
+      document.getElementById('submitRoleChange').addEventListener('click', submitAdminChangeRole);
+
+      document.getElementById('closeHistory').addEventListener('click', closeHistoryModal);
+      document.getElementById('closeWithdrawModalBtn').addEventListener('click', closeWithdrawModal);
+      document.getElementById('closeNotice').addEventListener('click', closeNoticeModal);
+      document.getElementById('closeSupport').addEventListener('click', closeSupportModal);
+      document.getElementById('closePassModal').addEventListener('click', closeAdminPasswordModal);
+      document.getElementById('closeRoleModal').addEventListener('click', closeAdminRoleModal);
+      document.getElementById('btnCloseWelcome').addEventListener('click', closeWelcomeNotice);
+
+      const saved = localStorage.getItem('task_auth_user');
+      if (saved) {
+        initSession(saved, saved === 'Admin');
       }
-    };
+    });
   </script>
 </body>
 </html>

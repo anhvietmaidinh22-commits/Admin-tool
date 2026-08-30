@@ -12,166 +12,169 @@
 
   <style>
     * { font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background-color: #0b0f19; color: #f8fafc; }
-    .glass-panel { background: rgba(17, 24, 39, 0.88); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
-    .glass-card { background: rgba(30, 41, 59, 0.65); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); }
-    .gradient-primary { background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); }
-    .gradient-text { background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    body { background-color: #07090e; color: #f1f5f9; }
+    .glass-panel { background: rgba(13, 19, 33, 0.9); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+    .glass-card { background: rgba(22, 30, 49, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.3s ease; }
+    .glass-card:hover { border-color: rgba(96, 165, 250, 0.3); transform: translateY(-2px); }
+    .gradient-primary { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
+    .gradient-text { background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .captcha-clean {
       font-family: 'Consolas', 'Monaco', monospace;
       letter-spacing: 4px;
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      background: linear-gradient(135deg, #0f172a 100%, #1e293b 0%);
       user-select: none;
     }
     .swal2-popup {
-      background: rgba(17, 24, 39, 0.95) !important;
-      backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      border-radius: 24px !important;
-      color: #f8fafc !important;
+      background: rgba(15, 23, 42, 0.98) !important;
+      backdrop-filter: blur(20px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      border-radius: 28px !important;
+      color: #f1f5f9 !important;
       font-family: 'Plus Jakarta Sans', sans-serif !important;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
     }
-    .swal2-title { color: #ffffff !important; font-size: 18px !important; font-weight: 800 !important; }
+    .swal2-title { color: #ffffff !important; font-size: 19px !important; font-weight: 800 !important; }
     .swal2-html-container { color: #94a3b8 !important; font-size: 13px !important; }
     .swal2-confirm {
-      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%) !important;
-      border-radius: 12px !important;
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%) !important;
+      border-radius: 14px !important;
       font-weight: 700 !important;
       font-size: 13px !important;
-      padding: 10px 24px !important;
+      padding: 12px 28px !important;
+      box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.5) !important;
     }
     .custom-tabs-scroll::-webkit-scrollbar { display: none; }
     .custom-tabs-scroll { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased relative">
+<body class="min-h-screen flex flex-col antialiased relative selection:bg-blue-500 selection:text-white">
 
-  <div class="fixed bottom-5 right-5 z-40">
-    <button onclick="openSupportModal()" class="w-12 h-12 rounded-full gradient-primary text-white shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition cursor-pointer">
+  <!-- HỖ TRỢ NỔI -->
+  <div class="fixed bottom-6 right-6 z-40">
+    <button onclick="openSupportModal()" class="w-13 h-13 w-12 h-12 rounded-full gradient-primary text-white shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition cursor-pointer shadow-blue-500/40">
       <i class="fa-solid fa-headset text-xl"></i>
     </button>
   </div>
 
-  <!-- POPUP THÔNG BÁO KHI ĐĂNG NHẬP -->
+  <!-- POPUP THÔNG BÁO CHÀO MỪNG -->
   <div id="welcomeNoticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 pointer-events-auto">
-    <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700/80 shadow-2xl relative">
-      <div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center mx-auto mb-3 text-xl">
+    <div class="glass-panel w-full max-w-md p-6 sm:p-7 rounded-3xl border border-slate-700/80 shadow-2xl relative">
+      <div class="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg shadow-blue-500/10">
         <i class="fa-solid fa-bullhorn"></i>
       </div>
       <h3 id="welcomeNoticeTitle" class="text-base font-extrabold text-white text-center">Thông Báo Hệ Thống</h3>
-      <div id="welcomeNoticeBody" class="mt-2 text-xs text-slate-300 leading-relaxed text-center bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800 max-h-60 overflow-y-auto space-y-2"></div>
-      <button onclick="closeWelcomeNotice()" class="mt-4 w-full py-2.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg cursor-pointer hover:opacity-90">
+      <div id="welcomeNoticeBody" class="mt-3 text-xs text-slate-300 leading-relaxed text-center bg-slate-900/80 p-4 rounded-2xl border border-slate-800 max-h-60 overflow-y-auto space-y-2"></div>
+      <button onclick="closeWelcomeNotice()" class="mt-5 w-full py-3 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg cursor-pointer hover:opacity-90 transition">
         Đã Hiểu & Đóng
       </button>
     </div>
   </div>
 
   <!-- AUTH MODAL -->
-  <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+  <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-xl flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-3xl border border-slate-700/70 shadow-2xl relative overflow-hidden">
       <div id="authFormContent">
-        <div class="text-center mb-5">
-          <div class="w-12 h-12 rounded-2xl gradient-primary flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30 mb-2.5">
-            <i class="fa-solid fa-bolt text-white text-xl"></i>
+        <div class="text-center mb-6">
+          <div class="w-14 h-14 rounded-2xl gradient-primary flex items-center justify-center mx-auto shadow-xl shadow-blue-500/30 mb-3">
+            <i class="fa-solid fa-bolt text-white text-2xl"></i>
           </div>
-          <h2 id="authTitle" class="text-2xl font-extrabold text-white tracking-tight">Đăng Nhập</h2>
-          <p class="text-xs text-slate-400 mt-0.5">Hệ thống phân phối nhiệm vụ trả thưởng</p>
+          <h2 id="authTitle" class="text-2xl font-black text-white tracking-tight">Đăng Nhập Hệ Thống</h2>
+          <p class="text-xs text-slate-400 mt-1">Nền tảng phân phối và kiếm tiền online uy tín</p>
         </div>
 
-        <div class="space-y-3">
+        <div class="space-y-3.5">
           <div>
-            <label class="text-[11px] font-semibold text-slate-300 block mb-1">Tên tài khoản</label>
+            <label class="text-[11px] font-bold text-slate-300 block mb-1.5 uppercase tracking-wider">Tên tài khoản</label>
             <div class="relative">
-              <i class="fa-solid fa-user absolute left-3.5 top-3 text-slate-500 text-xs"></i>
-              <input id="authUsername" type="text" placeholder="Nhập tài khoản..." class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 transition">
+              <i class="fa-solid fa-user absolute left-3.5 top-3.5 text-slate-500 text-xs"></i>
+              <input id="authUsername" type="text" placeholder="Nhập tài khoản của bạn..." class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 transition shadow-inner">
             </div>
           </div>
 
           <div>
-            <label class="text-[11px] font-semibold text-slate-300 block mb-1">Mật khẩu</label>
+            <label class="text-[11px] font-bold text-slate-300 block mb-1.5 uppercase tracking-wider">Mật khẩu</label>
             <div class="relative">
-              <i class="fa-solid fa-lock absolute left-3.5 top-3 text-slate-500 text-xs"></i>
-              <input id="authPassword" type="password" placeholder="Nhập mật khẩu..." class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 transition">
+              <i class="fa-solid fa-lock absolute left-3.5 top-3.5 text-slate-500 text-xs"></i>
+              <input id="authPassword" type="password" placeholder="Nhập mật khẩu..." class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 transition shadow-inner">
             </div>
           </div>
 
-          <div id="captchaContainer" class="space-y-1 pt-1">
-            <label class="text-[11px] font-semibold text-slate-300 block">Mã bảo mật</label>
-            <div class="flex items-center space-x-2">
-              <input id="authCaptchaInput" type="text" placeholder="Nhập mã bên phải" class="flex-1 bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 uppercase">
-              <div id="captchaText" class="captcha-clean px-3 py-2 rounded-xl border border-blue-500/30 text-blue-400 font-extrabold text-sm tracking-widest shadow-inner w-24 text-center">
+          <div id="captchaContainer" class="space-y-1.5 pt-1">
+            <label class="text-[11px] font-bold text-slate-300 block uppercase tracking-wider">Mã bảo mật</label>
+            <div class="flex items-center space-x-2.5">
+              <input id="authCaptchaInput" type="text" placeholder="Nhập mã" class="flex-1 bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 uppercase tracking-widest font-mono">
+              <div id="captchaText" class="captcha-clean px-3 py-2.5 rounded-2xl border border-blue-500/30 text-blue-400 font-black text-sm tracking-widest shadow-inner w-28 text-center">
                 ----
               </div>
-              <button onclick="generateCaptcha()" type="button" class="p-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 hover:text-white cursor-pointer" title="Đổi mã">
+              <button onclick="generateCaptcha()" type="button" class="p-3 rounded-2xl bg-slate-900 border border-slate-700 text-slate-400 hover:text-white cursor-pointer transition" title="Đổi mã">
                 <i class="fa-solid fa-rotate-right text-xs"></i>
               </button>
             </div>
           </div>
 
-          <button id="btnAuthSubmit" onclick="handleAuthSubmit()" class="w-full py-2.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg shadow-blue-500/25 hover:opacity-95 transition cursor-pointer mt-3">
-            Đăng Nhập
+          <button id="btnAuthSubmit" onclick="handleAuthSubmit()" class="w-full py-3 rounded-2xl gradient-primary text-white text-xs font-extrabold shadow-xl shadow-blue-500/25 hover:opacity-95 transition cursor-pointer mt-4">
+            Đăng Nhập Ngay
           </button>
         </div>
 
-        <div class="mt-4 text-center text-xs text-slate-400">
-          <span id="authSwitchText">Chưa có tài khoản?</span>
-          <button id="authSwitchBtn" onclick="toggleAuthMode()" class="text-blue-400 font-bold ml-1 hover:underline cursor-pointer">Đăng ký ngay</button>
+        <div class="mt-5 text-center text-xs text-slate-400 border-t border-slate-800/80 pt-4">
+          <span id="authSwitchText">Chưa có tài khoản hệ thống?</span>
+          <button id="authSwitchBtn" onclick="toggleAuthMode()" class="text-blue-400 font-extrabold ml-1 hover:underline cursor-pointer">Đăng ký thành viên</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MENU DRAWER (Giao diện chuẩn web lớn kèm thời gian tạo, IP/Session) -->
+  <!-- MENU DRAWER -->
   <div id="menuDrawer" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
     <div id="drawerOverlay" onclick="closeMenu()" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
     
-    <div id="drawerContent" class="absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-slate-900/95 border-l border-slate-800 p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 pointer-events-auto">
+    <div id="drawerContent" class="absolute top-0 right-0 h-full w-84 max-w-[90vw] bg-slate-900/98 border-l border-slate-800 p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 pointer-events-auto shadow-2xl">
       <div class="space-y-4 overflow-y-auto">
         
         <!-- Khối Thông Tin Tài Khoản Kiểu Web Lớn -->
-        <div class="pb-4 border-b border-slate-800/80 bg-slate-950/50 p-4 rounded-2xl border border-slate-800 shadow-inner">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center space-x-2.5">
-              <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-extrabold text-sm shadow-md">
+        <div class="pb-4 border-b border-slate-800 bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 shadow-inner">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-2xl gradient-primary text-white flex items-center justify-center font-black text-sm shadow-md shadow-blue-500/20">
                 <i class="fa-solid fa-user-shield"></i>
               </div>
               <div>
-                <p id="drawerUsername" class="text-xs font-extrabold text-white tracking-wide">--</p>
+                <p id="drawerUsername" class="text-xs font-black text-white tracking-wide">--</p>
                 <span id="drawerRoleTag" class="text-[9px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-extrabold border border-blue-500/30">CTV Active</span>
               </div>
             </div>
-            <button onclick="closeMenu()" class="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white cursor-pointer">
+            <button onclick="closeMenu()" class="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white cursor-pointer transition">
               <i class="fa-solid fa-xmark text-sm"></i>
             </button>
           </div>
           
-          <!-- Chi tiết Ngày giờ tạo & Trạng thái hệ thống -->
-          <div class="mt-3 space-y-1.5 text-[11px] text-slate-400 border-t border-slate-800/60 pt-2.5 font-medium">
+          <div class="mt-2 space-y-1.5 text-[11px] text-slate-400 border-t border-slate-800/60 pt-2 font-medium">
             <div class="flex justify-between items-center">
-              <span class="text-slate-500 flex items-center gap-1"><i class="fa-regular fa-clock text-[10px]"></i> Khởi tạo:</span>
+              <span class="text-slate-500 flex items-center gap-1.5"><i class="fa-regular fa-clock text-[10px] text-blue-400"></i> Khởi tạo phiên:</span>
               <span id="drawerCreatedAt" class="text-slate-200 font-mono font-bold">--</span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-slate-500 flex items-center gap-1"><i class="fa-solid fa-shield-halved text-[10px]"></i> Phiên bản:</span>
-              <span class="text-emerald-400 font-mono font-bold">Secure v2.6</span>
+              <span class="text-slate-500 flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-[10px] text-emerald-400"></i> Trạng thái:</span>
+              <span class="text-emerald-400 font-mono font-bold">Bảo mật tuyệt đối</span>
             </div>
           </div>
         </div>
 
         <div class="space-y-2">
-          <button onclick="goToHome(); closeMenu();" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-slate-800/80 text-slate-200 border border-slate-700/60 text-xs font-bold hover:bg-slate-700 transition cursor-pointer">
+          <button onclick="goToHome(); closeMenu();" class="w-full flex items-center space-x-3 px-3.5 py-3 rounded-2xl bg-slate-800/80 text-slate-200 border border-slate-700/60 text-xs font-bold hover:bg-slate-700 transition cursor-pointer">
             <i class="fa-solid fa-house text-sm text-blue-400"></i>
             <span>Trang Chủ Sàn Kèo</span>
           </button>
-          <button onclick="openWithdrawModal(); closeMenu();" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold hover:bg-blue-500/20 transition cursor-pointer">
+          <button onclick="openWithdrawModal(); closeMenu();" class="w-full flex items-center space-x-3 px-3.5 py-3 rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold hover:bg-blue-500/20 transition cursor-pointer">
             <i class="fa-solid fa-building-columns text-sm"></i>
             <span>Rút Tiền ATM / MoMo</span>
           </button>
-          <button onclick="openSupportModal(); closeMenu();" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold hover:bg-purple-500/20 transition cursor-pointer">
+          <button onclick="openSupportModal(); closeMenu();" class="w-full flex items-center space-x-3 px-3.5 py-3 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold hover:bg-purple-500/20 transition cursor-pointer">
             <i class="fa-solid fa-headset text-sm"></i>
             <span>Trung Tâm Hỗ Trợ 24/7</span>
           </button>
-          <button id="btnDrawerAdmin" onclick="toggleView('admin'); closeMenu();" class="hidden w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-amber-500/10 text-amber-300 border border-amber-500/20 text-xs font-bold hover:bg-amber-500/20 transition cursor-pointer">
+          <button id="btnDrawerAdmin" onclick="toggleView('admin'); closeMenu();" class="hidden w-full flex items-center space-x-3 px-3.5 py-3 rounded-2xl bg-amber-500/10 text-amber-300 border border-amber-500/20 text-xs font-bold hover:bg-amber-500/20 transition cursor-pointer">
             <i class="fa-solid fa-crown text-sm"></i>
             <span>Bảng Quản Trị Hệ Thống</span>
           </button>
@@ -182,10 +185,10 @@
             <i class="fa-solid fa-users-rectangle text-blue-400"></i> Nhóm Giao Lưu CTV
           </p>
           <div class="grid grid-cols-2 gap-2">
-            <a id="drawerGroupZaloLink" href="#" target="_blank" class="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400 text-xs font-bold hover:bg-blue-600/30 transition">
+            <a id="drawerGroupZaloLink" href="#" target="_blank" class="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-blue-600/20 border border-blue-500/30 text-blue-400 text-xs font-bold hover:bg-blue-600/30 transition">
               <span class="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center text-[10px]">Z</span> Nhóm Zalo
             </a>
-            <a id="drawerGroupTelegramLink" href="#" target="_blank" class="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-sky-600/20 border border-sky-500/30 text-sky-400 text-xs font-bold hover:bg-sky-600/30 transition">
+            <a id="drawerGroupTelegramLink" href="#" target="_blank" class="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-sky-600/20 border border-sky-500/30 text-sky-400 text-xs font-bold hover:bg-sky-600/30 transition">
               <i class="fa-brands fa-telegram text-sm text-sky-400"></i> Nhóm Tele
             </a>
           </div>
@@ -193,7 +196,7 @@
 
         <div class="space-y-2 pt-2 border-t border-slate-800">
           <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Thông Tin Thanh Toán</p>
-          <div class="bg-slate-950/60 rounded-xl p-3 border border-slate-800 space-y-2 text-xs">
+          <div class="bg-slate-950/60 rounded-2xl p-3.5 border border-slate-800 space-y-2 text-xs">
             <div class="flex justify-between">
               <span class="text-slate-400">Tối thiểu rút:</span>
               <span id="drawerMinWithdrawText" class="text-slate-200 font-bold">50.000 VNĐ</span>
@@ -206,336 +209,340 @@
         </div>
       </div>
 
-      <button onclick="handleLogout()" class="w-full py-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold hover:bg-rose-500/20 transition flex items-center justify-center gap-2 cursor-pointer">
+      <button onclick="handleLogout()" class="w-full py-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-extrabold hover:bg-rose-500/20 transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-rose-500/5">
         <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng Xuất Hệ Thống
       </button>
     </div>
   </div>
 
   <!-- TOPBAR -->
-  <header class="glass-panel sticky top-0 z-40 border-b border-slate-800 px-3 sm:px-6 py-2 flex items-center justify-between">
-    <div class="flex items-center space-x-2">
-      <div class="w-8 h-8 rounded-xl gradient-primary flex items-center justify-center shadow-md">
-        <i class="fa-solid fa-bolt text-white text-sm"></i>
+  <header class="glass-panel sticky top-0 z-40 border-b border-slate-800 px-4 sm:px-8 py-3 flex items-center justify-between">
+    <div class="flex items-center space-x-2.5">
+      <div class="w-9 h-9 rounded-2xl gradient-primary flex items-center justify-center shadow-lg shadow-blue-500/30">
+        <i class="fa-solid fa-bolt text-white text-base"></i>
       </div>
       <div>
-        <span class="font-extrabold text-sm sm:text-base tracking-tight gradient-text">AUTOPOSTAI</span>
-        <span id="roleBadge" class="hidden text-[9px] uppercase font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 py-0.2 rounded-full ml-1">ADMIN</span>
+        <span class="font-black text-base sm:text-lg tracking-tight gradient-text">AUTOPOSTAI</span>
+        <span id="roleBadge" class="hidden text-[9px] uppercase font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full ml-1.5">ADMIN</span>
       </div>
     </div>
 
-    <div class="flex items-center space-x-2">
-      <button onclick="goToHome()" class="hidden sm:flex px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold items-center gap-1.5 cursor-pointer">
+    <div class="flex items-center space-x-2.5">
+      <button onclick="goToHome()" class="hidden sm:flex px-3 py-2 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold items-center gap-1.5 cursor-pointer transition">
         <i class="fa-solid fa-house text-blue-400"></i> Trang Chủ
       </button>
 
-      <button onclick="openNoticeModal()" class="relative w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer">
+      <button onclick="openNoticeModal()" class="relative w-9 h-9 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer">
         <i class="fa-regular fa-bell text-xs"></i>
-        <span id="noticeDot" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+        <span id="noticeDot" class="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
       </button>
 
-      <div class="bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1 flex items-center gap-1.5 text-xs font-bold">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl px-3.5 py-1.5 flex items-center gap-2 text-xs font-bold shadow-inner">
         <span class="text-[10px] text-slate-400 uppercase font-medium">Số dư:</span>
-        <span class="text-emerald-400 font-extrabold whitespace-nowrap"><span id="navBalanceVND">0</span> đ</span>
+        <span class="text-emerald-400 font-black whitespace-nowrap"><span id="navBalanceVND">0</span> đ</span>
       </div>
 
-      <button onclick="openMenu()" class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer">
+      <button onclick="openMenu()" class="w-9 h-9 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer">
         <i class="fa-solid fa-bars text-sm"></i>
       </button>
     </div>
   </header>
 
-  <!-- BANNER MARQUEE -->
-  <div id="noticeMarqueeContainer" class="bg-blue-600/10 border-b border-blue-500/20 px-4 py-1.5 text-xs text-blue-300 flex items-center space-x-2">
-    <i class="fa-solid fa-bullhorn text-blue-400 flex-shrink-0"></i>
-    <marquee id="noticeMarqueeText" scrollamount="6" class="font-semibold">Chào mừng bạn đến với hệ thống kiếm tiền tự động AUTOPOSTAI!</marquee>
+  <!-- BANNER MARQUEE (Khắc phục triệt để lỗi thu hẹp, chạy mượt mà tràn viền) -->
+  <div class="w-full bg-gradient-to-r from-blue-600/10 via-indigo-600/15 to-purple-600/10 border-b border-blue-500/20 py-2 px-4 overflow-hidden shadow-inner">
+    <div class="max-w-6xl mx-auto flex items-center space-x-3 text-xs text-blue-300">
+      <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 font-extrabold flex-shrink-0">
+        <i class="fa-solid fa-bullhorn animate-bounce"></i> TIN TỨC
+      </div>
+      <marquee id="noticeMarqueeText" scrollamount="6" class="font-bold tracking-wide">Chào mừng bạn đến với hệ thống kiếm tiền tự động AUTOPOSTAI! Hoàn thành nhiệm vụ nhận thưởng uy tín 24/7.</marquee>
+    </div>
   </div>
 
   <!-- SÀN NHIỆM VỤ NATIVE -->
-  <main id="ctvView" class="flex-1 max-w-5xl w-full mx-auto px-4 mt-4 space-y-4 pb-12">
+  <main id="ctvView" class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 mt-6 space-y-5 pb-16">
     
-    <div class="grid grid-cols-2 sm:grid-cols-2 gap-3">
-      <div class="glass-card rounded-2xl p-4 flex flex-col justify-between">
-        <span class="text-[11px] font-semibold text-slate-400">Số Dư Khả Dụng</span>
-        <div class="mt-1 flex items-baseline space-x-1">
-          <span id="mainBalanceVND" class="text-2xl font-black text-emerald-400">0</span>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="glass-card rounded-3xl p-5 flex flex-col justify-between shadow-xl">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Số Dư Khả Dụng</span>
+        <div class="mt-2 flex items-baseline space-x-1.5">
+          <span id="mainBalanceVND" class="text-3xl font-black text-emerald-400">0</span>
           <span class="text-xs font-bold text-slate-300">VNĐ</span>
         </div>
-        <span class="text-[10px] text-slate-500 mt-0.5">Sẵn sàng rút</span>
+        <span class="text-[11px] text-slate-500 mt-1">Sẵn sàng tạo lệnh rút về ngân hàng / Momo</span>
       </div>
 
-      <div class="glass-card rounded-2xl p-4 flex flex-col justify-between">
-        <span class="text-[11px] font-semibold text-slate-400">Nhiệm Vụ Khả Dụng</span>
-        <div class="mt-1 flex items-center space-x-1.5 text-xs font-bold text-emerald-400">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span id="availableTasksCount">Đang tải...</span>
+      <div class="glass-card rounded-3xl p-5 flex flex-col justify-between shadow-xl">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nhiệm Vụ Khả Dụng</span>
+        <div class="mt-2 flex items-center space-x-2 text-xs font-bold text-emerald-400">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50"></span>
+          <span id="availableTasksCount" class="text-sm font-extrabold text-white">Đang tải...</span>
         </div>
-        <span class="text-[10px] text-slate-500 mt-0.5">Upload ảnh chụp màn hình để duyệt</span>
+        <span class="text-[11px] text-slate-500 mt-1">Upload ảnh chụp màn hình chứng chỉ để duyệt</span>
       </div>
     </div>
 
     <!-- KHUNG NHIỆM VỤ NATIVE -->
-    <div class="glass-card rounded-3xl p-4 sm:p-6 border border-slate-800 space-y-4 shadow-2xl">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800 gap-2">
+    <div class="glass-card rounded-3xl p-5 sm:p-7 border border-slate-800 space-y-5 shadow-2xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
         <div>
-          <h2 class="text-base font-extrabold text-white flex items-center gap-2">
-            <i class="fa-solid fa-fire text-amber-400"></i> Danh Sách Nhiệm Vụ Kiếm Tiền Mới Nhất
+          <h2 class="text-base sm:text-lg font-black text-white flex items-center gap-2.5">
+            <i class="fa-solid fa-fire text-amber-400 animate-pulse"></i> Danh Sách Nhiệm Vụ Kiếm Tiền Mới Nhất
           </h2>
-          <p class="text-xs text-slate-400 mt-0.5">Hoàn thành nhiệm vụ và up ảnh chụp màn hình xác nhận để Admin duyệt</p>
+          <p class="text-xs text-slate-400 mt-0.5">Hoàn thành nhiệm vụ và up ảnh chụp màn hình xác nhận để Admin duyệt cộng tiền</p>
         </div>
 
         <div class="flex items-center space-x-2">
-          <button onclick="fetchAutoOffers()" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-xs font-bold text-slate-300 flex items-center gap-1.5 cursor-pointer">
-            <i id="taskRefreshIcon" class="fa-solid fa-rotate-right"></i> Làm Mới
+          <button onclick="fetchAutoOffers()" class="px-3.5 py-2 rounded-2xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-xs font-bold text-slate-300 flex items-center gap-2 cursor-pointer transition shadow-md">
+            <i id="taskRefreshIcon" class="fa-solid fa-rotate-right"></i> Làm Mới Sàn
           </button>
         </div>
       </div>
 
-      <div id="nativeTaskList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
+      <div id="nativeTaskList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </div>
 
   </main>
 
   <!-- BẢNG QUẢN TRỊ ADMIN -->
-  <div id="adminView" class="hidden flex-1 max-w-6xl w-full mx-auto px-4 mt-4 space-y-4 pb-12">
+  <div id="adminView" class="hidden flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 mt-6 space-y-5 pb-16">
     
     <div class="flex items-center justify-between">
       <div>
-        <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
+        <h2 class="text-lg sm:text-2xl font-black text-white flex items-center gap-2.5">
           <i class="fa-solid fa-crown text-amber-400"></i> Bảng Quản Trị Hệ Thống
         </h2>
-        <p class="text-xs text-slate-400 mt-0.5">Duyệt ảnh chứng chỉ nhiệm vụ, thành viên, tài chính & cài đặt</p>
+        <p class="text-xs text-slate-400 mt-0.5">Duyệt ảnh chứng chỉ nhiệm vụ, quản lý thành viên, tài chính & cài đặt</p>
       </div>
-      <button onclick="goToHome()" class="px-3 py-1.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg flex items-center gap-1 cursor-pointer">
+      <button onclick="goToHome()" class="px-3.5 py-2 rounded-2xl gradient-primary text-white text-xs font-bold shadow-lg flex items-center gap-1.5 cursor-pointer">
         <i class="fa-solid fa-house"></i> Về Trang Chủ
       </button>
     </div>
 
     <!-- 7 Tab Admin Đầy Đủ -->
-    <div class="flex space-x-2 overflow-x-auto pb-2 text-xs font-bold custom-tabs-scroll">
-      <button onclick="switchAdminTab('tabTaskApprovals')" id="btnTabTaskApprovals" class="px-3.5 py-2 rounded-xl bg-blue-600 text-white shadow whitespace-nowrap flex items-center gap-1.5 cursor-pointer">
+    <div class="flex space-x-2.5 overflow-x-auto pb-2 text-xs font-bold custom-tabs-scroll">
+      <button onclick="switchAdminTab('tabTaskApprovals')" id="btnTabTaskApprovals" class="px-4 py-2.5 rounded-2xl bg-blue-600 text-white shadow-lg whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-list-check"></i> 1. Duyệt Kèo (<span id="pendingTaskBadgeCount">0</span>)
       </button>
-      <button onclick="switchAdminTab('tabUsers')" id="btnTabUsers" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5 cursor-pointer">
+      <button onclick="switchAdminTab('tabUsers')" id="btnTabUsers" class="px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-users-gear"></i> 2. Khách Hàng
       </button>
-      <button onclick="switchAdminTab('tabAddOffer')" id="btnTabAddOffer" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5 cursor-pointer">
+      <button onclick="switchAdminTab('tabAddOffer')" id="btnTabAddOffer" class="px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-plus-circle"></i> 3. Đăng Kèo Mới
       </button>
-      <button onclick="switchAdminTab('tabFinance')" id="btnTabFinance" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5 cursor-pointer">
+      <button onclick="switchAdminTab('tabFinance')" id="btnTabFinance" class="px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-money-bill-transfer"></i> 4. Duyệt Rút
       </button>
-      <button onclick="switchAdminTab('tabTelegramBot')" id="btnTabTelegramBot" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5 cursor-pointer">
+      <button onclick="switchAdminTab('tabTelegramBot')" id="btnTabTelegramBot" class="px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-brands fa-telegram"></i> 5. Bot Telegram
       </button>
-      <button onclick="switchAdminTab('tabNotices')" id="btnTabNotices" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5 cursor-pointer">
+      <button onclick="switchAdminTab('tabNotices')" id="btnTabNotices" class="px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-bullhorn"></i> 6. Thông Báo
       </button>
-      <button onclick="switchAdminTab('tabSupport')" id="btnTabSupport" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5 cursor-pointer">
+      <button onclick="switchAdminTab('tabSupport')" id="btnTabSupport" class="px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-headset"></i> 7. Hỗ Trợ & Nhóm
       </button>
     </div>
 
     <!-- TAB 1: DUYỆT NHIỆM VỤ -->
-    <div id="tabTaskApprovals" class="admin-tab-content glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
-      <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+    <div id="tabTaskApprovals" class="admin-tab-content glass-card rounded-3xl p-5 sm:p-6 border border-slate-800 space-y-4">
+      <h3 class="text-sm font-extrabold text-slate-200 flex items-center gap-2">
         <i class="fa-solid fa-clipboard-check text-blue-400"></i> Duyệt Ảnh Bằng Chứng Hoàn Thành Nhiệm Vụ Của CTV
       </h3>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs text-slate-300">
-          <thead class="bg-slate-900/80 text-slate-400 uppercase text-[10px]">
+          <thead class="bg-slate-900/90 text-slate-400 uppercase text-[10px] tracking-wider">
             <tr>
-              <th class="p-2.5">Thời Gian</th>
-              <th class="p-2.5">Tài Khoản</th>
-              <th class="p-2.5">Tên Nhiệm Vụ</th>
-              <th class="p-2.5">Ảnh Chứng Chỉ / Bằng Chứng</th>
-              <th class="p-2.5 text-right">Thao Tác</th>
+              <th class="p-3">Thời Gian</th>
+              <th class="p-3">Tài Khoản</th>
+              <th class="p-3">Tên Nhiệm Vụ</th>
+              <th class="p-3">Ảnh Chứng Chỉ / Bằng Chứng</th>
+              <th class="p-3 text-right">Thao Tác</th>
             </tr>
           </thead>
-          <tbody id="adminTaskApprovalsTable" class="divide-y border-slate-800">
-            <tr><td colspan="5" class="p-4 text-center text-slate-500">Chưa có bằng chứng nhiệm vụ nào gửi lên.</td></tr>
+          <tbody id="adminTaskApprovalsTable" class="divide-y divide-slate-800/80">
+            <tr><td colspan="5" class="p-5 text-center text-slate-500">Chưa có bằng chứng nhiệm vụ nào gửi lên.</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
     <!-- TAB 2: KHÁCH HÀNG -->
-    <div id="tabUsers" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
+    <div id="tabUsers" class="admin-tab-content hidden glass-card rounded-3xl p-5 sm:p-6 border border-slate-800 space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
         <div>
-          <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+          <h3 class="text-sm font-extrabold text-slate-200 flex items-center gap-2">
             <i class="fa-solid fa-users text-blue-400"></i> Quản Lý Thành Viên Chuyên Sâu
           </h3>
           <p class="text-[11px] text-slate-400 mt-0.5">Sửa mật khẩu, đổi quyền, chỉnh tiền & khóa tài khoản</p>
         </div>
         
         <div class="flex items-center gap-2 flex-wrap">
-          <select id="adminRoleFilter" onchange="filterAdminUserList()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none">
+          <select id="adminRoleFilter" onchange="filterAdminUserList()" class="bg-slate-900 border border-slate-700 rounded-2xl px-3.5 py-2 text-xs text-white focus:outline-none">
             <option value="all">Tất cả vai trò</option>
             <option value="admin">Admin</option>
             <option value="manager">Manager</option>
             <option value="member">Member</option>
           </select>
-          <input id="adminSearchInput" oninput="filterAdminUserList()" type="text" placeholder="Tìm tài khoản..." class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none w-32 sm:w-44">
-          <button onclick="loadAdminUserList()" class="px-2.5 py-1.5 rounded-xl bg-slate-800 text-slate-300 text-xs hover:bg-slate-700 cursor-pointer"><i class="fa-solid fa-rotate-right"></i></button>
+          <input id="adminSearchInput" oninput="filterAdminUserList()" type="text" placeholder="Tìm tài khoản..." class="bg-slate-900 border border-slate-700 rounded-2xl px-3.5 py-2 text-xs text-white focus:outline-none w-36 sm:w-48">
+          <button onclick="loadAdminUserList()" class="px-3 py-2 rounded-2xl bg-slate-800 text-slate-300 text-xs hover:bg-slate-700 cursor-pointer"><i class="fa-solid fa-rotate-right"></i></button>
         </div>
       </div>
 
-      <div id="adminUserCardsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div class="col-span-full text-center text-slate-500 py-6 text-xs">Đang tải danh sách thành viên...</div>
+      <div id="adminUserCardsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        <div class="col-span-full text-center text-slate-500 py-8 text-xs">Đang tải danh sách thành viên...</div>
       </div>
     </div>
 
     <!-- TAB 3: ĐĂNG KÈO MỚI -->
-    <div id="tabAddOffer" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-6">
-      <div class="space-y-4 bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-        <h3 class="text-sm font-bold text-amber-400 flex items-center gap-2">
+    <div id="tabAddOffer" class="admin-tab-content hidden glass-card rounded-3xl p-5 sm:p-6 border border-slate-800 space-y-6">
+      <div class="space-y-4 bg-slate-900/60 p-5 rounded-2xl border border-slate-800 shadow-inner">
+        <h3 class="text-sm font-extrabold text-amber-400 flex items-center gap-2">
           <i class="fa-solid fa-plus-circle"></i> Đăng Kèo Nhiệm Vụ Mới
         </h3>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
           <div>
-            <label class="block text-slate-400 mb-1">Tên Nhiệm Vụ</label>
-            <input id="newOfferTitle" type="text" placeholder="Ví dụ: Đăng ký Cake VPBank" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+            <label class="block text-slate-400 mb-1 font-bold">Tên Nhiệm Vụ</label>
+            <input id="newOfferTitle" type="text" placeholder="Ví dụ: Đăng ký Cake VPBank" class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none focus:border-amber-500">
           </div>
           <div>
-            <label class="block text-slate-400 mb-1">Thưởng Khách Nhận (VNĐ)</label>
-            <input id="newOfferReward" type="number" placeholder="Ví dụ: 35000" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+            <label class="block text-slate-400 mb-1 font-bold">Thưởng Khách Nhận (VNĐ)</label>
+            <input id="newOfferReward" type="number" placeholder="Ví dụ: 35000" class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none focus:border-amber-500">
           </div>
           <div class="sm:col-span-2">
-            <label class="block text-slate-400 mb-1">Link Đích (Link Affiliate)</label>
-            <input id="newOfferUrl" type="text" placeholder="https://..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+            <label class="block text-slate-400 mb-1 font-bold">Link Đích (Link Affiliate)</label>
+            <input id="newOfferUrl" type="text" placeholder="https://..." class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none focus:border-amber-500">
           </div>
           <div class="sm:col-span-2">
-            <label class="block text-slate-400 mb-1">Mô tả hướng dẫn</label>
-            <input id="newOfferDesc" type="text" placeholder="Tải app, eKYC thành công..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+            <label class="block text-slate-400 mb-1 font-bold">Mô tả hướng dẫn</label>
+            <input id="newOfferDesc" type="text" placeholder="Tải app, eKYC thành công..." class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none focus:border-amber-500">
           </div>
         </div>
 
         <div class="text-right">
-          <button onclick="adminAddNewOffer()" class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-lg transition cursor-pointer">
+          <button onclick="adminAddNewOffer()" class="px-5 py-2.5 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-extrabold text-xs shadow-lg shadow-amber-600/20 transition cursor-pointer">
             <i class="fa-solid fa-paper-plane mr-1"></i> Đăng Kèo Ngay
           </button>
         </div>
 
-        <div class="pt-3 border-t border-slate-800">
-          <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Danh Sách Kèo Đang Chạy</h4>
-          <div id="adminOfferManageList" class="space-y-2"></div>
+        <div class="pt-4 border-t border-slate-800">
+          <h4 class="text-xs font-extrabold text-slate-400 uppercase mb-3">Danh Sách Kèo Đang Chạy</h4>
+          <div id="adminOfferManageList" class="space-y-2.5"></div>
         </div>
       </div>
     </div>
 
     <!-- TAB 4: RÚT TIỀN -->
-    <div id="tabFinance" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
-      <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+    <div id="tabFinance" class="admin-tab-content hidden glass-card rounded-3xl p-5 sm:p-6 border border-slate-800 space-y-4">
+      <h3 class="text-sm font-extrabold text-slate-200 flex items-center gap-2">
         <i class="fa-solid fa-money-check-dollar text-purple-400"></i> Quản Lý Yêu Cầu Rút Tiền Của CTV
       </h3>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs text-slate-300">
-          <thead class="bg-slate-900/80 text-slate-400 uppercase text-[10px]">
+          <thead class="bg-slate-900/90 text-slate-400 uppercase text-[10px] tracking-wider">
             <tr>
-              <th class="p-2.5">Thời Gian</th>
-              <th class="p-2.5">Tài Khoản</th>
-              <th class="p-2.5">Số Tiền Rút</th>
-              <th class="p-2.5">Thông Tin Nhận Tiền</th>
-              <th class="p-2.5 text-right">Thao Tác</th>
+              <th class="p-3">Thời Gian</th>
+              <th class="p-3">Tài Khoản</th>
+              <th class="p-3">Số Tiền Rút</th>
+              <th class="p-3">Thông Tin Nhận Tiền</th>
+              <th class="p-3 text-right">Thao Tác</th>
             </tr>
           </thead>
-          <tbody id="adminFinanceTable" class="divide-y border-slate-800">
-            <tr><td colspan="5" class="p-4 text-center text-slate-500">Chưa có yêu cầu rút tiền nào.</td></tr>
+          <tbody id="adminFinanceTable" class="divide-y divide-slate-800/80">
+            <tr><td colspan="5" class="p-5 text-center text-slate-500">Chưa có yêu cầu rút tiền nào.</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
     <!-- TAB 5: BOT TELEGRAM -->
-    <div id="tabTelegramBot" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
+    <div id="tabTelegramBot" class="admin-tab-content hidden glass-card rounded-3xl p-5 sm:p-6 border border-slate-800 space-y-4">
       <div class="flex items-center justify-between">
-        <h3 class="text-sm font-bold text-sky-400 flex items-center gap-2">
+        <h3 class="text-sm font-extrabold text-sky-400 flex items-center gap-2">
           <i class="fa-brands fa-telegram text-base"></i> Cấu Hình Bot Telegram Tự Động
         </h3>
         <span class="text-[11px] text-slate-400">Tự động báo khi có User đăng ký, rút tiền</span>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
         <div>
-          <label class="block text-slate-400 mb-1">Telegram Bot Token (Lấy từ @BotFather)</label>
-          <input id="adminCfgTeleToken" type="text" placeholder="Ví dụ: 123456789:ABCdefGhIJKlmNoPQRsTUV..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-sky-500">
+          <label class="block text-slate-400 mb-1 font-bold">Telegram Bot Token (Lấy từ @BotFather)</label>
+          <input id="adminCfgTeleToken" type="text" placeholder="Ví dụ: 123456789:ABCdef..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none focus:border-sky-500">
         </div>
         <div>
-          <label class="block text-slate-400 mb-1">Telegram Chat ID (Lấy từ @userinfobot)</label>
-          <input id="adminCfgTeleChatId" type="text" placeholder="Ví dụ: 987654321..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-sky-500">
+          <label class="block text-slate-400 mb-1 font-bold">Telegram Chat ID (Lấy từ @userinfobot)</label>
+          <input id="adminCfgTeleChatId" type="text" placeholder="Ví dụ: 987654321..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none focus:border-sky-500">
         </div>
       </div>
 
       <div class="flex justify-end gap-2 pt-2">
-        <button onclick="testTelegramBotAlert()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 font-bold text-xs transition cursor-pointer">
+        <button onclick="testTelegramBotAlert()" class="px-4 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-sky-400 font-extrabold text-xs transition cursor-pointer">
           <i class="fa-solid fa-paper-plane mr-1"></i> Bắn Tin Thử Nghiệm
         </button>
-        <button onclick="saveTelegramBotConfig()" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs shadow-lg transition cursor-pointer">
+        <button onclick="saveTelegramBotConfig()" class="px-5 py-2.5 rounded-2xl bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs shadow-lg shadow-sky-600/20 transition cursor-pointer">
           <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu Cấu Hình Bot
         </button>
       </div>
     </div>
 
     <!-- TAB 6: THÔNG BÁO HỆ THỐNG -->
-    <div id="tabNotices" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
-      <h3 class="text-sm font-bold text-blue-400 flex items-center gap-2">
+    <div id="tabNotices" class="admin-tab-content hidden glass-card rounded-3xl p-5 sm:p-6 border border-slate-800 space-y-4">
+      <h3 class="text-sm font-extrabold text-blue-400 flex items-center gap-2">
         <i class="fa-solid fa-bullhorn"></i> Phát & Quản Lý Danh Sách Thông Báo
       </h3>
       
-      <div class="space-y-2 text-xs">
+      <div class="space-y-3 text-xs">
         <div>
-          <label class="block text-slate-400 mb-1">Tiêu đề thông báo</label>
-          <input id="adminNoticeTitle" type="text" placeholder="Ví dụ: Sự kiện tặng thưởng cuối tuần..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          <label class="block text-slate-400 mb-1 font-bold">Tiêu đề thông báo</label>
+          <input id="adminNoticeTitle" type="text" placeholder="Ví dụ: Sự kiện tặng thưởng cuối tuần..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none focus:border-blue-500">
         </div>
         <div>
-          <label class="block text-slate-400 mb-1">Nội dung chi tiết</label>
-          <textarea id="adminNoticeInput" rows="2" placeholder="Nhập nội dung chi tiết..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none"></textarea>
+          <label class="block text-slate-400 mb-1 font-bold">Nội dung chi tiết</label>
+          <textarea id="adminNoticeInput" rows="2" placeholder="Nhập nội dung chi tiết..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none focus:border-blue-500"></textarea>
         </div>
       </div>
       
       <div class="text-right">
-        <button onclick="adminPublishNotice()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg transition cursor-pointer">
+        <button onclick="adminPublishNotice()" class="px-5 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-lg shadow-blue-600/20 transition cursor-pointer">
           <i class="fa-solid fa-bullhorn mr-1"></i> Thêm Thông Báo Mới
         </button>
       </div>
 
-      <div class="pt-3 border-t border-slate-800 space-y-2">
-        <h4 class="text-xs font-bold text-slate-400 uppercase">Danh Sách Thông Báo Đang Có</h4>
-        <div id="adminNoticeManageList" class="space-y-2"></div>
+      <div class="pt-4 border-t border-slate-800 space-y-2.5">
+        <h4 class="text-xs font-extrabold text-slate-400 uppercase">Danh Sách Thông Báo Đang Có</h4>
+        <div id="adminNoticeManageList" class="space-y-2.5"></div>
       </div>
     </div>
 
     <!-- TAB 7: HỖ TRỢ & NHÓM CTV -->
-    <div id="tabSupport" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
-      <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
+    <div id="tabSupport" class="admin-tab-content hidden glass-card rounded-3xl p-5 sm:p-6 border border-slate-800 space-y-4">
+      <h3 class="text-sm font-extrabold text-emerald-400 flex items-center gap-2">
         <i class="fa-solid fa-headset"></i> Cài Đặt Kênh Hỗ Trợ & Link Nhóm CTV
       </h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
         <div>
-          <label class="block text-slate-400 mb-1">Số Zalo CSKH</label>
-          <input id="adminCfgZalo" type="text" placeholder="0987654321" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          <label class="block text-slate-400 mb-1 font-bold">Số Zalo CSKH</label>
+          <input id="adminCfgZalo" type="text" placeholder="0987654321" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
         </div>
         <div>
-          <label class="block text-slate-400 mb-1">Username / Link Telegram CSKH</label>
-          <input id="adminCfgTelegram" type="text" placeholder="@cskh" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          <label class="block text-slate-400 mb-1 font-bold">Username / Link Telegram CSKH</label>
+          <input id="adminCfgTelegram" type="text" placeholder="@cskh" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
         </div>
         <div>
-          <label class="block text-slate-400 mb-1">Link Nhóm Zalo CTV</label>
-          <input id="adminCfgGroupZalo" type="text" placeholder="https://zalo.me/g/..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          <label class="block text-slate-400 mb-1 font-bold">Link Nhóm Zalo CTV</label>
+          <input id="adminCfgGroupZalo" type="text" placeholder="https://zalo.me/g/..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
         </div>
         <div>
-          <label class="block text-slate-400 mb-1">Link Nhóm Telegram CTV</label>
-          <input id="adminCfgGroupTelegram" type="text" placeholder="https://t.me/..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          <label class="block text-slate-400 mb-1 font-bold">Link Nhóm Telegram CTV</label>
+          <input id="adminCfgGroupTelegram" type="text" placeholder="https://t.me/..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
         </div>
         <div class="sm:col-span-2">
-          <label class="block text-slate-400 mb-1">Thời gian trực hỗ trợ</label>
-          <input id="adminCfgWorkTime" type="text" placeholder="08:00 - 23:00 (Hàng ngày)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          <label class="block text-slate-400 mb-1 font-bold">Thời gian trực hỗ trợ</label>
+          <input id="adminCfgWorkTime" type="text" placeholder="08:00 - 23:00 (Hàng ngày)" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
         </div>
       </div>
       <div class="text-right">
-        <button onclick="saveAdminSupportConfig()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg transition cursor-pointer">
+        <button onclick="saveAdminSupportConfig()" class="px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-600/20 transition cursor-pointer">
           <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu Cấu Hình Hỗ Trợ & Nhóm CTV
         </button>
       </div>
@@ -555,13 +562,13 @@
       <div class="space-y-3 text-xs">
         <div>
           <label class="block text-slate-400 mb-1">Tài khoản:</label>
-          <input id="adminTargetUser" type="text" disabled class="w-full bg-slate-900/60 border border-slate-800 rounded-xl p-2.5 text-slate-400 font-bold">
+          <input id="adminTargetUser" type="text" disabled class="w-full bg-slate-900/60 border border-slate-800 rounded-2xl p-3 text-slate-400 font-bold">
         </div>
         <div>
           <label class="block text-slate-400 mb-1">Mật khẩu mới:</label>
-          <input id="adminNewUserPassword" type="text" placeholder="Nhập mật khẩu mới..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          <input id="adminNewUserPassword" type="text" placeholder="Nhập mật khẩu mới..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
         </div>
-        <button onclick="submitAdminChangePassword()" class="w-full py-2.5 rounded-xl gradient-primary text-white font-bold text-xs shadow-lg mt-2 cursor-pointer">
+        <button onclick="submitAdminChangePassword()" class="w-full py-3 rounded-2xl gradient-primary text-white font-bold text-xs shadow-lg mt-2 cursor-pointer">
           Lưu Mật Khẩu Mới
         </button>
       </div>
@@ -580,17 +587,17 @@
       <div class="space-y-3 text-xs">
         <div>
           <label class="block text-slate-400 mb-1">Tài khoản:</label>
-          <input id="adminRoleTargetUser" type="text" disabled class="w-full bg-slate-900/60 border border-slate-800 rounded-xl p-2.5 text-slate-400 font-bold">
+          <input id="adminRoleTargetUser" type="text" disabled class="w-full bg-slate-900/60 border border-slate-800 rounded-2xl p-3 text-slate-400 font-bold">
         </div>
         <div>
           <label class="block text-slate-400 mb-1">Chọn vai trò quyền hạn:</label>
-          <select id="adminRoleSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          <select id="adminRoleSelect" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
             <option value="member">Thành viên (Member)</option>
             <option value="manager">Quản lý (Manager)</option>
             <option value="admin">Quản trị viên (Admin)</option>
           </select>
         </div>
-        <button onclick="submitAdminChangeRole()" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg mt-2 cursor-pointer">
+        <button onclick="submitAdminChangeRole()" class="w-full py-3 rounded-2xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg mt-2 cursor-pointer">
           Cập Nhật Vai Trò
         </button>
       </div>
@@ -663,7 +670,7 @@
       <div class="space-y-3 text-xs">
         <div>
           <label class="block text-slate-400 mb-1">Phương thức nhận tiền</label>
-          <select id="withdrawMethod" onchange="handleWithdrawMethodChange()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          <select id="withdrawMethod" onchange="handleWithdrawMethodChange()" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
             <option value="bank">Ngân Hàng (24/7)</option>
             <option value="momo">Ví MoMo</option>
           </select>
@@ -672,7 +679,7 @@
         <div id="withdrawBankFields" class="space-y-2.5">
           <div>
             <label class="block text-slate-400 mb-1">Ngân hàng thụ hưởng</label>
-            <select id="withdrawBankName" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+            <select id="withdrawBankName" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
               <option value="MBBank">MBBank - Quân Đội</option>
               <option value="Vietcombank">VCB - Ngoại Thương</option>
               <option value="Techcombank">TCB - Kỹ Thương</option>
@@ -688,31 +695,31 @@
           </div>
           <div>
             <label class="block text-slate-400 mb-1">Số tài khoản</label>
-            <input id="withdrawBankNumber" type="text" placeholder="Nhập số tài khoản..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+            <input id="withdrawBankNumber" type="text" placeholder="Nhập số tài khoản..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
           </div>
           <div>
             <label class="block text-slate-400 mb-1">Tên chủ tài khoản (In hoa không dấu)</label>
-            <input id="withdrawBankOwner" type="text" placeholder="NGUYEN VAN A" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none uppercase">
+            <input id="withdrawBankOwner" type="text" placeholder="NGUYEN VAN A" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none uppercase">
           </div>
         </div>
 
         <div id="withdrawMomoFields" class="hidden space-y-2.5">
           <div>
             <label class="block text-slate-400 mb-1">Số điện thoại MoMo</label>
-            <input id="withdrawMomoPhone" type="text" placeholder="0987654321..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+            <input id="withdrawMomoPhone" type="text" placeholder="0987654321..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
           </div>
           <div>
             <label class="block text-slate-400 mb-1">Tên chủ ví MoMo</label>
-            <input id="withdrawMomoOwner" type="text" placeholder="NGUYEN VAN A" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none uppercase">
+            <input id="withdrawMomoOwner" type="text" placeholder="NGUYEN VAN A" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none uppercase">
           </div>
         </div>
 
         <div>
           <label class="block text-slate-400 mb-1">Số tiền muốn rút (VNĐ)</label>
-          <input id="withdrawAmountVND" type="number" placeholder="Tối thiểu 50.000 VNĐ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none">
+          <input id="withdrawAmountVND" type="number" placeholder="Tối thiểu 50.000 VNĐ" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
         </div>
 
-        <button onclick="submitWithdrawRequest()" class="w-full py-2.5 rounded-xl gradient-primary text-white font-bold text-xs shadow-lg mt-2 cursor-pointer">
+        <button onclick="submitWithdrawRequest()" class="w-full py-3 rounded-2xl gradient-primary text-white font-bold text-xs shadow-lg mt-2 cursor-pointer">
           Tạo Lệnh Rút Tiền
         </button>
       </div>
@@ -730,7 +737,7 @@
       showConfirmButton: false,
       timer: 3000,
       timerProgressBar: true,
-      background: '#111827',
+      background: '#161e31',
       color: '#ffffff'
     });
 
@@ -741,7 +748,7 @@
     const ADMIN_CREDENTIALS = { username: 'Admin', password: '123321' };
 
     let systemConfig = {
-      rate: 1, // Tỷ lệ chuẩn 1:1 để cộng đúng chính xác số tiền VNĐ thực tế của kèo
+      rate: 1,
       minWithdraw: Number(localStorage.getItem('sys_min_withdraw')) || 50000,
       zalo: localStorage.getItem('sys_zalo') || '0987654321',
       telegram: localStorage.getItem('sys_telegram') || '@cskh',
@@ -762,6 +769,21 @@
     let currentVNDBalance = 0;
     let cachedAdminUserList = [];
     let financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
+
+    // Lưu trữ danh sách nhiệm vụ CTV đã làm (để tự động ẩn đi không lặp lại)
+    function getCompletedTasksForUser(userId) {
+      const db = JSON.parse(localStorage.getItem('completed_tasks_map')) || {};
+      return db[userId] || [];
+    }
+
+    function markTaskAsCompletedForUser(userId, taskId) {
+      let db = JSON.parse(localStorage.getItem('completed_tasks_map')) || {};
+      if (!db[userId]) db[userId] = [];
+      if (!db[userId].includes(taskId)) {
+        db[userId].push(taskId);
+        localStorage.setItem('completed_tasks_map', JSON.stringify(db));
+      }
+    }
 
     async function fetchCloudData() {
       try {
@@ -821,8 +843,8 @@
       isRegisterMode = !isRegisterMode;
       const titleEl = document.getElementById('authTitle');
       const btnEl = document.getElementById('btnAuthSubmit');
-      if (titleEl) titleEl.innerText = isRegisterMode ? 'Đăng Ký' : 'Đăng Nhập';
-      if (btnEl) btnEl.innerText = isRegisterMode ? 'Tạo Tài Khoản' : 'Đăng Nhập';
+      if (titleEl) titleEl.innerText = isRegisterMode ? 'Đăng Ký Thành Viên' : 'Đăng Nhập Hệ Thống';
+      if (btnEl) btnEl.innerText = isRegisterMode ? 'Tạo Tài Khoản' : 'Đăng Nhập Ngay';
       generateCaptcha();
     }
 
@@ -837,12 +859,12 @@
       const inputCap = capInput.value.trim().toUpperCase();
 
       if (!u || !p) return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập tài khoản và mật khẩu!');
-      if (inputCap !== currentCaptcha) { generateCaptcha(); return showNotify('error', 'Sai Mã', 'Mã xác nhận không đúng!'); }
+      if (inputCap !== currentCaptcha) { generateCaptcha(); return showNotify('error', 'Sai Mã', 'Mã xác nhận bảo mật không đúng!'); }
 
       userPermissions = JSON.parse(localStorage.getItem('user_permissions_db')) || userPermissions;
       if (userPermissions[u]?.banned) {
         generateCaptcha();
-        return showNotify('error', 'Tài Khoản Bị Khóa', 'Tài khoản của bạn đã bị khóa bởi quản trị viên!');
+        return showNotify('error', 'Tài Khoản Bị Khóa', 'Tài khoản của bạn đã bị khóa bởi quản trị viên hệ thống!');
       }
 
       if (isRegisterMode) {
@@ -889,10 +911,9 @@
       const drawerUser = document.getElementById('drawerUsername');
       if (drawerUser) drawerUser.innerText = userId;
 
-      // Hiển thị ngày giờ tạo/đăng nhập chuẩn phong cách web lớn ở menu drawer
       const drawerCreatedAt = document.getElementById('drawerCreatedAt');
       if (drawerCreatedAt) {
-        const nowFormatted = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' - ' + new Date().toLocaleDateString('vi-VN');
+        const nowFormatted = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
         drawerCreatedAt.innerText = nowFormatted;
       }
 
@@ -934,7 +955,7 @@
         if (titleEl) titleEl.innerText = latest.title;
         if (bodyEl) {
           bodyEl.innerHTML = notifications.map(n => `
-            <div class="p-2.5 bg-slate-950/70 border border-slate-800 rounded-xl text-left">
+            <div class="p-3 bg-slate-950/70 border border-slate-800 rounded-2xl text-left">
               <p class="font-bold text-white text-xs mb-1">${n.title}</p>
               <p class="text-slate-300 text-[11px] leading-relaxed">${n.content}</p>
             </div>
@@ -972,7 +993,7 @@
       if (notifications.length > 0) {
         if (marquee) marquee.innerText = notifications.map(n => `⚡ [${n.title}]: ${n.content}`).join('   ★   ');
         if (modalList) {
-          modalList.innerHTML = notifications.map(n => `<div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="font-bold text-white text-xs">${n.title}</p><p class="text-slate-300 text-[11px] mt-1">${n.content}</p></div>`).join('');
+          modalList.innerHTML = notifications.map(n => `<div class="bg-slate-900 p-3 rounded-2xl border border-slate-800"><p class="font-bold text-white text-xs">${n.title}</p><p class="text-slate-300 text-[11px] mt-1">${n.content}</p></div>`).join('');
         }
       }
     }
@@ -1034,14 +1055,18 @@
 
       await fetchCloudData();
 
-      if (customOffers.length === 0) {
+      // Lọc bỏ những kèo mà user hiện tại đã làm rồi để không hiển thị nữa
+      const completedIds = getCompletedTasksForUser(currentUser);
+      const availableOffers = customOffers.filter(o => !completedIds.includes(o.id));
+
+      if (availableOffers.length === 0) {
         container.innerHTML = `
           <div class="col-span-full text-center py-12 space-y-3">
             <div class="w-14 h-14 bg-slate-800 text-slate-400 rounded-2xl flex items-center justify-center mx-auto text-2xl border border-slate-700">
-              <i class="fa-solid fa-folder-open"></i>
+              <i class="fa-solid fa-circle-check text-emerald-400"></i>
             </div>
-            <p class="text-white font-bold text-sm">Chưa có nhiệm vụ nào trên sàn.</p>
-            <p class="text-slate-500 text-xs">Vui lòng chờ Admin đăng thêm kèo mới ở Tab 3.</p>
+            <p class="text-white font-bold text-sm">Bạn đã hoàn thành tất cả nhiệm vụ!</p>
+            <p class="text-slate-500 text-xs">Vui lòng chờ Admin đăng thêm kèo mới trên hệ thống.</p>
           </div>
         `;
         if (countText) countText.innerText = `0 Kèo sẵn sàng`;
@@ -1049,17 +1074,17 @@
         return;
       }
 
-      if (countText) countText.innerText = `${customOffers.length} Kèo sẵn sàng`;
-      container.innerHTML = customOffers.map(t => `
-        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-3 shadow-lg">
+      if (countText) countText.innerText = `${availableOffers.length} Kèo sẵn sàng`;
+      container.innerHTML = availableOffers.map(t => `
+        <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-4 sm:p-5 flex flex-col justify-between space-y-3 shadow-lg">
           <div>
-            <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-[10px] text-emerald-400 font-bold border border-emerald-500/25">Độc Quyền</span>
-            <h3 class="font-extrabold text-white text-xs mt-2">${t.title}</h3>
-            <p class="text-slate-400 text-[11px] mt-1">${t.desc || 'Không có mô tả'}</p>
+            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-[10px] text-emerald-400 font-extrabold border border-emerald-500/25">Độc Quyền</span>
+            <h3 class="font-black text-white text-xs sm:text-sm mt-2.5">${t.title}</h3>
+            <p class="text-slate-400 text-[11px] mt-1 leading-relaxed">${t.desc || 'Không có mô tả chi tiết'}</p>
           </div>
-          <div class="pt-2 border-t border-slate-800 flex items-center justify-between">
-            <span class="text-xs font-black text-emerald-400">+${Number(t.reward).toLocaleString('vi-VN')} đ</span>
-            <button onclick="handleStartTask('${t.id}', '${t.title}', '${t.url}', ${t.reward})" class="px-3.5 py-1.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-md cursor-pointer hover:opacity-90">
+          <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+            <span class="text-xs sm:text-sm font-black text-emerald-400">+${Number(t.reward).toLocaleString('vi-VN')} đ</span>
+            <button onclick="handleStartTask('${t.id}', '${t.title}', '${t.url}', ${t.reward})" class="px-4 py-2 rounded-2xl gradient-primary text-white text-xs font-bold shadow-md cursor-pointer hover:opacity-90 transition">
               Làm Kèo <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
             </button>
           </div>
@@ -1077,10 +1102,10 @@
         title: 'Xác Nhận Hoàn Thành Kèo',
         html: `
           <div class="text-left space-y-3 text-xs">
-            <p class="text-slate-300">Nhập ghi chú hoặc mã giao dịch:</p>
-            <input id="swal-input1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none" placeholder="Ví dụ: SĐT đăng ký, mã GD...">
+            <p class="text-slate-300">Nhập ghi chú hoặc mã giao dịch (SĐT / Email đăng ký):</p>
+            <input id="swal-input1" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none" placeholder="Ví dụ: 0987654321...">
             <p class="text-slate-300 pt-1">Tải lên ảnh chụp màn hình (Chứng chỉ / Bằng chứng):</p>
-            <input type="file" id="swal-input2" accept="image/*" class="w-full text-slate-400 text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500">
+            <input type="file" id="swal-input2" accept="image/*" class="w-full text-slate-400 text-xs file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer">
           </div>
         `,
         focusConfirm: false,
@@ -1105,7 +1130,7 @@
 
       if (formValues) {
         const newSubId = Date.now();
-        const timeStr = new Date().toLocaleTimeString('vi-VN') + ' ' + new Date().toLocaleDateString('vi-VN');
+        const timeStr = new Date().toLocaleTimeString('vi-VN') + ' • ' + new Date().toLocaleDateString('vi-VN');
         
         await supabaseClient.from('pending_tasks').insert([{
           id: newSubId,
@@ -1116,10 +1141,14 @@
           proof_image: formValues.image,
           time: timeStr
         }]);
+
+        // Đánh dấu nhiệm vụ này đã làm xong đối với CTV hiện tại để ẩn đi
+        markTaskAsCompletedForUser(currentUser, taskId);
         
         sendTelegramAlert(`📥 <b>BẰNG CHỨNG ẢNH NHIỆM VỤ MỚI!</b>\n👤 Tài khoản: <code>${currentUser}</code>\n📝 Kèo: ${taskTitle}\n💬 Ghi chú: <code>${formValues.note}</code>`);
 
         showNotify('success', 'Đã Gửi Bằng Chứng', 'Yêu cầu của bạn đã được gửi cho Admin duyệt.');
+        fetchAutoOffers();
       }
     }
 
@@ -1147,13 +1176,13 @@
     function switchAdminTab(tabId) {
       document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('#adminView button[id^="btnTab"]').forEach(b => {
-        b.className = 'px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5';
+        b.className = 'px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition';
       });
       const targetTab = document.getElementById(tabId);
       if (targetTab) targetTab.classList.remove('hidden');
       const btnId = 'btn' + tabId.charAt(0).toUpperCase() + tabId.slice(1);
       const targetBtn = document.getElementById(btnId);
-      if (targetBtn) targetBtn.className = 'px-3.5 py-2 rounded-xl bg-blue-600 text-white shadow whitespace-nowrap flex items-center gap-1.5';
+      if (targetBtn) targetBtn.className = 'px-4 py-2.5 rounded-2xl bg-blue-600 text-white shadow-lg whitespace-nowrap flex items-center gap-2 cursor-pointer transition';
     }
 
     async function renderAdminTaskApprovals() {
@@ -1164,24 +1193,24 @@
       if (!tbody) return;
 
       if (pendingTaskSubmissions.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">Chưa có bằng chứng nào chờ duyệt.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="p-5 text-center text-slate-500">Chưa có bằng chứng nào chờ duyệt.</td></tr>';
         return;
       }
 
       tbody.innerHTML = pendingTaskSubmissions.map((s) => {
-        const imgTag = s.proofImage ? `<a href="${s.proofImage}" target="_blank"><img src="${s.proofImage}" class="w-16 h-16 object-cover rounded-xl border border-slate-700 hover:scale-105 transition"></a>` : '<span class="text-slate-500">Không có ảnh</span>';
+        const imgTag = s.proofImage ? `<a href="${s.proofImage}" target="_blank"><img src="${s.proofImage}" class="w-16 h-16 object-cover rounded-2xl border border-slate-700 hover:scale-105 transition shadow"></a>` : '<span class="text-slate-500">Không có ảnh</span>';
         return `
           <tr class="hover:bg-slate-800/40">
-            <td class="p-2.5 text-slate-500">${s.time}</td>
-            <td class="p-2.5 font-bold text-white">${s.user}</td>
-            <td class="p-2.5 text-slate-300">${s.title} <b class="text-emerald-400">(+${s.reward.toLocaleString('vi-VN')}đ)</b></td>
-            <td class="p-2.5 space-y-1">
-              <p class="font-mono text-amber-300">${s.proofText || ''}</p>
+            <td class="p-3 text-slate-400 font-mono text-[11px]">${s.time}</td>
+            <td class="p-3 font-extrabold text-white">${s.user}</td>
+            <td class="p-3 text-slate-300">${s.title} <b class="text-emerald-400 font-black">(+${s.reward.toLocaleString('vi-VN')}đ)</b></td>
+            <td class="p-3 space-y-1">
+              <p class="font-mono text-amber-300 bg-slate-950/60 p-2 rounded-xl border border-slate-800">${s.proofText || ''}</p>
               ${imgTag}
             </td>
-            <td class="p-2.5 text-right space-x-1">
-              <button onclick="approveTaskSubmission('${s.id}')" class="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 rounded font-bold cursor-pointer">Duyệt Cộng</button>
-              <button onclick="rejectTaskSubmission('${s.id}')" class="px-2.5 py-1 bg-rose-500/20 text-rose-300 rounded font-bold cursor-pointer">Hủy</button>
+            <td class="p-3 text-right space-x-1.5">
+              <button onclick="approveTaskSubmission('${s.id}')" class="px-3 py-1.5 bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 rounded-xl font-bold cursor-pointer transition">Duyệt Cộng</button>
+              <button onclick="rejectTaskSubmission('${s.id}')" class="px-3 py-1.5 bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 rounded-xl font-bold cursor-pointer transition">Hủy</button>
             </td>
           </tr>
         `;
@@ -1211,7 +1240,7 @@
       await renderAdminTaskApprovals();
       await loadAdminUserList();
 
-      Toast.fire({ icon: 'success', title: `Đã duyệt và cộng chính xác +${sub.reward.toLocaleString('vi-VN')}đ cho tài khoản ${sub.user}!` });
+      Toast.fire({ icon: 'success', title: `Đã duyệt và cộng +${sub.reward.toLocaleString('vi-VN')}đ cho tài khoản ${sub.user}!` });
     }
 
     async function rejectTaskSubmission(subId) {
@@ -1245,9 +1274,9 @@
       if (!list) return;
       if (customOffers.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có kèo nào.</p>';
       list.innerHTML = customOffers.map((o) => `
-        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
-          <div><p class="font-bold text-white">${o.title} <span class="text-emerald-400 font-extrabold ml-2">+${Number(o.reward).toLocaleString('vi-VN')}đ</span></p></div>
-          <button onclick="adminDeleteOffer('${o.id}')" class="p-1.5 text-rose-400 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+        <div class="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 flex justify-between items-center text-xs shadow-inner">
+          <div><p class="font-extrabold text-white">${o.title} <span class="text-emerald-400 font-black ml-2">+${Number(o.reward).toLocaleString('vi-VN')}đ</span></p></div>
+          <button onclick="adminDeleteOffer('${o.id}')" class="p-2 text-rose-400 hover:text-rose-300 cursor-pointer transition"><i class="fa-solid fa-trash"></i></button>
         </div>
       `).join('');
     }
@@ -1262,7 +1291,7 @@
     async function loadAdminUserList() {
       const container = document.getElementById('adminUserCardsContainer');
       if (!container) return;
-      container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-6 text-xs">Đang tải danh sách thành viên...</div>';
+      container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-8 text-xs">Đang tải danh sách thành viên...</div>';
       
       const { data } = await supabaseClient.from('users_task').select('*').order('created_at', { ascending: false });
       if (data) {
@@ -1275,7 +1304,7 @@
       const container = document.getElementById('adminUserCardsContainer');
       if (!container) return;
       if (!list || list.length === 0) {
-        container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-6 text-xs">Không có tài khoản nào phù hợp.</div>';
+        container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-8 text-xs">Không có tài khoản nào phù hợp.</div>';
         return;
       }
 
@@ -1284,50 +1313,50 @@
         const role = userPermissions[u.user_id]?.role || (u.user_id === 'Admin' ? 'admin' : 'member');
         const isBanned = userPermissions[u.user_id]?.banned || false;
 
-        let roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">Member</span>';
-        if (role === 'admin') roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">Admin</span>';
-        if (role === 'manager') roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">Manager</span>';
+        let roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/35">Member</span>';
+        if (role === 'admin') roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/35">Admin</span>';
+        if (role === 'manager') roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/35">Manager</span>';
 
         const statusBadge = isBanned 
           ? '<span class="text-rose-400 font-bold text-[11px] flex items-center gap-1"><i class="fa-solid fa-ban text-[10px]"></i> Đã Khóa</span>'
           : '<span class="text-emerald-400 font-bold text-[11px] flex items-center gap-1"><i class="fa-solid fa-circle-check text-[10px]"></i> Hoạt Động</span>';
 
         return `
-          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 space-y-3 shadow-lg">
-            <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
-              <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-xl bg-slate-800 text-blue-400 flex items-center justify-center text-sm font-bold border border-slate-700">
+          <div class="glass-card rounded-3xl p-4 space-y-3 shadow-xl border border-slate-800">
+            <div class="flex items-center justify-between pb-2.5 border-b border-slate-800">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-2xl bg-slate-800 text-blue-400 flex items-center justify-center text-sm font-bold border border-slate-700 shadow-inner">
                   <i class="fa-solid fa-user"></i>
                 </div>
                 <div>
-                  <h4 class="font-extrabold text-white text-xs">${u.user_id}</h4>
+                  <h4 class="font-black text-white text-xs">${u.user_id}</h4>
                   <div class="mt-0.5 flex items-center gap-1">${roleBadge}</div>
                 </div>
               </div>
               <div>${statusBadge}</div>
             </div>
 
-            <div class="flex items-center justify-between bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/60">
-              <span class="text-[11px] text-slate-400 font-medium">Số dư ví:</span>
-              <span class="text-sm font-extrabold text-emerald-400">${vnd.toLocaleString('vi-VN')} đ</span>
+            <div class="flex items-center justify-between bg-slate-950/70 p-3 rounded-2xl border border-slate-800/80 shadow-inner">
+              <span class="text-[11px] text-slate-400 font-semibold">Số dư ví:</span>
+              <span class="text-sm font-black text-emerald-400">${vnd.toLocaleString('vi-VN')} đ</span>
             </div>
 
             <div class="grid grid-cols-3 gap-1.5 pt-1">
-              <button onclick="openAdminPasswordModal('${u.user_id}')" class="py-1.5 px-2 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded-xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
+              <button onclick="openAdminPasswordModal('${u.user_id}')" class="py-2 px-2 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
                 <i class="fa-solid fa-key"></i> Đổi Pass
               </button>
-              <button onclick="openAdminRoleModal('${u.user_id}', '${role}')" class="py-1.5 px-2 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 rounded-xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
+              <button onclick="openAdminRoleModal('${u.user_id}', '${role}')" class="py-2 px-2 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
                 <i class="fa-solid fa-user-shield"></i> Quyền
               </button>
-              <button onclick="toggleBanUser('${u.user_id}')" class="py-1.5 px-2 ${isBanned ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-300 hover:bg-rose-500/30'} rounded-xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
+              <button onclick="toggleBanUser('${u.user_id}')" class="py-2 px-2 ${isBanned ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-300 hover:bg-rose-500/30'} rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
                 <i class="fa-solid ${isBanned ? 'fa-lock-open' : 'fa-lock'}"></i> ${isBanned ? 'Mở Khóa' : 'Khóa'}
               </button>
             </div>
 
-            <div class="flex items-center gap-1.5 pt-1">
-              <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập số VNĐ..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500">
-              <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-bold cursor-pointer">+ Cộng</button>
-              <button onclick="adminCustomAdjust('${u.user_id}', -1)" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/30 rounded-xl text-xs font-bold cursor-pointer">- Trừ</button>
+            <div class="flex items-center gap-2 pt-1">
+              <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập VNĐ..." class="flex-1 bg-slate-950 border border-slate-700 rounded-2xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 shadow-inner">
+              <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-3.5 py-2 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-2xl text-xs font-extrabold cursor-pointer transition">+ Cộng</button>
+              <button onclick="adminCustomAdjust('${u.user_id}', -1)" class="px-3.5 py-2 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/30 rounded-2xl text-xs font-extrabold cursor-pointer transition">- Trừ</button>
             </div>
           </div>
         `;
@@ -1433,14 +1462,14 @@
       financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
       const tbody = document.getElementById('adminFinanceTable');
       if (!tbody) return;
-      if (financeRequests.length === 0) return tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">Chưa có lệnh rút.</td></tr>';
+      if (financeRequests.length === 0) return tbody.innerHTML = '<tr><td colspan="5" class="p-5 text-center text-slate-500">Chưa có yêu cầu rút tiền nào.</td></tr>';
       tbody.innerHTML = financeRequests.map((r, idx) => `
         <tr class="hover:bg-slate-800/40">
-          <td class="p-2.5 text-slate-500">${r.time}</td>
-          <td class="p-2.5 font-bold text-white">${r.user}</td>
-          <td class="p-2.5 font-extrabold text-emerald-400">${r.amount.toLocaleString('vi-VN')}đ</td>
-          <td class="p-2.5 text-slate-400">${r.info}</td>
-          <td class="p-2.5 text-right"><button onclick="adminApproveFinance(${idx})" class="px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded text-[11px] font-bold cursor-pointer">Duyệt Rút</button></td>
+          <td class="p-3 text-slate-400 font-mono text-[11px]">${r.time}</td>
+          <td class="p-3 font-extrabold text-white">${r.user}</td>
+          <td class="p-3 font-black text-emerald-400">${r.amount.toLocaleString('vi-VN')}đ</td>
+          <td class="p-3 text-slate-300 font-mono">${r.info}</td>
+          <td class="p-3 text-right"><button onclick="adminApproveFinance(${idx})" class="px-3 py-1.5 bg-emerald-500/20 text-emerald-300 rounded-xl text-xs font-bold cursor-pointer transition">Duyệt Rút</button></td>
         </tr>
       `).join('');
     }
@@ -1456,7 +1485,7 @@
       localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
       renderAdminFinanceTable();
       await loadAdminUserList();
-      Toast.fire({ icon: 'success', title: 'Đã duyệt lệnh rút!' });
+      Toast.fire({ icon: 'success', title: 'Đã duyệt lệnh rút tiền!' });
     }
 
     function loadAdminSupportFields() {
@@ -1526,9 +1555,9 @@
       if (!list) return;
       if (notifications.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có thông báo nào.</p>';
       list.innerHTML = notifications.map((n) => `
-        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
-          <div><p class="font-bold text-white">${n.title}</p><p class="text-slate-400 text-[11px]">${n.content}</p></div>
-          <button onclick="adminDeleteNotice('${n.id}')" class="p-1.5 text-rose-400 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+        <div class="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 flex justify-between items-center text-xs shadow-inner">
+          <div><p class="font-extrabold text-white">${n.title}</p><p class="text-slate-400 text-[11px] mt-0.5">${n.content}</p></div>
+          <button onclick="adminDeleteNotice('${n.id}')" class="p-2 text-rose-400 hover:text-rose-300 cursor-pointer transition"><i class="fa-solid fa-trash"></i></button>
         </div>
       `).join('');
     }
@@ -1562,7 +1591,7 @@
       let accountInfo = '';
 
       if (!amountVND || amountVND < systemConfig.minWithdraw) return showNotify('warning', 'Hạn Mức', `Tối thiểu rút ${systemConfig.minWithdraw.toLocaleString('vi-VN')} VNĐ`);
-      if (amountVND > currentVNDBalance) return showNotify('error', 'Số Dư', 'Số dư không đủ!');
+      if (amountVND > currentVNDBalance) return showNotify('error', 'Số Dư', 'Số dư trong ví không đủ!');
 
       if (method === 'momo') {
         const phone = document.getElementById('withdrawMomoPhone')?.value.trim();
@@ -1577,13 +1606,13 @@
         accountInfo = `${bankName} - ${bankNumber} (${bankOwner.toUpperCase()})`;
       }
 
-      financeRequests.unshift({ id: Date.now(), user: currentUser, amount: amountVND, info: accountInfo, time: new Date().toLocaleTimeString('vi-VN') });
+      financeRequests.unshift({ id: Date.now(), user: currentUser, amount: amountVND, info: accountInfo, time: new Date().toLocaleTimeString('vi-VN') + ' • ' + new Date().toLocaleDateString('vi-VN') });
       localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
       
       sendTelegramAlert(`💸 <b>YÊU CẦU RÚT TIỀN!</b>\n👤 Tài khoản: <code>${currentUser}</code>\n💰 Số tiền: <b>${amountVND.toLocaleString('vi-VN')} VNĐ</b>\n🏦 Thụ hưởng: <code>${accountInfo}</code>`);
 
       closeWithdrawModal();
-      showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền!');
+      showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền thành công!');
     }
 
     function handleLogout() { localStorage.removeItem('task_auth_user'); location.reload(); }

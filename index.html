@@ -526,7 +526,7 @@
       </div>
     </div>
 
-    <!-- TAB 6: TẠO LỆNH RÚT ẢO -->
+    <!-- TAB 6: TẠO LỆNH RÚT ẢO (CÓ AUTO RANDOM VÀ SỐ TIỀN LẺ) -->
     <div id="tabFakeWithdraw" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <h3 class="text-sm font-extrabold text-emerald-400 flex items-center gap-2">
@@ -571,13 +571,13 @@
       </div>
     </div>
 
-    <!-- TAB 7: BILL THANH TOÁN (TỰ ĐỘNG TẠO ẢNH BILL & THÔNG TIN THÀNH CÔNG) -->
+    <!-- TAB 7: BILL THANH TOÁN (CÓ CẢ TỰ ĐỘNG BẮN ẢNH BILL NGẪU NHIÊN THEO THỜI GIAN) -->
     <div id="tabFakeBill" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <h3 class="text-sm font-extrabold text-amber-400 flex items-center gap-2">
           <i class="fa-solid fa-receipt"></i> Tự Động Tạo Bill Thanh Toán & Gửi Kèm Ảnh
         </h3>
-        <span class="text-[11px] text-slate-400">Tạo biên lai chuyển khoản tự động kèm ảnh sắc nét</span>
+        <span class="text-[11px] text-slate-400">Tạo biên lai chuyển khoản tự động kèm ảnh sắc nét & Auto chạy ngầm</span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
@@ -588,7 +588,6 @@
             <option value="mbbank">MB Bank</option>
             <option value="techcombank">Techcombank</option>
             <option value="acb">ACB Bank</option>
-            <option value="momo">Ví MoMo</option>
           </select>
         </div>
         <div>
@@ -607,6 +606,21 @@
           <label class="block text-slate-400 mb-1 font-bold">Nội dung chuyển khoản</label>
           <input id="genBillNote" type="text" placeholder="THANH TOAN THUONG KEO AUTOPOSTAI" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none uppercase">
         </div>
+      </div>
+
+      <!-- PHẦN ĐIỀU KHIỂN AUTO BILL -->
+      <div class="bg-slate-950/70 p-4 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-slate-300 font-bold">🔄 Tự động tạo & bắn ảnh bill ngẫu nhiên mỗi:</span>
+          <select id="autoBillInterval" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold focus:outline-none">
+            <option value="45">45 giây</option>
+            <option value="90" selected>90 giây</option>
+            <option value="200">200 giây</option>
+          </select>
+        </div>
+        <button id="btnToggleAutoBill" onclick="toggleAutoBill()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md">
+          <i class="fa-solid fa-play mr-1"></i> Bật Auto Bill
+        </button>
       </div>
 
       <div class="text-right pt-2">
@@ -1087,6 +1101,200 @@
       } catch (err) {}
     }
 
+    // TÍNH NĂNG 1: AUTO RÚT ẢO (MỤC 6)
+    let autoFakeIntervalId = null;
+    function toggleAutoFakeWithdraw() {
+      const btn = document.getElementById('btnToggleAutoFake');
+      const selectSec = document.getElementById('autoFakeInterval');
+      
+      if (autoFakeIntervalId) {
+        clearInterval(autoFakeIntervalId);
+        autoFakeIntervalId = null;
+        if (btn) {
+          btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Bật Auto Tự Động';
+          btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md';
+        }
+        showNotify('info', 'Đã Tắt Auto', 'Đã dừng tính năng tự động bắn lệnh rút ảo.');
+      } else {
+        const sec = Number(selectSec?.value || 60) * 1000;
+        const randomNames = ['hoangnam99', 'ductuan88', 'thanhhang68', 'vanminh123', 'ngocanh79', 'tuanKini', 'phuongthao9x', 'quanghuy2k', 'ducminhpro', 'thanhdat55', 'hoanganh2k1', 'linhchi555'];
+        const randomBanks = ['MBBank - 0987654321', 'VCB - 1029384756', 'Techcombank - 987654321', 'Momo - 0359123456', 'ACB - 5566778899', 'VPBank - 8822334455'];
+
+        autoFakeIntervalId = setInterval(() => {
+          const randUser = randomNames[Math.floor(Math.random() * randomNames.length)];
+          const baseAmount = Math.floor(Math.random() * 8) * 50000 + 80000;
+          const randomOdd = Math.floor(Math.random() * 890) + 110;
+          const randAmount = baseAmount + randomOdd;
+          const randBank = randomBanks[Math.floor(Math.random() * randomBanks.length)];
+          const randInfo = `${randBank} (NGUYEN VAN ${randUser.toUpperCase()})`;
+          const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+          
+          sendGroupAlert(`
+💳 <b>YÊU CẦU RÚT TIỀN MỚI!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Thành viên:</b> <code>${randUser}</code>
+💰 <b>Số tiền rút:</b> <code>${randAmount.toLocaleString('vi-VN')} VNĐ</code>
+🏦 <b>Thụ hưởng:</b> <code>${randInfo}</code>
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+          `.trim());
+        }, sec);
+
+        if (btn) {
+          btn.innerHTML = '<i class="fa-solid fa-stop mr-1"></i> Dừng Auto';
+          btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md animate-pulse';
+        }
+        showNotify('success', 'Đã Bật Auto Tự Động', `Hệ thống tự động bắn lệnh rút ảo ngẫu nhiên mỗi ${selectSec.value} giây!`);
+      }
+    }
+
+    async function sendFakeWithdrawAlert() {
+      const fakeUser = document.getElementById('fakeUser')?.value.trim();
+      let fakeAmount = Number(document.getElementById('fakeAmount')?.value);
+      const fakeInfo = document.getElementById('fakeInfo')?.value.trim();
+
+      if (!fakeUser || !fakeInfo) {
+        return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập tên CTV và thông tin nhận!');
+      }
+
+      if (!fakeAmount || fakeAmount <= 0) {
+        const base = Math.floor(Math.random() * 8) * 50000 + 80000;
+        const odd = Math.floor(Math.random() * 890) + 110;
+        fakeAmount = base + odd;
+      }
+
+      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      
+      await sendGroupAlert(`
+💳 <b>YÊU CẦU RÚT TIỀN MỚI!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Thành viên:</b> <code>${fakeUser}</code>
+💰 <b>Số tiền rút:</b> <code>${fakeAmount.toLocaleString('vi-VN')} VNĐ</code>
+🏦 <b>Thụ hưởng:</b> <code>${fakeInfo}</code>
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+      `.trim());
+
+      document.getElementById('fakeUser').value = '';
+      document.getElementById('fakeAmount').value = '';
+      document.getElementById('fakeInfo').value = '';
+
+      showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền ảo ra nhóm Telegram thành công!');
+    }
+
+    // TÍNH NĂNG 2: AUTO BILL THANH TOÁN (MỤC 7)
+    let autoBillIntervalId = null;
+    function toggleAutoBill() {
+      const btn = document.getElementById('btnToggleAutoBill');
+      const selectSec = document.getElementById('autoBillInterval');
+      
+      if (autoBillIntervalId) {
+        clearInterval(autoBillIntervalId);
+        autoBillIntervalId = null;
+        if (btn) {
+          btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Bật Auto Bill';
+          btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md';
+        }
+        showNotify('info', 'Đã Tắt Auto Bill', 'Đã dừng tính năng tự động tạo và bắn bill thanh toán.');
+      } else {
+        const sec = Number(selectSec?.value || 90) * 1000;
+        const randomNames = ['HOANG NAM', 'DUC TUAN', 'THANH HANG', 'VAN MINH', 'NGOC ANH', 'TUAN KINI', 'PHUONG THAO', 'QUANG HUY', 'DUC MINH', 'THANH DAT'];
+        const randomBanks = ['vcb', 'mbbank', 'techcombank', 'acb'];
+
+        autoBillIntervalId = setInterval(() => {
+          const randName = randomNames[Math.floor(Math.random() * randomNames.length)];
+          const randBank = randomBanks[Math.floor(Math.random() * randomBanks.length)];
+          const base = Math.floor(Math.random() * 8) * 50000 + 80000;
+          const odd = Math.floor(Math.random() * 890) + 110;
+          const randAmount = base + odd;
+          const randStk = '09' + Math.floor(10000000 + Math.random() * 90000000);
+          const randNote = 'THANH TOAN THUONG KEO AUTOPOSTAI';
+
+          let apiUrl = `https://img.vietqr.io/image/VCB-${randStk}-compact2.jpg?amount=${randAmount}&addInfo=${encodeURIComponent(randNote)}&accountName=${encodeURIComponent(randName)}`;
+          if (randBank === 'mbbank') apiUrl = `https://img.vietqr.io/image/MB-${randStk}-compact2.jpg?amount=${randAmount}&addInfo=${encodeURIComponent(randNote)}&accountName=${encodeURIComponent(randName)}`;
+          else if (randBank === 'techcombank') apiUrl = `https://img.vietqr.io/image/TCB-${randStk}-compact2.jpg?amount=${randAmount}&addInfo=${encodeURIComponent(randNote)}&accountName=${encodeURIComponent(randName)}`;
+
+          const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+          const caption = `
+✅ <b>RÚT TIỀN THÀNH CÔNG!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Tài khoản / Tên:</b> <b>${randName}</b>
+💰 <b>Số tiền nhận:</b> <code>+${randAmount.toLocaleString('vi-VN')} VNĐ</code>
+🏦 <b>Tài khoản:</b> <code>${randStk} (${randBank.toUpperCase()})</code>
+📝 <b>Nội dung:</b> ${randNote}
+📌 <b>Trạng thái:</b> <b style="color:#22c55e">Thành công</b>
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+          `.trim();
+
+          sendGroupPhotoAlert(apiUrl, caption);
+        }, sec);
+
+        if (btn) {
+          btn.innerHTML = '<i class="fa-solid fa-stop mr-1"></i> Dừng Auto Bill';
+          btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md animate-pulse';
+        }
+        showNotify('success', 'Đã Bật Auto Bill', `Hệ thống tự động tạo ảnh bill chuyển khoản ngẫu nhiên mỗi ${selectSec.value} giây!`);
+      }
+    }
+
+    async function generateAndSendAutoBill() {
+      const bank = document.getElementById('genBillBank')?.value;
+      let amount = Number(document.getElementById('genBillAmount')?.value);
+      const name = document.getElementById('genBillName')?.value.trim();
+      const stk = document.getElementById('genBillStk')?.value.trim();
+      const note = document.getElementById('genBillNote')?.value.trim();
+
+      if (!name || !stk || !note) {
+        return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập đầy đủ tên, số tài khoản và nội dung!');
+      }
+
+      if (!amount || amount <= 0) {
+        const base = Math.floor(Math.random() * 8) * 50000 + 80000;
+        const odd = Math.floor(Math.random() * 890) + 110;
+        amount = base + odd;
+      }
+
+      let apiUrl = '';
+      const addInfo = encodeURIComponent(note);
+      const accountName = encodeURIComponent(name);
+
+      if (bank === 'vcb') {
+        apiUrl = `https://img.vietqr.io/image/VCB-${stk}-compact2.jpg?amount=${amount}&addInfo=${addInfo}&accountName=${accountName}`;
+      } else if (bank === 'mbbank') {
+        apiUrl = `https://img.vietqr.io/image/MB-${stk}-compact2.jpg?amount=${amount}&addInfo=${addInfo}&accountName=${accountName}`;
+      } else if (bank === 'techcombank') {
+        apiUrl = `https://img.vietqr.io/image/TCB-${stk}-compact2.jpg?amount=${amount}&addInfo=${addInfo}&accountName=${accountName}`;
+      } else if (bank === 'acb') {
+        apiUrl = `https://img.vietqr.io/image/ACB-${stk}-compact2.jpg?amount=${amount}&addInfo=${addInfo}&accountName=${accountName}`;
+      } else {
+        apiUrl = `https://img.vietqr.io/image/VIETINBANK-${stk}-compact2.jpg?amount=${amount}&addInfo=${addInfo}&accountName=${accountName}`;
+      }
+
+      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      
+      const caption = `
+✅ <b>RÚT TIỀN THÀNH CÔNG!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Tài khoản / Tên:</b> <b>${name.toUpperCase()}</b>
+💰 <b>Số tiền nhận:</b> <code>+${amount.toLocaleString('vi-VN')} VNĐ</code>
+🏦 <b>Tài khoản:</b> <code>${stk} (${bank.toUpperCase()})</code>
+📝 <b>Nội dung:</b> ${note.toUpperCase()}
+📌 <b>Trạng thái:</b> <b style="color:#22c55e">Thành công</b>
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+      `.trim());
+
+      await sendGroupPhotoAlert(apiUrl, caption);
+
+      document.getElementById('genBillAmount').value = '';
+      document.getElementById('genBillName').value = '';
+      document.getElementById('genBillStk').value = '';
+      document.getElementById('genBillNote').value = '';
+
+      showNotify('success', 'Thành Công', 'Đã tự động tạo ảnh bill và bắn thẳng ra nhóm Telegram thành công!');
+    }
+
     async function testTelegramBotAlert() {
       const aToken = document.getElementById('adminCfgAdminToken')?.value.trim();
       const aChatId = document.getElementById('adminCfgAdminChatId')?.value.trim();
@@ -1139,6 +1347,7 @@
       const capInput = document.getElementById('authCaptchaInput');
       if (capInput) capInput.value = '';
     }
+    generateCaptcha();
 
     function toggleAuthMode() {
       isRegisterMode = !isRegisterMode;

@@ -736,11 +736,9 @@
       teleChatId: localStorage.getItem('sys_tele_chat_id') || ''
     };
 
-    let customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
+    let customOffers = [];
     let pendingTaskSubmissions = JSON.parse(localStorage.getItem('pending_task_sub_db')) || [];
-    let notifications = JSON.parse(localStorage.getItem('sys_notifications_db')) || [
-      { id: 1, title: 'Thông báo hệ thống', content: 'Hoàn thành nhiệm vụ và tải ảnh chứng chỉ lên để Admin duyệt cộng tiền.', time: 'Hôm nay' }
-    ];
+    let notifications = [];
     let userPermissions = JSON.parse(localStorage.getItem('user_permissions_db')) || { 'Admin': { role: 'admin', banned: false } };
 
     let isRegisterMode = false;
@@ -748,6 +746,32 @@
     let currentVNDBalance = 0;
     let cachedAdminUserList = [];
     let financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
+
+    // Tải dữ liệu dùng chung trực tiếp từ Supabase để đồng bộ mọi thiết bị
+    async function fetchCloudData() {
+      try {
+        // Tải danh sách Kèo
+        const { data: offersData } = await supabaseClient.from('system_offers').select('*').order('created_at', { ascending: false });
+        if (offersData && offersData.length > 0) {
+          customOffers = offersData.map(o => ({ id: o.id, title: o.title, reward: o.reward, url: o.url, desc: o.description }));
+        } else {
+          customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
+        }
+
+        // Tải danh sách Thông báo
+        const { data: noticesData } = await supabaseClient.from('system_notices').select('*').order('created_at', { ascending: false });
+        if (noticesData && noticesData.length > 0) {
+          notifications = noticesData.map(n => ({ id: n.id, title: n.title, content: n.content, time: n.time }));
+        } else {
+          notifications = JSON.parse(localStorage.getItem('sys_notifications_db')) || [
+            { id: 1, title: 'Thông báo hệ thống', content: 'Hoàn thành nhiệm vụ và tải ảnh chứng chỉ lên để Admin duyệt cộng tiền.', time: 'Hôm nay' }
+          ];
+        }
+      } catch (err) {
+        customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
+        notifications = JSON.parse(localStorage.getItem('sys_notifications_db')) || [];
+      }
+    }
 
     async function sendTelegramAlert(messageText) {
       if (!systemConfig.teleToken || !systemConfig.teleChatId) return;
@@ -796,7 +820,6 @@
       if (!u || !p) return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập tài khoản và mật khẩu!');
       if (inputCap !== currentCaptcha) { generateCaptcha(); return showNotify('error', 'Sai Mã', 'Mã xác nhận không đúng!'); }
 
-      // Cập nhật lại quyền từ localStorage mới nhất
       userPermissions = JSON.parse(localStorage.getItem('user_permissions_db')) || userPermissions;
       if (userPermissions[u]?.banned) {
         generateCaptcha();
@@ -857,6 +880,7 @@
         if (drawerAdmin) drawerAdmin.classList.add('hidden');
       }
 
+      await fetchCloudData();
       applySupportConfig();
       renderNotifications();
       await syncUserData();
@@ -865,7 +889,6 @@
     }
 
     function popWelcomeNotice() {
-      notifications = JSON.parse(localStorage.getItem('sys_notifications_db')) || notifications;
       if (notifications.length > 0) {
         const titleEl = document.getElementById('welcomeNoticeTitle');
         const bodyEl = document.getElementById('welcomeNoticeBody');
@@ -908,7 +931,6 @@
     }
 
     function renderNotifications() {
-      notifications = JSON.parse(localStorage.getItem('sys_notifications_db')) || notifications;
       const modalList = document.getElementById('noticeModalContent');
       const marquee = document.getElementById('noticeMarqueeText');
       if (notifications.length > 0) {
@@ -919,7 +941,8 @@
       }
     }
 
-    function openNoticeModal() { 
+    async function openNoticeModal() { 
+      await fetchCloudData();
       renderNotifications();
       const m = document.getElementById('noticeModal'); 
       if (m) m.classList.remove('hidden'); 
@@ -966,14 +989,14 @@
       if (mainB) mainB.innerText = currentVNDBalance.toLocaleString('vi-VN');
     }
 
-    function fetchAutoOffers() {
+    async function fetchAutoOffers() {
       const container = document.getElementById('nativeTaskList');
       const countText = document.getElementById('availableTasksCount');
       const icon = document.getElementById('taskRefreshIcon');
       if (!container) return;
       if (icon) icon.classList.add('fa-spin');
 
-      customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
+      await fetchCloudData();
 
       if (customOffers.length === 0) {
         container.innerHTML = `
@@ -1163,41 +1186,41 @@
       Toast.fire({ icon: 'info', title: 'Đã từ chối bằng chứng nhiệm vụ.' });
     }
 
-    function adminAddNewOffer() {
+    async function adminAddNewOffer() {
       const title = document.getElementById('newOfferTitle').value.trim();
       const reward = Number(document.getElementById('newOfferReward').value);
       const url = document.getElementById('newOfferUrl').value.trim();
       const desc = document.getElementById('newOfferDesc').value.trim();
       if (!title || !reward || !url) return showNotify('warning', 'Thiếu Dữ Liệu', 'Nhập đủ thông tin kèo!');
 
-      customOffers.unshift({ id: 'custom_' + Date.now(), title, reward, url, desc });
-      localStorage.setItem('custom_offers_db', JSON.stringify(customOffers));
+      const { error } = await supabaseClient.from('system_offers').insert([{ title, reward, url, description: desc }]);
+      if (error) return showNotify('error', 'Lỗi Đăng Kèo', error.message);
+
       document.getElementById('newOfferTitle').value = '';
       document.getElementById('newOfferReward').value = '';
       document.getElementById('newOfferUrl').value = '';
       document.getElementById('newOfferDesc').value = '';
-      showNotify('success', 'Thành Công', 'Đã đăng kèo mới lên sàn!');
-      renderAdminOfferList();
+      showNotify('success', 'Thành Công', 'Đã đăng kèo mới lên hệ thống đám mây!');
+      await renderAdminOfferList();
       fetchAutoOffers();
     }
 
-    function renderAdminOfferList() {
+    async function renderAdminOfferList() {
+      await fetchCloudData();
       const list = document.getElementById('adminOfferManageList');
       if (!list) return;
-      customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
       if (customOffers.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có kèo nào.</p>';
       list.innerHTML = customOffers.map((o, idx) => `
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
           <div><p class="font-bold text-white">${o.title} <span class="text-emerald-400 font-extrabold ml-2">+${Number(o.reward).toLocaleString('vi-VN')}đ</span></p></div>
-          <button onclick="adminDeleteOffer(${idx})" class="p-1.5 text-rose-400 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+          <button onclick="adminDeleteOffer('${o.id}')" class="p-1.5 text-rose-400 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
         </div>
       `).join('');
     }
 
-    function adminDeleteOffer(idx) {
-      customOffers.splice(idx, 1);
-      localStorage.setItem('custom_offers_db', JSON.stringify(customOffers));
-      renderAdminOfferList();
+    async function adminDeleteOffer(offerId) {
+      await supabaseClient.from('system_offers').delete().eq('id', offerId);
+      await renderAdminOfferList();
       fetchAutoOffers();
       Toast.fire({ icon: 'info', title: 'Đã xóa kèo.' });
     }
@@ -1444,41 +1467,42 @@
       showNotify('success', 'Thành Công', 'Đã lưu cấu hình Bot Telegram!');
     }
 
-    function adminPublishNotice() {
+    async function adminPublishNotice() {
       const title = document.getElementById('adminNoticeTitle')?.value.trim() || 'Thông báo';
       const content = document.getElementById('adminNoticeInput')?.value.trim();
       if (!content) return showNotify('warning', 'Thiếu Dữ Liệu', 'Nhập nội dung thông báo!');
       
-      notifications.unshift({ id: Date.now(), title, content, time: new Date().toLocaleTimeString('vi-VN') });
-      localStorage.setItem('sys_notifications_db', JSON.stringify(notifications));
+      const timeStr = new Date().toLocaleTimeString('vi-VN');
+      await supabaseClient.from('system_notices').insert([{ title, content, time: timeStr }]);
       
       const tInput = document.getElementById('adminNoticeTitle');
       const cInput = document.getElementById('adminNoticeInput');
       if (tInput) tInput.value = '';
       if (cInput) cInput.value = '';
       
+      await fetchCloudData();
       renderNotifications();
       renderAdminNoticeManageList();
-      showNotify('success', 'Thành Công', 'Đã phát thông báo mới!');
+      showNotify('success', 'Thành Công', 'Đã phát thông báo mới lên hệ thống đám mây!');
     }
 
-    function renderAdminNoticeManageList() {
-      notifications = JSON.parse(localStorage.getItem('sys_notifications_db')) || notifications;
+    async function renderAdminNoticeManageList() {
+      await fetchCloudData();
       const list = document.getElementById('adminNoticeManageList');
       if (!list) return;
+      if (notifications.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có thông báo nào.</p>';
       list.innerHTML = notifications.map((n, idx) => `
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
           <div><p class="font-bold text-white">${n.title}</p><p class="text-slate-400 text-[11px]">${n.content}</p></div>
-          <button onclick="adminDeleteNotice(${idx})" class="p-1.5 text-rose-400 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+          <button onclick="adminDeleteNotice('${n.id}')" class="p-1.5 text-rose-400 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
         </div>
       `).join('');
     }
 
-    function adminDeleteNotice(idx) {
-      notifications.splice(idx, 1);
-      localStorage.setItem('sys_notifications_db', JSON.stringify(notifications));
+    async function adminDeleteNotice(noticeId) {
+      await supabaseClient.from('system_notices').delete().eq('id', noticeId);
+      await renderAdminNoticeManageList();
       renderNotifications();
-      renderAdminNoticeManageList();
       Toast.fire({ icon: 'info', title: 'Đã xóa thông báo.' });
     }
 
@@ -1530,7 +1554,8 @@
 
     function handleLogout() { localStorage.removeItem('task_auth_user'); location.reload(); }
 
-    window.onload = () => {
+    window.onload = async () => {
+      await fetchCloudData();
       const savedUser = localStorage.getItem('task_auth_user');
       if (savedUser) {
         initSession(savedUser, savedUser === 'Admin' || userPermissions[savedUser]?.role === 'admin');

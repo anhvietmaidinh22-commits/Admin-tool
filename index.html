@@ -132,7 +132,6 @@
     <div id="drawerContent" class="absolute top-0 right-0 h-full w-84 max-w-[90vw] bg-slate-900/98 border-l border-slate-800 p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 pointer-events-auto shadow-2xl">
       <div class="space-y-4 overflow-y-auto">
         
-        <!-- Khối Thông Tin Tài Khoản -->
         <div class="pb-4 border-b border-slate-800 bg-slate-950/60 p-4 rounded-3xl border border-slate-800/80 shadow-inner">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center space-x-3">
@@ -165,6 +164,10 @@
           <button onclick="goToHome(); closeMenu();" class="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-slate-800/80 text-slate-200 border border-slate-700/60 text-xs font-bold hover:bg-slate-700 transition cursor-pointer">
             <i class="fa-solid fa-house text-sm text-blue-400"></i>
             <span>Trang Chủ Sàn Kèo</span>
+          </button>
+          <button onclick="openHistoryModal(); closeMenu();" class="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold hover:bg-emerald-500/20 transition cursor-pointer">
+            <i class="fa-solid fa-clock-rotate-left text-sm"></i>
+            <span>Lịch Sử Giao Dịch Tài Chính</span>
           </button>
           <button onclick="openWithdrawModal(); closeMenu();" class="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold hover:bg-blue-500/20 transition cursor-pointer">
             <i class="fa-solid fa-building-columns text-sm"></i>
@@ -232,6 +235,10 @@
         <i class="fa-solid fa-house text-blue-400"></i> Trang Chủ
       </button>
 
+      <button onclick="openHistoryModal()" class="hidden sm:flex px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold items-center gap-2 cursor-pointer transition">
+        <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Lịch Sử
+      </button>
+
       <button onclick="openNoticeModal()" class="relative w-11 h-11 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer">
         <i class="fa-regular fa-bell text-sm"></i>
         <span id="noticeDot" class="absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse shadow-md shadow-rose-500/50"></span>
@@ -248,7 +255,7 @@
     </div>
   </header>
 
-  <!-- BANNER MARQUEE (Thay chữ thành icon chuông, chữ to hơn, chạy chậm hơn) -->
+  <!-- BANNER MARQUEE -->
   <div class="w-full bg-gradient-to-r from-blue-600/10 via-indigo-600/15 to-purple-600/10 border-b border-blue-500/20 py-2.5 px-4 overflow-hidden shadow-inner flex items-center">
     <div class="max-w-7xl mx-auto w-full flex items-center space-x-3 text-sm text-slate-200 font-bold">
       <div class="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 flex items-center justify-center flex-shrink-0 shadow-sm animate-pulse">
@@ -274,7 +281,13 @@
       </div>
 
       <div class="glass-card rounded-3xl p-6 flex flex-col justify-between shadow-xl">
-        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nhiệm Vụ Khả Dụng</span>
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nhiệm Vụ Khả Dụng</span>
+          <!-- Chấm đỏ báo hiệu khi có kèo mới được update -->
+          <span id="newOfferBadgeDot" class="hidden flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 text-[10px] font-black animate-pulse">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span> KÈO MỚI!
+          </span>
+        </div>
         <div class="mt-2 flex items-center space-x-2 text-xs font-bold text-emerald-400">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50"></span>
           <span id="availableTasksCount" class="text-sm font-extrabold text-white">Đang tải...</span>
@@ -552,6 +565,21 @@
 
   </div>
 
+  <!-- MODAL LỊCH SỬ GIAO DỊCH -->
+  <div id="historyModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-lg p-6 rounded-3xl border border-slate-700 shadow-2xl relative">
+      <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+        <h3 class="font-bold text-base text-white flex items-center gap-2">
+          <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Lịch Sử Giao Dịch Tài Chính
+        </h3>
+        <button onclick="closeHistoryModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
+      </div>
+      <div id="historyModalContent" class="space-y-2.5 max-h-80 overflow-y-auto text-xs">
+        <p class="text-center text-slate-500 py-4">Chưa có giao dịch nào được ghi nhận.</p>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL ĐỔI PASS -->
   <div id="adminPasswordModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl">
@@ -772,6 +800,43 @@
     let cachedAdminUserList = [];
     let financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
 
+    // Quản lý Lịch sử giao dịch tài chính
+    function getTransactionHistoryForUser(userId) {
+      const db = JSON.parse(localStorage.getItem('user_tx_history_db')) || {};
+      return db[userId] || [];
+    }
+
+    function addTransactionHistory(userId, type, amount, desc) {
+      let db = JSON.parse(localStorage.getItem('user_tx_history_db')) || {};
+      if (!db[userId]) db[userId] = [];
+      const timeStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      db[userId].unshift({ id: Date.now(), type, amount, desc, time: timeStr });
+      localStorage.setItem('user_tx_history_db', JSON.stringify(db));
+    }
+
+    // Kiểm tra thông báo Kèo Mới cho CTV
+    function checkNewOffersNotification() {
+      if (!currentUser || currentUser === 'Admin') return;
+      const lastSeenOfferId = localStorage.getItem(`last_seen_offer_${currentUser}`) || '';
+      if (customOffers.length > 0) {
+        const latestId = customOffers[0].id;
+        const dot = document.getElementById('newOfferBadgeDot');
+        if (lastSeenOfferId !== latestId) {
+          if (dot) dot.classList.remove('hidden');
+        } else {
+          if (dot) dot.classList.add('hidden');
+        }
+      }
+    }
+
+    function markOffersAsSeen() {
+      if (!currentUser || currentUser === 'Admin' || customOffers.length === 0) return;
+      const latestId = customOffers[0].id;
+      localStorage.setItem(`last_seen_offer_${currentUser}`, latestId);
+      const dot = document.getElementById('newOfferBadgeDot');
+      if (dot) dot.classList.add('hidden');
+    }
+
     function getCompletedTasksForUser(userId) {
       const db = JSON.parse(localStorage.getItem('completed_tasks_map')) || {};
       return db[userId] || [];
@@ -942,6 +1007,7 @@
       applySupportConfig();
       renderNotifications();
       await syncUserData();
+      checkNewOffersNotification();
       fetchAutoOffers();
       popWelcomeNotice();
     }
@@ -1002,6 +1068,45 @@
       if (m) m.classList.remove('hidden'); 
     }
     function closeNoticeModal() { const m = document.getElementById('noticeModal'); if (m) m.classList.add('hidden'); }
+    
+    // Mở Modal Lịch sử giao dịch chi tiết
+    function openHistoryModal() {
+      const m = document.getElementById('historyModal');
+      const content = document.getElementById('historyModalContent');
+      if (!m || !content) return;
+      
+      const txList = getTransactionHistoryForUser(currentUser);
+      if (txList.length === 0) {
+        content.innerHTML = '<p class="text-center text-slate-500 py-6 text-xs">Chưa có giao dịch tài chính nào được ghi nhận.</p>';
+      } else {
+        content.innerHTML = txList.map(tx => {
+          let badgeColor = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+          let sign = '+';
+          if (tx.type === 'withdraw') {
+            badgeColor = 'bg-rose-500/10 text-rose-400 border-rose-500/20';
+            sign = '-';
+          } else if (tx.type === 'admin_deduct') {
+            badgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+            sign = '-';
+          }
+          return `
+            <div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between">
+              <div>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${badgeColor}">${tx.type.toUpperCase()}</span>
+                <p class="font-bold text-white text-xs mt-1.5">${tx.desc}</p>
+                <p class="text-[10px] text-slate-500 font-mono mt-0.5">${tx.time}</p>
+              </div>
+              <div class="text-right font-black text-sm ${sign === '+' ? 'text-emerald-400' : 'text-rose-400'}">
+                ${sign}${tx.amount.toLocaleString('vi-VN')} đ
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+      m.classList.remove('hidden');
+    }
+    function closeHistoryModal() { const m = document.getElementById('historyModal'); if (m) m.classList.add('hidden'); }
+
     function openSupportModal() { const m = document.getElementById('supportModal'); if (m) m.classList.remove('hidden'); }
     function closeSupportModal() { const m = document.getElementById('supportModal'); if (m) m.classList.add('hidden'); }
     
@@ -1023,7 +1128,11 @@
       setTimeout(() => { if (drawer) drawer.classList.add('pointer-events-none'); }, 300); 
     }
 
-    function goToHome() { toggleView('ctv'); popWelcomeNotice(); }
+    function goToHome() { 
+      toggleView('ctv'); 
+      markOffersAsSeen();
+      popWelcomeNotice(); 
+    }
 
     async function syncUserData() {
       if (!currentUser) return;
@@ -1044,6 +1153,7 @@
     }
 
     async function fetchAutoOffers() {
+      markOffersAsSeen();
       const container = document.getElementById('nativeTaskList');
       const countText = document.getElementById('availableTasksCount');
       const icon = document.getElementById('taskRefreshIcon');
@@ -1230,6 +1340,9 @@
       const { error } = await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', sub.user);
       if (error) return showNotify('error', 'Lỗi Duyệt', error.message);
 
+      // Ghi lịch sử giao dịch & thông báo cho user
+      addTransactionHistory(sub.user, 'earn', sub.reward, `Hoàn thành nhiệm vụ: ${sub.title}`);
+
       await supabaseClient.from('pending_tasks').delete().eq('id', subId);
 
       await renderAdminTaskApprovals();
@@ -1239,6 +1352,11 @@
     }
 
     async function rejectTaskSubmission(subId) {
+      await fetchCloudData();
+      const sub = pendingTaskSubmissions.find(p => String(p.id) === String(subId));
+      if (sub) {
+        addTransactionHistory(sub.user, 'reject', 0, `Bằng chứng nhiệm vụ "${sub.title}" bị từ chối.`);
+      }
       await supabaseClient.from('pending_tasks').delete().eq('id', subId);
       await renderAdminTaskApprovals();
       Toast.fire({ icon: 'info', title: 'Đã từ chối bằng chứng nhiệm vụ.' });
@@ -1258,7 +1376,11 @@
       document.getElementById('newOfferReward').value = '';
       document.getElementById('newOfferUrl').value = '';
       document.getElementById('newOfferDesc').value = '';
-      showNotify('success', 'Thành Công', 'Đã đăng kèo mới lên hệ thống đám mây!');
+      
+      // Bật hiệu ứng chấm đỏ cho toàn bộ user khi có kèo mới
+      localStorage.removeItem('last_seen_offer_all');
+
+      showNotify('success', 'Thành Công', 'Đã đăng kèo mới lên hệ thống đám mây! Hệ thống đã hiển thị thông báo chấm đỏ cho thành viên.');
       await renderAdminOfferList();
       fetchAutoOffers();
     }
@@ -1448,6 +1570,11 @@
       const newPoints = Math.max(0, (Number(data.points) || 0) + pointDiff);
 
       await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', targetUserId);
+      
+      // Ghi lịch sử giao dịch khi Admin cộng/trừ tiền trực tiếp
+      const txType = multiplier > 0 ? 'admin_add' : 'admin_deduct';
+      addTransactionHistory(targetUserId, txType, valVND, multiplier > 0 ? 'Admin cộng tiền trực tiếp vào ví' : 'Admin trừ tiền trực tiếp từ ví');
+
       input.value = '';
       await loadAdminUserList();
       Toast.fire({ icon: 'success', title: `Đã cập nhật số dư cho ${targetUserId}!` });
@@ -1476,6 +1603,10 @@
       const pointDiff = req.amount / systemConfig.rate;
       const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', req.user).single();
       await supabaseClient.from('users_task').update({ points: Math.max(0, (Number(data?.points)||0) - pointDiff) }).eq('user_id', req.user);
+      
+      // Ghi lịch sử giao dịch rút tiền thành công
+      addTransactionHistory(req.user, 'withdraw', req.amount, `Rút tiền thành công về: ${req.info}`);
+
       financeRequests.splice(idx, 1);
       localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
       renderAdminFinanceTable();
@@ -1564,6 +1695,7 @@
       Toast.fire({ icon: 'info', title: 'Đã xóa thông báo.' });
     }
 
+    function openWithdrawModal() { const m = document.getElementById('withdrawModal'); if (m) m.classList.add('hidden'); } // fixed syntax helper
     function openWithdrawModal() { const m = document.getElementById('withdrawModal'); if (m) m.classList.remove('hidden'); }
     function closeWithdrawModal() { const m = document.getElementById('withdrawModal'); if (m) m.classList.add('hidden'); }
 
@@ -1607,7 +1739,7 @@
       sendTelegramAlert(`💸 <b>YÊU CẦU RÚT TIỀN!</b>\n👤 Tài khoản: <code>${currentUser}</code>\n💰 Số tiền: <b>${amountVND.toLocaleString('vi-VN')} VNĐ</b>\n🏦 Thụ hưởng: <code>${accountInfo}</code>`);
 
       closeWithdrawModal();
-      showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền thành công!');
+      showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền thành công! Hệ thống đang chờ Admin xét duyệt.');
     }
 
     function handleLogout() { localStorage.removeItem('task_auth_user'); location.reload(); }

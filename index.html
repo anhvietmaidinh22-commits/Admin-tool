@@ -877,29 +877,48 @@
       }
     }
 
-    async function fetchAutoOffers() {
+    function fetchAutoOffers() {
       const container = document.getElementById('nativeTaskList');
       const countText = document.getElementById('availableTasksCount');
-      let taskPool = customOffers.length > 0 ? customOffers : [
-        { id: 'sample_1', title: 'Mở Tài Khoản Ngân Hàng Nhận 35k', reward: 35000, desc: 'Mở tài khoản thành công qua link độc quyền.', url: '#' }
-      ];
+      const icon = document.getElementById('taskRefreshIcon');
+      if (icon) icon.classList.add('fa-spin');
 
-      countText.innerText = `${taskPool.length} Kèo sẵn sàng`;
-      container.innerHTML = taskPool.map(t => `
+      // Tải lại danh sách từ localStorage để đảm bảo đồng bộ mới nhất từ Admin
+      customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
+
+      if (customOffers.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-12 space-y-3">
+            <div class="w-14 h-14 bg-slate-800 text-slate-400 rounded-2xl flex items-center justify-center mx-auto text-2xl border border-slate-700">
+              <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <p class="text-white font-bold text-sm">Chưa có nhiệm vụ nào trên sàn.</p>
+            <p class="text-slate-500 text-xs">Vui lòng chờ Admin đăng thêm kèo mới ở Tab 3.</p>
+          </div>
+        `;
+        countText.innerText = `0 Kèo sẵn sàng`;
+        if (icon) setTimeout(() => icon.classList.remove('fa-spin'), 400);
+        return;
+      }
+
+      countText.innerText = `${customOffers.length} Kèo sẵn sàng`;
+      container.innerHTML = customOffers.map(t => `
         <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-3 shadow-lg">
           <div>
             <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-[10px] text-emerald-400 font-bold border border-emerald-500/25">Độc Quyền</span>
             <h3 class="font-extrabold text-white text-xs mt-2">${t.title}</h3>
-            <p class="text-slate-400 text-[11px] mt-1">${t.desc}</p>
+            <p class="text-slate-400 text-[11px] mt-1">${t.desc || 'Không có mô tả'}</p>
           </div>
           <div class="pt-2 border-t border-slate-800 flex items-center justify-between">
-            <span class="text-xs font-black text-emerald-400">+${t.reward.toLocaleString('vi-VN')} đ</span>
+            <span class="text-xs font-black text-emerald-400">+${Number(t.reward).toLocaleString('vi-VN')} đ</span>
             <button onclick="handleStartTask('${t.id}', '${t.title}', '${t.url}', ${t.reward})" class="px-3.5 py-1.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-md">
               Làm Kèo <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
             </button>
           </div>
         </div>
       `).join('');
+
+      if (icon) setTimeout(() => icon.classList.remove('fa-spin'), 400);
     }
 
     async function handleStartTask(taskId, taskTitle, taskUrl, rewardAmount) {
@@ -1010,19 +1029,16 @@
       const sub = pendingTaskSubmissions[idx];
       const pointDiff = sub.reward / systemConfig.rate;
 
-      // Lấy điểm hiện tại từ Database Supabase của user đó
       const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', sub.user).single();
       const currentPoints = Number(data?.points) || 0;
       const newPoints = currentPoints + pointDiff;
 
-      // Cập nhật điểm lên Supabase
       const { error } = await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', sub.user);
 
       if (error) {
         return showNotify('error', 'Lỗi Duyệt', error.message);
       }
 
-      // Xóa khỏi danh sách chờ duyệt
       pendingTaskSubmissions.splice(idx, 1);
       localStorage.setItem('pending_task_sub_db', JSON.stringify(pendingTaskSubmissions));
       renderAdminTaskApprovals();
@@ -1061,7 +1077,7 @@
       if (customOffers.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có kèo nào.</p>';
       list.innerHTML = customOffers.map((o, idx) => `
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
-          <div><p class="font-bold text-white">${o.title} <span class="text-emerald-400 font-extrabold ml-2">+${o.reward.toLocaleString('vi-VN')}đ</span></p></div>
+          <div><p class="font-bold text-white">${o.title} <span class="text-emerald-400 font-extrabold ml-2">+${Number(o.reward).toLocaleString('vi-VN')}đ</span></p></div>
           <button onclick="adminDeleteOffer(${idx})" class="p-1.5 text-rose-400"><i class="fa-solid fa-trash"></i></button>
         </div>
       `).join('');

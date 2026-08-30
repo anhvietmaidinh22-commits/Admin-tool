@@ -736,9 +736,7 @@
       teleChatId: localStorage.getItem('sys_tele_chat_id') || ''
     };
 
-    let customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [
-      { id: 'default_1', title: 'Mở Tài Khoản Ngân Hàng Nhận 35k', reward: 35000, desc: 'Mở tài khoản thành công qua link độc quyền.', url: '#' }
-    ];
+    let customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
     let pendingTaskSubmissions = JSON.parse(localStorage.getItem('pending_task_sub_db')) || [];
     let notifications = JSON.parse(localStorage.getItem('sys_notifications_db')) || [
       { id: 1, title: 'Thông báo hệ thống', content: 'Hoàn thành nhiệm vụ và tải ảnh chứng chỉ lên để Admin duyệt cộng tiền.', time: 'Hôm nay' }
@@ -960,9 +958,22 @@
       if (!container) return;
       if (icon) icon.classList.add('fa-spin');
 
-      customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [
-        { id: 'default_1', title: 'Mở Tài Khoản Ngân Hàng Nhận 35k', reward: 35000, desc: 'Mở tài khoản thành công qua link độc quyền.', url: '#' }
-      ];
+      customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
+
+      if (customOffers.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-12 space-y-3">
+            <div class="w-14 h-14 bg-slate-800 text-slate-400 rounded-2xl flex items-center justify-center mx-auto text-2xl border border-slate-700">
+              <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <p class="text-white font-bold text-sm">Chưa có nhiệm vụ nào trên sàn.</p>
+            <p class="text-slate-500 text-xs">Vui lòng chờ Admin đăng thêm kèo mới ở Tab 3.</p>
+          </div>
+        `;
+        if (countText) countText.innerText = `0 Kèo sẵn sàng`;
+        if (icon) setTimeout(() => icon.classList.remove('fa-spin'), 400);
+        return;
+      }
 
       if (countText) countText.innerText = `${customOffers.length} Kèo sẵn sàng`;
       container.innerHTML = customOffers.map(t => `
@@ -1036,13 +1047,13 @@
       }
     }
 
-    function toggleView(view) {
+    async function toggleView(view) {
       const ctvV = document.getElementById('ctvView');
       const adminV = document.getElementById('adminView');
       if (view === 'admin') {
         if (ctvV) ctvV.classList.add('hidden');
         if (adminV) adminV.classList.remove('hidden');
-        loadAdminUserList();
+        await loadAdminUserList();
         renderAdminOfferList();
         renderAdminFinanceTable();
         renderAdminTaskApprovals();
@@ -1051,7 +1062,7 @@
       } else {
         if (adminV) adminV.classList.add('hidden');
         if (ctvV) ctvV.classList.remove('hidden');
-        syncUserData();
+        await syncUserData();
         fetchAutoOffers();
       }
     }
@@ -1121,7 +1132,7 @@
       pendingTaskSubmissions.splice(idx, 1);
       localStorage.setItem('pending_task_sub_db', JSON.stringify(pendingTaskSubmissions));
       renderAdminTaskApprovals();
-      loadAdminUserList();
+      await loadAdminUserList();
 
       Toast.fire({ icon: 'success', title: `Đã duyệt và cộng +${sub.reward.toLocaleString('vi-VN')}đ cho tài khoản ${sub.user}!` });
     }
@@ -1154,6 +1165,7 @@
     function renderAdminOfferList() {
       const list = document.getElementById('adminOfferManageList');
       if (!list) return;
+      customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
       if (customOffers.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có kèo nào.</p>';
       list.innerHTML = customOffers.map((o, idx) => `
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
@@ -1337,7 +1349,7 @@
 
       await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', targetUserId);
       input.value = '';
-      loadAdminUserList();
+      await loadAdminUserList();
       Toast.fire({ icon: 'success', title: `Đã cập nhật số dư cho ${targetUserId}!` });
     }
 
@@ -1364,6 +1376,7 @@
       financeRequests.splice(idx, 1);
       localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
       renderAdminFinanceTable();
+      await loadAdminUserList();
       Toast.fire({ icon: 'success', title: 'Đã duyệt lệnh rút!' });
     }
 

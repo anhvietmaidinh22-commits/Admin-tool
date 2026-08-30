@@ -254,7 +254,7 @@
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span id="availableTasksCount">Đang tải...</span>
         </div>
-        <span class="text-[10px] text-slate-500 mt-0.5">Gửi bằng chứng để duyệt</span>
+        <span class="text-[10px] text-slate-500 mt-0.5">Upload ảnh chụp màn hình để duyệt</span>
       </div>
     </div>
 
@@ -265,7 +265,7 @@
           <h2 class="text-base font-extrabold text-white flex items-center gap-2">
             <i class="fa-solid fa-fire text-amber-400"></i> Danh Sách Nhiệm Vụ Kiếm Tiền Mới Nhất
           </h2>
-          <p class="text-xs text-slate-400 mt-0.5">Hoàn thành nhiệm vụ và gửi bằng chứng xác nhận để Admin duyệt cộng tiền</p>
+          <p class="text-xs text-slate-400 mt-0.5">Hoàn thành nhiệm vụ và up ảnh chụp màn hình xác nhận để Admin duyệt</p>
         </div>
 
         <div class="flex items-center space-x-2">
@@ -288,7 +288,7 @@
         <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
           <i class="fa-solid fa-crown text-amber-400"></i> Bảng Quản Trị Hệ Thống
         </h2>
-        <p class="text-xs text-slate-400 mt-0.5">Duyệt bằng chứng nhiệm vụ, thành viên, tài chính & cài đặt</p>
+        <p class="text-xs text-slate-400 mt-0.5">Duyệt ảnh chứng chỉ nhiệm vụ, thành viên, tài chính & cài đặt</p>
       </div>
       <button onclick="goToHome()" class="px-3 py-1.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg flex items-center gap-1">
         <i class="fa-solid fa-house"></i> Về Trang Chủ
@@ -323,7 +323,7 @@
     <!-- TAB 1: DUYỆT NHIỆM VỤ -->
     <div id="tabTaskApprovals" class="admin-tab-content glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-        <i class="fa-solid fa-clipboard-check text-blue-400"></i> Duyệt Bằng Chứng Hoàn Thành Nhiệm Vụ Của CTV
+        <i class="fa-solid fa-clipboard-check text-blue-400"></i> Duyệt Ảnh Bằng Chứng Hoàn Thành Nhiệm Vụ Của CTV
       </h3>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs text-slate-300">
@@ -332,7 +332,7 @@
               <th class="p-2.5">Thời Gian</th>
               <th class="p-2.5">Tài Khoản</th>
               <th class="p-2.5">Tên Nhiệm Vụ</th>
-              <th class="p-2.5">Bằng Chứng / Mã Xác Nhận</th>
+              <th class="p-2.5">Ảnh Chứng Chỉ / Bằng Chứng</th>
               <th class="p-2.5 text-right">Thao Tác</th>
             </tr>
           </thead>
@@ -343,7 +343,7 @@
       </div>
     </div>
 
-    <!-- TAB 2: KHÁCH HÀNG (ĐÃ CÓ ĐẦY ĐỦ CÁC NÚT ĐỔI PASS, QUYỀN, KHÓA, CỘNG TRỪ TIỀN) -->
+    <!-- TAB 2: KHÁCH HÀNG -->
     <div id="tabUsers" class="admin-tab-content hidden glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
         <div>
@@ -739,7 +739,7 @@
     let customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
     let pendingTaskSubmissions = JSON.parse(localStorage.getItem('pending_task_sub_db')) || [];
     let notifications = JSON.parse(localStorage.getItem('sys_notifications_db')) || [
-      { id: 1, title: 'Thông báo hệ thống', content: 'Hoàn thành nhiệm vụ và gửi bằng chứng để Admin duyệt cộng tiền.', time: 'Hôm nay' }
+      { id: 1, title: 'Thông báo hệ thống', content: 'Hoàn thành nhiệm vụ và tải ảnh chứng chỉ lên để Admin duyệt cộng tiền.', time: 'Hôm nay' }
     ];
     let userPermissions = JSON.parse(localStorage.getItem('user_permissions_db')) || { 'Admin': { role: 'admin', banned: false } };
 
@@ -902,35 +902,56 @@
       `).join('');
     }
 
-    function handleStartTask(taskId, taskTitle, taskUrl, rewardAmount) {
+    async function handleStartTask(taskId, taskTitle, taskUrl, rewardAmount) {
       if (!taskUrl || taskUrl === '#') return showNotify('warning', 'Thiếu Link', 'Kèo này chưa có đường dẫn đối tác!');
       window.open(taskUrl, '_blank');
 
-      Swal.fire({
+      const { value: formValues } = await Swal.fire({
         title: 'Xác Nhận Hoàn Thành Kèo',
-        text: 'Vui lòng nhập Mã Giao Dịch hoặc Số Điện Thoại/Tên tài khoản bạn đã đăng ký ở trang đối tác:',
-        input: 'text',
-        inputPlaceholder: 'Nhập bằng chứng...',
+        html: `
+          <div class="text-left space-y-3 text-xs">
+            <p class="text-slate-300">Nhập ghi chú hoặc mã giao dịch:</p>
+            <input id="swal-input1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none" placeholder="Ví dụ: SĐT đăng ký, mã GD...">
+            <p class="text-slate-300 pt-1">Tải lên ảnh chụp màn hình (Chứng chỉ / Bằng chứng):</p>
+            <input type="file" id="swal-input2" accept="image/*" class="w-full text-slate-400 text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500">
+          </div>
+        `,
+        focusConfirm: false,
         showCancelButton: true,
-        confirmButtonText: 'Gửi Bằng Chứng Duyệt',
-        cancelButtonText: 'Hủy'
-      }).then((result) => {
-        if (result.isConfirmed && result.value) {
-          pendingTaskSubmissions.unshift({
-            id: Date.now(),
-            user: currentUser,
-            title: taskTitle,
-            reward: rewardAmount,
-            proof: result.value,
-            time: new Date().toLocaleTimeString('vi-VN') + ' ' + new Date().toLocaleDateString('vi-VN')
+        confirmButtonText: 'Gửi Bằng Chứng',
+        cancelButtonText: 'Hủy',
+        preConfirm: () => {
+          const note = document.getElementById('swal-input1').value;
+          const fileInput = document.getElementById('swal-input2');
+          return new Promise((resolve, reject) => {
+            if (fileInput.files.length > 0) {
+              const reader = new FileReader();
+              reader.onload = e => resolve({ note, image: e.target.result });
+              reader.onerror = error => reject(error);
+              reader.readAsDataURL(fileInput.files[0]);
+            } else {
+              resolve({ note: note || 'Không có ghi chú', image: null });
+            }
           });
-          localStorage.setItem('pending_task_sub_db', JSON.stringify(pendingTaskSubmissions));
-          
-          sendTelegramAlert(`📥 <b>BẰNG CHỨNG NHIỆM VỤ MỚI!</b>\n👤 Tài khoản: <code>${currentUser}</code>\n📝 Kèo: ${taskTitle}\n🔑 Proof: <code>${result.value}</code>`);
-
-          showNotify('success', 'Đã Gửi Bằng Chứng', 'Yêu cầu của bạn đã được gửi cho Admin duyệt.');
         }
       });
+
+      if (formValues) {
+        pendingTaskSubmissions.unshift({
+          id: Date.now(),
+          user: currentUser,
+          title: taskTitle,
+          reward: rewardAmount,
+          proofText: formValues.note,
+          proofImage: formValues.image,
+          time: new Date().toLocaleTimeString('vi-VN') + ' ' + new Date().toLocaleDateString('vi-VN')
+        });
+        localStorage.setItem('pending_task_sub_db', JSON.stringify(pendingTaskSubmissions));
+        
+        sendTelegramAlert(`📥 <b>BẰNG CHỨNG ẢNH NHIỆM VỤ MỚI!</b>\n👤 Tài khoản: <code>${currentUser}</code>\n📝 Kèo: ${taskTitle}\n💬 Ghi chú: <code>${formValues.note}</code>`);
+
+        showNotify('success', 'Đã Gửi Bằng Chứng', 'Yêu cầu của bạn đã được gửi cho Admin duyệt.');
+      }
     }
 
     function toggleView(view) {
@@ -965,39 +986,93 @@
       document.getElementById('pendingTaskBadgeCount').innerText = pendingTaskSubmissions.length;
       if (pendingTaskSubmissions.length === 0) return tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">Chưa có bằng chứng nào chờ duyệt.</td></tr>';
 
-      tbody.innerHTML = pendingTaskSubmissions.map((s, idx) => `
-        <tr class="hover:bg-slate-800/40">
-          <td class="p-2.5 text-slate-500">${s.time}</td>
-          <td class="p-2.5 font-bold text-white">${s.user}</td>
-          <td class="p-2.5 text-slate-300">${s.title} <b class="text-emerald-400">(+${s.reward.toLocaleString('vi-VN')}đ)</b></td>
-          <td class="p-2.5 font-mono text-amber-300">${s.proof}</td>
-          <td class="p-2.5 text-right space-x-1">
-            <button onclick="approveTaskSubmission(${idx})" class="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 rounded font-bold">Duyệt Cộng</button>
-            <button onclick="rejectTaskSubmission(${idx})" class="px-2.5 py-1 bg-rose-500/20 text-rose-300 rounded font-bold">Hủy</button>
-          </td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = pendingTaskSubmissions.map((s, idx) => {
+        const imgTag = s.proofImage ? `<a href="${s.proofImage}" target="_blank"><img src="${s.proofImage}" class="w-16 h-16 object-cover rounded-xl border border-slate-700 hover:scale-105 transition"></a>` : '<span class="text-slate-500">Không có ảnh</span>';
+        return `
+          <tr class="hover:bg-slate-800/40">
+            <td class="p-2.5 text-slate-500">${s.time}</td>
+            <td class="p-2.5 font-bold text-white">${s.user}</td>
+            <td class="p-2.5 text-slate-300">${s.title} <b class="text-emerald-400">(+${s.reward.toLocaleString('vi-VN')}đ)</b></td>
+            <td class="p-2.5 space-y-1">
+              <p class="font-mono text-amber-300">${s.proofText || ''}</p>
+              ${imgTag}
+            </td>
+            <td class="p-2.5 text-right space-x-1">
+              <button onclick="approveTaskSubmission(${idx})" class="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 rounded font-bold">Duyệt Cộng</button>
+              <button onclick="rejectTaskSubmission(${idx})" class="px-2.5 py-1 bg-rose-500/20 text-rose-300 rounded font-bold">Hủy</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
 
     async function approveTaskSubmission(idx) {
       const sub = pendingTaskSubmissions[idx];
       const pointDiff = sub.reward / systemConfig.rate;
 
+      // Lấy điểm hiện tại từ Database Supabase của user đó
       const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', sub.user).single();
-      const newPoints = (Number(data?.points) || 0) + pointDiff;
-      await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', sub.user);
+      const currentPoints = Number(data?.points) || 0;
+      const newPoints = currentPoints + pointDiff;
 
+      // Cập nhật điểm lên Supabase
+      const { error } = await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', sub.user);
+
+      if (error) {
+        return showNotify('error', 'Lỗi Duyệt', error.message);
+      }
+
+      // Xóa khỏi danh sách chờ duyệt
       pendingTaskSubmissions.splice(idx, 1);
       localStorage.setItem('pending_task_sub_db', JSON.stringify(pendingTaskSubmissions));
       renderAdminTaskApprovals();
-      Toast.fire({ icon: 'success', title: `Đã duyệt và cộng +${sub.reward.toLocaleString('vi-VN')}đ cho ${sub.user}!` });
+      loadAdminUserList();
+
+      Toast.fire({ icon: 'success', title: `Đã duyệt và cộng +${sub.reward.toLocaleString('vi-VN')}đ cho tài khoản ${sub.user}!` });
     }
 
     function rejectTaskSubmission(idx) {
       pendingTaskSubmissions.splice(idx, 1);
       localStorage.setItem('pending_task_sub_db', JSON.stringify(pendingTaskSubmissions));
       renderAdminTaskApprovals();
-      Toast.fire({ icon: 'info', title: 'Đã từ chối bằng chứng.' });
+      Toast.fire({ icon: 'info', title: 'Đã từ chối bằng chứng nhiệm vụ.' });
+    }
+
+    function adminAddNewOffer() {
+      const title = document.getElementById('newOfferTitle').value.trim();
+      const reward = Number(document.getElementById('newOfferReward').value);
+      const url = document.getElementById('newOfferUrl').value.trim();
+      const desc = document.getElementById('newOfferDesc').value.trim();
+      if (!title || !reward || !url) return showNotify('warning', 'Thiếu Dữ Liệu', 'Nhập đủ thông tin kèo!');
+
+      customOffers.unshift({ id: 'custom_' + Date.now(), title, reward, url, desc });
+      localStorage.setItem('custom_offers_db', JSON.stringify(customOffers));
+      document.getElementById('newOfferTitle').value = '';
+      document.getElementById('newOfferReward').value = '';
+      document.getElementById('newOfferUrl').value = '';
+      document.getElementById('newOfferDesc').value = '';
+      showNotify('success', 'Thành Công', 'Đã đăng kèo mới lên sàn!');
+      renderAdminOfferList();
+      fetchAutoOffers();
+    }
+
+    function renderAdminOfferList() {
+      const list = document.getElementById('adminOfferManageList');
+      if (customOffers.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có kèo nào.</p>';
+      list.innerHTML = customOffers.map((o, idx) => `
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
+          <div><p class="font-bold text-white">${o.title} <span class="text-emerald-400 font-extrabold ml-2">+${o.reward.toLocaleString('vi-VN')}đ</span></p></div>
+          <button onclick="adminDeleteOffer(${idx})" class="p-1.5 text-rose-400"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      `).join('');
+    }
+
+    function adminDeleteOffer(idx) {
+      customOffers.splice(idx, 1);
+      localStorage.setItem('custom_offers_db', JSON.stringify(customOffers));
+      renderAdminOfferList();
+      fetchAutoOffers();
+      Toast.fire({ icon: 'info', title: 'Đã xóa kèo.' });
     }
 
     async function loadAdminUserList() {
@@ -1152,43 +1227,6 @@
       Toast.fire({ icon: 'success', title: `Đã cập nhật số dư cho ${targetUserId}!` });
     }
 
-    function adminAddNewOffer() {
-      const title = document.getElementById('newOfferTitle').value.trim();
-      const reward = Number(document.getElementById('newOfferReward').value);
-      const url = document.getElementById('newOfferUrl').value.trim();
-      const desc = document.getElementById('newOfferDesc').value.trim();
-      if (!title || !reward || !url) return showNotify('warning', 'Thiếu Dữ Liệu', 'Nhập đủ thông tin kèo!');
-
-      customOffers.unshift({ id: 'custom_' + Date.now(), title, reward, url, desc });
-      localStorage.setItem('custom_offers_db', JSON.stringify(customOffers));
-      document.getElementById('newOfferTitle').value = '';
-      document.getElementById('newOfferReward').value = '';
-      document.getElementById('newOfferUrl').value = '';
-      document.getElementById('newOfferDesc').value = '';
-      showNotify('success', 'Thành Công', 'Đã đăng kèo mới lên sàn!');
-      renderAdminOfferList();
-      fetchAutoOffers();
-    }
-
-    function renderAdminOfferList() {
-      const list = document.getElementById('adminOfferManageList');
-      if (customOffers.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có kèo nào.</p>';
-      list.innerHTML = customOffers.map((o, idx) => `
-        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
-          <div><p class="font-bold text-white">${o.title} <span class="text-emerald-400 font-extrabold ml-2">+${o.reward.toLocaleString('vi-VN')}đ</span></p></div>
-          <button onclick="adminDeleteOffer(${idx})" class="p-1.5 text-rose-400"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      `).join('');
-    }
-
-    function adminDeleteOffer(idx) {
-      customOffers.splice(idx, 1);
-      localStorage.setItem('custom_offers_db', JSON.stringify(customOffers));
-      renderAdminOfferList();
-      fetchAutoOffers();
-      Toast.fire({ icon: 'info', title: 'Đã xóa kèo.' });
-    }
-
     function renderAdminFinanceTable() {
       const tbody = document.getElementById('adminFinanceTable');
       if (financeRequests.length === 0) return tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">Chưa có lệnh rút.</td></tr>';
@@ -1333,4 +1371,3 @@
   </script>
 </body>
 </html>
-8

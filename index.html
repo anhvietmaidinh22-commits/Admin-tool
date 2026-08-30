@@ -745,7 +745,6 @@
 
     let isRegisterMode = false;
     let currentUser = null;
-    let currentCaptcha = '';
     let currentVNDBalance = 0;
     let cachedAdminUserList = [];
     let financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
@@ -762,27 +761,36 @@
       } catch (err) {}
     }
 
+    let currentCaptcha = '';
     function generateCaptcha() {
       const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
       let res = '';
       for (let i = 0; i < 4; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
       currentCaptcha = res;
-      document.getElementById('captchaText').innerText = res;
-      document.getElementById('authCaptchaInput').value = '';
+      const capEl = document.getElementById('captchaText');
+      if (capEl) capEl.innerText = res;
+      const capInput = document.getElementById('authCaptchaInput');
+      if (capInput) capInput.value = '';
     }
-    generateCaptcha();
 
     function toggleAuthMode() {
       isRegisterMode = !isRegisterMode;
-      document.getElementById('authTitle').innerText = isRegisterMode ? 'Đăng Ký' : 'Đăng Nhập';
-      document.getElementById('btnAuthSubmit').innerText = isRegisterMode ? 'Tạo Tài Khoản' : 'Đăng Nhập';
+      const titleEl = document.getElementById('authTitle');
+      const btnEl = document.getElementById('btnAuthSubmit');
+      if (titleEl) titleEl.innerText = isRegisterMode ? 'Đăng Ký' : 'Đăng Nhập';
+      if (btnEl) btnEl.innerText = isRegisterMode ? 'Tạo Tài Khoản' : 'Đăng Nhập';
       generateCaptcha();
     }
 
     async function handleAuthSubmit() {
-      const u = document.getElementById('authUsername').value.trim();
-      const p = document.getElementById('authPassword').value.trim();
-      const inputCap = document.getElementById('authCaptchaInput').value.trim().toUpperCase();
+      const uInput = document.getElementById('authUsername');
+      const pInput = document.getElementById('authPassword');
+      const capInput = document.getElementById('authCaptchaInput');
+      
+      if (!uInput || !pInput || !capInput) return;
+      const u = uInput.value.trim();
+      const p = pInput.value.trim();
+      const inputCap = capInput.value.trim().toUpperCase();
 
       if (!u || !p) return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập tài khoản và mật khẩu!');
       if (inputCap !== currentCaptcha) { generateCaptcha(); return showNotify('error', 'Sai Mã', 'Mã xác nhận không đúng!'); }
@@ -804,22 +812,36 @@
           initSession('Admin', true);
           return;
         }
-        const { data } = await supabaseClient.from('users_task').select('*').eq('user_id', u).single();
-        if (!data) { generateCaptcha(); return showNotify('error', 'Thất Bại', 'Sai tài khoản hoặc mật khẩu!'); }
+        
+        let { data } = await supabaseClient.from('users_task').select('*').eq('user_id', u).single();
+        if (!data) {
+          await supabaseClient.from('users_task').insert([{ user_id: u, points: 0 }]);
+        }
+
         localStorage.setItem('task_auth_user', u);
-        const isAdmin = userPermissions[u]?.role === 'admin' || userPermissions[u]?.role === 'manager';
+        const isAdmin = userPermissions[u]?.role === 'admin' || userPermissions[u]?.role === 'manager' || u === 'Admin';
         initSession(u, isAdmin);
       }
     }
 
     async function initSession(userId, isAdmin = false) {
       currentUser = userId;
-      document.getElementById('authModal').classList.add('hidden');
-      document.getElementById('drawerUsername').innerText = userId;
+      const modal = document.getElementById('authModal');
+      if (modal) modal.classList.add('hidden');
+      
+      const drawerUser = document.getElementById('drawerUsername');
+      if (drawerUser) drawerUser.innerText = userId;
+
+      const roleBadge = document.getElementById('roleBadge');
+      const drawerAdmin = document.getElementById('btnDrawerAdmin');
       if (isAdmin || userId === 'Admin') {
-        document.getElementById('roleBadge').classList.remove('hidden');
-        document.getElementById('btnDrawerAdmin').classList.remove('hidden');
+        if (roleBadge) roleBadge.classList.remove('hidden');
+        if (drawerAdmin) drawerAdmin.classList.remove('hidden');
+      } else {
+        if (roleBadge) roleBadge.classList.add('hidden');
+        if (drawerAdmin) drawerAdmin.classList.add('hidden');
       }
+
       applySupportConfig();
       renderNotifications();
       await syncUserData();
@@ -829,42 +851,78 @@
 
     function popWelcomeNotice() {
       if (notifications.length > 0) {
-        document.getElementById('welcomeNoticeTitle').innerText = notifications[0].title;
-        document.getElementById('welcomeNoticeBody').innerHTML = notifications.map(n => `
-          <div class="p-2.5 bg-slate-950/70 border border-slate-800 rounded-xl text-left">
-            <p class="font-bold text-white text-xs mb-1">${n.title}</p>
-            <p class="text-slate-300 text-[11px] leading-relaxed">${n.content}</p>
-          </div>
-        `).join('');
-        document.getElementById('welcomeNoticeModal').classList.remove('hidden');
+        const titleEl = document.getElementById('welcomeNoticeTitle');
+        const bodyEl = document.getElementById('welcomeNoticeBody');
+        const noticeModal = document.getElementById('welcomeNoticeModal');
+        if (titleEl) titleEl.innerText = notifications[0].title;
+        if (bodyEl) {
+          bodyEl.innerHTML = notifications.map(n => `
+            <div class="p-2.5 bg-slate-950/70 border border-slate-800 rounded-xl text-left">
+              <p class="font-bold text-white text-xs mb-1">${n.title}</p>
+              <p class="text-slate-300 text-[11px] leading-relaxed">${n.content}</p>
+            </div>
+          `).join('');
+        }
+        if (noticeModal) noticeModal.classList.remove('hidden');
       }
     }
-    function closeWelcomeNotice() { document.getElementById('welcomeNoticeModal').classList.add('hidden'); }
+    function closeWelcomeNotice() { 
+      const m = document.getElementById('welcomeNoticeModal');
+      if (m) m.classList.add('hidden'); 
+    }
 
     function applySupportConfig() {
-      document.getElementById('supportZaloText').innerText = systemConfig.zalo;
-      document.getElementById('supportZaloLink').href = `https://zalo.me/${systemConfig.zalo}`;
-      document.getElementById('supportTelegramText').innerText = systemConfig.telegram;
-      document.getElementById('supportTelegramLink').href = `https://t.me/${systemConfig.telegram.replace('@', '')}`;
-      document.getElementById('supportWorkTimeText').innerText = systemConfig.workTime;
-      document.getElementById('drawerGroupZaloLink').href = systemConfig.groupZalo;
-      document.getElementById('drawerGroupTelegramLink').href = systemConfig.groupTelegram;
+      const zText = document.getElementById('supportZaloText');
+      const zLink = document.getElementById('supportZaloLink');
+      const tText = document.getElementById('supportTelegramText');
+      const tLink = document.getElementById('supportTelegramLink');
+      const wText = document.getElementById('supportWorkTimeText');
+      const gZalo = document.getElementById('drawerGroupZaloLink');
+      const gTele = document.getElementById('drawerGroupTelegramLink');
+
+      if (zText) zText.innerText = systemConfig.zalo;
+      if (zLink) zLink.href = `https://zalo.me/${systemConfig.zalo}`;
+      if (tText) tText.innerText = systemConfig.telegram;
+      if (tLink) tLink.href = `https://t.me/${systemConfig.telegram.replace('@', '')}`;
+      if (wText) wText.innerText = systemConfig.workTime;
+      if (gZalo) gZalo.href = systemConfig.groupZalo;
+      if (gTele) gTele.href = systemConfig.groupTelegram;
     }
 
     function renderNotifications() {
       const modalList = document.getElementById('noticeModalContent');
+      const marquee = document.getElementById('noticeMarqueeText');
       if (notifications.length > 0) {
-        document.getElementById('noticeMarqueeText').innerText = notifications.map(n => `⚡ [${n.title}]: ${n.content}`).join('   ★   ');
-        modalList.innerHTML = notifications.map(n => `<div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="font-bold text-white text-xs">${n.title}</p><p class="text-slate-300 text-[11px] mt-1">${n.content}</p></div>`).join('');
+        if (marquee) marquee.innerText = notifications.map(n => `⚡ [${n.title}]: ${n.content}`).join('   ★   ');
+        if (modalList) {
+          modalList.innerHTML = notifications.map(n => `<div class="bg-slate-900 p-3 rounded-xl border border-slate-800"><p class="font-bold text-white text-xs">${n.title}</p><p class="text-slate-300 text-[11px] mt-1">${n.content}</p></div>`).join('');
+        }
       }
     }
 
-    function openNoticeModal() { document.getElementById('noticeModal').classList.remove('hidden'); }
-    function closeNoticeModal() { document.getElementById('noticeModal').classList.add('hidden'); }
-    function openSupportModal() { document.getElementById('supportModal').classList.remove('hidden'); }
-    function closeSupportModal() { document.getElementById('supportModal').classList.add('hidden'); }
-    function openMenu() { const drawer = document.getElementById('menuDrawer'); drawer.classList.remove('pointer-events-none'); document.getElementById('drawerOverlay').classList.remove('opacity-0'); document.getElementById('drawerContent').classList.remove('translate-x-full'); }
-    function closeMenu() { document.getElementById('drawerOverlay').classList.add('opacity-0'); document.getElementById('drawerContent').classList.add('translate-x-full'); setTimeout(() => document.getElementById('menuDrawer').classList.add('pointer-events-none'), 300); }
+    function openNoticeModal() { const m = document.getElementById('noticeModal'); if (m) m.classList.remove('hidden'); }
+    function closeNoticeModal() { const m = document.getElementById('noticeModal'); if (m) m.classList.add('hidden'); }
+    function openSupportModal() { const m = document.getElementById('supportModal'); if (m) m.classList.remove('hidden'); }
+    function closeSupportModal() { const m = document.getElementById('supportModal'); if (m) m.classList.add('hidden'); }
+    
+    function openMenu() { 
+      const drawer = document.getElementById('menuDrawer'); 
+      const overlay = document.getElementById('drawerOverlay');
+      const content = document.getElementById('drawerContent');
+      if (drawer) drawer.classList.remove('pointer-events-none'); 
+      if (overlay) overlay.classList.remove('opacity-0'); 
+      if (content) content.classList.remove('translate-x-full'); 
+    }
+    
+    function closeMenu() { 
+      const overlay = document.getElementById('drawerOverlay');
+      const content = document.getElementById('drawerContent');
+      const drawer = document.getElementById('menuDrawer');
+      if (overlay) overlay.classList.add('opacity-0'); 
+      if (content) content.classList.add('translate-x-full'); 
+      setTimeout(() => { if (drawer) drawer.classList.add('pointer-events-none'); }, 300); 
+    }
+
     function goToHome() { toggleView('ctv'); popWelcomeNotice(); }
 
     async function syncUserData() {
@@ -879,14 +937,17 @@
       } catch (e) {
         currentVNDBalance = 0;
       }
-      document.getElementById('navBalanceVND').innerText = currentVNDBalance.toLocaleString('vi-VN');
-      document.getElementById('mainBalanceVND').innerText = currentVNDBalance.toLocaleString('vi-VN');
+      const navB = document.getElementById('navBalanceVND');
+      const mainB = document.getElementById('mainBalanceVND');
+      if (navB) navB.innerText = currentVNDBalance.toLocaleString('vi-VN');
+      if (mainB) mainB.innerText = currentVNDBalance.toLocaleString('vi-VN');
     }
 
     function fetchAutoOffers() {
       const container = document.getElementById('nativeTaskList');
       const countText = document.getElementById('availableTasksCount');
       const icon = document.getElementById('taskRefreshIcon');
+      if (!container) return;
       if (icon) icon.classList.add('fa-spin');
 
       customOffers = JSON.parse(localStorage.getItem('custom_offers_db')) || [];
@@ -901,12 +962,12 @@
             <p class="text-slate-500 text-xs">Vui lòng chờ Admin đăng thêm kèo mới ở Tab 3.</p>
           </div>
         `;
-        countText.innerText = `0 Kèo sẵn sàng`;
+        if (countText) countText.innerText = `0 Kèo sẵn sàng`;
         if (icon) setTimeout(() => icon.classList.remove('fa-spin'), 400);
         return;
       }
 
-      countText.innerText = `${customOffers.length} Kèo sẵn sàng`;
+      if (countText) countText.innerText = `${customOffers.length} Kèo sẵn sàng`;
       container.innerHTML = customOffers.map(t => `
         <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-3 shadow-lg">
           <div>
@@ -979,9 +1040,11 @@
     }
 
     function toggleView(view) {
+      const ctvV = document.getElementById('ctvView');
+      const adminV = document.getElementById('adminView');
       if (view === 'admin') {
-        document.getElementById('ctvView').classList.add('hidden');
-        document.getElementById('adminView').classList.remove('hidden');
+        if (ctvV) ctvV.classList.add('hidden');
+        if (adminV) adminV.classList.remove('hidden');
         loadAdminUserList();
         renderAdminOfferList();
         renderAdminFinanceTable();
@@ -989,8 +1052,8 @@
         loadAdminSupportFields();
         renderAdminNoticeManageList();
       } else {
-        document.getElementById('adminView').classList.add('hidden');
-        document.getElementById('ctvView').classList.remove('hidden');
+        if (adminV) adminV.classList.add('hidden');
+        if (ctvV) ctvV.classList.remove('hidden');
         syncUserData();
         fetchAutoOffers();
       }
@@ -1001,14 +1064,23 @@
       document.querySelectorAll('#adminView button[id^="btnTab"]').forEach(b => {
         b.className = 'px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1.5';
       });
-      document.getElementById(tabId).classList.remove('hidden');
-      document.getElementById('btn' + tabId.charAt(0).toUpperCase() + tabId.slice(1)).className = 'px-3.5 py-2 rounded-xl bg-blue-600 text-white shadow whitespace-nowrap flex items-center gap-1.5';
+      const targetTab = document.getElementById(tabId);
+      if (targetTab) targetTab.classList.remove('hidden');
+      const btnId = 'btn' + tabId.charAt(0).toUpperCase() + tabId.slice(1);
+      const targetBtn = document.getElementById(btnId);
+      if (targetBtn) targetBtn.className = 'px-3.5 py-2 rounded-xl bg-blue-600 text-white shadow whitespace-nowrap flex items-center gap-1.5';
     }
 
     function renderAdminTaskApprovals() {
       const tbody = document.getElementById('adminTaskApprovalsTable');
-      document.getElementById('pendingTaskBadgeCount').innerText = pendingTaskSubmissions.length;
-      if (pendingTaskSubmissions.length === 0) return tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">Chưa có bằng chứng nào chờ duyệt.</td></tr>';
+      const badge = document.getElementById('pendingTaskBadgeCount');
+      if (badge) badge.innerText = pendingTaskSubmissions.length;
+      if (!tbody) return;
+
+      if (pendingTaskSubmissions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">Chưa có bằng chứng nào chờ duyệt.</td></tr>';
+        return;
+      }
 
       tbody.innerHTML = pendingTaskSubmissions.map((s, idx) => {
         const imgTag = s.proofImage ? `<a href="${s.proofImage}" target="_blank"><img src="${s.proofImage}" class="w-16 h-16 object-cover rounded-xl border border-slate-700 hover:scale-105 transition"></a>` : '<span class="text-slate-500">Không có ảnh</span>';
@@ -1034,8 +1106,13 @@
       const sub = pendingTaskSubmissions[idx];
       const pointDiff = sub.reward / systemConfig.rate;
 
-      const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', sub.user).single();
-      const currentPoints = Number(data?.points) || 0;
+      let { data } = await supabaseClient.from('users_task').select('points').eq('user_id', sub.user).single();
+      if (!data) {
+        await supabaseClient.from('users_task').insert([{ user_id: sub.user, points: 0 }]);
+        data = { points: 0 };
+      }
+
+      const currentPoints = Number(data.points) || 0;
       const newPoints = currentPoints + pointDiff;
 
       const { error } = await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', sub.user);
@@ -1079,6 +1156,7 @@
 
     function renderAdminOfferList() {
       const list = document.getElementById('adminOfferManageList');
+      if (!list) return;
       if (customOffers.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có kèo nào.</p>';
       list.innerHTML = customOffers.map((o, idx) => `
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
@@ -1098,6 +1176,7 @@
 
     async function loadAdminUserList() {
       const container = document.getElementById('adminUserCardsContainer');
+      if (!container) return;
       container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-6 text-xs">Đang tải danh sách thành viên...</div>';
       
       const { data } = await supabaseClient.from('users_task').select('*').order('created_at', { ascending: false });
@@ -1109,6 +1188,7 @@
 
     function renderAdminUserTable(list) {
       const container = document.getElementById('adminUserCardsContainer');
+      if (!container) return;
       if (!list || list.length === 0) {
         container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-6 text-xs">Không có tài khoản nào phù hợp.</div>';
         return;
@@ -1170,8 +1250,11 @@
     }
 
     function filterAdminUserList() {
-      const q = document.getElementById('adminSearchInput').value.trim().toLowerCase();
-      const roleFilter = document.getElementById('adminRoleFilter').value;
+      const qInput = document.getElementById('adminSearchInput');
+      const roleFilterEl = document.getElementById('adminRoleFilter');
+      if (!qInput || !roleFilterEl) return;
+      const q = qInput.value.trim().toLowerCase();
+      const roleFilter = roleFilterEl.value;
 
       const filtered = cachedAdminUserList.filter(u => {
         const matchName = u.user_id.toLowerCase().includes(q);
@@ -1184,11 +1267,17 @@
     }
 
     function openAdminPasswordModal(userId) {
-      document.getElementById('adminTargetUser').value = userId;
-      document.getElementById('adminNewUserPassword').value = '';
-      document.getElementById('adminPasswordModal').classList.remove('hidden');
+      const targetUser = document.getElementById('adminTargetUser');
+      const newPass = document.getElementById('adminNewUserPassword');
+      const modal = document.getElementById('adminPasswordModal');
+      if (targetUser) targetUser.value = userId;
+      if (newPass) newPass.value = '';
+      if (modal) modal.classList.remove('hidden');
     }
-    function closeAdminPasswordModal() { document.getElementById('adminPasswordModal').classList.add('hidden'); }
+    function closeAdminPasswordModal() { 
+      const m = document.getElementById('adminPasswordModal');
+      if (m) m.classList.add('hidden'); 
+    }
 
     function submitAdminChangePassword() {
       const targetUser = document.getElementById('adminTargetUser').value;
@@ -1201,11 +1290,17 @@
     }
 
     function openAdminRoleModal(userId, currentRole) {
-      document.getElementById('adminRoleTargetUser').value = userId;
-      document.getElementById('adminRoleSelect').value = currentRole;
-      document.getElementById('adminRoleModal').classList.remove('hidden');
+      const uEl = document.getElementById('adminRoleTargetUser');
+      const sEl = document.getElementById('adminRoleSelect');
+      const mEl = document.getElementById('adminRoleModal');
+      if (uEl) uEl.value = userId;
+      if (sEl) sEl.value = currentRole;
+      if (mEl) mEl.classList.remove('hidden');
     }
-    function closeAdminRoleModal() { document.getElementById('adminRoleModal').classList.add('hidden'); }
+    function closeAdminRoleModal() { 
+      const m = document.getElementById('adminRoleModal');
+      if (m) m.classList.add('hidden'); 
+    }
 
     function submitAdminChangeRole() {
       const targetUser = document.getElementById('adminRoleTargetUser').value;
@@ -1235,6 +1330,7 @@
 
     async function adminCustomAdjust(targetUserId, multiplier) {
       const input = document.getElementById(`input_adjust_${targetUserId}`);
+      if (!input) return;
       const valVND = Number(input.value);
       if (!valVND || valVND <= 0) return showNotify('warning', 'Chú Ý', 'Vui lòng nhập số tiền VNĐ hợp lệ!');
 
@@ -1250,6 +1346,7 @@
 
     function renderAdminFinanceTable() {
       const tbody = document.getElementById('adminFinanceTable');
+      if (!tbody) return;
       if (financeRequests.length === 0) return tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">Chưa có lệnh rút.</td></tr>';
       tbody.innerHTML = financeRequests.map((r, idx) => `
         <tr class="hover:bg-slate-800/40">
@@ -1274,21 +1371,29 @@
     }
 
     function loadAdminSupportFields() {
-      document.getElementById('adminCfgZalo').value = systemConfig.zalo;
-      document.getElementById('adminCfgTelegram').value = systemConfig.telegram;
-      document.getElementById('adminCfgGroupZalo').value = systemConfig.groupZalo;
-      document.getElementById('adminCfgGroupTelegram').value = systemConfig.groupTelegram;
-      document.getElementById('adminCfgWorkTime').value = systemConfig.workTime;
-      document.getElementById('adminCfgTeleToken').value = systemConfig.teleToken;
-      document.getElementById('adminCfgTeleChatId').value = systemConfig.teleChatId;
+      const z = document.getElementById('adminCfgZalo');
+      const t = document.getElementById('adminCfgTelegram');
+      const gz = document.getElementById('adminCfgGroupZalo');
+      const gt = document.getElementById('adminCfgGroupTelegram');
+      const wt = document.getElementById('adminCfgWorkTime');
+      const tt = document.getElementById('adminCfgTeleToken');
+      const tc = document.getElementById('adminCfgTeleChatId');
+
+      if (z) z.value = systemConfig.zalo;
+      if (t) t.value = systemConfig.telegram;
+      if (gz) gz.value = systemConfig.groupZalo;
+      if (gt) gt.value = systemConfig.groupTelegram;
+      if (wt) wt.value = systemConfig.workTime;
+      if (tt) tt.value = systemConfig.teleToken;
+      if (tc) tc.value = systemConfig.teleChatId;
     }
 
     function saveAdminSupportConfig() {
-      systemConfig.zalo = document.getElementById('adminCfgZalo').value.trim() || '0987654321';
-      systemConfig.telegram = document.getElementById('adminCfgTelegram').value.trim() || '@cskh';
-      systemConfig.groupZalo = document.getElementById('adminCfgGroupZalo').value.trim() || 'https://zalo.me/g/example';
-      systemConfig.groupTelegram = document.getElementById('adminCfgGroupTelegram').value.trim() || 'https://t.me/example';
-      systemConfig.workTime = document.getElementById('adminCfgWorkTime').value.trim() || '08:00 - 23:00 (Hàng ngày)';
+      systemConfig.zalo = document.getElementById('adminCfgZalo')?.value.trim() || '0987654321';
+      systemConfig.telegram = document.getElementById('adminCfgTelegram')?.value.trim() || '@cskh';
+      systemConfig.groupZalo = document.getElementById('adminCfgGroupZalo')?.value.trim() || 'https://zalo.me/g/example';
+      systemConfig.groupTelegram = document.getElementById('adminCfgGroupTelegram')?.value.trim() || 'https://t.me/example';
+      systemConfig.workTime = document.getElementById('adminCfgWorkTime')?.value.trim() || '08:00 - 23:00 (Hàng ngày)';
 
       localStorage.setItem('sys_zalo', systemConfig.zalo);
       localStorage.setItem('sys_telegram', systemConfig.telegram);
@@ -1300,21 +1405,23 @@
     }
 
     function saveTelegramBotConfig() {
-      systemConfig.teleToken = document.getElementById('adminCfgTeleToken').value.trim();
-      systemConfig.teleChatId = document.getElementById('adminCfgTeleChatId').value.trim();
+      systemConfig.teleToken = document.getElementById('adminCfgTeleToken')?.value.trim() || '';
+      systemConfig.teleChatId = document.getElementById('adminCfgTeleChatId')?.value.trim() || '';
       localStorage.setItem('sys_tele_token', systemConfig.teleToken);
       localStorage.setItem('sys_tele_chat_id', systemConfig.teleChatId);
       showNotify('success', 'Thành Công', 'Đã lưu cấu hình Bot Telegram!');
     }
 
     function adminPublishNotice() {
-      const title = document.getElementById('adminNoticeTitle').value.trim() || 'Thông báo';
-      const content = document.getElementById('adminNoticeInput').value.trim();
+      const title = document.getElementById('adminNoticeTitle')?.value.trim() || 'Thông báo';
+      const content = document.getElementById('adminNoticeInput')?.value.trim();
       if (!content) return showNotify('warning', 'Thiếu Dữ Liệu', 'Nhập nội dung thông báo!');
       notifications.unshift({ id: Date.now(), title, content, time: new Date().toLocaleTimeString('vi-VN') });
       localStorage.setItem('sys_notifications_db', JSON.stringify(notifications));
-      document.getElementById('adminNoticeTitle').value = '';
-      document.getElementById('adminNoticeInput').value = '';
+      const tInput = document.getElementById('adminNoticeTitle');
+      const cInput = document.getElementById('adminNoticeInput');
+      if (tInput) tInput.value = '';
+      if (cInput) cInput.value = '';
       renderNotifications();
       renderAdminNoticeManageList();
       showNotify('success', 'Thành Công', 'Đã phát thông báo mới!');
@@ -1339,37 +1446,39 @@
       Toast.fire({ icon: 'info', title: 'Đã xóa thông báo.' });
     }
 
-    function openWithdrawModal() { document.getElementById('withdrawModal').classList.remove('hidden'); }
-    function closeWithdrawModal() { document.getElementById('withdrawModal').classList.add('hidden'); }
+    function openWithdrawModal() { const m = document.getElementById('withdrawModal'); if (m) m.classList.remove('hidden'); }
+    function closeWithdrawModal() { const m = document.getElementById('withdrawModal'); if (m) m.classList.add('hidden'); }
 
     function handleWithdrawMethodChange() {
-      const method = document.getElementById('withdrawMethod').value;
+      const method = document.getElementById('withdrawMethod')?.value;
+      const bFields = document.getElementById('withdrawBankFields');
+      const mFields = document.getElementById('withdrawMomoFields');
       if (method === 'momo') {
-        document.getElementById('withdrawBankFields').classList.add('hidden');
-        document.getElementById('withdrawMomoFields').classList.remove('hidden');
+        if (bFields) bFields.classList.add('hidden');
+        if (mFields) mFields.classList.remove('hidden');
       } else {
-        document.getElementById('withdrawMomoFields').classList.add('hidden');
-        document.getElementById('withdrawBankFields').classList.remove('hidden');
+        if (mFields) mFields.classList.add('hidden');
+        if (bFields) bFields.classList.remove('hidden');
       }
     }
 
     function submitWithdrawRequest() {
-      const method = document.getElementById('withdrawMethod').value;
-      const amountVND = Number(document.getElementById('withdrawAmountVND').value);
+      const method = document.getElementById('withdrawMethod')?.value;
+      const amountVND = Number(document.getElementById('withdrawAmountVND')?.value);
       let accountInfo = '';
 
       if (!amountVND || amountVND < systemConfig.minWithdraw) return showNotify('warning', 'Hạn Mức', `Tối thiểu rút ${systemConfig.minWithdraw.toLocaleString('vi-VN')} VNĐ`);
       if (amountVND > currentVNDBalance) return showNotify('error', 'Số Dư', 'Số dư không đủ!');
 
       if (method === 'momo') {
-        const phone = document.getElementById('withdrawMomoPhone').value.trim();
-        const owner = document.getElementById('withdrawMomoOwner').value.trim();
+        const phone = document.getElementById('withdrawMomoPhone')?.value.trim();
+        const owner = document.getElementById('withdrawMomoOwner')?.value.trim();
         if (!phone || !owner) return showNotify('warning', 'Thiếu', 'Nhập đủ thông tin MoMo!');
         accountInfo = `MOMO: ${phone} (${owner.toUpperCase()})`;
       } else {
-        const bankName = document.getElementById('withdrawBankName').value;
-        const bankNumber = document.getElementById('withdrawBankNumber').value.trim();
-        const bankOwner = document.getElementById('withdrawBankOwner').value.trim();
+        const bankName = document.getElementById('withdrawBankName')?.value;
+        const bankNumber = document.getElementById('withdrawBankNumber')?.value.trim();
+        const bankOwner = document.getElementById('withdrawBankOwner')?.value.trim();
         if (!bankNumber || !bankOwner) return showNotify('warning', 'Thiếu', 'Nhập đủ thông tin ngân hàng!');
         accountInfo = `${bankName} - ${bankNumber} (${bankOwner.toUpperCase()})`;
       }
@@ -1387,7 +1496,9 @@
 
     window.onload = () => {
       const savedUser = localStorage.getItem('task_auth_user');
-      if (savedUser) initSession(savedUser, savedUser === 'Admin');
+      if (savedUser) {
+        initSession(savedUser, savedUser === 'Admin' || userPermissions[savedUser]?.role === 'admin');
+      }
     };
   </script>
 </body>

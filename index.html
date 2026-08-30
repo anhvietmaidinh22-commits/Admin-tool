@@ -799,6 +799,77 @@
     let cachedAdminUserList = [];
     let financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
 
+    // Hàm gửi tin nhắn qua Bot Telegram nâng cấp (Có khung icon đẹp, ngày giờ đầy đủ và nút bấm truy cập web)
+    async function sendTelegramAlert(messageText) {
+      if (!systemConfig.teleToken || !systemConfig.teleChatId) return;
+      try {
+        const url = `https://api.telegram.org/bot${systemConfig.teleToken}/sendMessage`;
+        const webUrl = window.location.href.split('?')[0]; // Lấy link website hiện tại
+        
+        await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: systemConfig.teleChatId,
+            text: messageText,
+            parse_mode: 'HTML',
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: '🌐 Truy Cập Ngay Vào Web', url: webUrl }]
+              ]
+            }
+          })
+        });
+      } catch (err) {}
+    }
+
+    // Nút Bắn Tin Thử Nghiệm trong Tab Cài Đặt Bot
+    async function testTelegramBotAlert() {
+      const token = document.getElementById('adminCfgTeleToken')?.value.trim();
+      const chatId = document.getElementById('adminCfgTeleChatId')?.value.trim();
+      if (!token || !chatId) {
+        return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập đầy đủ Bot Token và Chat ID trước khi thử nghiệm!');
+      }
+      try {
+        const url = `https://api.telegram.org/bot${token}/sendMessage`;
+        const webUrl = window.location.href.split('?')[0];
+        const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+
+        const testMsg = `
+🔔 <b>THÔNG BÁO KIỂM TRA BOT TELEGRAM</b>
+━━━━━━━━━━━━━━━━━━━
+✨ <b>Hệ thống:</b> AUTOPOSTAI Platform
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+🤖 <b>Trạng thái:</b> Kết nối thành công & hoạt động ổn định!
+━━━━━━━━━━━━━━━━━━━
+💡 <i>Bot sẽ tự động gửi thông báo chi tiết khi có kèo mới, thành viên đăng ký, gửi bằng chứng hoặc rút tiền!</i>
+        `.trim();
+
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: testMsg,
+            parse_mode: 'HTML',
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: '🌐 Truy Cập Ngay Vào Web', url: webUrl }]
+              ]
+            }
+          })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showNotify('success', 'Thành Công', 'Đã bắn tin thử nghiệm thành công! Hãy kiểm tra Telegram.');
+        } else {
+          showNotify('error', 'Lỗi Gửi Tin', data.description || 'Kiểm tra lại Token hoặc Chat ID (hoặc chưa bấm /start với bot).');
+        }
+      } catch (err) {
+        showNotify('error', 'Lỗi Kết Nối', 'Không thể kết nối đến máy chủ Telegram.');
+      }
+    }
+
     function getTransactionHistoryForUser(userId) {
       const db = JSON.parse(localStorage.getItem('user_tx_history_db')) || {};
       return db[userId] || [];
@@ -877,43 +948,6 @@
       } catch (err) {}
     }
 
-    async function sendTelegramAlert(messageText) {
-      if (!systemConfig.teleToken || !systemConfig.teleChatId) return;
-      try {
-        const url = `https://api.telegram.org/bot${systemConfig.teleToken}/sendMessage`;
-        await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: systemConfig.teleChatId, text: messageText, parse_mode: 'HTML' })
-        });
-      } catch (err) {}
-    }
-
-    // Hàm bắn tin thử nghiệm bot Telegram (ĐÃ ĐƯỢC BỔ SUNG CHUẨN XÁC)
-    async function testTelegramBotAlert() {
-      const token = document.getElementById('adminCfgTeleToken')?.value.trim();
-      const chatId = document.getElementById('adminCfgTeleChatId')?.value.trim();
-      if (!token || !chatId) {
-        return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập đầy đủ Bot Token và Chat ID trước khi thử nghiệm!');
-      }
-      try {
-        const url = `https://api.telegram.org/bot${token}/sendMessage`;
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: chatId, text: '🔔 <b>TEST BOT TELEGRAM THÀNH CÔNG!</b>\nHệ thống AUTOPOSTAI đã kết nối bot mượt mà.', parse_mode: 'HTML' })
-        });
-        const data = await res.json();
-        if (data.ok) {
-          showNotify('success', 'Thành Công', 'Đã bắn tin thử nghiệm thành công! Hãy kiểm tra Telegram.');
-        } else {
-          showNotify('error', 'Lỗi Gửi Tin', data.description || 'Kiểm tra lại Token hoặc Chat ID (hoặc chưa bấm /start với bot).');
-        }
-      } catch (err) {
-        showNotify('error', 'Lỗi Kết Nối', 'Không thể kết nối đến máy chủ Telegram.');
-      }
-    }
-
     let currentCaptcha = '';
     function generateCaptcha() {
       const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
@@ -962,7 +996,15 @@
         userPermissions[u] = { role: 'member', banned: false };
         localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
         
-        sendTelegramAlert(`🎉 <b>THÀNH VIÊN MỚI ĐĂNG KÝ!</b>\n👤 Tài khoản: <code>${u}</code>`);
+        const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+        sendTelegramAlert(`
+🎉 <b>THÀNH VIÊN MỚI ĐĂNG KÝ!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Tài khoản:</b> <code>${u}</code>
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+🎯 <b>Trạng thái:</b> Hoạt động thành công
+━━━━━━━━━━━━━━━━━━━
+        `.trim());
         
         showNotify('success', 'Thành Công', 'Đăng ký thành công, vui lòng đăng nhập!');
         toggleAuthMode();
@@ -1018,7 +1060,7 @@
         }
       } else {
         if (roleBadge) roleBadge.classList.add('hidden');
-        if (drawerAdmin) drawerAdmin.classList.add('hidden');
+        if (drawerAdmin) roleBadge.classList.add('hidden');
         if (drawerRoleTag) {
           drawerRoleTag.innerText = 'Thành Viên CTV';
           drawerRoleTag.className = 'text-[10px] px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-extrabold border border-blue-500/30';
@@ -1271,7 +1313,17 @@
 
         markTaskAsCompletedForUser(currentUser, taskId);
         
-        sendTelegramAlert(`📥 <b>BẰNG CHỨNG ẢNH NHIỆM VỤ MỚI!</b>\n👤 Tài khoản: <code>${currentUser}</code>\n📝 Kèo: ${taskTitle}\n💬 Ghi chú: <code>${formValues.note}</code>`);
+        const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+        sendTelegramAlert(`
+📥 <b>BẰNG CHỨNG NHIỆM VỤ MỚI!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Thành viên:</b> <code>${currentUser}</code>
+🎯 <b>Tên Kèo:</b> ${taskTitle}
+💰 <b>Thưởng:</b> <code>+${rewardAmount.toLocaleString('vi-VN')} VNĐ</code>
+💬 <b>Ghi chú:</b> <code>${formValues.note}</code>
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+        `.trim());
 
         showNotify('success', 'Đã Gửi Bằng Chứng', 'Yêu cầu của bạn đã được gửi cho Admin duyệt.');
         fetchAutoOffers();
@@ -1363,6 +1415,17 @@
 
       addTransactionHistory(sub.user, 'earn', sub.reward, `Hoàn thành nhiệm vụ: ${sub.title}`);
 
+      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      sendTelegramAlert(`
+✅ <b>ĐÃ DUYỆT THƯỞNG NHIỆM VỤ!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Thành viên:</b> <code>${sub.user}</code>
+🎯 <b>Kèo:</b> ${sub.title}
+💰 <b>Cộng tiền:</b> <code>+${sub.reward.toLocaleString('vi-VN')} VNĐ</code>
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+      `.trim());
+
       await supabaseClient.from('pending_tasks').delete().eq('id', subId);
 
       await renderAdminTaskApprovals();
@@ -1401,7 +1464,18 @@
       
       localStorage.removeItem('last_seen_offer_all');
 
-      showNotify('success', 'Thành Công', 'Đã đăng kèo mới lên hệ thống đám mây! Hệ thống đã hiển thị thông báo chấm đỏ cho thành viên.');
+      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      sendTelegramAlert(`
+🔥 <b>CÓ KÈO NHIỆM VỤ MỚI TRÊN SÀN!</b>
+━━━━━━━━━━━━━━━━━━━
+📌 <b>Tên Kèo:</b> <b>${title}</b>
+💵 <b>Thưởng Nhận:</b> <code>+${reward.toLocaleString('vi-VN')} VNĐ</code>
+📝 <b>Mô tả:</b> ${desc || 'Làm nhiệm vụ ngay để nhận thưởng!'}
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+      `.trim());
+
+      showNotify('success', 'Thành Công', 'Đã đăng kèo mới lên hệ thống đám mây! Bot Telegram đã bắn tin thông báo.');
       await renderAdminOfferList();
       fetchAutoOffers();
     }
@@ -1451,9 +1525,9 @@
         const role = userPermissions[u.user_id]?.role || (u.user_id === 'Admin' ? 'admin' : 'member');
         const isBanned = userPermissions[u.user_id]?.banned || false;
 
-        let roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/35">Member</span>';
-        if (role === 'admin') roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/35">Admin</span>';
-        if (role === 'manager') roleBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/35">Manager</span>';
+        let roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/35">Member</span>';
+        if (role === 'admin') roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/35">Admin</span>';
+        if (role === 'manager') roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/35">Manager</span>';
 
         const statusBadge = isBanned 
           ? '<span class="text-rose-400 font-bold text-[10px] sm:text-[11px] flex items-center gap-1 whitespace-nowrap"><i class="fa-solid fa-ban text-[9px]"></i> Khóa</span>'
@@ -1479,7 +1553,6 @@
               <span class="text-sm font-black text-emerald-400">${vnd.toLocaleString('vi-VN')} đ</span>
             </div>
 
-            <!-- Các nút bấm Đổi Pass, Quyền, Khóa cân đối hoàn hảo trên di động -->
             <div class="grid grid-cols-3 gap-1.5 sm:gap-2 pt-1">
               <button onclick="openAdminPasswordModal('${u.user_id}')" class="py-2.5 px-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
                 <i class="fa-solid fa-key"></i> Pass
@@ -1492,7 +1565,6 @@
               </button>
             </div>
 
-            <!-- Ô nhập tiền và nút Cộng / Trừ cố định chuẩn khung, không bị tràn lề -->
             <div class="flex items-center gap-2 pt-1">
               <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập VNĐ..." class="w-full min-w-0 flex-1 bg-slate-950 border border-slate-700 rounded-2xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 shadow-inner">
               <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-3 sm:px-4 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-2xl text-xs font-extrabold cursor-pointer transition flex-shrink-0">+ Cộng</button>
@@ -1558,7 +1630,7 @@
 
     function submitAdminChangeRole() {
       const targetUser = document.getElementById('adminRoleTargetUser').value;
-      const newRole = document.getElementById('adminRoleSelect').value;
+      const newRole = document.getElementById('adminRoleSelect'].value;
 
       if (!userPermissions[targetUser]) userPermissions[targetUser] = { banned: false };
       userPermissions[targetUser].role = newRole;
@@ -1598,6 +1670,18 @@
       const descText = multiplier > 0 ? `Admin cộng trực tiếp +${valVND.toLocaleString('vi-VN')}đ` : `Admin trừ trực tiếp -${valVND.toLocaleString('vi-VN')}đ`;
       addTransactionHistory(targetUserId, txType, valVND, descText);
 
+      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      const actionName = multiplier > 0 ? 'CỘNG TIỀN VÀO VÍ' : 'TRỪ TIỀN TỪ VÍ';
+      sendTelegramAlert(`
+💰 <b>THÔNG BÁO BIẾN ĐỘNG SỐ DƯ!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Thành viên:</b> <code>${targetUserId}</code>
+⚙️ <b>Hành động:</b> ${actionName}
+💵 <b>Số tiền:</b> <code>${multiplier > 0 ? '+' : '-'}${valVND.toLocaleString('vi-VN')} VNĐ</code>
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+      `.trim());
+
       input.value = '';
       await loadAdminUserList();
       Toast.fire({ icon: 'success', title: `Đã cập nhật số dư cho ${targetUserId}!` });
@@ -1629,6 +1713,17 @@
       await supabaseClient.from('users_task').update({ points: Math.max(0, (Number(data?.points)||0) - pointDiff) }).eq('user_id', req.user);
       
       addTransactionHistory(req.user, 'withdraw', req.amount, `Rút tiền thành công về: ${req.info}`);
+
+      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      sendTelegramAlert(`
+💸 <b>ĐÃ DUYỆT RÚT TIỀN THÀNH CÔNG!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Thành viên:</b> <code>${req.user}</code>
+💰 <b>Số tiền rút:</b> <code>${req.amount.toLocaleString('vi-VN')} VNĐ</code>
+🏦 <b>Thụ hưởng:</b> <code>${req.info}</code>
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+      `.trim());
 
       financeRequests.splice(idx, 1);
       localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
@@ -1759,7 +1854,16 @@
       financeRequests.unshift({ id: Date.now(), user: currentUser, amount: amountVND, info: accountInfo, time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN') });
       localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
       
-      sendTelegramAlert(`💸 <b>YÊU CẦU RÚT TIỀN!</b>\n👤 Tài khoản: <code>${currentUser}</code>\n💰 Số tiền: <b>${amountVND.toLocaleString('vi-VN')} VNĐ</b>\n🏦 Thụ hưởng: <code>${accountInfo}</code>`);
+      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      sendTelegramAlert(`
+💳 <b>YÊU CẦU RÚT TIỀN MỚI!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Thành viên:</b> <code>${currentUser}</code>
+💰 <b>Số tiền rút:</b> <code>${amountVND.toLocaleString('vi-VN')} VNĐ</code>
+🏦 <b>Thụ hưởng:</b> <code>${accountInfo}</code>
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+      `.trim());
 
       closeWithdrawModal();
       showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền thành công! Hệ thống đang chờ Admin xét duyệt.');

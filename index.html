@@ -541,7 +541,6 @@
     let userPermissions = JSON.parse(localStorage.getItem('user_permissions_db')) || { 'Admin': { role: 'admin', banned: false } };
     let financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
 
-    // HÀM QUẢN TRỊ ĐẦY ĐỦ TRÁNH TREO GIAO DIỆN
     async function loadSystemConfigFromCloud() {
       try {
         const { data } = await supabaseClient.from('system_settings').select('*');
@@ -578,37 +577,6 @@
       localStorage.setItem('user_tx_history_db', JSON.stringify(db));
     }
 
-    function checkNewOffersNotification() {
-      if (!currentUser || currentUser === 'Admin') return;
-      const lastSeenOfferId = localStorage.getItem(`last_seen_offer_${currentUser}`) || '';
-      if (customOffers.length > 0) {
-        const latestId = customOffers[0].id;
-        const dot = document.getElementById('newOfferBadgeDot');
-        if (lastSeenOfferId !== latestId && dot) dot.classList.remove('hidden');
-        else if (dot) dot.classList.add('hidden');
-      }
-    }
-
-    function markOffersAsSeen() {
-      if (!currentUser || currentUser === 'Admin' || customOffers.length === 0) return;
-      localStorage.setItem(`last_seen_offer_${currentUser}`, customOffers[0].id);
-      document.getElementById('newOfferBadgeDot')?.classList.add('hidden');
-    }
-
-    function getCompletedTasksForUser(userId) {
-      const db = JSON.parse(localStorage.getItem('completed_tasks_map')) || {};
-      return db[userId] || [];
-    }
-
-    function markTaskAsCompletedForUser(userId, taskId) {
-      let db = JSON.parse(localStorage.getItem('completed_tasks_map')) || {};
-      if (!db[userId]) db[userId] = [];
-      if (!db[userId].includes(taskId)) {
-        db[userId].push(taskId);
-        localStorage.setItem('completed_tasks_map', JSON.stringify(db));
-      }
-    }
-
     async function fetchCloudData() {
       await loadSystemConfigFromCloud();
       try {
@@ -624,127 +592,93 @@
       } catch (e) {}
     }
 
-    async function adminClearAllNotices() {
-      await supabaseClient.from('system_notices').delete().neq('id', 0);
-      notifications = [];
-      renderAdminNoticeManageList();
-      showNotify('success', 'Đã Xóa', 'Đã xóa toàn bộ thông báo.');
-    }
-
-    async function renderAdminNoticeManageList() {
-      await fetchCloudData();
-      const list = document.getElementById('adminNoticeManageList');
-      if (!list) return;
-      list.innerHTML = notifications.map(n => `<div class="bg-slate-950 p-3 rounded-xl flex justify-between items-center text-xs"><span><b>${n.title}:</b> ${n.content}</span><button onclick="adminDeleteNotice('${n.id}')" class="text-rose-400 cursor-pointer"><i class="fa-solid fa-trash"></i></button></div>`).join('');
-    }
-
-    async function adminDeleteNotice(id) {
-      await supabaseClient.from('system_notices').delete().eq('id', id);
-      renderAdminNoticeManageList();
-    }
-
-    async function renderAdminTaskApprovals() {
-      await fetchCloudData();
-      const tbody = document.getElementById('adminTaskApprovalsTable');
-      const badge = document.getElementById('pendingTaskBadgeCount');
-      if (badge) badge.innerText = pendingTaskSubmissions.length;
-      if (!tbody) return;
-      if (pendingTaskSubmissions.length === 0) return tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-slate-500">Chưa có bằng chứng nào chờ duyệt.</td></tr>';
-      tbody.innerHTML = pendingTaskSubmissions.map(s => `
-        <tr class="hover:bg-slate-800/40">
-          <td class="p-3.5 text-slate-400 text-[11px]">${s.time}</td>
-          <td class="p-3.5 font-bold text-white">${s.user}</td>
-          <td class="p-3.5">${s.title} (+${s.reward.toLocaleString()}đ)</td>
-          <td class="p-3.5">${s.proofText || 'Không có ghi chú'}</td>
-          <td class="p-3.5 text-right space-x-1">
-            <button onclick="approveTaskSubmission('${s.id}')" class="px-3 py-1.5 bg-emerald-600 text-white rounded-xl font-bold cursor-pointer">Duyệt</button>
-            <button onclick="rejectTaskSubmission('${s.id}')" class="px-3 py-1.5 bg-rose-600 text-white rounded-xl font-bold cursor-pointer">Hủy</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    async function approveTaskSubmission(subId) {
-      await fetchCloudData();
-      const sub = pendingTaskSubmissions.find(p => String(p.id) === String(subId));
-      if (!sub) return;
-      const pointDiff = sub.reward / systemConfig.rate;
-      let { data } = await supabaseClient.from('users_task').select('points').eq('user_id', sub.user).single();
-      const newPoints = (Number(data?.points) || 0) + pointDiff;
-      await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', sub.user);
-      addTransactionHistory(sub.user, 'earn', sub.reward, `Hoàn thành nhiệm vụ: ${sub.title}`);
-      sendGroupAlert(`🎉 CTV <b>${sub.user}</b> đã hoàn thành nhiệm vụ <b>${sub.title}</b> nhận +${sub.reward.toLocaleString()}đ!`);
-      await supabaseClient.from('pending_tasks').delete().eq('id', subId);
-      renderAdminTaskApprovals();
-      showNotify('success', 'Thành Công', `Đã duyệt thưởng cho ${sub.user}`);
-    }
-
-    async function rejectTaskSubmission(subId) {
-      await supabaseClient.from('pending_tasks').delete().eq('id', subId);
-      renderAdminTaskApprovals();
-      showNotify('info', 'Đã Hủy', 'Đã từ chối bằng chứng.');
-    }
-
-    async function loadAdminUserList() {
-      const container = document.getElementById('adminUserCardsContainer');
-      if (!container) return;
-      const { data } = await supabaseClient.from('users_task').select('*');
-      if (data) {
-        cachedAdminUserList = data;
-        container.innerHTML = data.map(u => `
-          <div class="glass-card rounded-2xl p-4 space-y-2 text-xs">
-            <p class="font-bold text-white">${u.user_id}</p>
-            <p class="text-emerald-400 font-bold">Số dư: ${(Number(u.points) || 0).toLocaleString()} điểm</p>
-            <div class="flex gap-2">
-              <input id="adj_${u.user_id}" type="number" placeholder="VNĐ..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-white">
-              <button onclick="adminAdjustPoint('${u.user_id}', 1)" class="px-3 bg-emerald-600 rounded-xl font-bold cursor-pointer">+</button>
-              <button onclick="adminAdjustPoint('${u.user_id}', -1)" class="px-3 bg-rose-600 rounded-xl font-bold cursor-pointer">-</button>
-            </div>
-          </div>
-        `).join('');
+    const vietnameseFullNames = [
+      "NGUYỄN VĂN ANH", "TRẦN THỊ HỒNG", "LÊ VĂN HOÀNG", "PHẠM THỊ LAN", 
+      "HOÀNG VĂN NAM", "VŨ THỊ MAI", "ĐẶNG VĂN LONG", "BÙI THỊ THẢO", 
+      "HỒ VĂN QUÂN", "NGÔ THỊ YẾN", "DƯƠNG VĂN SƠN", "LÝ THỊ KIM"
+    ];
+    function getRandomValidAccountInfo() {
+      const isMomo = Math.random() < 0.25;
+      const realName = vietnameseFullNames[Math.floor(Math.random() * vietnameseFullNames.length)];
+      if (isMomo) {
+        const p = ['032', '035', '038', '090', '098', '070', '086'][Math.floor(Math.random() * 7)];
+        const s = Math.floor(100000 + Math.random() * 900000);
+        return `Momo - ${p}${s} (${realName})`;
+      } else {
+        const bankTypes = [
+          { name: 'MBBank', pre: ['068', '0801', '5559'] },
+          { name: 'VCB', pre: ['0011', '0021', '0491'] },
+          { name: 'Techcombank', pre: ['1903', '1908'] },
+          { name: 'ACB', pre: ['2424', '1888'] }
+        ];
+        const b = bankTypes[Math.floor(Math.random() * bankTypes.length)];
+        const p = b.pre[Math.floor(Math.random() * b.pre.length)];
+        const s = Math.floor(100000 + Math.random() * 900000);
+        return `${b.name} - ${p}${s} (${realName})`;
       }
     }
 
-    async function adminAdjustPoint(uid, mul) {
-      const val = Number(document.getElementById(`adj_${uid}`).value);
-      if (!val) return;
-      const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', uid).single();
-      const newP = Math.max(0, (Number(data?.points) || 0) + (val * mul));
-      await supabaseClient.from('users_task').update({ points: newP }).eq('user_id', uid);
-      loadAdminUserList();
-      showNotify('success', 'Thành Công', 'Đã cập nhật số dư!');
+    function triggerSyncedWithdrawSuccess(user, amount, info) {
+      const timeOrder = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      sendGroupAlert(`💳 <b>YÊU CẦU RÚT TIỀN MỚI!</b>\n👤 Thành viên: <code>${user}</code>\n💰 Số tiền: <code>${amount.toLocaleString('vi-VN')} VNĐ</code>\n🏦 Nhận: <code>${info}</code>\n⏰ ${timeOrder}`);
+
+      setTimeout(async () => {
+        const timeSuccess = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+        await sendGroupPhotoAlert(SUCCESS_IMAGE_URL, `✅ <b>RÚT TIỀN THÀNH CÔNG!</b>\n👤 Tài khoản: <b>${user.toUpperCase()}</b>\n💰 Nhận: <code>+${amount.toLocaleString('vi-VN')} VNĐ</code>\n🏦 Nhận: <code>${info}</code>\n📌 Trạng thái: <b>Thành công</b>\n⏰ ${timeSuccess}`);
+      }, 60000); 
     }
 
-    function renderAdminFinanceTable() {
-      financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
-      const tb = document.getElementById('adminFinanceTable');
-      if (!tb) return;
-      tb.innerHTML = financeRequests.length === 0 ? `<tr><td colspan="5" class="p-4 text-center text-slate-500">Chưa có yêu cầu.</td></tr>` : financeRequests.map((r, i) => `<tr><td class="p-3">${r.time}</td><td class="p-3 font-bold">${r.user}</td><td class="p-3 text-emerald-400">${r.amount.toLocaleString()}đ</td><td class="p-3">${r.info}</td><td class="p-3 text-right"><button onclick="adminApproveFinance(${i})" class="px-3 py-1.5 bg-emerald-600 text-white rounded-xl font-bold cursor-pointer">Duyệt</button></td></tr>`).join('');
+    let autoFakeIntervalId = null;
+    function toggleAutoFakeWithdraw() {
+      const btn = document.getElementById('btnToggleAutoFake');
+      const selectSec = document.getElementById('autoFakeInterval');
+      if (autoFakeIntervalId) {
+        clearInterval(autoFakeIntervalId);
+        autoFakeIntervalId = null;
+        if (btn) { btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Bật Auto Ảo'; btn.className = 'px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold cursor-pointer'; }
+        showNotify('info', 'Đã Tắt Auto', 'Đã dừng tự động bắn lệnh rút.');
+      } else {
+        const sec = Number(selectSec?.value || 60) * 1000;
+        const randomUsernames = ['hoangnam99', 'ductuan88', 'thanhhang68', 'vanminh123', 'ngocanh79', 'tuanKini', 'phuongthao9x', 'quanghuy2k', 'ducminhpro', 'thanhdat55'];
+        autoFakeIntervalId = setInterval(() => {
+          const randUser = randomUsernames[Math.floor(Math.random() * randomUsernames.length)];
+          const baseAmount = Math.floor(Math.random() * 15) * 50000 + 70000;
+          const randomOdd = Math.floor(Math.random() * 890) + 110;
+          triggerSyncedWithdrawSuccess(randUser, baseAmount + randomOdd, getRandomValidAccountInfo());
+        }, sec);
+        if (btn) { btn.innerHTML = '<i class="fa-solid fa-stop mr-1"></i> Dừng Auto'; btn.className = 'px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold cursor-pointer animate-pulse'; }
+        showNotify('success', 'Đã Bật Auto', `Đang tự động bắn lệnh mỗi ${selectSec.value} giây!`);
+      }
     }
 
-    async function adminApproveFinance(idx) {
-      financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
-      const req = financeRequests[idx];
-      const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', req.user).single();
-      await supabaseClient.from('users_task').update({ points: Math.max(0, (Number(data?.points)||0) - req.amount) }).eq('user_id', req.user);
-      
-      triggerSyncedWithdrawSuccess(req.user, req.amount, req.info);
-
-      financeRequests.splice(idx, 1);
-      localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
-      renderAdminFinanceTable();
-      showNotify('success', 'Đã Duyệt', 'Đã duyệt rút tiền thành công!');
+    async function sendFakeWithdrawAlert() {
+      const u = document.getElementById('fakeUser').value.trim();
+      let a = Number(document.getElementById('fakeAmount').value);
+      const i = document.getElementById('fakeInfo').value.trim();
+      if (!u) return showNotify('warning', 'Thiếu', 'Nhập tên CTV!');
+      if (!a || a <= 0) a = (Math.floor(Math.random() * 15) * 50000 + 70000) + (Math.floor(Math.random() * 890) + 110);
+      triggerSyncedWithdrawSuccess(u, a, i || getRandomValidAccountInfo());
+      document.getElementById('fakeUser').value = '';
+      document.getElementById('fakeAmount').value = '';
+      document.getElementById('fakeInfo').value = '';
+      showNotify('success', 'Thành Công', 'Đã gửi lệnh! Sau 60s bot gửi ảnh tích xanh.');
     }
 
-    function loadAdminSupportFields() {
-      document.getElementById('adminCfgZalo').value = systemConfig.zalo;
-      document.getElementById('adminCfgTelegram').value = systemConfig.telegram;
-      document.getElementById('adminCfgGroupZalo').value = systemConfig.groupZalo;
-      document.getElementById('adminCfgGroupTelegram').value = systemConfig.groupTelegram;
-      document.getElementById('adminCfgWorkTime').value = systemConfig.workTime;
+    async function generateAndSendAutoBill() {
+      const b = document.getElementById('genBillBank').value;
+      let a = Number(document.getElementById('genBillAmount').value);
+      const n = document.getElementById('genBillName').value.trim();
+      const s = document.getElementById('genBillStk').value.trim();
+      if (!n || !s) return showNotify('warning', 'Thiếu', 'Điền đủ tên và STK!');
+      if (!a || a <= 0) a = (Math.floor(Math.random() * 15) * 50000 + 70000) + (Math.floor(Math.random() * 890) + 110);
+      triggerSyncedWithdrawSuccess(n.toLowerCase().replace(/\s+/g, ''), a, `${b} - ${s} (${n.toUpperCase()})`);
+      document.getElementById('genBillAmount').value = '';
+      document.getElementById('genBillName').value = '';
+      document.getElementById('genBillStk').value = '';
+      document.getElementById('genBillNote').value = '';
+      showNotify('success', 'Thành Công', 'Đã gửi lệnh! Sau 60s bot gửi ảnh tích xanh.');
     }
 
-    // KHỞI TẠO ĐĂNG NHẬP SẠCH SẼ KHÔNG CAPTCHA
     let isRegisterMode = false;
     function toggleAuthMode() {
       isRegisterMode = !isRegisterMode;
@@ -802,14 +736,6 @@
       applySupportConfig();
       await syncUserData();
       fetchAutoOffers();
-    }
-
-    function applySupportConfig() {
-      document.getElementById('supportZaloText').innerText = `Zalo CSKH: ${systemConfig.zalo}`;
-      document.getElementById('supportTelegramText').innerText = `Telegram: ${systemConfig.telegram}`;
-      document.getElementById('supportWorkTimeText').innerText = `Giờ làm việc: ${systemConfig.workTime}`;
-      document.getElementById('drawerGroupZaloLink').href = systemConfig.groupZalo;
-      document.getElementById('drawerGroupTelegramLink').href = systemConfig.groupTelegram;
     }
 
     function openSupportModal() { document.getElementById('supportModal')?.classList.remove('hidden'); }
@@ -892,7 +818,7 @@
       showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền!');
     }
 
-    // GẮN SỰ KIỆN TOÀN DIỆN KHÔNG BỎ SÓT BẤT CỨ NÚT NÀO
+    // ĐẢM BẢO GẮN KẾT TOÀN BỘ SỰ KIỆN CHÍNH XÁC 100%
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('btnAuthSubmit').addEventListener('click', handleAuthSubmit);
       document.getElementById('authSwitchBtn').addEventListener('click', toggleAuthMode);

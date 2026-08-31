@@ -102,7 +102,7 @@
             <div class="grid grid-cols-12 gap-2 w-full items-center">
               <input id="authCaptchaInput" type="text" placeholder="Nhập mã" class="col-span-5 bg-slate-900/90 border border-slate-700/80 rounded-2xl px-3 py-3 text-xs text-white focus:outline-none focus:border-blue-500 uppercase tracking-widest font-mono text-center">
               <div id="captchaText" class="col-span-5 captcha-clean py-3 rounded-2xl border border-blue-500/30 text-blue-400 font-black text-sm tracking-widest shadow-inner text-center">
-                AB12
+                ----
               </div>
               <button id="btnRefreshCaptcha" type="button" class="col-span-2 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white cursor-pointer transition flex items-center justify-center" title="Đổi mã">
                 <i class="fa-solid fa-rotate-right text-sm"></i>
@@ -1137,7 +1137,7 @@
       if (autoFakeIntervalId) {
         clearInterval(autoFakeIntervalId);
         autoFakeIntervalId = null;
-        if (btn) { btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Bật Auto Ảo'; btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md'; }
+        if (btn) { btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Bật Auto Ảo'; btn.className = 'px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md'; }
         showNotify('info', 'Đã Tắt Auto', 'Đã dừng tự động bắn lệnh rút ảo.');
       } else {
         const sec = Number(selectSec?.value || 60) * 1000;
@@ -1229,14 +1229,11 @@
       }
     }
 
-    // CAPTCHA ĐỘC LẬP TỰ ĐỘNG THAY ĐỔI
     let currentCaptcha = '';
     function generateCaptcha() {
       const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
       let res = '';
-      for (let i = 0; i < 4; i++) {
-        res += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
+      for (let i = 0; i < 4; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
       currentCaptcha = res;
       const capEl = document.getElementById('captchaText');
       if (capEl) capEl.innerText = res;
@@ -1410,7 +1407,7 @@
       showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền!');
     }
 
-    // GẮN SỰ KIỆN TOÀN DIỆN NGAY KHI DOM READY
+    // GẮN SỰ KIỆN TOÀN DIỆN KHÔNG BỎ SÓT BẤT CỨ NÚT NÀO
     document.addEventListener('DOMContentLoaded', () => {
       generateCaptcha();
 

@@ -102,7 +102,7 @@
             <div class="grid grid-cols-12 gap-2 w-full items-center">
               <input id="authCaptchaInput" type="text" placeholder="Nhập mã" class="col-span-5 bg-slate-900/90 border border-slate-700/80 rounded-2xl px-3 py-3 text-xs text-white focus:outline-none focus:border-blue-500 uppercase tracking-widest font-mono text-center">
               <div id="captchaText" class="col-span-5 captcha-clean py-3 rounded-2xl border border-blue-500/30 text-blue-400 font-black text-sm tracking-widest shadow-inner text-center">
-                LOADING
+                ----
               </div>
               <button id="btnRefreshCaptcha" type="button" class="col-span-2 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white cursor-pointer transition flex items-center justify-center" title="Đổi mã">
                 <i class="fa-solid fa-rotate-right text-sm"></i>
@@ -677,7 +677,7 @@
 
   </div>
 
-  <!-- MODAL LỊCH SỬ GIAO DỊCH -->
+  <!-- MODALS -->
   <div id="historyModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-lg p-6 rounded-3xl border border-slate-700 shadow-2xl relative">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -692,7 +692,6 @@
     </div>
   </div>
 
-  <!-- MODAL ĐỔI PASS -->
   <div id="adminPasswordModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -717,7 +716,6 @@
     </div>
   </div>
 
-  <!-- MODAL PHÂN QUYỀN -->
   <div id="adminRoleModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -746,7 +744,6 @@
     </div>
   </div>
 
-  <!-- MODAL THÔNG BÁO -->
   <div id="noticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -759,7 +756,6 @@
     </div>
   </div>
 
-  <!-- MODAL HỖ TRỢ -->
   <div id="supportModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -801,7 +797,6 @@
     </div>
   </div>
 
-  <!-- MODAL RÚT TIỀN -->
   <div id="withdrawModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
       <div class="flex justify-between items-center mb-4">
@@ -1239,6 +1234,7 @@
       }
     }
 
+    // KHỞI TẠO HÀM CAPTCHA ĐỘC LẬP CHỐNG ĐƠ
     let currentCaptcha = '';
     function generateCaptcha() {
       const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
@@ -1409,7 +1405,7 @@
       showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền!');
     }
 
-    // GẮN SỰ KIỆN AN TOÀN TUYỆT ĐỐI BẰNG ADDEVENTLISTENER
+    // GẮN SỰ KIỆN AN TOÀN TRỰC TIẾP
     document.addEventListener('DOMContentLoaded', () => {
       generateCaptcha();
 
@@ -1456,14 +1452,12 @@
       document.getElementById('btnSaveSupport').addEventListener('click', saveAdminSupportConfig);
       document.getElementById('submitWithdraw').addEventListener('click', submitWithdrawRequest);
       document.getElementById('submitPassChange').addEventListener('click', submitAdminChangePassword);
-      document.getElementById('submitRoleChange').addEventListener('click', submitAdminChangeRole);
 
       document.getElementById('closeHistory').addEventListener('click', closeHistoryModal);
       document.getElementById('closeWithdrawModalBtn').addEventListener('click', closeWithdrawModal);
       document.getElementById('closeNotice').addEventListener('click', closeNoticeModal);
       document.getElementById('closeSupport').addEventListener('click', closeSupportModal);
       document.getElementById('closePassModal').addEventListener('click', closeAdminPasswordModal);
-      document.getElementById('closeRoleModal').addEventListener('click', closeAdminRoleModal);
       document.getElementById('btnCloseWelcome').addEventListener('click', closeWelcomeNotice);
 
       const saved = localStorage.getItem('task_auth_user');

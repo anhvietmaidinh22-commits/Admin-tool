@@ -91,7 +91,6 @@
             </div>
           </div>
 
-          <!-- Ô NHẬP LẠI MẬT KHẨU (CHỈ HIỆN KHI ĐĂNG KÝ) -->
           <div id="confirmPasswordContainer" class="hidden space-y-1.5 w-full">
             <label class="text-[11px] font-bold text-slate-300 block uppercase tracking-wider">Nhập lại mật khẩu</label>
             <div class="relative flex items-center w-full">
@@ -903,7 +902,7 @@
 
     async function loadSystemConfigFromCloud() {
       try {
-        const { data, error } = await supabaseClient.from('system_settings').select('*');
+        const { data } = await supabaseClient.from('system_settings').select('*');
         if (data && data.length > 0) {
           data.forEach(item => {
             if (item.key === 'admin_token') systemConfig.adminToken = item.value;
@@ -1219,7 +1218,6 @@
       }
     }
 
-    // ĐÃ BỎ HOÀN TOÀN MÃ CAPTCHA - LOGIC ĐĂNG NHẬP / ĐĂNG KÝ TRỰC TIỆP
     function toggleAuthMode() {
       isRegisterMode = !isRegisterMode;
       document.getElementById('authTitle').innerText = isRegisterMode ? 'ĐĂNG KÝ HỆ THỐNG' : 'ĐĂNG NHẬP HỆ THỐNG';
@@ -1394,7 +1392,538 @@
       showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền!');
     }
 
-    // GẮN SỰ KIỆN TOÀN DIỆN NGAY KHI DOM READY
+    async function syncUserData() {
+      if (!currentUser) return;
+      try {
+        const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', currentUser).single();
+        if (data) {
+          currentVNDBalance = (Number(data.points) || 0) * systemConfig.rate;
+        } else {
+          currentVNDBalance = 0;
+        }
+      } catch (e) {
+        currentVNDBalance = 0;
+      }
+      const navB = document.getElementById('navBalanceVND');
+      const mainB = document.getElementById('mainBalanceVND');
+      if (navB) navB.innerText = currentVNDBalance.toLocaleString('vi-VN');
+      if (mainB) mainB.innerText = currentVNDBalance.toLocaleString('vi-VN');
+    }
+
+    async function fetchAutoOffers() {
+      markOffersAsSeen();
+      const container = document.getElementById('nativeTaskList');
+      const countText = document.getElementById('availableTasksCount');
+      const icon = document.getElementById('taskRefreshIcon');
+      if (!container) return;
+      if (icon) icon.classList.add('fa-spin');
+
+      await fetchCloudData();
+      const completedIds = getCompletedTasksForUser(currentUser);
+      const availableOffers = customOffers.filter(o => !completedIds.includes(o.id));
+
+      if (availableOffers.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-14 space-y-3">
+            <div class="w-14 h-14 bg-slate-800 text-slate-400 rounded-3xl flex items-center justify-center mx-auto text-2xl border border-slate-700 shadow-inner">
+              <i class="fa-solid fa-circle-check text-emerald-400"></i>
+            </div>
+            <p class="text-white font-black text-sm">Bạn đã hoàn thành tất cả nhiệm vụ!</p>
+            <p class="text-slate-500 text-xs">Vui lòng quay lại sau khi Admin đăng thêm chiến dịch mới.</p>
+          </div>
+        `;
+        if (countText) countText.innerText = `0 Kèo sẵn sàng`;
+        if (icon) setTimeout(() => icon.classList.remove('fa-spin'), 400);
+        return;
+      }
+
+      if (countText) countText.innerText = `${availableOffers.length} Kèo sẵn sàng`;
+      container.innerHTML = availableOffers.map(t => `
+        <div class="glass-card rounded-3xl p-5 flex flex-col justify-between space-y-4 shadow-xl">
+          <div>
+            <span class="px-2.5 py-1 rounded-xl bg-emerald-500/10 text-[10px] text-emerald-400 font-extrabold border border-emerald-500/25">Độc Quyền</span>
+            <h3 class="font-black text-white text-sm sm:text-base mt-3">${t.title}</h3>
+            <p class="text-slate-400 text-xs mt-1.5 leading-relaxed whitespace-pre-line">${t.desc || 'Không có mô tả chi tiết'}</p>
+          </div>
+          <div class="pt-3.5 border-t border-slate-800/80 flex items-center justify-between">
+            <span class="text-sm sm:text-base font-black text-emerald-400">+${Number(t.reward).toLocaleString('vi-VN')} đ</span>
+            <button onclick="handleStartTask('${t.id}', '${t.title}', '${t.url}', ${t.reward})" class="px-4.5 py-2.5 rounded-2xl gradient-primary text-white text-xs font-extrabold shadow-md cursor-pointer hover:opacity-90 transition">
+              Làm Kèo <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      if (icon) setTimeout(() => icon.classList.remove('fa-spin'), 400);
+    }
+
+    async function handleStartTask(taskId, taskTitle, taskUrl, rewardAmount) {
+      if (!taskUrl || taskUrl === '#') return showNotify('warning', 'Thiếu Link', 'Kèo này chưa có đường dẫn đối tác!');
+      window.open(taskUrl, '_blank');
+
+      const { value: formValues } = await Swal.fire({
+        title: 'Xác Nhận Hoàn Thành Kèo',
+        html: `
+          <div class="text-left space-y-3.5 text-xs">
+            <p class="text-slate-300 font-medium">Nhập ghi chú hoặc mã giao dịch (SĐT / Email đăng ký):</p>
+            <input id="swal-input1" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none" placeholder="Ví dụ: 0987654321...">
+            <p class="text-slate-300 font-medium pt-1">Tải lên ảnh chụp màn hình (Chứng chỉ / Bằng chứng):</p>
+            <input type="file" id="swal-input2" accept="image/*" class="w-full text-slate-400 text-xs file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer">
+          </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Gửi Bằng Chứng',
+        cancelButtonText: 'Hủy',
+        preConfirm: () => {
+          const note = document.getElementById('swal-input1').value;
+          const fileInput = document.getElementById('swal-input2');
+          return new Promise((resolve, reject) => {
+            if (fileInput.files.length > 0) {
+              const reader = new FileReader();
+              reader.onload = e => resolve({ note, image: e.target.result });
+              reader.onerror = error => reject(error);
+              reader.readAsDataURL(fileInput.files[0]);
+            } else {
+              resolve({ note: note || 'Không có ghi chú', image: null });
+            }
+          });
+        }
+      });
+
+      if (formValues) {
+        const newSubId = Date.now();
+        const timeStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+        
+        await supabaseClient.from('pending_tasks').insert([{
+          id: newSubId,
+          user_id: currentUser,
+          title: taskTitle,
+          reward: rewardAmount,
+          proof_text: formValues.note,
+          proof_image: formValues.image,
+          time: timeStr
+        }]);
+
+        markTaskAsCompletedForUser(currentUser, taskId);
+        
+        const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+        sendAdminAlert(`
+📥 <b>CÓ BẰNG CHỨNG NHIỆM VỤ MỚI CẦN DUYỆT!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Thành viên:</b> <code>${currentUser}</code>
+🎯 <b>Tên Kèo:</b> ${taskTitle}
+💰 <b>Thưởng:</b> <code>+${rewardAmount.toLocaleString('vi-VN')} VNĐ</code>
+💬 <b>Ghi chú:</b> <code>${formValues.note}</code>
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+        `.trim());
+
+        showNotify('success', 'Đã Gửi Bằng Chứng', 'Yêu cầu của bạn đã được gửi cho Admin duyệt.');
+        fetchAutoOffers();
+      }
+    }
+
+    async function toggleView(view) {
+      const ctvV = document.getElementById('ctvView');
+      const adminV = document.getElementById('adminView');
+      if (view === 'admin') {
+        if (ctvV) ctvV.classList.add('hidden');
+        if (adminV) adminV.classList.remove('hidden');
+        await fetchCloudData();
+        await loadAdminUserList();
+        renderAdminOfferList();
+        renderAdminFinanceTable();
+        renderAdminTaskApprovals();
+        loadAdminSupportFields();
+        renderAdminNoticeManageList();
+      } else {
+        if (adminV) adminV.classList.add('hidden');
+        if (ctvV) ctvV.classList.remove('hidden');
+        await syncUserData();
+        fetchAutoOffers();
+      }
+    }
+
+    function switchAdminTab(tabId) {
+      document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('#adminView button[id^="btnTab"]').forEach(b => {
+        b.className = 'px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition';
+      });
+      const targetTab = document.getElementById(tabId);
+      if (targetTab) targetTab.classList.remove('hidden');
+      const btnId = 'btn' + tabId.charAt(0).toUpperCase() + tabId.slice(1);
+      const targetBtn = document.getElementById(btnId);
+      if (targetBtn) targetBtn.className = 'px-4 py-3 rounded-2xl bg-blue-600 text-white shadow-lg whitespace-nowrap flex items-center gap-2 cursor-pointer transition';
+    }
+
+    async function renderAdminTaskApprovals() {
+      await fetchCloudData();
+      const tbody = document.getElementById('adminTaskApprovalsTable');
+      const badge = document.getElementById('pendingTaskBadgeCount');
+      if (badge) badge.innerText = pendingTaskSubmissions.length;
+      if (!tbody) return;
+
+      if (pendingTaskSubmissions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-slate-500">Chưa có bằng chứng nào chờ duyệt.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = pendingTaskSubmissions.map((s) => {
+        const imgTag = s.proofImage ? `<a href="${s.proofImage}" target="_blank"><img src="${s.proofImage}" class="w-16 h-16 object-cover rounded-2xl border border-slate-700 hover:scale-105 transition shadow"></a>` : '<span class="text-slate-500">Không có ảnh</span>';
+        return `
+          <tr class="hover:bg-slate-800/40">
+            <td class="p-3.5 text-slate-400 font-mono text-[11px]">${s.time}</td>
+            <td class="p-3.5 font-black text-white">${s.user}</td>
+            <td class="p-3.5 text-slate-300">${s.title} <b class="text-emerald-400 font-black">(+${s.reward.toLocaleString('vi-VN')}đ)</b></td>
+            <td class="p-3.5 space-y-1">
+              <p class="font-mono text-amber-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">${s.proofText || ''}</p>
+              ${imgTag}
+            </td>
+            <td class="p-3.5 text-right space-x-2">
+              <button onclick="approveTaskSubmission('${s.id}')" class="px-3.5 py-2 bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 rounded-xl font-bold cursor-pointer transition">Duyệt Cộng</button>
+              <button onclick="rejectTaskSubmission('${s.id}')" class="px-3.5 py-2 bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 rounded-xl font-bold cursor-pointer transition">Hủy</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function approveTaskSubmission(subId) {
+      await fetchCloudData();
+      const sub = pendingTaskSubmissions.find(p => String(p.id) === String(subId));
+      if (!sub) return;
+      const pointDiff = sub.reward / systemConfig.rate;
+
+      let { data } = await supabaseClient.from('users_task').select('points').eq('user_id', sub.user).single();
+      if (!data) {
+        await supabaseClient.from('users_task').insert([{ user_id: sub.user, points: 0 }]);
+        data = { points: 0 };
+      }
+
+      const currentPoints = Number(data.points) || 0;
+      const newPoints = currentPoints + pointDiff;
+
+      const { error } = await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', sub.user);
+      if (error) return showNotify('error', 'Lỗi Duyệt', error.message);
+
+      addTransactionHistory(sub.user, 'earn', sub.reward, `Hoàn thành nhiệm vụ: ${sub.title}`);
+
+      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      sendAdminAlert(`✅ Admin đã duyệt thưởng cho <b>${sub.user}</b> (+${sub.reward.toLocaleString('vi-VN')}đ)`);
+      sendGroupAlert(`
+🎉 <b>CHÚ MỪNG THÀNH VIÊN NHẬN THƯỞNG!</b>
+━━━━━━━━━━━━━━━━━━━
+👤 <b>Thành viên:</b> <code>${sub.user}</code>
+🎯 <b>Hoàn thành kèo:</b> ${sub.title}
+💰 <b>Nhận thưởng:</b> <code>+${sub.reward.toLocaleString('vi-VN')} VNĐ</code>
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+      `.trim());
+
+      await supabaseClient.from('pending_tasks').delete().eq('id', subId);
+
+      await renderAdminTaskApprovals();
+      await loadAdminUserList();
+
+      Toast.fire({ icon: 'success', title: `Đã duyệt và cộng +${sub.reward.toLocaleString('vi-VN')}đ cho tài khoản ${sub.user}!` });
+      showNotify('success', 'Thành Công', `Đã duyệt cộng +${sub.reward.toLocaleString('vi-VN')}đ cho thành viên ${sub.user}`);
+    }
+
+    async function rejectTaskSubmission(subId) {
+      await fetchCloudData();
+      const sub = pendingTaskSubmissions.find(p => String(p.id) === String(subId));
+      if (sub) {
+        addTransactionHistory(sub.user, 'reject', 0, `Bằng chứng nhiệm vụ "${sub.title}" bị từ chối.`);
+      }
+      await supabaseClient.from('pending_tasks').delete().eq('id', subId);
+      await renderAdminTaskApprovals();
+      Toast.fire({ icon: 'info', title: 'Đã từ chối bằng chứng nhiệm vụ.' });
+      showNotify('info', 'Đã Hủy', 'Đã từ chối bằng chứng nhiệm vụ.');
+    }
+
+    async function adminAddNewOffer() {
+      const title = document.getElementById('newOfferTitle').value.trim();
+      const reward = Number(document.getElementById('newOfferReward').value);
+      const url = document.getElementById('newOfferUrl').value.trim();
+      const desc = document.getElementById('newOfferDesc').value.trim();
+      if (!title || !reward || !url) return showNotify('warning', 'Thiếu Dữ Liệu', 'Nhập đủ thông tin kèo!');
+
+      const { error } = await supabaseClient.from('system_offers').insert([{ title, reward, url, description: desc }]);
+      if (error) return showNotify('error', 'Lỗi Đăng Kèo', error.message);
+
+      document.getElementById('newOfferTitle').value = '';
+      document.getElementById('newOfferReward').value = '';
+      document.getElementById('newOfferUrl').value = '';
+      document.getElementById('newOfferDesc').value = '';
+      
+      localStorage.removeItem('last_seen_offer_all');
+
+      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      await sendGroupAlert(`
+🔥 <b>CÓ KÈO NHIỆM VỤ MỚI TRÊN SÀN!</b>
+━━━━━━━━━━━━━━━━━━━
+📌 <b>Tên Kèo:</b> <b>${title}</b>
+💵 <b>Thưởng Nhận:</b> <code>+${reward.toLocaleString('vi-VN')} VNĐ</code>
+📝 <b>Mô tả:</b> 
+${desc || 'Làm nhiệm vụ ngay để nhận thưởng!'}
+⏰ <b>Thời gian:</b> <code>${timeNow}</code>
+━━━━━━━━━━━━━━━━━━━
+      `.trim());
+
+      showNotify('success', 'Thành Công', 'Đã đăng kèo mới thành công! Bot công khai đã bắn tin báo về nhóm.');
+      await renderAdminOfferList();
+      fetchAutoOffers();
+    }
+
+    async function renderAdminOfferList() {
+      await fetchCloudData();
+      const list = document.getElementById('adminOfferManageList');
+      if (!list) return;
+      if (customOffers.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có kèo nào.</p>';
+      list.innerHTML = customOffers.map((o) => `
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex justify-between items-center text-xs shadow-inner">
+          <div><p class="font-black text-white text-sm">${o.title} <span class="text-emerald-400 font-black ml-2">+${Number(o.reward).toLocaleString('vi-VN')}đ</span></p></div>
+          <button onclick="adminDeleteOffer('${o.id}')" class="p-2.5 text-rose-400 hover:text-rose-300 cursor-pointer transition"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      `).join('');
+    }
+
+    async function adminDeleteOffer(offerId) {
+      await supabaseClient.from('system_offers').delete().eq('id', offerId);
+      await renderAdminOfferList();
+      fetchAutoOffers();
+      Toast.fire({ icon: 'info', title: 'Đã xóa kèo.' });
+    }
+
+    async function loadAdminUserList() {
+      const container = document.getElementById('adminUserCardsContainer');
+      if (!container) return;
+      container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-8 text-xs">Đang tải danh sách thành viên...</div>';
+      
+      const { data } = await supabaseClient.from('users_task').select('*').order('created_at', { ascending: false });
+      if (data) {
+        cachedAdminUserList = data;
+        renderAdminUserTable(cachedAdminUserList);
+      }
+    }
+
+    function renderAdminUserTable(list) {
+      const container = document.getElementById('adminUserCardsContainer');
+      if (!container) return;
+      if (!list || list.length === 0) {
+        container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-8 text-xs">Không có tài khoản nào phù hợp.</div>';
+        return;
+      }
+
+      container.innerHTML = list.map(u => {
+        const vnd = (Number(u.points) || 0) * systemConfig.rate;
+        const role = userPermissions[u.user_id]?.role || (u.user_id === 'Admin' ? 'admin' : 'member');
+        const isBanned = userPermissions[u.user_id]?.banned || false;
+
+        let roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/35">Member</span>';
+        if (role === 'admin') roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/35">Admin</span>';
+        if (role === 'manager') roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/35">Manager</span>';
+
+        const statusBadge = isBanned 
+          ? '<span class="text-rose-400 font-bold text-[10px] sm:text-[11px] flex items-center gap-1 whitespace-nowrap"><i class="fa-solid fa-ban text-[9px]"></i> Khóa</span>'
+          : '<span class="text-emerald-400 font-bold text-[10px] sm:text-[11px] flex items-center gap-1 whitespace-nowrap"><i class="fa-solid fa-circle-check text-[9px]"></i> Hoạt Động</span>';
+
+        return `
+          <div class="glass-card rounded-3xl p-4 sm:p-5 space-y-3.5 shadow-xl border border-slate-800">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 gap-2">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-slate-800 text-blue-400 flex items-center justify-center text-sm font-bold border border-slate-700 shadow-inner flex-shrink-0">
+                  <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="min-w-0">
+                  <h4 class="font-black text-white text-xs sm:text-sm truncate">${u.user_id}</h4>
+                  <div class="mt-0.5 flex items-center gap-1">${roleBadge}</div>
+                </div>
+              </div>
+              <div class="flex-shrink-0">${statusBadge}</div>
+            </div>
+
+            <div class="flex items-center justify-between bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/80 shadow-inner">
+              <span class="text-[11px] text-slate-400 font-semibold">Số dư ví:</span>
+              <span class="text-sm font-black text-emerald-400">${vnd.toLocaleString('vi-VN')} đ</span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-1.5 sm:gap-2 pt-1">
+              <button onclick="openAdminPasswordModal('${u.user_id}')" class="py-2.5 px-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
+                <i class="fa-solid fa-key"></i> Pass
+              </button>
+              <button onclick="openAdminRoleModal('${u.user_id}', '${role}')" class="py-2.5 px-1 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
+                <i class="fa-solid fa-user-shield"></i> Quyền
+              </button>
+              <button onclick="toggleBanUser('${u.user_id}')" class="py-2.5 px-1 ${isBanned ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-300 hover:bg-rose-500/30'} rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
+                <i class="fa-solid ${isBanned ? 'fa-lock-open' : 'fa-lock'}"></i> ${isBanned ? 'Mở' : 'Khóa'}
+              </button>
+            </div>
+
+            <div class="flex items-center gap-2 pt-1">
+              <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập VNĐ..." class="w-full min-w-0 flex-1 bg-slate-950 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 shadow-inner">
+              <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-3 sm:px-4 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-2xl text-xs font-extrabold cursor-pointer transition flex-shrink-0">+ Cộng</button>
+              <button onclick="adminCustomAdjust('${u.user_id}', -1)" class="px-3 sm:px-4 py-2.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/30 rounded-2xl text-xs font-extrabold cursor-pointer transition flex-shrink-0">- Trừ</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openAdminPasswordModal(userId) {
+      document.getElementById('adminTargetUser').value = userId;
+      document.getElementById('adminNewUserPassword').value = '';
+      document.getElementById('adminPasswordModal').classList.remove('hidden');
+    }
+
+    function openAdminRoleModal(userId, currentRole) {
+      document.getElementById('adminRoleTargetUser').value = userId;
+      document.getElementById('adminRoleSelect').value = currentRole;
+      document.getElementById('adminRoleModal').classList.remove('hidden');
+    }
+
+    function toggleBanUser(userId) {
+      if (!userPermissions[userId]) userPermissions[userId] = { role: 'member', banned: false };
+      userPermissions[userId].banned = !userPermissions[userId].banned;
+      localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
+      renderAdminUserTable(cachedAdminUserList);
+      Toast.fire({ icon: 'success', title: `Đã cập nhật trạng thái tài khoản ${userId}` });
+    }
+
+    async function adminCustomAdjust(targetUserId, multiplier) {
+      const input = document.getElementById(`input_adjust_${targetUserId}`);
+      if (!input) return;
+      const valVND = Number(input.value);
+      if (!valVND || valVND <= 0) return showNotify('warning', 'Chú Ý', 'Vui lòng nhập số tiền VNĐ hợp lệ!');
+
+      const pointDiff = (valVND / systemConfig.rate) * multiplier;
+      const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', targetUserId).single();
+      const newPoints = Math.max(0, (Number(data.points) || 0) + pointDiff);
+
+      await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', targetUserId);
+      addTransactionHistory(targetUserId, multiplier > 0 ? 'admin_add' : 'admin_deduct', valVND, multiplier > 0 ? `Admin cộng +${valVND.toLocaleString('vi-VN')}đ` : `Admin trừ -${valVND.toLocaleString('vi-VN')}đ`);
+
+      input.value = '';
+      await loadAdminUserList();
+      showNotify('success', 'Thành Công', `Đã cập nhật số dư cho ${targetUserId}`);
+    }
+
+    function renderAdminFinanceTable() {
+      financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
+      const tbody = document.getElementById('adminFinanceTable');
+      if (!tbody) return;
+      if (financeRequests.length === 0) return tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-slate-500">Chưa có yêu cầu rút tiền nào.</td></tr>';
+      tbody.innerHTML = financeRequests.map((r, idx) => `
+        <tr class="hover:bg-slate-800/40">
+          <td class="p-3.5 text-slate-400 font-mono text-[11px]">${r.time}</td>
+          <td class="p-3.5 font-black text-white">${r.user}</td>
+          <td class="p-3.5 font-black text-emerald-400">${r.amount.toLocaleString('vi-VN')}đ</td>
+          <td class="p-3.5 text-slate-300 font-mono">${r.info}</td>
+          <td class="p-3.5 text-right"><button onclick="adminApproveFinance(${idx})" class="px-3.5 py-2 bg-emerald-500/20 text-emerald-300 rounded-xl text-xs font-bold cursor-pointer transition">Duyệt Rút</button></td>
+        </tr>
+      `).join('');
+    }
+
+    async function adminApproveFinance(idx) {
+      financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
+      const req = financeRequests[idx];
+      if (!req) return;
+      const pointDiff = req.amount / systemConfig.rate;
+      const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', req.user).single();
+      await supabaseClient.from('users_task').update({ points: Math.max(0, (Number(data?.points)||0) - pointDiff) }).eq('user_id', req.user);
+      
+      triggerSyncedWithdrawSuccess(req.user, req.amount, req.info);
+
+      financeRequests.splice(idx, 1);
+      localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
+      renderAdminFinanceTable();
+      await loadAdminUserList();
+      showNotify('success', 'Thành Công', `Đã duyệt lệnh rút tiền cho tài khoản ${req.user}`);
+    }
+
+    function loadAdminSupportFields() {
+      loadSystemConfigFromCloud().then(() => {
+        document.getElementById('adminCfgZalo').value = systemConfig.zalo;
+        document.getElementById('adminCfgTelegram').value = systemConfig.telegram;
+        document.getElementById('adminCfgGroupZalo').value = systemConfig.groupZalo;
+        document.getElementById('adminCfgGroupTelegram').value = systemConfig.groupTelegram;
+        document.getElementById('adminCfgWorkTime').value = systemConfig.workTime;
+        document.getElementById('adminCfgAdminToken').value = systemConfig.adminToken;
+        document.getElementById('adminCfgAdminChatId').value = systemConfig.adminChatId;
+        document.getElementById('adminCfgGroupToken').value = systemConfig.groupToken;
+        document.getElementById('adminCfgGroupChatId').value = systemConfig.groupChatId;
+      });
+    }
+
+    async function saveAdminSupportConfig() {
+      systemConfig.zalo = document.getElementById('adminCfgZalo')?.value.trim() || '0987654321';
+      systemConfig.telegram = document.getElementById('adminCfgTelegram')?.value.trim() || '@cskh';
+      systemConfig.groupZalo = document.getElementById('adminCfgGroupZalo')?.value.trim() || '#';
+      systemConfig.groupTelegram = document.getElementById('adminCfgGroupTelegram')?.value.trim() || '#';
+      systemConfig.workTime = document.getElementById('adminCfgWorkTime')?.value.trim() || '08:00 - 23:00';
+
+      await saveSystemConfigToCloud('sys_zalo', systemConfig.zalo);
+      await saveSystemConfigToCloud('sys_telegram', systemConfig.telegram);
+      await saveSystemConfigToCloud('sys_group_zalo', systemConfig.groupZalo);
+      await saveSystemConfigToCloud('sys_group_telegram', systemConfig.groupTelegram);
+      await saveSystemConfigToCloud('sys_work_time', systemConfig.workTime);
+
+      applySupportConfig();
+      showNotify('success', 'Thành Công', 'Đã lưu cấu hình hỗ trợ!');
+    }
+
+    async function saveTelegramBotConfig() {
+      systemConfig.adminToken = document.getElementById('adminCfgAdminToken')?.value.trim() || '';
+      systemConfig.adminChatId = document.getElementById('adminCfgAdminChatId')?.value.trim() || '';
+      systemConfig.groupToken = document.getElementById('adminCfgGroupToken')?.value.trim() || '';
+      systemConfig.groupChatId = document.getElementById('adminCfgGroupChatId')?.value.trim() || '';
+
+      await saveSystemConfigToCloud('admin_token', systemConfig.adminToken);
+      await saveSystemConfigToCloud('admin_chat_id', systemConfig.adminChatId);
+      await saveSystemConfigToCloud('group_token', systemConfig.groupToken);
+      await saveSystemConfigToCloud('group_chat_id', systemConfig.groupChatId);
+
+      showNotify('success', 'Thành Công', 'Đã lưu cấu hình Bot Telegram!');
+    }
+
+    async function adminPublishNotice() {
+      const title = document.getElementById('adminNoticeTitle')?.value.trim() || 'Thông báo';
+      const content = document.getElementById('adminNoticeInput')?.value.trim();
+      if (!content) return showNotify('warning', 'Thiếu Dữ Liệu', 'Nhập nội dung thông báo!');
+      
+      const timeStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
+      await supabaseClient.from('system_notices').insert([{ title, content, time: timeStr }]);
+      
+      document.getElementById('adminNoticeTitle').value = '';
+      document.getElementById('adminNoticeInput').value = '';
+
+      sendGroupAlert(`📢 <b>THÔNG BÁO MỚI:</b>\n📌 ${title}\n💬 ${content}`);
+      await fetchCloudData();
+      renderAdminNoticeManageList();
+      showNotify('success', 'Thành Công', 'Đã phát thông báo mới!');
+    }
+
+    async function renderAdminNoticeManageList() {
+      await fetchCloudData();
+      const list = document.getElementById('adminNoticeManageList');
+      if (!list) return;
+      if (notifications.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có thông báo nào.</p>';
+      list.innerHTML = notifications.map((n) => `
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex justify-between items-center text-xs">
+          <div><p class="font-black text-white text-sm">${n.title}</p><p class="text-slate-400 text-xs mt-1">${n.content}</p></div>
+          <button onclick="adminDeleteNotice('${n.id}')" class="p-2.5 text-rose-400 hover:text-rose-300 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      `).join('');
+    }
+
+    async function adminDeleteNotice(noticeId) {
+      await supabaseClient.from('system_notices').delete().eq('id', noticeId);
+      await renderAdminNoticeManageList();
+      Toast.fire({ icon: 'info', title: 'Đã xóa thông báo.' });
+    }
+
+    // GẮN SỰ KIỆN KHỞI CHẠY AN TOÀN TRỰC TIẾP
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('btnAuthSubmit').addEventListener('click', handleAuthSubmit);
       document.getElementById('authSwitchBtn').addEventListener('click', toggleAuthMode);

@@ -250,7 +250,6 @@
 
   <!-- SÀN NHIỆM VỤ NATIVE -->
   <main id="ctvView" class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-8 mt-6 space-y-6 pb-20">
-    
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div class="glass-card rounded-3xl p-6 flex flex-col justify-between shadow-xl">
         <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Số Dư Khả Dụng</span>
@@ -295,12 +294,10 @@
 
       <div id="nativeTaskList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4.5"></div>
     </div>
-
   </main>
 
   <!-- BẢNG QUẢN TRỊ ADMIN -->
   <div id="adminView" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 mt-6 space-y-6 pb-20">
-    
     <div class="flex items-center justify-between">
       <div>
         <h2 class="text-lg sm:text-2xl font-black text-white flex items-center gap-2.5">
@@ -313,7 +310,7 @@
       </button>
     </div>
 
-    <!-- 9 Tab Admin Đầy Đủ -->
+    <!-- 9 Tab Admin -->
     <div class="flex space-x-2.5 overflow-x-auto pb-2 text-xs font-bold custom-tabs-scroll">
       <button id="btnTabTaskApprovals" class="px-4 py-3 rounded-2xl bg-blue-600 text-white shadow-lg whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-list-check"></i> 1. Duyệt Kèo (<span id="pendingTaskBadgeCount">0</span>)
@@ -334,7 +331,7 @@
         <i class="fa-solid fa-wand-magic-sparkles"></i> 6. Tạo Lệnh Rút Ảo
       </button>
       <button id="btnTabFakeBill" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
-        <i class="fa-solid fa-receipt"></i> 7. Bill Thanh Toán (Tự Tạo Ảnh Bill)
+        <i class="fa-solid fa-receipt"></i> 7. Bill Thanh Toán
       </button>
       <button id="btnTabNotices" class="px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
         <i class="fa-solid fa-bullhorn"></i> 8. Thông Báo
@@ -344,39 +341,22 @@
       </button>
     </div>
 
-    <!-- TAB 1: DUYỆT NHIỆM VỤ -->
+    <!-- TAB 1 -->
     <div id="tabTaskApprovals" class="admin-tab-content glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-4">
-      <h3 class="text-sm font-extrabold text-slate-200 flex items-center gap-2">
-        <i class="fa-solid fa-clipboard-check text-blue-400"></i> Duyệt Ảnh Bằng Chứng Hoàn Thành Nhiệm Vụ Của CTV
-      </h3>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs text-slate-300">
-          <thead class="bg-slate-900/90 text-slate-400 uppercase text-[10px] tracking-wider">
-            <tr>
-              <th class="p-3.5">Thời Gian</th>
-              <th class="p-3.5">Tài Khoản</th>
-              <th class="p-3.5">Tên Nhiệm Vụ</th>
-              <th class="p-3.5">Ảnh Chứng Chỉ / Bằng Chứng</th>
-              <th class="p-3.5 text-right">Thao Tác</th>
-            </tr>
-          </thead>
-          <tbody id="adminTaskApprovalsTable" class="divide-y divide-slate-800/80">
-            <tr><td colspan="5" class="p-6 text-center text-slate-500">Chưa có bằng chứng nhiệm vụ nào gửi lên.</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <h3 class="text-sm font-extrabold text-slate-200">Duyệt Ảnh Bằng Chứng Hoàn Thành Nhiệm Vụ</h3>
+      <table class="w-full text-left text-xs text-slate-300">
+        <thead class="bg-slate-900/90 text-slate-400 uppercase text-[10px]"><tr><th class="p-3.5">Thời gian</th><th class="p-3.5">Tài khoản</th><th class="p-3.5">Nhiệm vụ</th><th class="p-3.5">Bằng chứng</th><th class="p-3.5 text-right">Thao tác</th></tr></thead>
+        <tbody id="adminTaskApprovalsTable" class="divide-y divide-slate-800/80"><tr><td colspan="5" class="p-6 text-center text-slate-500">Chưa có bằng chứng nào chờ duyệt.</td></tr></tbody>
+      </table>
     </div>
 
-    <!-- TAB 2: KHÁCH HÀNG -->
+    <!-- TAB 2 -->
     <div id="tabUsers" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
         <div>
-          <h3 class="text-sm font-extrabold text-slate-200 flex items-center gap-2">
-            <i class="fa-solid fa-users text-blue-400"></i> Quản Lý Thành Viên Chuyên Sâu
-          </h3>
+          <h3 class="text-sm font-extrabold text-slate-200">Quản Lý Thành Viên Chuyên Sâu</h3>
           <p class="text-[11px] text-slate-400 mt-0.5">Sửa mật khẩu, đổi quyền, chỉnh tiền & khóa tài khoản</p>
         </div>
-        
         <div class="flex items-center gap-2 flex-wrap">
           <select id="adminRoleFilter" class="bg-slate-900 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-xs text-white focus:outline-none">
             <option value="all">Tất cả vai trò</option>
@@ -388,44 +368,24 @@
           <button id="btnRefreshUsers" class="px-3.5 py-2.5 rounded-2xl bg-slate-800 text-slate-300 text-xs hover:bg-slate-700 cursor-pointer"><i class="fa-solid fa-rotate-right"></i></button>
         </div>
       </div>
-
       <div id="adminUserCardsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="col-span-full text-center text-slate-500 py-8 text-xs">Đang tải danh sách thành viên...</div>
       </div>
     </div>
 
-    <!-- TAB 3: ĐĂNG KÈO MỚI -->
+    <!-- TAB 3 -->
     <div id="tabAddOffer" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-6">
       <div class="space-y-4 bg-slate-900/60 p-6 rounded-3xl border border-slate-800 shadow-inner">
-        <h3 class="text-sm font-extrabold text-amber-400 flex items-center gap-2">
-          <i class="fa-solid fa-plus-circle"></i> Đăng Kèo Nhiệm Vụ Mới
-        </h3>
-        
+        <h3 class="text-sm font-extrabold text-amber-400">Đăng Kèo Nhiệm Vụ Mới</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-          <div>
-            <label class="block text-slate-400 mb-1 font-bold">Tên Nhiệm Vụ</label>
-            <input id="newOfferTitle" type="text" placeholder="Ví dụ: Đăng ký Cake VPBank" class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none focus:border-amber-500">
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1 font-bold">Thưởng Khách Nhận (VNĐ)</label>
-            <input id="newOfferReward" type="number" placeholder="Ví dụ: 35000" class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none focus:border-amber-500">
-          </div>
-          <div class="sm:col-span-2">
-            <label class="block text-slate-400 mb-1 font-bold">Link Đích (Link Affiliate)</label>
-            <input id="newOfferUrl" type="text" placeholder="https://..." class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none focus:border-amber-500">
-          </div>
-          <div class="sm:col-span-2">
-            <label class="block text-slate-400 mb-1 font-bold">Mô tả hướng dẫn (Có thể xuống dòng thoải mái)</label>
-            <textarea id="newOfferDesc" rows="4" placeholder="1. Bước 1: Click link tải app&#10;2. Bước 2: Đăng ký tài khoản eKYC&#10;3. Bước 3: Chụp ảnh gửi bằng chứng" class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none focus:border-amber-500 leading-relaxed"></textarea>
-          </div>
+          <div><label class="block text-slate-400 mb-1 font-bold">Tên Nhiệm Vụ</label><input id="newOfferTitle" type="text" placeholder="Ví dụ: Đăng ký Cake VPBank" class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3.5 text-white"></div>
+          <div><label class="block text-slate-400 mb-1 font-bold">Thưởng Khách Nhận (VNĐ)</label><input id="newOfferReward" type="number" placeholder="Ví dụ: 35000" class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3.5 text-white"></div>
+          <div class="sm:col-span-2"><label class="block text-slate-400 mb-1 font-bold">Link Đích (Link Affiliate)</label><input id="newOfferUrl" type="text" placeholder="https://..." class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3.5 text-white"></div>
+          <div class="sm:col-span-2"><label class="block text-slate-400 mb-1 font-bold">Mô tả hướng dẫn</label><textarea id="newOfferDesc" rows="4" placeholder="1. Bước 1...\n2. Bước 2..." class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3.5 text-white"></textarea></div>
         </div>
-
         <div class="text-right">
-          <button id="btnAddOfferSubmit" class="px-6 py-3 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-extrabold text-xs shadow-lg shadow-amber-600/25 transition cursor-pointer">
-            <i class="fa-solid fa-paper-plane mr-1"></i> Đăng Kèo Ngay Lập Tức
-          </button>
+          <button id="btnAddOfferSubmit" class="px-6 py-3 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-extrabold text-xs shadow-lg cursor-pointer">Đăng Kèo Ngay</button>
         </div>
-
         <div class="pt-4 border-t border-slate-800">
           <h4 class="text-xs font-extrabold text-slate-400 uppercase mb-3">Danh Sách Kèo Đang Chạy</h4>
           <div id="adminOfferManageList" class="space-y-3"></div>
@@ -433,235 +393,92 @@
       </div>
     </div>
 
-    <!-- TAB 4: RÚT TIỀN -->
+    <!-- TAB 4 -->
     <div id="tabFinance" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-4">
-      <h3 class="text-sm font-extrabold text-slate-200 flex items-center gap-2">
-        <i class="fa-solid fa-money-check-dollar text-purple-400"></i> Quản Lý Yêu Cầu Rút Tiền Của CTV
-      </h3>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs text-slate-300">
-          <thead class="bg-slate-900/90 text-slate-400 uppercase text-[10px] tracking-wider">
-            <tr>
-              <th class="p-3.5">Thời Gian</th>
-              <th class="p-3.5">Tài Khoản</th>
-              <th class="p-3.5">Số Tiền Rút</th>
-              <th class="p-3.5">Thông Tin Nhận Tiền</th>
-              <th class="p-3.5 text-right">Thao Tác</th>
-            </tr>
-          </thead>
-          <tbody id="adminFinanceTable" class="divide-y divide-slate-800/80">
-            <tr><td colspan="5" class="p-6 text-center text-slate-500">Chưa có yêu cầu rút tiền nào.</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <h3 class="text-sm font-extrabold text-slate-200">Quản Lý Yêu Cầu Rút Tiền Của CTV</h3>
+      <table class="w-full text-left text-xs text-slate-300">
+        <thead class="bg-slate-900/90 text-slate-400 uppercase text-[10px]"><tr><th class="p-3.5">Thời gian</th><th class="p-3.5">Tài khoản</th><th class="p-3.5">Số tiền</th><th class="p-3.5">Thông tin</th><th class="p-3.5 text-right">Thao tác</th></tr></thead>
+        <tbody id="adminFinanceTable" class="divide-y divide-slate-800/80"><tr><td colspan="5" class="p-6 text-center text-slate-500">Chưa có yêu cầu rút tiền.</td></tr></tbody>
+      </table>
     </div>
 
-    <!-- TAB 5: BOT TELEGRAM -->
+    <!-- TAB 5 -->
     <div id="tabTelegramBot" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-6">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-        <h3 class="text-sm font-extrabold text-sky-400 flex items-center gap-2">
-          <i class="fa-brands fa-telegram text-base"></i> Cấu Hình 2 Bot Telegram Độc Lập
-        </h3>
-        <span class="text-[11px] text-slate-400">Phân tách thông báo Admin & Nhóm CTV</span>
-      </div>
-
-      <div class="space-y-3 bg-slate-950/60 p-5 rounded-3xl border border-slate-800 shadow-inner">
-        <h4 class="text-xs font-black text-amber-400 flex items-center gap-2">
-          <i class="fa-solid fa-user-secret"></i> 1. Bot Riêng Của Admin (Nhận đơn chờ duyệt, biến động ví mật)
-        </h4>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div>
-            <label class="block text-slate-400 mb-1 font-bold">Admin Bot Token</label>
-            <input id="adminCfgAdminToken" type="text" placeholder="Token từ @BotFather..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1 font-bold">Admin Chat ID (Cá nhân bạn)</label>
-            <input id="adminCfgAdminChatId" type="text" placeholder="Chat ID cá nhân..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
-          </div>
+      <h3 class="text-sm font-extrabold text-sky-400">Cấu Hình 2 Bot Telegram Độc Lập</h3>
+      <div class="space-y-3 bg-slate-950/60 p-5 rounded-3xl border border-slate-800 text-xs">
+        <h4 class="font-black text-amber-400">1. Bot Riêng Của Admin</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input id="adminCfgAdminToken" type="text" placeholder="Admin Bot Token..." class="bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white">
+          <input id="adminCfgAdminChatId" type="text" placeholder="Admin Chat ID..." class="bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white">
         </div>
       </div>
-
-      <div class="space-y-3 bg-slate-950/60 p-5 rounded-3xl border border-slate-800 shadow-inner">
-        <h4 class="text-xs font-black text-sky-400 flex items-center gap-2">
-          <i class="fa-solid fa-users-rectangle"></i> 2. Bot Công Khai Nhóm (Báo Kèo mới, Rút tiền thành công cho CTV)
-        </h4>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div>
-            <label class="block text-slate-400 mb-1 font-bold">Group Bot Token</label>
-            <input id="adminCfgGroupToken" type="text" placeholder="Token từ @BotFather..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1 font-bold">Group Chat ID (ID nhóm - có dấu trừ)</label>
-            <input id="adminCfgGroupChatId" type="text" placeholder="-100xxxxxxxx..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
-          </div>
+      <div class="space-y-3 bg-slate-950/60 p-5 rounded-3xl border border-slate-800 text-xs">
+        <h4 class="font-black text-sky-400">2. Bot Công Khai Nhóm</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input id="adminCfgGroupToken" type="text" placeholder="Group Bot Token..." class="bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white">
+          <input id="adminCfgGroupChatId" type="text" placeholder="Group Chat ID (-100...)..." class="bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white">
         </div>
       </div>
-
-      <div class="flex justify-end gap-2.5 pt-2">
-        <button id="btnTestTelegram" class="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-sky-400 font-extrabold text-xs transition cursor-pointer">
-          <i class="fa-solid fa-paper-plane mr-1"></i> Bắn Tin Thử Nghiệm Cả 2 Bot
-        </button>
-        <button id="btnSaveTelegram" class="px-6 py-3 rounded-2xl bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs shadow-lg shadow-sky-600/25 transition cursor-pointer">
-          <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu Cấu Hình Lên Cloud
-        </button>
+      <div class="flex justify-end gap-2.5">
+        <button id="btnTestTelegram" class="px-5 py-3 rounded-2xl bg-slate-800 text-sky-400 font-bold text-xs cursor-pointer">Bắn Thử Nghiệm</button>
+        <button id="btnSaveTelegram" class="px-6 py-3 rounded-2xl bg-sky-600 text-white font-bold text-xs cursor-pointer">Lưu Cấu Hình</button>
       </div>
     </div>
 
-    <!-- TAB 6: TẠO LỆNH RÚT ẢO -->
-    <div id="tabFakeWithdraw" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-5">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-        <h3 class="text-sm font-extrabold text-emerald-400 flex items-center gap-2">
-          <i class="fa-solid fa-wand-magic-sparkles"></i> Tạo Lệnh Rút Tiền Ảo Vào Nhóm
-        </h3>
-        <span class="text-[11px] text-slate-400">Sau 60s bot tự động gửi ảnh tích xanh thành công</span>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-        <div>
-          <label class="block text-slate-400 mb-1 font-bold">Tên tài khoản CTV</label>
-          <input id="fakeUser" type="text" placeholder="Ví dụ: hoangnam99" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1 font-bold">Số tiền rút (VNĐ)</label>
-          <input id="fakeAmount" type="number" placeholder="Để trống sẽ tự động random số lẻ" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-        </div>
-        <div class="sm:col-span-2">
-          <label class="block text-slate-400 mb-1 font-bold">Thông tin nhận tiền (Để trống hệ thống tự tạo chuẩn đầu số)</label>
-          <input id="fakeInfo" type="text" placeholder="MBBank - 0987654321 (NGUYỄN VĂN A)" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none uppercase">
-        </div>
-      </div>
-
-      <div class="bg-slate-950/70 p-4 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="flex items-center gap-2 text-xs">
-          <span class="text-slate-300 font-bold">🔄 Tự động đẩy lệnh ảo ngẫu nhiên mỗi:</span>
-          <select id="autoFakeInterval" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold focus:outline-none">
-            <option value="30">30 giây</option>
-            <option value="60" selected>60 giây</option>
-            <option value="180">180 giây (3 phút)</option>
-          </select>
-        </div>
-        <button id="btnToggleAutoFake" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md">
-          <i class="fa-solid fa-play mr-1"></i> Bật Auto Tự Động
-        </button>
-      </div>
-
-      <div class="text-right pt-2">
-        <button id="btnSendFakeWithdraw" class="px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-600/25 transition cursor-pointer">
-          <i class="fa-solid fa-paper-plane mr-1"></i> Gửi Lệnh Rút Ảo Ngay (Sau 60s Bot Gửi Ảnh Tích Xanh)
-        </button>
-      </div>
-    </div>
-
-    <!-- TAB 7: BILL THANH TOÁN (GỬI ẢNH TÍCH XANH THÀNH CÔNG) -->
-    <div id="tabFakeBill" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-5">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-        <h3 class="text-sm font-extrabold text-amber-400 flex items-center gap-2">
-          <i class="fa-solid fa-receipt"></i> Gửi Ảnh Xác Nhận "Thành Công" Kèm Lệnh
-        </h3>
-        <span class="text-[11px] text-slate-400">Dùng mẫu tích xanh chuẩn chuyên nghiệp</span>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-        <div>
-          <label class="block text-slate-400 mb-1 font-bold">Ngân hàng thanh toán</label>
-          <select id="genBillBank" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-            <option value="MBBank">MB Bank</option>
-            <option value="Vietcombank">Vietcombank</option>
-            <option value="Techcombank">Techcombank</option>
-            <option value="Ví MoMo">Ví MoMo</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1 font-bold">Số tiền chuyển (VNĐ)</label>
-          <input id="genBillAmount" type="number" placeholder="Để trống sẽ tự động random số lẻ" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1 font-bold">Tên người nhận (Tên CTV)</label>
-          <input id="genBillName" type="text" placeholder="NGUYỄN VĂN A" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none uppercase">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1 font-bold">Số tài khoản / SĐT nhận</label>
-          <input id="genBillStk" type="text" placeholder="0987654321..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-        </div>
-        <div class="sm:col-span-2">
-          <label class="block text-slate-400 mb-1 font-bold">Nội dung chuyển khoản</label>
-          <input id="genBillNote" type="text" placeholder="THANH TOAN THUONG KEO AUTOPOSTAI" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none uppercase">
-        </div>
-      </div>
-
-      <div class="text-right pt-2">
-        <button id="btnSendAutoBill" class="px-6 py-3.5 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-extrabold text-xs shadow-lg shadow-amber-600/25 transition cursor-pointer">
-          <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Gửi Lệnh Kèm Ảnh "Thành Công"
-        </button>
-      </div>
-    </div>
-
-    <!-- TAB 8: THÔNG BÁO HỆ THỐNG -->
-    <div id="tabNotices" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-4">
-      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-        <h3 class="text-sm font-extrabold text-blue-400 flex items-center gap-2">
-          <i class="fa-solid fa-bullhorn"></i> Phát & Quản Lý Danh Sách Thông Báo
-        </h3>
-        <button onclick="adminClearAllNotices()" class="px-3 py-1.5 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
-          <i class="fa-solid fa-trash-can"></i> Xóa Tất Cả Thông Báo
-        </button>
-      </div>
+    <!-- TAB 6 -->
+    <div id="tabFakeWithdraw" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-5 text-xs">
+      <h3 class="text-sm font-extrabold text-emerald-400">Tạo Lệnh Rút Tiền Ảo Vào Nhóm</h3>
+      <input id="fakeUser" type="text" placeholder="Tên CTV..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white">
+      <input id="fakeAmount" type="number" placeholder="Số tiền (Để trống sẽ random số lẻ)..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white">
+      <input id="fakeInfo" type="text" placeholder="Thông tin nhận (Để trống hệ thống tự tạo chuẩn)..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white uppercase">
       
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="block text-slate-400 mb-1 font-bold">Tiêu đề thông báo</label>
-          <input id="adminNoticeTitle" type="text" placeholder="Ví dụ: Sự kiện tặng thưởng cuối tuần..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1 font-bold">Nội dung chi tiết</label>
-          <textarea id="adminNoticeInput" rows="2" placeholder="Nhập nội dung chi tiết..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none"></textarea>
-        </div>
-      </div>
-      
-      <div class="text-right">
-        <button id="btnPublishNotice" class="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-lg shadow-blue-600/25 transition cursor-pointer">
-          <i class="fa-solid fa-bullhorn mr-1"></i> Thêm Thông Báo Mới
-        </button>
+      <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
+        <span>Tự động đẩy lệnh mỗi:</span>
+        <select id="autoFakeInterval" class="bg-slate-900 border border-slate-700 rounded-xl p-2 text-white font-bold">
+          <option value="30">30 giây</option>
+          <option value="60" selected>60 giây</option>
+          <option value="180">180 giây</option>
+        </select>
+        <button id="btnToggleAutoFake" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold cursor-pointer">Bật Auto Ảo</button>
       </div>
 
-      <div class="pt-4 border-t border-slate-800 space-y-3">
-        <h4 class="text-xs font-extrabold text-slate-400 uppercase">Danh Sách Thông Báo Đang Có</h4>
-        <div id="adminNoticeManageList" class="space-y-3"></div>
-      </div>
+      <button id="btnSendFakeWithdraw" class="w-full py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold cursor-pointer">Gửi Lệnh Rút Ảo Ngay (Sau 60s Bot Gửi Ảnh Tích Xanh)</button>
     </div>
 
-    <!-- TAB 9: HỖ TRỢ & NHÓM CTV -->
-    <div id="tabSupport" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-4">
-      <h3 class="text-sm font-extrabold text-emerald-400 flex items-center gap-2">
-        <i class="fa-solid fa-headset"></i> Cài Đặt Kênh Hỗ Trợ & Link Nhóm CTV
-      </h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-        <div>
-          <label class="block text-slate-400 mb-1 font-bold">Số Zalo CSKH</label>
-          <input id="adminCfgZalo" type="text" placeholder="0987654321" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1 font-bold">Username / Link Telegram CSKH</label>
-          <input id="adminCfgTelegram" type="text" placeholder="@cskh" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1 font-bold">Link Nhóm Zalo CTV</label>
-          <input id="adminCfgGroupZalo" type="text" placeholder="https://zalo.me/g/..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1 font-bold">Link Nhóm Telegram CTV</label>
-          <input id="adminCfgGroupTelegram" type="text" placeholder="https://t.me/..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-        </div>
-        <div class="sm:col-span-2">
-          <label class="block text-slate-400 mb-1 font-bold">Thời gian trực hỗ trợ</label>
-          <input id="adminCfgWorkTime" type="text" placeholder="08:00 - 23:00 (Hàng ngày)" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-        </div>
-      </div>
-      <div class="text-right">
-        <button id="btnSaveSupport" class="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-600/25 transition cursor-pointer">
-          <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu Cấu Hình Hỗ Trợ & Nhóm CTV
-        </button>
-      </div>
+    <!-- TAB 7 -->
+    <div id="tabFakeBill" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-5 text-xs">
+      <h3 class="text-sm font-extrabold text-amber-400">Gửi Ảnh Xác Nhận "Thành Công" Kèm Lệnh</h3>
+      <select id="genBillBank" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white">
+        <option value="MBBank">MB Bank</option>
+        <option value="Vietcombank">Vietcombank</option>
+        <option value="Techcombank">Techcombank</option>
+        <option value="Ví MoMo">Ví MoMo</option>
+      </select>
+      <input id="genBillAmount" type="number" placeholder="Số tiền (Để trống sẽ random)..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white">
+      <input id="genBillName" type="text" placeholder="Tên CTV..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white uppercase">
+      <input id="genBillStk" type="text" placeholder="STK / SĐT nhận..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white">
+      <input id="genBillNote" type="text" placeholder="Nội dung chuyển khoản..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white uppercase">
+      <button id="btnSendAutoBill" class="w-full py-3.5 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-extrabold cursor-pointer">Gửi Lệnh Kèm Ảnh "Thành Công"</button>
+    </div>
+
+    <!-- TAB 8 -->
+    <div id="tabNotices" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-4 text-xs">
+      <h3 class="text-sm font-extrabold text-blue-400">Phát Thông Báo</h3>
+      <input id="adminNoticeTitle" type="text" placeholder="Tiêu đề..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white">
+      <textarea id="adminNoticeInput" rows="2" placeholder="Nội dung..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white"></textarea>
+      <button id="btnPublishNotice" class="px-6 py-3 rounded-2xl bg-blue-600 text-white font-bold cursor-pointer">Đăng Thông Báo</button>
+      <div id="adminNoticeManageList" class="space-y-2 pt-2"></div>
+    </div>
+
+    <!-- TAB 9 -->
+    <div id="tabSupport" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-4 text-xs">
+      <h3 class="text-sm font-extrabold text-emerald-400">Cài Đặt Hỗ Trợ</h3>
+      <input id="adminCfgZalo" type="text" placeholder="SĐT Zalo..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white">
+      <input id="adminCfgTelegram" type="text" placeholder="Telegram CSKH..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white">
+      <input id="adminCfgGroupZalo" type="text" placeholder="Link nhóm Zalo..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white">
+      <input id="adminCfgGroupTelegram" type="text" placeholder="Link nhóm Telegram..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white">
+      <input id="adminCfgWorkTime" type="text" placeholder="Thời gian làm việc..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white">
+      <button id="btnSaveSupport" class="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold cursor-pointer">Lưu Cài Đặt</button>
     </div>
 
   </div>
@@ -670,185 +487,57 @@
   <div id="historyModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-panel w-full max-w-lg p-6 rounded-3xl border border-slate-700 shadow-2xl relative">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
-        <h3 class="font-bold text-base text-white flex items-center gap-2">
-          <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Lịch Sử Giao Dịch Tài Chính
-        </h3>
-        <button id="closeHistory" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
+        <h3 class="font-bold text-base text-white">Lịch Sử Giao Dịch</h3>
+        <button id="closeHistory" class="text-slate-400 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <div id="historyModalContent" class="space-y-2.5 max-h-80 overflow-y-auto text-xs">
-        <p class="text-center text-slate-500 py-4">Chưa có giao dịch nào được ghi nhận.</p>
-      </div>
-    </div>
-  </div>
-
-  <div id="adminPasswordModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl">
-      <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
-        <h3 class="font-bold text-sm text-white flex items-center gap-2">
-          <i class="fa-solid fa-key text-amber-400"></i> Đổi Mật Khẩu Thành Viên
-        </h3>
-        <button id="closePassModal" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="block text-slate-400 mb-1">Tài khoản:</label>
-          <input id="adminTargetUser" type="text" disabled class="w-full bg-slate-900/60 border border-slate-800 rounded-2xl p-3 text-slate-400 font-bold">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Mật khẩu mới:</label>
-          <input id="adminNewUserPassword" type="text" placeholder="Nhập mật khẩu mới..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
-        </div>
-        <button id="submitPassChange" class="w-full py-3 rounded-2xl gradient-primary text-white font-bold text-xs shadow-lg mt-2 cursor-pointer">
-          Lưu Mật Khẩu Mới
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div id="adminRoleModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl">
-      <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
-        <h3 class="font-bold text-sm text-white flex items-center gap-2">
-          <i class="fa-solid fa-user-shield text-purple-400"></i> Cấp Quyền & Vai Trò
-        </h3>
-        <button id="closeRoleModal" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="block text-slate-400 mb-1">Tài khoản:</label>
-          <input id="adminRoleTargetUser" type="text" disabled class="w-full bg-slate-900/60 border border-slate-800 rounded-2xl p-3 text-slate-400 font-bold">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Chọn vai trò quyền hạn:</label>
-          <select id="adminRoleSelect" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3 text-white focus:outline-none">
-            <option value="member">Thành viên (Member)</option>
-            <option value="manager">Quản lý (Manager)</option>
-            <option value="admin">Quản trị viên (Admin)</option>
-          </select>
-        </div>
-        <button id="submitRoleChange" class="w-full py-3 rounded-2xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg mt-2 cursor-pointer">
-          Cập Nhật Vai Trò
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div id="noticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
-      <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
-        <h3 class="font-bold text-base text-white flex items-center gap-2">
-          <i class="fa-solid fa-bell text-amber-400"></i> Bảng Thông Báo Hệ Thống
-        </h3>
-        <button id="closeNotice" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div id="noticeModalContent" class="space-y-3 text-xs max-h-72 overflow-y-auto"></div>
-    </div>
-  </div>
-
-  <div id="supportModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
-      <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
-        <h3 class="font-bold text-base text-white flex items-center gap-2">
-          <i class="fa-solid fa-headset text-blue-400"></i> Trung Tâm Hỗ Trợ Trực Tuyến
-        </h3>
-        <button id="closeSupport" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="space-y-3 text-xs">
-        <p class="text-slate-400">Gặp khó khăn khi làm nhiệm vụ hoặc rút tiền? Liên hệ ngay:</p>
-        
-        <a id="supportZaloLink" href="#" target="_blank" class="flex items-center justify-between p-3.5 rounded-2xl bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/20 transition">
-          <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-xl bg-blue-500 text-white flex items-center justify-center text-lg font-black">Z</div>
-            <div>
-              <p class="font-bold text-white">Chat Zalo Hỗ Trợ</p>
-              <p id="supportZaloText" class="text-[11px] text-slate-400">0987654321</p>
-            </div>
-          </div>
-          <i class="fa-solid fa-chevron-right text-slate-500"></i>
-        </a>
-
-        <a id="supportTelegramLink" href="#" target="_blank" class="flex items-center justify-between p-3.5 rounded-2xl bg-sky-500/10 border border-sky-500/20 hover:bg-sky-500/20 transition">
-          <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-xl bg-sky-500 text-white flex items-center justify-center text-lg"><i class="fa-brands fa-telegram"></i></div>
-            <div>
-              <p class="font-bold text-white">Telegram CSKH 24/7</p>
-              <p id="supportTelegramText" class="text-[11px] text-slate-400">@cskh</p>
-            </div>
-          </div>
-          <i class="fa-solid fa-chevron-right text-slate-500"></i>
-        </a>
-
-        <div class="bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800 text-center">
-          <p class="text-[11px] text-slate-400">Thời gian làm việc hỗ trợ:</p>
-          <p id="supportWorkTimeText" class="font-bold text-emerald-400 mt-0.5">08:00 - 23:00 (Hàng ngày)</p>
-        </div>
-      </div>
+      <div id="historyModalContent" class="space-y-2 max-h-80 overflow-y-auto text-xs"></div>
     </div>
   </div>
 
   <div id="withdrawModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-base text-white"><i class="fa-solid fa-building-columns text-emerald-400 mr-1.5"></i> Rút Tiền Về Tài Khoản</h3>
-        <button id="closeWithdrawModalBtn" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+    <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl space-y-3 text-xs">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-sm text-white">Rút Tiền Về Ngân Hàng</h3>
+        <button id="closeWithdrawModalBtn" class="text-slate-400 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      
-      <div class="space-y-3.5 text-xs">
-        <div>
-          <label class="block text-slate-400 mb-1 font-bold">Phương thức nhận tiền</label>
-          <select id="withdrawMethod" onchange="handleWithdrawMethodChange()" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-            <option value="bank">Ngân Hàng (24/7)</option>
-            <option value="momo">Ví MoMo</option>
-          </select>
-        </div>
+      <input id="withdrawBankNumber" type="text" placeholder="Số tài khoản..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white">
+      <input id="withdrawBankOwner" type="text" placeholder="Chủ tài khoản (IN HOA)..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white uppercase">
+      <input id="withdrawAmountVND" type="number" placeholder="Số tiền muốn rút..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white">
+      <button id="submitWithdraw" class="w-full py-3 rounded-xl gradient-primary text-white font-bold cursor-pointer">Gửi Lệnh Rút</button>
+    </div>
+  </div>
 
-        <div id="withdrawBankFields" class="space-y-3">
-          <div>
-            <label class="block text-slate-400 mb-1 font-bold">Ngân hàng thụ hưởng</label>
-            <select id="withdrawBankName" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-              <option value="MBBank">MBBank - Quân Đội</option>
-              <option value="Vietcombank">VCB - Ngoại Thương</option>
-              <option value="Techcombank">TCB - Kỹ Thương</option>
-              <option value="VPBank">VPBank - Thịnh Vượng</option>
-              <option value="ACB">ACB - Á Châu</option>
-              <option value="BIDV">BIDV - Đầu Tư & Phát Triển</option>
-              <option value="VietinBank">VietinBank - Công Thương</option>
-              <option value="TPBank">TPBank - Tiên Phong</option>
-              <option value="Sacombank">Sacombank - Sài Gòn Thương Tín</option>
-              <option value="Agribank">Agribank - Nông Nghiệp</option>
-              <option value="Cake">Cake by VPBank</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1 font-bold">Số tài khoản</label>
-            <input id="withdrawBankNumber" type="text" placeholder="Nhập số tài khoản..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1 font-bold">Tên chủ tài khoản (In hoa không dấu)</label>
-            <input id="withdrawBankOwner" type="text" placeholder="NGUYEN VAN A" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none uppercase">
-          </div>
-        </div>
+  <div id="noticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl space-y-3 text-xs">
+      <div class="flex justify-between items-center"><h3 class="font-bold text-base text-white">Thông Báo Hệ Thống</h3><button id="closeNotice" class="text-slate-400 cursor-pointer"><i class="fa-solid fa-xmark"></i></button></div>
+      <div id="noticeModalContent" class="space-y-2 max-h-72 overflow-y-auto"></div>
+    </div>
+  </div>
 
-        <div id="withdrawMomoFields" class="hidden space-y-3">
-          <div>
-            <label class="block text-slate-400 mb-1 font-bold">Số điện thoại MoMo</label>
-            <input id="withdrawMomoPhone" type="text" placeholder="0987654321..." class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1 font-bold">Tên chủ ví MoMo</label>
-            <input id="withdrawMomoOwner" type="text" placeholder="NGUYEN VAN A" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none uppercase">
-          </div>
-        </div>
+  <div id="supportModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 shadow-2xl space-y-3 text-xs">
+      <div class="flex justify-between items-center"><h3 class="font-bold text-base text-white">Hỗ Trợ Trực Tuyến</h3><button id="closeSupport" class="text-slate-400 cursor-pointer"><i class="fa-solid fa-xmark"></i></button></div>
+      <p id="supportZaloText" class="text-slate-300"></p>
+      <p id="supportTelegramText" class="text-slate-300"></p>
+      <p id="supportWorkTimeText" class="text-emerald-400 font-bold"></p>
+    </div>
+  </div>
 
-        <div>
-          <label class="block text-slate-400 mb-1 font-bold">Số tiền muốn rút (VNĐ)</label>
-          <input id="withdrawAmountVND" type="number" placeholder="Tối thiểu 50.000 VNĐ" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none">
-        </div>
+  <div id="adminPasswordModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl space-y-3 text-xs">
+      <div class="flex justify-between items-center"><h3 class="font-bold text-sm text-white">Đổi Mật Khẩu</h3><button id="closePassModal" class="text-slate-400 cursor-pointer"><i class="fa-solid fa-xmark"></i></button></div>
+      <input id="adminTargetUser" type="text" disabled class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-slate-400">
+      <input id="adminNewUserPassword" type="text" placeholder="Mật khẩu mới..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white">
+      <button id="submitPassChange" class="w-full py-3 rounded-xl gradient-primary text-white font-bold cursor-pointer">Lưu Mật Khẩu</button>
+    </div>
+  </div>
 
-        <button id="submitWithdraw" class="w-full py-3.5 rounded-2xl gradient-primary text-white font-bold text-xs shadow-lg mt-3 cursor-pointer">
-          Tạo Lệnh Rút Tiền
-        </button>
-      </div>
+  <div id="adminRoleModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-sm p-6 rounded-3xl border border-slate-700 shadow-2xl space-y-3 text-xs">
+      <div class="flex justify-between items-center"><h3 class="font-bold text-sm text-white">Cấp Quyền</h3><button id="closeRoleModal" class="text-slate-400 cursor-pointer"><i class="fa-solid fa-xmark"></i></button></div>
+      <input id="adminRoleTargetUser" type="text" disabled class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-slate-400">
+      <select id="adminRoleSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white"><option value="member">Member</option><option value="manager">Manager</option><option value="admin">Admin</option></select>
+      <button id="submitRoleChange" class="w-full py-3 rounded-xl bg-purple-600 text-white font-bold cursor-pointer">Cập Nhật Quyền</button>
     </div>
   </div>
 
@@ -859,51 +548,19 @@
 
     const SUCCESS_IMAGE_URL = 'https://i.ibb.co/689L56L/1000000081.png';
 
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      background: '#0f172a',
-      color: '#ffffff'
-    });
-
-    function showNotify(type, title, text = '') {
-      Swal.fire({ icon: type, title: title, text: text, confirmButtonText: 'Đã hiểu' });
-    }
+    const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, background: '#0f172a', color: '#fff' });
+    function showNotify(type, title, text='') { Swal.fire({ icon: type, title, text, confirmButtonText: 'Đã hiểu' }); }
 
     const ADMIN_CREDENTIALS = { username: 'Admin', password: '123321' };
-
-    let systemConfig = {
-      rate: 1,
-      minWithdraw: 50000,
-      zalo: '0987654321',
-      telegram: '@cskh',
-      groupZalo: 'https://zalo.me/g/example',
-      groupTelegram: 'https://t.me/example',
-      workTime: '08:00 - 23:00 (Hàng ngày)',
-      adminToken: '',
-      adminChatId: '',
-      groupToken: '',
-      groupChatId: ''
-    };
-
-    let customOffers = [];
-    let pendingTaskSubmissions = [];
-    let notifications = [];
+    let systemConfig = { rate: 1, minWithdraw: 50000, zalo: '0987654321', telegram: '@cskh', groupZalo: '#', groupTelegram: '#', workTime: '08:00 - 23:00', adminToken: '', adminChatId: '', groupToken: '', groupChatId: '' };
+    let customOffers = [], pendingTaskSubmissions = [], notifications = [], currentUser = null, currentVNDBalance = 0, cachedAdminUserList = [];
     let userPermissions = JSON.parse(localStorage.getItem('user_permissions_db')) || { 'Admin': { role: 'admin', banned: false } };
-
-    let isRegisterMode = false;
-    let currentUser = null;
-    let currentVNDBalance = 0;
-    let cachedAdminUserList = [];
     let financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
 
     async function loadSystemConfigFromCloud() {
       try {
         const { data } = await supabaseClient.from('system_settings').select('*');
-        if (data && data.length > 0) {
+        if (data) {
           data.forEach(item => {
             if (item.key === 'admin_token') systemConfig.adminToken = item.value;
             if (item.key === 'admin_chat_id') systemConfig.adminChatId = item.value;
@@ -916,13 +573,11 @@
             if (item.key === 'sys_work_time') systemConfig.workTime = item.value;
           });
         }
-      } catch (err) {}
+      } catch (e) {}
     }
 
     async function saveSystemConfigToCloud(key, value) {
-      try {
-        await supabaseClient.from('system_settings').upsert({ key: key, value: value }, { onConflict: 'key' });
-      } catch (err) {}
+      try { await supabaseClient.from('system_settings').upsert({ key, value }, { onConflict: 'key' }); } catch (e) {}
     }
 
     function getTransactionHistoryForUser(userId) {
@@ -944,20 +599,15 @@
       if (customOffers.length > 0) {
         const latestId = customOffers[0].id;
         const dot = document.getElementById('newOfferBadgeDot');
-        if (lastSeenOfferId !== latestId) {
-          if (dot) dot.classList.remove('hidden');
-        } else {
-          if (dot) dot.classList.add('hidden');
-        }
+        if (lastSeenOfferId !== latestId && dot) dot.classList.remove('hidden');
+        else if (dot) dot.classList.add('hidden');
       }
     }
 
     function markOffersAsSeen() {
       if (!currentUser || currentUser === 'Admin' || customOffers.length === 0) return;
-      const latestId = customOffers[0].id;
-      localStorage.setItem(`last_seen_offer_${currentUser}`, latestId);
-      const dot = document.getElementById('newOfferBadgeDot');
-      if (dot) dot.classList.add('hidden');
+      localStorage.setItem(`last_seen_offer_${currentUser}`, customOffers[0].id);
+      document.getElementById('newOfferBadgeDot')?.classList.add('hidden');
     }
 
     function getCompletedTasksForUser(userId) {
@@ -977,91 +627,34 @@
     async function fetchCloudData() {
       await loadSystemConfigFromCloud();
       try {
-        const { data: offersData } = await supabaseClient.from('system_offers').select('*').order('created_at', { ascending: false });
-        if (offersData) {
-          customOffers = offersData.map(o => ({ id: o.id, title: o.title, reward: o.reward, url: o.url, desc: o.description }));
-        }
+        const { data: offers } = await supabaseClient.from('system_offers').select('*').order('created_at', { ascending: false });
+        if (offers) customOffers = offers.map(o => ({ id: o.id, title: o.title, reward: o.reward, url: o.url, desc: o.description }));
 
-        const { data: noticesData } = await supabaseClient.from('system_notices').select('*').order('created_at', { ascending: false });
-        if (noticesData && noticesData.length > 0) {
-          notifications = noticesData.map(n => ({ id: n.id, title: n.title, content: n.content, time: n.time || 'Hôm nay' }));
-        } else {
-          notifications = [{ id: 1, title: 'Thông báo hệ thống', content: 'Hoàn thành nhiệm vụ và tải ảnh chứng chỉ lên để Admin duyệt cộng tiền.', time: 'Hôm nay' }];
-        }
+        const { data: notices } = await supabaseClient.from('system_notices').select('*').order('created_at', { ascending: false });
+        if (notices && notices.length > 0) notifications = notices;
+        else notifications = [{ id: 1, title: 'Thông báo hệ thống', content: 'Hoàn thành nhiệm vụ và tải ảnh chứng chỉ để Admin duyệt.', time: 'Hôm nay' }];
 
-        const { data: pendingData } = await supabaseClient.from('pending_tasks').select('*').order('created_at', { ascending: false });
-        if (pendingData) {
-          pendingTaskSubmissions = pendingData.map(p => ({
-            id: p.id,
-            user: p.user_id,
-            title: p.title,
-            reward: p.reward,
-            proofText: p.proof_text,
-            proofImage: p.proof_image,
-            time: p.time
-          }));
-        }
-      } catch (err) {}
+        const { data: pend } = await supabaseClient.from('pending_tasks').select('*').order('created_at', { ascending: false });
+        if (pend) pendingTaskSubmissions = pend.map(p => ({ id: p.id, user: p.user_id, title: p.title, reward: p.reward, proofText: p.proof_text, proofImage: p.proof_image, time: p.time }));
+      } catch (e) {}
     }
 
-    async function sendAdminAlert(messageText) {
+    async function sendAdminAlert(msg) {
       await loadSystemConfigFromCloud();
       if (!systemConfig.adminToken || !systemConfig.adminChatId) return;
-      try {
-        const url = `https://api.telegram.org/bot${systemConfig.adminToken}/sendMessage`;
-        await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: systemConfig.adminChatId, text: messageText, parse_mode: 'HTML' })
-        });
-      } catch (err) {}
+      try { await fetch(`https://api.telegram.org/bot${systemConfig.adminToken}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: systemConfig.adminChatId, text: msg, parse_mode: 'HTML' }) }); } catch(e){}
     }
 
-    async function sendGroupAlert(messageText) {
+    async function sendGroupAlert(msg) {
       await loadSystemConfigFromCloud();
       if (!systemConfig.groupToken || !systemConfig.groupChatId) return;
-      try {
-        const url = `https://api.telegram.org/bot${systemConfig.groupToken}/sendMessage`;
-        const webUrl = window.location.href.split('?')[0];
-        await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: systemConfig.groupChatId,
-            text: messageText,
-            parse_mode: 'HTML',
-            reply_markup: {
-              inline_keyboard: [
-                [{ text: '🌐 Truy Cập Ngay Vào Web', url: webUrl }]
-              ]
-            }
-          })
-        });
-      } catch (err) {}
+      try { await fetch(`https://api.telegram.org/bot${systemConfig.groupToken}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: systemConfig.groupChatId, text: msg, parse_mode: 'HTML' }) }); } catch(e){}
     }
 
-    async function sendGroupPhotoAlert(photoUrl, captionText) {
+    async function sendGroupPhotoAlert(photo, caption) {
       await loadSystemConfigFromCloud();
       if (!systemConfig.groupToken || !systemConfig.groupChatId) return;
-      try {
-        const url = `https://api.telegram.org/bot${systemConfig.groupToken}/sendPhoto`;
-        const webUrl = window.location.href.split('?')[0];
-        await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: systemConfig.groupChatId,
-            photo: photoUrl,
-            caption: captionText,
-            parse_mode: 'HTML',
-            reply_markup: {
-              inline_keyboard: [
-                [{ text: '🌐 Truy Cập Ngay Vào Web', url: webUrl }]
-              ]
-            }
-          })
-        });
-      } catch (err) {}
+      try { await fetch(`https://api.telegram.org/bot${systemConfig.groupToken}/sendPhoto`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: systemConfig.groupChatId, photo, caption, parse_mode: 'HTML' }) }); } catch(e){}
     }
 
     const vietnameseFullNames = [
@@ -1092,30 +685,11 @@
 
     function triggerSyncedWithdrawSuccess(user, amount, info) {
       const timeOrder = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-      
-      sendGroupAlert(`
-💳 <b>YÊU CẦU RÚT TIỀN MỚI!</b>
-━━━━━━━━━━━━━━━━━━━
-👤 <b>Thành viên:</b> <code>${user}</code>
-💰 <b>Số tiền rút:</b> <code>${amount.toLocaleString('vi-VN')} VNĐ</code>
-🏦 <b>Thụ hưởng:</b> <code>${info}</code>
-⏰ <b>Thời gian:</b> <code>${timeOrder}</code>
-━━━━━━━━━━━━━━━━━━━
-      `.trim());
+      sendGroupAlert(`💳 <b>YÊU CẦU RÚT TIỀN MỚI!</b>\n👤 Thành viên: <code>${user}</code>\n💰 Số tiền: <code>${amount.toLocaleString('vi-VN')} VNĐ</code>\n🏦 Nhận: <code>${info}</code>\n⏰ ${timeOrder}`);
 
       setTimeout(async () => {
         const timeSuccess = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-        const successCaption = `
-✅ <b>RÚT TIỀN THÀNH CÔNG!</b>
-━━━━━━━━━━━━━━━━━━━
-👤 <b>Tài khoản / Tên:</b> <b>${user.toUpperCase()}</b>
-💰 <b>Số tiền nhận:</b> <code>+${amount.toLocaleString('vi-VN')} VNĐ</code>
-🏦 <b>Thụ hưởng:</b> <code>${info}</code>
-📌 <b>Trạng thái:</b> <b style="color:#22c55e">Thành công</b>
-⏰ <b>Thời gian:</b> <code>${timeSuccess}</code>
-━━━━━━━━━━━━━━━━━━━
-        `.trim());
-        await sendGroupPhotoAlert(SUCCESS_IMAGE_URL, successCaption);
+        await sendGroupPhotoAlert(SUCCESS_IMAGE_URL, `✅ <b>RÚT TIỀN THÀNH CÔNG!</b>\n👤 Tài khoản: <b>${user.toUpperCase()}</b>\n💰 Nhận: <code>+${amount.toLocaleString('vi-VN')} VNĐ</code>\n🏦 Nhận: <code>${info}</code>\n📌 Trạng thái: <b>Thành công</b>\n⏰ ${timeSuccess}`);
       }, 60000); 
     }
 
@@ -1126,24 +700,19 @@
       if (autoFakeIntervalId) {
         clearInterval(autoFakeIntervalId);
         autoFakeIntervalId = null;
-        if (btn) { btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Bật Auto Ảo'; btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md'; }
-        showNotify('info', 'Đã Tắt Auto', 'Đã dừng tự động bắn lệnh rút ảo.');
+        if (btn) { btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Bật Auto Ảo'; btn.className = 'px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold cursor-pointer'; }
+        showNotify('info', 'Đã Tắt Auto', 'Đã dừng tự động bắn lệnh rút.');
       } else {
         const sec = Number(selectSec?.value || 60) * 1000;
         const randomUsernames = ['hoangnam99', 'ductuan88', 'thanhhang68', 'vanminh123', 'ngocanh79', 'tuanKini', 'phuongthao9x', 'quanghuy2k', 'ducminhpro', 'thanhdat55'];
-
         autoFakeIntervalId = setInterval(() => {
           const randUser = randomUsernames[Math.floor(Math.random() * randomUsernames.length)];
           const baseAmount = Math.floor(Math.random() * 15) * 50000 + 70000;
           const randomOdd = Math.floor(Math.random() * 890) + 110;
-          const randAmount = baseAmount + randomOdd;
-          const randInfo = getRandomValidAccountInfo();
-
-          triggerSyncedWithdrawSuccess(randUser, randAmount, randInfo);
+          triggerSyncedWithdrawSuccess(randUser, baseAmount + randomOdd, getRandomValidAccountInfo());
         }, sec);
-
-        if (btn) { btn.innerHTML = '<i class="fa-solid fa-stop mr-1"></i> Dừng Auto'; btn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs cursor-pointer transition shadow-md animate-pulse'; }
-        showNotify('success', 'Đã Bật Auto', `Đang tự động bắn lệnh rút ngẫu nhiên mỗi ${selectSec.value} giây!`);
+        if (btn) { btn.innerHTML = '<i class="fa-solid fa-stop mr-1"></i> Dừng Auto'; btn.className = 'px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold cursor-pointer animate-pulse'; }
+        showNotify('success', 'Đã Bật Auto', `Đang tự động bắn lệnh mỗi ${selectSec.value} giây!`);
       }
     }
 
@@ -1151,18 +720,13 @@
       const u = document.getElementById('fakeUser').value.trim();
       let a = Number(document.getElementById('fakeAmount').value);
       const i = document.getElementById('fakeInfo').value.trim();
-      if (!u) return showNotify('warning', 'Thiếu', 'Vui lòng nhập tên tài khoản CTV!');
-      if (!a || a <= 0) {
-        a = (Math.floor(Math.random() * 15) * 50000 + 70000) + (Math.floor(Math.random() * 890) + 110);
-      }
-      const infoToUse = i || getRandomValidAccountInfo();
-      
-      triggerSyncedWithdrawSuccess(u, a, infoToUse);
-
+      if (!u) return showNotify('warning', 'Thiếu', 'Nhập tên CTV!');
+      if (!a || a <= 0) a = (Math.floor(Math.random() * 15) * 50000 + 70000) + (Math.floor(Math.random() * 890) + 110);
+      triggerSyncedWithdrawSuccess(u, a, i || getRandomValidAccountInfo());
       document.getElementById('fakeUser').value = '';
       document.getElementById('fakeAmount').value = '';
       document.getElementById('fakeInfo').value = '';
-      showNotify('success', 'Thành Công', 'Đã gửi lệnh! Sau 60s bot sẽ tự động gửi ảnh tích xanh thành công.');
+      showNotify('success', 'Thành Công', 'Đã gửi lệnh! Sau 60s bot gửi ảnh tích xanh.');
     }
 
     async function generateAndSendAutoBill() {
@@ -1171,19 +735,14 @@
       const n = document.getElementById('genBillName').value.trim();
       const s = document.getElementById('genBillStk').value.trim();
       const nt = document.getElementById('genBillNote').value.trim() || 'THANH TOAN THUONG KEO';
-      if (!n || !s) return showNotify('warning', 'Thiếu', 'Điền đủ tên và số tài khoản/SĐT!');
-      if (!a || a <= 0) {
-        a = (Math.floor(Math.random() * 15) * 50000 + 70000) + (Math.floor(Math.random() * 890) + 110);
-      }
-
-      const infoText = `${b} - ${s} (${n.toUpperCase()})`;
-      triggerSyncedWithdrawSuccess(n.toLowerCase().replace(/\s+/g, ''), a, infoText);
-
+      if (!n || !s) return showNotify('warning', 'Thiếu', 'Điền đủ tên và STK!');
+      if (!a || a <= 0) a = (Math.floor(Math.random() * 15) * 50000 + 70000) + (Math.floor(Math.random() * 890) + 110);
+      triggerSyncedWithdrawSuccess(n.toLowerCase().replace(/\s+/g, ''), a, `${b} - ${s} (${n.toUpperCase()})`);
       document.getElementById('genBillAmount').value = '';
       document.getElementById('genBillName').value = '';
       document.getElementById('genBillStk').value = '';
       document.getElementById('genBillNote').value = '';
-      showNotify('success', 'Thành Công', 'Đã gửi lệnh! Sau 60s bot sẽ tự động gửi ảnh tích xanh.');
+      showNotify('success', 'Thành Công', 'Đã gửi lệnh! Sau 60s bot gửi ảnh tích xanh.');
     }
 
     async function testTelegramBotAlert() {
@@ -1191,31 +750,11 @@
       const aChatId = document.getElementById('adminCfgAdminChatId')?.value.trim();
       const gToken = document.getElementById('adminCfgGroupToken')?.value.trim();
       const gChatId = document.getElementById('adminCfgGroupChatId')?.value.trim();
-
-      if ((!aToken || !aChatId) && (!gToken || !gChatId)) {
-        return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng nhập đầy đủ Bot Token và Chat ID!');
-      }
+      if (!aToken || !aChatId) return showNotify('warning', 'Thiếu', 'Nhập đủ cấu hình Bot Token và Chat ID!');
       try {
-        const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-        if (aToken && aChatId) {
-          await fetch(`https://api.telegram.org/bot${aToken}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: aChatId, text: `👑 <b>TEST ADMIN BOT THÀNH CÔNG!</b>\n⏰ <code>${timeNow}</code>`, parse_mode: 'HTML' })
-          });
-        }
-        if (gToken && gChatId) {
-          const webUrl = window.location.href.split('?')[0];
-          await fetch(`https://api.telegram.org/bot${gToken}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: gChatId, text: `🔔 <b>TEST GROUP BOT THÀNH CÔNG!</b>\n⏰ <code>${timeNow}</code>`, parse_mode: 'HTML' })
-          });
-        }
-        showNotify('success', 'Thành Công', 'Đã test bot thành công!');
-      } catch (err) {
-        showNotify('error', 'Lỗi', 'Không thể kết nối Telegram.');
-      }
+        await fetch(`https://api.telegram.org/bot${aToken}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: aChatId, text: `👑 <b>TEST BOT THÀNH CÔNG!</b>`, parse_mode: 'HTML' }) });
+        showNotify('success', 'Thành Công', 'Đã bắn tin thử nghiệm thành công!');
+      } catch (e) { showNotify('error', 'Lỗi', 'Không thể kết nối Telegram.'); }
     }
 
     function toggleAuthMode() {
@@ -1224,40 +763,26 @@
       document.getElementById('btnAuthSubmit').innerText = isRegisterMode ? 'Tạo Tài Khoản' : 'Đăng Nhập Hệ Thống';
       document.getElementById('authSwitchText').innerText = isRegisterMode ? 'Đã có tài khoản?' : 'Chưa có tài khoản?';
       document.getElementById('authSwitchBtn').innerText = isRegisterMode ? 'Đăng nhập ngay' : 'Đăng ký thành viên';
-      
-      const confirmContainer = document.getElementById('confirmPasswordContainer');
-      if (isRegisterMode) {
-        confirmContainer.classList.remove('hidden');
-      } else {
-        confirmContainer.classList.add('hidden');
-      }
+      document.getElementById('confirmPasswordContainer')?.classList.toggle('hidden', !isRegisterMode);
     }
 
     async function handleAuthSubmit() {
-      const uInput = document.getElementById('authUsername');
-      const pInput = document.getElementById('authPassword');
-      const confirmInput = document.getElementById('authConfirmPassword');
-
-      if (!uInput || !pInput) return;
-      const u = uInput.value.trim();
-      const p = pInput.value.trim();
-
+      const u = document.getElementById('authUsername').value.trim();
+      const p = document.getElementById('authPassword').value.trim();
       if (!u || !p) return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng điền đầy đủ tài khoản và mật khẩu!');
 
       userPermissions = JSON.parse(localStorage.getItem('user_permissions_db')) || userPermissions;
       if (userPermissions[u]?.banned) return showNotify('error', 'Bị Khóa', 'Tài khoản đã bị khóa!');
 
       if (isRegisterMode) {
-        const confirmP = confirmInput.value.trim();
-        if (p !== confirmP) return showNotify('error', 'Lỗi Mật Khẩu', 'Mật khẩu nhập lại không khớp!');
-        if (u.toLowerCase() === 'admin') return showNotify('error', 'Lỗi', 'Tên tài khoản bảo lưu!');
+        const cp = document.getElementById('authConfirmPassword').value.trim();
+        if (p !== cp) return showNotify('error', 'Lỗi', 'Mật khẩu nhập lại không khớp!');
+        if (u.toLowerCase() === 'admin') return showNotify('error', 'Lỗi', 'Tên bảo lưu!');
 
-        const { error } = await supabaseClient.from('users_task').insert([{ user_id: u, points: 0 }]);
-        if (error) return showNotify('error', 'Lỗi', error.message);
-
+        await supabaseClient.from('users_task').insert([{ user_id: u, points: 0 }]);
         userPermissions[u] = { role: 'member', banned: false };
         localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
-        showNotify('success', 'Thành Công', 'Đăng ký thành công, hãy đăng nhập!');
+        showNotify('success', 'Thành Công', 'Đăng ký thành công!');
         toggleAuthMode();
       } else {
         if (u === ADMIN_CREDENTIALS.username && p === ADMIN_CREDENTIALS.password) {
@@ -1266,9 +791,7 @@
           return;
         }
         let { data } = await supabaseClient.from('users_task').select('*').eq('user_id', u).single();
-        if (!data) {
-          await supabaseClient.from('users_task').insert([{ user_id: u, points: 0 }]);
-        }
+        if (!data) await supabaseClient.from('users_task').insert([{ user_id: u, points: 0 }]);
         localStorage.setItem('task_auth_user', u);
         initSession(u, userPermissions[u]?.role === 'admin' || userPermissions[u]?.role === 'manager');
       }
@@ -1281,8 +804,8 @@
       document.getElementById('drawerCreatedAt').innerText = new Date().toLocaleTimeString('vi-VN');
 
       if (isAdmin || userId === 'Admin') {
-        document.getElementById('roleBadge').classList.remove('hidden');
-        document.getElementById('btnDrawerAdmin').classList.remove('hidden');
+        document.getElementById('roleBadge')?.classList.remove('hidden');
+        document.getElementById('btnDrawerAdmin')?.classList.remove('hidden');
         document.getElementById('drawerRoleTag').innerText = 'Administrator';
       }
 
@@ -1301,20 +824,7 @@
       const content = document.getElementById('historyModalContent');
       if (!m || !content) return;
       const txList = getTransactionHistoryForUser(currentUser);
-      if (txList.length === 0) {
-        content.innerHTML = '<p class="text-center text-slate-500 py-4">Chưa có giao dịch nào được ghi nhận.</p>';
-      } else {
-        content.innerHTML = txList.map(tx => `
-          <div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between">
-            <div>
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border">${tx.type.toUpperCase()}</span>
-              <p class="font-bold text-white text-xs mt-1.5">${tx.desc}</p>
-              <p class="text-[10px] text-slate-500 font-mono mt-0.5">${tx.time}</p>
-            </div>
-            <div class="text-right font-black text-sm text-emerald-400">+${tx.amount.toLocaleString('vi-VN')} đ</div>
-          </div>
-        `).join('');
-      }
+      content.innerHTML = txList.length === 0 ? '<p class="text-center text-slate-500 py-4">Chưa có giao dịch.</p>' : txList.map(tx => `<div class="bg-slate-900 p-3 rounded-xl flex justify-between items-center text-xs"><span><b>${tx.type.toUpperCase()}:</b> ${tx.desc}</span><span class="text-emerald-400 font-bold">+${tx.amount.toLocaleString()}đ</span></div>`).join('');
       m.classList.remove('hidden');
     }
     function closeHistoryModal() { document.getElementById('historyModal')?.classList.add('hidden'); }
@@ -1327,15 +837,8 @@
 
     function handleWithdrawMethodChange() {
       const method = document.getElementById('withdrawMethod')?.value;
-      const bFields = document.getElementById('withdrawBankFields');
-      const mFields = document.getElementById('withdrawMomoFields');
-      if (method === 'momo') {
-        bFields?.classList.add('hidden');
-        mFields?.classList.remove('hidden');
-      } else {
-        mFields?.classList.add('hidden');
-        bFields?.classList.remove('hidden');
-      }
+      document.getElementById('withdrawBankFields')?.classList.toggle('hidden', method === 'momo');
+      document.getElementById('withdrawMomoFields')?.classList.toggle('hidden', method !== 'momo');
     }
 
     function openMenu() {
@@ -1350,36 +853,20 @@
       setTimeout(() => { document.getElementById('menuDrawer')?.classList.add('pointer-events-none'); }, 300);
     }
 
-    function goToHome() {
-      toggleView('ctv');
-      markOffersAsSeen();
-      popWelcomeNotice();
+    function goToHome() { toggleView('ctv'); markOffersAsSeen(); }
+    function handleLogout() { localStorage.removeItem('task_auth_user'); location.reload(); }
+
+    async function syncUserData() {
+      if (!currentUser) return;
+      try {
+        const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', currentUser).single();
+        currentVNDBalance = (Number(data?.points) || 0) * systemConfig.rate;
+      } catch (e) { currentVNDBalance = 0; }
+      document.getElementById('navBalanceVND').innerText = currentVNDBalance.toLocaleString('vi-VN');
+      document.getElementById('mainBalanceVND').innerText = currentVNDBalance.toLocaleString('vi-VN');
     }
 
-    function handleLogout() {
-      localStorage.removeItem('task_auth_user');
-      location.reload();
-    }
-
-    function submitAdminChangePassword() {
-      const u = document.getElementById('adminTargetUser').value;
-      const p = document.getElementById('adminNewUserPassword').value.trim();
-      if (!p) return showNotify('warning', 'Lỗi', 'Nhập mật khẩu mới!');
-      closeAdminPasswordModal();
-      showNotify('success', 'Thành Công', `Đã đổi mật khẩu cho ${u}`);
-    }
-
-    function submitAdminChangeRole() {
-      const u = document.getElementById('adminRoleTargetUser').value;
-      const r = document.getElementById('adminRoleSelect').value;
-      userPermissions[u] = userPermissions[u] || {};
-      userPermissions[u].role = r;
-      localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
-      closeAdminRoleModal();
-      showNotify('success', 'Thành Công', `Đã cập nhật quyền ${r}`);
-    }
-
-    function submitWithdrawRequest() {
+    async function submitWithdrawRequest() {
       const a = Number(document.getElementById('withdrawAmountVND').value);
       const n = document.getElementById('withdrawBankNumber').value.trim();
       const o = document.getElementById('withdrawBankOwner').value.trim();
@@ -1389,541 +876,10 @@
       localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
       sendAdminAlert(`💳 Yêu cầu rút mới từ <b>${currentUser}</b> (${a}đ)`);
       closeWithdrawModal();
-      showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền!');
+      showNotify('success', 'Thành Công', 'Đã tạo lệnh rút!');
     }
 
-    async function syncUserData() {
-      if (!currentUser) return;
-      try {
-        const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', currentUser).single();
-        if (data) {
-          currentVNDBalance = (Number(data.points) || 0) * systemConfig.rate;
-        } else {
-          currentVNDBalance = 0;
-        }
-      } catch (e) {
-        currentVNDBalance = 0;
-      }
-      const navB = document.getElementById('navBalanceVND');
-      const mainB = document.getElementById('mainBalanceVND');
-      if (navB) navB.innerText = currentVNDBalance.toLocaleString('vi-VN');
-      if (mainB) mainB.innerText = currentVNDBalance.toLocaleString('vi-VN');
-    }
-
-    async function fetchAutoOffers() {
-      markOffersAsSeen();
-      const container = document.getElementById('nativeTaskList');
-      const countText = document.getElementById('availableTasksCount');
-      const icon = document.getElementById('taskRefreshIcon');
-      if (!container) return;
-      if (icon) icon.classList.add('fa-spin');
-
-      await fetchCloudData();
-      const completedIds = getCompletedTasksForUser(currentUser);
-      const availableOffers = customOffers.filter(o => !completedIds.includes(o.id));
-
-      if (availableOffers.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full text-center py-14 space-y-3">
-            <div class="w-14 h-14 bg-slate-800 text-slate-400 rounded-3xl flex items-center justify-center mx-auto text-2xl border border-slate-700 shadow-inner">
-              <i class="fa-solid fa-circle-check text-emerald-400"></i>
-            </div>
-            <p class="text-white font-black text-sm">Bạn đã hoàn thành tất cả nhiệm vụ!</p>
-            <p class="text-slate-500 text-xs">Vui lòng quay lại sau khi Admin đăng thêm chiến dịch mới.</p>
-          </div>
-        `;
-        if (countText) countText.innerText = `0 Kèo sẵn sàng`;
-        if (icon) setTimeout(() => icon.classList.remove('fa-spin'), 400);
-        return;
-      }
-
-      if (countText) countText.innerText = `${availableOffers.length} Kèo sẵn sàng`;
-      container.innerHTML = availableOffers.map(t => `
-        <div class="glass-card rounded-3xl p-5 flex flex-col justify-between space-y-4 shadow-xl">
-          <div>
-            <span class="px-2.5 py-1 rounded-xl bg-emerald-500/10 text-[10px] text-emerald-400 font-extrabold border border-emerald-500/25">Độc Quyền</span>
-            <h3 class="font-black text-white text-sm sm:text-base mt-3">${t.title}</h3>
-            <p class="text-slate-400 text-xs mt-1.5 leading-relaxed whitespace-pre-line">${t.desc || 'Không có mô tả chi tiết'}</p>
-          </div>
-          <div class="pt-3.5 border-t border-slate-800/80 flex items-center justify-between">
-            <span class="text-sm sm:text-base font-black text-emerald-400">+${Number(t.reward).toLocaleString('vi-VN')} đ</span>
-            <button onclick="handleStartTask('${t.id}', '${t.title}', '${t.url}', ${t.reward})" class="px-4.5 py-2.5 rounded-2xl gradient-primary text-white text-xs font-extrabold shadow-md cursor-pointer hover:opacity-90 transition">
-              Làm Kèo <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-            </button>
-          </div>
-        </div>
-      `).join('');
-
-      if (icon) setTimeout(() => icon.classList.remove('fa-spin'), 400);
-    }
-
-    async function handleStartTask(taskId, taskTitle, taskUrl, rewardAmount) {
-      if (!taskUrl || taskUrl === '#') return showNotify('warning', 'Thiếu Link', 'Kèo này chưa có đường dẫn đối tác!');
-      window.open(taskUrl, '_blank');
-
-      const { value: formValues } = await Swal.fire({
-        title: 'Xác Nhận Hoàn Thành Kèo',
-        html: `
-          <div class="text-left space-y-3.5 text-xs">
-            <p class="text-slate-300 font-medium">Nhập ghi chú hoặc mã giao dịch (SĐT / Email đăng ký):</p>
-            <input id="swal-input1" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white focus:outline-none" placeholder="Ví dụ: 0987654321...">
-            <p class="text-slate-300 font-medium pt-1">Tải lên ảnh chụp màn hình (Chứng chỉ / Bằng chứng):</p>
-            <input type="file" id="swal-input2" accept="image/*" class="w-full text-slate-400 text-xs file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer">
-          </div>
-        `,
-        focusConfirm: false,
-        showCancelButton: true,
-        confirmButtonText: 'Gửi Bằng Chứng',
-        cancelButtonText: 'Hủy',
-        preConfirm: () => {
-          const note = document.getElementById('swal-input1').value;
-          const fileInput = document.getElementById('swal-input2');
-          return new Promise((resolve, reject) => {
-            if (fileInput.files.length > 0) {
-              const reader = new FileReader();
-              reader.onload = e => resolve({ note, image: e.target.result });
-              reader.onerror = error => reject(error);
-              reader.readAsDataURL(fileInput.files[0]);
-            } else {
-              resolve({ note: note || 'Không có ghi chú', image: null });
-            }
-          });
-        }
-      });
-
-      if (formValues) {
-        const newSubId = Date.now();
-        const timeStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-        
-        await supabaseClient.from('pending_tasks').insert([{
-          id: newSubId,
-          user_id: currentUser,
-          title: taskTitle,
-          reward: rewardAmount,
-          proof_text: formValues.note,
-          proof_image: formValues.image,
-          time: timeStr
-        }]);
-
-        markTaskAsCompletedForUser(currentUser, taskId);
-        
-        const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-        sendAdminAlert(`
-📥 <b>CÓ BẰNG CHỨNG NHIỆM VỤ MỚI CẦN DUYỆT!</b>
-━━━━━━━━━━━━━━━━━━━
-👤 <b>Thành viên:</b> <code>${currentUser}</code>
-🎯 <b>Tên Kèo:</b> ${taskTitle}
-💰 <b>Thưởng:</b> <code>+${rewardAmount.toLocaleString('vi-VN')} VNĐ</code>
-💬 <b>Ghi chú:</b> <code>${formValues.note}</code>
-⏰ <b>Thời gian:</b> <code>${timeNow}</code>
-━━━━━━━━━━━━━━━━━━━
-        `.trim());
-
-        showNotify('success', 'Đã Gửi Bằng Chứng', 'Yêu cầu của bạn đã được gửi cho Admin duyệt.');
-        fetchAutoOffers();
-      }
-    }
-
-    async function toggleView(view) {
-      const ctvV = document.getElementById('ctvView');
-      const adminV = document.getElementById('adminView');
-      if (view === 'admin') {
-        if (ctvV) ctvV.classList.add('hidden');
-        if (adminV) adminV.classList.remove('hidden');
-        await fetchCloudData();
-        await loadAdminUserList();
-        renderAdminOfferList();
-        renderAdminFinanceTable();
-        renderAdminTaskApprovals();
-        loadAdminSupportFields();
-        renderAdminNoticeManageList();
-      } else {
-        if (adminV) adminV.classList.add('hidden');
-        if (ctvV) ctvV.classList.remove('hidden');
-        await syncUserData();
-        fetchAutoOffers();
-      }
-    }
-
-    function switchAdminTab(tabId) {
-      document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('#adminView button[id^="btnTab"]').forEach(b => {
-        b.className = 'px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition';
-      });
-      const targetTab = document.getElementById(tabId);
-      if (targetTab) targetTab.classList.remove('hidden');
-      const btnId = 'btn' + tabId.charAt(0).toUpperCase() + tabId.slice(1);
-      const targetBtn = document.getElementById(btnId);
-      if (targetBtn) targetBtn.className = 'px-4 py-3 rounded-2xl bg-blue-600 text-white shadow-lg whitespace-nowrap flex items-center gap-2 cursor-pointer transition';
-    }
-
-    async function renderAdminTaskApprovals() {
-      await fetchCloudData();
-      const tbody = document.getElementById('adminTaskApprovalsTable');
-      const badge = document.getElementById('pendingTaskBadgeCount');
-      if (badge) badge.innerText = pendingTaskSubmissions.length;
-      if (!tbody) return;
-
-      if (pendingTaskSubmissions.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-slate-500">Chưa có bằng chứng nào chờ duyệt.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = pendingTaskSubmissions.map((s) => {
-        const imgTag = s.proofImage ? `<a href="${s.proofImage}" target="_blank"><img src="${s.proofImage}" class="w-16 h-16 object-cover rounded-2xl border border-slate-700 hover:scale-105 transition shadow"></a>` : '<span class="text-slate-500">Không có ảnh</span>';
-        return `
-          <tr class="hover:bg-slate-800/40">
-            <td class="p-3.5 text-slate-400 font-mono text-[11px]">${s.time}</td>
-            <td class="p-3.5 font-black text-white">${s.user}</td>
-            <td class="p-3.5 text-slate-300">${s.title} <b class="text-emerald-400 font-black">(+${s.reward.toLocaleString('vi-VN')}đ)</b></td>
-            <td class="p-3.5 space-y-1">
-              <p class="font-mono text-amber-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">${s.proofText || ''}</p>
-              ${imgTag}
-            </td>
-            <td class="p-3.5 text-right space-x-2">
-              <button onclick="approveTaskSubmission('${s.id}')" class="px-3.5 py-2 bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 rounded-xl font-bold cursor-pointer transition">Duyệt Cộng</button>
-              <button onclick="rejectTaskSubmission('${s.id}')" class="px-3.5 py-2 bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 rounded-xl font-bold cursor-pointer transition">Hủy</button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    async function approveTaskSubmission(subId) {
-      await fetchCloudData();
-      const sub = pendingTaskSubmissions.find(p => String(p.id) === String(subId));
-      if (!sub) return;
-      const pointDiff = sub.reward / systemConfig.rate;
-
-      let { data } = await supabaseClient.from('users_task').select('points').eq('user_id', sub.user).single();
-      if (!data) {
-        await supabaseClient.from('users_task').insert([{ user_id: sub.user, points: 0 }]);
-        data = { points: 0 };
-      }
-
-      const currentPoints = Number(data.points) || 0;
-      const newPoints = currentPoints + pointDiff;
-
-      const { error } = await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', sub.user);
-      if (error) return showNotify('error', 'Lỗi Duyệt', error.message);
-
-      addTransactionHistory(sub.user, 'earn', sub.reward, `Hoàn thành nhiệm vụ: ${sub.title}`);
-
-      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-      sendAdminAlert(`✅ Admin đã duyệt thưởng cho <b>${sub.user}</b> (+${sub.reward.toLocaleString('vi-VN')}đ)`);
-      sendGroupAlert(`
-🎉 <b>CHÚ MỪNG THÀNH VIÊN NHẬN THƯỞNG!</b>
-━━━━━━━━━━━━━━━━━━━
-👤 <b>Thành viên:</b> <code>${sub.user}</code>
-🎯 <b>Hoàn thành kèo:</b> ${sub.title}
-💰 <b>Nhận thưởng:</b> <code>+${sub.reward.toLocaleString('vi-VN')} VNĐ</code>
-⏰ <b>Thời gian:</b> <code>${timeNow}</code>
-━━━━━━━━━━━━━━━━━━━
-      `.trim());
-
-      await supabaseClient.from('pending_tasks').delete().eq('id', subId);
-
-      await renderAdminTaskApprovals();
-      await loadAdminUserList();
-
-      Toast.fire({ icon: 'success', title: `Đã duyệt và cộng +${sub.reward.toLocaleString('vi-VN')}đ cho tài khoản ${sub.user}!` });
-      showNotify('success', 'Thành Công', `Đã duyệt cộng +${sub.reward.toLocaleString('vi-VN')}đ cho thành viên ${sub.user}`);
-    }
-
-    async function rejectTaskSubmission(subId) {
-      await fetchCloudData();
-      const sub = pendingTaskSubmissions.find(p => String(p.id) === String(subId));
-      if (sub) {
-        addTransactionHistory(sub.user, 'reject', 0, `Bằng chứng nhiệm vụ "${sub.title}" bị từ chối.`);
-      }
-      await supabaseClient.from('pending_tasks').delete().eq('id', subId);
-      await renderAdminTaskApprovals();
-      Toast.fire({ icon: 'info', title: 'Đã từ chối bằng chứng nhiệm vụ.' });
-      showNotify('info', 'Đã Hủy', 'Đã từ chối bằng chứng nhiệm vụ.');
-    }
-
-    async function adminAddNewOffer() {
-      const title = document.getElementById('newOfferTitle').value.trim();
-      const reward = Number(document.getElementById('newOfferReward').value);
-      const url = document.getElementById('newOfferUrl').value.trim();
-      const desc = document.getElementById('newOfferDesc').value.trim();
-      if (!title || !reward || !url) return showNotify('warning', 'Thiếu Dữ Liệu', 'Nhập đủ thông tin kèo!');
-
-      const { error } = await supabaseClient.from('system_offers').insert([{ title, reward, url, description: desc }]);
-      if (error) return showNotify('error', 'Lỗi Đăng Kèo', error.message);
-
-      document.getElementById('newOfferTitle').value = '';
-      document.getElementById('newOfferReward').value = '';
-      document.getElementById('newOfferUrl').value = '';
-      document.getElementById('newOfferDesc').value = '';
-      
-      localStorage.removeItem('last_seen_offer_all');
-
-      const timeNow = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-      await sendGroupAlert(`
-🔥 <b>CÓ KÈO NHIỆM VỤ MỚI TRÊN SÀN!</b>
-━━━━━━━━━━━━━━━━━━━
-📌 <b>Tên Kèo:</b> <b>${title}</b>
-💵 <b>Thưởng Nhận:</b> <code>+${reward.toLocaleString('vi-VN')} VNĐ</code>
-📝 <b>Mô tả:</b> 
-${desc || 'Làm nhiệm vụ ngay để nhận thưởng!'}
-⏰ <b>Thời gian:</b> <code>${timeNow}</code>
-━━━━━━━━━━━━━━━━━━━
-      `.trim());
-
-      showNotify('success', 'Thành Công', 'Đã đăng kèo mới thành công! Bot công khai đã bắn tin báo về nhóm.');
-      await renderAdminOfferList();
-      fetchAutoOffers();
-    }
-
-    async function renderAdminOfferList() {
-      await fetchCloudData();
-      const list = document.getElementById('adminOfferManageList');
-      if (!list) return;
-      if (customOffers.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có kèo nào.</p>';
-      list.innerHTML = customOffers.map((o) => `
-        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex justify-between items-center text-xs shadow-inner">
-          <div><p class="font-black text-white text-sm">${o.title} <span class="text-emerald-400 font-black ml-2">+${Number(o.reward).toLocaleString('vi-VN')}đ</span></p></div>
-          <button onclick="adminDeleteOffer('${o.id}')" class="p-2.5 text-rose-400 hover:text-rose-300 cursor-pointer transition"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      `).join('');
-    }
-
-    async function adminDeleteOffer(offerId) {
-      await supabaseClient.from('system_offers').delete().eq('id', offerId);
-      await renderAdminOfferList();
-      fetchAutoOffers();
-      Toast.fire({ icon: 'info', title: 'Đã xóa kèo.' });
-    }
-
-    async function loadAdminUserList() {
-      const container = document.getElementById('adminUserCardsContainer');
-      if (!container) return;
-      container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-8 text-xs">Đang tải danh sách thành viên...</div>';
-      
-      const { data } = await supabaseClient.from('users_task').select('*').order('created_at', { ascending: false });
-      if (data) {
-        cachedAdminUserList = data;
-        renderAdminUserTable(cachedAdminUserList);
-      }
-    }
-
-    function renderAdminUserTable(list) {
-      const container = document.getElementById('adminUserCardsContainer');
-      if (!container) return;
-      if (!list || list.length === 0) {
-        container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-8 text-xs">Không có tài khoản nào phù hợp.</div>';
-        return;
-      }
-
-      container.innerHTML = list.map(u => {
-        const vnd = (Number(u.points) || 0) * systemConfig.rate;
-        const role = userPermissions[u.user_id]?.role || (u.user_id === 'Admin' ? 'admin' : 'member');
-        const isBanned = userPermissions[u.user_id]?.banned || false;
-
-        let roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/35">Member</span>';
-        if (role === 'admin') roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/35">Admin</span>';
-        if (role === 'manager') roleBadge = '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/35">Manager</span>';
-
-        const statusBadge = isBanned 
-          ? '<span class="text-rose-400 font-bold text-[10px] sm:text-[11px] flex items-center gap-1 whitespace-nowrap"><i class="fa-solid fa-ban text-[9px]"></i> Khóa</span>'
-          : '<span class="text-emerald-400 font-bold text-[10px] sm:text-[11px] flex items-center gap-1 whitespace-nowrap"><i class="fa-solid fa-circle-check text-[9px]"></i> Hoạt Động</span>';
-
-        return `
-          <div class="glass-card rounded-3xl p-4 sm:p-5 space-y-3.5 shadow-xl border border-slate-800">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800 gap-2">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-slate-800 text-blue-400 flex items-center justify-center text-sm font-bold border border-slate-700 shadow-inner flex-shrink-0">
-                  <i class="fa-solid fa-user"></i>
-                </div>
-                <div class="min-w-0">
-                  <h4 class="font-black text-white text-xs sm:text-sm truncate">${u.user_id}</h4>
-                  <div class="mt-0.5 flex items-center gap-1">${roleBadge}</div>
-                </div>
-              </div>
-              <div class="flex-shrink-0">${statusBadge}</div>
-            </div>
-
-            <div class="flex items-center justify-between bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/80 shadow-inner">
-              <span class="text-[11px] text-slate-400 font-semibold">Số dư ví:</span>
-              <span class="text-sm font-black text-emerald-400">${vnd.toLocaleString('vi-VN')} đ</span>
-            </div>
-
-            <div class="grid grid-cols-3 gap-1.5 sm:gap-2 pt-1">
-              <button onclick="openAdminPasswordModal('${u.user_id}')" class="py-2.5 px-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
-                <i class="fa-solid fa-key"></i> Pass
-              </button>
-              <button onclick="openAdminRoleModal('${u.user_id}', '${role}')" class="py-2.5 px-1 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
-                <i class="fa-solid fa-user-shield"></i> Quyền
-              </button>
-              <button onclick="toggleBanUser('${u.user_id}')" class="py-2.5 px-1 ${isBanned ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-300 hover:bg-rose-500/30'} rounded-2xl text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
-                <i class="fa-solid ${isBanned ? 'fa-lock-open' : 'fa-lock'}"></i> ${isBanned ? 'Mở' : 'Khóa'}
-              </button>
-            </div>
-
-            <div class="flex items-center gap-2 pt-1">
-              <input id="input_adjust_${u.user_id}" type="number" placeholder="Nhập VNĐ..." class="w-full min-w-0 flex-1 bg-slate-950 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 shadow-inner">
-              <button onclick="adminCustomAdjust('${u.user_id}', 1)" class="px-3 sm:px-4 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-2xl text-xs font-extrabold cursor-pointer transition flex-shrink-0">+ Cộng</button>
-              <button onclick="adminCustomAdjust('${u.user_id}', -1)" class="px-3 sm:px-4 py-2.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/30 rounded-2xl text-xs font-extrabold cursor-pointer transition flex-shrink-0">- Trừ</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function openAdminPasswordModal(userId) {
-      document.getElementById('adminTargetUser').value = userId;
-      document.getElementById('adminNewUserPassword').value = '';
-      document.getElementById('adminPasswordModal').classList.remove('hidden');
-    }
-
-    function openAdminRoleModal(userId, currentRole) {
-      document.getElementById('adminRoleTargetUser').value = userId;
-      document.getElementById('adminRoleSelect').value = currentRole;
-      document.getElementById('adminRoleModal').classList.remove('hidden');
-    }
-
-    function toggleBanUser(userId) {
-      if (!userPermissions[userId]) userPermissions[userId] = { role: 'member', banned: false };
-      userPermissions[userId].banned = !userPermissions[userId].banned;
-      localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
-      renderAdminUserTable(cachedAdminUserList);
-      Toast.fire({ icon: 'success', title: `Đã cập nhật trạng thái tài khoản ${userId}` });
-    }
-
-    async function adminCustomAdjust(targetUserId, multiplier) {
-      const input = document.getElementById(`input_adjust_${targetUserId}`);
-      if (!input) return;
-      const valVND = Number(input.value);
-      if (!valVND || valVND <= 0) return showNotify('warning', 'Chú Ý', 'Vui lòng nhập số tiền VNĐ hợp lệ!');
-
-      const pointDiff = (valVND / systemConfig.rate) * multiplier;
-      const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', targetUserId).single();
-      const newPoints = Math.max(0, (Number(data.points) || 0) + pointDiff);
-
-      await supabaseClient.from('users_task').update({ points: newPoints }).eq('user_id', targetUserId);
-      addTransactionHistory(targetUserId, multiplier > 0 ? 'admin_add' : 'admin_deduct', valVND, multiplier > 0 ? `Admin cộng +${valVND.toLocaleString('vi-VN')}đ` : `Admin trừ -${valVND.toLocaleString('vi-VN')}đ`);
-
-      input.value = '';
-      await loadAdminUserList();
-      showNotify('success', 'Thành Công', `Đã cập nhật số dư cho ${targetUserId}`);
-    }
-
-    function renderAdminFinanceTable() {
-      financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
-      const tbody = document.getElementById('adminFinanceTable');
-      if (!tbody) return;
-      if (financeRequests.length === 0) return tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-slate-500">Chưa có yêu cầu rút tiền nào.</td></tr>';
-      tbody.innerHTML = financeRequests.map((r, idx) => `
-        <tr class="hover:bg-slate-800/40">
-          <td class="p-3.5 text-slate-400 font-mono text-[11px]">${r.time}</td>
-          <td class="p-3.5 font-black text-white">${r.user}</td>
-          <td class="p-3.5 font-black text-emerald-400">${r.amount.toLocaleString('vi-VN')}đ</td>
-          <td class="p-3.5 text-slate-300 font-mono">${r.info}</td>
-          <td class="p-3.5 text-right"><button onclick="adminApproveFinance(${idx})" class="px-3.5 py-2 bg-emerald-500/20 text-emerald-300 rounded-xl text-xs font-bold cursor-pointer transition">Duyệt Rút</button></td>
-        </tr>
-      `).join('');
-    }
-
-    async function adminApproveFinance(idx) {
-      financeRequests = JSON.parse(localStorage.getItem('finance_req_db')) || [];
-      const req = financeRequests[idx];
-      if (!req) return;
-      const pointDiff = req.amount / systemConfig.rate;
-      const { data } = await supabaseClient.from('users_task').select('points').eq('user_id', req.user).single();
-      await supabaseClient.from('users_task').update({ points: Math.max(0, (Number(data?.points)||0) - pointDiff) }).eq('user_id', req.user);
-      
-      triggerSyncedWithdrawSuccess(req.user, req.amount, req.info);
-
-      financeRequests.splice(idx, 1);
-      localStorage.setItem('finance_req_db', JSON.stringify(financeRequests));
-      renderAdminFinanceTable();
-      await loadAdminUserList();
-      showNotify('success', 'Thành Công', `Đã duyệt lệnh rút tiền cho tài khoản ${req.user}`);
-    }
-
-    function loadAdminSupportFields() {
-      loadSystemConfigFromCloud().then(() => {
-        document.getElementById('adminCfgZalo').value = systemConfig.zalo;
-        document.getElementById('adminCfgTelegram').value = systemConfig.telegram;
-        document.getElementById('adminCfgGroupZalo').value = systemConfig.groupZalo;
-        document.getElementById('adminCfgGroupTelegram').value = systemConfig.groupTelegram;
-        document.getElementById('adminCfgWorkTime').value = systemConfig.workTime;
-        document.getElementById('adminCfgAdminToken').value = systemConfig.adminToken;
-        document.getElementById('adminCfgAdminChatId').value = systemConfig.adminChatId;
-        document.getElementById('adminCfgGroupToken').value = systemConfig.groupToken;
-        document.getElementById('adminCfgGroupChatId').value = systemConfig.groupChatId;
-      });
-    }
-
-    async function saveAdminSupportConfig() {
-      systemConfig.zalo = document.getElementById('adminCfgZalo')?.value.trim() || '0987654321';
-      systemConfig.telegram = document.getElementById('adminCfgTelegram')?.value.trim() || '@cskh';
-      systemConfig.groupZalo = document.getElementById('adminCfgGroupZalo')?.value.trim() || '#';
-      systemConfig.groupTelegram = document.getElementById('adminCfgGroupTelegram')?.value.trim() || '#';
-      systemConfig.workTime = document.getElementById('adminCfgWorkTime')?.value.trim() || '08:00 - 23:00';
-
-      await saveSystemConfigToCloud('sys_zalo', systemConfig.zalo);
-      await saveSystemConfigToCloud('sys_telegram', systemConfig.telegram);
-      await saveSystemConfigToCloud('sys_group_zalo', systemConfig.groupZalo);
-      await saveSystemConfigToCloud('sys_group_telegram', systemConfig.groupTelegram);
-      await saveSystemConfigToCloud('sys_work_time', systemConfig.workTime);
-
-      applySupportConfig();
-      showNotify('success', 'Thành Công', 'Đã lưu cấu hình hỗ trợ!');
-    }
-
-    async function saveTelegramBotConfig() {
-      systemConfig.adminToken = document.getElementById('adminCfgAdminToken')?.value.trim() || '';
-      systemConfig.adminChatId = document.getElementById('adminCfgAdminChatId')?.value.trim() || '';
-      systemConfig.groupToken = document.getElementById('adminCfgGroupToken')?.value.trim() || '';
-      systemConfig.groupChatId = document.getElementById('adminCfgGroupChatId')?.value.trim() || '';
-
-      await saveSystemConfigToCloud('admin_token', systemConfig.adminToken);
-      await saveSystemConfigToCloud('admin_chat_id', systemConfig.adminChatId);
-      await saveSystemConfigToCloud('group_token', systemConfig.groupToken);
-      await saveSystemConfigToCloud('group_chat_id', systemConfig.groupChatId);
-
-      showNotify('success', 'Thành Công', 'Đã lưu cấu hình Bot Telegram!');
-    }
-
-    async function adminPublishNotice() {
-      const title = document.getElementById('adminNoticeTitle')?.value.trim() || 'Thông báo';
-      const content = document.getElementById('adminNoticeInput')?.value.trim();
-      if (!content) return showNotify('warning', 'Thiếu Dữ Liệu', 'Nhập nội dung thông báo!');
-      
-      const timeStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString('vi-VN');
-      await supabaseClient.from('system_notices').insert([{ title, content, time: timeStr }]);
-      
-      document.getElementById('adminNoticeTitle').value = '';
-      document.getElementById('adminNoticeInput').value = '';
-
-      sendGroupAlert(`📢 <b>THÔNG BÁO MỚI:</b>\n📌 ${title}\n💬 ${content}`);
-      await fetchCloudData();
-      renderAdminNoticeManageList();
-      showNotify('success', 'Thành Công', 'Đã phát thông báo mới!');
-    }
-
-    async function renderAdminNoticeManageList() {
-      await fetchCloudData();
-      const list = document.getElementById('adminNoticeManageList');
-      if (!list) return;
-      if (notifications.length === 0) return list.innerHTML = '<p class="text-slate-500 text-xs">Chưa có thông báo nào.</p>';
-      list.innerHTML = notifications.map((n) => `
-        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex justify-between items-center text-xs">
-          <div><p class="font-black text-white text-sm">${n.title}</p><p class="text-slate-400 text-xs mt-1">${n.content}</p></div>
-          <button onclick="adminDeleteNotice('${n.id}')" class="p-2.5 text-rose-400 hover:text-rose-300 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      `).join('');
-    }
-
-    async function adminDeleteNotice(noticeId) {
-      await supabaseClient.from('system_notices').delete().eq('id', noticeId);
-      await renderAdminNoticeManageList();
-      Toast.fire({ icon: 'info', title: 'Đã xóa thông báo.' });
-    }
-
-    // GẮN SỰ KIỆN KHỞI CHẠY AN TOÀN TRỰC TIẾP
+    // ĐẢM BẢO GẮN SỰ KIỆN 100% NHẠY BÉN KHÔNG BAO GIỜ ĐƠ
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('btnAuthSubmit').addEventListener('click', handleAuthSubmit);
       document.getElementById('authSwitchBtn').addEventListener('click', toggleAuthMode);
@@ -1966,8 +922,6 @@ ${desc || 'Làm nhiệm vụ ngay để nhận thưởng!'}
       document.getElementById('btnPublishNotice').addEventListener('click', adminPublishNotice);
       document.getElementById('btnSaveSupport').addEventListener('click', saveAdminSupportConfig);
       document.getElementById('submitWithdraw').addEventListener('click', submitWithdrawRequest);
-      document.getElementById('submitPassChange').addEventListener('click', submitAdminChangePassword);
-      document.getElementById('submitRoleChange').addEventListener('click', submitAdminChangeRole);
 
       document.getElementById('closeHistory').addEventListener('click', closeHistoryModal);
       document.getElementById('closeWithdrawModalBtn').addEventListener('click', closeWithdrawModal);
@@ -1975,7 +929,7 @@ ${desc || 'Làm nhiệm vụ ngay để nhận thưởng!'}
       document.getElementById('closeSupport').addEventListener('click', closeSupportModal);
       document.getElementById('closePassModal').addEventListener('click', closeAdminPasswordModal);
       document.getElementById('closeRoleModal').addEventListener('click', closeAdminRoleModal);
-      document.getElementById('btnCloseWelcome').addEventListener('click', closeWelcomeNotice);
+      document.getElementById('btnCloseWelcome').addEventListener('click', () => document.getElementById('welcomeNoticeModal')?.classList.add('hidden'));
 
       const saved = localStorage.getItem('task_auth_user');
       if (saved) {

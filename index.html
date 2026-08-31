@@ -102,7 +102,7 @@
             <div class="grid grid-cols-12 gap-2 w-full items-center">
               <input id="authCaptchaInput" type="text" placeholder="Nhập mã" class="col-span-5 bg-slate-900/90 border border-slate-700/80 rounded-2xl px-3 py-3 text-xs text-white focus:outline-none focus:border-blue-500 uppercase tracking-widest font-mono text-center">
               <div id="captchaText" class="col-span-5 captcha-clean py-3 rounded-2xl border border-blue-500/30 text-blue-400 font-black text-sm tracking-widest shadow-inner text-center">
-                INIT
+                AB12
               </div>
               <button id="btnRefreshCaptcha" type="button" class="col-span-2 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white cursor-pointer transition flex items-center justify-center" title="Đổi mã">
                 <i class="fa-solid fa-rotate-right text-sm"></i>
@@ -1229,7 +1229,8 @@
       }
     }
 
-    // HÀM TẠO CAPTCHA CHUẨN XÁC, THAY ĐỔI LIÊN TỤC VÀ KHÔNG BAO GIỜ BỊ ĐƠ
+    // CAPTCHA ĐỘC LẬP TỰ ĐỘNG THAY ĐỔI
+    let currentCaptcha = '';
     function generateCaptcha() {
       const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
       let res = '';
@@ -1238,13 +1239,9 @@
       }
       currentCaptcha = res;
       const capEl = document.getElementById('captchaText');
-      if (capEl) {
-        capEl.innerText = res;
-      }
+      if (capEl) capEl.innerText = res;
       const capInput = document.getElementById('authCaptchaInput');
-      if (capInput) {
-        capInput.value = '';
-      }
+      if (capInput) capInput.value = '';
     }
 
     function toggleAuthMode() {
@@ -1257,9 +1254,14 @@
     }
 
     async function handleAuthSubmit() {
-      const u = document.getElementById('authUsername').value.trim();
-      const p = document.getElementById('authPassword').value.trim();
-      const cap = document.getElementById('authCaptchaInput').value.trim().toUpperCase();
+      const uInput = document.getElementById('authUsername');
+      const pInput = document.getElementById('authPassword');
+      const capInput = document.getElementById('authCaptchaInput');
+
+      if (!uInput || !pInput || !capInput) return;
+      const u = uInput.value.trim();
+      const p = pInput.value.trim();
+      const cap = capInput.value.trim().toUpperCase();
 
       if (!u || !p) return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng điền đầy đủ tài khoản và mật khẩu!');
       if (cap !== currentCaptcha) { 
@@ -1339,6 +1341,7 @@
     function openNoticeModal() { document.getElementById('noticeModal')?.classList.remove('hidden'); }
     function closeNoticeModal() { document.getElementById('noticeModal')?.classList.add('hidden'); }
     function closeAdminPasswordModal() { document.getElementById('adminPasswordModal')?.classList.add('hidden'); }
+    function closeAdminRoleModal() { document.getElementById('adminRoleModal')?.classList.add('hidden'); }
 
     function handleWithdrawMethodChange() {
       const method = document.getElementById('withdrawMethod')?.value;
@@ -1382,6 +1385,16 @@
       if (!p) return showNotify('warning', 'Lỗi', 'Nhập mật khẩu mới!');
       closeAdminPasswordModal();
       showNotify('success', 'Thành Công', `Đã đổi mật khẩu cho ${u}`);
+    }
+
+    function submitAdminChangeRole() {
+      const u = document.getElementById('adminRoleTargetUser').value;
+      const r = document.getElementById('adminRoleSelect').value;
+      userPermissions[u] = userPermissions[u] || {};
+      userPermissions[u].role = r;
+      localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
+      closeAdminRoleModal();
+      showNotify('success', 'Thành Công', `Đã cập nhật quyền ${r}`);
     }
 
     function submitWithdrawRequest() {
@@ -1444,12 +1457,14 @@
       document.getElementById('btnSaveSupport').addEventListener('click', saveAdminSupportConfig);
       document.getElementById('submitWithdraw').addEventListener('click', submitWithdrawRequest);
       document.getElementById('submitPassChange').addEventListener('click', submitAdminChangePassword);
+      document.getElementById('submitRoleChange').addEventListener('click', submitAdminChangeRole);
 
       document.getElementById('closeHistory').addEventListener('click', closeHistoryModal);
       document.getElementById('closeWithdrawModalBtn').addEventListener('click', closeWithdrawModal);
       document.getElementById('closeNotice').addEventListener('click', closeNoticeModal);
       document.getElementById('closeSupport').addEventListener('click', closeSupportModal);
       document.getElementById('closePassModal').addEventListener('click', closeAdminPasswordModal);
+      document.getElementById('closeRoleModal').addEventListener('click', closeAdminRoleModal);
       document.getElementById('btnCloseWelcome').addEventListener('click', closeWelcomeNotice);
 
       const saved = localStorage.getItem('task_auth_user');

@@ -888,7 +888,47 @@
       showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền!');
     }
 
-    // ĐẢM BẢO GẮN KẾT TOÀN BỘ SỰ KIỆN CHÍNH XÁC 100% VÀ TỰ ĐỘNG ĐÓNG MENU KHI BẤM
+    async function fetchAutoOffers() {
+      markOffersAsSeen();
+      const container = document.getElementById('nativeTaskList');
+      const countText = document.getElementById('availableTasksCount');
+      if (!container) return;
+      await fetchCloudData();
+      const completedIds = getCompletedTasksForUser(currentUser);
+      const availableOffers = customOffers.filter(o => !completedIds.includes(o.id));
+      if (countText) countText.innerText = `${availableOffers.length} Kèo sẵn sàng`;
+      container.innerHTML = availableOffers.length === 0 ? '<div class="col-span-full text-center py-8 text-slate-500 text-xs">Không có nhiệm vụ khả dụng.</div>' : availableOffers.map(t => `
+        <div class="glass-card rounded-3xl p-5 flex flex-col justify-between space-y-4 shadow-xl">
+          <div>
+            <span class="px-2.5 py-1 rounded-xl bg-emerald-500/10 text-[10px] text-emerald-400 font-extrabold border border-emerald-500/25">Độc Quyền</span>
+            <h3 class="font-black text-white text-sm sm:text-base mt-3">${t.title}</h3>
+            <p class="text-slate-400 text-xs mt-1.5 leading-relaxed">${t.desc || ''}</p>
+          </div>
+          <div class="pt-3.5 border-t border-slate-800/80 flex items-center justify-between">
+            <span class="text-sm font-black text-emerald-400">+${Number(t.reward).toLocaleString('vi-VN')} đ</span>
+            <button onclick="handleStartTask('${t.id}', '${t.title}', '${t.url}', ${t.reward})" class="px-4.5 py-2.5 rounded-2xl gradient-primary text-white text-xs font-extrabold shadow-md cursor-pointer">Làm Kèo</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function handleStartTask(taskId, taskTitle, taskUrl, rewardAmount) {
+      if (taskUrl && taskUrl !== '#') window.open(taskUrl, '_blank');
+      const { value: formValues } = await Swal.fire({
+        title: 'Xác Nhận Hoàn Thành Kèo',
+        html: `<input id="swal-input1" class="swal2-input" placeholder="Nhập SĐT hoặc ghi chú...">`,
+        focusConfirm: false,
+        preConfirm: () => document.getElementById('swal-input1').value
+      });
+      if (formValues !== undefined) {
+        await supabaseClient.from('pending_tasks').insert([{ id: Date.now(), user_id: currentUser, title: taskTitle, reward: rewardAmount, proof_text: formValues || 'Hoàn thành', time: new Date().toLocaleTimeString('vi-VN') }]);
+        markTaskAsCompletedForUser(currentUser, taskId);
+        showNotify('success', 'Đã Gửi', 'Đã gửi bằng chứng cho Admin duyệt.');
+        fetchAutoOffers();
+      }
+    }
+
+    // ĐẢM BẢO GẮN KẾT TOÀN BỘ SỰ KIỆN CHÍNH XÁC 100%
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('btnAuthSubmit').addEventListener('click', handleAuthSubmit);
       document.getElementById('authSwitchBtn').addEventListener('click', toggleAuthMode);

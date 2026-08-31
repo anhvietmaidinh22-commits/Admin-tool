@@ -18,12 +18,6 @@
     .glass-card:hover { border-color: rgba(59, 130, 246, 0.4); transform: translateY(-1px); }
     .gradient-primary { background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); }
     .gradient-text { background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .captcha-clean {
-      font-family: 'Consolas', 'Monaco', monospace;
-      letter-spacing: 4px;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      user-select: none;
-    }
     .swal2-popup {
       background: rgba(11, 17, 32, 0.98) !important;
       backdrop-filter: blur(24px) !important;
@@ -82,7 +76,7 @@
 
         <div class="space-y-4 w-full">
           <div>
-            <label class="text-[11px] font-bold text-slate-300 block mb-1.5 uppercase tracking-wider">Tên tài khoản</label>
+            <label class="text-[11px] font-bold text-slate-300 block mb-1.5 uppercase tracking-wider">Tài khoản</label>
             <div class="relative flex items-center w-full">
               <i class="fa-solid fa-user absolute left-4 text-slate-400 text-sm"></i>
               <input id="authUsername" type="text" placeholder="Nhập tài khoản..." class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl pl-11 pr-4 py-3 text-xs text-white focus:outline-none focus:border-blue-500 transition shadow-inner">
@@ -97,17 +91,12 @@
             </div>
           </div>
 
-          <div id="captchaContainer" class="space-y-1.5 pt-1 w-full">
-            <label class="text-[11px] font-bold text-slate-300 block uppercase tracking-wider">Mã bảo mật</label>
-            <div class="grid grid-cols-12 gap-2 w-full items-center">
-              <input id="authCaptchaInput" type="text" placeholder="Nhập mã" class="col-span-5 bg-slate-900/90 border border-slate-700/80 rounded-2xl px-3 py-3 text-xs text-white focus:outline-none focus:border-blue-500 uppercase tracking-widest font-mono text-center">
-              <!-- KHỞI TẠO MÃ NGAY LẬP TỨC TRÁNH DẤU GẠCH -->
-              <div id="captchaText" class="col-span-5 captcha-clean py-3 rounded-2xl border border-blue-500/30 text-blue-400 font-black text-sm tracking-widest shadow-inner text-center">
-                79X4
-              </div>
-              <button id="btnRefreshCaptcha" type="button" class="col-span-2 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white cursor-pointer transition flex items-center justify-center" title="Đổi mã">
-                <i class="fa-solid fa-rotate-right text-sm"></i>
-              </button>
+          <!-- Ô NHẬP LẠI MẬT KHẨU (CHỈ HIỆN KHI ĐĂNG KÝ) -->
+          <div id="confirmPasswordContainer" class="hidden space-y-1.5 w-full">
+            <label class="text-[11px] font-bold text-slate-300 block uppercase tracking-wider">Nhập lại mật khẩu</label>
+            <div class="relative flex items-center w-full">
+              <i class="fa-solid fa-lock-open absolute left-4 text-slate-400 text-sm"></i>
+              <input id="authConfirmPassword" type="password" placeholder="Xác nhận lại mật khẩu..." class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl pl-11 pr-4 py-3 text-xs text-white focus:outline-none focus:border-blue-500 transition shadow-inner">
             </div>
           </div>
 
@@ -631,9 +620,15 @@
       </div>
       
       <div class="text-right">
-        <button id="btnPublishNotice" class="px-6 py-3 rounded-2xl bg-blue-600 text-white font-bold cursor-pointer">Đăng Thông Báo</button>
+        <button id="btnPublishNotice" class="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-lg shadow-blue-600/25 transition cursor-pointer">
+          <i class="fa-solid fa-bullhorn mr-1"></i> Thêm Thông Báo Mới
+        </button>
       </div>
-      <div id="adminNoticeManageList" class="space-y-2 pt-2"></div>
+
+      <div class="pt-4 border-t border-slate-800 space-y-3">
+        <h4 class="text-xs font-extrabold text-slate-400 uppercase">Danh Sách Thông Báo Đang Có</h4>
+        <div id="adminNoticeManageList" class="space-y-3"></div>
+      </div>
     </div>
 
     <!-- TAB 9: HỖ TRỢ & NHÓM CTV -->
@@ -1224,50 +1219,44 @@
       }
     }
 
-    // CAPTCHA ĐỘC LẬP TỰ ĐỘNG THAY ĐỔI
-    let currentCaptcha = '';
-    function generateCaptcha() {
-      const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
-      let res = '';
-      for (let i = 0; i < 4; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
-      currentCaptcha = res;
-      const capEl = document.getElementById('captchaText');
-      if (capEl) capEl.innerText = res;
-      const capInput = document.getElementById('authCaptchaInput');
-      if (capInput) capInput.value = '';
-    }
-
+    // ĐÃ BỎ HOÀN TOÀN MÃ CAPTCHA - LOGIC ĐĂNG NHẬP / ĐĂNG KÝ TRỰC TIỆP
     function toggleAuthMode() {
       isRegisterMode = !isRegisterMode;
       document.getElementById('authTitle').innerText = isRegisterMode ? 'ĐĂNG KÝ HỆ THỐNG' : 'ĐĂNG NHẬP HỆ THỐNG';
       document.getElementById('btnAuthSubmit').innerText = isRegisterMode ? 'Tạo Tài Khoản' : 'Đăng Nhập Hệ Thống';
       document.getElementById('authSwitchText').innerText = isRegisterMode ? 'Đã có tài khoản?' : 'Chưa có tài khoản?';
       document.getElementById('authSwitchBtn').innerText = isRegisterMode ? 'Đăng nhập ngay' : 'Đăng ký thành viên';
-      generateCaptcha();
+      
+      const confirmContainer = document.getElementById('confirmPasswordContainer');
+      if (isRegisterMode) {
+        confirmContainer.classList.remove('hidden');
+      } else {
+        confirmContainer.classList.add('hidden');
+      }
     }
 
     async function handleAuthSubmit() {
       const uInput = document.getElementById('authUsername');
       const pInput = document.getElementById('authPassword');
-      const capInput = document.getElementById('authCaptchaInput');
+      const confirmInput = document.getElementById('authConfirmPassword');
 
-      if (!uInput || !pInput || !capInput) return;
+      if (!uInput || !pInput) return;
       const u = uInput.value.trim();
       const p = pInput.value.trim();
-      const cap = capInput.value.trim().toUpperCase();
 
       if (!u || !p) return showNotify('warning', 'Thiếu Thông Tin', 'Vui lòng điền đầy đủ tài khoản và mật khẩu!');
-      if (cap !== currentCaptcha) { 
-        generateCaptcha(); 
-        return showNotify('error', 'Sai Mã', 'Mã bảo mật không đúng!'); 
-      }
 
       userPermissions = JSON.parse(localStorage.getItem('user_permissions_db')) || userPermissions;
-      if (userPermissions[u]?.banned) return showNotify('error', 'B bị Khóa', 'Tài khoản đã bị khóa!');
+      if (userPermissions[u]?.banned) return showNotify('error', 'Bị Khóa', 'Tài khoản đã bị khóa!');
 
       if (isRegisterMode) {
+        const confirmP = confirmInput.value.trim();
+        if (p !== confirmP) return showNotify('error', 'Lỗi Mật Khẩu', 'Mật khẩu nhập lại không khớp!');
         if (u.toLowerCase() === 'admin') return showNotify('error', 'Lỗi', 'Tên tài khoản bảo lưu!');
-        await supabaseClient.from('users_task').insert([{ user_id: u, points: 0 }]);
+
+        const { error } = await supabaseClient.from('users_task').insert([{ user_id: u, points: 0 }]);
+        if (error) return showNotify('error', 'Lỗi', error.message);
+
         userPermissions[u] = { role: 'member', banned: false };
         localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
         showNotify('success', 'Thành Công', 'Đăng ký thành công, hãy đăng nhập!');
@@ -1279,7 +1268,9 @@
           return;
         }
         let { data } = await supabaseClient.from('users_task').select('*').eq('user_id', u).single();
-        if (!data) await supabaseClient.from('users_task').insert([{ user_id: u, points: 0 }]);
+        if (!data) {
+          await supabaseClient.from('users_task').insert([{ user_id: u, points: 0 }]);
+        }
         localStorage.setItem('task_auth_user', u);
         initSession(u, userPermissions[u]?.role === 'admin' || userPermissions[u]?.role === 'manager');
       }
@@ -1403,13 +1394,10 @@
       showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền!');
     }
 
-    // GẮN SỰ KIỆN TOÀN DIỆN KHÔNG BỎ SÓT BẤT CỨ NÚT NÀO
+    // GẮN SỰ KIỆN TOÀN DIỆN NGAY KHI DOM READY
     document.addEventListener('DOMContentLoaded', () => {
-      generateCaptcha();
-
       document.getElementById('btnAuthSubmit').addEventListener('click', handleAuthSubmit);
       document.getElementById('authSwitchBtn').addEventListener('click', toggleAuthMode);
-      document.getElementById('btnRefreshCaptcha').addEventListener('click', generateCaptcha);
 
       document.getElementById('btnOpenMenu').addEventListener('click', openMenu);
       document.getElementById('btnCloseDrawer').addEventListener('click', closeMenu);

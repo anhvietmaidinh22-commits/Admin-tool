@@ -563,7 +563,7 @@
       </div>
     </div>
 
-    <!-- TAB 7: BILL THANH TOÁN -->
+    <!-- TAB 7: BILL THANH TOÁN (GỬI ẢNH TÍCH XANH THÀNH CÔNG) -->
     <div id="tabFakeBill" class="admin-tab-content hidden glass-card rounded-3xl p-6 sm:p-7 border border-slate-800 space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <h3 class="text-sm font-extrabold text-amber-400 flex items-center gap-2">
@@ -1229,7 +1229,6 @@
       }
     }
 
-    // CAPTCHA ĐỘC LẬP CHẠY NGAY LẬP TỨC
     let currentCaptcha = '';
     function generateCaptcha() {
       const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
@@ -1238,6 +1237,8 @@
       currentCaptcha = res;
       const capEl = document.getElementById('captchaText');
       if (capEl) capEl.innerText = res;
+      const capInput = document.getElementById('authCaptchaInput');
+      if (capInput) capInput.value = '';
     }
 
     function toggleAuthMode() {
@@ -1329,6 +1330,7 @@
     function openNoticeModal() { document.getElementById('noticeModal')?.classList.remove('hidden'); }
     function closeNoticeModal() { document.getElementById('noticeModal')?.classList.add('hidden'); }
     function closeAdminPasswordModal() { document.getElementById('adminPasswordModal')?.classList.add('hidden'); }
+    function closeAdminRoleModal() { document.getElementById('adminRoleModal')?.classList.add('hidden'); }
 
     function handleWithdrawMethodChange() {
       const method = document.getElementById('withdrawMethod')?.value;
@@ -1374,6 +1376,16 @@
       showNotify('success', 'Thành Công', `Đã đổi mật khẩu cho ${u}`);
     }
 
+    function submitAdminChangeRole() {
+      const u = document.getElementById('adminRoleTargetUser').value;
+      const r = document.getElementById('adminRoleSelect').value;
+      userPermissions[u] = userPermissions[u] || {};
+      userPermissions[u].role = r;
+      localStorage.setItem('user_permissions_db', JSON.stringify(userPermissions));
+      closeAdminRoleModal();
+      showNotify('success', 'Thành Công', `Đã cập nhật quyền ${r}`);
+    }
+
     function submitWithdrawRequest() {
       const a = Number(document.getElementById('withdrawAmountVND').value);
       const n = document.getElementById('withdrawBankNumber').value.trim();
@@ -1387,7 +1399,7 @@
       showNotify('success', 'Thành Công', 'Đã tạo lệnh rút tiền!');
     }
 
-    // GẮN SỰ KIỆN KHỞI CHẠY ĐỘC LẬP
+    // GẮN SỰ KIỆN AN TOÀN ĐỘC LẬP
     document.addEventListener('DOMContentLoaded', () => {
       generateCaptcha();
 

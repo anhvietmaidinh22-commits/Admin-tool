@@ -577,6 +577,26 @@
       localStorage.setItem('user_tx_history_db', JSON.stringify(db));
     }
 
+    function markOffersAsSeen() {
+      if (!currentUser || currentUser === 'Admin' || customOffers.length === 0) return;
+      localStorage.setItem(`last_seen_offer_${currentUser}`, customOffers[0].id);
+      document.getElementById('newOfferBadgeDot')?.classList.add('hidden');
+    }
+
+    function getCompletedTasksForUser(userId) {
+      const db = JSON.parse(localStorage.getItem('completed_tasks_map')) || {};
+      return db[userId] || [];
+    }
+
+    function markTaskAsCompletedForUser(userId, taskId) {
+      let db = JSON.parse(localStorage.getItem('completed_tasks_map')) || {};
+      if (!db[userId]) db[userId] = [];
+      if (!db[userId].includes(taskId)) {
+        db[userId].push(taskId);
+        localStorage.setItem('completed_tasks_map', JSON.stringify(db));
+      }
+    }
+
     async function fetchCloudData() {
       await loadSystemConfigFromCloud();
       try {
@@ -590,6 +610,24 @@
         const { data: pend } = await supabaseClient.from('pending_tasks').select('*').order('created_at', { ascending: false });
         if (pend) pendingTaskSubmissions = pend.map(p => ({ id: p.id, user: p.user_id, title: p.title, reward: p.reward, proofText: p.proof_text, proofImage: p.proof_image, time: p.time }));
       } catch (e) {}
+    }
+
+    async function sendAdminAlert(msg) {
+      await loadSystemConfigFromCloud();
+      if (!systemConfig.adminToken || !systemConfig.adminChatId) return;
+      try { await fetch(`https://api.telegram.org/bot${systemConfig.adminToken}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: systemConfig.adminChatId, text: msg, parse_mode: 'HTML' }) }); } catch(e){}
+    }
+
+    async function sendGroupAlert(msg) {
+      await loadSystemConfigFromCloud();
+      if (!systemConfig.groupToken || !systemConfig.groupChatId) return;
+      try { await fetch(`https://api.telegram.org/bot${systemConfig.groupToken}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: systemConfig.groupChatId, text: msg, parse_mode: 'HTML' }) }); } catch(e){}
+    }
+
+    async function sendGroupPhotoAlert(photo, caption) {
+      await loadSystemConfigFromCloud();
+      if (!systemConfig.groupToken || !systemConfig.groupChatId) return;
+      try { await fetch(`https://api.telegram.org/bot${systemConfig.groupToken}/sendPhoto`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: systemConfig.groupChatId, photo, caption, parse_mode: 'HTML' }) }); } catch(e){}
     }
 
     const vietnameseFullNames = [
@@ -776,6 +814,38 @@
 
     function goToHome() { toggleView('ctv'); markOffersAsSeen(); }
     function handleLogout() { localStorage.removeItem('task_auth_user'); location.reload(); }
+
+    function toggleView(view) {
+      const ctvV = document.getElementById('ctvView');
+      const adminV = document.getElementById('adminView');
+      if (view === 'admin') {
+        ctvV?.classList.add('hidden');
+        adminV?.classList.remove('hidden');
+        fetchCloudData();
+        loadAdminUserList();
+        renderAdminOfferList();
+        renderAdminFinanceTable();
+        renderAdminTaskApprovals();
+        loadAdminSupportFields();
+        renderAdminNoticeManageList();
+      } else {
+        adminV?.classList.add('hidden');
+        ctvV?.classList.remove('hidden');
+        syncUserData();
+        fetchAutoOffers();
+      }
+    }
+
+    function switchAdminTab(tabId) {
+      document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('#adminView button[id^="btnTab"]').forEach(b => {
+        b.className = 'px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-2 cursor-pointer transition';
+      });
+      document.getElementById(tabId)?.classList.remove('hidden');
+      const btnId = 'btn' + tabId.charAt(0).toUpperCase() + tabId.slice(1);
+      const targetBtn = document.getElementById(btnId);
+      if (targetBtn) targetBtn.className = 'px-4 py-3 rounded-2xl bg-blue-600 text-white shadow-lg whitespace-nowrap flex items-center gap-2 cursor-pointer transition';
+    }
 
     function submitAdminChangePassword() {
       const u = document.getElementById('adminTargetUser').value;

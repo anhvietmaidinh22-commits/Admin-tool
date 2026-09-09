@@ -34,12 +34,10 @@
         .card-box { background: #ffffff; border: 1px solid #e2e8f0; }
 
         .floating-support { position: fixed; bottom: 80px; right: 20px; z-index: 99; display: flex; flex-direction: column; gap: 12px; }
-        .support-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: transform 0.2s; overflow: hidden; background: white; border: 2px solid white; }
+        .support-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: transform 0.2s; overflow: hidden; background: white; border: 2px solid white; font-weight: 800; font-size: 14px; text-decoration: none; }
         .support-btn:hover { transform: scale(1.1); }
-        .support-btn img { width: 100%; height: 100%; object-fit: cover; }
     </style>
     <script>
-        // KIỂM TRA NGAY LẬP TỨC TRƯỚC KHI TRANG KỊP RENDER ĐỂ KHÔNG BỊ ĐÁ RA ĐĂNG NHẬP
         (function() {
             const savedUser = localStorage.getItem('loggedInUser');
             if (savedUser) {
@@ -64,13 +62,15 @@
         </div>
     </div>
 
-    <!-- 2 NÚT HỖ TRỢ ZALO & TELEGRAM GÓC DƯỚI BÊN PHẢI -->
+    <!-- 2 NÚT HỖ TRỢ ZALO & TELEGRAM (DÙNG SVG CHUẨN XÁC 100% KHÔNG BAO GIỜ LỖI HÌNH ẢNH) -->
     <div class="floating-support">
-        <a href="https://t.me/admin" target="_blank" class="support-btn" title="Hỗ trợ Telegram">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+        <!-- Nút Telegram -->
+        <a href="https://t.me/admin" target="_blank" class="support-btn bg-blue-500 text-white" title="Hỗ trợ Telegram">
+            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.03-1.99 1.27-5.62 3.72-.53.36-1.01.54-1.44.53-.47-.02-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.25.38-.51 1.07-.78 4.18-1.82 6.98-3.02 8.39-3.61 3.99-1.67 4.82-1.96 5.36-1.97.12 0 .39.03.56.17.14.12.18.28.2.4-.02.07-.02.2-.04.33z"/></svg>
         </a>
-        <a href="https://zalo.me/admin" target="_blank" class="support-btn" title="Hỗ trợ Zalo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Zalo_Logo.svg" alt="Zalo" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/91/Zalo_Logo.svg';">
+        <!-- Nút Zalo (Biểu tượng Z chữ đậm xanh đặc trưng) -->
+        <a href="https://zalo.me/admin" target="_blank" class="support-btn bg-sky-500 text-white font-extrabold text-lg" title="Hỗ trợ Zalo">
+            Z
         </a>
     </div>
 
@@ -422,7 +422,7 @@
             </div>
         </div>
 
-        <!-- TAB KHO SĂN MÃ (TỰ ĐỘNG CÀO MÃ MỚI 100% KHI BẤM CẬP NHẬT) -->
+        <!-- TAB KHO SĂN MÃ -->
         <div id="tab-deals" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🔥 Kho Săn Mã Giảm Giá Đa Sàn (Tự Động Quét Thời Gian Thực)</h2>
@@ -780,15 +780,15 @@
             switchTab('home');
         }
 
-        // Tự động áp dụng khi vừa tải trang xong
-        if (window.__PRELOAD_USER__) {
-            currentUser = window.__PRELOAD_USER__;
-            window.addEventListener('DOMContentLoaded', () => {
+        // Khởi chạy ngay lập tức khi DOM đã sẵn sàng (đảm bảo không bị mất phiên khi F5)
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.__PRELOAD_USER__) {
+                currentUser = window.__PRELOAD_USER__;
                 document.getElementById('auth-modal').classList.add('hidden');
                 updateUIAccess();
                 switchTab('home');
-            });
-        }
+            }
+        });
 
         function logoutSession() {
             localStorage.removeItem('loggedInUser');

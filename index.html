@@ -11,19 +11,40 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         
-        #center-success-modal { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; animation: fadeIn 0.2s ease; }
-        .success-box { background: #2d1b4e; border: 1px solid #7c3aed; padding: 32px; border-radius: 28px; text-align: center; color: #fff; max-width: 320px; width: 90%; box-shadow: 0 20px 40px rgba(0,0,0,0.4); animation: scaleUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .checkmark-circle { width: 70px; height: 70px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 34px; box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes scaleUp { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        /* Hiệu ứng chuyển động dấu tích xanh mượt mà (Animated Checkmark) */
+        #center-success-modal { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        #center-success-modal.show { opacity: 1; pointer-events: auto; }
+        
+        .success-box { background: #2d1b4e; border: 1px solid #7c3aed; padding: 36px 32px; border-radius: 28px; text-align: center; color: #fff; max-width: 320px; width: 90%; box-shadow: 0 20px 40px rgba(0,0,0,0.4); transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #center-success-modal.show .success-box { transform: scale(1); }
+
+        .checkmark-circle { width: 75px; height: 75px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; box-shadow: 0 0 25px rgba(16, 185, 129, 0.6); animation: pulseCircle 1.5s infinite; }
+        
+        @keyframes pulseCircle {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        /* SVG Checkmark Drawing Animation */
+        .checkmark { width: 40px; height: 40px; border-radius: 50%; display: block; stroke-width: 3; stroke: #fff; stroke-miterlimit: 10; box-shadow: inset 0px 0px 0px #10b981; animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both; }
+        .checkmark__check { transform-origin: 50% 50%; stroke-dasharray: 48; stroke-dashoffset: 48; animation: stroke 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards; }
+        @keyframes stroke { 100% { stroke-dashoffset: 0; } }
+        @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
+        @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 30px #10b981; } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-20 lg:pb-0">
 
-    <!-- MODAL THÔNG BÁO DẤU TÍCH XANH Ở GIỮA (TỰ ĐỘNG TẮT SAU 1.5S, KHÔNG BỊ ĐỨNG HÌNH) -->
-    <div id="center-success-modal" class="hidden">
+    <!-- MODAL THÔNG BÁO DẤU TÍCH XANH CHUYỂN ĐỘNG Ở GIỮA -->
+    <div id="center-success-modal">
         <div class="success-box space-y-3">
-            <div class="checkmark-circle">✅</div>
+            <div class="checkmark-circle">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
             <h3 class="font-extrabold text-xl text-white">Thành Công!</h3>
             <p id="center-success-text" class="text-xs text-purple-200">Đã hoàn thành thao tác hệ thống.</p>
         </div>
@@ -335,7 +356,7 @@
             </div>
         </div>
 
-        <!-- TAB QUÉT DATA (GIẢI MÃ HACKER KHÔNG BỊ ĐỨNG, TỰ ĐỘNG TẮT MODAL) -->
+        <!-- TAB QUÉT DATA -->
         <div id="tab-scraper" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (50 - 500 Data Hàng Loạt)</h2>
@@ -500,14 +521,14 @@
             { code: 'SKINCARE50K', desc: 'Giảm 50K mỹ phẩm Hàn Quốc', platform: 'SHOPEE' }
         ];
 
-        // Hiển thị modal dấu tích xanh ở giữa, tự động tắt sau 1.2s để không bị đứng hình
+        // Hiệu ứng chuyển động dấu tích xanh mượt mà (chỉ gọi khi thực sự bấm hoàn thành)
         function showCenterSuccess(text) {
             document.getElementById('center-success-text').innerText = text;
             const modal = document.getElementById('center-success-modal');
-            modal.classList.remove('hidden');
+            modal.classList.add('show');
             setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 1200);
+                modal.classList.remove('show');
+            }, 1400);
         }
 
         function copyToClipboard(text) {
@@ -799,7 +820,7 @@
             if(selected) selected.className = "p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1";
         }
 
-        // GIẢI MÃ HACKER KHÔNG BỊ ĐỨNG, CHẠY TỪNG DATA VÀ HIỆN DẤU TÍCH XANH TỰ TẮT
+        // HACKER DECRYPT & ANIMATED SUCCESS MODAL
         function runHackerScraperExecution() {
             const terminal = document.getElementById('terminal-box');
             const execBtn = document.getElementById('exec-btn');
@@ -852,7 +873,6 @@
                     rowsContainer.innerHTML = generatedHtml;
                     dataContainer.classList.remove('hidden');
 
-                    // Hiện dấu tích xanh ở giữa màn hình và tự động biến mất sau 1.2s không bị đứng hình
                     showCenterSuccess('Đã giải mã thành công 250 Data hàng loạt!');
                 }
             }, 100);

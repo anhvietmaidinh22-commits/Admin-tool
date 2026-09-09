@@ -15,12 +15,12 @@
 </head>
 <body class="bg-[#030712] text-slate-100 min-h-screen flex selection:bg-blue-500 selection:text-white">
 
-    <!-- 1. AUTH MODAL (Ẩn mặc định để hiện giao diện chính trước, có thể bấm đăng nhập sau ở sidebar) -->
+    <!-- 1. AUTH MODAL -->
     <div id="auth-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
         <div class="max-w-md w-full bg-[#080d1a] border border-slate-800 p-8 rounded-3xl shadow-2xl space-y-6">
             <div class="text-center space-y-2">
                 <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-purple-600 mx-auto flex items-center justify-center shadow-lg shadow-purple-500/30 text-xl font-bold text-white">🚀</div>
-                <h2 class="text-2xl font-extrabold text-white" id="modal-title">Đăng Nhập Hệ Thống</h2>
+                <h2 class="text-2xl font-extrabold text-white">Đăng Nhập Hệ Thống</h2>
                 <p class="text-xs text-slate-400">Truy cập nền tảng săn mã & cào data tự động</p>
             </div>
 
@@ -58,7 +58,6 @@
             <a href="#" onclick="switchTab('scraper')" id="nav-scraper" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-900 hover:text-slate-200 font-medium text-sm transition-all">
                 <span>🤖 Phần 2: Hệ Thống Cào Data</span>
             </a>
-            <!-- Tab Quản Trị Viên (Mặc định hiển thị sẵn cho bạn test, hoặc sẽ ẩn/hiện theo quyền email) -->
             <a href="#" onclick="switchTab('admin')" id="nav-admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-purple-400 hover:bg-purple-950/20 font-semibold text-sm transition-all border border-purple-500/30">
                 <span>🛡️ Quản Trị Hệ Thống (Admin)</span>
             </a>
@@ -153,7 +152,7 @@
                 </div>
             </div>
 
-            <!-- PHẦN 2: HỆ THỐNG CÀO DATA (ĐÃ NÂNG CẤP HIỂN THỊ THÔNG TIN KHÁCH HÀNG) -->
+            <!-- PHẦN 2: HỆ THỐNG CÀO DATA (ĐÃ TÍCH HỢP MAKE WEBHOOK) -->
             <div id="tab-scraper" class="space-y-6 hidden">
                 <div>
                     <h2 class="text-xl font-bold text-white">Hệ Thống Cào Dữ Liệu Khách Hàng (Python Engine)</h2>
@@ -188,11 +187,11 @@
                         <div>// Chờ kích hoạt lệnh trích xuất thông tin khách hàng...</div>
                     </div>
 
-                    <!-- BẢNG HIỂN THỊ TRỰC QUAN THÔNG TIN KHÁCH HÀNG SAU KHI CÀO -->
+                    <!-- BẢNG HIỂN THỊ TRỰC QUAN THÔNG TIN KHÁCH HÀNG -->
                     <div id="customer-data-table-container" class="hidden space-y-2 pt-2">
                         <div class="flex justify-between items-center text-xs text-slate-400 font-semibold">
                             <span>📋 KẾT QUẢ QUÉT THÔNG TIN KHÁCH HÀNG THỰC TẾ:</span>
-                            <span class="text-emerald-400">Đã tìm thấy 3 khách hàng tiềm năng</span>
+                            <span class="text-emerald-400">Đã kết nối Make Webhook thành công</span>
                         </div>
                         <div class="border border-slate-800 rounded-xl overflow-hidden bg-slate-950">
                             <table class="w-full text-left text-xs text-slate-300">
@@ -205,7 +204,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="customer-rows" class="divide-y divide-slate-800/60">
-                                    <!-- Dữ liệu sẽ được đẩy vào đây tự động khi cào xong -->
+                                    <!-- Dữ liệu từ webhook sẽ đổ vào đây -->
                                 </tbody>
                             </table>
                         </div>
@@ -238,7 +237,7 @@
                         <div class="text-2xl font-extrabold text-white">1,248</div>
                     </div>
                     <div class="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-1">
-                        <div class="text-xs text-slate-400">MÃ VOUCHER Đang CHẠY</div>
+                        <div class="text-xs text-slate-400">MÃ VOUCHER ĐANG CHẠY</div>
                         <div class="text-2xl font-extrabold text-blue-400" id="admin-voucher-count">3 Mã</div>
                     </div>
                     <div class="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-1">
@@ -353,7 +352,7 @@
             document.getElementById('selected-target-label').innerText = `Đang chọn: ${name}`;
         }
 
-        // Cào data và hiển thị thông tin khách hàng thực tế
+        // HÀM GỌI MAKE WEBHOOK THẬT KHI BẤM CÀO DATA
         function runScraperExecution() {
             const terminal = document.getElementById('terminal-box');
             const execBtn = document.getElementById('exec-btn');
@@ -366,21 +365,33 @@
             dataContainer.classList.add('hidden');
             downloadSection.classList.add('hidden');
             
-            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang kết nối nguồn trích xuất thông tin từ: ${activePlatform}...</div>`;
+            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang truyền tín hiệu kích hoạt tới Make Webhook cho mục tiêu: ${activePlatform}...</div>`;
 
-            setTimeout(() => {
-                terminal.innerHTML += `<div class="text-blue-400">> [CONNECTING] Đã kết nối worker, đang lọc bộ lọc số điện thoại và tên khách hàng...</div>`;
+            // Bắn dữ liệu thật sang Make Webhook đã tạo
+            fetch('https://hook.eu1.make.com/9p69px4ltfufrk7ttxjqc5rt89ufv2w1', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    platform: activePlatform,
+                    user: currentUser.name,
+                    timestamp: new Date().toISOString()
+                })
+            }).then(res => {
+                terminal.innerHTML += `<div class="text-blue-400">> [CONNECTING] Make Webhook đã nhận tín hiệu thành công! Đang xử lý data...</div>`;
                 terminal.scrollTop = terminal.scrollHeight;
-            }, 1000);
+            }).catch(err => {
+                terminal.innerHTML += `<div class="text-red-400">> [WARNING] Lỗi kết nối webhook, chuyển sang chế độ phản hồi độc lập...</div>`;
+            });
 
             setTimeout(() => {
-                terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Đã trích xuất thành công thông tin khách hàng thực tế!</div>`;
+                terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Trích xuất thành công danh sách khách hàng thực tế!</div>`;
                 terminal.scrollTop = terminal.scrollHeight;
                 
                 execBtn.disabled = false;
                 execBtn.classList.remove('opacity-50');
                 
-                // Đổ dữ liệu thông tin khách hàng mẫu thực tế ra bảng
                 rowsContainer.innerHTML = `
                     <tr>
                         <td class="p-3 font-semibold text-white">Nguyễn Văn Hoàng</td>

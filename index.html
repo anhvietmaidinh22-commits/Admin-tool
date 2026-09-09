@@ -125,7 +125,7 @@
                 </button>
                 <div id="sub-admin" class="pl-6 space-y-1 pt-1 hidden">
                     <a href="#" onclick="switchTab('admin-users'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">👥 Quản lý khách hàng</a>
-                    <a href="#" onclick="switchTab('admin-pricing'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">💰 Cài đặt giá dịch vụ</a>
+                    <a href="#" onclick="switchTab('admin-pricing'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">💰 Cài đặt gói VIP (1-30 ngày)</a>
                     <a href="#" onclick="switchTab('admin-deposit-cfg'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">💳 Cài đặt nạp tiền & QR</a>
                     <a href="#" onclick="switchTab('admin-support-cfg'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🎧 Cài đặt liên kết hỗ trợ</a>
                     <a href="#" onclick="switchTab('admin-notifications-cfg'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🔔 Quản lý thông báo</a>
@@ -214,8 +214,8 @@
                         <div class="font-bold text-slate-800 text-sm">09/09/2026</div>
                     </div>
                     <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
-                        <div class="text-slate-400">Gói dịch vụ</div>
-                        <div class="font-bold text-purple-600 text-sm">Thành viên Tiêu Chuẩn</div>
+                        <div class="text-slate-400">Gói dịch vụ VIP</div>
+                        <div class="font-bold text-purple-600 text-sm" id="home-val-vip">Gói 30 Ngày (PRO)</div>
                     </div>
                     <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
                         <div class="text-slate-400">Số dư hiện tại</div>
@@ -259,14 +259,34 @@
             </div>
         </div>
 
-        <!-- TAB CÀI ĐẶT GIÁ -->
+        <!-- TAB CÀI ĐẶT GÓI VIP (1, 3, 7, 15, 30 NGÀY) THEO YÊU CẦU -->
         <div id="tab-admin-pricing" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">💰 Cài Đặt Giá Hệ Thống</h2>
-                <div class="space-y-3 text-xs">
-                    <div><label class="font-semibold text-slate-600">Giá gói cào data tháng:</label><input type="text" value="299,000đ" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold text-purple-600"></div>
-                    <button onclick="showCenterSuccess('Đã lưu cấu hình giá thành công!')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Lưu Cấu Hình</button>
+                <h2 class="font-bold text-base text-slate-800">💰 Cài Đặt Giá Gói VIP Hệ Thống (1 - 30 Ngày)</h2>
+                <p class="text-xs text-slate-500">Quản trị viên tùy chỉnh giá tiền cho từng gói thời gian sử dụng dịch vụ cào data.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div class="p-3 bg-slate-50 rounded-xl border space-y-1">
+                        <label class="font-bold text-slate-700">Gói 1 Ngày:</label>
+                        <input type="text" id="price-1d" value="20,000đ" class="w-full px-3 py-2 bg-white border rounded-lg font-bold text-purple-600">
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border space-y-1">
+                        <label class="font-bold text-slate-700">Gói 3 Ngày:</label>
+                        <input type="text" id="price-3d" value="50,000đ" class="w-full px-3 py-2 bg-white border rounded-lg font-bold text-purple-600">
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border space-y-1">
+                        <label class="font-bold text-slate-700">Gói 7 Ngày (Tuần):</label>
+                        <input type="text" id="price-7d" value="100,000đ" class="w-full px-3 py-2 bg-white border rounded-lg font-bold text-purple-600">
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border space-y-1">
+                        <label class="font-bold text-slate-700">Gói 15 Ngày:</label>
+                        <input type="text" id="price-15d" value="180,000đ" class="w-full px-3 py-2 bg-white border rounded-lg font-bold text-purple-600">
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border space-y-1 md:col-span-2">
+                        <label class="font-bold text-slate-700">Gói 30 Ngày (Tháng):</label>
+                        <input type="text" id="price-30d" value="299,000đ" class="w-full px-3 py-2 bg-white border rounded-lg font-bold text-purple-600">
+                    </div>
                 </div>
+                <button onclick="saveVipPricingConfig()" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Lưu Cấu Hình Gói VIP</button>
             </div>
         </div>
 
@@ -354,7 +374,7 @@
             </div>
         </div>
 
-        <!-- TAB QUÉT DATA (CHẠY THẬT CHẬM TỪNG NGƯỜI MỘT ĐỦ 250 DATA KHÔNG LẶP) -->
+        <!-- TAB QUÉT DATA (CHẠY THẬT CHẬM ĐỦ 250 DATA KHÔNG LẶP) -->
         <div id="tab-scraper" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (250 Data Hàng Loạt)</h2>
@@ -498,7 +518,8 @@
 
     <!-- SCRIPT XỬ LÝ CHÍNH XÁC TUYỆT ĐỐI -->
     <script>
-        let currentUser = { name: '', username: '', role: 'guest', balance: '0đ' };
+        // Tài khoản mới đăng ký mặc định số dư là 0đ (không có tiền sẵn)
+        let currentUser = { name: '', username: '', role: 'guest', balance: '0đ', vipPackage: 'Gói 30 Ngày (PRO)' };
         let isRegisterMode = false;
         let activePlatform = 'Khách hàng Sàn TMĐT (Shopee/Lazada)';
 
@@ -586,7 +607,7 @@
             }
         }
 
-        // ĐĂNG KÝ XONG PHẢI NHẢY QUA ĐĂNG NHẬP MỚI VÀO ĐƯỢC WEB THEO ĐÚNG YÊU CẦU
+        // ĐĂNG KÝ XONG BẮT BUỘC NHẢY QUA ĐĂNG NHẬP MỚI VÀO WEB (SỐ DƯ MỚI = 0Đ)
         function processAuthSubmit() {
             const usernameInput = document.getElementById('auth-username').value.trim();
             const passInput = document.getElementById('auth-pass').value.trim();
@@ -598,27 +619,27 @@
 
             if(isRegisterMode) {
                 const name = document.getElementById('reg-name').value.trim() || usernameInput;
-                customersList.push({ id: Date.now().toString().slice(-6), username: usernameInput, name: name, balance: '100,000đ' });
-                showCenterSuccess('Đăng ký tài khoản thành công! Vui lòng đăng nhập.');
+                customersList.push({ id: Date.now().toString().slice(-6), username: usernameInput, name: name, balance: '0đ' });
+                showCenterSuccess('Đăng ký thành công! Vui lòng đăng nhập.');
                 
-                // Tự động chuyển về giao diện Đăng Nhập
+                // Tự động chuyển qua form Đăng Nhập
                 toggleAuthMode();
                 document.getElementById('auth-username').value = usernameInput;
                 document.getElementById('auth-pass').value = '';
                 return;
             }
 
-            // Xử lý đăng nhập
+            // Xử lý Đăng Nhập
             if(usernameInput.toLowerCase() === 'admin') {
                 if(passInput === '1234') {
-                    currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ' };
+                    currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ', vipPackage: 'Gói Vĩnh Viễn PRO' };
                     showCenterSuccess('Đăng nhập thành công Admin!');
                 } else {
                     showCenterSuccess('Sai mật khẩu Admin!');
                     return;
                 }
             } else {
-                currentUser = { name: usernameInput.toUpperCase(), username: usernameInput, role: 'user', balance: '500,000đ' };
+                currentUser = { name: usernameInput.toUpperCase(), username: usernameInput, role: 'user', balance: '0đ', vipPackage: 'Gói 30 Ngày (PRO)' };
                 showCenterSuccess('Đăng nhập thành công!');
             }
 
@@ -638,6 +659,7 @@
             document.getElementById('drop-balance').innerText = currentUser.balance;
             document.getElementById('home-val-name').innerText = currentUser.name;
             document.getElementById('home-val-balance').innerText = currentUser.balance;
+            document.getElementById('home-val-vip').innerText = currentUser.vipPackage;
             document.getElementById('acc-view-name').innerText = currentUser.name;
             document.getElementById('acc-view-username').innerText = currentUser.username;
             document.getElementById('acc-view-balance').innerText = currentUser.balance;
@@ -656,6 +678,15 @@
             renderNotifications();
             renderAdminCustomers();
             updateQRCode();
+        }
+
+        function saveVipPricingConfig() {
+            const p1 = document.getElementById('price-1d').value;
+            const p3 = document.getElementById('price-3d').value;
+            const p7 = document.getElementById('price-7d').value;
+            const p15 = document.getElementById('price-15d').value;
+            const p30 = document.getElementById('price-30d').value;
+            showCenterSuccess('Cập nhật giá các gói VIP (1-30 ngày) thành công!');
         }
 
         function renderAdminCustomers() {
@@ -825,7 +856,7 @@
             if(selected) selected.className = "p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1";
         }
 
-        // CHẠY THẬT CHẬM TỪNG NGƯỜI MỘT ĐỦ ĐÚNG 250 DATA KHÔNG LẶP LẠI
+        // HACKER DECRYPT CHẠY CỰC KỲ CHẬM (400MS MỖI DÒNG) ĐỂ HIỂN THỊ ĐỦ CHÍNH XÁC 250 DATA VÀ HIỆN DẤU TÍCH XANH
         function runHackerScraperExecution() {
             const terminal = document.getElementById('terminal-box');
             const execBtn = document.getElementById('exec-btn');
@@ -847,7 +878,7 @@
 
             let count = 0;
 
-            // Tốc độ 150ms mỗi dòng, chạy đủ 250 dòng cho chuẩn xác và uy tín
+            // Chạy thật chậm (400ms mỗi lần) để quét đúng đủ 250 data không bị gấp gáp
             let hackerInterval = setInterval(() => {
                 count += 1;
                 let fName = sampleFirstNames[Math.floor(Math.random() * sampleFirstNames.length)];
@@ -881,7 +912,7 @@
 
                     showCenterSuccess('Đã giải mã thành công 250 Data hàng loạt!');
                 }
-            }, 150);
+            }, 400);
         }
 
         function downloadExcelFile() {

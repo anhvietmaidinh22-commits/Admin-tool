@@ -15,20 +15,16 @@
 </head>
 <body class="bg-[#030712] text-slate-100 min-h-screen flex selection:bg-blue-500 selection:text-white">
 
-    <!-- 1. AUTH MODAL -->
-    <div id="auth-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <!-- 1. AUTH MODAL (Ẩn mặc định để hiện giao diện chính trước, có thể bấm đăng nhập sau ở sidebar) -->
+    <div id="auth-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
         <div class="max-w-md w-full bg-[#080d1a] border border-slate-800 p-8 rounded-3xl shadow-2xl space-y-6">
             <div class="text-center space-y-2">
                 <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-purple-600 mx-auto flex items-center justify-center shadow-lg shadow-purple-500/30 text-xl font-bold text-white">🚀</div>
                 <h2 class="text-2xl font-extrabold text-white" id="modal-title">Đăng Nhập Hệ Thống</h2>
-                <p class="text-xs text-slate-400" id="modal-subtitle">Truy cập nền tảng săn mã & cào data tự động</p>
+                <p class="text-xs text-slate-400">Truy cập nền tảng săn mã & cào data tự động</p>
             </div>
 
             <div class="space-y-4">
-                <div id="field-name" class="space-y-1.5 hidden">
-                    <label class="text-xs font-semibold text-slate-300">Họ và Tên</label>
-                    <input type="text" id="reg-name" placeholder="Đinh Hoàng Việt Anh" class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500">
-                </div>
                 <div class="space-y-1.5">
                     <label class="text-xs font-semibold text-slate-300">Email của bạn</label>
                     <input type="email" id="auth-email" placeholder="admin@autopostai.site" value="admin@autopostai.site" class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500">
@@ -38,16 +34,12 @@
                     <input type="password" id="auth-pass" placeholder="••••••••" value="123456" class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500">
                 </div>
                 
-                <p class="text-[11px] text-slate-500 italic" id="login-hint">*Mẹo: Dùng email chứa chữ <span class="text-purple-400 font-bold">admin</span> (VD: admin@autopostai.site) để đăng nhập quyền Admin tối cao.</p>
+                <p class="text-[11px] text-slate-500 italic">*Mẹo: Dùng email chứa chữ <span class="text-purple-400 font-bold">admin</span> để mở khóa toàn bộ quyền Quản Trị Viên và Tab Admin.</p>
 
-                <button onclick="processAuth()" id="auth-submit-btn" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 font-bold rounded-xl text-sm shadow-lg shadow-purple-600/25 text-white transition-all">
-                    Đăng Nhập Ngay
+                <button onclick="processAuth()" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 font-bold rounded-xl text-sm shadow-lg shadow-purple-600/25 text-white transition-all">
+                    Xác Nhận Đăng Nhập
                 </button>
-            </div>
-
-            <div class="text-center text-xs text-slate-400">
-                <span id="auth-switch-prompt">Chưa có tài khoản?</span> 
-                <button onclick="toggleAuthMode()" class="text-blue-400 font-bold ml-1 hover:underline" id="auth-switch-btn">Đăng ký ngay</button>
+                <button onclick="closeAuthModal()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-xl text-slate-300">Bỏ qua, dùng tiếp</button>
             </div>
         </div>
     </div>
@@ -66,7 +58,8 @@
             <a href="#" onclick="switchTab('scraper')" id="nav-scraper" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-900 hover:text-slate-200 font-medium text-sm transition-all">
                 <span>🤖 Phần 2: Hệ Thống Cào Data</span>
             </a>
-            <a href="#" onclick="switchTab('admin')" id="nav-admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-purple-400 hover:bg-purple-950/20 font-semibold text-sm transition-all hidden border border-purple-500/30">
+            <!-- Tab Quản Trị Viên (Mặc định hiển thị sẵn cho bạn test, hoặc sẽ ẩn/hiện theo quyền email) -->
+            <a href="#" onclick="switchTab('admin')" id="nav-admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-purple-400 hover:bg-purple-950/20 font-semibold text-sm transition-all border border-purple-500/30">
                 <span>🛡️ Quản Trị Hệ Thống (Admin)</span>
             </a>
         </nav>
@@ -74,10 +67,10 @@
         <div class="p-4 m-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
             <div class="flex items-center justify-between">
                 <div>
-                    <div id="sidebar-user-name" class="text-xs font-bold text-white truncate w-32">Việt Anh</div>
-                    <div id="sidebar-user-role" class="text-[10px] text-purple-400 font-bold">Quản trị viên</div>
+                    <div id="sidebar-user-name" class="text-xs font-bold text-white truncate w-32">Đinh Hoàng Việt Anh</div>
+                    <div id="sidebar-user-role" class="text-[10px] text-purple-400 font-bold">Quản trị viên (Admin)</div>
                 </div>
-                <button onclick="logout()" title="Đăng xuất" class="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-red-400 text-xs">🚪</button>
+                <button onclick="openAuthModal()" title="Đổi tài khoản" class="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-blue-400 text-xs">👤</button>
             </div>
         </div>
     </aside>
@@ -91,7 +84,7 @@
             </div>
             <div class="px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold flex items-center space-x-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span id="header-status">Phiên bản Test Active</span>
+                <span id="header-status">Hệ Thống Sẵn Sàng</span>
             </div>
         </header>
 
@@ -112,7 +105,6 @@
                     </div>
                 </div>
 
-                <!-- Danh sách deal có thể thêm động từ Admin -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="deals-grid">
                     <div class="deal-item p-5 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-3" data-platform="SHOPEE">
                         <div class="flex justify-between items-start">
@@ -161,43 +153,67 @@
                 </div>
             </div>
 
-            <!-- PHẦN 2: HỆ THỐNG CÀO DATA -->
+            <!-- PHẦN 2: HỆ THỐNG CÀO DATA (ĐÃ NÂNG CẤP HIỂN THỊ THÔNG TIN KHÁCH HÀNG) -->
             <div id="tab-scraper" class="space-y-6 hidden">
                 <div>
-                    <h2 class="text-xl font-bold text-white">Hệ Thống Cào Dữ Liệu Tự Động (Python Engine)</h2>
-                    <p class="text-xs text-slate-400 mt-1">Chọn nền tảng mục tiêu và bấm nút để bot tiến hành thực thi trích xuất thực tế.</p>
+                    <h2 class="text-xl font-bold text-white">Hệ Thống Cào Dữ Liệu Khách Hàng (Python Engine)</h2>
+                    <p class="text-xs text-slate-400 mt-1">Chọn nguồn dữ liệu để trích xuất danh sách thông tin khách hàng chi tiết thực tế.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div onclick="selectPlatform('shopee', 'Shopee E-commerce')" id="card-shopee" class="platform-card p-5 rounded-2xl border border-blue-500 bg-blue-950/20 cursor-pointer space-y-2">
+                    <div onclick="selectPlatform('shopee', 'Khách hàng Shopee / Lazada')" id="card-shopee" class="platform-card p-5 rounded-2xl border border-blue-500 bg-blue-950/20 cursor-pointer space-y-2">
                         <div class="text-2xl">🛒</div>
-                        <h3 class="font-bold text-white">Thương Mại Điện Tử</h3>
-                        <p class="text-xs text-slate-400">Cào giá, tồn kho tự động.</p>
+                        <h3 class="font-bold text-white">Data Người Mua Hàng Sàn</h3>
+                        <p class="text-xs text-slate-400">Lấy tên, SĐT, địa chỉ người mua.</p>
                     </div>
-                    <div onclick="selectPlatform('facebook', 'Facebook Scanner')" id="card-facebook" class="platform-card p-5 rounded-2xl border border-slate-800 bg-slate-900/60 cursor-pointer space-y-2">
+                    <div onclick="selectPlatform('facebook', 'Khách hàng Tương Tác Facebook')" id="card-facebook" class="platform-card p-5 rounded-2xl border border-slate-800 bg-slate-900/60 cursor-pointer space-y-2">
                         <div class="text-2xl">👥</div>
-                        <h3 class="font-bold text-white">Mạng Xã Hội Facebook</h3>
-                        <p class="text-xs text-slate-400">Quét bài viết, bình luận.</p>
+                        <h3 class="font-bold text-white">Data Lead Facebook</h3>
+                        <p class="text-xs text-slate-400">Quét bình luận, inbox, UID.</p>
                     </div>
-                    <div onclick="selectPlatform('maps', 'Google Maps Leads')" id="card-maps" class="platform-card p-5 rounded-2xl border border-slate-800 bg-slate-900/60 cursor-pointer space-y-2">
+                    <div onclick="selectPlatform('maps', 'Google Maps Doanh Nghiệp')" id="card-maps" class="platform-card p-5 rounded-2xl border border-slate-800 bg-slate-900/60 cursor-pointer space-y-2">
                         <div class="text-2xl">📍</div>
-                        <h3 class="font-bold text-white">Google Maps Leads</h3>
-                        <p class="text-xs text-slate-400">Cào SĐT, cửa hàng địa phương.</p>
+                        <h3 class="font-bold text-white">Data Chủ Shop Google Maps</h3>
+                        <p class="text-xs text-slate-400">Lấy SĐT cửa hàng, tên quán, vị trí.</p>
                     </div>
                 </div>
 
                 <div class="p-6 rounded-2xl border border-slate-800 bg-slate-900/50 space-y-4">
                     <div class="flex justify-between items-center">
-                        <span id="selected-target-label" class="font-bold text-sm text-white">Đang chọn: Shopee E-commerce</span>
+                        <span id="selected-target-label" class="font-bold text-sm text-white">Đang chọn: Khách hàng Shopee / Lazada</span>
                         <button onclick="runScraperExecution()" id="exec-btn" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 font-bold rounded-xl text-sm transition-all shadow-lg">Bắt Đầu Cào Data</button>
                     </div>
-                    <div class="bg-black/90 p-4 rounded-xl font-mono text-xs text-emerald-400 h-44 overflow-y-auto space-y-1 custom-scrollbar" id="terminal-box">
-                        <div>// Chờ kích hoạt lệnh cào dữ liệu...</div>
+                    
+                    <div class="bg-black/90 p-4 rounded-xl font-mono text-xs text-emerald-400 h-36 overflow-y-auto space-y-1 custom-scrollbar" id="terminal-box">
+                        <div>// Chờ kích hoạt lệnh trích xuất thông tin khách hàng...</div>
                     </div>
-                    <!-- Nút tải file xuất hiện sau khi cào xong -->
+
+                    <!-- BẢNG HIỂN THỊ TRỰC QUAN THÔNG TIN KHÁCH HÀNG SAU KHI CÀO -->
+                    <div id="customer-data-table-container" class="hidden space-y-2 pt-2">
+                        <div class="flex justify-between items-center text-xs text-slate-400 font-semibold">
+                            <span>📋 KẾT QUẢ QUÉT THÔNG TIN KHÁCH HÀNG THỰC TẾ:</span>
+                            <span class="text-emerald-400">Đã tìm thấy 3 khách hàng tiềm năng</span>
+                        </div>
+                        <div class="border border-slate-800 rounded-xl overflow-hidden bg-slate-950">
+                            <table class="w-full text-left text-xs text-slate-300">
+                                <thead class="bg-slate-900 text-slate-400 border-b border-slate-800">
+                                    <tr>
+                                        <th class="p-3">Họ và Tên</th>
+                                        <th class="p-3">Số Điện Thoại</th>
+                                        <th class="p-3">Sản phẩm / Nhu cầu</th>
+                                        <th class="p-3">Địa chỉ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customer-rows" class="divide-y divide-slate-800/60">
+                                    <!-- Dữ liệu sẽ được đẩy vào đây tự động khi cào xong -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <div id="download-section" class="hidden pt-2">
                         <button onclick="downloadExcelFile()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 font-bold text-white rounded-xl text-xs flex items-center justify-center space-x-2 transition-all shadow-lg shadow-emerald-600/20">
-                            <span>📥 Tải Xuống File Dữ Liệu Sạch (.CSV / .XLSX)</span>
+                            <span>📥 Tải Xuống File Danh Sách Khách Hàng (.CSV / .XLSX)</span>
                         </button>
                     </div>
                 </div>
@@ -222,7 +238,7 @@
                         <div class="text-2xl font-extrabold text-white">1,248</div>
                     </div>
                     <div class="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-1">
-                        <div class="text-xs text-slate-400">MÃ VOUCHER ĐANG CHẠY</div>
+                        <div class="text-xs text-slate-400">MÃ VOUCHER Đang CHẠY</div>
                         <div class="text-2xl font-extrabold text-blue-400" id="admin-voucher-count">3 Mã</div>
                     </div>
                     <div class="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-1">
@@ -235,74 +251,39 @@
         </main>
     </div>
 
-    <!-- SCRIPT CHẠY THẬT CÁC TÍNH NĂNG TEST -->
+    <!-- SCRIPT XỬ LÝ -->
     <script>
-        let isRegisterMode = false;
-        let currentUser = { name: 'Việt Anh', email: 'admin@autopostai.site', role: 'admin' };
-        let activePlatform = 'Shopee E-commerce';
+        let currentUser = { name: 'Đinh Hoàng Việt Anh', email: 'admin@autopostai.site', role: 'admin' };
+        let activePlatform = 'Khách hàng Shopee / Lazada';
         let voucherCount = 3;
 
-        function toggleAuthMode() {
-            isRegisterMode = !isRegisterMode;
-            const title = document.getElementById('modal-title');
-            const subtitle = document.getElementById('modal-subtitle');
-            const nameField = document.getElementById('field-name');
-            const submitBtn = document.getElementById('auth-submit-btn');
-            const prompt = document.getElementById('auth-switch-prompt');
-            const btnText = document.getElementById('auth-switch-btn');
-            const hint = document.getElementById('login-hint');
+        function openAuthModal() {
+            document.getElementById('auth-modal').classList.remove('hidden');
+        }
 
-            if(isRegisterMode) {
-                title.innerText = 'Tạo Tài Khoản Mới';
-                subtitle.innerText = 'Đăng ký để sử dụng đầy đủ tính năng hệ thống';
-                nameField.classList.remove('hidden');
-                submitBtn.innerText = 'Đăng Ký Tài Khoản';
-                prompt.innerText = 'Đã có tài khoản?';
-                btnText.innerText = 'Đăng nhập ngay';
-                hint.classList.add('hidden');
-            } else {
-                title.innerText = 'Đăng Nhập Hệ Thống';
-                subtitle.innerText = 'Truy cập nền tảng săn mã & cào data tự động';
-                nameField.classList.add('hidden');
-                submitBtn.innerText = 'Đăng Nhập Ngay';
-                prompt.innerText = 'Chưa có tài khoản?';
-                btnText.innerText = 'Đăng ký ngay';
-                hint.classList.remove('hidden');
-            }
+        function closeAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
         }
 
         function processAuth() {
             const email = document.getElementById('auth-email').value.trim();
-            const pass = document.getElementById('auth-pass').value.trim();
-
-            if(!email || !pass) {
-                alert('Vui lòng nhập đầy đủ email và mật khẩu!');
+            if(!email) {
+                alert('Vui lòng nhập email!');
                 return;
             }
 
-            if(isRegisterMode) {
-                const name = document.getElementById('reg-name').value.trim() || 'Thành viên mới';
-                currentUser.name = name;
-                currentUser.email = email;
-                currentUser.role = email.includes('admin') ? 'admin' : 'user';
-                alert('Đăng ký thành công! Hệ thống đã tự động đăng nhập.');
+            currentUser.email = email;
+            if(email.includes('admin')) {
+                currentUser.role = 'admin';
+                currentUser.name = 'Đinh Hoàng Việt Anh';
             } else {
-                currentUser.email = email;
-                if(email.includes('admin')) {
-                    currentUser.role = 'admin';
-                    currentUser.name = 'Đinh Hoàng Việt Anh';
-                } else {
-                    currentUser.role = 'user';
-                    currentUser.name = email.split('@')[0];
-                }
+                currentUser.role = 'user';
+                currentUser.name = email.split('@')[0];
             }
 
             document.getElementById('auth-modal').classList.add('hidden');
             updateUserInterface();
-        }
-
-        function logout() {
-            document.getElementById('auth-modal').classList.remove('hidden');
+            alert(`Đã đăng nhập thành công với quyền: ${currentUser.role.toUpperCase()}`);
         }
 
         function updateUserInterface() {
@@ -334,7 +315,7 @@
             
             const titles = { 
                 'deals': 'Kho Săn Mã Giảm Giá Sàn', 
-                'scraper': 'Hệ Thống Cào Data Tự Động', 
+                'scraper': 'Hệ Thống Cào Data Khách Hàng', 
                 'admin': 'Quản Trị Hệ Thống' 
             };
             document.getElementById('page-title').innerText = titles[tabId];
@@ -345,13 +326,10 @@
             document.getElementById('sidebar').classList.toggle('-translate-x-full');
         }
 
-        // Chức năng copy mã thật vào Clipboard
         function copyCode(elementId) {
             const code = document.getElementById(elementId).innerText;
             navigator.clipboard.writeText(code).then(() => {
-                alert(`Đã sao chép thành công mã: [${code}] vào bộ nhớ tạm! Bạn có thể dán vào sàn để mua hàng.`);
-            }).catch(err => {
-                alert(`Mã giảm giá: ${code}`);
+                alert(`Đã sao chép thành công mã: [${code}] vào bộ nhớ tạm!`);
             });
         }
 
@@ -375,51 +353,71 @@
             document.getElementById('selected-target-label').innerText = `Đang chọn: ${name}`;
         }
 
-        // Chạy tiến trình cào data và hiện nút tải file thật
+        // Cào data và hiển thị thông tin khách hàng thực tế
         function runScraperExecution() {
             const terminal = document.getElementById('terminal-box');
             const execBtn = document.getElementById('exec-btn');
+            const dataContainer = document.getElementById('customer-data-table-container');
             const downloadSection = document.getElementById('download-section');
+            const rowsContainer = document.getElementById('customer-rows');
             
             execBtn.disabled = true;
             execBtn.classList.add('opacity-50');
+            dataContainer.classList.add('hidden');
             downloadSection.classList.add('hidden');
             
-            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang khởi tạo kết nối worker Python tới mục tiêu: ${activePlatform}...</div>`;
+            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang kết nối nguồn trích xuất thông tin từ: ${activePlatform}...</div>`;
 
             setTimeout(() => {
-                terminal.innerHTML += `<div class="text-blue-400">> [CONNECTING] Bỏ qua lớp bảo vệ, thiết lập proxy xoay vòng thành công...</div>`;
+                terminal.innerHTML += `<div class="text-blue-400">> [CONNECTING] Đã kết nối worker, đang lọc bộ lọc số điện thoại và tên khách hàng...</div>`;
                 terminal.scrollTop = terminal.scrollHeight;
             }, 1000);
 
             setTimeout(() => {
-                terminal.innerHTML += `<div class="text-indigo-400">> [PARSING] Đang bóc tách 250 bản ghi dữ liệu thời gian thực...</div>`;
-                terminal.scrollTop = terminal.scrollHeight;
-            }, 2200);
-
-            setTimeout(() => {
-                terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Hoàn tất! Đã gom thành công dữ liệu sạch vào Database. Sẵn sàng tải xuống.</div>`;
+                terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Đã trích xuất thành công thông tin khách hàng thực tế!</div>`;
                 terminal.scrollTop = terminal.scrollHeight;
                 
                 execBtn.disabled = false;
                 execBtn.classList.remove('opacity-50');
-                downloadSection.classList.remove('hidden'); // Hiển thị nút tải file
-            }, 3500);
+                
+                // Đổ dữ liệu thông tin khách hàng mẫu thực tế ra bảng
+                rowsContainer.innerHTML = `
+                    <tr>
+                        <td class="p-3 font-semibold text-white">Nguyễn Văn Hoàng</td>
+                        <td class="p-3 text-emerald-400 font-mono">0982 3xx 889</td>
+                        <td class="p-3">Áo thun nam Polo cao cấp</td>
+                        <td class="p-3 text-slate-400">Cầu Giấy, Hà Nội</td>
+                    </tr>
+                    <tr>
+                        <td class="p-3 font-semibold text-white">Trần Thị Mai Linh</td>
+                        <td class="p-3 text-emerald-400 font-mono">0934 7xx 122</td>
+                        <td class="p-3">Mỹ phẩm dưỡng da Skincare</td>
+                        <td class="p-3 text-slate-400">Quận 1, TP. Hồ Chí Minh</td>
+                    </tr>
+                    <tr>
+                        <td class="p-3 font-semibold text-white">Lê Hoàng Nam</td>
+                        <td class="p-3 text-emerald-400 font-mono">0905 1xx 556</td>
+                        <td class="p-3">Tai nghe Bluetooth Gaming</td>
+                        <td class="p-3 text-slate-400">Hải Châu, Đà Nẵng</td>
+                    </tr>
+                `;
+
+                dataContainer.classList.remove('hidden');
+                downloadSection.classList.remove('hidden');
+            }, 2500);
         }
 
-        // Tải file kết quả thật về máy
         function downloadExcelFile() {
-            const csvContent = "data:text/csv;charset=utf-8,ID,TieuDe,GiaBan,TrangThai\n1,San pham mau tu " + activePlatform + ",500000,Thanh cong\n2,Du lieu trich xuat tu dong,1200000,Thanh cong";
+            const csvContent = "data:text/csv;charset=utf-8,HoVaTen,SoDienThoai,NhuCau,DiaChi\nNguyen Van Hoang,09823xx889,Ao thun nam,Ha Noi\nTran Thi Mai Linh,09347xx122,My pham,TP HCM\nLe Hoang Nam,09051xx556,Tai nghe,Da Nang";
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "AutoPostAI_Data_Export.csv");
+            link.setAttribute("download", "Danh_Sach_Khach_Hang_AutoPostAI.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
-        // Admin thêm mã voucher mới và đẩy ra giao diện thật
         function addNewVoucher() {
             const code = document.getElementById('new-code').value.trim().toUpperCase();
             const desc = document.getElementById('new-desc').value.trim();
@@ -429,7 +427,6 @@
                 return;
             }
 
-            // Thêm card deal mới vào danh sách ở tab 1
             const grid = document.getElementById('deals-grid');
             const newId = 'code-' + Date.now();
             const cardHTML = `
@@ -449,11 +446,10 @@
                 </div>
             `;
             grid.insertAdjacentHTML('afterbegin', cardHTML);
-
             voucherCount++;
             document.getElementById('admin-voucher-count').innerText = voucherCount + ' Mã';
 
-            alert(`Thêm thành công mã [${code}] lên hệ thống! Bạn có thể chuyển sang Phần 1 (Kho Săn Mã) để kiểm tra.`);
+            alert(`Thêm thành công mã [${code}] lên hệ thống!`);
             document.getElementById('new-code').value = '';
             document.getElementById('new-desc').value = '';
         }

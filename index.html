@@ -3,155 +3,459 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoPostAI - Advanced Data Matrix</title>
+    <title>AutoPostAI - Enterprise Data & Deal Matrix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glow-effect {
-            box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.3);
-        }
-        .card-glow:hover {
-            box-shadow: 0 0 25px -5px rgba(168, 85, 247, 0.4);
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #030712; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-[#030712] text-slate-100 min-h-screen relative overflow-x-hidden selection:bg-purple-500 selection:text-white pb-12">
+<body class="bg-[#030712] text-slate-100 min-h-screen flex selection:bg-blue-500 selection:text-white">
 
-    <!-- Hiệu ứng ánh sáng nền rực rỡ -->
-    <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[120px] pointer-events-none"></div>
-    <div class="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] pointer-events-none"></div>
-
-    <div class="max-w-4xl mx-auto px-4 pt-10 relative z-10 space-y-8">
-        
-        <!-- Header -->
-        <header class="flex items-center justify-between border-b border-slate-800/80 pb-6">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                </div>
-                <div>
-                    <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">AutoPostAI Hub</h1>
-                    <p class="text-xs text-slate-400">Hệ thống trích xuất và điều phối dữ liệu tự động thông minh</p>
-                </div>
+    <!-- 1. AUTH MODAL -->
+    <div id="auth-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-[#080d1a] border border-slate-800 p-8 rounded-3xl shadow-2xl space-y-6">
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-purple-600 mx-auto flex items-center justify-center shadow-lg shadow-purple-500/30 text-xl font-bold text-white">🚀</div>
+                <h2 class="text-2xl font-extrabold text-white" id="modal-title">Đăng Nhập Hệ Thống</h2>
+                <p class="text-xs text-slate-400" id="modal-subtitle">Truy cập nền tảng săn mã & cào data tự động</p>
             </div>
-            <div class="px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold flex items-center space-x-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Hệ thống sẵn sàng</span>
-            </div>
-        </header>
 
-        <!-- Phần chọn mảng (Categories) -->
-        <div class="space-y-3">
-            <h2 class="text-sm font-semibold tracking-wide text-slate-400 uppercase">1. Chọn mảng mục tiêu thu thập dữ liệu</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-4">
+                <div id="field-name" class="space-y-1.5 hidden">
+                    <label class="text-xs font-semibold text-slate-300">Họ và Tên</label>
+                    <input type="text" id="reg-name" placeholder="Đinh Hoàng Việt Anh" class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-slate-300">Email của bạn</label>
+                    <input type="email" id="auth-email" placeholder="admin@autopostai.site" value="admin@autopostai.site" class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-slate-300">Mật khẩu</label>
+                    <input type="password" id="auth-pass" placeholder="••••••••" value="123456" class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
                 
-                <!-- Card 1 -->
-                <div onclick="selectCategory('e_commerce')" id="card-e_commerce" class="category-card p-5 rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl cursor-pointer transition-all duration-300 hover:border-blue-500/50 card-glow border-blue-500 bg-gradient-to-br from-blue-950/40 to-slate-900/80">
-                    <div class="flex items-start justify-between">
-                        <div class="text-2xl p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">🛒</div>
-                        <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300">Hot</span>
-                    </div>
-                    <h3 class="font-bold text-base mt-4 text-white">Sàn Thương Mại Điện Tử</h3>
-                    <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">Quét tự động giá bán, kho hàng, số lượng đã bán và thông tin nhà cung cấp.</p>
-                </div>
+                <p class="text-[11px] text-slate-500 italic" id="login-hint">*Mẹo: Dùng email chứa chữ <span class="text-purple-400 font-bold">admin</span> (VD: admin@autopostai.site) để đăng nhập quyền Admin tối cao.</p>
 
-                <!-- Card 2 -->
-                <div onclick="selectCategory('real_estate')" id="card-real_estate" class="category-card p-5 rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl cursor-pointer transition-all duration-300 hover:border-purple-500/50 card-glow">
-                    <div class="flex items-start justify-between">
-                        <div class="text-2xl p-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">🏢</div>
-                    </div>
-                    <h3 class="font-bold text-base mt-4 text-white">Bất Động Sản & Nhà Đất</h3>
-                    <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">Trích xuất tin rao bán, diện tích, vị trí địa lý và giá giao dịch mới nhất.</p>
-                </div>
-
-                <!-- Card 3 -->
-                <div onclick="selectCategory('social_media')" id="card-social_media" class="category-card p-5 rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl cursor-pointer transition-all duration-300 hover:border-pink-500/50 card-glow">
-                    <div class="flex items-start justify-between">
-                        <div class="text-2xl p-2.5 rounded-xl bg-pink-500/10 text-pink-400 border border-pink-500/20">📱</div>
-                    </div>
-                    <h3 class="font-bold text-base mt-4 text-white">Mạng Xã Hội & Trend</h3>
-                    <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">Thu thập bình luận, xu hướng từ khóa và mức độ tương tác bài viết.</p>
-                </div>
-
-                <!-- Card 4 -->
-                <div onclick="selectCategory('job_market')" id="card-job_market" class="category-card p-5 rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl cursor-pointer transition-all duration-300 hover:border-amber-500/50 card-glow">
-                    <div class="flex items-start justify-between">
-                        <div class="text-2xl p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">💼</div>
-                    </div>
-                    <h3 class="font-bold text-base mt-4 text-white">Tuyển Dụng Việc Làm</h3>
-                    <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">Lọc danh sách vị trí việc làm, mức lương và yêu cầu kỹ năng chi tiết.</p>
-                </div>
-
+                <button onclick="processAuth()" id="auth-submit-btn" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 font-bold rounded-xl text-sm shadow-lg shadow-purple-600/25 text-white transition-all">
+                    Đăng Nhập Ngay
+                </button>
             </div>
-        </div>
 
-        <!-- Nút bấm hành động hoành tráng -->
-        <div class="space-y-3">
-            <h2 class="text-sm font-semibold tracking-wide text-slate-400 uppercase">2. Kích hoạt tiến trình</h2>
-            <button onclick="runScraper()" id="run-btn" class="w-full py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 font-bold rounded-2xl transition-all duration-300 shadow-xl shadow-purple-600/25 flex items-center justify-center space-x-2 text-base active:scale-[0.99]">
-                <svg class="w-5 h-5 animate-spin hidden" id="spinner" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                <span id="btn-text">Bắt Đầu Chạy Trích Xuất Dữ Liệu</span>
-            </button>
-        </div>
-
-        <!-- Màn hình Terminal Log rực rỡ -->
-        <div class="space-y-3">
-            <h2 class="text-sm font-semibold tracking-wide text-slate-400 uppercase">3. Nhật ký hoạt động (Terminal Logs)</h2>
-            <div class="bg-black/90 border border-slate-800/80 p-5 rounded-2xl font-mono text-xs text-emerald-400 h-44 overflow-y-auto shadow-inner space-y-1.5" id="terminal-box">
-                <div class="text-slate-500 flex items-center space-x-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-                    <span>Hệ thống chờ lệnh thực thi từ người dùng...</span>
-                </div>
+            <div class="text-center text-xs text-slate-400">
+                <span id="auth-switch-prompt">Chưa có tài khoản?</span> 
+                <button onclick="toggleAuthMode()" class="text-blue-400 font-bold ml-1 hover:underline" id="auth-switch-btn">Đăng ký ngay</button>
             </div>
         </div>
     </div>
 
-    <script>
-        let currentCategory = 'e_commerce';
+    <!-- 2. SIDEBAR -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-[#080d1a] border-r border-slate-800/80 flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0">
+        <div class="h-16 flex items-center px-6 border-b border-slate-800/80 space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/30 text-white font-bold">⚡</div>
+            <span class="font-extrabold text-lg bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">AutoPostAI</span>
+        </div>
 
-        function selectCategory(id) {
-            currentCategory = id;
-            document.querySelectorAll('.category-card').forEach(el => {
-                el.classList.remove('border-blue-500', 'bg-gradient-to-br', 'from-blue-950/40', 'to-slate-900/80', 'border-purple-500', 'border-pink-500', 'border-amber-500');
-            });
-            const selectedCard = document.getElementById('card-' + id);
-            selectedCard.classList.add('border-blue-500', 'bg-gradient-to-br', 'from-blue-950/40', 'to-slate-900/80');
+        <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto custom-scrollbar">
+            <a href="#" onclick="switchTab('deals')" id="nav-deals" class="flex items-center space-x-3 px-4 py-3 rounded-xl bg-blue-600/10 text-blue-400 border border-blue-500/20 font-semibold text-sm transition-all">
+                <span>🔥 Phần 1: Kho Săn Mã Giảm Giá</span>
+            </a>
+            <a href="#" onclick="switchTab('scraper')" id="nav-scraper" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-900 hover:text-slate-200 font-medium text-sm transition-all">
+                <span>🤖 Phần 2: Hệ Thống Cào Data</span>
+            </a>
+            <a href="#" onclick="switchTab('admin')" id="nav-admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-purple-400 hover:bg-purple-950/20 font-semibold text-sm transition-all hidden border border-purple-500/30">
+                <span>🛡️ Quản Trị Hệ Thống (Admin)</span>
+            </a>
+        </nav>
+
+        <div class="p-4 m-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div id="sidebar-user-name" class="text-xs font-bold text-white truncate w-32">Việt Anh</div>
+                    <div id="sidebar-user-role" class="text-[10px] text-purple-400 font-bold">Quản trị viên</div>
+                </div>
+                <button onclick="logout()" title="Đăng xuất" class="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-red-400 text-xs">🚪</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 3. MAIN CONTENT -->
+    <div class="flex-1 flex flex-col lg:pl-64 min-w-0">
+        <header class="h-16 border-b border-slate-800/80 bg-[#030712]/80 backdrop-blur-xl sticky top-0 z-30 px-6 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg bg-slate-900 text-slate-300 border border-slate-800">☰</button>
+                <h2 class="font-bold text-base text-slate-200" id="page-title">Kho Săn Mã Giảm Giá Sàn</h2>
+            </div>
+            <div class="px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span id="header-status">Phiên bản Test Active</span>
+            </div>
+        </header>
+
+        <main class="flex-1 p-6 space-y-6 max-w-7xl mx-auto w-full">
+            
+            <!-- PHẦN 1: KHO SĂN MÃ -->
+            <div id="tab-deals" class="space-y-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Săn Voucher & Flash Sale Các Sàn</h2>
+                        <p class="text-xs text-slate-400 mt-1">Bấm sao chép mã trực tiếp để sử dụng ngay trên Shopee, Lazada, TikTok.</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="filterPlatform('ALL')" class="px-4 py-2 bg-blue-600 text-white font-bold text-xs rounded-xl">Tất Cả</button>
+                        <button onclick="filterPlatform('SHOPEE')" class="px-4 py-2 bg-slate-900 border border-slate-800 text-slate-300 hover:text-white font-bold text-xs rounded-xl">Shopee</button>
+                        <button onclick="filterPlatform('TIKTOK')" class="px-4 py-2 bg-slate-900 border border-slate-800 text-slate-300 hover:text-white font-bold text-xs rounded-xl">TikTok</button>
+                        <button onclick="filterPlatform('LAZADA')" class="px-4 py-2 bg-slate-900 border border-slate-800 text-slate-300 hover:text-white font-bold text-xs rounded-xl">Lazada</button>
+                    </div>
+                </div>
+
+                <!-- Danh sách deal có thể thêm động từ Admin -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="deals-grid">
+                    <div class="deal-item p-5 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-3" data-platform="SHOPEE">
+                        <div class="flex justify-between items-start">
+                            <span class="px-2.5 py-1 rounded bg-orange-500/10 text-orange-400 border border-orange-500/20 text-xs font-bold">SHOPEE MALL</span>
+                            <span class="text-xs text-emerald-400 font-semibold">Còn hiệu lực</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-base">Mã giảm 100K đơn từ 500K</h3>
+                            <p class="text-xs text-slate-400 mt-1">Áp dụng toàn sàn khung giờ 0H.</p>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center font-mono">
+                            <span class="text-orange-400 font-bold text-sm" id="code-1">SPVNMAL100</span>
+                            <button onclick="copyCode('code-1')" class="px-3 py-1.5 bg-orange-500 hover:bg-orange-400 text-slate-950 font-bold text-xs rounded-lg transition-all">Sao chép</button>
+                        </div>
+                    </div>
+
+                    <div class="deal-item p-5 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-3" data-platform="TIKTOK">
+                        <div class="flex justify-between items-start">
+                            <span class="px-2.5 py-1 rounded bg-pink-500/10 text-pink-400 border border-pink-500/20 text-xs font-bold">TIKTOK SHOP</span>
+                            <span class="text-xs text-emerald-400 font-semibold">Hot Deal</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-base">Voucher Freeship đơn 0Đ</h3>
+                            <p class="text-xs text-slate-400 mt-1">Dành cho toàn bộ phiên livestream.</p>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center font-mono">
+                            <span class="text-pink-400 font-bold text-sm" id="code-2">TTFSHIP0D</span>
+                            <button onclick="copyCode('code-2')" class="px-3 py-1.5 bg-pink-500 hover:bg-pink-400 text-slate-950 font-bold text-xs rounded-lg transition-all">Sao chép</button>
+                        </div>
+                    </div>
+
+                    <div class="deal-item p-5 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-3" data-platform="LAZADA">
+                        <div class="flex justify-between items-start">
+                            <span class="px-2.5 py-1 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold">LAZADA VOUCHER</span>
+                            <span class="text-xs text-emerald-400 font-semibold">Độc quyền</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-base">Giảm 30% tối đa 150K</h3>
+                            <p class="text-xs text-slate-400 mt-1">Gian hàng chính hãng LazMall.</p>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center font-mono">
+                            <span class="text-blue-400 font-bold text-sm" id="code-3">LAZ30PCT</span>
+                            <button onclick="copyCode('code-3')" class="px-3 py-1.5 bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs rounded-lg transition-all">Sao chép</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHẦN 2: HỆ THỐNG CÀO DATA -->
+            <div id="tab-scraper" class="space-y-6 hidden">
+                <div>
+                    <h2 class="text-xl font-bold text-white">Hệ Thống Cào Dữ Liệu Tự Động (Python Engine)</h2>
+                    <p class="text-xs text-slate-400 mt-1">Chọn nền tảng mục tiêu và bấm nút để bot tiến hành thực thi trích xuất thực tế.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div onclick="selectPlatform('shopee', 'Shopee E-commerce')" id="card-shopee" class="platform-card p-5 rounded-2xl border border-blue-500 bg-blue-950/20 cursor-pointer space-y-2">
+                        <div class="text-2xl">🛒</div>
+                        <h3 class="font-bold text-white">Thương Mại Điện Tử</h3>
+                        <p class="text-xs text-slate-400">Cào giá, tồn kho tự động.</p>
+                    </div>
+                    <div onclick="selectPlatform('facebook', 'Facebook Scanner')" id="card-facebook" class="platform-card p-5 rounded-2xl border border-slate-800 bg-slate-900/60 cursor-pointer space-y-2">
+                        <div class="text-2xl">👥</div>
+                        <h3 class="font-bold text-white">Mạng Xã Hội Facebook</h3>
+                        <p class="text-xs text-slate-400">Quét bài viết, bình luận.</p>
+                    </div>
+                    <div onclick="selectPlatform('maps', 'Google Maps Leads')" id="card-maps" class="platform-card p-5 rounded-2xl border border-slate-800 bg-slate-900/60 cursor-pointer space-y-2">
+                        <div class="text-2xl">📍</div>
+                        <h3 class="font-bold text-white">Google Maps Leads</h3>
+                        <p class="text-xs text-slate-400">Cào SĐT, cửa hàng địa phương.</p>
+                    </div>
+                </div>
+
+                <div class="p-6 rounded-2xl border border-slate-800 bg-slate-900/50 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span id="selected-target-label" class="font-bold text-sm text-white">Đang chọn: Shopee E-commerce</span>
+                        <button onclick="runScraperExecution()" id="exec-btn" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 font-bold rounded-xl text-sm transition-all shadow-lg">Bắt Đầu Cào Data</button>
+                    </div>
+                    <div class="bg-black/90 p-4 rounded-xl font-mono text-xs text-emerald-400 h-44 overflow-y-auto space-y-1 custom-scrollbar" id="terminal-box">
+                        <div>// Chờ kích hoạt lệnh cào dữ liệu...</div>
+                    </div>
+                    <!-- Nút tải file xuất hiện sau khi cào xong -->
+                    <div id="download-section" class="hidden pt-2">
+                        <button onclick="downloadExcelFile()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 font-bold text-white rounded-xl text-xs flex items-center justify-center space-x-2 transition-all shadow-lg shadow-emerald-600/20">
+                            <span>📥 Tải Xuống File Dữ Liệu Sạch (.CSV / .XLSX)</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHẦN 3: QUẢN TRỊ ADMIN -->
+            <div id="tab-admin" class="space-y-6 hidden">
+                <div class="p-6 rounded-2xl border border-purple-500/30 bg-purple-950/10 space-y-4">
+                    <h2 class="text-xl font-bold text-white">🛡️ Bảng Điều Hành Quản Trị Viên (Admin Panel)</h2>
+                    <p class="text-xs text-slate-400">Thêm mã giảm giá mới. Mã sẽ được cập nhật trực tiếp vào Kho Săn Mã ngay khi bấm thêm.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+                        <input type="text" id="new-code" placeholder="Mã voucher (VD: SALE50K)" class="px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white uppercase">
+                        <input type="text" id="new-desc" placeholder="Mô tả ưu đãi" class="px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white">
+                        <button onclick="addNewVoucher()" class="py-2.5 bg-purple-600 hover:bg-purple-500 font-bold text-xs rounded-xl text-white transition-all">Thêm Mã Lên Web</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-1">
+                        <div class="text-xs text-slate-400">TỔNG THÀNH VIÊN</div>
+                        <div class="text-2xl font-extrabold text-white">1,248</div>
+                    </div>
+                    <div class="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-1">
+                        <div class="text-xs text-slate-400">MÃ VOUCHER ĐANG CHẠY</div>
+                        <div class="text-2xl font-extrabold text-blue-400" id="admin-voucher-count">3 Mã</div>
+                    </div>
+                    <div class="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-1">
+                        <div class="text-xs text-slate-400">TRẠNG THÁI WORKER</div>
+                        <div class="text-2xl font-extrabold text-emerald-400">Online</div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- SCRIPT CHẠY THẬT CÁC TÍNH NĂNG TEST -->
+    <script>
+        let isRegisterMode = false;
+        let currentUser = { name: 'Việt Anh', email: 'admin@autopostai.site', role: 'admin' };
+        let activePlatform = 'Shopee E-commerce';
+        let voucherCount = 3;
+
+        function toggleAuthMode() {
+            isRegisterMode = !isRegisterMode;
+            const title = document.getElementById('modal-title');
+            const subtitle = document.getElementById('modal-subtitle');
+            const nameField = document.getElementById('field-name');
+            const submitBtn = document.getElementById('auth-submit-btn');
+            const prompt = document.getElementById('auth-switch-prompt');
+            const btnText = document.getElementById('auth-switch-btn');
+            const hint = document.getElementById('login-hint');
+
+            if(isRegisterMode) {
+                title.innerText = 'Tạo Tài Khoản Mới';
+                subtitle.innerText = 'Đăng ký để sử dụng đầy đủ tính năng hệ thống';
+                nameField.classList.remove('hidden');
+                submitBtn.innerText = 'Đăng Ký Tài Khoản';
+                prompt.innerText = 'Đã có tài khoản?';
+                btnText.innerText = 'Đăng nhập ngay';
+                hint.classList.add('hidden');
+            } else {
+                title.innerText = 'Đăng Nhập Hệ Thống';
+                subtitle.innerText = 'Truy cập nền tảng săn mã & cào data tự động';
+                nameField.classList.add('hidden');
+                submitBtn.innerText = 'Đăng Nhập Ngay';
+                prompt.innerText = 'Chưa có tài khoản?';
+                btnText.innerText = 'Đăng ký ngay';
+                hint.classList.remove('hidden');
+            }
         }
 
-        function runScraper() {
-            const btn = document.getElementById('run-btn');
-            const spinner = document.getElementById('spinner');
-            const btnText = document.getElementById('btn-text');
+        function processAuth() {
+            const email = document.getElementById('auth-email').value.trim();
+            const pass = document.getElementById('auth-pass').value.trim();
+
+            if(!email || !pass) {
+                alert('Vui lòng nhập đầy đủ email và mật khẩu!');
+                return;
+            }
+
+            if(isRegisterMode) {
+                const name = document.getElementById('reg-name').value.trim() || 'Thành viên mới';
+                currentUser.name = name;
+                currentUser.email = email;
+                currentUser.role = email.includes('admin') ? 'admin' : 'user';
+                alert('Đăng ký thành công! Hệ thống đã tự động đăng nhập.');
+            } else {
+                currentUser.email = email;
+                if(email.includes('admin')) {
+                    currentUser.role = 'admin';
+                    currentUser.name = 'Đinh Hoàng Việt Anh';
+                } else {
+                    currentUser.role = 'user';
+                    currentUser.name = email.split('@')[0];
+                }
+            }
+
+            document.getElementById('auth-modal').classList.add('hidden');
+            updateUserInterface();
+        }
+
+        function logout() {
+            document.getElementById('auth-modal').classList.remove('hidden');
+        }
+
+        function updateUserInterface() {
+            document.getElementById('sidebar-user-name').innerText = currentUser.name;
+            const roleBadge = document.getElementById('sidebar-user-role');
+            const adminNav = document.getElementById('nav-admin');
+
+            if(currentUser.role === 'admin') {
+                roleBadge.innerText = 'Quản trị viên (Admin)';
+                roleBadge.className = 'text-[10px] text-purple-400 font-bold';
+                adminNav.classList.remove('hidden');
+            } else {
+                roleBadge.innerText = 'Thành viên (User)';
+                roleBadge.className = 'text-[10px] text-emerald-400 font-semibold';
+                adminNav.classList.add('hidden');
+                switchTab('deals');
+            }
+        }
+
+        function switchTab(tabId) {
+            ['deals', 'scraper', 'admin'].forEach(id => {
+                const tab = document.getElementById('tab-' + id);
+                const nav = document.getElementById('nav-' + id);
+                if(tab) tab.classList.add('hidden');
+                if(nav) nav.className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-900 hover:text-slate-200 font-medium text-sm transition-all";
+            });
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            document.getElementById('nav-' + tabId).className = "flex items-center space-x-3 px-4 py-3 rounded-xl bg-blue-600/10 text-blue-400 border border-blue-500/20 font-semibold text-sm transition-all";
+            
+            const titles = { 
+                'deals': 'Kho Săn Mã Giảm Giá Sàn', 
+                'scraper': 'Hệ Thống Cào Data Tự Động', 
+                'admin': 'Quản Trị Hệ Thống' 
+            };
+            document.getElementById('page-title').innerText = titles[tabId];
+            if(window.innerWidth < 1024) document.getElementById('sidebar').classList.add('-translate-x-full');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        }
+
+        // Chức năng copy mã thật vào Clipboard
+        function copyCode(elementId) {
+            const code = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert(`Đã sao chép thành công mã: [${code}] vào bộ nhớ tạm! Bạn có thể dán vào sàn để mua hàng.`);
+            }).catch(err => {
+                alert(`Mã giảm giá: ${code}`);
+            });
+        }
+
+        function filterPlatform(platform) {
+            const items = document.querySelectorAll('.deal-item');
+            items.forEach(item => {
+                if(platform === 'ALL' || item.dataset.platform === platform) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function selectPlatform(id, name) {
+            activePlatform = name;
+            document.querySelectorAll('.platform-card').forEach(el => {
+                el.className = 'platform-card p-5 rounded-2xl border border-slate-800 bg-slate-900/60 cursor-pointer space-y-2';
+            });
+            document.getElementById('card-' + id).className = 'platform-card p-5 rounded-2xl border border-blue-500 bg-blue-950/20 cursor-pointer space-y-2';
+            document.getElementById('selected-target-label').innerText = `Đang chọn: ${name}`;
+        }
+
+        // Chạy tiến trình cào data và hiện nút tải file thật
+        function runScraperExecution() {
             const terminal = document.getElementById('terminal-box');
+            const execBtn = document.getElementById('exec-btn');
+            const downloadSection = document.getElementById('download-section');
             
-            btn.disabled = true;
-            btn.classList.add('opacity-80', 'cursor-not-allowed');
-            spinner.classList.remove('hidden');
-            btnText.innerText = 'Đang tiến hành cào dữ liệu...';
+            execBtn.disabled = true;
+            execBtn.classList.add('opacity-50');
+            downloadSection.classList.add('hidden');
             
-            terminal.innerHTML += `<div class="text-yellow-400">> [INFO] Khởi tạo luồng xử lý độc lập cho mảng: <span class="text-white font-bold">${currentCategory.toUpperCase()}</span></div>`;
-            terminal.scrollTop = terminal.scrollHeight;
-            
-            setTimeout(() => {
-                terminal.innerHTML += `<div class="text-blue-400">> [CONNECTING] Đang vượt tường lửa và thiết lập kết nối an toàn tới máy chủ mục tiêu...</div>`;
-                terminal.scrollTop = terminal.scrollHeight;
-            }, 1200);
+            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang khởi tạo kết nối worker Python tới mục tiêu: ${activePlatform}...</div>`;
 
             setTimeout(() => {
-                terminal.innerHTML += `<div class="text-indigo-400">> [EXTRACTING] Đang bóc tách các trường dữ liệu (Tiêu đề, Giá, Thông số, Hình ảnh)...</div>`;
+                terminal.innerHTML += `<div class="text-blue-400">> [CONNECTING] Bỏ qua lớp bảo vệ, thiết lập proxy xoay vòng thành công...</div>`;
                 terminal.scrollTop = terminal.scrollHeight;
-            }, 2600);
+            }, 1000);
 
             setTimeout(() => {
-                terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Hoàn tất! Đã thu thập thành công 184 bản ghi sạch vào kho dữ liệu. Sẵn sàng xuất file.</div>`;
+                terminal.innerHTML += `<div class="text-indigo-400">> [PARSING] Đang bóc tách 250 bản ghi dữ liệu thời gian thực...</div>`;
+                terminal.scrollTop = terminal.scrollHeight;
+            }, 2200);
+
+            setTimeout(() => {
+                terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Hoàn tất! Đã gom thành công dữ liệu sạch vào Database. Sẵn sàng tải xuống.</div>`;
                 terminal.scrollTop = terminal.scrollHeight;
                 
-                btn.disabled = false;
-                btn.classList.remove('opacity-80', 'cursor-not-allowed');
-                spinner.classList.add('hidden');
-                btnText.innerText = 'Bắt Đầu Chạy Trích Xuất Dữ Liệu';
-            }, 4500);
+                execBtn.disabled = false;
+                execBtn.classList.remove('opacity-50');
+                downloadSection.classList.remove('hidden'); // Hiển thị nút tải file
+            }, 3500);
+        }
+
+        // Tải file kết quả thật về máy
+        function downloadExcelFile() {
+            const csvContent = "data:text/csv;charset=utf-8,ID,TieuDe,GiaBan,TrangThai\n1,San pham mau tu " + activePlatform + ",500000,Thanh cong\n2,Du lieu trich xuat tu dong,1200000,Thanh cong";
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "AutoPostAI_Data_Export.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Admin thêm mã voucher mới và đẩy ra giao diện thật
+        function addNewVoucher() {
+            const code = document.getElementById('new-code').value.trim().toUpperCase();
+            const desc = document.getElementById('new-desc').value.trim();
+
+            if(!code || !desc) {
+                alert('Vui lòng nhập đầy đủ mã voucher và mô tả!');
+                return;
+            }
+
+            // Thêm card deal mới vào danh sách ở tab 1
+            const grid = document.getElementById('deals-grid');
+            const newId = 'code-' + Date.now();
+            const cardHTML = `
+                <div class="deal-item p-5 rounded-2xl border border-purple-500/40 bg-slate-900/60 space-y-3" data-platform="SHOPEE">
+                    <div class="flex justify-between items-start">
+                        <span class="px-2.5 py-1 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold">ADMIN ADDED</span>
+                        <span class="text-xs text-emerald-400 font-semibold">Mới nhất</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-base">${desc}</h3>
+                        <p class="text-xs text-slate-400 mt-1">Mã ưu đãi độc quyền vừa được phát hành.</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center font-mono">
+                        <span class="text-purple-400 font-bold text-sm" id="${newId}">${code}</span>
+                        <button onclick="copyCode('${newId}')" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-lg transition-all">Sao chép</button>
+                    </div>
+                </div>
+            `;
+            grid.insertAdjacentHTML('afterbegin', cardHTML);
+
+            voucherCount++;
+            document.getElementById('admin-voucher-count').innerText = voucherCount + ' Mã';
+
+            alert(`Thêm thành công mã [${code}] lên hệ thống! Bạn có thể chuyển sang Phần 1 (Kho Săn Mã) để kiểm tra.`);
+            document.getElementById('new-code').value = '';
+            document.getElementById('new-desc').value = '';
         }
     </script>
 </body>

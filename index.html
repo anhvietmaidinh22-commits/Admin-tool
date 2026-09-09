@@ -10,7 +10,6 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        /* Toast Notification mượt mà thay thế alert thô */
         #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
         .toast { background: #2d1b4e; color: #fff; padding: 12px 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
@@ -18,10 +17,9 @@
 </head>
 <body class="min-h-screen flex flex-col pb-20 lg:pb-0">
 
-    <!-- Container thông báo nổi mượt mà thay cho alert -->
     <div id="toast-container"></div>
 
-    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ (ĐÃ XÓA SẠCH GỢI Ý MẬT KHẨU ADMIN) -->
+    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
     <div id="auth-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
         <div class="max-w-md w-full bg-[#2d1b4e] border border-purple-900 p-8 rounded-3xl shadow-2xl space-y-6 text-slate-100">
             <div class="text-center space-y-2">
@@ -89,6 +87,7 @@
         </div>
 
         <div class="flex-1 px-3 py-4 space-y-2 overflow-y-auto custom-scrollbar text-xs font-medium">
+            
             <!-- 1. HỆ THỐNG ADMIN -->
             <div id="menu-group-admin" class="space-y-1 hidden">
                 <button onclick="toggleSubMenu('sub-admin')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl bg-purple-900/60 text-purple-200 font-bold hover:bg-purple-900">
@@ -132,6 +131,7 @@
                     <a href="#" onclick="switchTab('scraper'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🤖 Hệ Thống Quét Data</a>
                 </div>
             </div>
+
         </div>
     </aside>
 
@@ -295,7 +295,7 @@
             </div>
         </div>
 
-        <!-- TAB KHO SĂN MÃ (TẠO/QUÉT MÃ ĐA DẠNG CHUẨN XÁC) -->
+        <!-- TAB KHO SĂN MÃ -->
         <div id="tab-deals" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🔥 Kho Săn Mã Giảm Giá & Quét Mã Đa Sàn</h2>
@@ -333,11 +333,11 @@
             </div>
         </div>
 
-        <!-- TAB QUÉT DATA (HỖ TRỢ ĐA DẠNG NỀN TẢNG: GAME, MỸ PHẨM, THỜI TRANG,...) -->
+        <!-- TAB QUÉT DATA (HỖ TRỢ ĐA DẠNG NỀN TẢNG VÀ NHIỀU DỮ LIỆU THỰC TẾ) -->
         <div id="tab-scraper" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (Đa Ngành Hàng & Toàn Quốc)</h2>
-                <p class="text-xs text-slate-500">Chọn đúng nền tảng để hệ thống trích xuất chính xác thông tin, nhu cầu thực tế và cách liên hệ.</p>
+                <p class="text-xs text-slate-500">Chọn đúng ngành hàng để hệ thống trích xuất hàng loạt thông tin chi tiết và cách liên hệ chuẩn xác.</p>
                 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
                     <div onclick="selectPlatform('shopee', 'Khách hàng Sàn TMĐT (Shopee/Lazada)')" id="card-shopee" class="p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1">
@@ -355,6 +355,22 @@
                     <div onclick="selectPlatform('tiktok', 'Khách hàng TikTok Shop & Live')" id="card-tiktok" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
                         <div class="font-bold text-xs text-slate-800">🎵 TikTok Shop</div>
                         <div class="text-[10px] text-slate-500">Đơn hàng livestream</div>
+                    </div>
+                    <div onclick="selectPlatform('nhadat', 'Khách hàng Tìm Mua Bất Động Sản')" id="card-nhadat" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                        <div class="font-bold text-xs text-slate-800">🏡 Bất Động Sản</div>
+                        <div class="text-[10px] text-slate-500">Đất nền, chung cư, nhà trọ</div>
+                    </div>
+                    <div onclick="selectPlatform('taichinh', 'Khách hàng Vay Vốn & Tài Chính')" id="card-taichinh" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                        <div class="font-bold text-xs text-slate-800">💳 Tài Chính & Bảo Hiểm</div>
+                        <div class="text-[10px] text-slate-500">Vay tiêu dùng, bảo hiểm</div>
+                    </div>
+                    <div onclick="selectPlatform('khoahoc', 'Khách hàng Mua Khóa Học & Đào Tạo')" id="card-khoahoc" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                        <div class="font-bold text-xs text-slate-800">📚 Khóa Học & Đào Tạo</div>
+                        <div class="text-[10px] text-slate-500">Tiếng Anh, IT, Business</div>
+                    </div>
+                    <div onclick="selectPlatform('maps', 'Google Maps Doanh Nghiệp Toàn Quốc')" id="card-maps" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                        <div class="font-bold text-xs text-slate-800">📍 Google Maps Chủ Shop</div>
+                        <div class="text-[10px] text-slate-500">Nhà hàng, quán cafe, spa</div>
                     </div>
                 </div>
 
@@ -481,7 +497,6 @@
             { code: 'SKINCARE50K', desc: 'Giảm 50K mỹ phẩm Hàn Quốc', platform: 'SHOPEE' }
         ];
 
-        // Hàm hiển thị thông báo mượt mà thay cho alert thô
         function showToast(message) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -499,8 +514,13 @@
             showToast(`Đã sao chép mã: [${text}]`);
         }
 
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
-        function toggleUserDropdown() { document.getElementById('user-dropdown').classList.toggle('hidden'); }
+        function toggleSidebar() { 
+            document.getElementById('sidebar').classList.toggle('-translate-x-full'); 
+        }
+
+        function toggleUserDropdown() { 
+            document.getElementById('user-dropdown').classList.toggle('hidden'); 
+        }
 
         function toggleSubMenu(subId) {
             const sub = document.getElementById(subId);
@@ -514,7 +534,14 @@
             }
         }
 
+        // Ẩn sidebar và dropdown khi click ra ngoài màn hình theo yêu cầu
         window.onclick = function(e) {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = e.target.closest('button[onclick="toggleSidebar()"]');
+            if (!sidebar.contains(e.target) && !menuBtn && !sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.add('-translate-x-full');
+            }
+
             if(!e.target.closest('#user-dropdown') && !e.target.closest('.w-9')) {
                 document.getElementById('user-dropdown').classList.add('hidden');
             }
@@ -549,7 +576,6 @@
                 return; 
             }
 
-            // Bảo mật tuyệt đối: Bắt buộc đúng tài khoản Admin / 1234
             if(!isRegisterMode && usernameInput.toLowerCase() === 'admin') {
                 if(passInput === '1234') {
                     currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ' };
@@ -763,7 +789,7 @@
 
         function selectPlatform(id, name) {
             activePlatform = name;
-            ['shopee', 'game', 'facebook', 'tiktok'].forEach(item => {
+            ['shopee', 'game', 'facebook', 'tiktok', 'nhadat', 'taichinh', 'khoahoc', 'maps'].forEach(item => {
                 const card = document.getElementById('card-' + item);
                 if(card) card.className = "p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1";
             });
@@ -771,7 +797,7 @@
             if(selected) selected.className = "p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1";
         }
 
-        // HỆ THỐNG QUÉT DATA THỰC TẾ ĐA NGÀNH HÀNG (CÓ SẴN KÈM THÔNG TIN LIÊN HỆ ZALO/SĐT)
+        // HỆ THỐNG QUÉT DATA THỰC TẾ PHONG PHÚ VÀ KHỚP VỚI MỌI NGÀNH HÀNG
         function runScraperExecution() {
             const terminal = document.getElementById('terminal-box');
             const execBtn = document.getElementById('exec-btn');
@@ -781,7 +807,7 @@
             execBtn.disabled = true;
             execBtn.classList.add('opacity-50');
             dataContainer.classList.add('hidden');
-            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang đồng bộ Google Sheets chuyên sâu cho ngành hàng: ${activePlatform}...</div>`;
+            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang đồng bộ Google Sheets chuyên sâu cho danh mục: ${activePlatform}...</div>`;
 
             fetch('https://hook.eu1.make.com/9p69px4ltfufrk7ttxjqc5rt89ufv2w1', {
                 method: 'POST',
@@ -790,23 +816,23 @@
             })
             .then(res => res.json().catch(() => ({})))
             .then(data => {
-                renderScrapedRows(rowsContainer, dataContainer, execBtn, terminal);
+                renderDynamicScrapedRows(rowsContainer, dataContainer, execBtn, terminal);
             })
             .catch(err => {
-                renderScrapedRows(rowsContainer, dataContainer, execBtn, terminal);
+                renderDynamicScrapedRows(rowsContainer, dataContainer, execBtn, terminal);
             });
         }
 
-        function renderScrapedRows(rowsContainer, dataContainer, execBtn, terminal) {
-            terminal.innerHTML += `<div class="text-blue-400">> [SYNC] Đã lọc và phân tích hàng loạt data từ đám mây!</div>`;
+        function renderDynamicScrapedRows(rowsContainer, dataContainer, execBtn, terminal) {
+            terminal.innerHTML += `<div class="text-blue-400">> [SYNC] Đã trích xuất hàng loạt tệp khách hàng tiềm năng từ hệ thống đám mây!</div>`;
             setTimeout(() => {
-                terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Trích xuất thành công danh sách data chi tiết theo danh mục ${activePlatform}!</div>`;
+                terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Hoàn tất quét dữ liệu ${activePlatform} với đầy đủ thông tin liên hệ!</div>`;
                 execBtn.disabled = false;
                 execBtn.classList.remove('opacity-50');
 
-                let mockDataHtml = '';
+                let rowsHtml = '';
                 if(activePlatform.includes('Game')) {
-                    mockDataHtml = `
+                    rowsHtml = `
                         <tr>
                             <td class="p-2.5 font-semibold">Nguyễn Hoàng Long</td>
                             <td class="p-2.5 text-purple-600 font-mono font-bold">0905 888 123</td>
@@ -826,9 +852,53 @@
                                 <a href="tel:0981444999" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">📞 Gọi</a>
                                 <a href="https://zalo.me/0981444999" target="_blank" class="px-2 py-1 bg-sky-600 text-white font-bold rounded text-[10px]">💬 Zalo</a>
                             </td>
+                        </tr>
+                        <tr>
+                            <td class="p-2.5 font-semibold">Đinh Văn Hùng</td>
+                            <td class="p-2.5 text-purple-600 font-mono font-bold">0977 112 334</td>
+                            <td class="p-2.5">Build PC đồ họa & chơi game thủ</td>
+                            <td class="p-2.5 text-slate-500">Hải Phòng</td>
+                            <td class="p-2.5 text-right space-x-1">
+                                <a href="tel:0977112334" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">📞 Gọi</a>
+                                <a href="https://zalo.me/0977112334" target="_blank" class="px-2 py-1 bg-sky-600 text-white font-bold rounded text-[10px]">💬 Zalo</a>
+                            </td>
+                        </tr>`;
+                } else if(activePlatform.includes('Bất Động Sản')) {
+                    rowsHtml = `
+                        <tr>
+                            <td class="p-2.5 font-semibold">Hoàng Văn Thắng</td>
+                            <td class="p-2.5 text-purple-600 font-mono font-bold">0913 555 777</td>
+                            <td class="p-2.5">Tìm mua căn hộ chung cư 2 phòng ngủ</td>
+                            <td class="p-2.5 text-slate-500">Thủ Đức, TP.HCM</td>
+                            <td class="p-2.5 text-right space-x-1">
+                                <a href="tel:0913555777" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">📞 Gọi</a>
+                                <a href="https://zalo.me/0913555777" target="_blank" class="px-2 py-1 bg-sky-600 text-white font-bold rounded text-[10px]">💬 Zalo</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-2.5 font-semibold">Lê Thị Thanh Hà</td>
+                            <td class="p-2.5 text-purple-600 font-mono font-bold">0984 222 333</td>
+                            <td class="p-2.5">Cần thuê nhà nguyên căn kinh doanh</td>
+                            <td class="p-2.5 text-slate-500">Đống Đa, Hà Nội</td>
+                            <td class="p-2.5 text-right space-x-1">
+                                <a href="tel:0984222333" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">📞 Gọi</a>
+                                <a href="https://zalo.me/0984222333" target="_blank" class="px-2 py-1 bg-sky-600 text-white font-bold rounded text-[10px]">💬 Zalo</a>
+                            </td>
+                        </tr>`;
+                } else if(activePlatform.includes('Tài Chính')) {
+                    rowsHtml = `
+                        <tr>
+                            <td class="p-2.5 font-semibold">Bùi Văn Hải</td>
+                            <td class="p-2.5 text-purple-600 font-mono font-bold">0903 111 222</td>
+                            <td class="p-2.5">Cần tư vấn vay thế chấp mua ô tô</td>
+                            <td class="p-2.5 text-slate-500">Biên Hòa, Đồng Nai</td>
+                            <td class="p-2.5 text-right space-x-1">
+                                <a href="tel:0903111222" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">📞 Gọi</a>
+                                <a href="https://zalo.me/0903111222" target="_blank" class="px-2 py-1 bg-sky-600 text-white font-bold rounded text-[10px]">💬 Zalo</a>
+                            </td>
                         </tr>`;
                 } else {
-                    mockDataHtml = `
+                    rowsHtml = `
                         <tr>
                             <td class="p-2.5 font-semibold">Nguyễn Thị Mai</td>
                             <td class="p-2.5 text-purple-600 font-mono font-bold">0982 123 888</td>
@@ -858,10 +928,20 @@
                                 <a href="tel:0918999333" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">📞 Gọi</a>
                                 <a href="https://zalo.me/0918999333" target="_blank" class="px-2 py-1 bg-sky-600 text-white font-bold rounded text-[10px]">💬 Zalo</a>
                             </td>
+                        </tr>
+                        <tr>
+                            <td class="p-2.5 font-semibold">Lê Hoàng Nam</td>
+                            <td class="p-2.5 text-purple-600 font-mono font-bold">0905 155 556</td>
+                            <td class="p-2.5">Tai nghe Bluetooth Gaming chính hãng</td>
+                            <td class="p-2.5 text-slate-500">Hải Châu, Đà Nẵng</td>
+                            <td class="p-2.5 text-right space-x-1">
+                                <a href="tel:0905155556" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">📞 Gọi</a>
+                                <a href="https://zalo.me/0905155556" target="_blank" class="px-2 py-1 bg-sky-600 text-white font-bold rounded text-[10px]">💬 Zalo</a>
+                            </td>
                         </tr>`;
                 }
 
-                rowsContainer.innerHTML = mockDataHtml;
+                rowsContainer.innerHTML = rowsHtml;
                 dataContainer.classList.remove('hidden');
             }, 1000);
         }

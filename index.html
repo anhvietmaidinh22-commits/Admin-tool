@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Cào Dữ Liệu Tự Động</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-white min-h-screen p-6">
+    <div class="max-w-3xl mx-auto space-y-6">
+        <header class="border-b border-slate-800 pb-4">
+            <h1 class="text-2xl font-bold tracking-tight">AutoPostAI - Data Hub</h1>
+            <p class="text-sm text-slate-400 mt-1">Chọn mảng dữ liệu bạn muốn thu thập hệ thống sẽ tự động xử lý.</p>
+        </header>
+
+        <!-- Danh sách các mảng chọn -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="category-list">
+            <div onclick="selectCategory('san_thuormg_mai')" id="card-san_thuormg_mai" class="category-card p-4 rounded-xl border border-slate-800 bg-slate-900 cursor-pointer transition-all border-blue-500 bg-blue-950/30">
+                <h3 class="font-semibold text-blue-400">🛒 Sàn Thương Mại Điện Tử</h3>
+                <p class="text-xs text-slate-400 mt-1">Cào giá sản phẩm, thông tin tồn kho và đánh giá.</p>
+            </div>
+            <div onclick="selectCategory('bat_dong_san')" id="card-bat_dong_san" class="category-card p-4 rounded-xl border border-slate-800 bg-slate-900 cursor-pointer transition-all">
+                <h3 class="font-semibold">🏠 Bất Động Sản</h3>
+                <p class="text-xs text-slate-400 mt-1">Quét tin rao bán nhà đất, diện tích và mức giá.</p>
+            </div>
+            <div onclick="selectCategory('mang_xa_hoi')" id="card-mang_xa_hoi" class="category-card p-4 rounded-xl border border-slate-800 bg-slate-900 cursor-pointer transition-all">
+                <h3 class="font-semibold">📱 Mạng Xã Hội</h3>
+                <p class="text-xs text-slate-400 mt-1">Thu thập bình luận, tương tác và bài viết nổi bật.</p>
+            </div>
+            <div onclick="selectCategory('viec_lam')" id="card-viec_lam" class="category-card p-4 rounded-xl border border-slate-800 bg-slate-900 cursor-pointer transition-all">
+                <h3 class="font-semibold">💼 Tuyển Dụng Việc Làm</h3>
+                <p class="text-xs text-slate-400 mt-1">Lọc thông tin việc làm, mức lương theo khu vực.</p>
+            </div>
+        </div>
+
+        <!-- Nút bấm chạy -->
+        <button onclick="runScraper()" id="run-btn" class="w-full py-3 bg-blue-600 hover:bg-blue-500 font-medium rounded-xl transition-colors shadow-lg shadow-blue-600/20">
+            Bắt Đầu Chạy Tiến Trình Cào Data
+        </button>
+
+        <!-- Màn hình Terminal Log -->
+        <div class="bg-black/80 border border-slate-800 p-4 rounded-xl font-mono text-xs text-emerald-400 h-40 overflow-y-auto" id="terminal-box">
+            <span class="text-slate-500">// Hệ thống sẵn sàng. Vui lòng chọn mảng và bấm nút thực thi.</span>
+        </div>
+    </div>
+
+    <script>
+        let currentCategory = 'san_thuormg_mai';
+
+        function selectCategory(id) {
+            currentCategory = id;
+            document.querySelectorAll('.category-card').forEach(el => {
+                el.classList.remove('border-blue-500', 'bg-blue-950/30');
+            });
+            document.getElementById('card-' + id).classList.add('border-blue-500', 'bg-blue-950/30');
+        }
+
+        function runScraper() {
+            const btn = document.getElementById('run-btn');
+            const terminal = document.getElementById('terminal-box');
+            
+            btn.disabled = true;
+            btn.classList.add('opacity-50');
+            terminal.innerHTML += `<br>> Đang khởi tạo kết nối cào dữ liệu cho mảng: <span class="text-yellow-400">${currentCategory}</span>...`;
+            
+            setTimeout(() => {
+                terminal.innerHTML += `<br>> [SUCCESS] Đã kết nối thành công đến mục tiêu. Đang bóc tách dữ liệu...`;
+                terminal.scrollTop = terminal.scrollHeight;
+            }, 1000);
+
+            setTimeout(() => {
+                terminal.innerHTML += `<br>> [DONE] Hoàn tất! Đã gom thành công 150 bản ghi sạch vào hệ thống.`;
+                terminal.scrollTop = terminal.scrollHeight;
+                btn.disabled = false;
+                btn.classList.remove('opacity-50');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

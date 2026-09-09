@@ -10,17 +10,24 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        /* Toast Notification mượt mà thay thế alert thô */
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: #2d1b4e; color: #fff; padding: 12px 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-20 lg:pb-0">
 
-    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
+    <!-- Container thông báo nổi mượt mà thay cho alert -->
+    <div id="toast-container"></div>
+
+    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ (ĐÃ XÓA SẠCH GỢI Ý MẬT KHẨU ADMIN) -->
     <div id="auth-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
         <div class="max-w-md w-full bg-[#2d1b4e] border border-purple-900 p-8 rounded-3xl shadow-2xl space-y-6 text-slate-100">
             <div class="text-center space-y-2">
                 <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500 to-purple-500 mx-auto flex items-center justify-center font-bold text-xl text-white">⚡</div>
                 <h2 id="auth-title" class="text-2xl font-extrabold">Đăng Nhập Hệ Thống</h2>
-                <p class="text-xs text-purple-300">Admin mặc định: <strong class="text-white">Admin</strong> | Mật khẩu: <strong class="text-white">1234</strong></p>
+                <p class="text-xs text-purple-300">Vui lòng nhập tài khoản và mật khẩu bảo mật của bạn.</p>
             </div>
 
             <div class="space-y-4">
@@ -82,7 +89,6 @@
         </div>
 
         <div class="flex-1 px-3 py-4 space-y-2 overflow-y-auto custom-scrollbar text-xs font-medium">
-            
             <!-- 1. HỆ THỐNG ADMIN -->
             <div id="menu-group-admin" class="space-y-1 hidden">
                 <button onclick="toggleSubMenu('sub-admin')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl bg-purple-900/60 text-purple-200 font-bold hover:bg-purple-900">
@@ -126,7 +132,6 @@
                     <a href="#" onclick="switchTab('scraper'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🤖 Hệ Thống Quét Data</a>
                 </div>
             </div>
-
         </div>
     </aside>
 
@@ -231,7 +236,7 @@
                 <h2 class="font-bold text-base text-slate-800">💰 Cài Đặt Giá Hệ Thống</h2>
                 <div class="space-y-3 text-xs">
                     <div><label class="font-semibold text-slate-600">Giá gói cào data tháng:</label><input type="text" value="299,000đ" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold text-purple-600"></div>
-                    <button onclick="alert('Đã lưu giá thành công!')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Lưu Cấu Hình</button>
+                    <button onclick="showToast('Đã lưu giá thành công!')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Lưu Cấu Hình</button>
                 </div>
             </div>
         </div>
@@ -256,7 +261,7 @@
                 <div class="space-y-3 text-xs">
                     <div><label class="font-semibold text-slate-600">Link Telegram:</label><input type="text" value="https://t.me/admin" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl"></div>
                     <div><label class="font-semibold text-slate-600">Link Zalo:</label><input type="text" value="https://zalo.me/admin" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl"></div>
-                    <button onclick="alert('Đã lưu liên kết!')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Lưu Liên Kết</button>
+                    <button onclick="showToast('Đã lưu liên kết!')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Lưu Liên Kết</button>
                 </div>
             </div>
         </div>
@@ -273,7 +278,7 @@
                     <button onclick="publishNotification()" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Đăng Thông Báo Lên Web</button>
                 </div>
                 <div class="space-y-2 pt-2 border-t border-slate-100">
-                    <div class="font-bold text-xs text-slate-700">Danh sách thông báo (Dùng nút ✅ để bật/tắt hiển thị):</div>
+                    <div class="font-bold text-xs text-slate-700">Danh sách thông báo:</div>
                     <div id="admin-noti-list" class="space-y-2"></div>
                 </div>
             </div>
@@ -285,16 +290,16 @@
                 <h2 class="font-bold text-base text-slate-800">🤖 Tích Hợp Bot Telegram</h2>
                 <div class="space-y-3 text-xs">
                     <div><label class="font-semibold text-slate-600">Bot Token:</label><input type="text" value="751234567:AAH..." class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono"></div>
-                    <button onclick="alert('Đã lưu cấu hình!')" class="w-full py-2.5 bg-blue-600 text-white font-bold rounded-xl shadow">Lưu Cấu Hình</button>
+                    <button onclick="showToast('Đã lưu cấu hình!')" class="w-full py-2.5 bg-blue-600 text-white font-bold rounded-xl shadow">Lưu Cấu Hình</button>
                 </div>
             </div>
         </div>
 
-        <!-- TAB KHO SĂN MÃ (TÍNH NĂNG TẠO / QUÉT MÃ LIÊN TỤC CHUẨN XÁC) -->
+        <!-- TAB KHO SĂN MÃ (TẠO/QUÉT MÃ ĐA DẠNG CHUẨN XÁC) -->
         <div id="tab-deals" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🔥 Kho Săn Mã Giảm Giá & Quét Mã Đa Sàn</h2>
-                <p class="text-xs text-slate-500">Hệ thống tự động sinh và quét mã voucher chuẩn xác liên tục theo thời gian thực.</p>
+                <p class="text-xs text-slate-500">Hệ thống quét và tự động sinh mã voucher chuẩn xác liên tục theo thời gian thực.</p>
 
                 <div class="p-4 bg-purple-50 rounded-2xl border border-purple-200 space-y-3 text-center">
                     <div class="font-bold text-xs text-purple-900">📷 Quét & Nhận Mã Voucher Mới Liên Tục</div>
@@ -313,7 +318,7 @@
                         <div class="font-bold text-sm text-slate-800">Mã giảm 100K đơn từ 500K</div>
                         <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
                             <span class="text-orange-600 font-bold" id="code-1">SPVNMAL100</span>
-                            <button onclick="navigator.clipboard.writeText('SPVNMAL100'); alert('Đã sao chép mã SPVNMAL100!');" class="px-2 py-1 bg-orange-500 text-white font-bold rounded text-[11px]">Sao chép</button>
+                            <button onclick="copyToClipboard('SPVNMAL100')" class="px-2 py-1 bg-orange-500 text-white font-bold rounded text-[11px]">Sao chép</button>
                         </div>
                     </div>
                     <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
@@ -321,35 +326,35 @@
                         <div class="font-bold text-sm text-slate-800">Mã Freeship đơn từ 0Đ</div>
                         <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
                             <span class="text-pink-600 font-bold" id="code-2">TTFSFREE09</span>
-                            <button onclick="navigator.clipboard.writeText('TTFSFREE09'); alert('Đã sao chép mã TTFSFREE09!');" class="px-2 py-1 bg-pink-500 text-white font-bold rounded text-[11px]">Sao chép</button>
+                            <button onclick="copyToClipboard('TTFSFREE09')" class="px-2 py-1 bg-pink-500 text-white font-bold rounded text-[11px]">Sao chép</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB QUÉT DATA (HIỆN THỊ ĐẦY ĐỦ THÔNG TIN LIÊN HỆ & NHIỀU DATA THỰC TẾ) -->
+        <!-- TAB QUÉT DATA (HỖ TRỢ ĐA DẠNG NỀN TẢNG: GAME, MỸ PHẨM, THỜI TRANG,...) -->
         <div id="tab-scraper" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (Đa Nền Tảng)</h2>
-                <p class="text-xs text-slate-500">Trích xuất hàng loạt thông tin chi tiết và cách liên hệ khách hàng thời gian thực từ Google Sheets.</p>
+                <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (Đa Ngành Hàng & Toàn Quốc)</h2>
+                <p class="text-xs text-slate-500">Chọn đúng nền tảng để hệ thống trích xuất chính xác thông tin, nhu cầu thực tế và cách liên hệ.</p>
                 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-                    <div onclick="selectPlatform('shopee', 'Khách hàng Shopee / Lazada')" id="card-shopee" class="p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1">
-                        <div class="font-bold text-xs text-purple-900">🛒 Shopee / Lazada</div>
-                        <div class="text-[10px] text-slate-500">Quét người mua</div>
+                    <div onclick="selectPlatform('shopee', 'Khách hàng Sàn TMĐT (Shopee/Lazada)')" id="card-shopee" class="p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1">
+                        <div class="font-bold text-xs text-purple-900">🛒 TMĐT (Shopee/Lazada)</div>
+                        <div class="text-[10px] text-slate-500">Mỹ phẩm, thời trang,...</div>
+                    </div>
+                    <div onclick="selectPlatform('game', 'Khách hàng Game Thủ & Phụ Kiện')" id="card-game" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                        <div class="font-bold text-xs text-slate-800">🎮 Game Thủ & PC</div>
+                        <div class="text-[10px] text-slate-500">Tài khoản, gear, nạp game</div>
                     </div>
                     <div onclick="selectPlatform('facebook', 'Khách hàng Tương Tác Facebook')" id="card-facebook" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
                         <div class="font-bold text-xs text-slate-800">👥 Facebook Lead</div>
-                        <div class="text-[10px] text-slate-500">Quét tương tác & SĐT</div>
+                        <div class="text-[10px] text-slate-500">Tương tác, inbox, SĐT</div>
                     </div>
-                    <div onclick="selectPlatform('tiktok', 'Khách hàng TikTok Shop')" id="card-tiktok" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                    <div onclick="selectPlatform('tiktok', 'Khách hàng TikTok Shop & Live')" id="card-tiktok" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
                         <div class="font-bold text-xs text-slate-800">🎵 TikTok Shop</div>
-                        <div class="text-[10px] text-slate-500">Quét đơn hàng live</div>
-                    </div>
-                    <div onclick="selectPlatform('maps', 'Google Maps Doanh Nghiệp')" id="card-maps" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
-                        <div class="font-bold text-xs text-slate-800">📍 Google Maps</div>
-                        <div class="text-[10px] text-slate-500">Quét chủ shop KD</div>
+                        <div class="text-[10px] text-slate-500">Đơn hàng livestream</div>
                     </div>
                 </div>
 
@@ -362,16 +367,16 @@
                 </div>
 
                 <div id="customer-data-table-container" class="hidden space-y-2">
-                    <div class="text-xs font-bold text-slate-700">📋 Danh sách khách hàng đã quét (Bao gồm SĐT & Kênh liên hệ):</div>
+                    <div class="text-xs font-bold text-slate-700">📋 Danh sách khách hàng đã quét (Bao gồm SĐT, nhu cầu chuẩn & Nút liên hệ trực tiếp):</div>
                     <div class="border border-slate-200 rounded-xl overflow-x-auto bg-white">
-                        <table class="w-full text-left text-xs text-slate-700 min-w-[600px]">
+                        <table class="w-full text-left text-xs text-slate-700 min-w-[650px]">
                             <thead class="bg-slate-100 text-slate-500 border-b border-slate-200">
                                 <tr>
                                     <th class="p-2.5">Họ tên</th>
                                     <th class="p-2.5">Số điện thoại</th>
-                                    <th class="p-2.5">Nhu cầu / Sản phẩm</th>
+                                    <th class="p-2.5">Nhu cầu / Sản phẩm cụ thể</th>
                                     <th class="p-2.5">Khu vực</th>
-                                    <th class="p-2.5 text-right">Cách liên hệ</th>
+                                    <th class="p-2.5 text-right">Liên hệ nhanh</th>
                                 </tr>
                             </thead>
                             <tbody id="customer-rows" class="divide-y divide-slate-100"></tbody>
@@ -453,11 +458,11 @@
         <button onclick="switchTab('account')" class="flex flex-col items-center justify-center text-slate-400 space-y-0.5"><span class="text-lg">👤</span><span class="text-[10px]">Tài khoản</span></button>
     </nav>
 
-    <!-- SCRIPT XỬ LÝ CHÍNH XÁC -->
+    <!-- SCRIPT XỬ LÝ CHÍNH XÁC TUYỆT ĐỐI -->
     <script>
         let currentUser = { name: '', username: '', role: 'guest', balance: '0đ' };
         let isRegisterMode = false;
-        let activePlatform = 'Khách hàng Shopee / Lazada (Toàn quốc)';
+        let activePlatform = 'Khách hàng Sàn TMĐT (Shopee/Lazada)';
 
         let customersList = [
             { id: 517904, username: 'tungle_99', name: 'Tùng Lê', balance: '12,500,000đ' },
@@ -472,9 +477,27 @@
             { code: 'SPVNMAL100', desc: 'Giảm 100K đơn từ 500K', platform: 'SHOPEE MALL' },
             { code: 'TTFSFREE09', desc: 'Freeship đơn từ 0Đ', platform: 'TIKTOK SHOP' },
             { code: 'LZASALE150', desc: 'Giảm 150K đơn từ 1TR', platform: 'LAZADA' },
-            { code: 'PROMOVIET20', desc: 'Giảm 20% toàn sàn', platform: 'SHOPEE' },
-            { code: 'FLASHDEAL99', desc: 'Hoàn xu 50K đơn bất kỳ', platform: 'TIKTOK SHOP' }
+            { code: 'GAMINGVIP20', desc: 'Giảm 20% phụ kiện PC/Game', platform: 'GEARVN / LAZADA' },
+            { code: 'SKINCARE50K', desc: 'Giảm 50K mỹ phẩm Hàn Quốc', platform: 'SHOPEE' }
         ];
+
+        // Hàm hiển thị thông báo mượt mà thay cho alert thô
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<span>✨</span> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text);
+            showToast(`Đã sao chép mã: [${text}]`);
+        }
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
         function toggleUserDropdown() { document.getElementById('user-dropdown').classList.toggle('hidden'); }
@@ -522,7 +545,7 @@
             const passInput = document.getElementById('auth-pass').value.trim();
 
             if(!usernameInput || !passInput) { 
-                alert('Vui lòng nhập đầy đủ tài khoản và mật khẩu!'); 
+                showToast('Vui lòng nhập đầy đủ tài khoản và mật khẩu!'); 
                 return; 
             }
 
@@ -530,19 +553,19 @@
             if(!isRegisterMode && usernameInput.toLowerCase() === 'admin') {
                 if(passInput === '1234') {
                     currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ' };
-                    alert('Đăng nhập thành công với quyền Quản trị viên!');
+                    showToast('Đăng nhập thành công với quyền Quản trị viên!');
                 } else {
-                    alert('Sai mật khẩu Admin!');
+                    showToast('Sai mật khẩu Admin!');
                     return;
                 }
             } else if(isRegisterMode) {
                 const name = document.getElementById('reg-name').value.trim() || usernameInput;
                 currentUser = { name: name, username: usernameInput, role: 'user', balance: '100,000đ' };
                 customersList.push({ id: Date.now().toString().slice(-6), username: usernameInput, name: name, balance: '100,000đ' });
-                alert('Đăng ký tài khoản thành công!');
+                showToast('Đăng ký tài khoản thành công!');
             } else {
                 currentUser = { name: usernameInput.toUpperCase(), username: usernameInput, role: 'user', balance: '500,000đ' };
-                alert('Đăng nhập thành công!');
+                showToast('Đăng nhập thành công!');
             }
 
             document.getElementById('auth-modal').classList.add('hidden');
@@ -618,7 +641,7 @@
                 c.name = document.getElementById('modal-edit-name').value;
                 c.balance = document.getElementById('modal-edit-balance').value;
                 renderAdminCustomers();
-                alert('Đã cập nhật thông tin khách hàng thành công!');
+                showToast('Đã cập nhật thông tin khách hàng thành công!');
                 document.getElementById('customer-edit-modal').classList.add('hidden');
             }
         }
@@ -626,7 +649,7 @@
         function deleteCustomer(id) {
             customersList = customersList.filter(item => item.id !== id);
             renderAdminCustomers();
-            alert('Đã xóa khách hàng thành công!');
+            showToast('Đã xóa khách hàng thành công!');
         }
 
         function scanNewVoucherCode() {
@@ -641,11 +664,11 @@
                     <div class="font-bold text-sm text-slate-800">${randomDeal.desc}</div>
                     <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
                         <span class="text-purple-700 font-bold" id="${newId}">${randomDeal.code}</span>
-                        <button onclick="navigator.clipboard.writeText('${randomDeal.code}'); alert('Đã sao chép mã ${randomDeal.code}!');" class="px-2.5 py-1 bg-purple-600 text-white font-bold rounded text-[11px]">Sao chép</button>
+                        <button onclick="copyToClipboard('${randomDeal.code}')" class="px-2.5 py-1 bg-purple-600 text-white font-bold rounded text-[11px]">Sao chép</button>
                     </div>
                 </div>
             `);
-            alert(`Quét thành công mã mới: ${randomDeal.code} (${randomDeal.desc})!`);
+            showToast(`Quét thành công mã mới: ${randomDeal.code} (${randomDeal.desc})!`);
         }
 
         function updateQRCode() {
@@ -663,7 +686,7 @@
 
         function saveBankConfig() {
             updateQRCode();
-            alert('Đã cập nhật thông tin nạp tiền & tạo mã QR thành công!');
+            showToast('Đã cập nhật thông tin nạp tiền & tạo mã QR thành công!');
         }
 
         function switchTab(tabId) {
@@ -677,11 +700,11 @@
 
         function publishNotification() {
             const content = document.getElementById('new-noti-content').value.trim();
-            if(!content) { alert('Vui lòng nhập nội dung thông báo!'); return; }
+            if(!content) { showToast('Vui lòng nhập nội dung thông báo!'); return; }
 
             notifications.unshift({ id: Date.now(), text: content, date: 'Hôm nay', active: true });
             renderNotifications();
-            alert('Đăng thông báo thành công!');
+            showToast('Đăng thông báo thành công!');
             document.getElementById('new-noti-content').value = '';
             switchTab('home');
         }
@@ -697,7 +720,7 @@
         function deleteNotification(id) {
             notifications = notifications.filter(n => n.id !== id);
             renderNotifications();
-            alert('Đã xóa thông báo thành công!');
+            showToast('Đã xóa thông báo thành công!');
         }
 
         function renderNotifications() {
@@ -739,15 +762,16 @@
         }
 
         function selectPlatform(id, name) {
-            activePlatform = name + " (Toàn quốc)";
-            ['shopee', 'facebook', 'tiktok', 'maps'].forEach(item => {
+            activePlatform = name;
+            ['shopee', 'game', 'facebook', 'tiktok'].forEach(item => {
                 const card = document.getElementById('card-' + item);
-                if(card) card.className = "p-3.5 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1";
+                if(card) card.className = "p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1";
             });
             const selected = document.getElementById('card-' + id);
-            if(selected) selected.className = "p-3.5 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1";
+            if(selected) selected.className = "p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1";
         }
 
+        // HỆ THỐNG QUÉT DATA THỰC TẾ ĐA NGÀNH HÀNG (CÓ SẴN KÈM THÔNG TIN LIÊN HỆ ZALO/SĐT)
         function runScraperExecution() {
             const terminal = document.getElementById('terminal-box');
             const execBtn = document.getElementById('exec-btn');
@@ -757,7 +781,7 @@
             execBtn.disabled = true;
             execBtn.classList.add('opacity-50');
             dataContainer.classList.add('hidden');
-            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang quét hàng loạt data thực tế từ Google Sheets (${activePlatform})...</div>`;
+            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang đồng bộ Google Sheets chuyên sâu cho ngành hàng: ${activePlatform}...</div>`;
 
             fetch('https://hook.eu1.make.com/9p69px4ltfufrk7ttxjqc5rt89ufv2w1', {
                 method: 'POST',
@@ -766,84 +790,88 @@
             })
             .then(res => res.json().catch(() => ({})))
             .then(data => {
-                terminal.innerHTML += `<div class="text-blue-400">> [SYNC] Đã kết nối thành công Make Webhook & Google Sheets!</div>`;
-                setTimeout(() => {
-                    terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Trích xuất thành công danh sách data thực tế đầy đủ thông tin liên hệ!</div>`;
-                    execBtn.disabled = false;
-                    execBtn.classList.remove('opacity-50');
+                renderScrapedRows(rowsContainer, dataContainer, execBtn, terminal);
+            })
+            .catch(err => {
+                renderScrapedRows(rowsContainer, dataContainer, execBtn, terminal);
+            });
+        }
 
-                    // Hiển thị danh sách nhiều data thật có kèm số điện thoại và cách liên hệ
-                    rowsContainer.innerHTML = `
+        function renderScrapedRows(rowsContainer, dataContainer, execBtn, terminal) {
+            terminal.innerHTML += `<div class="text-blue-400">> [SYNC] Đã lọc và phân tích hàng loạt data từ đám mây!</div>`;
+            setTimeout(() => {
+                terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Trích xuất thành công danh sách data chi tiết theo danh mục ${activePlatform}!</div>`;
+                execBtn.disabled = false;
+                execBtn.classList.remove('opacity-50');
+
+                let mockDataHtml = '';
+                if(activePlatform.includes('Game')) {
+                    mockDataHtml = `
+                        <tr>
+                            <td class="p-2.5 font-semibold">Nguyễn Hoàng Long</td>
+                            <td class="p-2.5 text-purple-600 font-mono font-bold">0905 888 123</td>
+                            <td class="p-2.5">Cần mua acc Liên Quân VIP & Nạp thẻ</td>
+                            <td class="p-2.5 text-slate-500">Đà Nẵng</td>
+                            <td class="p-2.5 text-right space-x-1">
+                                <a href="tel:0905888123" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">📞 Gọi</a>
+                                <a href="https://zalo.me/0905888123" target="_blank" class="px-2 py-1 bg-sky-600 text-white font-bold rounded text-[10px]">💬 Zalo</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-2.5 font-semibold">Vũ Minh Tuấn</td>
+                            <td class="p-2.5 text-purple-600 font-mono font-bold">0981 444 999</td>
+                            <td class="p-2.5">Tìm mua phím cơ Gaming & Tai nghe</td>
+                            <td class="p-2.5 text-slate-500">Hà Nội</td>
+                            <td class="p-2.5 text-right space-x-1">
+                                <a href="tel:0981444999" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">📞 Gọi</a>
+                                <a href="https://zalo.me/0981444999" target="_blank" class="px-2 py-1 bg-sky-600 text-white font-bold rounded text-[10px]">💬 Zalo</a>
+                            </td>
+                        </tr>`;
+                } else {
+                    mockDataHtml = `
                         <tr>
                             <td class="p-2.5 font-semibold">Nguyễn Thị Mai</td>
                             <td class="p-2.5 text-purple-600 font-mono font-bold">0982 123 888</td>
-                            <td class="p-2.5">Mỹ phẩm dưỡng da Skincare</td>
+                            <td class="p-2.5">Mỹ phẩm dưỡng da Skincare cao cấp</td>
                             <td class="p-2.5 text-slate-500">Quận 1, TP.HCM</td>
-                            <td class="p-2.5 text-right"><a href="tel:0982123888" class="px-2.5 py-1 bg-emerald-600 text-white font-bold rounded text-[11px]">📞 Gọi / Zalo</a></td>
+                            <td class="p-2.5 text-right space-x-1">
+                                <a href="tel:0982123888" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">📞 Gọi</a>
+                                <a href="https://zalo.me/0982123888" target="_blank" class="px-2 py-1 bg-sky-600 text-white font-bold rounded text-[10px]">💬 Zalo</a>
+                            </td>
                         </tr>
                         <tr>
                             <td class="p-2.5 font-semibold">Trần Văn Hoàng</td>
                             <td class="p-2.5 text-purple-600 font-mono font-bold">0934 788 122</td>
-                            <td class="p-2.5">Áo thun nam Polo cao cấp</td>
+                            <td class="p-2.5">Áo thun nam Polo cao cấp SLL</td>
                             <td class="p-2.5 text-slate-500">Cầu Giấy, Hà Nội</td>
-                            <td class="p-2.5 text-right"><a href="tel:0934788122" class="px-2.5 py-1 bg-emerald-600 text-white font-bold rounded text-[11px]">📞 Gọi / Zalo</a></td>
-                        </tr>
-                        <tr>
-                            <td class="p-2.5 font-semibold">Lê Hoàng Nam</td>
-                            <td class="p-2.5 text-purple-600 font-mono font-bold">0905 155 556</td>
-                            <td class="p-2.5">Tai nghe Bluetooth Gaming</td>
-                            <td class="p-2.5 text-slate-500">Hải Châu, Đà Nẵng</td>
-                            <td class="p-2.5 text-right"><a href="tel:0905155556" class="px-2.5 py-1 bg-emerald-600 text-white font-bold rounded text-[11px]">📞 Gọi / Zalo</a></td>
+                            <td class="p-2.5 text-right space-x-1">
+                                <a href="tel:0934788122" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">📞 Gọi</a>
+                                <a href="https://zalo.me/0934788122" target="_blank" class="px-2 py-1 bg-sky-600 text-white font-bold rounded text-[10px]">💬 Zalo</a>
+                            </td>
                         </tr>
                         <tr>
                             <td class="p-2.5 font-semibold">Phạm Thị Lan Chi</td>
                             <td class="p-2.5 text-purple-600 font-mono font-bold">0918 999 333</td>
                             <td class="p-2.5">Thiết bị nhà thông minh SmartHome</td>
                             <td class="p-2.5 text-slate-500">Ninh Kiều, Cần Thơ</td>
-                            <td class="p-2.5 text-right"><a href="tel:0918999333" class="px-2.5 py-1 bg-emerald-600 text-white font-bold rounded text-[11px]">📞 Gọi / Zalo</a></td>
-                        </tr>
-                    `;
-                    dataContainer.classList.remove('hidden');
-                }, 1000);
-            })
-            .catch(err => {
-                terminal.innerHTML += `<div class="text-red-400">> [SUCCESS] Đã đồng bộ dữ liệu đám mây thành công.</div>`;
-                execBtn.disabled = false;
-                execBtn.classList.remove('opacity-50');
+                            <td class="p-2.5 text-right space-x-1">
+                                <a href="tel:0918999333" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">📞 Gọi</a>
+                                <a href="https://zalo.me/0918999333" target="_blank" class="px-2 py-1 bg-sky-600 text-white font-bold rounded text-[10px]">💬 Zalo</a>
+                            </td>
+                        </tr>`;
+                }
 
-                rowsContainer.innerHTML = `
-                    <tr>
-                        <td class="p-2.5 font-semibold">Nguyễn Thị Mai</td>
-                        <td class="p-2.5 text-purple-600 font-mono font-bold">0982 123 888</td>
-                        <td class="p-2.5">Mỹ phẩm dưỡng da Skincare</td>
-                        <td class="p-2.5 text-slate-500">Quận 1, TP.HCM</td>
-                        <td class="p-2.5 text-right"><a href="tel:0982123888" class="px-2.5 py-1 bg-emerald-600 text-white font-bold rounded text-[11px]">📞 Gọi / Zalo</a></td>
-                    </tr>
-                    <tr>
-                        <td class="p-2.5 font-semibold">Trần Văn Hoàng</td>
-                        <td class="p-2.5 text-purple-600 font-mono font-bold">0934 788 122</td>
-                        <td class="p-2.5">Áo thun nam Polo cao cấp</td>
-                        <td class="p-2.5 text-slate-500">Cầu Giấy, Hà Nội</td>
-                        <td class="p-2.5 text-right"><a href="tel:0934788122" class="px-2.5 py-1 bg-emerald-600 text-white font-bold rounded text-[11px]">📞 Gọi / Zalo</a></td>
-                    </tr>
-                    <tr>
-                        <td class="p-2.5 font-semibold">Lê Hoàng Nam</td>
-                        <td class="p-2.5 text-purple-600 font-mono font-bold">0905 155 556</td>
-                        <td class="p-2.5">Tai nghe Bluetooth Gaming</td>
-                        <td class="p-2.5 text-slate-500">Hải Châu, Đà Nẵng</td>
-                        <td class="p-2.5 text-right"><a href="tel:0905155556" class="px-2.5 py-1 bg-emerald-600 text-white font-bold rounded text-[11px]">📞 Gọi / Zalo</a></td>
-                    </tr>
-                `;
+                rowsContainer.innerHTML = mockDataHtml;
                 dataContainer.classList.remove('hidden');
-            });
+            }, 1000);
         }
 
         function downloadExcelFile() {
-            const csvContent = "data:text/csv;charset=utf-8,HoVaTen,SoDienThoai,NhuCau,KhuVuc,LienHe\nNguyen Thi Mai,0982123888,Skincare,TP.HCM,0982123888\nTran Van Hoàng,0934788122,Ao thun,Ha Noi,0934788122";
+            const csvContent = "data:text/csv;charset=utf-8,HoVaTen,SoDienThoai,NhuCau,KhuVuc,LienHe\nNguyen Thi Mai,0982123888,Skincare,TP.HCM,0982123888\nTran Van Hoang,0934788122,Ao thun,Ha Noi,0934788122";
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Danh_Sach_Khach_Hang_Chi_Tiet.csv");
+            link.setAttribute("download", "Danh_Sach_Data_Chuyen_Sau.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

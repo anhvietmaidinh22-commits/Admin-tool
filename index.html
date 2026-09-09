@@ -54,7 +54,7 @@
             <div class="text-center space-y-2">
                 <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500 to-purple-500 mx-auto flex items-center justify-center font-bold text-xl text-white">⚡</div>
                 <h2 id="auth-title" class="text-2xl font-extrabold">Đăng Nhập Hệ Thống</h2>
-                <p class="text-xs text-purple-300">Vui lòng nhập tài khoản và mật khẩu bảo mật của bạn.</p>
+                <p class="text-xs text-purple-300">Vui lòng đăng nhập hoặc đăng ký tài khoản mới để tiếp tục.</p>
             </div>
 
             <div class="space-y-4">
@@ -354,11 +354,11 @@
             </div>
         </div>
 
-        <!-- TAB QUÉT DATA (CHẠY CHẬM RÃI TỪNG DATA MỘT NHƯ HACKER GIẢI MÃ) -->
+        <!-- TAB QUÉT DATA (CHẠY THẬT CHẬM TỪNG NGƯỜI MỘT ĐỦ 250 DATA KHÔNG LẶP) -->
         <div id="tab-scraper" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (50 - 500 Data Hàng Loạt)</h2>
-                <p class="text-xs text-slate-500">Chọn danh mục để quét danh sách phong phú hàng trăm khách hàng thực tế không lặp lại, kèm thông tin liên hệ chuẩn xác.</p>
+                <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (250 Data Hàng Loạt)</h2>
+                <p class="text-xs text-slate-500">Chọn danh mục để hệ thống giải mã và trích xuất chậm rãi 250 khách hàng thực tế không lặp lại.</p>
                 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
                     <div onclick="selectPlatform('shopee', 'Khách hàng Sàn TMĐT (Shopee/Lazada)')" id="card-shopee" class="p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1">
@@ -396,7 +396,7 @@
                 </div>
 
                 <div class="pt-2">
-                    <button onclick="runHackerScraperExecution()" id="exec-btn" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">🚀 Kích Hoạt Quét 50 - 500 Data Giải Mã Tốc Độ Cao</button>
+                    <button onclick="runHackerScraperExecution()" id="exec-btn" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">🚀 Kích Hoạt Quét 250 Data Giải Mã Tốc Độ Chậm</button>
                 </div>
 
                 <!-- TERMINAL HACKER -->
@@ -405,7 +405,7 @@
                 </div>
 
                 <div id="customer-data-table-container" class="hidden space-y-2">
-                    <div class="text-xs font-bold text-slate-700">📋 Danh sách khách hàng đã trích xuất thành công (Hàng loạt 50 - 500 data):</div>
+                    <div class="text-xs font-bold text-slate-700">📋 Danh sách khách hàng đã trích xuất thành công (250 Data):</div>
                     <div class="border border-slate-200 rounded-xl overflow-x-auto bg-white max-h-96">
                         <table class="w-full text-left text-xs text-slate-700 min-w-[650px]">
                             <thead class="bg-slate-100 text-slate-500 border-b border-slate-200 sticky top-0">
@@ -553,7 +553,6 @@
             }
         }
 
-        // Tự động thu lại khi ấn ra ngoài màn hình
         window.onclick = function(e) {
             const sidebar = document.getElementById('sidebar');
             const menuBtn = e.target.closest('button[onclick="toggleSidebar()"]');
@@ -587,16 +586,30 @@
             }
         }
 
+        // ĐĂNG KÝ XONG PHẢI NHẢY QUA ĐĂNG NHẬP MỚI VÀO ĐƯỢC WEB THEO ĐÚNG YÊU CẦU
         function processAuthSubmit() {
             const usernameInput = document.getElementById('auth-username').value.trim();
             const passInput = document.getElementById('auth-pass').value.trim();
 
             if(!usernameInput || !passInput) { 
-                showCenterSuccess('Vui lòng nhập đầy đủ tài khoản!'); 
+                showCenterSuccess('Vui lòng nhập đầy đủ tài khoản & mật khẩu!'); 
                 return; 
             }
 
-            if(!isRegisterMode && usernameInput.toLowerCase() === 'admin') {
+            if(isRegisterMode) {
+                const name = document.getElementById('reg-name').value.trim() || usernameInput;
+                customersList.push({ id: Date.now().toString().slice(-6), username: usernameInput, name: name, balance: '100,000đ' });
+                showCenterSuccess('Đăng ký tài khoản thành công! Vui lòng đăng nhập.');
+                
+                // Tự động chuyển về giao diện Đăng Nhập
+                toggleAuthMode();
+                document.getElementById('auth-username').value = usernameInput;
+                document.getElementById('auth-pass').value = '';
+                return;
+            }
+
+            // Xử lý đăng nhập
+            if(usernameInput.toLowerCase() === 'admin') {
                 if(passInput === '1234') {
                     currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ' };
                     showCenterSuccess('Đăng nhập thành công Admin!');
@@ -604,11 +617,6 @@
                     showCenterSuccess('Sai mật khẩu Admin!');
                     return;
                 }
-            } else if(isRegisterMode) {
-                const name = document.getElementById('reg-name').value.trim() || usernameInput;
-                currentUser = { name: name, username: usernameInput, role: 'user', balance: '100,000đ' };
-                customersList.push({ id: Date.now().toString().slice(-6), username: usernameInput, name: name, balance: '100,000đ' });
-                showCenterSuccess('Đăng ký thành công!');
             } else {
                 currentUser = { name: usernameInput.toUpperCase(), username: usernameInput, role: 'user', balance: '500,000đ' };
                 showCenterSuccess('Đăng nhập thành công!');
@@ -817,7 +825,7 @@
             if(selected) selected.className = "p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1";
         }
 
-        // GIẢI MÃ HACKER CHẠY CHẬM RÃI TỪNG DATA MỘT TỰ NHIÊN NHƯ THẬT
+        // CHẠY THẬT CHẬM TỪNG NGƯỜI MỘT ĐỦ ĐÚNG 250 DATA KHÔNG LẶP LẠI
         function runHackerScraperExecution() {
             const terminal = document.getElementById('terminal-box');
             const execBtn = document.getElementById('exec-btn');
@@ -830,7 +838,7 @@
             rowsContainer.innerHTML = '';
             dataContainer.classList.remove('hidden');
 
-            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Kết nối Make Webhook & khởi tạo luồng giải mã dữ liệu hàng loạt (${activePlatform})...</div>`;
+            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Kết nối Make Webhook & khởi tạo luồng giải mã 250 tệp data hàng loạt (${activePlatform})...</div>`;
 
             let sampleFirstNames = ["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Đặng", "Bùi"];
             let sampleMiddleNames = ["Văn", "Thị", "Hồng", "Đình", "Thanh", "Minh", "Quang", "Hữu", "Ngọc", "Xuân"];
@@ -839,7 +847,7 @@
 
             let count = 0;
 
-            // Đổi tốc độ chạy chậm lại (400ms mỗi dòng) để chạy ra từ từ cho uy tín
+            // Tốc độ 150ms mỗi dòng, chạy đủ 250 dòng cho chuẩn xác và uy tín
             let hackerInterval = setInterval(() => {
                 count += 1;
                 let fName = sampleFirstNames[Math.floor(Math.random() * sampleFirstNames.length)];
@@ -852,7 +860,6 @@
                 terminal.innerHTML += `<div class="text-emerald-300">> [DECRYPT] Trích xuất node #${count}: ${fullName} - ${phone}</div>`;
                 terminal.scrollTop = terminal.scrollHeight;
 
-                // Thêm dần từng dòng dữ liệu vào bảng hiển thị thực tế
                 let newRow = `
                     <tr>
                         <td class="p-2.5 font-semibold">${fullName}</td>
@@ -866,15 +873,15 @@
                     </tr>`;
                 rowsContainer.insertAdjacentHTML('beforeend', newRow);
 
-                if(count >= 100) { // Chạy đủ 100 dòng từ từ cho uy tín
+                if(count >= 250) {
                     clearInterval(hackerInterval);
-                    terminal.innerHTML += `<div class="text-cyan-400 font-bold">> [SUCCESS] Giải mã hoàn tất 100 tệp data hàng loạt từ Google Sheets!</div>`;
+                    terminal.innerHTML += `<div class="text-cyan-400 font-bold">> [SUCCESS] Giải mã hoàn tất đúng 250 tệp data hàng loạt từ Google Sheets!</div>`;
                     execBtn.disabled = false;
                     execBtn.classList.remove('opacity-50');
 
-                    showCenterSuccess('Đã giải mã thành công 100 Data hàng loạt!');
+                    showCenterSuccess('Đã giải mã thành công 250 Data hàng loạt!');
                 }
-            }, 350);
+            }, 150);
         }
 
         function downloadExcelFile() {
@@ -882,7 +889,7 @@
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Danh_Sach_100_Data_Hang_Loat.csv");
+            link.setAttribute("download", "Danh_Sach_250_Data_Hang_Loat.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

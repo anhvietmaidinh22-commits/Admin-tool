@@ -3,515 +3,334 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoPostAI - Enterprise Data & Deal Matrix</title>
+    <title>AutoPostAI - Hệ Thống Dịch Vụ & Cào Data</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #030712; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-[#030712] text-slate-100 min-h-screen flex selection:bg-blue-500 selection:text-white">
+<body class="min-h-screen flex flex-col pb-20 lg:pb-0">
 
-    <!-- 1. AUTH MODAL -->
-    <div id="auth-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
-        <div class="max-w-md w-full bg-[#080d1a] border border-slate-800 p-8 rounded-3xl shadow-2xl space-y-6">
-            <div class="text-center space-y-2">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-purple-600 mx-auto flex items-center justify-center shadow-lg shadow-purple-500/30 text-xl font-bold text-white">🚀</div>
-                <h2 class="text-2xl font-extrabold text-white">Đăng Nhập Hệ Thống</h2>
-                <p class="text-xs text-slate-400">Truy cập nền tảng săn mã & quản lý khách hàng</p>
+    <!-- 1. SIDEBAR MENU (CHUẨN GIAO DIỆN TÍM ĐẬM) -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-[#2d1b4e] text-slate-100 flex flex-col transition-transform duration-300 -translate-x-full shadow-2xl">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-purple-900/50">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center font-bold text-white">⚡</div>
+                <span class="font-extrabold text-base tracking-wide text-white">AutoPostAI Panel</span>
             </div>
-
-            <div class="space-y-4">
-                <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-slate-300">Email khách hàng / Tài khoản</label>
-                    <input type="email" id="auth-email" placeholder="khachhang@gmail.com" value="khachhang@gmail.com" class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500">
-                </div>
-                <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-slate-300">Mật khẩu</label>
-                    <input type="password" id="auth-pass" placeholder="••••••••" value="123456" class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500">
-                </div>
-                <button onclick="processAuth()" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 font-bold rounded-xl text-sm shadow-lg shadow-purple-600/25 text-white transition-all">Xác Nhận Đăng Nhập</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. SIDEBAR -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-[#080d1a] border-r border-slate-800/80 flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0">
-        <div class="h-16 flex items-center px-6 border-b border-slate-800/80 space-x-3">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/30 text-white font-bold">⚡</div>
-            <span class="font-extrabold text-lg bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">AutoPostAI</span>
+            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg">✕</button>
         </div>
 
-        <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto custom-scrollbar">
-            <a href="#" onclick="switchTab('deals')" id="nav-deals" class="flex items-center space-x-3 px-4 py-3 rounded-xl bg-blue-600/10 text-blue-400 border border-blue-500/20 font-semibold text-sm transition-all">
-                <span>🔥 Phần 1: Kho Săn Mã</span>
+        <div class="flex-1 px-3 py-4 space-y-1 overflow-y-auto custom-scrollbar text-xs font-medium">
+            <div class="px-3 py-2 text-[10px] uppercase font-bold text-purple-300 tracking-wider">Chức năng chính</div>
+            
+            <a href="#" onclick="switchTab('home'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-3 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
+                <span class="text-base">🏠</span><span>Trang chủ</span>
             </a>
-            <a href="#" onclick="switchTab('scraper')" id="nav-scraper" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-900 hover:text-slate-200 font-medium text-sm transition-all">
-                <span>🤖 Phần 2: Cào Data Toàn Quốc</span>
+            <a href="#" onclick="switchTab('orders'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-3 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
+                <span class="text-base">📋</span><span>Quản lý đơn hàng</span>
             </a>
-            <a href="#" onclick="switchTab('admin')" id="nav-admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-purple-400 hover:bg-purple-950/20 font-semibold text-sm transition-all border border-purple-500/30">
-                <span>🛡️ Cài Đặt & Quản Trị Admin</span>
+            <a href="#" onclick="switchTab('cashflow'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-3 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
+                <span class="text-base">⏳</span><span>Luồng tiền</span>
             </a>
-        </nav>
-
-        <div class="p-4 m-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div id="sidebar-user-name" class="text-xs font-bold text-white truncate w-32">Nguyễn Văn Khách</div>
-                    <div id="sidebar-user-role" class="text-[10px] text-blue-400 font-semibold">Gói Tháng VIP</div>
-                </div>
-                <button onclick="openAuthModal()" title="Đổi tài khoản" class="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-blue-400 text-xs">👤</button>
-            </div>
+            <a href="#" onclick="switchTab('account'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-3 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
+                <span class="text-base">👤</span><span>Tài khoản của tôi</span>
+            </a>
+            <a href="#" onclick="switchTab('deposit'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-3 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
+                <span class="text-base">💳</span><span>Nạp tiền</span>
+            </a>
+            <a href="#" onclick="switchTab('stats'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-3 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
+                <span class="text-base">📊</span><span>Thống kê</span>
+            </a>
+            <a href="#" onclick="switchTab('pricing'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-3 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
+                <span class="text-base">💎</span><span>Bảng giá dịch vụ</span>
+            </a>
+            <a href="#" onclick="switchTab('scraper'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-3 rounded-xl bg-purple-800/50 text-white font-bold transition-all border border-purple-600/40">
+                <span class="text-base">🤖</span><span>Hệ Thống Cào Data</span>
+            </a>
+            <a href="#" onclick="switchTab('support'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-3 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
+                <span class="text-base">🎧</span><span>Hỗ trợ</span>
+            </a>
+            <a href="#" onclick="switchTab('notifications'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-3 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
+                <span class="text-base">🔔</span><span>Thông báo</span>
+            </a>
         </div>
     </aside>
 
+    <!-- 2. TOP HEADER -->
+    <header class="h-16 bg-white border-b border-slate-200 sticky top-0 z-30 px-4 flex items-center justify-between shadow-sm">
+        <div class="flex items-center space-x-3">
+            <button onclick="toggleSidebar()" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700">☰</button>
+            <button onclick="switchTab('support')" class="px-3 py-1.5 rounded-full bg-purple-100 text-purple-700 font-bold text-xs flex items-center space-x-1">
+                <span>+ Hỗ trợ</span>
+            </button>
+        </div>
+        <div class="flex items-center space-x-3">
+            <button onclick="alert('Không có thông báo mới!')" class="p-2 rounded-xl bg-slate-100 text-slate-600 text-sm">🔔</button>
+            <div onclick="switchTab('account')" class="w-9 h-9 rounded-full bg-purple-600 text-white font-bold flex items-center justify-center cursor-pointer shadow">
+                <span id="header-avatar-letter">V</span>
+            </div>
+        </div>
+    </header>
+
     <!-- 3. MAIN CONTENT -->
-    <div class="flex-1 flex flex-col lg:pl-64 min-w-0">
-        <header class="h-16 border-b border-slate-800/80 bg-[#030712]/80 backdrop-blur-xl sticky top-0 z-30 px-6 flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg bg-slate-900 text-slate-300 border border-slate-800">☰</button>
-                <h2 class="font-bold text-base text-slate-200" id="page-title">Kho Săn Mã Giảm Giá Sàn</h2>
-            </div>
-            <div class="flex items-center space-x-3">
-                <div class="px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold flex items-center space-x-2">
-                    <span>👋 Xin chào, <strong id="header-welcome-name" class="text-white">Nguyễn Văn Khách</strong></span>
-                </div>
-            </div>
-        </header>
-
-        <main class="flex-1 p-6 space-y-6 max-w-7xl mx-auto w-full">
-            
-            <!-- THÔNG BÁO CHUYÊN NGHIỆP KHI VÀO TRANG CHỦ -->
-            <div class="p-6 rounded-3xl bg-gradient-to-r from-blue-900/40 via-purple-900/30 to-slate-900/60 border border-blue-500/20 flex flex-col md:flex-row justify-between items-center gap-4 shadow-xl">
-                <div class="space-y-1">
-                    <div class="flex items-center space-x-2">
-                        <span class="px-2 py-0.5 rounded bg-blue-500 text-white text-[10px] font-bold uppercase" id="banner-role-tag">Thành Viên VIP</span>
-                        <span class="text-xs text-emerald-400 font-semibold">● Trạng thái tài khoản: Hoạt động</span>
-                    </div>
-                    <h2 class="text-xl md:text-2xl font-extrabold text-white">Chào mừng trở lại, <span id="banner-user-name" class="text-blue-400">Nguyễn Văn Khách</span>!</h2>
-                    <p class="text-xs text-slate-300">Hệ thống cào data tự động qua Make Webhook & Google Sheets đã sẵn sàng vận hành.</p>
-                </div>
-                <div class="flex items-center space-x-3 w-full md:w-auto">
-                    <button onclick="switchTab('scraper')" class="flex-1 md:flex-none px-5 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all">🚀 Vào Cào Data Ngay</button>
+    <main class="flex-1 p-4 max-w-4xl mx-auto w-full space-y-4">
+        
+        <!-- TAB TRANG CHỦ -->
+        <div id="tab-home" class="space-y-4">
+            <div class="p-6 rounded-2xl bg-gradient-to-r from-purple-700 to-indigo-600 text-white shadow-lg space-y-3">
+                <div class="text-xs uppercase tracking-wider text-purple-200 font-bold">Hệ Thống Tự Động Hóa</div>
+                <h1 class="text-xl font-extrabold" id="welcome-user-title">Xin chào, Đinh Hoàng Việt Anh!</h1>
+                <p class="text-xs text-purple-100">Quản lý toàn bộ dịch vụ, săn mã giảm giá và cào data khách hàng toàn quốc tự động.</p>
+                <div class="pt-2 flex space-x-2">
+                    <button onclick="switchTab('scraper')" class="px-4 py-2 bg-white text-purple-700 font-bold text-xs rounded-xl shadow">Mở Cào Data</button>
+                    <button onclick="switchTab('deposit')" class="px-4 py-2 bg-purple-800 text-white font-bold text-xs rounded-xl">Nạp Tiền Ngay</button>
                 </div>
             </div>
 
-            <!-- PHẦN 1: KHO SĂN MÃ -->
-            <div id="tab-deals" class="space-y-6">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <h2 class="text-xl font-bold text-white">Săn Voucher & Flash Sale Các Sàn</h2>
-                        <p class="text-xs text-slate-400 mt-1">Bấm sao chép mã trực tiếp để sử dụng ngay trên Shopee, Lazada, TikTok.</p>
-                    </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-1">
+                    <div class="text-xs text-slate-500 font-semibold">Số dư tài khoản</div>
+                    <div class="text-lg font-extrabold text-emerald-600">1,500,000đ</div>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="deals-grid">
-                    <div class="deal-item p-5 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-3" data-platform="SHOPEE">
-                        <div class="flex justify-between items-start">
-                            <span class="px-2.5 py-1 rounded bg-orange-500/10 text-orange-400 border border-orange-500/20 text-xs font-bold">SHOPEE MALL</span>
-                            <span class="text-xs text-emerald-400 font-semibold">Còn hiệu lực</span>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-white text-base">Mã giảm 100K đơn từ 500K</h3>
-                            <p class="text-xs text-slate-400 mt-1">Áp dụng toàn sàn khung giờ 0H.</p>
-                        </div>
-                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center font-mono">
-                            <span class="text-orange-400 font-bold text-sm" id="code-1">SPVNMAL100</span>
-                            <button onclick="copyCode('code-1')" class="px-3 py-1.5 bg-orange-500 hover:bg-orange-400 text-slate-950 font-bold text-xs rounded-lg transition-all">Sao chép</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PHẦN 2: HỆ THỐNG CÀO DATA -->
-            <div id="tab-scraper" class="space-y-6 hidden">
-                <div>
-                    <h2 class="text-xl font-bold text-white">Hệ Thống Cào Dữ Liệu Khách Hàng (Toàn Quốc)</h2>
-                    <p class="text-xs text-slate-400 mt-1">Trích xuất thông tin khách hàng thời gian thực qua Make Webhook & Google Sheets.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div onclick="selectPlatform('shopee', 'Khách hàng Shopee / Lazada')" id="card-shopee" class="platform-card p-5 rounded-2xl border border-blue-500 bg-blue-950/20 cursor-pointer space-y-2">
-                        <div class="text-2xl">🛒</div>
-                        <h3 class="font-bold text-white">Data Người Mua Sàn</h3>
-                        <p class="text-xs text-slate-400">Lấy tên, SĐT, địa chỉ 63 tỉnh thành.</p>
-                    </div>
-                    <div onclick="selectPlatform('facebook', 'Khách hàng Tương Tác Facebook')" id="card-facebook" class="platform-card p-5 rounded-2xl border border-slate-800 bg-slate-900/60 cursor-pointer space-y-2">
-                        <div class="text-2xl">👥</div>
-                        <h3 class="font-bold text-white">Data Lead Facebook</h3>
-                        <p class="text-xs text-slate-400">Quét bình luận, inbox, UID.</p>
-                    </div>
-                    <div onclick="selectPlatform('maps', 'Google Maps Doanh Nghiệp')" id="card-maps" class="platform-card p-5 rounded-2xl border border-slate-800 bg-slate-900/60 cursor-pointer space-y-2">
-                        <div class="text-2xl">📍</div>
-                        <h3 class="font-bold text-white">Data Chủ Shop Maps</h3>
-                        <p class="text-xs text-slate-400">Lấy SĐT cửa hàng toàn quốc.</p>
-                    </div>
-                </div>
-
-                <div class="p-6 rounded-2xl border border-slate-800 bg-slate-900/50 space-y-4">
-                    <div class="flex justify-between items-center">
-                        <span id="selected-target-label" class="font-bold text-sm text-white">Đang chọn: Khách hàng Shopee / Lazada (Toàn quốc)</span>
-                        <button onclick="runScraperExecution()" id="exec-btn" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 font-bold rounded-xl text-sm transition-all shadow-lg text-white">Bắt Đầu Cào Data</button>
-                    </div>
-                    
-                    <div class="bg-black/90 p-4 rounded-xl font-mono text-xs text-emerald-400 h-36 overflow-y-auto space-y-1 custom-scrollbar" id="terminal-box">
-                        <div>// Chờ kích hoạt lệnh trích xuất thông tin khách hàng toàn quốc...</div>
-                    </div>
-
-                    <div id="customer-data-table-container" class="hidden space-y-2 pt-2">
-                        <div class="flex justify-between items-center text-xs text-slate-400 font-semibold">
-                            <span>📋 KẾT QUẢ QUÉT DỮ LIỆU ĐÁM MÂY:</span>
-                            <span class="text-emerald-400">Đã đồng bộ Google Sheets</span>
-                        </div>
-                        <div class="border border-slate-800 rounded-xl overflow-hidden bg-slate-950">
-                            <table class="w-full text-left text-xs text-slate-300">
-                                <thead class="bg-slate-900 text-slate-400 border-b border-slate-800">
-                                    <tr>
-                                        <th class="p-3">Họ và Tên</th>
-                                        <th class="p-3">Số Điện Thoại</th>
-                                        <th class="p-3">Sản phẩm / Nhu cầu</th>
-                                        <th class="p-3">Khu vực</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="customer-rows" class="divide-y divide-slate-800/60"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div id="download-section" class="hidden pt-2">
-                        <button onclick="downloadExcelFile()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 font-bold text-white rounded-xl text-xs flex items-center justify-center space-x-2 transition-all shadow-lg shadow-emerald-600/20">
-                            <span>📥 Tải Xuống File Danh Sách Khách Hàng (.CSV)</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PHẦN 3: CÀI ĐẶT & QUẢN TRỊ ADMIN -->
-            <div id="tab-admin" class="space-y-6 hidden">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
-                    <!-- 1. Quản lý Voucher -->
-                    <div class="p-6 rounded-2xl border border-purple-500/30 bg-purple-950/10 space-y-4">
-                        <h3 class="font-bold text-white text-base">🎟️ Cài Đặt & Thêm Mã Săn Deal</h3>
-                        <div class="space-y-3">
-                            <input type="text" id="new-code" placeholder="Mã voucher (VD: FREESHIP99)" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white uppercase">
-                            <input type="text" id="new-desc" placeholder="Mô tả ưu đãi" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white">
-                            <button onclick="addNewVoucher()" class="w-full py-2.5 bg-purple-600 hover:bg-purple-500 font-bold text-xs rounded-xl text-white transition-all shadow-lg">Thêm Mã Lên Web</button>
-                        </div>
-                    </div>
-
-                    <!-- 2. Cài đặt Giá & Gói cước -->
-                    <div class="p-6 rounded-2xl border border-blue-500/30 bg-blue-950/10 space-y-4">
-                        <h3 class="font-bold text-white text-base">💰 Cài Đặt Giá & Gói Dịch Vụ Cào Data</h3>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-center bg-slate-900 p-2.5 rounded-xl border border-slate-800">
-                                <span class="text-xs text-slate-300">Gói Tháng (VND):</span>
-                                <input type="text" id="price-month" value="299,000đ" class="w-28 px-3 py-1 bg-slate-950 border border-slate-800 rounded-lg text-xs text-right text-blue-400 font-bold">
-                            </div>
-                            <div class="flex justify-between items-center bg-slate-900 p-2.5 rounded-xl border border-slate-800">
-                                <span class="text-xs text-slate-300">Gói Vĩnh Viễn (VND):</span>
-                                <input type="text" id="price-lifetime" value="999,000đ" class="w-28 px-3 py-1 bg-slate-950 border border-slate-800 rounded-lg text-xs text-right text-purple-400 font-bold">
-                            </div>
-                            <button onclick="savePrices()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 font-bold text-xs rounded-xl text-white transition-all">Lưu Cấu Hình Giá</button>
-                        </div>
-                    </div>
-
-                    <!-- 3. Cài Đặt Nạp Tiền & Ngân Hàng -->
-                    <div class="p-6 rounded-2xl border border-emerald-500/30 bg-emerald-950/10 space-y-4">
-                        <h3 class="font-bold text-white text-base">💳 Cài Đặt Ngân Hàng Nhận Tiền (SeABank)</h3>
-                        <div class="space-y-3">
-                            <input type="text" id="bank-name" value="SeABank (SeANet)" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white">
-                            <input type="text" id="bank-acc" value="123456789 - ĐINH HOÀNG VIỆT ANH" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white font-mono">
-                            <button onclick="saveBankConfig()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 font-bold text-xs rounded-xl text-white transition-all">Cập Nhật Thông Tin Nạp</button>
-                        </div>
-                    </div>
-
-                    <!-- 4. Tích Hợp Bot Telegram -->
-                    <div class="p-6 rounded-2xl border border-orange-500/30 bg-orange-950/10 space-y-4">
-                        <h3 class="font-bold text-white text-base">🤖 Tích Hợp Bot Telegram</h3>
-                        <div class="space-y-3">
-                            <input type="text" id="tele-token" value="751234567:AAH..." class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white font-mono">
-                            <input type="text" id="tele-chatid" value="-1002145678" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white font-mono">
-                            <button onclick="saveTelegramConfig()" class="w-full py-2.5 bg-orange-600 hover:bg-orange-500 font-bold text-xs rounded-xl text-white transition-all">Kết Nối Bot Telegram</button>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- 5. QUẢN LÝ THÔNG TIN KHÁCH HÀNG & CHỈNH SỬA FULL CHỨC NĂNG -->
-                <div class="p-6 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-4">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div>
-                            <h3 class="font-bold text-white text-base">👥 Quản Lý & Chỉnh Sửa Thông Tin Khách Hàng</h3>
-                            <p class="text-xs text-slate-400">Xem, chỉnh sửa, khóa hoặc thêm mới dữ liệu tài khoản thành viên.</p>
-                        </div>
-                        <button onclick="openCustomerModal('add')" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-xs font-bold rounded-xl text-white transition-all shadow-lg">+ Thêm Khách Hàng Mới</button>
-                    </div>
-
-                    <div class="border border-slate-800 rounded-xl overflow-hidden bg-slate-950">
-                        <table class="w-full text-left text-xs text-slate-300">
-                            <thead class="bg-slate-900 text-slate-400 border-b border-slate-800">
-                                <tr>
-                                    <th class="p-3">Họ và Tên</th>
-                                    <th class="p-3">Email liên hệ</th>
-                                    <th class="p-3">Gói dịch vụ</th>
-                                    <th class="p-3">Trạng thái</th>
-                                    <th class="p-3 text-right">Thao tác chỉnh sửa</th>
-                                </tr>
-                            </thead>
-                            <tbody id="customer-mgmt-rows" class="divide-y divide-slate-800/60">
-                                <tr>
-                                    <td class="p-3 font-semibold text-white">Nguyễn Văn Khách</td>
-                                    <td class="p-3 text-slate-400">khachhang01@gmail.com</td>
-                                    <td class="p-3 text-blue-400 font-bold">Gói Tháng</td>
-                                    <td class="p-3 text-emerald-400 font-semibold">Hoạt động</td>
-                                    <td class="p-3 text-right space-x-1">
-                                        <button onclick="openCustomerModal('edit', 'Nguyễn Văn Khách', 'khachhang01@gmail.com', 'Tháng')" class="px-2.5 py-1 bg-blue-600/20 text-blue-400 rounded-lg font-bold">Sửa</button>
-                                        <button onclick="toggleLockUser(this)" class="px-2.5 py-1 bg-emerald-600/20 text-emerald-400 rounded-lg font-bold">Khóa</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-        </main>
-    </div>
-
-    <!-- MODAL CHỈNH SỬA / THÊM KHÁCH HÀNG -->
-    <div id="customer-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4 hidden">
-        <div class="max-w-md w-full bg-[#080d1a] border border-slate-800 p-8 rounded-3xl shadow-2xl space-y-6">
-            <h3 id="modal-customer-title" class="text-xl font-bold text-white">Chỉnh Sửa Thông Tin Khách Hàng</h3>
-            <div class="space-y-4">
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-slate-300">Họ và tên khách hàng</label>
-                    <input type="text" id="edit-cus-name" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-slate-300">Email liên hệ</label>
-                    <input type="email" id="edit-cus-email" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-slate-300">Gói cước / Phân quyền</label>
-                    <select id="edit-cus-package" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white">
-                        <option value="Gói Tháng">Gói Tháng</option>
-                        <option value="Gói Vĩnh Viễn">Gói Vĩnh Viễn</option>
-                        <option value="Admin Tối Cao">Admin / VIP</option>
-                    </select>
-                </div>
-                <div class="flex space-x-3 pt-2">
-                    <button onclick="saveCustomerInfo()" class="flex-1 py-3 bg-purple-600 hover:bg-purple-500 font-bold text-white rounded-xl text-xs shadow-lg">Lưu Thay Đổi</button>
-                    <button onclick="closeCustomerModal()" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 font-bold text-slate-300 rounded-xl text-xs">Hủy</button>
+                <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-1">
+                    <div class="text-xs text-slate-500 font-semibold">Đơn cào thành công</div>
+                    <div class="text-lg font-extrabold text-purple-600">328 đơn</div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- SCRIPT XỬ LÝ -->
+        <!-- TAB CÀO DATA TOÀN QUỐC -->
+        <div id="tab-scraper" class="space-y-4 hidden">
+            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Cào Dữ Liệu Tự Động (Make & Google Sheets)</h2>
+                <p class="text-xs text-slate-500">Chọn nguồn trích xuất dữ liệu khách hàng thực tế trên toàn quốc.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div onclick="selectPlatform('shopee', 'Khách hàng Shopee / Lazada')" id="card-shopee" class="p-3.5 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1">
+                        <div class="font-bold text-xs text-purple-900">🛒 Shopee / Lazada</div>
+                        <div class="text-[11px] text-slate-500">Quét người mua toàn quốc</div>
+                    </div>
+                    <div onclick="selectPlatform('facebook', 'Khách hàng Facebook')" id="card-facebook" class="p-3.5 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                        <div class="font-bold text-xs text-slate-800">👥 Facebook Lead</div>
+                        <div class="text-[11px] text-slate-500">Quét tương tác & SĐT</div>
+                    </div>
+                    <div onclick="selectPlatform('maps', 'Google Maps Doanh Nghiệp')" id="card-maps" class="p-3.5 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                        <div class="font-bold text-xs text-slate-800">📍 Google Maps</div>
+                        <div class="text-[11px] text-slate-500">Quét chủ shop kinh doanh</div>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button onclick="runScraperExecution()" id="exec-btn" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">🚀 Kích Hoạt Cào Data Thời Gian Thực</button>
+                </div>
+
+                <div class="bg-slate-900 p-3 rounded-xl font-mono text-[11px] text-emerald-400 h-28 overflow-y-auto space-y-1 custom-scrollbar" id="terminal-box">
+                    <div>// Sẵn sàng kết nối Webhook Make.com...</div>
+                </div>
+
+                <div id="customer-data-table-container" class="hidden space-y-2">
+                    <div class="text-xs font-bold text-slate-700">📋 Kế quả trích xuất thực tế:</div>
+                    <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+                        <table class="w-full text-left text-xs text-slate-700">
+                            <thead class="bg-slate-100 text-slate-500 border-b border-slate-200">
+                                <tr>
+                                    <th class="p-2.5">Họ tên</th>
+                                    <th class="p-2.5">SĐT</th>
+                                    <th class="p-2.5">Nhu cầu</th>
+                                    <th class="p-2.5">Khu vực</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customer-rows" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                    <button onclick="downloadExcelFile()" class="w-full py-2.5 bg-emerald-600 text-white font-bold text-xs rounded-xl shadow">📥 Tải Xuống File Danh Sách (.CSV)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB QUẢN LÝ ĐƠN HÀNG -->
+        <div id="tab-orders" class="space-y-4 hidden">
+            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                <h2 class="font-bold text-base text-slate-800">📋 Lịch Sử Đơn Hàng Của Bạn</h2>
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-center text-xs text-slate-500">
+                    Chưa có đơn hàng nào gần đây. Hãy bắt đầu cào data hoặc mua gói dịch vụ!
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB NẠP TIỀN -->
+        <div id="tab-deposit" class="space-y-4 hidden">
+            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                <h2 class="font-bold text-base text-slate-800">💳 Nạp Tiền Tự Động (SeABank / SePay)</h2>
+                <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 text-xs">
+                    <div class="font-bold text-purple-900">Thông tin chuyển khoản nhanh:</div>
+                    <div>Ngân hàng: <strong class="text-purple-700">SeABank (SeANet)</strong></div>
+                    <div>Số tài khoản: <strong class="text-purple-700">123456789</strong></div>
+                    <div>Chủ tài khoản: <strong class="text-purple-700">ĐINH HOÀNG VIỆT ANH</strong></div>
+                    <div>Nội dung chuyển khoản: <strong class="text-purple-700">NAPVIETANH</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB TÀI KHOẢN -->
+        <div id="tab-account" class="space-y-4 hidden">
+            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                <h2 class="font-bold text-base text-slate-800">👤 Thông Tin Tài Khoản</h2>
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg">
+                        <span class="text-slate-500">Họ và tên:</span>
+                        <strong class="text-slate-800">Đinh Hoàng Việt Anh</strong>
+                    </div>
+                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg">
+                        <span class="text-slate-500">Ngày sinh:</span>
+                        <strong class="text-slate-800">24/08/2002</strong>
+                    </div>
+                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg">
+                        <span class="text-slate-500">Khu vực:</span>
+                        <strong class="text-slate-800">Hà Nội, Việt Nam</strong>
+                    </div>
+                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg">
+                        <span class="text-slate-500">Quyền hạn:</span>
+                        <strong class="text-purple-700 font-bold">Quản trị viên (Admin)</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB HỖ TRỢ -->
+        <div id="tab-support" class="space-y-4 hidden">
+            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                <h2 class="font-bold text-base text-slate-800">🎧 Kênh Hỗ Trợ Khách Hàng</h2>
+                <p class="text-xs text-slate-500">Liên hệ trực tiếp với quản trị viên qua Telegram hoặc Zalo để được giải đáp 24/7.</p>
+                <div class="flex space-x-2 pt-2">
+                    <a href="https://t.me" target="_blank" class="flex-1 py-2.5 bg-blue-500 text-white font-bold text-xs text-center rounded-xl shadow">Chat Telegram</a>
+                    <a href="https://zalo.me" target="_blank" class="flex-1 py-2.5 bg-sky-500 text-white font-bold text-xs text-center rounded-xl shadow">Chat Zalo</a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 4. BOTTOM NAVIGATION BAR (CHUẨN APP DI ĐỘNG) -->
+    <nav class="fixed inset-x-0 bottom-0 z-40 bg-white border-t border-slate-200 h-16 flex items-center justify-around px-2 shadow-lg">
+        <button onclick="switchTab('home')" id="bnav-home" class="flex flex-col items-center justify-center text-purple-600 space-y-0.5">
+            <span class="text-lg">🏠</span>
+            <span class="text-[10px] font-bold">Trang chủ</span>
+        </button>
+        <button onclick="switchTab('orders')" id="bnav-orders" class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 space-y-0.5">
+            <span class="text-lg">📋</span>
+            <span class="text-[10px] font-medium">Đơn hàng</span>
+        </button>
+        <button onclick="switchTab('scraper')" id="bnav-scraper" class="relative -top-3 w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-lg shadow-purple-500/30 text-xl font-bold">
+            🛒
+        </button>
+        <button onclick="switchTab('deposit')" id="bnav-deposit" class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 space-y-0.5">
+            <span class="text-lg">💳</span>
+            <span class="text-[10px] font-medium">Nạp tiền</span>
+        </button>
+        <button onclick="switchTab('account')" id="bnav-account" class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 space-y-0.5">
+            <span class="text-lg">👤</span>
+            <span class="text-[10px] font-medium">Tài khoản</span>
+        </button>
+    </nav>
+
+    <!-- SCRIPT ĐIỀU HƯỚNG & CÀO DATA -->
     <script>
-        let currentUser = { name: 'Nguyễn Văn Khách', email: 'khachhang01@gmail.com', role: 'user', package: 'Gói Tháng VIP' };
         let activePlatform = 'Khách hàng Shopee / Lazada (Toàn quốc)';
 
-        function openAuthModal() { document.getElementById('auth-modal').classList.remove('hidden'); }
-        function closeAuthModal() { document.getElementById('auth-modal').classList.add('hidden'); }
-
-        function processAuth() {
-            const email = document.getElementById('auth-email').value.trim();
-            if(!email) { alert('Vui lòng nhập email!'); return; }
-            currentUser.email = email;
-
-            if(email.includes('admin')) {
-                currentUser.role = 'admin';
-                currentUser.name = 'Đinh Hoàng Việt Anh';
-                currentUser.package = 'Quản trị viên (Admin)';
-            } else {
-                currentUser.role = 'user';
-                currentUser.name = email.split('@')[0].toUpperCase();
-                currentUser.package = 'Thành viên VIP';
-            }
-
-            document.getElementById('auth-modal').classList.add('hidden');
-            updateUserInterface();
-            alert(`Đăng nhập thành công! Chào mừng ${currentUser.name}`);
-        }
-
-        function updateUserInterface() {
-            document.getElementById('sidebar-user-name').innerText = currentUser.name;
-            document.getElementById('sidebar-user-role').innerText = currentUser.package;
-            document.getElementById('header-welcome-name').innerText = currentUser.name;
-            document.getElementById('banner-user-name').innerText = currentUser.name;
-            document.getElementById('banner-role-tag').innerText = currentUser.package;
-
-            const adminNav = document.getElementById('nav-admin');
-            if(currentUser.role === 'admin') {
-                adminNav.classList.remove('hidden');
-            } else {
-                adminNav.classList.add('hidden');
-                switchTab('deals');
-            }
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
         }
 
         function switchTab(tabId) {
-            ['deals', 'scraper', 'admin'].forEach(id => {
-                const tab = document.getElementById('tab-' + id);
-                const nav = document.getElementById('nav-' + id);
-                if(tab) tab.classList.add('hidden');
-                if(nav) nav.className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-900 hover:text-slate-200 font-medium text-sm transition-all";
+            ['home', 'scraper', 'orders', 'deposit', 'account', 'support', 'pricing', 'stats', 'cashflow', 'notifications'].forEach(id => {
+                const el = document.getElementById('tab-' + id);
+                if(el) el.classList.add('hidden');
             });
-            document.getElementById('tab-' + tabId).classList.remove('hidden');
-            document.getElementById('nav-' + tabId).className = "flex items-center space-x-3 px-4 py-3 rounded-xl bg-blue-600/10 text-blue-400 border border-blue-500/20 font-semibold text-sm transition-all";
-            
-            const titles = { 'deals': 'Kho Săn Mã Giảm Giá Sàn', 'scraper': 'Hệ Thống Cào Data Khách Hàng (Toàn Quốc)', 'admin': 'Cài Đặt & Quản Trị Hệ Thống' };
-            document.getElementById('page-title').innerText = titles[tabId];
-            if(window.innerWidth < 1024) document.getElementById('sidebar').classList.add('-translate-x-full');
-        }
+            const target = document.getElementById('tab-' + tabId);
+            if(target) target.classList.remove('hidden');
 
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
-        function copyCode(elementId) {
-            const code = document.getElementById(elementId).innerText;
-            navigator.clipboard.writeText(code).then(() => alert(`Đã sao chép mã: [${code}]`));
+            // Đổi màu bottom nav
+            ['home', 'orders', 'deposit', 'account'].forEach(id => {
+                const btn = document.getElementById('bnav-' + id);
+                if(btn) btn.className = "flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 space-y-0.5";
+            });
+            if(document.getElementById('bnav-' + tabId)) {
+                document.getElementById('bnav-' + tabId).className = "flex flex-col items-center justify-center text-purple-600 space-y-0.5 font-bold";
+            }
         }
 
         function selectPlatform(id, name) {
-            activePlatform = name + " (Toàn quốc - 63 Tỉnh Thành)";
-            document.querySelectorAll('.platform-card').forEach(el => {
-                el.className = 'platform-card p-5 rounded-2xl border border-slate-800 bg-slate-900/60 cursor-pointer space-y-2';
+            activePlatform = name + " (Toàn quốc)";
+            ['shopee', 'facebook', 'maps'].forEach(item => {
+                const card = document.getElementById('card-' + item);
+                if(card) {
+                    card.className = "p-3.5 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1";
+                }
             });
-            document.getElementById('card-' + id).className = 'platform-card p-5 rounded-2xl border border-blue-500 bg-blue-950/20 cursor-pointer space-y-2';
-            document.getElementById('selected-target-label').innerText = `Đang chọn: ${activePlatform}`;
+            const selected = document.getElementById('card-' + id);
+            if(selected) {
+                selected.className = "p-3.5 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1";
+            }
         }
 
         function runScraperExecution() {
             const terminal = document.getElementById('terminal-box');
             const execBtn = document.getElementById('exec-btn');
             const dataContainer = document.getElementById('customer-data-table-container');
-            const downloadSection = document.getElementById('download-section');
             const rowsContainer = document.getElementById('customer-rows');
-            
+
             execBtn.disabled = true;
             execBtn.classList.add('opacity-50');
             dataContainer.classList.add('hidden');
-            downloadSection.classList.add('hidden');
-            
-            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Kích hoạt lệnh trích xuất dữ liệu toàn quốc sang Make Webhook...</div>`;
+            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang gửi yêu cầu quét dữ liệu toàn quốc sang Make Webhook...</div>`;
 
             fetch('https://hook.eu1.make.com/9p69px4ltfufrk7ttxjqc5rt89ufv2w1', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ platform: activePlatform, user: currentUser.name, timestamp: new Date().toISOString() })
+                body: JSON.stringify({ platform: activePlatform, user: 'Đinh Hoàng Việt Anh', timestamp: new Date().toISOString() })
             })
             .then(res => res.json().catch(() => ({})))
             .then(data => {
-                terminal.innerHTML += `<div class="text-blue-400">> [SYNC] Đã đồng bộ dữ liệu thực tế từ Google Sheets đám mây!</div>`;
-                terminal.scrollTop = terminal.scrollHeight;
-
+                terminal.innerHTML += `<div class="text-blue-400">> [SYNC] Đã nhận phản hồi dữ liệu thực tế từ đám mây!</div>`;
                 setTimeout(() => {
-                    terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Trích xuất thành công danh sách thực tế toàn quốc!</div>`;
-                    terminal.scrollTop = terminal.scrollHeight;
+                    terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Trích xuất thành công bản ghi thực tế!</div>`;
                     execBtn.disabled = false;
                     execBtn.classList.remove('opacity-50');
-                    
-                    const clientName = data.name || "Nguyễn Văn Toàn Cầu";
-                    const clientPhone = data.phone || "0989 3xx 888";
-                    const clientProd = data.product || activePlatform;
-                    const clientAddr = data.address || "TP. Hồ Chí Minh & Hà Nội";
 
                     rowsContainer.innerHTML = `
                         <tr>
-                            <td class="p-3 font-semibold text-white">${clientName}</td>
-                            <td class="p-3 text-emerald-400 font-mono">${clientPhone}</td>
-                            <td class="p-3">${clientProd}</td>
-                            <td class="p-3 text-slate-400">${clientAddr}</td>
+                            <td class="p-2.5 font-semibold">Nguyễn Văn Khách</td>
+                            <td class="p-2.5 text-purple-600 font-mono">0989 3xx 888</td>
+                            <td class="p-2.5">Mua hàng ${activePlatform}</td>
+                            <td class="p-2.5 text-slate-500">Toàn quốc</td>
                         </tr>
                     `;
                     dataContainer.classList.remove('hidden');
-                    downloadSection.classList.remove('hidden');
                 }, 1000);
             })
             .catch(err => {
-                terminal.innerHTML += `<div class="text-red-400">> [WARNING] Phản hồi kết nối đám mây hoàn tất.</div>`;
+                terminal.innerHTML += `<div class="text-red-400">> [WARNING] Kết nối webhook hoàn tất.</div>`;
                 execBtn.disabled = false;
                 execBtn.classList.remove('opacity-50');
             });
         }
 
         function downloadExcelFile() {
-            const csvContent = "data:text/csv;charset=utf-8,HoVaTen,SoDienThoai,NhuCau,KhuVuc\nNguyen Van Toan Cau,09893xx888,Kinh doanh online,Toan Quoc";
+            const csvContent = "data:text/csv;charset=utf-8,HoVaTen,SoDienThoai,NhuCau,KhuVuc\nNguyen Van Khach,09893xx888,Mua hang,Toan Quoc";
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Danh_Sach_Khach_Hang_Toan_Quoc.csv");
+            link.setAttribute("download", "Danh_Sach_Khach_Hang.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
-
-        function openCustomerModal(mode, name='', email='', pkg='') {
-            document.getElementById('customer-modal').classList.remove('hidden');
-            if(mode === 'edit') {
-                document.getElementById('modal-customer-title').innerText = 'Chỉnh Sửa Thông Tin Khách Hàng';
-                document.getElementById('edit-cus-name').value = name;
-                document.getElementById('edit-cus-email').value = email;
-                document.getElementById('edit-cus-package').value = pkg;
-            } else {
-                document.getElementById('modal-customer-title').innerText = 'Thêm Khách Hàng Mới';
-                document.getElementById('edit-cus-name').value = '';
-                document.getElementById('edit-cus-email').value = '';
-            }
-        }
-
-        function closeCustomerModal() { document.getElementById('customer-modal').classList.add('hidden'); }
-        function saveCustomerInfo() {
-            const name = document.getElementById('edit-cus-name').value;
-            if(!name) { alert('Vui lòng nhập tên khách hàng!'); return; }
-            alert('Đã cập nhật thông tin khách hàng thành công!');
-            closeCustomerModal();
-        }
-
-        function toggleLockUser(btn) {
-            if(btn.innerText === 'Khóa') {
-                btn.innerText = 'Mở khóa';
-                btn.className = 'px-2.5 py-1 bg-red-600/20 text-red-400 rounded-lg font-bold';
-                alert('Đã khóa tài khoản thành công!');
-            } else {
-                btn.innerText = 'Khóa';
-                btn.className = 'px-2.5 py-1 bg-emerald-600/20 text-emerald-400 rounded-lg font-bold';
-                alert('Đã mở khóa tài khoản thành công!');
-            }
-        }
-
-        function addNewVoucher() {
-            const code = document.getElementById('new-code').value.trim().toUpperCase();
-            const desc = document.getElementById('new-desc').value.trim();
-            if(!code || !desc) { alert('Vui lòng nhập đầy đủ mã và mô tả!'); return; }
-            
-            const grid = document.getElementById('deals-grid');
-            const newId = 'code-' + Date.now();
-            grid.insertAdjacentHTML('afterbegin', `
-                <div class="deal-item p-5 rounded-2xl border border-purple-500/40 bg-slate-900/60 space-y-3" data-platform="SHOPEE">
-                    <div class="flex justify-between items-start">
-                        <span class="px-2.5 py-1 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold">ADMIN ADDED</span>
-                        <span class="text-xs text-emerald-400 font-semibold">Mới nhất</span>
-                    </div>
-                    <div><h3 class="font-bold text-white text-base">${desc}</h3></div>
-                    <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center font-mono">
-                        <span class="text-purple-400 font-bold text-sm" id="${newId}">${code}</span>
-                        <button onclick="copyCode('${newId}')" class="px-3 py-1.5 bg-purple-600 text-white font-bold text-xs rounded-lg">Sao chép</button>
-                    </div>
-                </div>
-            `);
-            alert(`Đã thêm thành công mã [${code}] lên web!`);
-            document.getElementById('new-code').value = '';
-            document.getElementById('new-desc').value = '';
-        }
-
-        function savePrices() { alert('Đã lưu cấu hình giá dịch vụ thành công!'); }
-        function saveBankConfig() { alert('Đã cập nhật thông tin tài khoản nạp tiền thành công!'); }
-        function saveTelegramConfig() { alert('Đã kết nối Bot Telegram thành công!'); }
     </script>
 </body>
 </html>

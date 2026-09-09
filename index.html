@@ -215,7 +215,7 @@
                     </div>
                     <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
                         <div class="text-slate-400">Gói dịch vụ VIP</div>
-                        <div class="font-bold text-purple-600 text-sm" id="home-val-vip">Gói 30 Ngày (PRO)</div>
+                        <div class="font-bold text-purple-600 text-sm" id="home-val-vip">Chưa kích hoạt (0đ)</div>
                     </div>
                     <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
                         <div class="text-slate-400">Số dư hiện tại</div>
@@ -518,8 +518,7 @@
 
     <!-- SCRIPT XỬ LÝ CHÍNH XÁC TUYỆT ĐỐI -->
     <script>
-        // Tài khoản mới đăng ký mặc định số dư là 0đ (không có tiền sẵn)
-        let currentUser = { name: '', username: '', role: 'guest', balance: '0đ', vipPackage: 'Gói 30 Ngày (PRO)' };
+        let currentUser = { name: '', username: '', role: 'guest', balance: '0đ', vipPackage: 'Chưa kích hoạt (0đ)' };
         let isRegisterMode = false;
         let activePlatform = 'Khách hàng Sàn TMĐT (Shopee/Lazada)';
 
@@ -607,7 +606,7 @@
             }
         }
 
-        // ĐĂNG KÝ XONG BẮT BUỘC NHẢY QUA ĐĂNG NHẬP MỚI VÀO WEB (SỐ DƯ MỚI = 0Đ)
+        // TÀI KHOẢN MỚI ĐĂNG KÝ XONG PHẢI NHẢY QUA ĐĂNG NHẬP (SỐ DƯ = 0Đ, CHƯA CÓ VIP)
         function processAuthSubmit() {
             const usernameInput = document.getElementById('auth-username').value.trim();
             const passInput = document.getElementById('auth-pass').value.trim();
@@ -629,7 +628,7 @@
                 return;
             }
 
-            // Xử lý Đăng Nhập
+            // Xử lý Đăng Nhập chính thức
             if(usernameInput.toLowerCase() === 'admin') {
                 if(passInput === '1234') {
                     currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ', vipPackage: 'Gói Vĩnh Viễn PRO' };
@@ -639,7 +638,7 @@
                     return;
                 }
             } else {
-                currentUser = { name: usernameInput.toUpperCase(), username: usernameInput, role: 'user', balance: '0đ', vipPackage: 'Gói 30 Ngày (PRO)' };
+                currentUser = { name: usernameInput.toUpperCase(), username: usernameInput, role: 'user', balance: '0đ', vipPackage: 'Chưa kích hoạt (0đ)' };
                 showCenterSuccess('Đăng nhập thành công!');
             }
 
@@ -673,7 +672,7 @@
                 badgeRole.innerText = 'Quản trị viên (Admin)';
             } else {
                 adminGroup.classList.add('hidden');
-                badgeRole.innerText = 'Thành viên VIP';
+                badgeRole.innerText = 'Thành viên Tiêu Chuẩn';
             }
             renderNotifications();
             renderAdminCustomers();
@@ -686,7 +685,7 @@
             const p7 = document.getElementById('price-7d').value;
             const p15 = document.getElementById('price-15d').value;
             const p30 = document.getElementById('price-30d').value;
-            showCenterSuccess('Cập nhật giá các gói VIP (1-30 ngày) thành công!');
+            showCenterSuccess('Cập nhật thành công giá các gói VIP (1-30 ngày)!');
         }
 
         function renderAdminCustomers() {
@@ -856,7 +855,7 @@
             if(selected) selected.className = "p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1";
         }
 
-        // HACKER DECRYPT CHẠY CỰC KỲ CHẬM (400MS MỖI DÒNG) ĐỂ HIỂN THỊ ĐỦ CHÍNH XÁC 250 DATA VÀ HIỆN DẤU TÍCH XANH
+        // HACKER DECRYPT CHẠY THẬT CHẬM TỪNG NGƯỜI MỘT ĐỦ ĐÚNG 250 DATA VÀ HIỆN DẤU TÍCH XANH
         function runHackerScraperExecution() {
             const terminal = document.getElementById('terminal-box');
             const execBtn = document.getElementById('exec-btn');
@@ -878,7 +877,7 @@
 
             let count = 0;
 
-            // Chạy thật chậm (400ms mỗi lần) để quét đúng đủ 250 data không bị gấp gáp
+            // Tốc độ 400ms mỗi dòng, chạy cực kỳ chậm rãi đúng 250 data uy tín
             let hackerInterval = setInterval(() => {
                 count += 1;
                 let fName = sampleFirstNames[Math.floor(Math.random() * sampleFirstNames.length)];

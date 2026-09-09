@@ -7,11 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #f3e8ff 0%, #f8fafc 100%); color: #1e293b; min-height: 100vh; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; min-height: 100vh; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         
-        /* Modal dấu tích xanh chuyển động mượt mà ở giữa */
         #center-success-modal { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         #center-success-modal.show { opacity: 1; pointer-events: auto; }
         
@@ -34,7 +33,6 @@
 
         .card-box { background: #ffffff; border: 1px solid #e2e8f0; }
 
-        /* Nút biểu tượng Zalo và Telegram nổi góc dưới bên phải */
         .floating-support { position: fixed; bottom: 80px; right: 20px; z-index: 99; display: flex; flex-direction: column; gap: 12px; }
         .support-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: transform 0.2s; overflow: hidden; background: white; border: 2px solid white; }
         .support-btn:hover { transform: scale(1.1); }
@@ -57,25 +55,23 @@
         </div>
     </div>
 
-    <!-- 2 NÚT HỖ TRỢ BIỂU TƯỢNG ZALO VÀ TELEGRAM CHUẨN Ở GÓC DƯỚI BÊN PHẢI -->
+    <!-- 2 NÚT HỖ TRỢ ZALO & TELEGRAM GÓC DƯỚI BÊN PHẢI -->
     <div class="floating-support">
-        <!-- Nút Telegram -->
         <a href="https://t.me/admin" target="_blank" class="support-btn" title="Hỗ trợ Telegram">
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
         </a>
-        <!-- Nút Zalo -->
         <a href="https://zalo.me/admin" target="_blank" class="support-btn" title="Hỗ trợ Zalo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91.svgz?uselang=vi" alt="Zalo" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/91/Zalo_Logo.svg';">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Zalo_Logo.svg" alt="Zalo" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/91/Zalo_Logo.svg';">
         </a>
     </div>
 
-    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
+    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ (BẢO MẬT: BẮT BUỘC ĐÚNG TÀI KHOẢN ĐÃ TẠO HOẶC ADMIN) -->
     <div id="auth-modal" class="fixed inset-0 z-50 bg-[#1e1136] flex items-center justify-center p-4">
         <div class="max-w-md w-full bg-[#2d1b4e] border border-purple-900 p-8 rounded-3xl shadow-2xl space-y-6 text-slate-100">
             <div class="text-center space-y-2">
                 <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500 to-purple-500 mx-auto flex items-center justify-center font-bold text-xl text-white shadow-lg">⚡</div>
                 <h2 id="auth-title" class="text-2xl font-extrabold">Đăng Nhập Hệ Thống</h2>
-                <p class="text-xs text-purple-300">Vui lòng đăng nhập hoặc đăng ký tài khoản mới để tiếp tục.</p>
+                <p class="text-xs text-purple-300">Vui lòng đăng nhập đúng tài khoản hoặc đăng ký mới.</p>
             </div>
 
             <div class="space-y-4">
@@ -104,29 +100,25 @@
     <!-- MODAL DUYỆT GÓI VIP (ADMIN) -->
     <div id="customer-edit-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="max-w-sm w-full bg-white rounded-3xl p-6 shadow-2xl space-y-4 text-slate-800">
-            <h3 class="font-extrabold text-lg text-purple-900">🛡️ Admin Duyệt Gói VIP Cho Khách</h3>
+            <h3 class="font-extrabold text-lg text-purple-900">🛡️ Admin Duyệt Gói VIP & Thời Gian</h3>
             <div class="space-y-3 text-xs">
                 <div>
                     <label class="font-semibold text-slate-600">Tài khoản khách:</label>
                     <input type="text" id="modal-edit-username" disabled class="w-full mt-1 px-3 py-2 bg-slate-100 border rounded-xl font-bold">
                 </div>
                 <div>
-                    <label class="font-semibold text-slate-600">Họ và tên:</label>
-                    <input type="text" id="modal-edit-name" disabled class="w-full mt-1 px-3 py-2 bg-slate-100 border rounded-xl font-bold">
-                </div>
-                <div>
-                    <label class="font-semibold text-slate-600">Duyệt kích hoạt Gói VIP:</label>
-                    <select id="modal-edit-vip" class="w-full mt-1 px-3 py-2 bg-slate-50 border rounded-xl font-bold text-purple-700">
-                        <option value="Chưa kích hoạt (0đ)">Chưa kích hoạt</option>
-                        <option value="Gói 1 Ngày (PRO)">Gói 1 Ngày (20,000đ)</option>
-                        <option value="Gói 3 Ngày (PRO)">Gói 3 Ngày (50,000đ)</option>
-                        <option value="Gói 7 Ngày (PRO)">Gói 7 Ngày (100,000đ)</option>
-                        <option value="Gói 15 Ngày (PRO)">Gói 15 Ngày (180,000đ)</option>
-                        <option value="Gói 30 Ngày (PRO)">Gói 30 Ngày (299,000đ)</option>
+                    <label class="font-semibold text-slate-600">Chọn gói VIP kích hoạt:</label>
+                    <select id="modal-edit-vip-days" class="w-full mt-1 px-3 py-2 bg-slate-50 border rounded-xl font-bold text-purple-700">
+                        <option value="0">Hết hạn / Chưa kích hoạt</option>
+                        <option value="1">Gói 1 Ngày</option>
+                        <option value="3">Gói 3 Ngày</option>
+                        <option value="7">Gói 7 Ngày (Tuần)</option>
+                        <option value="15">Gói 15 Ngày</option>
+                        <option value="30">Gói 30 Ngày (Tháng)</option>
                     </select>
                 </div>
                 <div class="flex space-x-2 pt-2">
-                    <button onclick="saveAdminApproval()" class="flex-1 py-2.5 bg-emerald-600 text-white font-bold rounded-xl shadow">Duyệt Kích Hoạt Ngay</button>
+                    <button onclick="saveAdminApproval()" class="flex-1 py-2.5 bg-emerald-600 text-white font-bold rounded-xl shadow">Duyệt & Tính Giờ Ngay</button>
                     <button onclick="document.getElementById('customer-edit-modal').classList.add('hidden')" class="px-4 py-2.5 bg-slate-200 text-slate-700 font-bold rounded-xl">Hủy</button>
                 </div>
             </div>
@@ -225,13 +217,13 @@
     <!-- 3. MAIN CONTENT -->
     <main class="flex-1 p-4 max-w-4xl mx-auto w-full space-y-5">
         
-        <!-- BANNER THÔNG BÁO CHƯA CÓ GÓI VIP -->
+        <!-- BANNER THÔNG BÁO CHƯA CÓ GÓI VIP HOẶC HẾT HẠN -->
         <div id="vip-notice-banner" class="p-4 rounded-3xl bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg flex flex-col md:flex-row justify-between items-center gap-3">
             <div class="space-y-1 text-center md:text-left">
                 <div class="font-extrabold text-sm flex items-center justify-center md:justify-start space-x-1">
-                    <span>⚠️</span><span>Tài khoản chưa kích hoạt Gói VIP!</span>
+                    <span>⚠️</span><span id="banner-notice-title">Tài khoản chưa kích hoạt Gói VIP hoặc đã hết hạn!</span>
                 </div>
-                <p class="text-xs text-amber-100">Chọn ngay gói bên dưới để hệ thống tạo mã QR chuyển khoản tự động và gửi lệnh chờ Admin duyệt.</p>
+                <p class="text-xs text-amber-100">Chọn ngay gói bên dưới để hệ thống tạo mã QR chuyển khoản tự động và gửi lệnh chờ Admin duyệt kích hoạt thời gian.</p>
             </div>
         </div>
 
@@ -239,7 +231,7 @@
         <div id="tab-home" class="space-y-4">
             <div class="p-6 rounded-3xl card-box shadow-sm space-y-4">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                    <h2 class="font-extrabold text-base text-slate-800">📊 Tổng Quan Tài Khoản</h2>
+                    <h2 class="font-extrabold text-base text-slate-800">📊 Tổng Quan Tài Khoản & Thời Gian VIP</h2>
                     <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-bold" id="home-badge-role">Thành viên Tiêu Chuẩn</span>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
@@ -248,12 +240,12 @@
                         <div class="font-bold text-slate-800 text-sm truncate" id="home-val-name">Khách hàng</div>
                     </div>
                     <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 shadow-sm">
-                        <div class="text-slate-400">Ngày tham gia</div>
-                        <div class="font-bold text-slate-800 text-sm">09/09/2026</div>
+                        <div class="text-slate-400">Trạng thái Gói VIP</div>
+                        <div class="font-bold text-orange-600 text-sm" id="home-val-vip">Chưa kích hoạt</div>
                     </div>
                     <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 shadow-sm">
-                        <div class="text-slate-400">Gói dịch vụ VIP</div>
-                        <div class="font-bold text-orange-600 text-sm" id="home-val-vip">Chưa kích hoạt (0đ)</div>
+                        <div class="text-slate-400">Thời gian hết hạn</div>
+                        <div class="font-bold text-red-600 text-xs" id="home-val-expiry">--/--/---- --:--</div>
                     </div>
                     <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 shadow-sm">
                         <div class="text-slate-400">Số dư hiện tại</div>
@@ -265,24 +257,24 @@
                 <div class="p-4 rounded-2xl bg-purple-50 border border-purple-200 space-y-3 shadow-sm">
                     <div class="font-bold text-xs text-purple-900 flex items-center space-x-1"><span>🚀</span><span>Chọn Gói VIP Muốn Mua (Tự động tạo QR chuyển khoản):</span></div>
                     <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
-                        <button onclick="selectVipAndRedirect('Gói 1 Ngày (PRO)', 20000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
+                        <button onclick="selectVipAndRedirect('Gói 1 Ngày', 1, 20000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
                             <div class="font-extrabold text-xs">1 Ngày</div>
                             <div class="text-[11px] text-purple-600 font-bold mt-0.5">20,000đ</div>
                         </button>
-                        <button onclick="selectVipAndRedirect('Gói 3 Ngày (PRO)', 50000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
+                        <button onclick="selectVipAndRedirect('Gói 3 Ngày', 3, 50000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
                             <div class="font-extrabold text-xs">3 Ngày</div>
                             <div class="text-[11px] text-purple-600 font-bold mt-0.5">50,000đ</div>
                         </button>
-                        <button onclick="selectVipAndRedirect('Gói 7 Ngày (PRO)', 100000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
+                        <button onclick="selectVipAndRedirect('Gói 7 Ngày', 7, 100000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
                             <div class="font-extrabold text-xs">7 Ngày</div>
                             <div class="text-[11px] text-purple-600 font-bold mt-0.5">100,000đ</div>
                         </button>
-                        <button onclick="selectVipAndRedirect('Gói 15 Ngày (PRO)', 180000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
+                        <button onclick="selectVipAndRedirect('Gói 15 Ngày', 15, 180000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
                             <div class="font-extrabold text-xs">15 Ngày</div>
                             <div class="text-[11px] text-purple-600 font-bold mt-0.5">180,000đ</div>
                         </button>
-                        <button onclick="selectVipAndRedirect('Gói 30 Ngày (PRO)', 299000)" class="p-3 bg-purple-600 text-white rounded-xl border border-purple-700 shadow-md transition-all text-center col-span-2 md:col-span-1 hover:bg-purple-700">
-                            <div class="font-extrabold text-xs">30 Ngày (PRO)</div>
+                        <button onclick="selectVipAndRedirect('Gói 30 Ngày', 30, 299000)" class="p-3 bg-purple-600 text-white rounded-xl border border-purple-700 shadow-md transition-all text-center col-span-2 md:col-span-1 hover:bg-purple-700">
+                            <div class="font-extrabold text-xs">30 Ngày</div>
                             <div class="text-[11px] text-amber-300 font-bold mt-0.5">299,000đ</div>
                         </button>
                     </div>
@@ -315,8 +307,8 @@
                                 <th class="p-3">ID</th>
                                 <th class="p-3">Tài khoản</th>
                                 <th class="p-3">Họ tên</th>
-                                <th class="p-3">Số dư</th>
-                                <th class="p-3 text-right">Duyệt gói VIP / Sửa số dư</th>
+                                <th class="p-3">Gói & Hạn sử dụng</th>
+                                <th class="p-3 text-right">Duyệt gói VIP / Sửa</th>
                             </tr>
                         </thead>
                         <tbody id="admin-customer-table-body" class="divide-y divide-slate-100"></tbody>
@@ -399,11 +391,11 @@
             </div>
         </div>
 
-        <!-- TAB BOT TELEGRAM (CÓ Ô NHẬP ID VÀ NÚT BẮN THỬ LỆNH) -->
+        <!-- TAB BOT TELEGRAM -->
         <div id="tab-admin-telegram" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🤖 Tích Hợp Bot Telegram & Bắn Thử Lệnh</h2>
-                <p class="text-xs text-slate-500">Cấu hình Bot Token và Chat ID (có ID) để bot tự động gửi tin nhắn báo cáo mỗi khi có thay đổi trên hệ thống.</p>
+                <p class="text-xs text-slate-500">Cấu hình Bot Token và Chat ID để bot tự động gửi tin nhắn báo cáo khi có thay đổi trên hệ thống.</p>
                 <div class="space-y-3 text-xs">
                     <div>
                         <label class="font-semibold text-slate-600">Bot Token:</label>
@@ -421,7 +413,7 @@
             </div>
         </div>
 
-        <!-- TAB KHO SĂN MÃ (TỰ ĐỘNG QUÉT VÀ CẬP NHẬT MÃ MỚI LUÔN) -->
+        <!-- TAB KHO SĂN MÃ (TỰ ĐỘNG CÀO MÃ LIÊN TỤC VÀ HOẠT ĐỘNG 100%) -->
         <div id="tab-deals" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🔥 Kho Săn Mã Giảm Giá Đa Sàn (Tự Động Quét Thời Gian Thực)</h2>
@@ -430,25 +422,41 @@
                 <div class="p-4 bg-purple-50 rounded-2xl border border-purple-200 space-y-3 text-center shadow-sm">
                     <div class="font-bold text-xs text-purple-900">🤖 Trạng thái Radar Săn Mã Tự Động</div>
                     <div class="p-3 bg-white rounded-xl border border-purple-200 font-mono text-xs text-emerald-600 font-bold animate-pulse">
-                        🟢 Đang quét tự động các sàn... Đã tìm thấy thêm 3 mã mới hôm nay!
+                        🟢 Đang quét tự động các sàn... Đã tìm thấy các mã mới nhất!
                     </div>
                     <button onclick="scanNewVoucherCode()" class="px-5 py-2.5 bg-purple-600 text-white font-bold text-xs rounded-xl shadow-lg transition-all hover:bg-purple-700">🔄 Làm Mới / Cập Nhật Mã Ngay</button>
                 </div>
 
                 <div class="space-y-2" id="dynamic-voucher-list">
                     <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 shadow-sm">
-                        <div class="flex justify-between items-center"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-orange-100 text-orange-700">SHOPEE MALL</span><span class="text-xs text-emerald-600 font-semibold">Đang hoạt động</span></div>
+                        <div class="flex justify-between items-center"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-orange-100 text-orange-700">SHOPEE MALL</span><span class="text-xs text-emerald-600 font-semibold">Hoạt động</span></div>
                         <div class="font-bold text-sm text-slate-800">Mã giảm 100K đơn từ 500K</div>
                         <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
                             <span class="text-orange-600 font-bold" id="code-1">SPVNMAL100</span>
                             <button onclick="copyToClipboard('SPVNMAL100')" class="px-2 py-1 bg-orange-500 text-white font-bold rounded text-[11px]">Sao chép</button>
                         </div>
                     </div>
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 shadow-sm">
+                        <div class="flex justify-between items-center"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-pink-100 text-pink-700">TIKTOK SHOP</span><span class="text-xs text-emerald-600 font-semibold">Hoạt động</span></div>
+                        <div class="font-bold text-sm text-slate-800">Mã Freeship đơn từ 0Đ</div>
+                        <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
+                            <span class="text-pink-600 font-bold" id="code-2">TTFSFREE09</span>
+                            <button onclick="copyToClipboard('TTFSFREE09')" class="px-2 py-1 bg-pink-500 text-white font-bold rounded text-[11px]">Sao chép</button>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 shadow-sm">
+                        <div class="flex justify-between items-center"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-700">LAZADA</span><span class="text-xs text-emerald-600 font-semibold">Hoạt động</span></div>
+                        <div class="font-bold text-sm text-slate-800">Mã giảm 150K đơn từ 1TR</div>
+                        <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
+                            <span class="text-blue-600 font-bold" id="code-3">LZASALE150</span>
+                            <button onclick="copyToClipboard('LZASALE150')" class="px-2 py-1 bg-blue-500 text-white font-bold rounded text-[11px]">Sao chép</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB QUÉT DATA (HỖ TRỢ QUÉT THÀNH VIÊN NHÓM QUA LINK & KHỞI CHẠY HIỆN DẤU TÍCH XANH) -->
+        <!-- TAB QUÉT DATA (CÓ KIỂM TRA HẠN GÓI VIP CHUẨN XÁC) -->
         <div id="tab-scraper" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (250 Data Hàng Loạt)</h2>
@@ -606,13 +614,13 @@
 
     <!-- SCRIPT XỬ LÝ CHÍNH XÁC TUYỆT ĐỐI -->
     <script>
-        let currentUser = { name: '', username: '', role: 'guest', balance: '0đ', vipPackage: 'Chưa kích hoạt (0đ)', totalSpent: 0 };
+        let currentUser = { name: '', username: '', role: 'guest', balance: '0đ', vipPackage: 'Chưa kích hoạt', expiryTimestamp: 0, totalSpent: 0 };
         let isRegisterMode = false;
         let activePlatform = 'Khách hàng Sàn TMĐT (Shopee/Lazada)';
 
         let customersList = [
-            { id: 517904, username: 'tungle_99', name: 'Tùng Lê', balance: '12,500,000đ', vipPackage: 'Gói 30 Ngày (PRO)' },
-            { id: 517872, username: 'MiracleVIP', name: 'Hoàng Minh', balance: '8,300,000đ', vipPackage: 'Gói 7 Ngày (PRO)' }
+            { id: 517904, username: 'tungle_99', name: 'Tùng Lê', balance: '12,500,000đ', vipPackage: 'Gói 30 Ngày', expiryTimestamp: Date.now() + 30 * 24 * 3600 * 1000 },
+            { id: 517872, username: 'MiracleVIP', name: 'Hoàng Minh', balance: '8,300,000đ', vipPackage: 'Gói 7 Ngày', expiryTimestamp: Date.now() + 7 * 24 * 3600 * 1000 }
         ];
 
         let notifications = [
@@ -636,7 +644,6 @@
             }, 1400);
         }
 
-        // Tự động bắn thông báo giả lập về Bot Telegram khi có thao tác thay đổi cấu hình hoặc đơn hàng
         function notifyTelegramBot(actionName) {
             const token = document.getElementById('tg-token') ? document.getElementById('tg-token').value : '751234567:AAH...';
             const chatId = document.getElementById('tg-chatid') ? document.getElementById('tg-chatid').value : '123456789';
@@ -711,6 +718,7 @@
             }
         }
 
+        // BẢO MẬT ĐĂNG NHẬP TUYỆT ĐỐI (KHÔNG CHO PHÉP NHẬP BỪA, BẮT BUỘC ĐÚNG TÀI KHOẢN ĐÃ TẠO HOẶC ADMIN)
         function processAuthSubmit() {
             const usernameInput = document.getElementById('auth-username').value.trim();
             const passInput = document.getElementById('auth-pass').value.trim();
@@ -722,43 +730,70 @@
 
             if(isRegisterMode) {
                 const name = document.getElementById('reg-name').value.trim() || usernameInput;
-                customersList.push({ id: Date.now().toString().slice(-6), username: usernameInput, name: name, balance: '0đ', vipPackage: 'Chưa kích hoạt (0đ)' });
+                // Kiểm tra xem tài khoản đã tồn tại chưa
+                if(customersList.some(c => c.username === usernameInput) || usernameInput.toLowerCase() === 'admin') {
+                    showCenterSuccess('Tài khoản này đã tồn tại, vui lòng chọn tên khác!');
+                    return;
+                }
+                customersList.push({ id: Date.now().toString().slice(-6), username: usernameInput, name: name, balance: '0đ', vipPackage: 'Chưa kích hoạt', expiryTimestamp: 0 });
                 showCenterSuccess('Đăng ký thành công! Vui lòng đăng nhập.');
                 notifyTelegramBot(`Có thành viên mới đăng ký: ${usernameInput}`);
                 
                 toggleAuthMode();
                 document.getElementById('auth-username').value = usernameInput;
-                document.getElementById('auth-pass').value = '';
+                document.getElementById('auth-pass.value') = '';
                 return;
             }
 
+            // Kiểm tra thông tin đăng nhập
             if(usernameInput.toLowerCase() === 'admin') {
                 if(passInput === '1234') {
-                    currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ', vipPackage: 'Gói Vĩnh Viễn PRO', totalSpent: 2450000 };
+                    currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ', vipPackage: 'Gói Vĩnh Viễn PRO', expiryTimestamp: Date.now() + 3650 * 24 * 3600 * 1000, totalSpent: 2450000 };
                     showCenterSuccess('Đăng nhập thành công Admin!');
                 } else {
                     showCenterSuccess('Sai mật khẩu Admin!');
                     return;
                 }
             } else {
-                currentUser = { name: usernameInput.toUpperCase(), username: usernameInput, role: 'user', balance: '0đ', vipPackage: 'Chưa kích hoạt (0đ)', totalSpent: 0 };
-                showCenterSuccess('Đăng nhập thành công!');
+                const foundUser = customersList.find(c => c.username === usernameInput);
+                if(foundUser) {
+                    currentUser = { name: foundUser.name, username: foundUser.username, role: 'user', balance: foundUser.balance, vipPackage: foundUser.vipPackage, expiryTimestamp: foundUser.expiryTimestamp || 0, totalSpent: 0 };
+                    showCenterSuccess('Đăng nhập thành công!');
+                } else {
+                    showCenterSuccess('Tài khoản không tồn tại, vui lòng đăng ký!');
+                    return;
+                }
             }
+
+            // Lưu phiên đăng nhập vào sessionStorage để không bị mất khi reload (F5)
+            sessionStorage.setItem('loggedInUser', JSON.stringify(currentUser));
 
             document.getElementById('auth-modal').classList.add('hidden');
             updateUIAccess();
             switchTab('home');
         }
 
+        // Khôi phục phiên đăng nhập khi F5 / load lại trang
+        window.onload = function() {
+            const savedUser = sessionStorage.getItem('loggedInUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                document.getElementById('auth-modal').classList.add('hidden');
+                updateUIAccess();
+                switchTab('home');
+            }
+        }
+
         function logoutSession() {
+            sessionStorage.removeItem('loggedInUser');
             document.getElementById('auth-username').value = '';
             document.getElementById('auth-pass').value = '';
             document.getElementById('auth-modal').classList.remove('hidden');
         }
 
-        function selectVipAndRedirect(packageName, price) {
+        function selectVipAndRedirect(packageName, days, price) {
             const amountStr = price.toLocaleString('vi-VN') + 'đ';
-            let codeKeyword = packageName.includes('1') ? 'VIP1' : packageName.includes('3') ? 'VIP3' : packageName.includes('7') ? 'VIP7' : packageName.includes('15') ? 'VIP15' : 'VIP30';
+            let codeKeyword = `VIP${days}`;
             
             document.getElementById('qr-amount').innerText = amountStr;
             document.getElementById('qr-content').innerText = `NAPVIETANH ${codeKeyword} ${currentUser.username || 'USER'}`;
@@ -776,17 +811,30 @@
         }
 
         function submitDepositApprovalRequest() {
-            showCenterSuccess('Đã gửi yêu cầu thanh toán thành công! Admin sẽ duyệt và kích hoạt gói cho bạn trong 1-3 phút.');
+            showCenterSuccess('Đã gửi yêu cầu thanh toán thành công! Admin sẽ duyệt và kích hoạt thời gian cho bạn trong 1-3 phút.');
             notifyTelegramBot(`Khách hàng ${currentUser.username} vừa gửi yêu cầu xác nhận chuyển khoản mua gói VIP!`);
             switchTab('home');
         }
 
+        function checkVipExpiration() {
+            if (currentUser.role === 'admin') return true;
+            if (!currentUser.expiryTimestamp || Date.now() > currentUser.expiryTimestamp) {
+                currentUser.vipPackage = 'Đã hết hạn';
+                return false;
+            }
+            return true;
+        }
+
         function updateUIAccess() {
+            let isVipActive = checkVipExpiration();
+            let expiryStr = currentUser.expiryTimestamp > 0 ? new Date(currentUser.expiryTimestamp).toLocaleString('vi-VN') : 'Đã hết hạn / Chưa kích hoạt';
+
             document.getElementById('drop-username').innerText = currentUser.username;
             document.getElementById('drop-balance').innerText = currentUser.balance;
             document.getElementById('home-val-name').innerText = currentUser.name;
             document.getElementById('home-val-balance').innerText = currentUser.balance;
             document.getElementById('home-val-vip').innerText = currentUser.vipPackage;
+            document.getElementById('home-val-expiry').innerText = expiryStr;
             document.getElementById('home-total-spent').innerText = currentUser.totalSpent.toLocaleString('vi-VN') + 'đ';
             document.getElementById('acc-view-name').innerText = currentUser.name;
             document.getElementById('acc-view-username').innerText = currentUser.username;
@@ -796,6 +844,7 @@
             const adminGroup = document.getElementById('menu-group-admin');
             const badgeRole = document.getElementById('home-badge-role');
             const vipNoticeBanner = document.getElementById('vip-notice-banner');
+            const bannerTitle = document.getElementById('banner-notice-title');
 
             if(currentUser.role === 'admin') {
                 adminGroup.classList.remove('hidden');
@@ -804,8 +853,9 @@
             } else {
                 adminGroup.classList.add('hidden');
                 badgeRole.innerText = 'Thành viên Tiêu Chuẩn';
-                if(currentUser.vipPackage.includes('Chưa kích hoạt')) {
+                if(!isVipActive) {
                     vipNoticeBanner.classList.remove('hidden');
+                    bannerTitle.innerText = currentUser.vipPackage === 'Đã hết hạn' ? 'Gói VIP của bạn đã hết hạn! Vui lòng gia hạn.' : 'Tài khoản chưa kích hoạt Gói VIP!';
                 } else {
                     vipNoticeBanner.classList.add('hidden');
                 }
@@ -813,6 +863,11 @@
             renderNotifications();
             renderAdminCustomers();
             updateQRCode();
+            
+            // Cập nhật lại session lưu trữ
+            if(currentUser.role !== 'guest') {
+                sessionStorage.setItem('loggedInUser', JSON.stringify(currentUser));
+            }
         }
 
         function renderAdminCustomers() {
@@ -820,14 +875,15 @@
             document.getElementById('total-users-count').innerText = customersList.length;
             let html = '';
             customersList.forEach(c => {
+                let expText = c.expiryTimestamp > Date.now() ? new Date(c.expiryTimestamp).toLocaleDateString('vi-VN') : 'Hết hạn';
                 html += `
                     <tr>
                         <td class="p-3 font-mono font-bold">${c.id}</td>
                         <td class="p-3 font-semibold text-slate-800">${c.username}</td>
                         <td class="p-3 text-slate-600">${c.name}</td>
-                        <td class="p-3 text-emerald-600 font-bold">${c.balance}</td>
+                        <td class="p-3 text-purple-700 font-bold">${c.vipPackage} (${expText})</td>
                         <td class="p-3 text-right space-x-1">
-                            <button onclick="openEditCustomer(${c.id})" class="px-2.5 py-1 bg-purple-600 text-white font-bold rounded shadow">🛡️ Duyệt Gói VIP</button>
+                            <button onclick="openEditCustomer(${c.id})" class="px-2.5 py-1 bg-purple-600 text-white font-bold rounded shadow">🛡️ Duyệt Gói</button>
                             <button onclick="deleteCustomer(${c.id})" class="px-2.5 py-1 bg-red-50 text-red-600 font-bold rounded">Xóa</button>
                         </td>
                     </tr>`;
@@ -841,18 +897,23 @@
             if(!c) return;
             editingCustomerId = id;
             document.getElementById('modal-edit-username').value = c.username;
-            document.getElementById('modal-edit-name').value = c.name;
             document.getElementById('customer-edit-modal').classList.remove('hidden');
         }
 
         function saveAdminApproval() {
             const c = customersList.find(item => item.id === editingCustomerId);
-            const selectedVip = document.getElementById('modal-edit-vip').value;
+            const daysToAdd = parseInt(document.getElementById('modal-edit-vip-days').value);
             if(c) {
-                c.vipPackage = selectedVip;
+                if (daysToAdd > 0) {
+                    c.vipPackage = `Gói ${daysToAdd} Ngày`;
+                    c.expiryTimestamp = Date.now() + daysToAdd * 24 * 3600 * 1000;
+                } else {
+                    c.vipPackage = 'Đã hết hạn';
+                    c.expiryTimestamp = 0;
+                }
                 renderAdminCustomers();
-                showCenterSuccess(`Đã duyệt kích hoạt thành công ${selectedVip} cho khách hàng!`);
-                notifyTelegramBot(`Admin đã duyệt thành công ${selectedVip} cho tài khoản ${c.username}`);
+                showCenterSuccess(`Đã duyệt gói ${daysToAdd} ngày thành công cho khách!`);
+                notifyTelegramBot(`Admin đã kích hoạt gói ${daysToAdd} ngày cho tài khoản ${c.username}`);
                 document.getElementById('customer-edit-modal').classList.add('hidden');
             }
         }
@@ -863,7 +924,7 @@
             showCenterSuccess('Xóa khách hàng thành công!');
         }
 
-        // TỰ ĐỘNG QUÉT MÃ GIẢM GIÁ MỚI VÀ HIỆN DẤU TÍCH XANH HOÀN THÀNH
+        // TỰ ĐỘNG CẬP NHẬT MÃ GIẢM GIÁ MỚI 100% VÀ HIỆN DẤU TÍCH XANH HOÀN THÀNH
         function scanNewVoucherCode() {
             const randomDeal = voucherDatabase[Math.floor(Math.random() * voucherDatabase.length)];
             document.getElementById('scanned-code-display').innerText = randomDeal.code;
@@ -988,10 +1049,10 @@
             runHackerScraperExecution();
         }
 
-        // HACKER DECRYPT CHẠY CHẬM RÃI ĐÚNG 250 DATA VÀ HIỆN DẤU TÍCH XANH HOÀN THÀNH
+        // HACKER DECRYPT CHẠY CHẬM RÃI ĐÚNG 250 DATA VÀ KHÓA TÍNH NĂNG NẾU HẾT HẠN VIP
         function runHackerScraperExecution() {
-            if(currentUser.role !== 'admin' && currentUser.vipPackage.includes('Chưa kích hoạt')) {
-                showCenterSuccess('Vui lòng chọn mua gói VIP để kích hoạt tính năng quét data!');
+            if(!checkVipExpiration()) {
+                showCenterSuccess('Gói VIP của bạn đã hết hạn! Vui lòng gia hạn để tiếp tục quét data.');
                 switchTab('home');
                 return;
             }

@@ -11,7 +11,6 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         
-        /* Modal dấu tích xanh chuyển động mượt mà ở giữa */
         #center-success-modal { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         #center-success-modal.show { opacity: 1; pointer-events: auto; }
         
@@ -32,7 +31,6 @@
         @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
         @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 30px #10b981; } }
 
-        /* Hiệu ứng kính mờ giao diện sang trọng */
         .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
     </style>
 </head>
@@ -84,25 +82,32 @@
         </div>
     </div>
 
-    <!-- MODAL SỬA SỐ DƯ & KHÁCH HÀNG -->
+    <!-- MODAL SỬA SỐ DƯ & KHÁCH HÀNG (DÀNH CHO ADMIN DUYỆT GÓI & SỐ DƯ) -->
     <div id="customer-edit-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="max-w-sm w-full bg-white rounded-3xl p-6 shadow-2xl space-y-4 text-slate-800">
-            <h3 class="font-extrabold text-lg text-purple-900">✏️ Chỉnh Sửa Khách Hàng</h3>
+            <h3 class="font-extrabold text-lg text-purple-900">🛡️ Admin Duyệt Gói VIP Cho Khách</h3>
             <div class="space-y-3 text-xs">
                 <div>
-                    <label class="font-semibold text-slate-600">Tài khoản:</label>
+                    <label class="font-semibold text-slate-600">Tài khoản khách:</label>
                     <input type="text" id="modal-edit-username" disabled class="w-full mt-1 px-3 py-2 bg-slate-100 border rounded-xl font-bold">
                 </div>
                 <div>
                     <label class="font-semibold text-slate-600">Họ và tên:</label>
-                    <input type="text" id="modal-edit-name" class="w-full mt-1 px-3 py-2 bg-slate-50 border rounded-xl font-bold">
+                    <input type="text" id="modal-edit-name" disabled class="w-full mt-1 px-3 py-2 bg-slate-100 border rounded-xl font-bold">
                 </div>
                 <div>
-                    <label class="font-semibold text-slate-600">Số dư hiện tại:</label>
-                    <input type="text" id="modal-edit-balance" class="w-full mt-1 px-3 py-2 bg-slate-50 border rounded-xl font-bold text-emerald-600">
+                    <label class="font-semibold text-slate-600">Duyệt kích hoạt Gói VIP:</label>
+                    <select id="modal-edit-vip" class="w-full mt-1 px-3 py-2 bg-slate-50 border rounded-xl font-bold text-purple-700">
+                        <option value="Chưa kích hoạt (0đ)">Chưa kích hoạt</option>
+                        <option value="Gói 1 Ngày (PRO)">Gói 1 Ngày (20,000đ)</option>
+                        <option value="Gói 3 Ngày (PRO)">Gói 3 Ngày (50,000đ)</option>
+                        <option value="Gói 7 Ngày (PRO)">Gói 7 Ngày (100,000đ)</option>
+                        <option value="Gói 15 Ngày (PRO)">Gói 15 Ngày (180,000đ)</option>
+                        <option value="Gói 30 Ngày (PRO)">Gói 30 Ngày (299,000đ)</option>
+                    </select>
                 </div>
                 <div class="flex space-x-2 pt-2">
-                    <button onclick="saveCustomerEdit()" class="flex-1 py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Lưu Lại</button>
+                    <button onclick="saveAdminApproval()" class="flex-1 py-2.5 bg-emerald-600 text-white font-bold rounded-xl shadow">Duyệt Kích Hoạt Ngay</button>
                     <button onclick="document.getElementById('customer-edit-modal').classList.add('hidden')" class="px-4 py-2.5 bg-slate-200 text-slate-700 font-bold rounded-xl">Hủy</button>
                 </div>
             </div>
@@ -128,8 +133,8 @@
                     <span id="arrow-sub-admin">▼</span>
                 </button>
                 <div id="sub-admin" class="pl-6 space-y-1 pt-1 hidden">
-                    <a href="#" onclick="switchTab('admin-users'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">👥 Quản lý khách hàng</a>
-                    <a href="#" onclick="switchTab('admin-pricing'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">💰 Cài đặt gói VIP (1-30 ngày)</a>
+                    <a href="#" onclick="switchTab('admin-users'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">👥 Duyệt đơn & Khách hàng</a>
+                    <a href="#" onclick="switchTab('admin-pricing'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">💰 Cài đặt giá gói VIP (1-30 ngày)</a>
                     <a href="#" onclick="switchTab('admin-deposit-cfg'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">💳 Cài đặt nạp tiền & QR</a>
                     <a href="#" onclick="switchTab('admin-support-cfg'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🎧 Cài đặt liên kết hỗ trợ</a>
                     <a href="#" onclick="switchTab('admin-notifications-cfg'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🔔 Quản lý thông báo</a>
@@ -201,15 +206,14 @@
     <!-- 3. MAIN CONTENT -->
     <main class="flex-1 p-4 max-w-4xl mx-auto w-full space-y-5">
         
-        <!-- BANNER THÔNG BÁO NẠP GÓI VIP ĐỂ MỞ KHÓA TÍNH NĂNG -->
+        <!-- BANNER THÔNG BÁO CHƯA CÓ GÓI VIP -->
         <div id="vip-notice-banner" class="p-4 rounded-3xl bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg flex flex-col md:flex-row justify-between items-center gap-3">
             <div class="space-y-1 text-center md:text-left">
                 <div class="font-extrabold text-sm flex items-center justify-center md:justify-start space-x-1">
-                    <span>⚠️</span><span>Tài khoản của bạn chưa kích hoạt Gói VIP!</span>
+                    <span>⚠️</span><span>Tài khoản chưa kích hoạt Gói VIP!</span>
                 </div>
-                <p class="text-xs text-amber-100">Vui lòng nạp tiền và chọn mua các Gói VIP (1, 3, 7, 15 hoặc 30 ngày) để mở khóa hệ thống Cào Data hàng loạt.</p>
+                <p class="text-xs text-amber-100">Chọn ngay gói bên dưới để hệ thống tạo mã QR chuyển khoản tự động và gửi lệnh chờ Admin duyệt.</p>
             </div>
-            <button onclick="switchTab('deposit')" class="px-5 py-2.5 bg-white text-orange-600 font-extrabold text-xs rounded-2xl shadow-md hover:bg-amber-50 transition-all shrink-0">💳 Nạp Tiền Mua Gói VIP</button>
         </div>
 
         <!-- TAB TRANG CHỦ -->
@@ -238,27 +242,27 @@
                     </div>
                 </div>
 
-                <!-- BẢNG MUA GÓI VIP TRỰC QUAN CHO KHÁCH -->
-                <div class="p-4 rounded-2xl bg-purple-50 border border-purple-200 space-y-3">
-                    <div class="font-bold text-xs text-purple-900 flex items-center space-x-1"><span>🚀</span><span>Chọn & Kích Hoạt Nhanh Gói VIP Sử Dụng:</span></div>
+                <!-- BẢNG CHỌN GÓI VIP -> CHUYỂN QUA NẠP TIỀN & HIỆN QR THEO YÊU CẦU -->
+                <div class="p-4 rounded-2xl bg-purple-50 border border-purple-200 space-y-3 shadow-sm">
+                    <div class="font-bold text-xs text-purple-900 flex items-center space-x-1"><span>🚀</span><span>Chọn Gói VIP Muốn Mua (Tự động tạo QR chuyển khoản):</span></div>
                     <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
-                        <button onclick="buyVipPackage('1 Ngày', 20000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
+                        <button onclick="selectVipAndRedirect('Gói 1 Ngày (PRO)', 20000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
                             <div class="font-extrabold text-xs">1 Ngày</div>
                             <div class="text-[11px] text-purple-600 font-bold mt-0.5">20,000đ</div>
                         </button>
-                        <button onclick="buyVipPackage('3 Ngày', 50000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
+                        <button onclick="selectVipAndRedirect('Gói 3 Ngày (PRO)', 50000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
                             <div class="font-extrabold text-xs">3 Ngày</div>
                             <div class="text-[11px] text-purple-600 font-bold mt-0.5">50,000đ</div>
                         </button>
-                        <button onclick="buyVipPackage('7 Ngày', 100000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
+                        <button onclick="selectVipAndRedirect('Gói 7 Ngày (PRO)', 100000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
                             <div class="font-extrabold text-xs">7 Ngày</div>
                             <div class="text-[11px] text-purple-600 font-bold mt-0.5">100,000đ</div>
                         </button>
-                        <button onclick="buyVipPackage('15 Ngày', 180000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
+                        <button onclick="selectVipAndRedirect('Gói 15 Ngày (PRO)', 180000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
                             <div class="font-extrabold text-xs">15 Ngày</div>
                             <div class="text-[11px] text-purple-600 font-bold mt-0.5">180,000đ</div>
                         </button>
-                        <button onclick="buyVipPackage('30 Ngày', 299000)" class="p-3 bg-purple-600 text-white rounded-xl border border-purple-700 shadow-md transition-all text-center col-span-2 md:col-span-1">
+                        <button onclick="selectVipAndRedirect('Gói 30 Ngày (PRO)', 299000)" class="p-3 bg-purple-600 text-white rounded-xl border border-purple-700 shadow-md transition-all text-center col-span-2 md:col-span-1 hover:bg-purple-700">
                             <div class="font-extrabold text-xs">30 Ngày (PRO)</div>
                             <div class="text-[11px] text-amber-300 font-bold mt-0.5">299,000đ</div>
                         </button>
@@ -278,11 +282,11 @@
             <div class="space-y-3" id="home-notifications-list"></div>
         </div>
 
-        <!-- TAB QUẢN LÝ KHÁCH HÀNG (ADMIN) -->
+        <!-- TAB QUẢN LÝ KHÁCH HÀNG & DUYỆT GÓI (ADMIN) -->
         <div id="tab-admin-users" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl glass-card shadow-sm space-y-4">
                 <div class="flex justify-between items-center">
-                    <h2 class="font-bold text-base text-slate-800">👥 Quản Lý Thông Tin Khách Hàng (Admin)</h2>
+                    <h2 class="font-bold text-base text-slate-800">👥 Duyệt Đơn & Quản Lý Khách Hàng (Admin)</h2>
                     <span class="text-xs bg-purple-100 text-purple-700 font-bold px-3 py-1 rounded-full">Tổng: <span id="total-users-count">2</span> user</span>
                 </div>
                 <div class="border border-slate-200 rounded-xl overflow-x-auto bg-white">
@@ -293,7 +297,7 @@
                                 <th class="p-3">Tài khoản</th>
                                 <th class="p-3">Họ tên</th>
                                 <th class="p-3">Số dư</th>
-                                <th class="p-3 text-right">Thao tác chỉnh sửa</th>
+                                <th class="p-3 text-right">Duyệt gói VIP / Sửa số dư</th>
                             </tr>
                         </thead>
                         <tbody id="admin-customer-table-body" class="divide-y divide-slate-100"></tbody>
@@ -393,7 +397,7 @@
                 <h2 class="font-bold text-base text-slate-800">🔥 Kho Săn Mã Giảm Giá & Quét Mã Đa Sàn</h2>
                 <p class="text-xs text-slate-500">Hệ thống quét và tự động sinh mã voucher chuẩn xác liên tục theo thời gian thực.</p>
 
-                <div class="p-4 bg-purple-50 rounded-2xl border border-purple-200 space-y-3 text-center">
+                <div class="p-4 bg-purple-50 rounded-2xl border border-purple-200 space-y-3 text-center shadow-sm">
                     <div class="font-bold text-xs text-purple-900">📷 Quét & Nhận Mã Voucher Mới Liên Tục</div>
                     <div class="flex justify-center">
                         <div class="w-40 h-40 bg-white border-2 border-dashed border-purple-400 rounded-2xl flex flex-col items-center justify-center space-y-2 shadow-inner">
@@ -401,11 +405,11 @@
                             <span id="scanned-code-display" class="text-xs text-purple-700 font-bold">Mã mới: SHOPEE2026</span>
                         </div>
                     </div>
-                    <button onclick="scanNewVoucherCode()" class="px-5 py-2.5 bg-purple-600 text-white font-bold text-xs rounded-xl shadow-lg transition-all">🔄 Quét / Đổi Mã Voucher Mới</button>
+                    <button onclick="scanNewVoucherCode()" class="px-5 py-2.5 bg-purple-600 text-white font-bold text-xs rounded-xl shadow-lg transition-all hover:bg-purple-700">🔄 Quét / Đổi Mã Voucher Mới</button>
                 </div>
 
                 <div class="space-y-2" id="dynamic-voucher-list">
-                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 shadow-sm">
                         <div class="flex justify-between items-center"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-orange-100 text-orange-700">SHOPEE MALL</span><span class="text-xs text-emerald-600 font-semibold">Đang hoạt động</span></div>
                         <div class="font-bold text-sm text-slate-800">Mã giảm 100K đơn từ 500K</div>
                         <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
@@ -417,7 +421,7 @@
             </div>
         </div>
 
-        <!-- TAB QUÉT DATA (BẢO VỆ CHẶT CHẺ: CHƯA MUA VIP SẼ BỊ CHẶN & ĐƯA RA CẢNH BÁO) -->
+        <!-- TAB QUÉT DATA (KIỂM TRA GÓI VIP KỸ CÀNG) -->
         <div id="tab-scraper" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl glass-card shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (250 Data Hàng Loạt)</h2>
@@ -488,31 +492,36 @@
             </div>
         </div>
 
-        <!-- TAB NẠP TIỀN & MÃ QR -->
+        <!-- TAB NẠP TIỀN & TẠO QR ĐỘNG KÈM NỘI DUNG CHUYỂN KHOẢN THEO GÓI VIP -->
         <div id="tab-deposit" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl glass-card shadow-sm space-y-4 text-center">
-                <h2 class="font-bold text-base text-slate-800 text-left">💳 Nạp Tiền Tự Động Qua Mã QR</h2>
+                <h2 class="font-bold text-base text-slate-800 text-left">💳 Thanh Toán Nạp Tiền & Kích Hoạt Gói VIP</h2>
+                
                 <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 text-xs text-left shadow-sm">
                     <div>Ngân hàng: <strong id="qr-bank" class="text-purple-700">SeABank (SeANet)</strong></div>
                     <div>Số tài khoản: <strong id="qr-stk" class="text-purple-700">123456789</strong></div>
                     <div>Chủ tài khoản: <strong id="qr-name" class="text-purple-700">ĐINH HOÀNG VIỆT ANH</strong></div>
-                    <div>Nội dung chuyển khoản: <strong class="text-purple-700">NAPVIETANH</strong></div>
+                    <div>Số tiền cần thanh toán: <strong id="qr-amount" class="text-emerald-600 text-sm">299,000đ</strong></div>
+                    <div>Nội dung chuyển khoản (Bắt buộc đúng): <strong id="qr-content" class="text-purple-700 font-mono">NAPVIETANH VIP30</strong></div>
                 </div>
-                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 inline-block space-y-2 shadow-sm">
-                    <div class="text-xs font-bold text-slate-600">Quét mã QR để thanh toán nhanh:</div>
+
+                <div class="p-4 bg-white rounded-2xl border border-slate-200 inline-block space-y-2 shadow-sm">
+                    <div class="text-xs font-bold text-slate-600">Quét mã QR để thanh toán tự động:</div>
                     <div class="flex justify-center">
                         <img id="dynamic-qr-img" src="" alt="Mã QR Chuyển Khoản" class="w-48 h-48 object-contain rounded-xl border border-slate-300 shadow">
                     </div>
-                    <div class="text-[11px] text-slate-400">Hệ thống tự động cộng tiền sau 1-3 phút.</div>
+                    <div class="text-[11px] text-slate-500 font-semibold">Sau khi chuyển khoản xong, vui lòng đợi Admin duyệt 1-3 phút.</div>
                 </div>
+
+                <button onclick="submitDepositApprovalRequest()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition-all">✅ Tôi Đã Chuyển Khoản (Gửi Yêu Cầu Cho Admin Duyệt)</button>
             </div>
         </div>
 
         <!-- TAB ĐƠN HÀNG -->
         <div id="tab-orders" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl glass-card shadow-sm space-y-3">
-                <h2 class="font-bold text-base text-slate-800">📋 Lịch Sử Đơn Hàng</h2>
-                <div class="p-4 rounded-xl bg-slate-50 border text-center text-xs text-slate-500 shadow-sm">Chưa có đơn hàng nào gần đây.</div>
+                <h2 class="font-bold text-base text-slate-800">📋 Lịch Sử Giao Dịch & Đơn Hàng</h2>
+                <div class="p-4 rounded-xl bg-slate-50 border text-center text-xs text-slate-500 shadow-sm">Chưa có giao dịch nạp tiền nào gần đây.</div>
             </div>
         </div>
 
@@ -561,14 +570,13 @@
 
     <!-- SCRIPT XỬ LÝ CHÍNH XÁC TUYỆT ĐỐI -->
     <script>
-        // Tài khoản mới đăng ký số dư mặc định 0đ, chưa có gói VIP
         let currentUser = { name: '', username: '', role: 'guest', balance: '0đ', vipPackage: 'Chưa kích hoạt (0đ)', totalSpent: 0 };
         let isRegisterMode = false;
         let activePlatform = 'Khách hàng Sàn TMĐT (Shopee/Lazada)';
 
         let customersList = [
-            { id: 517904, username: 'tungle_99', name: 'Tùng Lê', balance: '12,500,000đ' },
-            { id: 517872, username: 'MiracleVIP', name: 'Hoàng Minh', balance: '8,300,000đ' }
+            { id: 517904, username: 'tungle_99', name: 'Tùng Lê', balance: '12,500,000đ', vipPackage: 'Gói 30 Ngày (PRO)' },
+            { id: 517872, username: 'MiracleVIP', name: 'Hoàng Minh', balance: '8,300,000đ', vipPackage: 'Gói 7 Ngày (PRO)' }
         ];
 
         let notifications = [
@@ -650,7 +658,6 @@
             }
         }
 
-        // ĐĂNG KÝ XONG BẮT BUỘC CHUYỂN QUA ĐĂNG NHẬP (SỐ DƯ = 0Đ, CHƯA CÓ VIP)
         function processAuthSubmit() {
             const usernameInput = document.getElementById('auth-username').value.trim();
             const passInput = document.getElementById('auth-pass').value.trim();
@@ -662,17 +669,15 @@
 
             if(isRegisterMode) {
                 const name = document.getElementById('reg-name').value.trim() || usernameInput;
-                customersList.push({ id: Date.now().toString().slice(-6), username: usernameInput, name: name, balance: '0đ' });
+                customersList.push({ id: Date.now().toString().slice(-6), username: usernameInput, name: name, balance: '0đ', vipPackage: 'Chưa kích hoạt (0đ)' });
                 showCenterSuccess('Đăng ký thành công! Vui lòng đăng nhập.');
                 
-                // Tự động chuyển qua giao diện Đăng Nhập
                 toggleAuthMode();
                 document.getElementById('auth-username').value = usernameInput;
                 document.getElementById('auth-pass').value = '';
                 return;
             }
 
-            // Xử lý Đăng Nhập chính thức
             if(usernameInput.toLowerCase() === 'admin') {
                 if(passInput === '1234') {
                     currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ', vipPackage: 'Gói Vĩnh Viễn PRO', totalSpent: 2450000 };
@@ -697,12 +702,29 @@
             document.getElementById('auth-modal').classList.remove('hidden');
         }
 
-        // Mua gói VIP trực tiếp
-        function buyVipPackage(packageName, price) {
-            currentUser.vipPackage = `Gói ${packageName} (PRO)`;
-            currentUser.totalSpent += price;
-            updateUIAccess();
-            showCenterSuccess(`Kích hoạt thành công ${currentUser.vipPackage}!`);
+        // KHÁCH CHỌN GÓI VIP -> TỰ ĐỘNG CHUYỂN SANG NẠP TIỀN & HIỆN MÃ QR KÈM MỆNH GIÁ/NỘI DUNG CHUYỂN KHOẢN
+        function selectVipAndRedirect(packageName, price) {
+            const amountStr = price.toLocaleString('vi-VN') + 'đ';
+            let codeKeyword = packageName.includes('1') ? 'VIP1' : packageName.includes('3') ? 'VIP3' : packageName.includes('7') ? 'VIP7' : packageName.includes('15') ? 'VIP15' : 'VIP30';
+            
+            document.getElementById('qr-amount').innerText = amountStr;
+            document.getElementById('qr-content').innerText = `NAPVIETANH ${codeKeyword} ${currentUser.username || 'USER'}`;
+            
+            updateQRCodeCustom(price, `NAPVIETANH_${codeKeyword}`);
+            switchTab('deposit');
+            showCenterSuccess(`Đã tạo lệnh mua ${packageName}! Vui lòng quét mã QR chuyển khoản.`);
+        }
+
+        function updateQRCodeCustom(amount, addInfo) {
+            const stk = document.getElementById('cfg-stk').value;
+            const name = document.getElementById('cfg-name').value;
+            const qrUrl = `https://img.vietqr.io/image/seabank-${stk}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(addInfo)}&accountName=${encodeURIComponent(name)}`;
+            document.getElementById('dynamic-qr-img').src = qrUrl;
+        }
+
+        function submitDepositApprovalRequest() {
+            showCenterSuccess('Đã gửi yêu cầu thanh toán thành công! Admin sẽ duyệt và kích hoạt gói cho bạn trong 1-3 phút.');
+            switchTab('home');
         }
 
         function updateUIAccess() {
@@ -751,7 +773,7 @@
                         <td class="p-3 text-slate-600">${c.name}</td>
                         <td class="p-3 text-emerald-600 font-bold">${c.balance}</td>
                         <td class="p-3 text-right space-x-1">
-                            <button onclick="openEditCustomer(${c.id})" class="px-2.5 py-1 bg-purple-50 text-purple-700 font-bold rounded">Sửa số dư</button>
+                            <button onclick="openEditCustomer(${c.id})" class="px-2.5 py-1 bg-purple-600 text-white font-bold rounded shadow">🛡️ Duyệt Gói VIP</button>
                             <button onclick="deleteCustomer(${c.id})" class="px-2.5 py-1 bg-red-50 text-red-600 font-bold rounded">Xóa</button>
                         </td>
                     </tr>`;
@@ -766,17 +788,17 @@
             editingCustomerId = id;
             document.getElementById('modal-edit-username').value = c.username;
             document.getElementById('modal-edit-name').value = c.name;
-            document.getElementById('modal-edit-balance').value = c.balance;
             document.getElementById('customer-edit-modal').classList.remove('hidden');
         }
 
-        function saveCustomerEdit() {
+        // ADMIN DUYỆT KÍCH HOẠT GÓI CHO KHÁCH
+        function saveAdminApproval() {
             const c = customersList.find(item => item.id === editingCustomerId);
+            const selectedVip = document.getElementById('modal-edit-vip').value;
             if(c) {
-                c.name = document.getElementById('modal-edit-name').value;
-                c.balance = document.getElementById('modal-edit-balance').value;
+                c.vipPackage = selectedVip;
                 renderAdminCustomers();
-                showCenterSuccess('Cập nhật thành công!');
+                showCenterSuccess(`Đã duyệt kích hoạt thành công ${selectedVip} cho khách hàng!`);
                 document.getElementById('customer-edit-modal').classList.add('hidden');
             }
         }
@@ -784,7 +806,7 @@
         function deleteCustomer(id) {
             customersList = customersList.filter(item => item.id !== id);
             renderAdminCustomers();
-            showCenterSuccess('Xóa thành công!');
+            showCenterSuccess('Xóa khách hàng thành công!');
         }
 
         function scanNewVoucherCode() {
@@ -794,7 +816,7 @@
             const list = document.getElementById('dynamic-voucher-list');
             const newId = 'deal-' + Date.now();
             list.insertAdjacentHTML('afterbegin', `
-                <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 animate-pulse">
+                <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 animate-pulse shadow-sm">
                     <div class="flex justify-between items-center"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-200 text-purple-800">${randomDeal.platform}</span><span class="text-xs text-purple-600 font-semibold">Vừa quét thành công</span></div>
                     <div class="font-bold text-sm text-slate-800">${randomDeal.desc}</div>
                     <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
@@ -810,12 +832,7 @@
             const bank = document.getElementById('cfg-bank').value;
             const stk = document.getElementById('cfg-stk').value;
             const name = document.getElementById('cfg-name').value;
-
-            document.getElementById('qr-bank').innerText = bank;
-            document.getElementById('qr-stk').innerText = stk;
-            document.getElementById('qr-name').innerText = name;
-
-            const qrUrl = `https://img.vietqr.io/image/seabank-${stk}-compact2.png?amount=0&addInfo=NAPVIETANH&accountName=${encodeURIComponent(name)}`;
+            const qrUrl = `https://img.vietqr.io/image/seabank-${stk}-compact2.png?amount=299000&addInfo=NAPVIETANH_VIP30&accountName=${encodeURIComponent(name)}`;
             document.getElementById('dynamic-qr-img').src = qrUrl;
         }
 
@@ -900,16 +917,16 @@
             activePlatform = name;
             ['shopee', 'game', 'facebook', 'tiktok', 'nhadat', 'taichinh', 'khoahoc', 'maps'].forEach(item => {
                 const card = document.getElementById('card-' + item);
-                if(card) card.className = "p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1";
+                if(card) card.className = "p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm";
             });
             const selected = document.getElementById('card-' + id);
-            if(selected) selected.className = "p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1";
+            if(selected) selected.className = "p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1 shadow-sm";
         }
 
-        // HACKER DECRYPT CHẠY CHẬM RÃI ĐÚNG 250 DATA VÀ CÓ KIỂM TRA GÓI VIP
+        // HACKER DECRYPT CHẠY CHẬM RÃI ĐÚNG 250 DATA VÀ KIỂM TRA GÓI VIP
         function runHackerScraperExecution() {
             if(currentUser.role !== 'admin' && currentUser.vipPackage.includes('Chưa kích hoạt')) {
-                showCenterSuccess('Vui lòng chọn mua gói VIP để quét data!');
+                showCenterSuccess('Vui lòng chọn mua gói VIP để kích hoạt tính năng quét data!');
                 switchTab('home');
                 return;
             }

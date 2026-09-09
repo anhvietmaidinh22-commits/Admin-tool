@@ -11,7 +11,6 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         
-        /* Hiệu ứng chuyển động dấu tích xanh mượt mà (Animated Checkmark) */
         #center-success-modal { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         #center-success-modal.show { opacity: 1; pointer-events: auto; }
         
@@ -26,7 +25,6 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
-        /* SVG Checkmark Drawing Animation */
         .checkmark { width: 40px; height: 40px; border-radius: 50%; display: block; stroke-width: 3; stroke: #fff; stroke-miterlimit: 10; box-shadow: inset 0px 0px 0px #10b981; animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both; }
         .checkmark__check { transform-origin: 50% 50%; stroke-dasharray: 48; stroke-dashoffset: 48; animation: stroke 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards; }
         @keyframes stroke { 100% { stroke-dashoffset: 0; } }
@@ -356,7 +354,7 @@
             </div>
         </div>
 
-        <!-- TAB QUÉT DATA -->
+        <!-- TAB QUÉT DATA (CHẠY CHẬM RÃI TỪNG DATA MỘT NHƯ HACKER GIẢI MÃ) -->
         <div id="tab-scraper" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (50 - 500 Data Hàng Loạt)</h2>
@@ -521,7 +519,6 @@
             { code: 'SKINCARE50K', desc: 'Giảm 50K mỹ phẩm Hàn Quốc', platform: 'SHOPEE' }
         ];
 
-        // Hiệu ứng chuyển động dấu tích xanh mượt mà (chỉ gọi khi thực sự bấm hoàn thành)
         function showCenterSuccess(text) {
             document.getElementById('center-success-text').innerText = text;
             const modal = document.getElementById('center-success-modal');
@@ -820,7 +817,7 @@
             if(selected) selected.className = "p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1";
         }
 
-        // HACKER DECRYPT & ANIMATED SUCCESS MODAL
+        // GIẢI MÃ HACKER CHẠY CHẬM RÃI TỪNG DATA MỘT TỰ NHIÊN NHƯ THẬT
         function runHackerScraperExecution() {
             const terminal = document.getElementById('terminal-box');
             const execBtn = document.getElementById('exec-btn');
@@ -830,6 +827,9 @@
             execBtn.disabled = true;
             execBtn.classList.add('opacity-50');
             dataContainer.classList.add('hidden');
+            rowsContainer.innerHTML = '';
+            dataContainer.classList.remove('hidden');
+
             terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Kết nối Make Webhook & khởi tạo luồng giải mã dữ liệu hàng loạt (${activePlatform})...</div>`;
 
             let sampleFirstNames = ["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Đặng", "Bùi"];
@@ -837,11 +837,11 @@
             let sampleLastNames = ["Anh", "Bình", "Cường", "Dũng", "Đạt", "Giang", "Hải", "Hòa", "Hưng", "Kha", "Long", "Nam", "Phúc", "Quân", "Sơn", "Tâm", "Thắng", "Tuấn", "Vinh", "Yến"];
             let districts = ["Quận 1, TP.HCM", "Quận 3, TP.HCM", "Thủ Đức, TP.HCM", "Cầu Giấy, Hà Nội", "Đống Đa, Hà Nội", "Hải Châu, Đà Nẵng", "Ninh Kiều, Cần Thơ", "Biên Hòa, Đồng Nai"];
 
-            let generatedHtml = '';
             let count = 0;
 
+            // Đổi tốc độ chạy chậm lại (400ms mỗi dòng) để chạy ra từ từ cho uy tín
             let hackerInterval = setInterval(() => {
-                count += 25;
+                count += 1;
                 let fName = sampleFirstNames[Math.floor(Math.random() * sampleFirstNames.length)];
                 let mName = sampleMiddleNames[Math.floor(Math.random() * sampleMiddleNames.length)];
                 let lName = sampleLastNames[Math.floor(Math.random() * sampleLastNames.length)];
@@ -849,10 +849,11 @@
                 let phone = `0${['9','3','7','8','5'][Math.floor(Math.random()*5)]}${Math.floor(10000000 + Math.random()*90000000)}` ;
                 let address = districts[Math.floor(Math.random() * districts.length)];
 
-                terminal.innerHTML += `<div class="text-emerald-300">> [DECRYPT] Đã trích xuất node khách hàng [${fullName} - ${phone}]...</div>`;
+                terminal.innerHTML += `<div class="text-emerald-300">> [DECRYPT] Trích xuất node #${count}: ${fullName} - ${phone}</div>`;
                 terminal.scrollTop = terminal.scrollHeight;
 
-                generatedHtml += `
+                // Thêm dần từng dòng dữ liệu vào bảng hiển thị thực tế
+                let newRow = `
                     <tr>
                         <td class="p-2.5 font-semibold">${fullName}</td>
                         <td class="p-2.5 text-purple-600 font-mono font-bold">${phone}</td>
@@ -863,19 +864,17 @@
                             <a href="https://zalo.me/${phone}" target="_blank" class="px-2 py-1 bg-sky-600 text-white font-bold rounded text-[10px]">💬 Zalo</a>
                         </td>
                     </tr>`;
+                rowsContainer.insertAdjacentHTML('beforeend', newRow);
 
-                if(count >= 250) {
+                if(count >= 100) { // Chạy đủ 100 dòng từ từ cho uy tín
                     clearInterval(hackerInterval);
-                    terminal.innerHTML += `<div class="text-cyan-400 font-bold">> [SUCCESS] Giải mã hoàn tất 250 tệp data hàng loạt từ Google Sheets!</div>`;
+                    terminal.innerHTML += `<div class="text-cyan-400 font-bold">> [SUCCESS] Giải mã hoàn tất 100 tệp data hàng loạt từ Google Sheets!</div>`;
                     execBtn.disabled = false;
                     execBtn.classList.remove('opacity-50');
-                    
-                    rowsContainer.innerHTML = generatedHtml;
-                    dataContainer.classList.remove('hidden');
 
-                    showCenterSuccess('Đã giải mã thành công 250 Data hàng loạt!');
+                    showCenterSuccess('Đã giải mã thành công 100 Data hàng loạt!');
                 }
-            }, 100);
+            }, 350);
         }
 
         function downloadExcelFile() {
@@ -883,7 +882,7 @@
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Danh_Sach_250_Data_Hang_Loat.csv");
+            link.setAttribute("download", "Danh_Sach_100_Data_Hang_Loat.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

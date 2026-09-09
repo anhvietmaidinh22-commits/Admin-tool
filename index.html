@@ -11,6 +11,7 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         
+        /* Modal dấu tích xanh chuyển động mượt mà ở giữa */
         #center-success-modal { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         #center-success-modal.show { opacity: 1; pointer-events: auto; }
         
@@ -33,10 +34,11 @@
 
         .card-box { background: #ffffff; border: 1px solid #e2e8f0; }
 
-        /* Nút hỗ trợ nổi góc dưới bên phải */
-        .floating-support { position: fixed; bottom: 80px; right: 20px; z-index: 99; display: flex; flex-direction: column; gap: 10px; }
-        .support-btn { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: transform 0.2s; }
+        /* Nút biểu tượng Zalo và Telegram nổi góc dưới bên phải */
+        .floating-support { position: fixed; bottom: 80px; right: 20px; z-index: 99; display: flex; flex-direction: column; gap: 12px; }
+        .support-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: transform 0.2s; overflow: hidden; background: white; border: 2px solid white; }
         .support-btn:hover { transform: scale(1.1); }
+        .support-btn img { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-20 lg:pb-0">
@@ -55,10 +57,16 @@
         </div>
     </div>
 
-    <!-- CÁC NÚT ẤN HỖ TRỢ NỔI Ở GÓC DƯỚI BÊN PHẢI -->
+    <!-- 2 NÚT HỖ TRỢ BIỂU TƯỢNG ZALO VÀ TELEGRAM CHUẨN Ở GÓC DƯỚI BÊN PHẢI -->
     <div class="floating-support">
-        <a href="https://t.me/admin" target="_blank" class="support-btn bg-blue-500" title="Hỗ trợ Telegram">✈️</a>
-        <a href="https://zalo.me/admin" target="_blank" class="support-btn bg-sky-500" title="Hỗ trợ Zalo">💬</a>
+        <!-- Nút Telegram -->
+        <a href="https://t.me/admin" target="_blank" class="support-btn" title="Hỗ trợ Telegram">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+        </a>
+        <!-- Nút Zalo -->
+        <a href="https://zalo.me/admin" target="_blank" class="support-btn" title="Hỗ trợ Zalo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91.svgz?uselang=vi" alt="Zalo" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/91/Zalo_Logo.svg';">
+        </a>
     </div>
 
     <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
@@ -253,7 +261,7 @@
                     </div>
                 </div>
 
-                <!-- BẢNG CHỌN GÓI VIP -> CHUYỂN QUA NẠP TIỀN & HIỆN QR -->
+                <!-- BẢNG CHỌN GÓI VIP -->
                 <div class="p-4 rounded-2xl bg-purple-50 border border-purple-200 space-y-3 shadow-sm">
                     <div class="font-bold text-xs text-purple-900 flex items-center space-x-1"><span>🚀</span><span>Chọn Gói VIP Muốn Mua (Tự động tạo QR chuyển khoản):</span></div>
                     <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
@@ -391,11 +399,11 @@
             </div>
         </div>
 
-        <!-- TAB BOT TELEGRAM (CÓ NHẬP CHAT ID, TOKEN & NÚT BẮN THỬ LỆNH) -->
+        <!-- TAB BOT TELEGRAM (CÓ Ô NHẬP ID VÀ NÚT BẮN THỬ LỆNH) -->
         <div id="tab-admin-telegram" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🤖 Tích Hợp Bot Telegram & Bắn Thử Lệnh</h2>
-                <p class="text-xs text-slate-500">Cấu hình Bot Token và Chat ID để bot tự động gửi tin nhắn báo cáo mỗi khi có thay đổi hoặc đơn hàng mới trên hệ thống.</p>
+                <p class="text-xs text-slate-500">Cấu hình Bot Token và Chat ID (có ID) để bot tự động gửi tin nhắn báo cáo mỗi khi có thay đổi trên hệ thống.</p>
                 <div class="space-y-3 text-xs">
                     <div>
                         <label class="font-semibold text-slate-600">Bot Token:</label>
@@ -413,7 +421,7 @@
             </div>
         </div>
 
-        <!-- TAB KHO SĂN MÃ (TỰ ĐỘNG QUÉT MÃ LIÊN TỤC) -->
+        <!-- TAB KHO SĂN MÃ (TỰ ĐỘNG QUÉT VÀ CẬP NHẬT MÃ MỚI LUÔN) -->
         <div id="tab-deals" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🔥 Kho Săn Mã Giảm Giá Đa Sàn (Tự Động Quét Thời Gian Thực)</h2>
@@ -440,11 +448,11 @@
             </div>
         </div>
 
-        <!-- TAB QUÉT DATA (HỖ TRỢ THÊM TÍNH NĂNG QUÉT THÀNH VIÊN NHÓM QUA LINK) -->
+        <!-- TAB QUÉT DATA (HỖ TRỢ QUÉT THÀNH VIÊN NHÓM QUA LINK & KHỞI CHẠY HIỆN DẤU TÍCH XANH) -->
         <div id="tab-scraper" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (Đa Ngành Hàng & Quét Thành Viên Nhóm)</h2>
-                <p class="text-xs text-slate-500">Chọn danh mục quét hàng loạt hoặc dán link nhóm/group để cào toàn bộ thành viên tiềm năng.</p>
+                <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (250 Data Hàng Loạt)</h2>
+                <p class="text-xs text-slate-500">Chọn danh mục hoặc dán link nhóm để hệ thống giải mã và trích xuất chậm rãi 250 khách hàng thực tế.</p>
                 
                 <!-- Ô dán link nhóm để quét thành viên -->
                 <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 shadow-sm">
@@ -455,7 +463,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-2">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
                     <div onclick="selectPlatform('shopee', 'Khách hàng Sàn TMĐT (Shopee/Lazada)')" id="card-shopee" class="p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1 shadow-sm">
                         <div class="font-bold text-xs text-purple-900">🛒 TMĐT (Shopee/Lazada)</div>
                         <div class="text-[10px] text-slate-500">Mỹ phẩm, thời trang,...</div>
@@ -628,21 +636,21 @@
             }, 1400);
         }
 
-        // Tự động bắn thông báo giả lập về Bot Telegram khi có thao tác quan trọng
+        // Tự động bắn thông báo giả lập về Bot Telegram khi có thao tác thay đổi cấu hình hoặc đơn hàng
         function notifyTelegramBot(actionName) {
-            const token = document.getElementById('tg-token').value;
-            const chatId = document.getElementById('tg-chatid').value;
-            console.log(`[TELEGRAM BOT NOTIFY] Token: ${token} | ChatID: ${chatId} | Action: ${actionName}`);
+            const token = document.getElementById('tg-token') ? document.getElementById('tg-token').value : '751234567:AAH...';
+            const chatId = document.getElementById('tg-chatid') ? document.getElementById('tg-chatid').value : '123456789';
+            console.log(`[TELEGRAM BOT (ID: ${chatId})] Token: ${token} | Đã gửi báo cáo: ${actionName}`);
         }
 
         function sendTestTelegramMessage() {
-            showCenterSuccess('🚀 Đã bắn thử lệnh thành công về Bot Telegram của bạn!');
-            notifyTelegramBot('Test lệnh hệ thống');
+            showCenterSuccess('🚀 Bắn thử lệnh về Bot Telegram thành công!');
+            notifyTelegramBot('Test lệnh báo cáo hệ thống từ Admin');
         }
 
         function triggerConfigUpdateAndNotify(configName) {
             showCenterSuccess(`Đã lưu ${configName} thành công!`);
-            notifyTelegramBot(`Cập nhật cấu hình: ${configName}`);
+            notifyTelegramBot(`Cấu hình hệ thống thay đổi: ${configName}`);
         }
 
         function copyToClipboard(text) {
@@ -855,7 +863,7 @@
             showCenterSuccess('Xóa khách hàng thành công!');
         }
 
-        // TỰ ĐỘNG QUÉT VÀ CẬP NHẬT MÃ GIẢM GIÁ MỚI LIÊN TỤC
+        // TỰ ĐỘNG QUÉT MÃ GIẢM GIÁ MỚI VÀ HIỆN DẤU TÍCH XANH HOÀN THÀNH
         function scanNewVoucherCode() {
             const randomDeal = voucherDatabase[Math.floor(Math.random() * voucherDatabase.length)];
             document.getElementById('scanned-code-display').innerText = randomDeal.code;
@@ -872,7 +880,7 @@
                     </div>
                 </div>
             `);
-            showCenterSuccess(`Radar vừa quét thấy mã mới: ${randomDeal.code}!`);
+            showCenterSuccess(`Đã cập nhật mã giảm giá mới: ${randomDeal.code}!`);
         }
 
         function updateQRCode() {
@@ -970,7 +978,6 @@
             if(selected) selected.className = "p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1 shadow-sm";
         }
 
-        // TÍNH NĂNG QUÉT THÀNH VIÊN NHÓM QUA LINK (HỖ TRỢ LINK NHÓM)
         function runGroupScraper() {
             const groupLink = document.getElementById('group-link-input').value.trim();
             if(!groupLink) {
@@ -981,7 +988,7 @@
             runHackerScraperExecution();
         }
 
-        // HACKER DECRYPT CHẠY CHẬM RÃI ĐÚNG 250 DATA VÀ KIỂM TRA GÓI VIP
+        // HACKER DECRYPT CHẠY CHẬM RÃI ĐÚNG 250 DATA VÀ HIỆN DẤU TÍCH XANH HOÀN THÀNH
         function runHackerScraperExecution() {
             if(currentUser.role !== 'admin' && currentUser.vipPackage.includes('Chưa kích hoạt')) {
                 showCenterSuccess('Vui lòng chọn mua gói VIP để kích hoạt tính năng quét data!');
@@ -1040,6 +1047,7 @@
                     execBtn.disabled = false;
                     execBtn.classList.remove('opacity-50');
 
+                    // Hiện dấu tích xanh chuyển động ở giữa màn hình chuẩn xác
                     showCenterSuccess('Đã giải mã thành công 250 Data hàng loạt!');
                 }
             }, 400);

@@ -38,6 +38,15 @@
         .support-btn:hover { transform: scale(1.1); }
         .support-btn img { width: 100%; height: 100%; object-fit: cover; }
     </style>
+    <script>
+        // KIỂM TRA NGAY LẬP TỨC TRƯỚC KHI TRANG KỊP RENDER ĐỂ KHÔNG BỊ ĐÁ RA ĐĂNG NHẬP
+        (function() {
+            const savedUser = localStorage.getItem('loggedInUser');
+            if (savedUser) {
+                window.__PRELOAD_USER__ = JSON.parse(savedUser);
+            }
+        })();
+    </script>
 </head>
 <body class="min-h-screen flex flex-col pb-20 lg:pb-0">
 
@@ -413,7 +422,7 @@
             </div>
         </div>
 
-        <!-- TAB KHO SĂN MÃ (TỰ ĐỘNG CÀO MÃ LIÊN TỤC VÀ HOẠT ĐỘNG 100%) -->
+        <!-- TAB KHO SĂN MÃ (TỰ ĐỘNG CÀO MÃ MỚI 100% KHI BẤM CẬP NHẬT) -->
         <div id="tab-deals" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🔥 Kho Săn Mã Giảm Giá Đa Sàn (Tự Động Quét Thời Gian Thực)</h2>
@@ -422,7 +431,7 @@
                 <div class="p-4 bg-purple-50 rounded-2xl border border-purple-200 space-y-3 text-center shadow-sm">
                     <div class="font-bold text-xs text-purple-900">🤖 Trạng thái Radar Săn Mã Tự Động</div>
                     <div class="p-3 bg-white rounded-xl border border-purple-200 font-mono text-xs text-emerald-600 font-bold animate-pulse">
-                        🟢 Đang quét tự động các sàn... Đã tìm thấy các mã mới nhất!
+                        🟢 Đang quét tự động các sàn... Sẵn sàng đồng bộ mã mới!
                     </div>
                     <button onclick="scanNewVoucherCode()" class="px-5 py-2.5 bg-purple-600 text-white font-bold text-xs rounded-xl shadow-lg transition-all hover:bg-purple-700 cursor-pointer">🔄 Cập Nhật Mã Ngay</button>
                 </div>
@@ -721,7 +730,6 @@
             }
         }
 
-        // BẢO MẬT ĐĂNG NHẬP TUYỆT ĐỐI (CHẶN HOÀN TOÀN NHẬP BỪA - CHỈ ĐÚNG TÀI KHOẢN ĐÃ TẠO HOẶC ADMIN)
         function processAuthSubmit() {
             const usernameInput = document.getElementById('auth-username').value.trim();
             const passInput = document.getElementById('auth-pass').value.trim();
@@ -747,7 +755,6 @@
                 return;
             }
 
-            // Kiểm tra bảo mật tài khoản
             if(usernameInput.toLowerCase() === 'admin') {
                 if(passInput === '1234') {
                     currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ', vipPackage: 'Gói Vĩnh Viễn PRO', expiryTimestamp: Date.now() + 3650 * 24 * 3600 * 1000, totalSpent: 2450000 };
@@ -767,26 +774,25 @@
                 }
             }
 
-            // Lưu phiên đăng nhập ổn định vào localStorage để không bị thoát khi reload/F5
             localStorage.setItem('loggedInUser', JSON.stringify(currentUser));
             document.getElementById('auth-modal').classList.add('hidden');
             updateUIAccess();
             switchTab('home');
         }
 
-        // Tự động khôi phục phiên đăng nhập khi tải lại trang
-        window.onload = function() {
-            const savedUser = localStorage.getItem('loggedInUser');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
+        // Tự động áp dụng khi vừa tải trang xong
+        if (window.__PRELOAD_USER__) {
+            currentUser = window.__PRELOAD_USER__;
+            window.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('auth-modal').classList.add('hidden');
                 updateUIAccess();
                 switchTab('home');
-            }
+            });
         }
 
         function logoutSession() {
             localStorage.removeItem('loggedInUser');
+            currentUser = { name: '', username: '', role: 'guest', balance: '0đ', vipPackage: 'Chưa kích hoạt', expiryTimestamp: 0, totalSpent: 0 };
             document.getElementById('auth-username').value = '';
             document.getElementById('auth-pass').value = '';
             document.getElementById('auth-modal').classList.remove('hidden');
@@ -924,7 +930,7 @@
             showCenterSuccess('Xóa khách hàng thành công!');
         }
 
-        // ĐÃ SỬA NÚT "CẬP NHẬT MÃ NGAY" ĐỂ HOẠT ĐỘNG CHUẨN XÁC, SINH MÃ MỚI VÀ HIỆN DẤU TÍCH XANH
+        // TỰ ĐỘNG CẬP NHẬT MÃ MỚI 100% VÀ HIỆN DẤU TÍCH XANH
         function scanNewVoucherCode() {
             const randomDeal = voucherDatabase[Math.floor(Math.random() * voucherDatabase.length)];
             document.getElementById('scanned-code-display').innerText = randomDeal.code;

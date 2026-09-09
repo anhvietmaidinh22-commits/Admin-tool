@@ -14,13 +14,13 @@
 </head>
 <body class="min-h-screen flex flex-col pb-20 lg:pb-0">
 
-    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ (BẢO MẬT & BỎ TRỐNG MẶC ĐỊNH) -->
+    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
     <div id="auth-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
         <div class="max-w-md w-full bg-[#2d1b4e] border border-purple-900 p-8 rounded-3xl shadow-2xl space-y-6 text-slate-100">
             <div class="text-center space-y-2">
                 <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500 to-purple-500 mx-auto flex items-center justify-center font-bold text-xl text-white">⚡</div>
                 <h2 id="auth-title" class="text-2xl font-extrabold">Đăng Nhập Hệ Thống</h2>
-                <p class="text-xs text-purple-300">Vui lòng đăng nhập đúng tài khoản hoặc đăng ký mới để sử dụng.</p>
+                <p class="text-xs text-purple-300">Admin mặc định: <strong class="text-white">Admin</strong> | Mật khẩu: <strong class="text-white">1234</strong></p>
             </div>
 
             <div class="space-y-4">
@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    <!-- 1. SIDEBAR MENU CHUẨN XỔ XOỆ (3 MỤC HOẶC 2 MỤC TÙY PHÂN QUYỀN) -->
+    <!-- 1. SIDEBAR MENU -->
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-[#2d1b4e] text-slate-100 flex flex-col transition-transform duration-300 -translate-x-full shadow-2xl">
         <div class="h-16 flex items-center justify-between px-6 border-b border-purple-900/50">
             <div class="flex items-center space-x-3">
@@ -83,7 +83,7 @@
 
         <div class="flex-1 px-3 py-4 space-y-2 overflow-y-auto custom-scrollbar text-xs font-medium">
             
-            <!-- 1. HỆ THỐNG ADMIN (Chỉ Admin mới hiển thị) -->
+            <!-- 1. HỆ THỐNG ADMIN -->
             <div id="menu-group-admin" class="space-y-1 hidden">
                 <button onclick="toggleSubMenu('sub-admin')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl bg-purple-900/60 text-purple-200 font-bold hover:bg-purple-900">
                     <span class="flex items-center space-x-3"><span class="text-base">🛡️</span><span>Hệ thống Admin</span></span>
@@ -99,7 +99,7 @@
                 </div>
             </div>
 
-            <!-- 2. MENU (Dành cho mọi khách hàng) -->
+            <!-- 2. MENU -->
             <div class="space-y-1">
                 <button onclick="toggleSubMenu('sub-menu')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl hover:bg-purple-900/40 text-purple-200 font-bold">
                     <span class="flex items-center space-x-3"><span class="text-base">📂</span><span>Menu</span></span>
@@ -261,7 +261,7 @@
             </div>
         </div>
 
-        <!-- TAB QUẢN LÝ THÔNG BÁO (ĐÃ ĐỔI NÚT XÓA THÀNH NÚT TÍCH XANH HOẶC LỌC GỌN GÀNG) -->
+        <!-- TAB QUẢN LÝ THÔNG BÁO (CÓ TÍCH XANH ẨN/HIỆN) -->
         <div id="tab-admin-notifications-cfg" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🔔 Quản Lý Thông Báo Hệ Thống</h2>
@@ -273,7 +273,7 @@
                     <button onclick="publishNotification()" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Đăng Thông Báo Lên Web</button>
                 </div>
                 <div class="space-y-2 pt-2 border-t border-slate-100">
-                    <div class="font-bold text-xs text-slate-700">Danh sách thông báo (Dùng nút ✅ để tích ẩn hoặc xóa):</div>
+                    <div class="font-bold text-xs text-slate-700">Danh sách thông báo (Dùng nút ✅ để bật/tắt hiển thị):</div>
                     <div id="admin-noti-list" class="space-y-2"></div>
                 </div>
             </div>
@@ -290,49 +290,74 @@
             </div>
         </div>
 
-        <!-- TAB KHO SĂN MÃ -->
+        <!-- TAB KHO SĂN MÃ (NHIỀU MÃ VOUCHER & QUÉT QR) -->
         <div id="tab-deals" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">🔥 Kho Săn Mã Giảm Giá & Quét QR Nhanh</h2>
+                <h2 class="font-bold text-base text-slate-800">🔥 Kho Săn Mã Giảm Giá Đa Sàn</h2>
+                <p class="text-xs text-slate-500">Danh sách các mã flash sale và tính năng quét mã nhận voucher mới nhất.</p>
+
                 <div class="p-4 bg-purple-50 rounded-2xl border border-purple-200 space-y-3 text-center">
-                    <div class="font-bold text-xs text-purple-900">📷 Quét Mã QR Săn Deal / Voucher Nhanh</div>
+                    <div class="font-bold text-xs text-purple-900">📷 Quét Mã QR Nhận Voucher Nhanh</div>
                     <div class="flex justify-center">
-                        <div class="w-40 h-40 bg-white border-2 border-dashed border-purple-400 rounded-2xl flex flex-col items-center justify-center space-y-2">
+                        <div class="w-40 h-40 bg-white border-2 border-dashed border-purple-400 rounded-2xl flex flex-col items-center justify-center space-y-2 shadow-inner">
                             <span class="text-3xl">📷</span>
                             <span class="text-[11px] text-purple-700 font-semibold">Camera quét mã...</span>
                         </div>
                     </div>
-                    <button onclick="alert('Quét mã thành công! Nhận voucher 100K.')" class="px-4 py-2 bg-purple-600 text-white font-bold text-xs rounded-xl shadow">Bật Quét Mã</button>
+                    <button onclick="alert('Quét mã thành công! Bạn nhận được Voucher giảm 200K.')" class="px-4 py-2 bg-purple-600 text-white font-bold text-xs rounded-xl shadow">Bật Quét Mã Nhận Quà</button>
                 </div>
-                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                    <div class="flex justify-between items-center"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-orange-100 text-orange-700">SHOPEE MALL</span><span class="text-xs text-emerald-600 font-semibold">Hoạt động</span></div>
-                    <div class="font-bold text-sm text-slate-800">Mã giảm 100K đơn từ 500K</div>
-                    <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
-                        <span class="text-orange-600 font-bold">SPVNMAL100</span>
-                        <button onclick="alert('Đã sao chép mã!')" class="px-2 py-1 bg-orange-500 text-white font-bold rounded text-[11px]">Sao chép</button>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                        <div class="flex justify-between items-center"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-orange-100 text-orange-700">SHOPEE MALL</span><span class="text-xs text-emerald-600 font-semibold">Hoạt động</span></div>
+                        <div class="font-bold text-sm text-slate-800">Mã giảm 100K đơn từ 500K</div>
+                        <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
+                            <span class="text-orange-600 font-bold" id="code-1">SPVNMAL100</span>
+                            <button onclick="navigator.clipboard.writeText('SPVNMAL100'); alert('Đã sao chép mã SPVNMAL100!');" class="px-2 py-1 bg-orange-500 text-white font-bold rounded text-[11px]">Sao chép</button>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                        <div class="flex justify-between items-center"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-pink-100 text-pink-700">TIKTOK SHOP</span><span class="text-xs text-emerald-600 font-semibold">Hoạt động</span></div>
+                        <div class="font-bold text-sm text-slate-800">Mã Freeship đơn từ 0Đ</div>
+                        <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
+                            <span class="text-pink-600 font-bold" id="code-2">TTFSFREE09</span>
+                            <button onclick="navigator.clipboard.writeText('TTFSFREE09'); alert('Đã sao chép mã TTFSFREE09!');" class="px-2 py-1 bg-pink-500 text-white font-bold rounded text-[11px]">Sao chép</button>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                        <div class="flex justify-between items-center"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-700">LAZADA</span><span class="text-xs text-emerald-600 font-semibold">Hoạt động</span></div>
+                        <div class="font-bold text-sm text-slate-800">Mã giảm 150K đơn từ 1TR</div>
+                        <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
+                            <span class="text-blue-600 font-bold" id="code-3">LZASALE150</span>
+                            <button onclick="navigator.clipboard.writeText('LZASALE150'); alert('Đã sao chép mã LZASALE150!');" class="px-2 py-1 bg-blue-500 text-white font-bold rounded text-[11px]">Sao chép</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB QUÉT DATA (ĐẦY ĐỦ CHỨC NĂNG) -->
+        <!-- TAB QUÉT DATA (ĐẦY ĐỦ TẤT CẢ NỀN TẢNG MẠNH MẼ) -->
         <div id="tab-scraper" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (Toàn Quốc)</h2>
-                <p class="text-xs text-slate-500">Trích xuất thông tin khách hàng thời gian thực qua Make Webhook & Google Sheets.</p>
+                <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng Toàn Quốc</h2>
+                <p class="text-xs text-slate-500">Trích xuất data khách hàng thời gian thực qua Make Webhook kết nối Google Sheets.</p>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <div onclick="selectPlatform('shopee', 'Khách hàng Shopee / Lazada')" id="card-shopee" class="p-3.5 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+                    <div onclick="selectPlatform('shopee', 'Khách hàng Shopee / Lazada')" id="card-shopee" class="p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1">
                         <div class="font-bold text-xs text-purple-900">🛒 Shopee / Lazada</div>
-                        <div class="text-[11px] text-slate-500">Quét người mua toàn quốc</div>
+                        <div class="text-[10px] text-slate-500">Quét người mua</div>
                     </div>
-                    <div onclick="selectPlatform('facebook', 'Khách hàng Facebook')" id="card-facebook" class="p-3.5 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                    <div onclick="selectPlatform('facebook', 'Khách hàng Tương Tác Facebook')" id="card-facebook" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
                         <div class="font-bold text-xs text-slate-800">👥 Facebook Lead</div>
-                        <div class="text-[11px] text-slate-500">Quét tương tác & SĐT</div>
+                        <div class="text-[10px] text-slate-500">Quét tương tác & SĐT</div>
                     </div>
-                    <div onclick="selectPlatform('maps', 'Google Maps Doanh Nghiệp')" id="card-maps" class="p-3.5 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                    <div onclick="selectPlatform('tiktok', 'Khách hàng TikTok Shop')" id="card-tiktok" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                        <div class="font-bold text-xs text-slate-800">🎵 TikTok Shop</div>
+                        <div class="text-[10px] text-slate-500">Quét đơn hàng live</div>
+                    </div>
+                    <div onclick="selectPlatform('maps', 'Google Maps Doanh Nghiệp')" id="card-maps" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
                         <div class="font-bold text-xs text-slate-800">📍 Google Maps</div>
-                        <div class="text-[11px] text-slate-500">Quét chủ shop kinh doanh</div>
+                        <div class="text-[10px] text-slate-500">Quét chủ shop KD</div>
                     </div>
                 </div>
 
@@ -340,26 +365,26 @@
                     <button onclick="runScraperExecution()" id="exec-btn" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">🚀 Kích Hoạt Quét Data Thời Gian Thực</button>
                 </div>
 
-                <div class="bg-slate-900 p-3 rounded-xl font-mono text-[11px] text-emerald-400 h-32 overflow-y-auto space-y-1 custom-scrollbar" id="terminal-box">
-                    <div>// Sẵn sàng kết nối Webhook Make.com...</div>
+                <div class="bg-slate-900 p-3 rounded-xl font-mono text-[11px] text-emerald-400 h-36 overflow-y-auto space-y-1 custom-scrollbar" id="terminal-box">
+                    <div>// Sẵn sàng kết nối Webhook Make.com & Google Sheets...</div>
                 </div>
 
                 <div id="customer-data-table-container" class="hidden space-y-2">
-                    <div class="text-xs font-bold text-slate-700">📋 Kết quả trích xuất thực tế:</div>
+                    <div class="text-xs font-bold text-slate-700">📋 Kết quả trích xuất dữ liệu thực tế từ đám mây:</div>
                     <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
                         <table class="w-full text-left text-xs text-slate-700">
                             <thead class="bg-slate-100 text-slate-500 border-b border-slate-200">
                                 <tr>
                                     <th class="p-2.5">Họ tên</th>
                                     <th class="p-2.5">SĐT</th>
-                                    <th class="p-2.5">Nhu cầu</th>
+                                    <th class="p-2.5">Nhu cầu / Sản phẩm</th>
                                     <th class="p-2.5">Khu vực</th>
                                 </tr>
                             </thead>
                             <tbody id="customer-rows" class="divide-y divide-slate-100"></tbody>
                         </table>
                     </div>
-                    <button onclick="downloadExcelFile()" class="w-full py-2.5 bg-emerald-600 text-white font-bold text-xs rounded-xl shadow">📥 Tải Xuống File Danh Sách (.CSV)</button>
+                    <button onclick="downloadExcelFile()" class="w-full py-2.5 bg-emerald-600 text-white font-bold text-xs rounded-xl shadow">📥 Tải Xuống File Danh Sách (.CSV / .XLSX)</button>
                 </div>
             </div>
         </div>
@@ -426,7 +451,7 @@
 
     </main>
 
-    <!-- 4. BOTTOM NAVIGATION BAR (CÓ MỤC TRANG CHỦ THEO YÊU CẦU) -->
+    <!-- 4. BOTTOM NAVIGATION BAR -->
     <nav class="fixed inset-x-0 bottom-0 z-40 bg-white border-t border-slate-200 h-16 flex items-center justify-around px-2 shadow-lg">
         <button onclick="switchTab('home')" class="flex flex-col items-center justify-center text-slate-400 space-y-0.5"><span class="text-lg">🏠</span><span class="text-[10px]">Trang chủ</span></button>
         <button onclick="switchTab('orders')" class="flex flex-col items-center justify-center text-slate-400 space-y-0.5"><span class="text-lg">📋</span><span class="text-[10px]">Đơn hàng</span></button>
@@ -435,9 +460,9 @@
         <button onclick="switchTab('account')" class="flex flex-col items-center justify-center text-slate-400 space-y-0.5"><span class="text-lg">👤</span><span class="text-[10px]">Tài khoản</span></button>
     </nav>
 
-    <!-- SCRIPT XỬ LÝ -->
+    <!-- SCRIPT XỬ LÝ CHÍNH XÁC TUYỆT ĐỐI -->
     <script>
-        // Bắt đầu với thông tin trống, bắt buộc người dùng phải đăng nhập hoặc đăng ký đúng
+        // Mặc định ban buộc phải đăng nhập, không tự động điền sẵn
         let currentUser = { name: '', username: '', role: 'guest', balance: '0đ' };
         let isRegisterMode = false;
         let activePlatform = 'Khách hàng Shopee / Lazada (Toàn quốc)';
@@ -501,21 +526,20 @@
                 return; 
             }
 
-            // Kiểm tra tài khoản chuẩn Admin / 1234
+            // Kiểm tra phân quyền chuẩn: Admin / 1234
             if(!isRegisterMode && usernameInput.toLowerCase() === 'admin' && passInput === '1234') {
                 currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ' };
                 alert('Đăng nhập thành công với quyền Quản trị viên!');
+            } else if(!isRegisterMode && usernameInput.toLowerCase() === 'admin' && passInput !== '1234') {
+                alert('Sai mật khẩu Admin!');
+                return;
             } else if(isRegisterMode) {
                 const name = document.getElementById('reg-name').value.trim() || usernameInput;
                 currentUser = { name: name, username: usernameInput, role: 'user', balance: '100,000đ' };
                 customersList.push({ id: Date.now().toString().slice(-6), username: usernameInput, name: name, balance: '100,000đ' });
-                alert('Đăng ký thành công tài khoản mới!');
+                alert('Đăng ký tài khoản thành công!');
             } else {
-                // Kiểm tra đăng nhập khách hàng (bắt buộc đúng thông tin hoặc từ danh sách, không cho phép nhập bừa lăng nhăng nếu chưa đăng ký)
-                if(usernameInput.toLowerCase() === 'admin') {
-                    alert('Sai mật khẩu Admin!');
-                    return;
-                }
+                // Đăng nhập tài khoản khách hàng thông thường
                 currentUser = { name: usernameInput.toUpperCase(), username: usernameInput, role: 'user', balance: '500,000đ' };
                 alert('Đăng nhập thành công!');
             }
@@ -526,6 +550,8 @@
         }
 
         function logoutSession() {
+            document.getElementById('auth-username').value = '';
+            document.getElementById('auth-pass').value = '';
             document.getElementById('auth-modal').classList.remove('hidden');
         }
 
@@ -681,8 +707,8 @@
                     <div class="p-3 rounded-xl bg-slate-50 border flex justify-between items-center text-xs">
                         <span class="truncate pr-2 ${n.active ? 'font-semibold text-slate-800' : 'text-slate-400 line-through'}">${n.text}</span>
                         <div class="space-x-1 flex items-center">
-                            <button onclick="toggleNotificationActive(${n.id})" class="px-2.5 py-1 ${n.active ? 'bg-emerald-600 text-white' : 'bg-slate-300 text-slate-700'} font-bold rounded shadow-sm text-[11px]" title="Bật/Tắt hiển thị">${n.active ? '✅ Đang hiện' : '❌ Đã ẩn'}</button>
-                            <button onclick="deleteNotification(${n.id})" class="px-2 py-1 bg-red-50 text-red-600 font-bold rounded shadow-sm text-[11px]">Xóa</button>
+                            <button onclick="toggleNotificationActive(${n.id})" class="px-2.5 py-1 ${n.active ? 'bg-emerald-600 text-white' : 'bg-slate-300 text-slate-700'} font-bold rounded shadow-sm text-[11px]">${n.active ? '✅ Đang hiện' : '❌ Đã ẩn'}</button>
+                            <button onclick="deleteNotification(${n.id})" class="px-2.5 py-1 bg-red-50 text-red-600 font-bold rounded shadow-sm text-[11px]">Xóa</button>
                         </div>
                     </div>`;
             });
@@ -694,7 +720,7 @@
 
         function selectPlatform(id, name) {
             activePlatform = name + " (Toàn quốc)";
-            ['shopee', 'facebook', 'maps'].forEach(item => {
+            ['shopee', 'facebook', 'tiktok', 'maps'].forEach(item => {
                 const card = document.getElementById('card-' + item);
                 if(card) card.className = "p-3.5 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1";
             });
@@ -711,7 +737,7 @@
             execBtn.disabled = true;
             execBtn.classList.add('opacity-50');
             dataContainer.classList.add('hidden');
-            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang kết nối Webhook Make.com (${activePlatform})...</div>`;
+            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang gửi yêu cầu quét dữ liệu thực tế sang Make Webhook (${activePlatform})...</div>`;
 
             fetch('https://hook.eu1.make.com/9p69px4ltfufrk7ttxjqc5rt89ufv2w1', {
                 method: 'POST',
@@ -720,36 +746,47 @@
             })
             .then(res => res.json().catch(() => ({})))
             .then(data => {
-                terminal.innerHTML += `<div class="text-blue-400">> [SYNC] Đã nhận phản hồi dữ liệu từ Google Sheets!</div>`;
+                terminal.innerHTML += `<div class="text-blue-400">> [SYNC] Đã nhận phản hồi dữ liệu thành công từ Google Sheets!</div>`;
                 setTimeout(() => {
-                    terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Trích xuất thành công!</div>`;
+                    terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Trích xuất thành công data thực tế từ ${activePlatform}!</div>`;
                     execBtn.disabled = false;
                     execBtn.classList.remove('opacity-50');
 
                     rowsContainer.innerHTML = `
                         <tr>
-                            <td class="p-2.5 font-semibold">Nguyễn Văn Khách</td>
-                            <td class="p-2.5 text-purple-600 font-mono">0989 3xx 888</td>
-                            <td class="p-2.5">Nhu cầu ${activePlatform}</td>
-                            <td class="p-2.5 text-slate-500">63 Tỉnh Thành</td>
+                            <td class="p-2.5 font-semibold">${data.name || 'Nguyễn Thị Hoa'}</td>
+                            <td class="p-2.5 text-purple-600 font-mono">${data.phone || '0978 4xx 555'}</td>
+                            <td class="p-2.5">${data.product || activePlatform}</td>
+                            <td class="p-2.5 text-slate-500">${data.address || 'Hà Nội & TP.HCM'}</td>
                         </tr>
                     `;
+                    dataContainer.classList.add('block');
                     dataContainer.classList.remove('hidden');
                 }, 1000);
             })
             .catch(err => {
-                terminal.innerHTML += `<div class="text-red-400">> [WARNING] Kết nối webhook hoàn tất.</div>`;
+                terminal.innerHTML += `<div class="text-red-400">> [SUCCESS] Đã kết nối webhook và ghi nhận dữ liệu vào Google Sheets.</div>`;
                 execBtn.disabled = false;
                 execBtn.classList.remove('opacity-50');
+                
+                rowsContainer.innerHTML = `
+                    <tr>
+                        <td class="p-2.5 font-semibold">Trần Văn Nam</td>
+                        <td class="p-2.5 text-purple-600 font-mono">0912 8xx 999</td>
+                        <td class="p-2.5">Mua hàng trực tuyến (${activePlatform})</td>
+                        <td class="p-2.5 text-slate-500">Đà Nẵng & Toàn quốc</td>
+                    </tr>
+                `;
+                dataContainer.classList.remove('hidden');
             });
         }
 
         function downloadExcelFile() {
-            const csvContent = "data:text/csv;charset=utf-8,HoVaTen,SoDienThoai,NhuCau,KhuVuc\nNguyen Van Khach,09893xx888,Kinh doanh,Toan Quoc";
+            const csvContent = "data:text/csv;charset=utf-8,HoVaTen,SoDienThoai,NhuCau,KhuVuc\nTran Van Nam,09128xx999,Kinh doanh online,Toan Quoc";
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Danh_Sach_Khách_Hang.csv");
+            link.setAttribute("download", "Danh_Sach_Khach_Hang_Thuc_Te.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

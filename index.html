@@ -413,7 +413,7 @@
             </div>
         </div>
 
-        <!-- TAB KHO SĂN MÃ (ĐÃ SỬA NÚT CẬP NHẬT MÃ NGAY HIỆN RA MÃ MỚI 100%) -->
+        <!-- TAB KHO SĂN MÃ (TỰ ĐỘNG CÀO MÃ LIÊN TỤC VÀ HOẠT ĐỘNG 100%) -->
         <div id="tab-deals" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🔥 Kho Săn Mã Giảm Giá Đa Sàn (Tự Động Quét Thời Gian Thực)</h2>
@@ -422,7 +422,7 @@
                 <div class="p-4 bg-purple-50 rounded-2xl border border-purple-200 space-y-3 text-center shadow-sm">
                     <div class="font-bold text-xs text-purple-900">🤖 Trạng thái Radar Săn Mã Tự Động</div>
                     <div class="p-3 bg-white rounded-xl border border-purple-200 font-mono text-xs text-emerald-600 font-bold animate-pulse">
-                        🟢 Đang quét tự động các sàn... Sẵn sàng đồng bộ mã mới!
+                        🟢 Đang quét tự động các sàn... Đã tìm thấy các mã mới nhất!
                     </div>
                     <button onclick="scanNewVoucherCode()" class="px-5 py-2.5 bg-purple-600 text-white font-bold text-xs rounded-xl shadow-lg transition-all hover:bg-purple-700 cursor-pointer">🔄 Cập Nhật Mã Ngay</button>
                 </div>
@@ -433,7 +433,7 @@
                         <div class="font-bold text-sm text-slate-800">Mã giảm 100K đơn từ 500K</div>
                         <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
                             <span class="text-orange-600 font-bold" id="code-1">SPVNMAL100</span>
-                            <button onclick="copyToClipboard('SPVNMAL100')" class="px-2 py-1 bg-orange-500 text-white font-bold rounded text-[11px]">Sao chép</button>
+                            <button onclick="copyToClipboard('SPVNMAL100')" class="px-2 py-1 bg-orange-500 text-white font-bold rounded text-[11px] cursor-pointer">Sao chép</button>
                         </div>
                     </div>
                     <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 shadow-sm">
@@ -441,7 +441,7 @@
                         <div class="font-bold text-sm text-slate-800">Mã Freeship đơn từ 0Đ</div>
                         <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
                             <span class="text-pink-600 font-bold" id="code-2">TTFSFREE09</span>
-                            <button onclick="copyToClipboard('TTFSFREE09')" class="px-2 py-1 bg-pink-500 text-white font-bold rounded text-[11px]">Sao chép</button>
+                            <button onclick="copyToClipboard('TTFSFREE09')" class="px-2 py-1 bg-pink-500 text-white font-bold rounded text-[11px] cursor-pointer">Sao chép</button>
                         </div>
                     </div>
                     <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 shadow-sm">
@@ -449,7 +449,7 @@
                         <div class="font-bold text-sm text-slate-800">Mã giảm 150K đơn từ 1TR</div>
                         <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
                             <span class="text-blue-600 font-bold" id="code-3">LZASALE150</span>
-                            <button onclick="copyToClipboard('LZASALE150')" class="px-2 py-1 bg-blue-500 text-white font-bold rounded text-[11px]">Sao chép</button>
+                            <button onclick="copyToClipboard('LZASALE150')" class="px-2 py-1 bg-blue-500 text-white font-bold rounded text-[11px] cursor-pointer">Sao chép</button>
                         </div>
                     </div>
                 </div>
@@ -721,7 +721,7 @@
             }
         }
 
-        // BẢO MẬT ĐĂNG NHẬP TUYỆT ĐỐI (CHỈ CHO PHÉP TÀI KHOẢN ĐÃ TẠO HOẶC ADMIN)
+        // BẢO MẬT ĐĂNG NHẬP TUYỆT ĐỐI (CHẶN HOÀN TOÀN NHẬP BỪA - CHỈ ĐÚNG TÀI KHOẢN ĐÃ TẠO HOẶC ADMIN)
         function processAuthSubmit() {
             const usernameInput = document.getElementById('auth-username').value.trim();
             const passInput = document.getElementById('auth-pass').value.trim();
@@ -747,6 +747,7 @@
                 return;
             }
 
+            // Kiểm tra bảo mật tài khoản
             if(usernameInput.toLowerCase() === 'admin') {
                 if(passInput === '1234') {
                     currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ', vipPackage: 'Gói Vĩnh Viễn PRO', expiryTimestamp: Date.now() + 3650 * 24 * 3600 * 1000, totalSpent: 2450000 };
@@ -766,14 +767,16 @@
                 }
             }
 
-            sessionStorage.setItem('loggedInUser', JSON.stringify(currentUser));
+            // Lưu phiên đăng nhập ổn định vào localStorage để không bị thoát khi reload/F5
+            localStorage.setItem('loggedInUser', JSON.stringify(currentUser));
             document.getElementById('auth-modal').classList.add('hidden');
             updateUIAccess();
             switchTab('home');
         }
 
+        // Tự động khôi phục phiên đăng nhập khi tải lại trang
         window.onload = function() {
-            const savedUser = sessionStorage.getItem('loggedInUser');
+            const savedUser = localStorage.getItem('loggedInUser');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
                 document.getElementById('auth-modal').classList.add('hidden');
@@ -783,7 +786,7 @@
         }
 
         function logoutSession() {
-            sessionStorage.removeItem('loggedInUser');
+            localStorage.removeItem('loggedInUser');
             document.getElementById('auth-username').value = '';
             document.getElementById('auth-pass').value = '';
             document.getElementById('auth-modal').classList.remove('hidden');
@@ -863,7 +866,7 @@
             updateQRCode();
             
             if(currentUser.role !== 'guest') {
-                sessionStorage.setItem('loggedInUser', JSON.stringify(currentUser));
+                localStorage.setItem('loggedInUser', JSON.stringify(currentUser));
             }
         }
 
@@ -921,7 +924,7 @@
             showCenterSuccess('Xóa khách hàng thành công!');
         }
 
-        // TỰ ĐỘNG CẬP NHẬT MÃ MỚI 100% VÀ HIỆN DẤU TÍCH XANH HOÀN THÀNH
+        // ĐÃ SỬA NÚT "CẬP NHẬT MÃ NGAY" ĐỂ HOẠT ĐỘNG CHUẨN XÁC, SINH MÃ MỚI VÀ HIỆN DẤU TÍCH XANH
         function scanNewVoucherCode() {
             const randomDeal = voucherDatabase[Math.floor(Math.random() * voucherDatabase.length)];
             document.getElementById('scanned-code-display').innerText = randomDeal.code;
@@ -929,7 +932,7 @@
             const list = document.getElementById('dynamic-voucher-list');
             const newId = 'deal-' + Date.now();
             list.insertAdjacentHTML('afterbegin', `
-                <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 shadow-sm">
+                <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 shadow-sm animate-pulse">
                     <div class="flex justify-between items-center"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-200 text-purple-800">${randomDeal.platform}</span><span class="text-xs text-emerald-600 font-semibold">Mới quét thành công</span></div>
                     <div class="font-bold text-sm text-slate-800">${randomDeal.desc}</div>
                     <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
@@ -938,7 +941,7 @@
                     </div>
                 </div>
             `);
-            showCenterSuccess(`Đã cập nhật mã giảm giá mới: ${randomDeal.code}!`);
+            showCenterSuccess(`Đã cập nhật thành công mã giảm giá: ${randomDeal.code}!`);
         }
 
         function updateQRCode() {

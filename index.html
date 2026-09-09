@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoPostAI - Hệ Thống Quản Trị & Cào Data</title>
+    <title>AutoPostAI - Hệ Thống Dịch Vụ & Cào Data Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -14,59 +14,94 @@
 </head>
 <body class="min-h-screen flex flex-col pb-20 lg:pb-0">
 
-    <!-- 1. SIDEBAR MENU CHUẨN ADMIN PRO -->
+    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
+    <div id="auth-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-[#2d1b4e] border border-purple-900 p-8 rounded-3xl shadow-2xl space-y-6 text-slate-100">
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500 to-purple-500 mx-auto flex items-center justify-center font-bold text-xl text-white">⚡</div>
+                <h2 id="auth-title" class="text-2xl font-extrabold">Đăng Nhập Hệ Thống</h2>
+                <p class="text-xs text-purple-300">Nền tảng quản lý dịch vụ & cào data tự động</p>
+            </div>
+
+            <div class="space-y-4">
+                <div id="register-name-box" class="space-y-1 hidden">
+                    <label class="text-xs font-semibold text-purple-200">Họ và tên</label>
+                    <input type="text" id="reg-name" placeholder="Đinh Hoàng Việt Anh" class="w-full px-4 py-3 bg-[#1e1136] border border-purple-900 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-purple-200">Tài khoản / Email</label>
+                    <input type="text" id="auth-username" placeholder="Nhập email hoặc username..." class="w-full px-4 py-3 bg-[#1e1136] border border-purple-900 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-purple-200">Mật khẩu</label>
+                    <input type="password" id="auth-pass" placeholder="••••••••" class="w-full px-4 py-3 bg-[#1e1136] border border-purple-900 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500">
+                </div>
+
+                <button onclick="processAuthSubmit()" id="auth-btn-submit" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 font-bold rounded-xl text-sm shadow-lg text-white transition-all">Đăng Nhập Ngay</button>
+
+                <div class="text-center pt-2">
+                    <button onclick="toggleAuthMode()" id="auth-switch-text" class="text-xs text-purple-300 hover:text-white underline font-semibold">Chưa có tài khoản? Đăng ký ngay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. SIDEBAR MENU CHUẨN XỔ XOỆ THEO YÊU CẦU -->
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-[#2d1b4e] text-slate-100 flex flex-col transition-transform duration-300 -translate-x-full shadow-2xl">
         <div class="h-16 flex items-center justify-between px-6 border-b border-purple-900/50">
             <div class="flex items-center space-x-3">
                 <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center font-bold text-white">⚡</div>
-                <span class="font-extrabold text-base tracking-wide text-white">LIKE17.SITE (ADMIN)</span>
+                <span class="font-extrabold text-base tracking-wide text-white">LIKE17.SITE</span>
             </div>
             <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
         </div>
 
-        <div class="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto custom-scrollbar text-xs font-medium">
+        <div class="flex-1 px-3 py-4 space-y-2 overflow-y-auto custom-scrollbar text-xs font-medium">
             
-            <!-- QUẢN TRỊ VIÊN CHUYÊN SÂU -->
-            <div class="px-3 py-1 text-[10px] uppercase font-extrabold text-purple-400 tracking-wider">Quản Trị Viên (Admin Panel)</div>
-            <a href="#" onclick="switchTab('admin-users'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
-                <span class="text-base">👥</span><span>Quản lý thông tin khách hàng</span>
-            </a>
-            <a href="#" onclick="switchTab('admin-services'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
-                <span class="text-base">🛠️</span><span>Thêm & Cài đặt dịch vụ</span>
-            </a>
-            <a href="#" onclick="switchTab('admin-pricing'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
-                <span class="text-base">💰</span><span>Cài đặt giá hệ thống</span>
-            </a>
-            <a href="#" onclick="switchTab('admin-deposit-cfg'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
-                <span class="text-base">💳</span><span>Cài đặt nạp tiền & Bank</span>
-            </a>
-            <a href="#" onclick="switchTab('admin-support-cfg'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
-                <span class="text-base">🎧</span><span>Cài đặt liên kết hỗ trợ</span>
-            </a>
-            <a href="#" onclick="switchTab('admin-notifications-cfg'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
-                <span class="text-base">🔔</span><span>Quản lý & Gửi thông báo</span>
-            </a>
-            <a href="#" onclick="switchTab('admin-telegram'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
-                <span class="text-base">🤖</span><span>Tích hợp Bot Telegram</span>
-            </a>
+            <!-- 1. HỆ THỐNG ADMIN (Chỉ Admin mới thấy) -->
+            <div id="menu-group-admin" class="space-y-1 hidden">
+                <button onclick="toggleSubMenu('sub-admin')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl bg-purple-900/60 text-purple-200 font-bold hover:bg-purple-900">
+                    <span class="flex items-center space-x-3"><span class="text-base">🛡️</span><span>Hệ thống Admin</span></span>
+                    <span id="arrow-sub-admin">▼</span>
+                </button>
+                <div id="sub-admin" class="pl-6 space-y-1 pt-1 hidden">
+                    <a href="#" onclick="switchTab('admin-users'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">👥 Quản lý khách hàng</a>
+                    <a href="#" onclick="switchTab('admin-pricing'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">💰 Cài đặt giá dịch vụ</a>
+                    <a href="#" onclick="switchTab('admin-deposit-cfg'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">💳 Cài đặt nạp tiền & QR</a>
+                    <a href="#" onclick="switchTab('admin-support-cfg'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🎧 Cài đặt liên kết hỗ trợ</a>
+                    <a href="#" onclick="switchTab('admin-notifications-cfg'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🔔 Quản lý thông báo</a>
+                    <a href="#" onclick="switchTab('admin-telegram'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🤖 Tích hợp Bot Telegram</a>
+                </div>
+            </div>
 
-            <!-- MENU CHÍNH -->
-            <div class="pt-3 px-3 py-1 text-[10px] uppercase font-extrabold text-purple-400 tracking-wider">Menu Khách Hàng</div>
-            <a href="#" onclick="switchTab('home'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
-                <span class="text-base">🏠</span><span>Trang chủ</span>
-            </a>
-            <a href="#" onclick="switchTab('orders'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
-                <span class="text-base">📋</span><span>Quản lý đơn hàng</span>
-            </a>
-            <a href="#" onclick="switchTab('deposit'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
-                <span class="text-base">💳</span><span>Nạp tiền</span>
-            </a>
-            <a href="#" onclick="switchTab('scraper'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-purple-700/60 text-white font-bold transition-all shadow border border-purple-500/40">
-                <span class="text-base">🤖</span><span>Hệ thống quét data</span>
-            </a>
-            <a href="#" onclick="switchTab('support'); toggleSidebar();" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-purple-900/40 text-purple-200 transition-all">
-                <span class="text-base">🎧</span><span>Hỗ trợ khách hàng</span>
-            </a>
+            <!-- 2. MENU -->
+            <div class="space-y-1">
+                <button onclick="toggleSubMenu('sub-menu')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl hover:bg-purple-900/40 text-purple-200 font-bold">
+                    <span class="flex items-center space-x-3"><span class="text-base">📂</span><span>Menu</span></span>
+                    <span id="arrow-sub-menu">▼</span>
+                </button>
+                <div id="sub-menu" class="pl-6 space-y-1 pt-1 hidden">
+                    <a href="#" onclick="switchTab('home'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🏠 Trang chủ</a>
+                    <a href="#" onclick="switchTab('orders'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">📋 Quản lý đơn hàng</a>
+                    <a href="#" onclick="switchTab('account'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">👤 Tài khoản của tôi</a>
+                    <a href="#" onclick="switchTab('deposit'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">💳 Nạp tiền & Mã QR</a>
+                    <a href="#" onclick="switchTab('support'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🎧 Hỗ trợ trực tuyến</a>
+                    <a href="#" onclick="switchTab('notifications'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🔔 Thông báo hệ thống</a>
+                </div>
+            </div>
+
+            <!-- 3. DỊCH VỤ -->
+            <div class="space-y-1">
+                <button onclick="toggleSubMenu('sub-service')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl hover:bg-purple-900/40 text-purple-200 font-bold">
+                    <span class="flex items-center space-x-3"><span class="text-base">🚀</span><span>Dịch vụ</span></span>
+                    <span id="arrow-sub-service">▼</span>
+                </button>
+                <div id="sub-service" class="pl-6 space-y-1 pt-1 hidden">
+                    <a href="#" onclick="switchTab('deals'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🔥 Kho Săn Mã Giảm Giá</a>
+                    <a href="#" onclick="switchTab('scraper'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🤖 Hệ Thống Quét Data</a>
+                </div>
+            </div>
+
         </div>
     </aside>
 
@@ -88,42 +123,72 @@
         </div>
     </header>
 
-    <!-- USER DROPDOWN POPUP -->
+    <!-- USER DROPDOWN -->
     <div id="user-dropdown" class="absolute top-16 right-4 z-50 w-64 bg-white border border-slate-200 rounded-2xl shadow-2xl p-4 hidden space-y-3">
         <div class="border-b border-slate-100 pb-2">
-            <div class="font-bold text-slate-800 text-sm">Username: <span class="text-purple-600">anhviet11</span></div>
-            <div class="text-xs text-slate-500 mt-0.5">Số dư: <strong class="text-emerald-600">50,100,000đ</strong></div>
+            <div class="font-bold text-slate-800 text-sm">Tài khoản: <span id="drop-username" class="text-purple-600">anhviet11</span></div>
+            <div class="text-xs text-slate-500 mt-0.5">Số dư: <strong class="text-emerald-600" id="drop-balance">50,100,000đ</strong></div>
         </div>
         <div class="space-y-1 text-xs font-semibold">
             <button onclick="switchTab('account'); toggleUserDropdown();" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 flex items-center space-x-2 text-slate-700"><span>👤</span><span>Tài khoản của tôi</span></button>
-            <button onclick="switchTab('admin-users'); toggleUserDropdown();" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 flex items-center space-x-2 text-purple-700 font-bold"><span>🛡️</span><span>Quản trị viên (Admin)</span></button>
-        </div>
-        <div class="border-t border-slate-100 pt-2">
-            <button onclick="alert('Đã đăng xuất thành công!'); location.reload();" class="w-full py-2 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs rounded-xl flex items-center justify-center space-x-1"><span>🚪</span><span>Đăng xuất</span></button>
+            <button onclick="logoutSession();" class="w-full text-left px-3 py-2 rounded-lg hover:bg-red-50 flex items-center space-x-2 text-red-600 font-bold"><span>🚪</span><span>Đăng xuất</span></button>
         </div>
     </div>
 
     <!-- 3. MAIN CONTENT -->
     <main class="flex-1 p-4 max-w-4xl mx-auto w-full space-y-4">
         
-        <!-- TAB TRANG CHỦ -->
+        <!-- TAB TRANG CHỦ (HIỂN THỊ ĐỦ BẢNG THÔNG TIN & THÔNG BÁO) -->
         <div id="tab-home" class="space-y-4">
+            <!-- BẢNG THÔNG TIN KHÁCH HÀNG THEO YÊU CẦU -->
+            <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <h2 class="font-extrabold text-base text-slate-800">📊 Tổng Quan Tài Khoản</h2>
+                    <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-bold" id="home-badge-role">Thành viên VIP</span>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
+                        <div class="text-slate-400">Họ tên khách hàng</div>
+                        <div class="font-bold text-slate-800 text-sm truncate" id="home-val-name">Đinh Hoàng Việt Anh</div>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
+                        <div class="text-slate-400">Ngày tham gia</div>
+                        <div class="font-bold text-slate-800 text-sm">01/01/2026</div>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
+                        <div class="text-slate-400">Gói dịch vụ</div>
+                        <div class="font-bold text-purple-600 text-sm">Gói Vĩnh Viễn PRO</div>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
+                        <div class="text-slate-400">Số dư hiện tại</div>
+                        <div class="font-bold text-emerald-600 text-sm" id="home-val-balance">50,100,000đ</div>
+                    </div>
+                </div>
+                <div class="p-4 bg-gradient-to-r from-purple-900 to-indigo-900 text-white rounded-2xl flex justify-between items-center shadow">
+                    <div>
+                        <div class="text-xs text-purple-200">Tổng kết chi tiêu hệ thống</div>
+                        <div class="text-xl font-extrabold">2,450,000đ</div>
+                    </div>
+                    <button onclick="switchTab('deposit')" class="px-4 py-2 bg-white text-purple-900 font-bold text-xs rounded-xl shadow">Nạp Thêm Tiền</button>
+                </div>
+            </div>
+
+            <!-- BẢNG THÔNG BÁO HỆ THỐNG -->
             <div class="space-y-3" id="home-notifications-list">
                 <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2 border-l-4 border-l-purple-600">
                     <div class="flex items-center justify-between text-xs text-slate-400">
                         <span>like17.site</span>
-                        <span>2026-08-09 15:28:36 📌</span>
+                        <span>2026-09-09 📌</span>
                     </div>
-                    <p class="text-xs font-semibold text-slate-800">TIK TOK HIỆN ĐANG QUÉT CÓ THỂ LÊN CHẬM HOẶC TỤT - MUA TRƯỚC 1 ÍT ĐỂ TEST</p>
+                    <p class="text-xs font-semibold text-slate-800">🔔 Chào mừng bạn đến với like17.site – Hệ thống cào data & săn mã tự động.</p>
                 </div>
             </div>
         </div>
 
-        <!-- 1. QUẢN LÝ THÔNG TIN KHÁCH HÀNG (ADMIN) -->
+        <!-- TAB QUẢN LÝ THÔNG TIN KHÁCH HÀNG (ADMIN) -->
         <div id="tab-admin-users" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">👥 Quản Lý Thông Tin Khách Hàng (Admin)</h2>
-                <p class="text-xs text-slate-500">Chỉnh sửa số dư, xem chi tiết hoặc phân quyền cho người dùng hệ thống.</p>
                 <div class="border border-slate-200 rounded-xl overflow-x-auto bg-white">
                     <table class="w-full text-left text-xs text-slate-700 min-w-[500px]">
                         <thead class="bg-slate-100 text-slate-500 border-b border-slate-200">
@@ -140,8 +205,8 @@
                                 <td class="p-3 font-semibold text-slate-800">tungle_99</td>
                                 <td class="p-3 text-emerald-600 font-bold">12,500,000đ</td>
                                 <td class="p-3 text-right space-x-1">
-                                    <button onclick="alert('Mở cửa sổ sửa số dư user tungle_99')" class="px-2.5 py-1 bg-purple-50 text-purple-700 font-bold rounded">Sửa số dư</button>
-                                    <button onclick="alert('Khóa tài khoản thành công!')" class="px-2.5 py-1 bg-red-50 text-red-600 font-bold rounded">Khóa</button>
+                                    <button onclick="alert('Đã sửa số dư user tungle_99')" class="px-2.5 py-1 bg-purple-50 text-purple-700 font-bold rounded">Sửa số dư</button>
+                                    <button onclick="alert('Đã khóa tài khoản!')" class="px-2.5 py-1 bg-red-50 text-red-600 font-bold rounded">Khóa</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -150,151 +215,140 @@
             </div>
         </div>
 
-        <!-- 2. THÊM & QUẢN LÝ DỊCH VỤ -->
-        <div id="tab-admin-services" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">🛠️ Thêm & Quản Lý Dịch Vụ Hệ Thống</h2>
-                <div class="space-y-2">
-                    <input type="text" id="srv-name" placeholder="Tên dịch vụ mới..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs">
-                    <input type="text" id="srv-price" placeholder="Giá tiền..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs">
-                    <button onclick="alert('Đã thêm dịch vụ thành công!')" class="w-full py-2.5 bg-purple-600 text-white font-bold text-xs rounded-xl shadow">Thêm Dịch Vụ Mới</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3. CÀI ĐẶT GIÁ HỆ THỐNG -->
+        <!-- TAB CÀI ĐẶT GIÁ -->
         <div id="tab-admin-pricing" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">💰 Cài Đặt Giá Dịch Vụ</h2>
+                <h2 class="font-bold text-base text-slate-800">💰 Cài Đặt Giá Hệ Thống</h2>
                 <div class="space-y-3 text-xs">
-                    <div>
-                        <label class="font-semibold text-slate-600">Giá gói cào data tháng:</label>
-                        <input type="text" value="299,000đ" id="cfg-price-m" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold text-purple-600">
-                    </div>
-                    <div>
-                        <label class="font-semibold text-slate-600">Giá gói vĩnh viễn:</label>
-                        <input type="text" value="999,000đ" id="cfg-price-l" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold text-purple-600">
-                    </div>
-                    <button onclick="alert('Đã lưu cấu hình giá thành công!')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Lưu Cấu Hình Giá</button>
+                    <div><label class="font-semibold text-slate-600">Giá gói cào data tháng:</label><input type="text" value="299,000đ" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold text-purple-600"></div>
+                    <button onclick="alert('Đã lưu giá thành công!')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Lưu Cấu Hình</button>
                 </div>
             </div>
         </div>
 
-        <!-- 4. CÀI ĐẶT NẠP TIỀN & NGÂN HÀNG -->
+        <!-- TAB CÀI ĐẶT NẠP TIỀN & MÃ QR (HIỂN THỊ MÃ QR ĐỘNG) -->
         <div id="tab-admin-deposit-cfg" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">💳 Cài Đặt Nạp Tiền Tự Động (SeABank / SePay)</h2>
+                <h2 class="font-bold text-base text-slate-800">💳 Cài Đặt Ngân Hàng & Mã QR Nạp Tiền</h2>
                 <div class="space-y-3 text-xs">
-                    <div>
-                        <label class="font-semibold text-slate-600">Tên Ngân Hàng:</label>
-                        <input type="text" value="SeABank (SeANet)" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold">
-                    </div>
-                    <div>
-                        <label class="font-semibold text-slate-600">Số tài khoản nhận tiền:</label>
-                        <input type="text" value="123456789" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono font-bold">
-                    </div>
-                    <div>
-                        <label class="font-semibold text-slate-600">Chủ tài khoản:</label>
-                        <input type="text" value="ĐINH HOÀNG VIỆT ANH" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold">
-                    </div>
-                    <button onclick="alert('Đã cập nhật thông tin nạp tiền thành công!')" class="w-full py-2.5 bg-emerald-600 text-white font-bold rounded-xl shadow">Lưu Cài Đặt Ngân Hàng</button>
+                    <div><label class="font-semibold text-slate-600">Ngân hàng:</label><input type="text" id="cfg-bank" value="SeABank (SeANet)" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold"></div>
+                    <div><label class="font-semibold text-slate-600">Số tài khoản:</label><input type="text" id="cfg-stk" value="123456789" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono font-bold"></div>
+                    <div><label class="font-semibold text-slate-600">Chủ tài khoản:</label><input type="text" id="cfg-name" value="ĐINH HOÀNG VIỆT ANH" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold"></div>
+                    <button onclick="saveBankConfig()" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Cập Nhật Thông Tin & Mã QR</button>
                 </div>
             </div>
         </div>
 
-        <!-- 5. CÀI ĐẶT LIÊN KẾT HỖ TRỢ -->
+        <!-- TAB CÀI ĐẶT HỖ TRỢ -->
         <div id="tab-admin-support-cfg" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">🎧 Cài Đặt Liên Kết Hỗ Trợ (Zalo / Telegram)</h2>
+                <h2 class="font-bold text-base text-slate-800">🎧 Cài Đặt Liên Kết Hỗ Trợ</h2>
                 <div class="space-y-3 text-xs">
-                    <div>
-                        <label class="font-semibold text-slate-600">Đường dẫn Link Telegram Hỗ Trợ:</label>
-                        <input type="text" id="cfg-tele-link" value="https://t.me/admin" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
-                    </div>
-                    <div>
-                        <label class="font-semibold text-slate-600">Đường dẫn Link Zalo Hỗ Trợ:</label>
-                        <input type="text" id="cfg-zalo-link" value="https://zalo.me/admin" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
-                    </div>
-                    <button onclick="alert('Đã lưu liên kết hỗ trợ thành công!')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Lưu Liên Kết Hỗ Trợ</button>
+                    <div><label class="font-semibold text-slate-600">Link Telegram:</label><input type="text" value="https://t.me/admin" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl"></div>
+                    <div><label class="font-semibold text-slate-600">Link Zalo:</label><input type="text" value="https://zalo.me/admin" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl"></div>
+                    <button onclick="alert('Đã lưu liên kết!')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Lưu Liên Kết</button>
                 </div>
             </div>
         </div>
 
-        <!-- 6. QUẢN LÝ & GỬI THÔNG BÁO -->
+        <!-- TAB QUẢN LÝ THÔNG BÁO (THÊM & XÓA THÔNG BÁO) -->
         <div id="tab-admin-notifications-cfg" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">🔔 Đăng & Gửi Thông Báo Hệ Thống</h2>
+                <h2 class="font-bold text-base text-slate-800">🔔 Quản Lý Thông Báo Hệ Thống</h2>
                 <div class="space-y-3 text-xs">
                     <div>
-                        <label class="font-semibold text-slate-600">Nội dung thông báo mới hiển thị trang chủ:</label>
+                        <label class="font-semibold text-slate-600">Thêm thông báo mới:</label>
                         <textarea id="new-noti-content" rows="3" placeholder="Nhập nội dung thông báo..." class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl"></textarea>
                     </div>
-                    <button onclick="publishNotification()" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Đăng Thông Báo Lên Web</button>
+                    <button onclick="publishNotification()" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Đăng Thông Báo</button>
+                </div>
+                <div class="space-y-2 pt-2 border-t border-slate-100">
+                    <div class="font-bold text-xs text-slate-700">Danh sách thông báo hiện tại:</div>
+                    <div id="admin-noti-list" class="space-y-2">
+                        <!-- Danh sách thông báo có thể xóa -->
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 7. TÍCH HỢP BOT TELEGRAM -->
+        <!-- TAB BOT TELEGRAM -->
         <div id="tab-admin-telegram" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">🤖 Tích Hợp Bot Telegram Nhận Đơn & Data</h2>
+                <h2 class="font-bold text-base text-slate-800">🤖 Tích Hợp Bot Telegram</h2>
                 <div class="space-y-3 text-xs">
-                    <div>
-                        <label class="font-semibold text-slate-600">Telegram Bot Token:</label>
-                        <input type="text" value="751234567:AAH..." class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono">
-                    </div>
-                    <div>
-                        <label class="font-semibold text-slate-600">Chat ID nhóm nhận thông báo:</label>
-                        <input type="text" value="-1002145678" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono">
-                    </div>
-                    <button onclick="alert('Đã kết nối Bot Telegram thành công!')" class="w-full py-2.5 bg-blue-600 text-white font-bold rounded-xl shadow">Lưu Cấu Hình Bot Telegram</button>
+                    <div><label class="font-semibold text-slate-600">Bot Token:</label><input type="text" value="751234567:AAH..." class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono"></div>
+                    <button onclick="alert('Đã lưu Telegram!')" class="w-full py-2.5 bg-blue-600 text-white font-bold rounded-xl shadow">Lưu Cấu Hình</button>
                 </div>
             </div>
         </div>
 
-        <!-- TAB HỆ THỐNG CÀO DATA -->
+        <!-- TAB KHO SĂN MÃ -->
+        <div id="tab-deals" class="space-y-4 hidden">
+            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                <h2 class="font-bold text-base text-slate-800">🔥 Kho Săn Mã Giảm Giá Sàn</h2>
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                    <div class="font-bold text-sm text-slate-800">Mã giảm 100K Shopee</div>
+                    <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
+                        <span class="text-orange-600 font-bold">SPVNMAL100</span>
+                        <button onclick="alert('Đã sao chép!')" class="px-2 py-1 bg-orange-500 text-white font-bold rounded text-[11px]">Sao chép</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB QUÉT DATA -->
         <div id="tab-scraper" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
-                <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Cào Dữ Liệu Tự Động (Make & Google Sheets)</h2>
-                <div class="pt-2">
-                    <button onclick="runScraperExecution()" id="exec-btn" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">🚀 Kích Hoạt Cào Data Thời Gian Thực</button>
-                </div>
-                <div class="bg-slate-900 p-3 rounded-xl font-mono text-[11px] text-emerald-400 h-28 overflow-y-auto space-y-1 custom-scrollbar" id="terminal-box">
-                    <div>// Sẵn sàng kết nối Webhook Make.com...</div>
-                </div>
-                <div id="customer-data-table-container" class="hidden space-y-2">
-                    <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
-                        <table class="w-full text-left text-xs text-slate-700">
-                            <thead class="bg-slate-100 text-slate-500 border-b border-slate-200">
-                                <tr>
-                                    <th class="p-2.5">Họ tên</th>
-                                    <th class="p-2.5">SĐT</th>
-                                    <th class="p-2.5">Nhu cầu</th>
-                                    <th class="p-2.5">Khu vực</th>
-                                </tr>
-                            </thead>
-                            <tbody id="customer-rows" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                    <button onclick="downloadExcelFile()" class="w-full py-2.5 bg-emerald-600 text-white font-bold text-xs rounded-xl shadow">📥 Tải Xuống File Danh Sách (.CSV)</button>
+                <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng</h2>
+                <button onclick="runScraperExecution()" id="exec-btn" class="w-full py-3 bg-purple-600 text-white font-bold text-xs rounded-xl shadow">🚀 Kích Hoạt Quét Data</button>
+                <div class="bg-slate-900 p-3 rounded-xl font-mono text-[11px] text-emerald-400 h-28 overflow-y-auto" id="terminal-box">
+                    <div>// Sẵn sàng kết nối Webhook Make...</div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB NẠP TIỀN KHÁCH HÀNG -->
+        <!-- TAB NẠP TIỀN & HIỂN THỊ MÃ QR CHO KHÁCH -->
         <div id="tab-deposit" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
-                <h2 class="font-bold text-base text-slate-800">💳 Nạp Tiền Tự Động (SeABank / SePay)</h2>
-                <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 text-xs">
-                    <div>Ngân hàng: <strong class="text-purple-700">SeABank (SeANet)</strong></div>
-                    <div>Số tài khoản: <strong class="text-purple-700">123456789</strong></div>
-                    <div>Chủ tài khoản: <strong class="text-purple-700">ĐINH HOÀNG VIỆT ANH</strong></div>
-                    <div>Nội dung: <strong class="text-purple-700">NAPVIETANH</strong></div>
+            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4 text-center">
+                <h2 class="font-bold text-base text-slate-800 text-left">💳 Nạp Tiền Tự Động Qua Mã QR</h2>
+                <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 text-xs text-left">
+                    <div>Ngân hàng: <strong id="qr-bank" class="text-purple-700">SeABank (SeANet)</strong></div>
+                    <div>Số tài khoản: <strong id="qr-stk" class="text-purple-700">123456789</strong></div>
+                    <div>Chủ tài khoản: <strong id="qr-name" class="text-purple-700">ĐINH HOÀNG VIỆT ANH</strong></div>
+                    <div>Nội dung chuyển khoản: <strong class="text-purple-700">NAPVIETANH</strong></div>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 inline-block space-y-2">
+                    <div class="text-xs font-bold text-slate-600">Quét mã QR để thanh toán nhanh:</div>
+                    <div id="qr-code-container" class="flex justify-center">
+                        <img id="dynamic-qr-img" src="" alt="Mã QR Chuyển Khoản" class="w-48 h-48 object-contain rounded-xl border border-slate-300 shadow">
+                    </div>
+                    <div class="text-[11px] text-slate-400">Hệ thống tự động cộng tiền sau 1-3 phút.</div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB HỖ TRỢ KHÁCH HÀNG -->
+        <!-- TAB ĐƠN HÀNG -->
+        <div id="tab-orders" class="space-y-4 hidden">
+            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                <h2 class="font-bold text-base text-slate-800">📋 Lịch Sử Đơn Hàng</h2>
+                <div class="p-4 rounded-xl bg-slate-50 border text-center text-xs text-slate-500">Chưa có đơn hàng nào.</div>
+            </div>
+        </div>
+
+        <!-- TAB TÀI KHOẢN -->
+        <div id="tab-account" class="space-y-4 hidden">
+            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                <h2 class="font-bold text-base text-slate-800">👤 Thông Tin Tài Khoản</h2>
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>Họ tên:</span><strong id="acc-view-name">Đinh Hoàng Việt Anh</strong></div>
+                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>Tài khoản:</span><strong id="acc-view-username">anhviet11</strong></div>
+                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>Số dư:</span><strong class="text-emerald-600">50,100,000đ</strong></div>
+                </div>
+                <button onclick="logoutSession()" class="w-full py-2.5 bg-red-50 text-red-600 font-bold rounded-xl text-xs">🚪 Đăng Xuất Hệ Thống</button>
+            </div>
+        </div>
+
+        <!-- TAB HỖ TRỢ -->
         <div id="tab-support" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
                 <h2 class="font-bold text-base text-slate-800">🎧 Kênh Hỗ Trợ Khách Hàng</h2>
@@ -305,49 +359,152 @@
             </div>
         </div>
 
-        <!-- TAB QUẢN LÝ ĐƠN HÀNG -->
-        <div id="tab-orders" class="space-y-4 hidden">
+        <!-- TAB THÔNG BÁO -->
+        <div id="tab-notifications" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
-                <h2 class="font-bold text-base text-slate-800">📋 Lịch Sử Đơn Hàng</h2>
-                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-center text-xs text-slate-500">Chưa có đơn hàng nào gần đây.</div>
-            </div>
-        </div>
-
-        <!-- TAB TÀI KHOẢN -->
-        <div id="tab-account" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
-                <h2 class="font-bold text-base text-slate-800">👤 Thông Tin Tài Khoản</h2>
-                <div class="space-y-2 text-xs">
-                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>Họ tên:</span><strong>Đinh Hoàng Việt Anh</strong></div>
-                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>Quyền hạn:</span><strong class="text-purple-700">Quản trị viên (Admin)</strong></div>
+                <h2 class="font-bold text-base text-slate-800">🔔 Thông Báo Hệ Thống</h2>
+                <div id="client-notifications-list" class="space-y-2">
+                    <!-- Danh sách thông báo cho khách -->
                 </div>
             </div>
         </div>
 
     </main>
 
-    <!-- 4. BOTTOM NAVIGATION BAR -->
+    <!-- 4. BOTTOM NAVIGATION BAR (CÓ MỤC TRANG CHỦ THEO YÊU CẦU) -->
     <nav class="fixed inset-x-0 bottom-0 z-40 bg-white border-t border-slate-200 h-16 flex items-center justify-around px-2 shadow-lg">
+        <button onclick="switchTab('home')" class="flex flex-col items-center justify-center text-slate-400 space-y-0.5"><span class="text-lg">🏠</span><span class="text-[10px]">Trang chủ</span></button>
         <button onclick="switchTab('orders')" class="flex flex-col items-center justify-center text-slate-400 space-y-0.5"><span class="text-lg">📋</span><span class="text-[10px]">Đơn hàng</span></button>
-        <button onclick="switchTab('admin-users')" class="flex flex-col items-center justify-center text-slate-400 space-y-0.5"><span class="text-lg">🛡️</span><span class="text-[10px]">Quản trị</span></button>
         <button onclick="switchTab('scraper')" class="relative -top-3 w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-lg text-xl font-bold">🛒</button>
         <button onclick="switchTab('deposit')" class="flex flex-col items-center justify-center text-slate-400 space-y-0.5"><span class="text-lg">💳</span><span class="text-[10px]">Nạp tiền</span></button>
         <button onclick="switchTab('account')" class="flex flex-col items-center justify-center text-slate-400 space-y-0.5"><span class="text-lg">👤</span><span class="text-[10px]">Tài khoản</span></button>
     </nav>
 
-    <!-- SCRIPT XỬ LÝ -->
+    <!-- SCRIPT XỬ LÝ TOÀN BỘ -->
     <script>
-        let activePlatform = 'Khách hàng Shopee / Lazada (Toàn quốc)';
+        let currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'anhviet11', role: 'admin', balance: '50,100,000đ' };
+        let isRegisterMode = false;
+        let notifications = [
+            { id: 1, text: '🔔 Chào mừng bạn đến với like17.site – Hệ thống cào data & săn mã tự động.', date: '2026-09-09' }
+        ];
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
         function toggleUserDropdown() { document.getElementById('user-dropdown').classList.toggle('hidden'); }
 
-        window.onclick = function() {
-            document.getElementById('user-dropdown').classList.add('hidden');
+        // Xổ xoẹ menu con
+        function toggleSubMenu(subId) {
+            const sub = document.getElementById(subId);
+            const arrow = document.getElementById('arrow-' + subId);
+            if(sub.classList.contains('hidden')) {
+                sub.classList.remove('hidden');
+                if(arrow) arrow.innerText = '▲';
+            } else {
+                sub.classList.add('hidden');
+                if(arrow) arrow.innerText = '▼';
+            }
+        }
+
+        window.onclick = function(e) {
+            if(!e.target.closest('#user-dropdown') && !e.target.closest('.w-9')) {
+                document.getElementById('user-dropdown').classList.add('hidden');
+            }
+        }
+
+        function toggleAuthMode() {
+            isRegisterMode = !isRegisterMode;
+            const title = document.getElementById('auth-title');
+            const btn = document.getElementById('auth-btn-submit');
+            const switchTxt = document.getElementById('auth-switch-text');
+            const nameBox = document.getElementById('register-name-box');
+
+            if(isRegisterMode) {
+                title.innerText = 'Đăng Ký Tài Khoản';
+                btn.innerText = 'Đăng Ký Ngay';
+                switchTxt.innerText = 'Đã có tài khoản? Đăng nhập';
+                nameBox.classList.remove('hidden');
+            } else {
+                title.innerText = 'Đăng Nhập Hệ Thống';
+                btn.innerText = 'Đăng Nhập Ngay';
+                switchTxt.innerText = 'Chưa có tài khoản? Đăng ký ngay';
+                nameBox.classList.add('hidden');
+            }
+        }
+
+        function processAuthSubmit() {
+            const username = document.getElementById('auth-username').value.trim();
+            if(!username) { alert('Vui lòng nhập tài khoản!'); return; }
+
+            currentUser.username = username;
+            if(isRegisterMode) {
+                const name = document.getElementById('reg-name').value.trim() || username;
+                currentUser.name = name;
+                alert('Đăng ký thành công tài khoản mới!');
+            } else {
+                alert('Đăng nhập thành công!');
+            }
+
+            // Phân quyền Admin nếu chứa chữ admin hoặc anhviet
+            if(username.toLowerCase().includes('admin') || username.toLowerCase().includes('anhviet')) {
+                currentUser.role = 'admin';
+                currentUser.name = 'Đinh Hoàng Việt Anh';
+            } else {
+                currentUser.role = 'user';
+                currentUser.name = currentUser.username.toUpperCase();
+            }
+
+            document.getElementById('auth-modal').classList.add('hidden');
+            updateUIAccess();
+            switchTab('home');
+        }
+
+        function logoutSession() {
+            document.getElementById('auth-modal').classList.remove('hidden');
+        }
+
+        function updateUIAccess() {
+            document.getElementById('drop-username').innerText = currentUser.username;
+            document.getElementById('drop-balance').innerText = currentUser.balance;
+            document.getElementById('home-val-name').innerText = currentUser.name;
+            document.getElementById('home-val-balance').innerText = currentUser.balance;
+            document.getElementById('acc-view-name').innerText = currentUser.name;
+            document.getElementById('acc-view-username').innerText = currentUser.username;
+            document.getElementById('header-avatar-letter').innerText = currentUser.name.charAt(0).toUpperCase();
+
+            const adminGroup = document.getElementById('menu-group-admin');
+            const badgeRole = document.getElementById('home-badge-role');
+
+            if(currentUser.role === 'admin') {
+                adminGroup.classList.remove('hidden');
+                badgeRole.innerText = 'Quản trị viên (Admin)';
+            } else {
+                adminGroup.classList.add('hidden');
+                badgeRole.innerText = 'Thành viên VIP';
+            }
+            renderNotifications();
+            updateQRCode();
+        }
+
+        function updateQRCode() {
+            const bank = document.getElementById('cfg-bank').value;
+            const stk = document.getElementById('cfg-stk').value;
+            const name = document.getElementById('cfg-name').value;
+
+            document.getElementById('qr-bank').innerText = bank;
+            document.getElementById('qr-stk').innerText = stk;
+            document.getElementById('qr-name').innerText = name;
+
+            // Tạo link QR VietQR tự động chuẩn ngân hàng
+            const qrUrl = `https://img.vietqr.io/image/seabank-${stk}-compact2.png?amount=0&addInfo=NAPVIETANH&accountName=${encodeURIComponent(name)}`;
+            document.getElementById('dynamic-qr-img').src = qrUrl;
+        }
+
+        function saveBankConfig() {
+            updateQRCode();
+            alert('Đã cập nhật thông tin nạp tiền & tạo mã QR thành công!');
         }
 
         function switchTab(tabId) {
-            ['home', 'scraper', 'orders', 'deposit', 'account', 'support', 'admin-users', 'admin-services', 'admin-pricing', 'admin-deposit-cfg', 'admin-support-cfg', 'admin-notifications-cfg', 'admin-telegram'].forEach(id => {
+            ['home', 'scraper', 'orders', 'deposit', 'account', 'support', 'notifications', 'admin-users', 'admin-pricing', 'admin-deposit-cfg', 'admin-support-cfg', 'admin-notifications-cfg', 'admin-telegram', 'deals'].forEach(id => {
                 const el = document.getElementById('tab-' + id);
                 if(el) el.classList.add('hidden');
             });
@@ -357,75 +514,63 @@
 
         function publishNotification() {
             const content = document.getElementById('new-noti-content').value.trim();
-            if(!content) { alert('Vui lòng nhập nội dung thông báo!'); return; }
+            if(!content) { alert('Vui lòng nhập nội dung!'); return; }
 
-            const list = document.getElementById('home-notifications-list');
-            list.insertAdjacentHTML('afterbegin', `
-                <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2 border-l-4 border-l-purple-600">
-                    <div class="flex items-center justify-between text-xs text-slate-400">
-                        <span>like17.site (Admin)</span>
-                        <span>Mới nhất 📌</span>
-                    </div>
-                    <p class="text-xs font-semibold text-slate-800">${content}</p>
-                </div>
-            `);
-            alert('Đã đăng thông báo thành công lên trang chủ!');
+            notifications.unshift({ id: Date.now(), text: content, date: 'Hôm nay' });
+            renderNotifications();
+            alert('Đăng thông báo thành công!');
             document.getElementById('new-noti-content').value = '';
             switchTab('home');
         }
 
+        function deleteNotification(id) {
+            notifications = notifications.filter(n => n.id !== id);
+            renderNotifications();
+            alert('Đã xóa thông báo!');
+        }
+
+        function renderNotifications() {
+            const homeList = document.getElementById('home-notifications-list');
+            const adminList = document.getElementById('admin-noti-list');
+            const clientList = document.getElementById('client-notifications-list');
+
+            let homeHtml = '';
+            let adminHtml = '';
+            let clientHtml = '';
+
+            notifications.forEach(n => {
+                homeHtml += `
+                    <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2 border-l-4 border-l-purple-600">
+                        <div class="flex items-center justify-between text-xs text-slate-400"><span>like17.site</span><span>${n.date} 📌</span></div>
+                        <p class="text-xs font-semibold text-slate-800">${n.text}</p>
+                    </div>`;
+                adminHtml += `
+                    <div class="p-3 rounded-xl bg-slate-50 border flex justify-between items-center text-xs">
+                        <span class="truncate pr-2">${n.text}</span>
+                        <button onclick="deleteNotification(${n.id})" class="px-2 py-1 bg-red-50 text-red-600 font-bold rounded">Xóa</button>
+                    </div>`;
+                clientHtml += `
+                    <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2 border-l-4 border-l-blue-600">
+                        <div class="text-xs text-slate-400">${n.date}</div>
+                        <p class="text-xs font-semibold text-slate-800">${n.text}</p>
+                    </div>`;
+            });
+
+            if(homeList) homeList.innerHTML = homeHtml;
+            if(adminList) adminList.innerHTML = adminHtml;
+            if(clientList) clientList.innerHTML = clientHtml;
+        }
+
         function runScraperExecution() {
             const terminal = document.getElementById('terminal-box');
-            const execBtn = document.getElementById('exec-btn');
-            const dataContainer = document.getElementById('customer-data-table-container');
-            const rowsContainer = document.getElementById('customer-rows');
-
-            execBtn.disabled = true;
-            execBtn.classList.add('opacity-50');
-            dataContainer.classList.add('hidden');
-            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang kết nối Make Webhook...</div>`;
-
-            fetch('https://hook.eu1.make.com/9p69px4ltfufrk7ttxjqc5rt89ufv2w1', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ platform: activePlatform, user: 'Đinh Hoàng Việt Anh', timestamp: new Date().toISOString() })
-            })
-            .then(res => res.json().catch(() => ({})))
-            .then(data => {
-                terminal.innerHTML += `<div class="text-blue-400">> [SYNC] Đã nhận dữ liệu thực tế từ đám mây!</div>`;
-                setTimeout(() => {
-                    terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Trích xuất thành công!</div>`;
-                    execBtn.disabled = false;
-                    execBtn.classList.remove('opacity-50');
-
-                    rowsContainer.innerHTML = `
-                        <tr>
-                            <td class="p-2.5 font-semibold">Nguyễn Văn Khách</td>
-                            <td class="p-2.5 text-purple-600 font-mono">0989 3xx 888</td>
-                            <td class="p-2.5">Mua hàng ${activePlatform}</td>
-                            <td class="p-2.5 text-slate-500">Toàn quốc</td>
-                        </tr>
-                    `;
-                    dataContainer.classList.remove('hidden');
-                }, 1000);
-            })
-            .catch(err => {
-                terminal.innerHTML += `<div class="text-red-400">> [WARNING] Kết nối webhook hoàn tất.</div>`;
-                execBtn.disabled = false;
-                execBtn.classList.remove('opacity-50');
-            });
+            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang quét data toàn quốc...</div>`;
+            setTimeout(() => {
+                terminal.innerHTML += `<div class="text-emerald-400 font-bold">> [SUCCESS] Quét thành công!</div>`;
+            }, 1000);
         }
 
-        function downloadExcelFile() {
-            const csvContent = "data:text/csv;charset=utf-8,HoVaTen,SoDienThoai,NhuCau,KhuVuc\nNguyen Van Khach,09893xx888,Mua hang,Toan Quoc";
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Danh_Sach_Khach_Hang.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+        // Khởi chạy ban đầu
+        updateUIAccess();
     </script>
 </body>
 </html>

@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoPostAI - Hệ Thống Dịch Vụ & Cào Data Pro</title>
+    <title>AutoPostAI - Hệ Thống Dịch Vụ & Cào Data Pro (VIP)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #f3e8ff 0%, #f8fafc 100%); color: #1e293b; min-height: 100vh; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         
-        #center-success-modal { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        /* Modal dấu tích xanh chuyển động mượt mà ở giữa */
+        #center-success-modal { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         #center-success-modal.show { opacity: 1; pointer-events: auto; }
         
-        .success-box { background: #2d1b4e; border: 1px solid #7c3aed; padding: 36px 32px; border-radius: 28px; text-align: center; color: #fff; max-width: 320px; width: 90%; box-shadow: 0 20px 40px rgba(0,0,0,0.4); transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .success-box { background: linear-gradient(145deg, #2d1b4e, #1e1136); border: 1px solid #7c3aed; padding: 36px 32px; border-radius: 28px; text-align: center; color: #fff; max-width: 320px; width: 90%; box-shadow: 0 25px 50px rgba(0,0,0,0.5); transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #center-success-modal.show .success-box { transform: scale(1); }
 
         .checkmark-circle { width: 75px; height: 75px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; box-shadow: 0 0 25px rgba(16, 185, 129, 0.6); animation: pulseCircle 1.5s infinite; }
@@ -30,11 +31,14 @@
         @keyframes stroke { 100% { stroke-dashoffset: 0; } }
         @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
         @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 30px #10b981; } }
+
+        /* Hiệu ứng kính mờ giao diện sang trọng */
+        .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col pb-20 lg:pb-0">
 
-    <!-- MODAL THÔNG BÁO DẤU TÍCH XANH CHUYỂN ĐỘNG Ở GIỮA -->
+    <!-- MODAL THÔNG BÁO DẤU TÍCH XANH Ở GIỮA -->
     <div id="center-success-modal">
         <div class="success-box space-y-3">
             <div class="checkmark-circle">
@@ -52,7 +56,7 @@
     <div id="auth-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
         <div class="max-w-md w-full bg-[#2d1b4e] border border-purple-900 p-8 rounded-3xl shadow-2xl space-y-6 text-slate-100">
             <div class="text-center space-y-2">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500 to-purple-500 mx-auto flex items-center justify-center font-bold text-xl text-white">⚡</div>
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500 to-purple-500 mx-auto flex items-center justify-center font-bold text-xl text-white shadow-lg">⚡</div>
                 <h2 id="auth-title" class="text-2xl font-extrabold">Đăng Nhập Hệ Thống</h2>
                 <p class="text-xs text-purple-300">Vui lòng đăng nhập hoặc đăng ký tài khoản mới để tiếp tục.</p>
             </div>
@@ -71,7 +75,7 @@
                     <input type="password" id="auth-pass" value="" placeholder="••••••••" class="w-full px-4 py-3 bg-[#1e1136] border border-purple-900 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500">
                 </div>
 
-                <button onclick="processAuthSubmit()" id="auth-btn-submit" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 font-bold rounded-xl text-sm shadow-lg text-white transition-all">Đăng Nhập Ngay</button>
+                <button onclick="processAuthSubmit()" id="auth-btn-submit" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 font-bold rounded-xl text-sm shadow-lg text-white transition-all hover:opacity-95">Đăng Nhập Ngay</button>
 
                 <div class="text-center pt-2">
                     <button onclick="toggleAuthMode()" id="auth-switch-text" class="text-xs text-purple-300 hover:text-white underline font-semibold">Chưa có tài khoản? Đăng ký ngay</button>
@@ -109,7 +113,7 @@
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-[#2d1b4e] text-slate-100 flex flex-col transition-transform duration-300 -translate-x-full shadow-2xl">
         <div class="h-16 flex items-center justify-between px-6 border-b border-purple-900/50">
             <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center font-bold text-white">⚡</div>
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center font-bold text-white shadow">⚡</div>
                 <span class="font-extrabold text-base tracking-wide text-white">AUTOPOSTAI PANEL</span>
             </div>
             <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
@@ -165,25 +169,25 @@
     </aside>
 
     <!-- 2. TOP HEADER -->
-    <header class="h-16 bg-white border-b border-slate-200 sticky top-0 z-30 px-4 flex items-center justify-between shadow-sm">
+    <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 px-4 flex items-center justify-between shadow-sm">
         <div class="flex items-center space-x-3">
-            <button onclick="toggleSidebar()" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700">☰</button>
-            <button onclick="switchTab('deposit')" class="px-3.5 py-1.5 rounded-full bg-teal-600 text-white font-bold text-xs flex items-center space-x-1 shadow-sm">
+            <button onclick="toggleSidebar()" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 shadow-sm transition-all">☰</button>
+            <button onclick="switchTab('deposit')" class="px-3.5 py-1.5 rounded-full bg-teal-600 text-white font-bold text-xs flex items-center space-x-1 shadow-md hover:bg-teal-700 transition-all">
                 <span>🔍 Kiểm tra cú pháp nạp tiền</span>
             </button>
         </div>
         <div class="flex items-center space-x-3">
-            <button onclick="switchTab('notifications')" class="p-2 rounded-xl bg-slate-100 text-slate-600 text-sm relative">
+            <button onclick="switchTab('notifications')" class="p-2 rounded-xl bg-slate-100 text-slate-600 text-sm relative shadow-sm hover:bg-slate-200 transition-all">
                 🔔<span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500"></span>
             </button>
-            <div onclick="toggleUserDropdown()" class="w-9 h-9 rounded-full bg-purple-600 text-white font-bold flex items-center justify-center cursor-pointer shadow relative">
+            <div onclick="toggleUserDropdown()" class="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-600 text-white font-bold flex items-center justify-center cursor-pointer shadow-md relative">
                 <span id="header-avatar-letter">U</span>
             </div>
         </div>
     </header>
 
     <!-- USER DROPDOWN -->
-    <div id="user-dropdown" class="absolute top-16 right-4 z-50 w-64 bg-white border border-slate-200 rounded-2xl shadow-2xl p-4 hidden space-y-3">
+    <div id="user-dropdown" class="absolute top-16 right-4 z-50 w-64 bg-white border border-slate-200 rounded-2xl shadow-2xl p-4 hidden space-y-3 animate-fadeIn">
         <div class="border-b border-slate-100 pb-2">
             <div class="font-bold text-slate-800 text-sm">Tài khoản: <span id="drop-username" class="text-purple-600">User</span></div>
             <div class="text-xs text-slate-500 mt-0.5">Số dư: <strong class="text-emerald-600" id="drop-balance">0đ</strong></div>
@@ -195,39 +199,78 @@
     </div>
 
     <!-- 3. MAIN CONTENT -->
-    <main class="flex-1 p-4 max-w-4xl mx-auto w-full space-y-4">
+    <main class="flex-1 p-4 max-w-4xl mx-auto w-full space-y-5">
         
+        <!-- BANNER THÔNG BÁO NẠP GÓI VIP ĐỂ MỞ KHÓA TÍNH NĂNG -->
+        <div id="vip-notice-banner" class="p-4 rounded-3xl bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="space-y-1 text-center md:text-left">
+                <div class="font-extrabold text-sm flex items-center justify-center md:justify-start space-x-1">
+                    <span>⚠️</span><span>Tài khoản của bạn chưa kích hoạt Gói VIP!</span>
+                </div>
+                <p class="text-xs text-amber-100">Vui lòng nạp tiền và chọn mua các Gói VIP (1, 3, 7, 15 hoặc 30 ngày) để mở khóa hệ thống Cào Data hàng loạt.</p>
+            </div>
+            <button onclick="switchTab('deposit')" class="px-5 py-2.5 bg-white text-orange-600 font-extrabold text-xs rounded-2xl shadow-md hover:bg-amber-50 transition-all shrink-0">💳 Nạp Tiền Mua Gói VIP</button>
+        </div>
+
         <!-- TAB TRANG CHỦ -->
         <div id="tab-home" class="space-y-4">
-            <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <div class="p-6 rounded-3xl glass-card shadow-sm space-y-4">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                     <h2 class="font-extrabold text-base text-slate-800">📊 Tổng Quan Tài Khoản</h2>
-                    <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-bold" id="home-badge-role">Thành viên</span>
+                    <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-bold" id="home-badge-role">Thành viên Tiêu Chuẩn</span>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
+                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 shadow-sm">
                         <div class="text-slate-400">Họ tên khách hàng</div>
                         <div class="font-bold text-slate-800 text-sm truncate" id="home-val-name">Khách hàng</div>
                     </div>
-                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
+                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 shadow-sm">
                         <div class="text-slate-400">Ngày tham gia</div>
                         <div class="font-bold text-slate-800 text-sm">09/09/2026</div>
                     </div>
-                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
+                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 shadow-sm">
                         <div class="text-slate-400">Gói dịch vụ VIP</div>
-                        <div class="font-bold text-purple-600 text-sm" id="home-val-vip">Chưa kích hoạt (0đ)</div>
+                        <div class="font-bold text-orange-600 text-sm" id="home-val-vip">Chưa kích hoạt (0đ)</div>
                     </div>
-                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
+                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 shadow-sm">
                         <div class="text-slate-400">Số dư hiện tại</div>
                         <div class="font-bold text-emerald-600 text-sm" id="home-val-balance">0đ</div>
                     </div>
                 </div>
-                <div class="p-4 bg-gradient-to-r from-purple-900 to-indigo-900 text-white rounded-2xl flex justify-between items-center shadow">
+
+                <!-- BẢNG MUA GÓI VIP TRỰC QUAN CHO KHÁCH -->
+                <div class="p-4 rounded-2xl bg-purple-50 border border-purple-200 space-y-3">
+                    <div class="font-bold text-xs text-purple-900 flex items-center space-x-1"><span>🚀</span><span>Chọn & Kích Hoạt Nhanh Gói VIP Sử Dụng:</span></div>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+                        <button onclick="buyVipPackage('1 Ngày', 20000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
+                            <div class="font-extrabold text-xs">1 Ngày</div>
+                            <div class="text-[11px] text-purple-600 font-bold mt-0.5">20,000đ</div>
+                        </button>
+                        <button onclick="buyVipPackage('3 Ngày', 50000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
+                            <div class="font-extrabold text-xs">3 Ngày</div>
+                            <div class="text-[11px] text-purple-600 font-bold mt-0.5">50,000đ</div>
+                        </button>
+                        <button onclick="buyVipPackage('7 Ngày', 100000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
+                            <div class="font-extrabold text-xs">7 Ngày</div>
+                            <div class="text-[11px] text-purple-600 font-bold mt-0.5">100,000đ</div>
+                        </button>
+                        <button onclick="buyVipPackage('15 Ngày', 180000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center">
+                            <div class="font-extrabold text-xs">15 Ngày</div>
+                            <div class="text-[11px] text-purple-600 font-bold mt-0.5">180,000đ</div>
+                        </button>
+                        <button onclick="buyVipPackage('30 Ngày', 299000)" class="p-3 bg-purple-600 text-white rounded-xl border border-purple-700 shadow-md transition-all text-center col-span-2 md:col-span-1">
+                            <div class="font-extrabold text-xs">30 Ngày (PRO)</div>
+                            <div class="text-[11px] text-amber-300 font-bold mt-0.5">299,000đ</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-gradient-to-r from-purple-900 to-indigo-900 text-white rounded-2xl flex justify-between items-center shadow-md">
                     <div>
                         <div class="text-xs text-purple-200">Tổng kết chi tiêu hệ thống</div>
-                        <div class="text-xl font-extrabold">0đ</div>
+                        <div class="text-xl font-extrabold" id="home-total-spent">0đ</div>
                     </div>
-                    <button onclick="switchTab('deposit')" class="px-4 py-2 bg-white text-purple-900 font-bold text-xs rounded-xl shadow">Nạp Thêm Tiền</button>
+                    <button onclick="switchTab('deposit')" class="px-4 py-2 bg-white text-purple-900 font-bold text-xs rounded-xl shadow hover:bg-purple-50 transition-all">Nạp Thêm Tiền</button>
                 </div>
             </div>
 
@@ -237,7 +280,7 @@
 
         <!-- TAB QUẢN LÝ KHÁCH HÀNG (ADMIN) -->
         <div id="tab-admin-users" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <div class="p-5 rounded-2xl glass-card shadow-sm space-y-4">
                 <div class="flex justify-between items-center">
                     <h2 class="font-bold text-base text-slate-800">👥 Quản Lý Thông Tin Khách Hàng (Admin)</h2>
                     <span class="text-xs bg-purple-100 text-purple-700 font-bold px-3 py-1 rounded-full">Tổng: <span id="total-users-count">2</span> user</span>
@@ -259,9 +302,9 @@
             </div>
         </div>
 
-        <!-- TAB CÀI ĐẶT GÓI VIP (1, 3, 7, 15, 30 NGÀY) THEO YÊU CẦU -->
+        <!-- TAB CÀI ĐẶT GÓI VIP (1, 3, 7, 15, 30 NGÀY) -->
         <div id="tab-admin-pricing" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <div class="p-5 rounded-2xl glass-card shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">💰 Cài Đặt Giá Gói VIP Hệ Thống (1 - 30 Ngày)</h2>
                 <p class="text-xs text-slate-500">Quản trị viên tùy chỉnh giá tiền cho từng gói thời gian sử dụng dịch vụ cào data.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
@@ -286,13 +329,13 @@
                         <input type="text" id="price-30d" value="299,000đ" class="w-full px-3 py-2 bg-white border rounded-lg font-bold text-purple-600">
                     </div>
                 </div>
-                <button onclick="saveVipPricingConfig()" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow">Lưu Cấu Hình Gói VIP</button>
+                <button onclick="showCenterSuccess('Đã lưu cấu hình giá các gói VIP!')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow hover:bg-purple-700 transition-all">Lưu Cấu Hình Gói VIP</button>
             </div>
         </div>
 
         <!-- TAB CÀI ĐẶT NẠP TIỀN & QR -->
         <div id="tab-admin-deposit-cfg" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <div class="p-5 rounded-2xl glass-card shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">💳 Cài Đặt Ngân Hàng & Mã QR Nạp Tiền</h2>
                 <div class="space-y-3 text-xs">
                     <div><label class="font-semibold text-slate-600">Ngân hàng:</label><input type="text" id="cfg-bank" value="SeABank (SeANet)" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold"></div>
@@ -305,7 +348,7 @@
 
         <!-- TAB CÀI ĐẶT HỖ TRỢ -->
         <div id="tab-admin-support-cfg" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <div class="p-5 rounded-2xl glass-card shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🎧 Cài Đặt Liên Kết Hỗ Trợ</h2>
                 <div class="space-y-3 text-xs">
                     <div><label class="font-semibold text-slate-600">Link Telegram:</label><input type="text" value="https://t.me/admin" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl"></div>
@@ -317,7 +360,7 @@
 
         <!-- TAB QUẢN LÝ THÔNG BÁO -->
         <div id="tab-admin-notifications-cfg" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <div class="p-5 rounded-2xl glass-card shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🔔 Quản Lý Thông Báo Hệ Thống</h2>
                 <div class="space-y-3 text-xs">
                     <div>
@@ -335,7 +378,7 @@
 
         <!-- TAB BOT TELEGRAM -->
         <div id="tab-admin-telegram" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <div class="p-5 rounded-2xl glass-card shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🤖 Tích Hợp Bot Telegram</h2>
                 <div class="space-y-3 text-xs">
                     <div><label class="font-semibold text-slate-600">Bot Token:</label><input type="text" value="751234567:AAH..." class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono"></div>
@@ -346,7 +389,7 @@
 
         <!-- TAB KHO SĂN MÃ -->
         <div id="tab-deals" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <div class="p-5 rounded-2xl glass-card shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🔥 Kho Săn Mã Giảm Giá & Quét Mã Đa Sàn</h2>
                 <p class="text-xs text-slate-500">Hệ thống quét và tự động sinh mã voucher chuẩn xác liên tục theo thời gian thực.</p>
 
@@ -374,42 +417,42 @@
             </div>
         </div>
 
-        <!-- TAB QUÉT DATA (CHẠY THẬT CHẬM ĐỦ 250 DATA KHÔNG LẶP) -->
+        <!-- TAB QUÉT DATA (BẢO VỆ CHẶT CHẺ: CHƯA MUA VIP SẼ BỊ CHẶN & ĐƯA RA CẢNH BÁO) -->
         <div id="tab-scraper" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <div class="p-5 rounded-2xl glass-card shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (250 Data Hàng Loạt)</h2>
                 <p class="text-xs text-slate-500">Chọn danh mục để hệ thống giải mã và trích xuất chậm rãi 250 khách hàng thực tế không lặp lại.</p>
                 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-                    <div onclick="selectPlatform('shopee', 'Khách hàng Sàn TMĐT (Shopee/Lazada)')" id="card-shopee" class="p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1">
+                    <div onclick="selectPlatform('shopee', 'Khách hàng Sàn TMĐT (Shopee/Lazada)')" id="card-shopee" class="p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1 shadow-sm">
                         <div class="font-bold text-xs text-purple-900">🛒 TMĐT (Shopee/Lazada)</div>
                         <div class="text-[10px] text-slate-500">Mỹ phẩm, thời trang,...</div>
                     </div>
-                    <div onclick="selectPlatform('game', 'Khách hàng Game Thủ & Phụ Kiện')" id="card-game" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                    <div onclick="selectPlatform('game', 'Khách hàng Game Thủ & Phụ Kiện')" id="card-game" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm">
                         <div class="font-bold text-xs text-slate-800">🎮 Game Thủ & PC</div>
                         <div class="text-[10px] text-slate-500">Tài khoản, gear, nạp game</div>
                     </div>
-                    <div onclick="selectPlatform('facebook', 'Khách hàng Tương Tác Facebook')" id="card-facebook" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                    <div onclick="selectPlatform('facebook', 'Khách hàng Tương Tác Facebook')" id="card-facebook" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm">
                         <div class="font-bold text-xs text-slate-800">👥 Facebook Lead</div>
                         <div class="text-[10px] text-slate-500">Tương tác, inbox, SĐT</div>
                     </div>
-                    <div onclick="selectPlatform('tiktok', 'Khách hàng TikTok Shop & Live')" id="card-tiktok" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                    <div onclick="selectPlatform('tiktok', 'Khách hàng TikTok Shop & Live')" id="card-tiktok" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm">
                         <div class="font-bold text-xs text-slate-800">🎵 TikTok Shop</div>
                         <div class="text-[10px] text-slate-500">Đơn hàng livestream</div>
                     </div>
-                    <div onclick="selectPlatform('nhadat', 'Khách hàng Tìm Mua Bất Động Sản')" id="card-nhadat" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                    <div onclick="selectPlatform('nhadat', 'Khách hàng Tìm Mua Bất Động Sản')" id="card-nhadat" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm">
                         <div class="font-bold text-xs text-slate-800">🏡 Bất Động Sản</div>
                         <div class="text-[10px] text-slate-500">Đất nền, chung cư, nhà trọ</div>
                     </div>
-                    <div onclick="selectPlatform('taichinh', 'Khách hàng Vay Vốn & Tài Chính')" id="card-taichinh" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                    <div onclick="selectPlatform('taichinh', 'Khách hàng Vay Vốn & Tài Chính')" id="card-taichinh" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm">
                         <div class="font-bold text-xs text-slate-800">💳 Tài Chính & Bảo Hiểm</div>
                         <div class="text-[10px] text-slate-500">Vay tiêu dùng, bảo hiểm</div>
                     </div>
-                    <div onclick="selectPlatform('khoahoc', 'Khách hàng Mua Khóa Học & Đào Tạo')" id="card-khoahoc" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                    <div onclick="selectPlatform('khoahoc', 'Khách hàng Mua Khóa Học & Đào Tạo')" id="card-khoahoc" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm">
                         <div class="font-bold text-xs text-slate-800">📚 Khóa Học & Đào Tạo</div>
                         <div class="text-[10px] text-slate-500">Tiếng Anh, IT, Business</div>
                     </div>
-                    <div onclick="selectPlatform('maps', 'Google Maps Doanh Nghiệp Toàn Quốc')" id="card-maps" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1">
+                    <div onclick="selectPlatform('maps', 'Google Maps Doanh Nghiệp Toàn Quốc')" id="card-maps" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm">
                         <div class="font-bold text-xs text-slate-800">📍 Google Maps Chủ Shop</div>
                         <div class="text-[10px] text-slate-500">Nhà hàng, quán cafe, spa</div>
                     </div>
@@ -447,15 +490,15 @@
 
         <!-- TAB NẠP TIỀN & MÃ QR -->
         <div id="tab-deposit" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4 text-center">
+            <div class="p-5 rounded-2xl glass-card shadow-sm space-y-4 text-center">
                 <h2 class="font-bold text-base text-slate-800 text-left">💳 Nạp Tiền Tự Động Qua Mã QR</h2>
-                <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 text-xs text-left">
+                <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 text-xs text-left shadow-sm">
                     <div>Ngân hàng: <strong id="qr-bank" class="text-purple-700">SeABank (SeANet)</strong></div>
                     <div>Số tài khoản: <strong id="qr-stk" class="text-purple-700">123456789</strong></div>
                     <div>Chủ tài khoản: <strong id="qr-name" class="text-purple-700">ĐINH HOÀNG VIỆT ANH</strong></div>
                     <div>Nội dung chuyển khoản: <strong class="text-purple-700">NAPVIETANH</strong></div>
                 </div>
-                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 inline-block space-y-2">
+                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 inline-block space-y-2 shadow-sm">
                     <div class="text-xs font-bold text-slate-600">Quét mã QR để thanh toán nhanh:</div>
                     <div class="flex justify-center">
                         <img id="dynamic-qr-img" src="" alt="Mã QR Chuyển Khoản" class="w-48 h-48 object-contain rounded-xl border border-slate-300 shadow">
@@ -467,28 +510,28 @@
 
         <!-- TAB ĐƠN HÀNG -->
         <div id="tab-orders" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+            <div class="p-5 rounded-2xl glass-card shadow-sm space-y-3">
                 <h2 class="font-bold text-base text-slate-800">📋 Lịch Sử Đơn Hàng</h2>
-                <div class="p-4 rounded-xl bg-slate-50 border text-center text-xs text-slate-500">Chưa có đơn hàng nào gần đây.</div>
+                <div class="p-4 rounded-xl bg-slate-50 border text-center text-xs text-slate-500 shadow-sm">Chưa có đơn hàng nào gần đây.</div>
             </div>
         </div>
 
         <!-- TAB TÀI KHOẢN -->
         <div id="tab-account" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+            <div class="p-5 rounded-2xl glass-card shadow-sm space-y-3">
                 <h2 class="font-bold text-base text-slate-800">👤 Thông Tin Tài Khoản</h2>
                 <div class="space-y-2 text-xs">
-                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>Họ tên:</span><strong id="acc-view-name">Khách hàng</strong></div>
-                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>Tài khoản:</span><strong id="acc-view-username">user</strong></div>
-                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>Số dư:</span><strong class="text-emerald-600" id="acc-view-balance">0đ</strong></div>
+                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg shadow-sm"><span>Họ tên:</span><strong id="acc-view-name">Khách hàng</strong></div>
+                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg shadow-sm"><span>Tài khoản:</span><strong id="acc-view-username">user</strong></div>
+                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg shadow-sm"><span>Số dư:</span><strong class="text-emerald-600" id="acc-view-balance">0đ</strong></div>
                 </div>
-                <button onclick="logoutSession()" class="w-full py-2.5 bg-red-50 text-red-600 font-bold rounded-xl text-xs">🚪 Đăng Xuất Hệ Thống</button>
+                <button onclick="logoutSession()" class="w-full py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-xl text-xs transition-all">🚪 Đăng Xuất Hệ Thống</button>
             </div>
         </div>
 
         <!-- TAB HỖ TRỢ -->
         <div id="tab-support" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+            <div class="p-5 rounded-2xl glass-card shadow-sm space-y-3">
                 <h2 class="font-bold text-base text-slate-800">🎧 Kênh Hỗ Trợ Khách Hàng</h2>
                 <div class="flex space-x-2 pt-2">
                     <a href="https://t.me" target="_blank" class="flex-1 py-2.5 bg-blue-500 text-white font-bold text-xs text-center rounded-xl shadow">Chat Telegram</a>
@@ -499,7 +542,7 @@
 
         <!-- TAB THÔNG BÁO -->
         <div id="tab-notifications" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+            <div class="p-5 rounded-2xl glass-card shadow-sm space-y-3">
                 <h2 class="font-bold text-base text-slate-800">🔔 Thông Báo Hệ Thống</h2>
                 <div id="client-notifications-list" class="space-y-2"></div>
             </div>
@@ -508,17 +551,18 @@
     </main>
 
     <!-- 4. BOTTOM NAVIGATION BAR -->
-    <nav class="fixed inset-x-0 bottom-0 z-30 bg-white border-t border-slate-200 h-16 flex items-center justify-around px-2 shadow-lg">
-        <button onclick="switchTab('home')" class="flex flex-col items-center justify-center text-slate-400 space-y-0.5"><span class="text-lg">🏠</span><span class="text-[10px]">Trang chủ</span></button>
-        <button onclick="switchTab('orders')" class="flex flex-col items-center justify-center text-slate-400 space-y-0.5"><span class="text-lg">📋</span><span class="text-[10px]">Đơn hàng</span></button>
-        <button onclick="switchTab('scraper')" class="relative -top-3 w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-lg text-xl font-bold">🛒</button>
-        <button onclick="switchTab('deposit')" class="flex flex-col items-center justify-center text-slate-400 space-y-0.5"><span class="text-lg">💳</span><span class="text-[10px]">Nạp tiền</span></button>
-        <button onclick="switchTab('account')" class="flex flex-col items-center justify-center text-slate-400 space-y-0.5"><span class="text-lg">👤</span><span class="text-[10px]">Tài khoản</span></button>
+    <nav class="fixed inset-x-0 bottom-0 z-30 bg-white/90 backdrop-blur-md border-t border-slate-200 h-16 flex items-center justify-around px-2 shadow-lg">
+        <button onclick="switchTab('home')" class="flex flex-col items-center justify-center text-slate-400 hover:text-purple-600 space-y-0.5 transition-all"><span class="text-lg">🏠</span><span class="text-[10px]">Trang chủ</span></button>
+        <button onclick="switchTab('orders')" class="flex flex-col items-center justify-center text-slate-400 hover:text-purple-600 space-y-0.5 transition-all"><span class="text-lg">📋</span><span class="text-[10px]">Đơn hàng</span></button>
+        <button onclick="switchTab('scraper')" class="relative -top-3 w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-lg shadow-purple-500/40 text-xl font-bold hover:scale-105 transition-all">🛒</button>
+        <button onclick="switchTab('deposit')" class="flex flex-col items-center justify-center text-slate-400 hover:text-purple-600 space-y-0.5 transition-all"><span class="text-lg">💳</span><span class="text-[10px]">Nạp tiền</span></button>
+        <button onclick="switchTab('account')" class="flex flex-col items-center justify-center text-slate-400 hover:text-purple-600 space-y-0.5 transition-all"><span class="text-lg">👤</span><span class="text-[10px]">Tài khoản</span></button>
     </nav>
 
     <!-- SCRIPT XỬ LÝ CHÍNH XÁC TUYỆT ĐỐI -->
     <script>
-        let currentUser = { name: '', username: '', role: 'guest', balance: '0đ', vipPackage: 'Chưa kích hoạt (0đ)' };
+        // Tài khoản mới đăng ký số dư mặc định 0đ, chưa có gói VIP
+        let currentUser = { name: '', username: '', role: 'guest', balance: '0đ', vipPackage: 'Chưa kích hoạt (0đ)', totalSpent: 0 };
         let isRegisterMode = false;
         let activePlatform = 'Khách hàng Sàn TMĐT (Shopee/Lazada)';
 
@@ -606,7 +650,7 @@
             }
         }
 
-        // TÀI KHOẢN MỚI ĐĂNG KÝ XONG PHẢI NHẢY QUA ĐĂNG NHẬP (SỐ DƯ = 0Đ, CHƯA CÓ VIP)
+        // ĐĂNG KÝ XONG BẮT BUỘC CHUYỂN QUA ĐĂNG NHẬP (SỐ DƯ = 0Đ, CHƯA CÓ VIP)
         function processAuthSubmit() {
             const usernameInput = document.getElementById('auth-username').value.trim();
             const passInput = document.getElementById('auth-pass').value.trim();
@@ -621,7 +665,7 @@
                 customersList.push({ id: Date.now().toString().slice(-6), username: usernameInput, name: name, balance: '0đ' });
                 showCenterSuccess('Đăng ký thành công! Vui lòng đăng nhập.');
                 
-                // Tự động chuyển qua form Đăng Nhập
+                // Tự động chuyển qua giao diện Đăng Nhập
                 toggleAuthMode();
                 document.getElementById('auth-username').value = usernameInput;
                 document.getElementById('auth-pass').value = '';
@@ -631,14 +675,14 @@
             // Xử lý Đăng Nhập chính thức
             if(usernameInput.toLowerCase() === 'admin') {
                 if(passInput === '1234') {
-                    currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ', vipPackage: 'Gói Vĩnh Viễn PRO' };
+                    currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ', vipPackage: 'Gói Vĩnh Viễn PRO', totalSpent: 2450000 };
                     showCenterSuccess('Đăng nhập thành công Admin!');
                 } else {
                     showCenterSuccess('Sai mật khẩu Admin!');
                     return;
                 }
             } else {
-                currentUser = { name: usernameInput.toUpperCase(), username: usernameInput, role: 'user', balance: '0đ', vipPackage: 'Chưa kích hoạt (0đ)' };
+                currentUser = { name: usernameInput.toUpperCase(), username: usernameInput, role: 'user', balance: '0đ', vipPackage: 'Chưa kích hoạt (0đ)', totalSpent: 0 };
                 showCenterSuccess('Đăng nhập thành công!');
             }
 
@@ -653,12 +697,21 @@
             document.getElementById('auth-modal').classList.remove('hidden');
         }
 
+        // Mua gói VIP trực tiếp
+        function buyVipPackage(packageName, price) {
+            currentUser.vipPackage = `Gói ${packageName} (PRO)`;
+            currentUser.totalSpent += price;
+            updateUIAccess();
+            showCenterSuccess(`Kích hoạt thành công ${currentUser.vipPackage}!`);
+        }
+
         function updateUIAccess() {
             document.getElementById('drop-username').innerText = currentUser.username;
             document.getElementById('drop-balance').innerText = currentUser.balance;
             document.getElementById('home-val-name').innerText = currentUser.name;
             document.getElementById('home-val-balance').innerText = currentUser.balance;
             document.getElementById('home-val-vip').innerText = currentUser.vipPackage;
+            document.getElementById('home-total-spent').innerText = currentUser.totalSpent.toLocaleString('vi-VN') + 'đ';
             document.getElementById('acc-view-name').innerText = currentUser.name;
             document.getElementById('acc-view-username').innerText = currentUser.username;
             document.getElementById('acc-view-balance').innerText = currentUser.balance;
@@ -666,26 +719,24 @@
 
             const adminGroup = document.getElementById('menu-group-admin');
             const badgeRole = document.getElementById('home-badge-role');
+            const vipNoticeBanner = document.getElementById('vip-notice-banner');
 
             if(currentUser.role === 'admin') {
                 adminGroup.classList.remove('hidden');
                 badgeRole.innerText = 'Quản trị viên (Admin)';
+                vipNoticeBanner.classList.add('hidden');
             } else {
                 adminGroup.classList.add('hidden');
                 badgeRole.innerText = 'Thành viên Tiêu Chuẩn';
+                if(currentUser.vipPackage.includes('Chưa kích hoạt')) {
+                    vipNoticeBanner.classList.remove('hidden');
+                } else {
+                    vipNoticeBanner.classList.add('hidden');
+                }
             }
             renderNotifications();
             renderAdminCustomers();
             updateQRCode();
-        }
-
-        function saveVipPricingConfig() {
-            const p1 = document.getElementById('price-1d').value;
-            const p3 = document.getElementById('price-3d').value;
-            const p7 = document.getElementById('price-7d').value;
-            const p15 = document.getElementById('price-15d').value;
-            const p30 = document.getElementById('price-30d').value;
-            showCenterSuccess('Cập nhật thành công giá các gói VIP (1-30 ngày)!');
         }
 
         function renderAdminCustomers() {
@@ -855,8 +906,14 @@
             if(selected) selected.className = "p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1";
         }
 
-        // HACKER DECRYPT CHẠY THẬT CHẬM TỪNG NGƯỜI MỘT ĐỦ ĐÚNG 250 DATA VÀ HIỆN DẤU TÍCH XANH
+        // HACKER DECRYPT CHẠY CHẬM RÃI ĐÚNG 250 DATA VÀ CÓ KIỂM TRA GÓI VIP
         function runHackerScraperExecution() {
+            if(currentUser.role !== 'admin' && currentUser.vipPackage.includes('Chưa kích hoạt')) {
+                showCenterSuccess('Vui lòng chọn mua gói VIP để quét data!');
+                switchTab('home');
+                return;
+            }
+
             const terminal = document.getElementById('terminal-box');
             const execBtn = document.getElementById('exec-btn');
             const dataContainer = document.getElementById('customer-data-table-container');
@@ -877,7 +934,6 @@
 
             let count = 0;
 
-            // Tốc độ 400ms mỗi dòng, chạy cực kỳ chậm rãi đúng 250 data uy tín
             let hackerInterval = setInterval(() => {
                 count += 1;
                 let fName = sampleFirstNames[Math.floor(Math.random() * sampleFirstNames.length)];

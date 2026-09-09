@@ -11,7 +11,6 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         
-        /* Modal thông báo dấu tích xanh to ở giữa màn hình */
         #center-success-modal { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; animation: fadeIn 0.2s ease; }
         .success-box { background: #2d1b4e; border: 1px solid #7c3aed; padding: 32px; border-radius: 28px; text-align: center; color: #fff; max-width: 320px; width: 90%; box-shadow: 0 20px 40px rgba(0,0,0,0.4); animation: scaleUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .checkmark-circle { width: 70px; height: 70px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 34px; box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
@@ -21,13 +20,12 @@
 </head>
 <body class="min-h-screen flex flex-col pb-20 lg:pb-0">
 
-    <!-- MODAL THÔNG BÁO DẤU TÍCH XANH Ở GIỮA MÀN HÌNH -->
+    <!-- MODAL THÔNG BÁO DẤU TÍCH XANH Ở GIỮA (TỰ ĐỘNG TẮT SAU 1.5S, KHÔNG BỊ ĐỨNG HÌNH) -->
     <div id="center-success-modal" class="hidden">
         <div class="success-box space-y-3">
             <div class="checkmark-circle">✅</div>
             <h3 class="font-extrabold text-xl text-white">Thành Công!</h3>
             <p id="center-success-text" class="text-xs text-purple-200">Đã hoàn thành thao tác hệ thống.</p>
-            <button onclick="closeCenterModal()" class="w-full py-2.5 bg-purple-600 hover:bg-purple-500 font-bold text-xs rounded-xl text-white shadow-lg transition-all">Đóng</button>
         </div>
     </div>
 
@@ -93,7 +91,7 @@
         <div class="h-16 flex items-center justify-between px-6 border-b border-purple-900/50">
             <div class="flex items-center space-x-3">
                 <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center font-bold text-white">⚡</div>
-                <span class="font-extrabold text-base tracking-wide text-white">LIKE17.SITE</span>
+                <span class="font-extrabold text-base tracking-wide text-white">AUTOPOSTAI PANEL</span>
             </div>
             <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
         </div>
@@ -307,7 +305,7 @@
             </div>
         </div>
 
-        <!-- TAB KHO SĂN MÃ (HIỆN THÔNG BÁO DẤU TÍCH XANH Ở GIỮA KHI QUÉT THÀNH CÔNG) -->
+        <!-- TAB KHO SĂN MÃ -->
         <div id="tab-deals" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🔥 Kho Săn Mã Giảm Giá & Quét Mã Đa Sàn</h2>
@@ -337,7 +335,7 @@
             </div>
         </div>
 
-        <!-- TAB QUÉT DATA (GIẢI MÃ HACKER CHẠY TỪNG DATA 1 & HIỆN DẤU TÍCH XANH HOÀN THÀNH) -->
+        <!-- TAB QUÉT DATA (GIẢI MÃ HACKER KHÔNG BỊ ĐỨNG, TỰ ĐỘNG TẮT MODAL) -->
         <div id="tab-scraper" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (50 - 500 Data Hàng Loạt)</h2>
@@ -382,7 +380,7 @@
                     <button onclick="runHackerScraperExecution()" id="exec-btn" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">🚀 Kích Hoạt Quét 50 - 500 Data Giải Mã Tốc Độ Cao</button>
                 </div>
 
-                <!-- MÀN HÌNH TERMINAL HACKER GIẢI MÃ -->
+                <!-- TERMINAL HACKER -->
                 <div class="bg-black p-4 rounded-xl font-mono text-[11px] text-emerald-400 h-40 overflow-y-auto space-y-1 custom-scrollbar border border-purple-900 shadow-inner" id="terminal-box">
                     <div>// [SYSTEM] Sẵn sàng kích hoạt thuật toán giải mã dữ liệu hàng loạt từ Google Sheets...</div>
                 </div>
@@ -491,7 +489,7 @@
         ];
 
         let notifications = [
-            { id: 1, text: '🔔 Chào mừng bạn đến với like17.site – Hệ thống cào data & săn mã tự động.', date: '2026-09-09', active: true }
+            { id: 1, text: '🔔 Chào mừng bạn đến với hệ thống cào data & săn mã tự động.', date: '2026-09-09', active: true }
         ];
 
         let voucherDatabase = [
@@ -502,14 +500,14 @@
             { code: 'SKINCARE50K', desc: 'Giảm 50K mỹ phẩm Hàn Quốc', platform: 'SHOPEE' }
         ];
 
-        // Hiển thị modal dấu tích xanh ở giữa màn hình
+        // Hiển thị modal dấu tích xanh ở giữa, tự động tắt sau 1.2s để không bị đứng hình
         function showCenterSuccess(text) {
             document.getElementById('center-success-text').innerText = text;
-            document.getElementById('center-success-modal').classList.remove('hidden');
-        }
-
-        function closeCenterModal() {
-            document.getElementById('center-success-modal').classList.add('hidden');
+            const modal = document.getElementById('center-success-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 1200);
         }
 
         function copyToClipboard(text) {
@@ -576,14 +574,14 @@
             const passInput = document.getElementById('auth-pass').value.trim();
 
             if(!usernameInput || !passInput) { 
-                showCenterSuccess('Vui lòng nhập đầy đủ tài khoản và mật khẩu!'); 
+                showCenterSuccess('Vui lòng nhập đầy đủ tài khoản!'); 
                 return; 
             }
 
             if(!isRegisterMode && usernameInput.toLowerCase() === 'admin') {
                 if(passInput === '1234') {
                     currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ' };
-                    showCenterSuccess('Đăng nhập thành công với quyền Quản trị viên!');
+                    showCenterSuccess('Đăng nhập thành công Admin!');
                 } else {
                     showCenterSuccess('Sai mật khẩu Admin!');
                     return;
@@ -671,7 +669,7 @@
                 c.name = document.getElementById('modal-edit-name').value;
                 c.balance = document.getElementById('modal-edit-balance').value;
                 renderAdminCustomers();
-                showCenterSuccess('Cập nhật thông tin khách hàng thành công!');
+                showCenterSuccess('Cập nhật thành công!');
                 document.getElementById('customer-edit-modal').classList.add('hidden');
             }
         }
@@ -679,7 +677,7 @@
         function deleteCustomer(id) {
             customersList = customersList.filter(item => item.id !== id);
             renderAdminCustomers();
-            showCenterSuccess('Xóa khách hàng thành công!');
+            showCenterSuccess('Xóa thành công!');
         }
 
         function scanNewVoucherCode() {
@@ -698,7 +696,7 @@
                     </div>
                 </div>
             `);
-            showCenterSuccess(`Quét thành công mã mới: ${randomDeal.code}!`);
+            showCenterSuccess(`Đã quét mã: ${randomDeal.code}!`);
         }
 
         function updateQRCode() {
@@ -716,7 +714,7 @@
 
         function saveBankConfig() {
             updateQRCode();
-            showCenterSuccess('Cập nhật thông tin nạp tiền & tạo mã QR thành công!');
+            showCenterSuccess('Cập nhật thành công!');
         }
 
         function switchTab(tabId) {
@@ -730,7 +728,7 @@
 
         function publishNotification() {
             const content = document.getElementById('new-noti-content').value.trim();
-            if(!content) { showCenterSuccess('Vui lòng nhập nội dung thông báo!'); return; }
+            if(!content) { showCenterSuccess('Vui lòng nhập nội dung!'); return; }
 
             notifications.unshift({ id: Date.now(), text: content, date: 'Hôm nay', active: true });
             renderNotifications();
@@ -750,7 +748,7 @@
         function deleteNotification(id) {
             notifications = notifications.filter(n => n.id !== id);
             renderNotifications();
-            showCenterSuccess('Xóa thông báo thành công!');
+            showCenterSuccess('Xóa thành công!');
         }
 
         function renderNotifications() {
@@ -766,7 +764,7 @@
                 if(n.active) {
                     homeHtml += `
                         <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2 border-l-4 border-l-purple-600">
-                            <div class="flex items-center justify-between text-xs text-slate-400"><span>like17.site</span><span>${n.date} 📌</span></div>
+                            <div class="flex items-center justify-between text-xs text-slate-400"><span>Hệ thống</span><span>${n.date} 📌</span></div>
                             <p class="text-xs font-semibold text-slate-800">${n.text}</p>
                         </div>`;
                     clientHtml += `
@@ -801,7 +799,7 @@
             if(selected) selected.className = "p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1";
         }
 
-        // GIẢI MÃ HACKER CHẠY TỪNG DATA 1 VÀ HIỂN THỊ HÀNG LOẠT 50 - 500 DATA MỚI KHÔNG LẶP LẠI
+        // GIẢI MÃ HACKER KHÔNG BỊ ĐỨNG, CHẠY TỪNG DATA VÀ HIỆN DẤU TÍCH XANH TỰ TẮT
         function runHackerScraperExecution() {
             const terminal = document.getElementById('terminal-box');
             const execBtn = document.getElementById('exec-btn');
@@ -811,7 +809,7 @@
             execBtn.disabled = true;
             execBtn.classList.add('opacity-50');
             dataContainer.classList.add('hidden');
-            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Đang kết nối Webhook Make.com & khởi tạo luồng giải mã dữ liệu hàng loạt (${activePlatform})...</div>`;
+            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Kết nối Make Webhook & khởi tạo luồng giải mã dữ liệu hàng loạt (${activePlatform})...</div>`;
 
             let sampleFirstNames = ["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Đặng", "Bùi"];
             let sampleMiddleNames = ["Văn", "Thị", "Hồng", "Đình", "Thanh", "Minh", "Quang", "Hữu", "Ngọc", "Xuân"];
@@ -821,7 +819,6 @@
             let generatedHtml = '';
             let count = 0;
 
-            // Hiệu ứng giải mã của hacker chạy ra từng dòng dữ liệu 1 cực kỳ uy tín
             let hackerInterval = setInterval(() => {
                 count += 25;
                 let fName = sampleFirstNames[Math.floor(Math.random() * sampleFirstNames.length)];
@@ -831,7 +828,7 @@
                 let phone = `0${['9','3','7','8','5'][Math.floor(Math.random()*5)]}${Math.floor(10000000 + Math.random()*90000000)}` ;
                 let address = districts[Math.floor(Math.random() * districts.length)];
 
-                terminal.innerHTML += `<div class="text-emerald-300">> [DECRYPT] Đã trích xuất node khách hàng [${fullName} - ${phone}] thành công...</div>`;
+                terminal.innerHTML += `<div class="text-emerald-300">> [DECRYPT] Đã trích xuất node khách hàng [${fullName} - ${phone}]...</div>`;
                 terminal.scrollTop = terminal.scrollHeight;
 
                 generatedHtml += `
@@ -855,14 +852,14 @@
                     rowsContainer.innerHTML = generatedHtml;
                     dataContainer.classList.remove('hidden');
 
-                    // Hiện thông báo dấu tích xanh to ở giữa màn hình theo đúng yêu cầu
-                    showCenterSuccess('Đã quét và giải mã thành công 250 Data hàng loạt!');
+                    // Hiện dấu tích xanh ở giữa màn hình và tự động biến mất sau 1.2s không bị đứng hình
+                    showCenterSuccess('Đã giải mã thành công 250 Data hàng loạt!');
                 }
-            }, 120);
+            }, 100);
         }
 
         function downloadExcelFile() {
-            const csvContent = "data:text/csv;charset=utf-8,HoVaTen,SoDienThoai,NhuCau,KhuVuc,LienHe\nNguyen Thi Mai,0982123888,Skincare,TP.HCM,0982123888\nTran Van Hoang,0934788122,Ao thun,Ha Noi,0934788122";
+            const csvContent = "data:text/csv;charset=utf-8,HoVaTen,SoDienThoai,NhuCau,KhuVuc,LienHe\nNguyen Thi Mai,0982123888,Skincare,TP.HCM,0982123888";
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);

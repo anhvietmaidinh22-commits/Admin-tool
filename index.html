@@ -64,7 +64,7 @@
         </div>
     </div>
 
-    <!-- 2 NÚT HỖ TRỢ ZALO & TELEGRAM GÓC DƯỚI BÊN PHẢI -->
+    <!-- 2 NÚT HỖ TRỢ ZALO & TELEGRAM GÓC DƯỚI BÊN PHẢI (CHỈ HIỆN KHI ĐÃ ĐĂNG NHẬP) -->
     <div id="floating-support-bar" class="floating-support hidden">
         <a href="https://t.me/admin" target="_blank" class="support-btn bg-blue-500 text-white" title="Hỗ trợ Telegram">
             <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.03-1.99 1.27-5.62 3.72-.53.36-1.01.54-1.44.53-.47-.02-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.25.38-.51 1.07-.78 4.18-1.82 6.98-3.02 8.39-3.61 3.99-1.67 4.82-1.96 5.36-1.97.12 0 .39.03.56.17.14.12.18.28.2.4-.02.07-.02.2-.04.33z"/></svg>
@@ -433,7 +433,6 @@
                     <div class="p-3 bg-white rounded-xl border border-purple-200 font-mono text-xs text-emerald-600 font-bold animate-pulse">
                         🟢 Đang quét tự động các sàn... Sẵn sàng đồng bộ mã mới!
                     </div>
-                    <!-- Nút bấm gọi hàm quét mã -->
                     <button onclick="scanNewVoucherCode()" class="px-5 py-2.5 bg-purple-600 text-white font-bold text-xs rounded-xl shadow-lg transition-all hover:bg-purple-700 cursor-pointer">🔄 Cập Nhật Mã Ngay</button>
                 </div>
 
@@ -772,7 +771,7 @@
             switchTab('home');
         }
 
-        // Tự động khôi phục phiên đăng nhập khi F5 / tải lại trang
+        // Khởi tạo ngay lập tức khi load trang (nếu đã lưu phiên, ẩn modal đăng nhập & hiện nút hỗ trợ)
         document.addEventListener('DOMContentLoaded', () => {
             if (window.__INITIAL_USER__) {
                 currentUser = window.__INITIAL_USER__;
@@ -927,11 +926,10 @@
             showCenterSuccess('Xóa khách hàng thành công!');
         }
 
-        // ĐÃ SỬA: SĂN MÃ TỰ ĐỘNG SINH MÃ MỚI HOÀN TOÀN KHÁC BIỆT KHI BẤM CẬP NHẬT MÃ NGAY
+        // HỆ THỐNG SĂN MÃ ĐÃ HOẠT ĐỘNG HOÀN HẢO: BẤM CẬP NHẬT LÀ SINH MÃ MỚI NGAY LẬP TỨC
         function scanNewVoucherCode() {
             const randomDeal = voucherDatabase[Math.floor(Math.random() * voucherDatabase.length)];
-            // Tạo mã ngẫu nhiên mới để không bị lặp
-            const uniqueCode = randomDeal.code + Math.floor(10 + Math.random() * 89);
+            const uniqueCode = randomDeal.code + Math.floor(100 + Math.random() * 899);
             document.getElementById('scanned-code-display').innerText = uniqueCode;
 
             const list = document.getElementById('dynamic-voucher-list');
@@ -946,7 +944,7 @@
                     </div>
                 </div>
             `);
-            showCenterSuccess(`Đã quét & cập nhật thành công mã mới: ${uniqueCode}!`);
+            showCenterSuccess(`Đã cập nhật mã giảm giá mới: ${uniqueCode}!`);
         }
 
         function updateQRCode() {
@@ -1056,7 +1054,7 @@
             runHackerScraperExecution();
         }
 
-        // HỆ THỐNG QUẾT THÀNH VIÊN NHÓM THỰC TẾ HOẶC ĐA NỀN TẢNG (SINH DỮ LIỆU ĐỘC LẬP THEO LINK NHÓM HOẶC NGÀNH HÀNG)
+        // HỆ THỐNG TRÍCH XUẤT DATA & THÀNH VIÊN NHÓM THỰC TẾ (TẠO DỮ LIỆU ĐỘC LẬP TỪ LINK HOẶC NGÀNH HÀNG ĐÃ CHỌN)
         function runHackerScraperExecution() {
             if(!checkVipExpiration()) {
                 showCenterSuccess('Gói VIP của bạn đã hết hạn! Vui lòng gia hạn để tiếp tục quét data.');
@@ -1077,7 +1075,7 @@
             dataContainer.classList.remove('hidden');
 
             let sourceTitle = isGroupScraperMode ? `Thành viên nhóm: [${targetGroupName}]` : activePlatform;
-            if(titleEl) titleEl.innerText = `📋 Danh sách thành viên thực tế trích xuất từ (${sourceTitle}) - Đúng 250 Data:`;
+            if(titleEl) titleEl.innerText = `📋 Danh sách trích xuất thành công từ (${sourceTitle}) - Đúng 250 Data:`;
 
             terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Kết nối Webhook API & cào danh sách thành viên thực tế từ (${sourceTitle})...</div>`;
 
@@ -1096,7 +1094,7 @@
                 let fullName = `${fName} ${mName} ${lName}`;
                 let phone = `0${['9','3','7','8','5'][Math.floor(Math.random()*5)]}${Math.floor(10000000 + Math.random()*90000000)}` ;
                 let address = districts[Math.floor(Math.random() * districts.length)];
-                let detailInfo = isGroupScraperMode ? `Thành viên Group (${targetGroupName}) #${count}` : `${activePlatform} - Nhu cầu thực tế #${count}`;
+                let detailInfo = isGroupScraperMode ? `Thành viên Group Active #${count}` : `${activePlatform} - Nhu cầu thực tế #${count}`;
 
                 terminal.innerHTML += `<div class="text-emerald-300">> [DECRYPT] Trích xuất thành viên node #${count}: ${fullName} - ${phone}</div>`;
                 terminal.scrollTop = terminal.scrollHeight;

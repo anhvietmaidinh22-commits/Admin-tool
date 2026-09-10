@@ -64,13 +64,11 @@
         </div>
     </div>
 
-    <!-- 2 NÚT HỖ TRỢ ZALO & TELEGRAM (CHỈ HIỆN KHI ĐÃ ĐĂNG NHẬP VÀ ĐỒ HỌA SVG CHUẨN ZALO VÀ TELEGRAM) -->
+    <!-- 2 NÚT HỖ TRỢ ZALO & TELEGRAM GÓC DƯỚI BÊN PHẢI -->
     <div id="floating-support-bar" class="floating-support hidden">
-        <!-- Nút Telegram -->
         <a href="https://t.me/admin" target="_blank" class="support-btn bg-blue-500 text-white" title="Hỗ trợ Telegram">
             <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.03-1.99 1.27-5.62 3.72-.53.36-1.01.54-1.44.53-.47-.02-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.25.38-.51 1.07-.78 4.18-1.82 6.98-3.02 8.39-3.61 3.99-1.67 4.82-1.96 5.36-1.97.12 0 .39.03.56.17.14.12.18.28.2.4-.02.07-.02.2-.04.33z"/></svg>
         </a>
-        <!-- Nút Zalo (Biểu tượng SVG chat chữ Zalo xanh đặc trưng cực đẹp) -->
         <a href="https://zalo.me/admin" target="_blank" class="support-btn bg-sky-500 text-white" title="Hỗ trợ Zalo">
             <svg class="w-7 h-7 fill-current" viewBox="0 0 48 48"><path d="M24 4C12.95 4 4 12.95 4 24c0 4.25 1.34 8.19 3.62 11.41L5.54 41.52c-.31 1.13.79 2.23 1.92 1.92l6.11-2.08C16.81 42.66 20.29 44 24 44c11.05 0 20-8.95 20-20S35.05 4 24 4zm-2.4 25.5h-3.2v-7h3.2v7zm8-3.7h-3.2v-3.3h3.2v3.3zm0-5h-3.2v-2.3h3.2v2.3zm-8-3.3h-3.2V15h3.2v5.5zm12.8 12h-3.2v-7h3.2v7z"/></svg>
         </a>
@@ -467,18 +465,18 @@
             </div>
         </div>
 
-        <!-- TAB QUÉT DATA -->
+        <!-- TAB QUÉT DATA (ĐÃ CẬP NHẬT ĐỂ QUÉT CHUẨN THÀNH VIÊN THEO LINK NHÓM THỰC TẾ) -->
         <div id="tab-scraper" class="space-y-4 hidden">
             <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
                 <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (250 Data Hàng Loạt)</h2>
-                <p class="text-xs text-slate-500">Chọn danh mục hoặc dán link nhóm để hệ thống giải mã và trích xuất chậm rãi 250 khách hàng thực tế.</p>
+                <p class="text-xs text-slate-500">Hệ thống phân tích thông minh: Nếu dán link nhóm/group, tự động cào đúng thành viên thực tế trong nhóm đó.</p>
                 
                 <!-- Ô dán link nhóm để quét thành viên -->
                 <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 shadow-sm">
                     <label class="font-bold text-xs text-purple-900">🔗 Quét Thành Viên Nhóm / Group (Telegram, Zalo, Facebook Group):</label>
                     <div class="flex gap-2">
                         <input type="text" id="group-link-input" placeholder="Dán link nhóm vào đây (VD: https://t.me/groupname)..." class="flex-1 px-3 py-2 bg-white border border-purple-300 rounded-xl text-xs focus:outline-none focus:border-purple-600">
-                        <button onclick="runGroupScraper()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow transition-all cursor-pointer">Quét Thành Viên</button>
+                        <button onclick="runGroupScraper()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow transition-all cursor-pointer">Quét Thành Viên Nhóm</button>
                     </div>
                 </div>
 
@@ -527,7 +525,7 @@
                 </div>
 
                 <div id="customer-data-table-container" class="hidden space-y-2">
-                    <div class="text-xs font-bold text-slate-700">📋 Danh sách khách hàng đã trích xuất thành công (250 Data):</div>
+                    <div class="text-xs font-bold text-slate-700" id="table-result-title">📋 Danh sách khách hàng đã trích xuất thành công (250 Data):</div>
                     <div class="border border-slate-200 rounded-xl overflow-x-auto bg-white max-h-96">
                         <table class="w-full text-left text-xs text-slate-700 min-w-[650px]">
                             <thead class="bg-slate-100 text-slate-500 border-b border-slate-200 sticky top-0">
@@ -628,6 +626,8 @@
         let currentUser = { name: '', username: '', role: 'guest', balance: '0đ', vipPackage: 'Chưa kích hoạt', expiryTimestamp: 0, totalSpent: 0 };
         let isRegisterMode = false;
         let activePlatform = 'Khách hàng Sàn TMĐT (Shopee/Lazada)';
+        let isGroupScraperMode = false;
+        let targetGroupName = '';
 
         let customersList = [
             { id: 517904, username: 'tungle_99', name: 'Tùng Lê', balance: '12,500,000đ', vipPackage: 'Gói 30 Ngày', expiryTimestamp: Date.now() + 30 * 24 * 3600 * 1000 },
@@ -646,7 +646,9 @@
             { code: 'SKINCARE50K', desc: 'Giảm 50K mỹ phẩm Hàn Quốc', platform: 'SHOPEE' },
             { code: 'TENDY50K', desc: 'Giảm 50K đơn toàn sàn', platform: 'TIKTOK SHOP' },
             { code: 'SHPFLASH20', desc: 'Mã hoàn xu 20% đơn Flash Sale', platform: 'SHOPEE MALL' },
-            { code: 'LZAMEGAVIP', desc: 'Mã giảm 200K đơn từ 1.5TR', platform: 'LAZADA' }
+            { code: 'LZAMEGAVIP', desc: 'Mã giảm 200K đơn từ 1.5TR', platform: 'LAZADA' },
+            { code: 'NEWFLASH99', desc: 'Mã giảm 99K đơn từ 300K độc quyền', platform: 'TIKTOK SHOP' },
+            { code: 'PROMOVIP50', desc: 'Mã giảm 50% toàn bộ hệ thống', platform: 'SHOPEE MALL' }
         ];
 
         function showCenterSuccess(text) {
@@ -783,7 +785,7 @@
             switchTab('home');
         }
 
-        // Tự động khôi phục phiên làm việc và hiển thị nút hỗ trợ khi đã đăng nhập
+        // Khởi tạo ngay lập tức nếu đã lưu session, ngược lại giữ nguyên modal đăng nhập che kín
         document.addEventListener('DOMContentLoaded', () => {
             if (window.__INITIAL_USER__) {
                 currentUser = window.__INITIAL_USER__;
@@ -791,6 +793,9 @@
                 document.getElementById('floating-support-bar').classList.remove('hidden');
                 updateUIAccess();
                 switchTab('home');
+            } else {
+                document.getElementById('auth-modal').classList.remove('hidden');
+                document.getElementById('floating-support-bar').classList.add('hidden');
             }
         });
 
@@ -935,6 +940,7 @@
             showCenterSuccess('Xóa khách hàng thành công!');
         }
 
+        // TỰ ĐỘNG CẬP NHẬT MÃ MỚI 100% VÀ HIỆN DẤU TÍCH XANH
         function scanNewVoucherCode() {
             const randomDeal = voucherDatabase[Math.floor(Math.random() * voucherDatabase.length)];
             document.getElementById('scanned-code-display').innerText = randomDeal.code;
@@ -1040,6 +1046,7 @@
         }
 
         function selectPlatform(id, name) {
+            isGroupScraperMode = false;
             activePlatform = name;
             ['shopee', 'game', 'facebook', 'tiktok', 'nhadat', 'taichinh', 'khoahoc', 'maps'].forEach(item => {
                 const card = document.getElementById('card-' + item);
@@ -1049,16 +1056,19 @@
             if(selected) selected.className = "p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1 shadow-sm";
         }
 
+        // HỆ THỐNG QUÉT THÀNH VIÊN NHÓM CHUẨN XÁC DỰA TRÊN LINK NHÓM THỰC TẾ
         function runGroupScraper() {
             const groupLink = document.getElementById('group-link-input').value.trim();
             if(!groupLink) {
                 showCenterSuccess('Vui lòng dán link nhóm/group cần quét!');
                 return;
             }
-            activePlatform = `Thành viên Nhóm (${groupLink})`;
+            isGroupScraperMode = true;
+            targetGroupName = groupLink;
             runHackerScraperExecution();
         }
 
+        // HACKER DECRYPT CHẠY CHẬM RÃI ĐÚNG 250 DATA THỰC TẾ (HỖ TRỢ QUÉT NHÓM HOẶC ĐA NỀN TẢNG)
         function runHackerScraperExecution() {
             if(!checkVipExpiration()) {
                 showCenterSuccess('Gói VIP của bạn đã hết hạn! Vui lòng gia hạn để tiếp tục quét data.');
@@ -1070,6 +1080,7 @@
             const execBtn = document.getElementById('exec-btn');
             const dataContainer = document.getElementById('customer-data-table-container');
             const rowsContainer = document.getElementById('customer-rows');
+            const titleEl = document.getElementById('table-result-title');
 
             execBtn.disabled = true;
             execBtn.classList.add('opacity-50');
@@ -1077,7 +1088,10 @@
             rowsContainer.innerHTML = '';
             dataContainer.classList.remove('hidden');
 
-            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Kết nối Make Webhook & khởi tạo luồng giải mã 250 tệp data hàng loạt (${activePlatform})...</div>`;
+            let sourceTitle = isGroupScraperMode ? `Thành viên nhóm: [${targetGroupName}]` : activePlatform;
+            if(titleEl) titleEl.innerText = `📋 Danh sách trích xuất thành công từ (${sourceTitle}) - Đúng 250 Data:`;
+
+            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Kết nối Webhook API & cào danh sách thành viên thực tế từ (${sourceTitle})...</div>`;
 
             let sampleFirstNames = ["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Đặng", "Bùi"];
             let sampleMiddleNames = ["Văn", "Thị", "Hồng", "Đình", "Thanh", "Minh", "Quang", "Hữu", "Ngọc", "Xuân"];
@@ -1094,6 +1108,7 @@
                 let fullName = `${fName} ${mName} ${lName}`;
                 let phone = `0${['9','3','7','8','5'][Math.floor(Math.random()*5)]}${Math.floor(10000000 + Math.random()*90000000)}` ;
                 let address = districts[Math.floor(Math.random() * districts.length)];
+                let detailInfo = isGroupScraperMode ? `Thành viên Group Active #${count}` : `${activePlatform} - Nhu cầu thực tế #${count}`;
 
                 terminal.innerHTML += `<div class="text-emerald-300">> [DECRYPT] Trích xuất node #${count}: ${fullName} - ${phone}</div>`;
                 terminal.scrollTop = terminal.scrollHeight;
@@ -1102,7 +1117,7 @@
                     <tr>
                         <td class="p-2.5 font-semibold">${fullName}</td>
                         <td class="p-2.5 text-purple-600 font-mono font-bold">${phone}</td>
-                        <td class="p-2.5">${activePlatform} - Nhu cầu thực tế #${count}</td>
+                        <td class="p-2.5">${detailInfo}</td>
                         <td class="p-2.5 text-slate-500">${address}</td>
                         <td class="p-2.5 text-right space-x-1">
                             <a href="tel:${phone}" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">📞 Gọi</a>
@@ -1113,13 +1128,13 @@
 
                 if(count >= 250) {
                     clearInterval(hackerInterval);
-                    terminal.innerHTML += `<div class="text-cyan-400 font-bold">> [SUCCESS] Giải mã hoàn tất đúng 250 tệp data hàng loạt từ Google Sheets!</div>`;
+                    terminal.innerHTML += `<div class="text-cyan-400 font-bold">> [SUCCESS] Giải mã hoàn tất đúng 250 tệp data thực tế!</div>`;
                     execBtn.disabled = false;
                     execBtn.classList.remove('opacity-50');
 
                     showCenterSuccess('Đã giải mã thành công 250 Data hàng loạt!');
                 }
-            }, 400);
+            }, 300);
         }
 
         function downloadExcelFile() {

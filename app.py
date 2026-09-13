@@ -5,8 +5,9 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-TOKEN = os.environ.get('TOKEN')
-CHAT_ID = os.environ.get('CHAT_ID')
+# Đã điền sẵn Token và Chat ID của bạn
+TOKEN = "8986371446:AAEo6hNxWqXwQ181L8YXz68t1SVHeYiLo7g"
+CHAT_ID = "8348914397"
 
 daily_total_in = 0
 last_reset_date = datetime.now().strftime('%Y-%m-%d')
@@ -43,7 +44,6 @@ def webhook():
             
         formatted_amount = f"{int(amount_val):,}"
 
-        # Xử lý an toàn cho số dư hiện tại từ SePay gửi sang
         try:
             acc_val = float(accumulated)
             formatted_accumulated = f"{int(acc_val):,} VNĐ"
@@ -54,7 +54,6 @@ def webhook():
             daily_total_in += amount_val
             formatted_daily_total = f"{int(daily_total_in):,}"
 
-            # Khung thông báo chuẩn theo ý sếp
             message = (
                 f"🚨 **CÓ TIỀN CÓ TIỀN SẾP ƠI 💰💰💵** 🚨\n"
                 f"━━━━━━━━━━━━━━━━━━━\n"

@@ -10,7 +10,6 @@ CHAT_ID = os.environ.get('CHAT_ID')
 
 daily_total_in = 0
 last_reset_date = datetime.now().strftime('%Y-%m-%d')
-current_balance = 0
 
 @app.route('/')
 def home():
@@ -18,7 +17,7 @@ def home():
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    global daily_total_in, last_reset_date, current_balance
+    global daily_total_in, last_reset_date
     try:
         data = request.json
         if not data:
@@ -30,7 +29,7 @@ def webhook():
         content = data.get('content', 'N/A')
         transferType = data.get('transferType', 'in')
         transferAmount = data.get('transferAmount', 0)
-        accumulated = data.get('accumulated')
+        accumulated = data.get('accumulated', 0)
         
         current_date = datetime.now().strftime('%Y-%m-%d')
         if current_date != last_reset_date:
@@ -42,19 +41,20 @@ def webhook():
         except ValueError:
             amount_val = 0
             
-        formatted_amount = f"{int(amount_val):,}" if str(transferAmount).replace('.', '', 1).isdigit() else transferAmount
+        formatted_amount = f"{int(amount_val):,}"
+
+        # Xử lý an toàn cho số dư hiện tại từ SePay gửi sang
+        try:
+            acc_val = float(accumulated)
+            formatted_accumulated = f"{int(acc_val):,} VNĐ"
+        except (ValueError, TypeError):
+            formatted_accumulated = "Không có dữ liệu"
 
         if transferType == 'in':
             daily_total_in += amount_val
             formatted_daily_total = f"{int(daily_total_in):,}"
 
-            if accumulated is not None and str(accumulated).replace('.', '', 1).isdigit():
-                formatted_accumulated = f"{int(float(accumulated)):,} VNĐ"
-            else:
-                current_balance += amount_val
-                formatted_accumulated = f"{int(current_balance):,} VNĐ (tạm tính)"
-
-            # Tiêu đề và khung tin nhắn theo yêu cầu
+            # Khung thông báo chuẩn theo ý sếp
             message = (
                 f"🚨 **CÓ TIỀN CÓ TIỀN SẾP ƠI 💰💰💵** 🚨\n"
                 f"━━━━━━━━━━━━━━━━━━━\n"

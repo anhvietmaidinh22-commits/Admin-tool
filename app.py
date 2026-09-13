@@ -54,9 +54,9 @@ def webhook():
                 current_balance += amount_val
                 formatted_accumulated = f"{int(current_balance):,} VNĐ (tạm tính)"
 
-            # Khung tin nhắn trang trí icon bắt mắt
+            # Tiêu đề và khung tin nhắn theo yêu cầu
             message = (
-                f"🔔 **BIẾN ĐỘNG SỐ DƯ - TIỀN VỀ** 🔔\n"
+                f"🚨 **CÓ TIỀN CÓ TIỀN SẾP ƠI 💰💰💵** 🚨\n"
                 f"━━━━━━━━━━━━━━━━━━━\n"
                 f"🏛️ **Ngân hàng:** `{gateway}`\n"
                 f"💵 **Số tiền:** `+{formatted_amount} VNĐ`\n"

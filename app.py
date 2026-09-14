@@ -16,7 +16,6 @@ last_reset_date = datetime.now().strftime('%Y-%m-%d')
 latest_accumulated = "Chưa cập nhật số dư"
 latest_gateway = "N/A"
 
-# Bộ nhớ lưu trạng thái hội thoại của sếp (đang chờ nhập số ngày)
 user_states = {}
 
 def check_and_reset_day():
@@ -32,23 +31,23 @@ def check_and_reset_day():
         daily_amounts = []
         last_reset_date = current_date
 
-def send_main_menu(chat_id):
-    # Tạo bàn phím menu cố định phía dưới khung chat
-    menu_keyboard = {
-        "keyboard": [
-            [{"text": "📊 Tổng kết hôm nay"}, {"text": "📈 Thống kê theo số ngày"}],
-            [{"text": "💎 Xem số dư hiện tại"}, {"text": "⏰ Cài đặt giờ báo cáo"}]
-        ],
-        "resize_keyboard": True,
-        "is_persistent": True
-    }
+# Gửi Menu dạng nút bấm trực tiếp trong tin nhắn
+def send_inline_menu(chat_id):
     current_time_str = datetime.now().strftime('%d/%m/%Y lúc %H:%M:%S')
+    inline_keyboard = {
+        "inline_keyboard": [
+            [{"text": "📊 Tổng kết hôm nay", "callback_data": "btn_today"}],
+            [{"text": "📈 Thống kê theo số ngày", "callback_data": "btn_stats_days"}],
+            [{"text": "💎 Xem số dư hiện tại", "callback_data": "btn_balance"}],
+            [{"text": "⏰ Cài đặt giờ báo cáo", "callback_data": "btn_settings"}]
+        ]
+    }
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     payload = {
         "chat_id": chat_id,
         "text": f"🤖 *BẢNG ĐIỀU KHIỂN QUẢN LÝ TÀI CHÍNH*\n🕒 Thời điểm mở menu: `{current_time_str}`\n\nSếp muốn thao tác tính năng nào, hãy bấm vào các nút bên dưới nhé:",
         "parse_mode": "Markdown",
-        "reply_markup": menu_keyboard
+        "reply_markup": inline_keyboard
     }
     requests.post(url, json=payload)
 
@@ -56,7 +55,6 @@ def send_main_menu(chat_id):
 def home():
     return "Bot Management System is running!", 200
 
-# Endpoint nhận lệnh tự động từ Pipedream lúc 21h hàng ngày
 @app.route('/trigger-summary', methods=['POST'])
 def trigger_summary():
     global daily_total_in, daily_tx_count, daily_amounts, latest_accumulated, latest_gateway
@@ -101,21 +99,61 @@ def webhook():
         if not data:
             return jsonify({"status": "error"}), 400
 
-        # Xử lý tin nhắn văn bản và các nút bấm menu cố định
+        # 1. Xử lý khi sếp bấm vào các nút Inline trong tin nhắn
+        if 'callback_query' in data:
+            query = data['callback_query']
+            callback_data = query['data']
+            chat_id = query['message']['chat']['id']
+            check_and_reset_day()
+            now_str = datetime.now().strftime('%d/%m/%Y lúc %H:%M:%S')
+
+            if callback_data == 'btn_today':
+                avg = int(daily_total_in / daily_tx_count) if daily_tx_count > 0 else 0
+                msg = (
+                    f"📊 *BÁO CÁO NHANH HÔM NAY*\n"
+                    f"🕒 Thời gian: `{now_str}`\n"
+                    f"━━━━━━━━━━━━━━━━━━━\n"
+                    f"💰 Tổng thu: `{int(daily_total_in):,}` VNĐ\n"
+                    f"📦 Tổng đơn: `{daily_tx_count}` đơn\n"
+                    f"📈 Trung bình: `{avg:,}` VNĐ"
+                )
+                requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"})
+
+            elif callback_data == 'btn_stats_days':
+                user_states[chat_id] = 'waiting_for_days'
+                msg = f"🔢 *THỐNG KÊ DOANH THU THEO KỲ*\n🕒 Thời điểm yêu cầu: `{now_str}`\n\nSếp vui lòng **gõ nhập số ngày** muốn kiểm tra vào khung chat *(Ví dụ: gửi số `3`, `7` hoặc `30`)*:"
+                requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"})
+
+            elif callback_data == 'btn_balance':
+                msg = f"💎 *SỐ DƯ TÀI KHOẢN MỚI NHẤT*\n🕒 Cập nhật lúc: `{now_str}`\n━━━━━━━━━━━━━━━━━━━\n`{latest_accumulated}`"
+                requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"})
+
+            elif callback_data == 'btn_settings':
+                msg = (
+                    f"⚙️ *CẤU HÌNH THỜI GIAN BÁO CÁO TỰ ĐỘNG*\n"
+                    f"🕒 Thời gian kiểm tra: `{now_str}`\n"
+                    f"━━━━━━━━━━━━━━━━━━━\n"
+                    f"• Lịch trình hiện tại: **21:00 hàng ngày**\n"
+                    f"• Trạng thái: 🟢 Hoạt động tự động qua Pipedream."
+                )
+                requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"})
+
+            requests.post(f"https://api.telegram.org/bot{TOKEN}/answerCallbackQuery", json={"callback_query_id": query['id']})
+            return jsonify({"status": "success"}), 200
+
+        # 2. Xử lý tin nhắn văn bản (Nhập số ngày hoặc lệnh /start)
         if 'message' in data and 'text' in data['message']:
             text_received = data['message']['text'].strip()
             chat_id = data['message']['chat']['id']
             check_and_reset_day()
             now_str = datetime.now().strftime('%d/%m/%Y lúc %H:%M:%S')
 
-            # 0. ƯU TIÊN SỐ 1: Bắt lệnh /start hoặc /menu để hiện bàn phím nút bấm
             if text_received in ["/start", "/menu", "Menu", "menu"]:
-                send_main_menu(chat_id)
+                send_inline_menu(chat_id)
                 return jsonify({"status": "success"}), 200
 
-            # 1. Nếu sếp đang trong trạng thái chờ nhập số ngày để thống kê doanh thu
             if user_states.get(chat_id) == 'waiting_for_days':
-                user_states[chat_id] = None # Reset trạng thái ngay sau khi nhận
+                user_states[chat_id] = None
                 try:
                     days = int(text_received)
                     if days <= 0:
@@ -142,49 +180,10 @@ def webhook():
                     history_text += f"━━━━━━━━━━━━━━━━━━━\n💰 **TỔNG CỘNG:** `{int(total_sum):,}` VNĐ"
                     requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": chat_id, "text": history_text, "parse_mode": "Markdown"})
                 except ValueError:
-                    requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": chat_id, "text": "⚠️ Số ngày không hợp lệ! Vui lòng bấm lại nút '📈 Thống kê theo số ngày' và nhập một số nguyên dương (VD: 3, 7, 30).", "parse_mode": "Markdown"})
+                    requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": chat_id, "text": "⚠️ Số ngày không hợp lệ! Vui lòng bấm lại nút 'Thống kê theo số ngày' và nhập số nguyên dương (VD: 3, 7, 30).", "parse_mode": "Markdown"})
                 return jsonify({"status": "success"}), 200
 
-            # 2. Xử lý nút: "📊 Tổng kết hôm nay"
-            if text_received == "📊 Tổng kết hôm nay":
-                avg = int(daily_total_in / daily_tx_count) if daily_tx_count > 0 else 0
-                msg = (
-                    f"📊 *BÁO CÁO NHANH HÔM NAY*\n"
-                    f"🕒 Thời gian: `{now_str}`\n"
-                    f"━━━━━━━━━━━━━━━━━━━\n"
-                    f"💰 Tổng thu: `{int(daily_total_in):,}` VNĐ\n"
-                    f"📦 Tổng đơn: `{daily_tx_count}` đơn\n"
-                    f"📈 Trung bình: `{avg:,}` VNĐ"
-                )
-                requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"})
-                return jsonify({"status": "success"}), 200
-
-            # 3. Xử lý nút: "📈 Thống kê theo số ngày"
-            elif text_received == "📈 Thống kê theo số ngày":
-                user_states[chat_id] = 'waiting_for_days'
-                msg = f"🔢 *THỐNG KÊ DOANH THU THEO KỲ*\n🕒 Thời điểm yêu cầu: `{now_str}`\n\nSếp vui lòng **nhập số ngày** muốn kiểm tra vào khung chat *(Ví dụ: gõ số `3`, `7` hoặc `30`)*:"
-                requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"})
-                return jsonify({"status": "success"}), 200
-
-            # 4. Xử lý nút: "💎 Xem số dư hiện tại"
-            elif text_received == "💎 Xem số dư hiện tại":
-                msg = f"💎 *SỐ DƯ TÀI KHOẢN MỚI NHẤT*\n🕒 Cập nhật lúc: `{now_str}`\n━━━━━━━━━━━━━━━━━━━\n`{latest_accumulated}`"
-                requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"})
-                return jsonify({"status": "success"}), 200
-
-            # 5. Xử lý nút: "⏰ Cài đặt giờ báo cáo"
-            elif text_received == "⏰ Cài đặt giờ báo cáo":
-                msg = (
-                    f"⚙️ *CẤU HÌNH THỜI GIAN BÁO CÁO TỰ ĐỘNG*\n"
-                    f"🕒 Thời gian kiểm tra: `{now_str}`\n"
-                    f"━━━━━━━━━━━━━━━━━━━\n"
-                    f"• Lịch trình hiện tại: **21:00 hàng ngày**\n"
-                    f"• Trạng thái: 🟢 Đang hoạt động ổn định qua hệ thống Pipedream."
-                )
-                requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"})
-                return jsonify({"status": "success"}), 200
-
-        # Xử lý khi có tiền chuyển vào từ Ngân hàng / SePay
+        # 3. Xử lý khi có tiền chuyển vào từ SePay
         gateway = data.get('gateway', 'N/A')
         transactionDate = data.get('transactionDate', 'N/A')
         accountNumber = data.get('accountNumber', 'N/A')

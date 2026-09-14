@@ -32,6 +32,7 @@ def webhook():
         transferAmount = data.get('transferAmount', 0)
         accumulated = data.get('accumulated', 0)
         
+        # Kiểm tra và reset tổng tiền nếu sang ngày mới
         current_date = datetime.now().strftime('%Y-%m-%d')
         if current_date != last_reset_date:
             daily_total_in = 0
@@ -51,7 +52,7 @@ def webhook():
             formatted_accumulated = "Không có dữ liệu"
 
         if transferType == 'in':
-            daily_total_in += amount_val
+            daily_total_in += amount_val  # Cộng dồn tiền vào tổng thu
             formatted_daily_total = f"{int(daily_total_in):,}"
 
             message = (

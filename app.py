@@ -33,7 +33,7 @@ def check_and_reset_day():
         last_reset_date = current_date
 
 def send_main_menu(chat_id):
-    # Tạo bàn phím menu cố định phía dưới khung chat để bấm phát ăn ngay
+    # Tạo bàn phím menu cố định phía dưới khung chat
     menu_keyboard = {
         "keyboard": [
             [{"text": "📊 Tổng kết hôm nay"}, {"text": "📈 Thống kê theo số ngày"}],
@@ -108,6 +108,11 @@ def webhook():
             check_and_reset_day()
             now_str = datetime.now().strftime('%d/%m/%Y lúc %H:%M:%S')
 
+            # 0. ƯU TIÊN SỐ 1: Bắt lệnh /start hoặc /menu để hiện bàn phím nút bấm
+            if text_received in ["/start", "/menu", "Menu", "menu"]:
+                send_main_menu(chat_id)
+                return jsonify({"status": "success"}), 200
+
             # 1. Nếu sếp đang trong trạng thái chờ nhập số ngày để thống kê doanh thu
             if user_states.get(chat_id) == 'waiting_for_days':
                 user_states[chat_id] = None # Reset trạng thái ngay sau khi nhận
@@ -154,7 +159,7 @@ def webhook():
                 requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"})
                 return jsonify({"status": "success"}), 200
 
-            # 3. Xử lý nút: "📈 Thống kê theo số ngày" (Kích hoạt chế độ nhập số ngày)
+            # 3. Xử lý nút: "📈 Thống kê theo số ngày"
             elif text_received == "📈 Thống kê theo số ngày":
                 user_states[chat_id] = 'waiting_for_days'
                 msg = f"🔢 *THỐNG KÊ DOANH THU THEO KỲ*\n🕒 Thời điểm yêu cầu: `{now_str}`\n\nSếp vui lòng **nhập số ngày** muốn kiểm tra vào khung chat *(Ví dụ: gõ số `3`, `7` hoặc `30`)*:"
@@ -167,22 +172,16 @@ def webhook():
                 requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"})
                 return jsonify({"status": "success"}), 200
 
-            # 5. Xử lý nút: "⏰ Cài đặt giờ báo cáo" (Hiển thị thông tin thời gian báo cáo tự động)
+            # 5. Xử lý nút: "⏰ Cài đặt giờ báo cáo"
             elif text_received == "⏰ Cài đặt giờ báo cáo":
                 msg = (
                     f"⚙️ *CẤU HÌNH THỜI GIAN BÁO CÁO TỰ ĐỘNG*\n"
                     f"🕒 Thời gian kiểm tra: `{now_str}`\n"
                     f"━━━━━━━━━━━━━━━━━━━\n"
                     f"• Lịch trình hiện tại: **21:00 hàng ngày**\n"
-                    f"• Trạng thái: 🟢 Đang hoạt động ổn định qua hệ thống Pipedream.\n"
-                    f"*(Để đổi khung giờ khác, sếp có thể điều chỉnh trực tiếp mốc thời gian Cron trên Pipedream)*"
+                    f"• Trạng thái: 🟢 Đang hoạt động ổn định qua hệ thống Pipedream."
                 )
                 requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"})
-                return jsonify({"status": "success"}), 200
-
-            # Gọi lại menu chính
-            if text_received in ["/start", "Menu", "menu"]:
-                send_main_menu(chat_id)
                 return jsonify({"status": "success"}), 200
 
         # Xử lý khi có tiền chuyển vào từ Ngân hàng / SePay

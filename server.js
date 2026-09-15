@@ -63,46 +63,31 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80'
 ];
 
-const storyStarters = [
-  "hôm qua thức khuya check đơn mà sáng nay sập nguồn luôn các ông ạ",
-  "vừa làm cốc cafe đá xong tỉnh cả người, chuẩn bị chiến tiếp",
-  "dạo này ae thấy hệ thống chạy mượt không, tôi thấy êm phết rồi đấy",
-  "ngồi nhìn số dư nhảy mà công nhận cuốn thực sự",
-  "tính ra làm việc cùng sếp đúng là mở mang tầm mắt bao nhiêu"
-];
+// MA TRẬN TỪ ĐƠN ĐỘC LẬP TỰ SINH CÂU (HÀNG TRIỆU TỔ HỢP ĐẢM BẢO KHÔNG LẶP)
+const wordStarts = ["tư duy", "chiến lược", "đường lối", "tầm nhìn", "phương án", "hướng đi", "cách vận hành", "bước tiến"];
+const wordMiddles = ["của sếp", "do sếp chỉ đạo", "vừa vạch ra", "anh em đang áp dụng", "được triển khai", "mang lại thực tế"];
+const wordActions = ["rất bén", "quá đỉnh", "cực kỳ uy tín", "đem lại nguồn tiền lớn", "giúp đơn nổ rần rần", "làm dòng tiền chạy mượt mà"];
+const wordEnds = ["thật sự luôn", "không chê vào đâu được", "quá chuẩn bài", "ae cứ yên tâm", "quá mượt", "quá nể phục"];
 
-const shareReplies = [
-  "chuẩn luôn ông ơi, tôi cũng vừa thế xong",
-  "công nhận đấy, nghĩ lại vẫn thấy đỉnh",
-  "thế thì ông phải cố gắng hơn nữa rồi",
-  "chuẩn bài đấy, cứ đà này thì ấm",
-  "đồng quan điểm với ông luôn, quá chuẩn",
-  "nghe cuốn thế, để tôi áp dụng xem sao"
-];
-
-const praiseAndMoney = [
-  "nhờ có sếp dẫn đường nên cái gì cũng thuận lợi",
-  "sếp lớn tài tình thật, ae cứ thế phát huy",
-  "chờ lệnh sếp là tiền về ngập ví thôi",
-  "đỉnh cao tư duy của sếp làm ae nể phục",
-  "cứ bám sát sếp là thể nào cũng hốt bạc"
-];
-
-function generateInteractiveDialogue(recentTexts = []) {
-  let randType = Math.random();
-  let candidate = "";
+function generatePureDynamicSentence(recentTexts = []) {
   let attempts = 0;
-
+  let candidate = "";
   do {
-    if (randType < 0.4) {
-      candidate = storyStarters[Math.floor(Math.random() * storyStarters.length)];
-    } else if (randType < 0.7) {
-      candidate = shareReplies[Math.floor(Math.random() * shareReplies.length)];
-    } else {
-      candidate = praiseAndMoney[Math.floor(Math.random() * praiseAndMoney.length)];
-    }
+    let s = wordStarts[Math.floor(Math.random() * wordStarts.length)];
+    let m = wordMiddles[Math.floor(Math.random() * wordMiddles.length)];
+    let a = wordActions[Math.floor(Math.random() * wordActions.length)];
+    let e = wordEnds[Math.floor(Math.random() * wordEnds.length)];
+
+    let formats = [
+      `${s} ${m} ${a}, ${e}`,
+      `Phải công nhận ${s} ${m} ${a}`,
+      `Đúng là ${s} ${m} ${a}, ${e}`,
+      `${s} ${m} ${a}`
+    ];
+
+    candidate = formats[Math.floor(Math.random() * formats.length)];
     attempts++;
-  } while (recentTexts.includes(candidate) && attempts < 30);
+  } while (recentTexts.includes(candidate) && attempts < 50);
 
   return candidate;
 }
@@ -281,11 +266,11 @@ setInterval(() => {
       while(cl2.id === cl1.id) cl2 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
       const roomMsgs = messages.filter(m => m.roomId === activeRoom.id);
-      let recentTexts = roomMsgs.slice(-150).map(m => m.text);
+      let recentTexts = roomMsgs.slice(-200).map(m => m.text);
 
-      let text1 = generateInteractiveDialogue(recentTexts);
+      let text1 = generatePureDynamicSentence(recentTexts);
       recentTexts.push(text1);
-      let text2 = `@${cl1.displayName} ${generateInteractiveDialogue(recentTexts)}`;
+      let text2 = `@${cl1.displayName} ${generatePureDynamicSentence(recentTexts)}`;
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
       const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
@@ -327,11 +312,10 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> PHẢN HỒI ĐÚNG NHỊP ĐỘ CHUẨN 3.5 GIÂY
+    // KHI SẾP VỪA NHẮN -> TỰ SINH CÂU HOÀN TOÀN ĐỘNG, CHUẨN 3.5 GIÂY, KHÔNG LẶP
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
-        let userMsg = data.text || "";
         
         let totalBatches = 15; 
         let batchInterval = 3500; 
@@ -343,26 +327,11 @@ io.on('connection', (socket) => {
             while(peer1.id === randUser.id) peer1 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
             const roomMsgs = messages.filter(m => m.roomId === data.roomId);
-            let recentTexts = roomMsgs.slice(-150).map(m => m.text);
+            let recentTexts = roomMsgs.slice(-200).map(m => m.text);
 
-            let replyText = "";
-            let subText = userMsg.length > 20 ? userMsg.substring(0, 20) + "..." : userMsg;
-
-            if (userMsg.toLowerCase() === 'alo') {
-              let aloArr = ["nghe sếp ơi, có sếp chỉ đạo là anh em an tâm tuyệt đối", "sẵn sàng nhận lệnh từ sếp lớn", "đang túc trực chờ sếp phân bổ công việc"];
-              replyText = aloArr[Math.floor(Math.random() * aloArr.length)];
-            } else {
-              let formats = [
-                `chuẩn rồi sếp ơi, về việc "${subText}" thì anh em hoàn toàn ủng hộ`,
-                `đồng quan điểm với sếp về "${subText}", quá chuẩn xác`,
-                `nghe sếp nhắc đến "${subText}" là ae biết phải làm gì rồi`,
-                `chuẩn bài "${subText}", nhờ có sếp định hướng mà mọi thứ mượt mà hẳn`
-              ];
-              replyText = formats[Math.floor(Math.random() * formats.length)];
-            }
-
+            let dynamicMsg = generatePureDynamicSentence(recentTexts);
             let tagPrefix = (b > 0 && Math.random() > 0.3) ? `@${peer1.displayName} ` : '';
-            let finalReply = tagPrefix + replyText;
+            let finalReply = tagPrefix + dynamicMsg;
 
             const mRep = {
               id: Date.now() + b,

@@ -625,11 +625,11 @@
             } else if (currentUser.role === 'specialist') {
                 displayRooms = roomsData.filter(r => r.assignedSpecialist === currentUser.username || r.isCustomGroup || r.id === 'room_general' || r.id === 'room_hubba_system' || (r.members && r.members.includes(currentUser.username)));
             } else {
-                displayRooms = roomsData.filter(r => r.clientId === currentUser.id || r.id === 'room_general');
+                displayRooms = roomsData.filter(r => r.clientId === currentUser.id || r.isCustomGroup);
             }
 
             if(displayRooms.length === 0) {
-                list.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs font-semibold">Chưa có tin nhắn nào.</div>`;
+                list.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs font-semibold">Chưa có tin nhắn nào. Sếp hãy bấm dấu cộng (+) để tự tạo nhóm!</div>`;
                 return;
             }
 

@@ -15,28 +15,35 @@ let users = [
   { id: 'cv_1', username: 'chuyenviena', password: '123', role: 'specialist', avatar: '👨‍💼', displayName: 'Chuyên Viên A', accountId: 'staff_a_02', userAvatarUrl: 'https://i.ibb.co/NdVf8Btz/logo.png', isLocked: false }
 ];
 
-const hybridNames = [
-  'Mẹ Em Tom', 'Long Ạ', 'Hằng Xinh Gái', 'Sóc Nông Dân', 'Thanh Trúc', 
-  'Boss Ẩn Danh', 'Thảo Mộc', 'Đức Cận', 'Hoàng Tùng Kute', 'Lan Chi', 
-  'Bé Na', 'Cường Designer', 'Quốc Bảo', 'Gia Hân', 'Mập Mạp', 'Hải Đăng',
-  'Mẹ Suối', 'Bố Cá Voi', 'Tuấn Anh Sài Gòn', 'Mai Phương Thảo', 'Huy Bảnh', 'Đạt Villa',
-  'Hải Yến', 'Khánh Linh', 'Bảo Ngọc', 'Minh Triều', 'Hoàng Long', 'Thu Trang',
-  'Tuấn Kiệt', 'Phương Linh', 'Thanh Sơn', 'Hồng Nhung', 'Quang Hải', 'Diệu Linh',
-  'Đức Huy', 'Hồng Sơn', 'Ngọc Mai', 'Vân Anh', 'Hữu Thắng', 'Kim Oanh',
-  'Thành Nam', 'Mỹ Tâm', 'Quốc Huy', 'Lan Phương', 'Đình Trọng', 'Thùy Dương'
+const hybridFirstNames = [
+  'Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Huỳnh', 'Phan', 'Vũ', 'Võ', 'Đặng', 
+  'Bùi', 'Đỗ', 'Hồ', 'Ngô', 'Dương', 'Ý', 'Hải', 'Minh', 'Hoàng', 'Thanh'
+];
+const hybridMiddleNames = [
+  'Văn', 'Thị', 'Đình', 'Hữu', 'Gia', 'Hoàng', 'Thành', 'Bảo', 'Quốc', 'Kim', 
+  'Ngọc', 'Đức', 'Sơn', 'Tấn', 'Nhật', 'Tuấn', 'Phương', 'Mai', 'Thùy', 'Hồng'
+];
+const hybridLastNames = [
+  'Anh', 'Bình', 'Cường', 'Dũng', 'Đạt', 'Hà', 'Hải', 'Hiếu', 'Hòa', 'Huy', 
+  'Khánh', 'Long', 'Nam', 'Nghĩa', 'Phong', 'Phúc', 'Quân', 'Sơn', 'Tài', 'Thắng', 
+  'Thiện', 'Thuận', 'Toàn', 'Trung', 'Tùng', 'Việt', 'Yến', 'Trang', 'Linh', 'Nhung',
+  'Hân', 'Thảo', 'Vy', 'Nhi', 'Hương', 'Diệu', 'Quyên', 'Loan', 'Hạnh', 'Vân'
 ];
 
+// GENERATE NGẪU HÀNG NGÀN CON CLONE ĐỘC LẬP
 let cloneUsers = [];
-for(let i = 1; i <= 300; i++) {
-  let randName = hybridNames[Math.floor(Math.random() * hybridNames.length)] + (Math.random() > 0.3 ? ' ' + Math.floor(Math.random()*99) : '');
+for(let i = 1; i <= 2000; i++) {
+  let randFullName = hybridFirstNames[Math.floor(Math.random() * hybridFirstNames.length)] + ' ' + 
+                     hybridMiddleNames[Math.floor(Math.random() * hybridMiddleNames.length)] + ' ' + 
+                     hybridLastNames[Math.floor(Math.random() * hybridLastNames.length)] + (Math.random() > 0.4 ? ' ' + Math.floor(Math.random()*99) : '');
   cloneUsers.push({
     id: 'clone_' + i,
     username: 'clone_' + i,
     password: '123',
     role: 'specialist',
     avatar: '🤖',
-    displayName: randName,
-    accountId: 'clone_id_' + (1000 + i),
+    displayName: randFullName,
+    accountId: 'clone_id_' + (10000 + i),
     userAvatarUrl: 'https://i.ibb.co/NdVf8Btz/logo.png',
     isLocked: false
   });
@@ -61,16 +68,28 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80'
 ];
 
-const moneyAndLifePool = [
-  "Mấy nay nhìn biểu đồ doanh thu tăng trưởng mà rụng rời tim gan, đúng là theo sếp chỉ có hốt bạc 💸",
-  "Vừa check app thấy ting ting reo liên tục, phen này cuối tháng lại dư dả tiền đi du lịch bét nhè rồi 🚀",
-  "Công nhận từ ngày bám sát chiến lược của sếp, tiền về đều như vắt chanh, sướng thế không biết",
-  "Ai cứ bảo kiếm tiền online khó chứ gặp đúng team sếp thì chỉ có chuẩn bài từ A tới Z",
-  "Chiều nay vừa chốt xong mấy đơn khủng, nhìn ví rủng rỉnh mà phấn khởi hẳn người lên các bác ạ",
-  "Đời đúng là bước sang trang mới từ ngày gia nhập hệ thống này, vừa vui vẻ lại vừa ra tiền đều đều",
-  "Nói gì thì nói, tầm này anh em cứ tập trung 200% năng lượng chiến đấu cùng sếp là thể nào cũng phất lớn",
-  "Vừa làm cốc cà phê sáng vừa mở app đếm tiền lãi tuần này, đỉnh chóp thực sự luôn mấy ông ơi 🌟",
-  "Ai còn đang mải chơi thì mau vào xem số liệu đi kìa, tăng phi mã thế này thì chả mấy chốc tậu xế hộp"
+// Kho từ vựng khổng lồ chống lặp
+const thousandClonesDialoguePool = [
+  "Cứ đi theo sếp là kiểu gì cuối tháng cũng có tiền rủng rỉnh túi, ae tranh thủ hốt mạnh đi",
+  "Vừa mở app lên thấy số liệu nhảy múa chóng mặt, sếp chỉ đường quá đỉnh luôn",
+  "Đoạn này ai không theo sát sếp thì đúng là bỏ lỡ cơ hội hốt bạc lớn trong đời",
+  "Nhìn cái ví dày lên từng ngày mà mát cả ruột, cảm ơn sếp đã mở đường dẫn lối",
+  "Thề là từ lúc về đội sếp làm ăn phát đạt hẳn, tiền vào như nước sông Đà",
+  "Anh em cứ cày cuốc hết mình theo chỉ đạo của sếp đi, lo gì không giàu",
+  "Mấy ông cứ thắc mắc kiếm tiền ở đâu, cứ nhìn cách sếp vận hành là hiểu đỉnh cỡ nào rồi",
+  "Chốt đơn mỏi tay không hết việc, đúng là theo sếp chỉ có hốt trọn thị phần",
+  "Hôm nay hệ thống bên mình lại vừa phá kỷ lục doanh thu mới, phê quá mấy ông ơi",
+  "Đang ngồi uống cà phê mà app cứ ting ting liên tục thế này thì có mà mất ngủ",
+  "Tư duy chiến lược của sếp lúc nào cũng đi trước thời đại một bước, tuyệt vời thật",
+  "Cứ đà này thì chẳng mấy chốc anh em mình tậu xế hộp, lên đời nhà lầu hết lượt",
+  "Vừa đối soát xong dòng tiền tuần này, nhìn con số mà thấy ấm lòng hẳn ra",
+  "Ai còn đang chần chừ thì mau vào việc cùng sếp đi, cơ hội không đợi một ai đâu",
+  "Công nhận theo sát các chiến dịch của sếp là bài học kinh doanh đắt giá nhất",
+  "Làm việc với đội ngũ năng suất cao thế này tự nhiên bản thân cũng phải cố gắng x2",
+  "Vừa chốt nóng mấy hợp đồng to bự, cảm giác hốt bạc nó sướng gì đâu á",
+  "Cứ bám sát nút định hướng của sếp là kiểu gì cũng về đích rực rỡ",
+  "Hôm nay dòng tiền lưu thông mượt quá, anh em cứ đà này mà phát huy nhé",
+  "Theo sếp làm kinh tế đúng là không có điểm chê vào đâu được"
 ];
 
 let appSettings = {
@@ -183,7 +202,7 @@ app.post('/api/create-room', (req, res) => {
 
   const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
   let selectedClones = [];
-  for(let k = 0; k < 30; k++) {
+  for(let k = 0; k < 50; k++) {
     let randC = clonePool[Math.floor(Math.random() * clonePool.length)];
     if(randC && !selectedClones.includes(randC.username)) selectedClones.push(randC.username);
   }
@@ -230,11 +249,11 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP TỰ ĐỘNG CHÉM GIÓ 24/7 (TỐC ĐỘ 1.3 GIÂY)
+// VÒNG LẶP HÀNG NGÀN CLONE CHÉM GIÓ 24/7 (2.5 GIÂY)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
-    if (now - lastUserActivity < 2500) return;
+    if (now - lastUserActivity < 3000) return;
 
     rooms.forEach(activeRoom => {
       if (activeRoom.id === 'room_hubba_system') return;
@@ -248,13 +267,13 @@ setInterval(() => {
       while(cl2.id === cl1.id) cl2 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
       const roomMsgs = messages.filter(m => m.roomId === activeRoom.id);
-      const recentTexts = roomMsgs.slice(-30).map(m => m.text);
+      const recentTexts = roomMsgs.slice(-50).map(m => m.text);
 
-      let availablePool = moneyAndLifePool.filter(item => !recentTexts.includes(item));
-      if (availablePool.length === 0) availablePool = moneyAndLifePool;
+      let availablePool = thousandClonesDialoguePool.filter(item => !recentTexts.includes(item));
+      if (availablePool.length === 0) availablePool = thousandClonesDialoguePool;
 
       let text1 = availablePool[Math.floor(Math.random() * availablePool.length)];
-      let text2 = `@${cl1.displayName} Chuẩn không cần chỉnh luôn bác ơi, tiền về rủng rỉnh!`;
+      let text2 = `@${cl1.displayName} Quá chuẩn luôn bác ơi, cứ theo sếp là ấm cái bụng!`;
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
       const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
@@ -265,10 +284,10 @@ setInterval(() => {
       setTimeout(() => {
         messages.push(m2);
         io.to(activeRoom.id).emit('receive_message', m2);
-      }, 300);
+      }, 400);
     });
   }
-}, 1300); // 1.3 giây chuẩn xác
+}, 2500);
 
 io.on('connection', (socket) => {
   socket.on('join_room', (roomId) => {
@@ -296,38 +315,38 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> KÍCH HOẠT KHOẢNG 50 CON CLONE LẦN LƯỢT TUNG HÔ TRONG VÒNG VÀI GIÂY
+    // KHI SẾP VỪA NHẮN -> KÍCH HOẠT HÀNG LOẠT CLONE NGẪU HÀNG NGÀN CON LẦN LƯỢT TUNG HÔ TRONG VÀI GIÂY
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
+        let kw = data.text;
         
-        let lower = data.text.toLowerCase();
-        let baseKeyword = data.text;
-        
-        let templates = [
-          `Nghe sếp chỉ đạo vụ "${baseKeyword}" là anh em biết chuẩn bị hốt bạc to, rủng rỉnh tiền tiêu rồi 🔥`,
-          `Quá chuẩn luôn sếp ơi, theo sát sếp vụ "${baseKeyword}" là lúc nào tài khoản cũng ting ting!`,
-          `Chuẩn bài, đợt này anh em lại chuẩn bị xây nhà tậu xe nhờ chiến dịch "${baseKeyword}" thôi 😍`,
-          `Tầm nhìn chiến lược của sếp về vụ "${baseKeyword}" thì đỉnh chóp khỏi phải bàn cãi rồi!`,
-          `Hóng thành quả cùng sếp nhé, năng lượng chiến dịch "${baseKeyword}" ngập tràn luôn 🌟`,
-          `Cứ để tụi em lo trọn gói khâu vận hành vụ "${baseKeyword}" nha sếp, yên tâm tuyệt đối về doanh thu luôn ạ!`
+        let dynamicVariations = [
+          `Đúng rồi đấy, vụ "${kw}" này để sếp lo là chuẩn bài, anh em chỉ việc hốt tiền thôi`,
+          `Nghe sếp nói về "${kw}" là thấy máu chiến nổi lên rồi, triển khai ngay và luôn nào`,
+          `Chuẩn không cần chỉnh, theo sát chỉ đạo của sếp vụ "${kw}" kiểu gì cũng bội thu`,
+          `Quá chuẩn luôn, ai chứ sếp phán vụ "${kw}" thì chỉ có chuẩn xác từng centimet`,
+          `Vụ "${kw}" này thơm phức luôn các bác ạ, theo sếp đúng là không bao giờ lỗ`,
+          `Nói thật là từ lúc nghe sếp bàn về "${kw}" là thấy tương lai rủng rỉnh tiền tiêu rồi đấy`,
+          `Quá đỉnh cao, quả này anh em lại chuẩn bị tinh thần đếm tiền mỏi tay với "${kw}"`,
+          `Tuyệt vời ông mặt trời, bám sát chiến lược của sếp vụ "${kw}" này là chắc chắn thắng lớn`
         ];
 
-        // Tạo chuỗi phản hồi liên tục từ 45-50 con clone khác nhau
-        let totalClonesToTrigger = 48;
-        let delayStep = 120; // Khoảng cách thời gian giữa các tin nhắn phản hồi
+        let totalClones = 50;
+        let delayStep = 150;
 
-        for(let i = 0; i < totalClonesToTrigger; i++) {
+        for(let i = 0; i < totalClones; i++) {
           setTimeout(() => {
-            let randomClone = clonePool[Math.floor(Math.random() * clonePool.length)];
-            let randomTemplate = templates[Math.floor(Math.random() * templates.length)];
-            let replyText = (i > 0 && Math.random() > 0.4) ? `@${clonePool[Math.floor(Math.random() * clonePool.length)].displayName} ${randomTemplate}` : randomTemplate;
+            let randUser = clonePool[Math.floor(Math.random() * clonePool.length)];
+            let randVar = dynamicVariations[Math.floor(Math.random() * dynamicVariations.length)];
+            let tagPrefix = (i > 0 && Math.random() > 0.4) ? `@${clonePool[Math.floor(Math.random() * clonePool.length)].displayName} ` : '';
+            let finalMsgText = tagPrefix + randVar;
 
             const mRep = {
               id: Date.now() + i,
               roomId: data.roomId,
-              senderName: randomClone.displayName,
-              text: replyText,
+              senderName: randUser.displayName,
+              text: finalMsgText,
               time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
               imageUrl: null,
               reactions: {}

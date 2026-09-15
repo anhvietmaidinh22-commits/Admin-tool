@@ -16,7 +16,7 @@ let users = [
 ];
 
 const genzNicknames = [
-  'Quạu Cơ', 'Trầm Zn', 'Flexer Chính Hiệu', 'Bảnh Trai Phết', 'Đói Kém', 
+  'Quạu Cơ', 'Trầm Zn', 'Flexer Chính Hiệu', 'Bảnh Trai Phết', 'Tài Phiệt', 
   'Hệ Đốt Lương', 'Genz Lười', 'Đâm Chồi Nảy Lộc', 'Mất Ngủ', 'Hệ Tư Duy', 
   'Chúa Chốt Đơn', 'Vua Té Nước', 'Lười Nhưng Giàu', 'Hệ Mỏ Lắm', 'Đại Gia Ổi',
   'Boss Ẩn Danh', 'Cục Súc Đại Nhân', 'Thích Đếm Tiền', 'Sống Lỏ', 'Hệ Bám Sếp',
@@ -63,42 +63,29 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80'
 ];
 
-// KHO TỪ VỰNG ĐỘC LẬP ĐỒ SỘ (TRỘN ĐA TẦNG CHỐNG TRÙNG LẶP TUYỆT ĐỐI)
-const poolPartsA = [
-  "Thật sự là nhìn cách", "Phải công nhận rằng", "Không thể chối cãi là", 
-  "Mỗi lần nghe chỉ đạo", "Càng ngẫm về kế hoạch", "Từ lúc áp dụng mô hình", "Tính toán kỹ thì thấy"
-];
-const poolPartsB = [
-  "sếp vạch ra", "định hướng của sếp", "cách sếp scale hệ thống", 
-  "chiến lược sếp vừa chốt", "phương án vận hành này", "bước đi của sếp"
-];
-const poolPartsC = [
-  "mang lại nguồn lợi nhuận khủng khiếp", "giúp anh em hốt bạc mỏi tay không kịp đếm", 
-  "làm dòng tiền thông suốt mượt mà như lụa", "đẩy tốc độ chốt đơn bùng nổ vượt mọi giới hạn",
-  "kéo dài chuỗi ngày ting ting rủng rỉnh ví", "giúp team mình thống lĩnh trọn vẹn thị phần"
-];
-const poolPartsD = [
-  "không tìm ra điểm yếu nào luôn mấy ô ơi", "đỉnh chóp chữ ê kéo dài thực sự đấy", 
-  "quá uy tín cho một màn bứt tốc ngoạn mục", "làm ae đứng ngồi không yên vì quá phấn khởi",
-  "khiến đối thủ nhìn vào chỉ biết khóc thét", "xứng đáng điểm tuyệt đối cho tầm nhìn chiến lược"
-];
-const poolEmojis = ["🔥", "🚀", "💰", "🌟", "💸", "🎯", "😎", "💪", "⚡", "🏆"];
+const moneyActions = ["chốt đơn", "ting ting", "hốt bạc", "kiếm tiền", "nổ đơn", "thu hồi vốn", "scale số", "bơm tiền", "chạy ads", "úp sọt"];
+const moneyResults = ["mỏi tay", "ngập ví", "cháy phố", "sập web", "bội thu", "rủng rỉnh", "phê lòi", "ấm cái bụng", "bạt ngàn", "tẹt ga"];
+const moneyModifiers = ["luôn sếp ơi", "quá uy tín", "đỉnh chóp", "cháy quá", "quá bén", "mượt mà", "chuẩn bài", "khét lẹt", "vãi chưởng"];
 
-function generateStrictUniqueSentence(recentTexts = []) {
+function generateShortMoneySentence(recentTexts = []) {
   let attempts = 0;
   let candidate = "";
-  
   do {
-    let a = poolPartsA[Math.floor(Math.random() * poolPartsA.length)];
-    let b = poolPartsB[Math.floor(Math.random() * poolPartsB.length)];
-    let c = poolPartsC[Math.floor(Math.random() * poolPartsC.length)];
-    let d = poolPartsD[Math.floor(Math.random() * poolPartsD.length)];
-    let e = poolEmojis[Math.floor(Math.random() * poolEmojis.length)];
+    let act = moneyActions[Math.floor(Math.random() * moneyActions.length)];
+    let res = moneyResults[Math.floor(Math.random() * moneyResults.length)];
+    let mod = moneyModifiers[Math.floor(Math.random() * moneyModifiers.length)];
     
-    candidate = `${a} ${b} ${c}, ${d} ${e}`;
+    let formats = [
+      `${act} ${res} ${mod}`,
+      `Đúng bài ${act} ${res}`,
+      `Phen này ${act} ${res} ${mod}`,
+      `${act} ${res} đi ae`
+    ];
+    
+    candidate = formats[Math.floor(Math.random() * formats.length)];
     attempts++;
   } while (recentTexts.includes(candidate) && attempts < 20);
-
+  
   return candidate;
 }
 
@@ -259,7 +246,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP BACKGROUND CHÉM GIÓ 2.5 GIÂY
+// VÒNG LẶP BACKGROUND 2.5 GIÂY (CHUYÊN KIẾM TIỀN - KHÔNG ICON)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
@@ -278,8 +265,8 @@ setInterval(() => {
       const roomMsgs = messages.filter(m => m.roomId === activeRoom.id);
       let recentTexts = roomMsgs.slice(-40).map(m => m.text);
 
-      let text1 = generateStrictUniqueSentence(recentTexts);
-      let text2 = `@${cl1.displayName} Công nhận chuẩn không cần chỉnh, số liệu nhảy múa thế này thì ấm cái bụng rồi!`;
+      let text1 = generateShortMoneySentence(recentTexts);
+      let text2 = `@${cl1.displayName} ${generateShortMoneySentence(recentTexts)}`;
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
       const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
@@ -321,12 +308,11 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> PHÂN TÍCH THÔNG MINH, KHÔNG BAO GIỜ LẶP LẠI VĂN CŨ, TỐC ĐỘ 2.5 GIÂY
+    // KHI SẾP VỪA NHẮN -> XỬ LÝ NGỮ CẢNH THÔNG MINH, KHÔNG ICON, RẢI ĐỀU 2.5 GIÂY
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
-        let kw = data.text;
-        let lowerKw = kw.toLowerCase();
+        let lowerKw = (data.text || "").toLowerCase();
         
         let totalBatches = 15; 
         let batchInterval = 2500; 
@@ -341,20 +327,43 @@ io.on('connection', (socket) => {
             let recentTexts = roomMsgs.slice(-50).map(m => m.text);
 
             let replyText = "";
-            
-            // BẮT LỜI GỌI TƯƠNG TÁC TỪ SẾP (KHÔNG DÙNG CÂU THÔ KỆCH)
-            if (lowerKw.includes('mọi người') || lowerKw.includes('anh em') || lowerKw.includes('ae') || lowerKw.includes('ai ơi') || lowerKw.includes('chào') || lowerKw.includes('sếp')) {
-              let callReplies = [
-                `Dạ tụi em có mặt đầy đủ, sẵn sàng nhận chỉ đạo mới từ sếp rồi ạ! 🔥`,
-                `Điểm danh không thiếu một ai, sếp cứ quăng bài toán đi tụi em lo trọn gói 🚀`,
-                `Anh em đang túc trực đông đủ đây sếp ơi, chuẩn bị hốt bạc thôi nào 💰`,
-                `Nghe tiếng sếp gọi cái là ae nhao vào liền, có kèo gì thơm thế sếp ơi!`
+
+            if (lowerKw.includes('alo')) {
+              let aloReplies = [
+                "Alo nghe sếp, có kèo gì mới đấy ạ",
+                "Alo alo, sẵn sàng hốt bạc cùng sếp nhé",
+                "Nghe đây sếp ơi, đang sẵn đơn lắm rồi đây",
+                "Alo sếp, chốt đơn nhanh kẻo lỡ nhịp nào"
               ];
-              replyText = callReplies[Math.floor(Math.random() * callReplies.length)];
+              replyText = aloReplies[Math.floor(Math.random() * aloReplies.length)];
+            } else if (lowerKw.includes('chờ tin') || lowerKw.includes('chờ lệnh')) {
+              let waitReplies = [
+                "Đã rõ sếp, anh em vị trí sẵn sàng chờ tin sếp",
+                "Rõ thưa sếp, đang nín thở chờ lệnh xuất kích",
+                "Tuân lệnh sếp, ae túc trực 24/7 chờ ting ting",
+                "Đợi tin sếp là lên đỉnh doanh thu, ae bám sát nút"
+              ];
+              replyText = waitReplies[Math.floor(Math.random() * waitReplies.length)];
+            } else if (lowerKw.includes('nhóm im') || lowerKw.includes('trầm')) {
+              let quietReplies = [
+                "Không ai im cả đâu sếp, ae đang chuẩn bị tinh thần nổ đơn đây",
+                "Sôi động ngay lập tức, sếp cho chỉ đạo để anh em hốt bạc đi",
+                "Đâu lại vào đấy ngay, ae đang lót dép hóng lệnh sếp để ting ting đây",
+                "Không thể chậm trễ, nhao vào chốt đơn thui ae ơi"
+              ];
+              replyText = quietReplies[Math.floor(Math.random() * quietReplies.length)];
+            } else if (lowerKw.includes('trật tự') || lowerKw.includes('thông báo')) {
+              let notiReplies = [
+                "Rõ thưa sếp, anh em nghiêm túc lắng nghe thông báo",
+                "Đã rõ, tất cả trật tự hướng về sếp ạ",
+                "Tuân lệnh sếp, ae trật tự nghe chỉ đạo quan trọng",
+                "Nghiêm, mọi người chú ý lắng nghe sếp thông báo"
+              ];
+              replyText = notiReplies[Math.floor(Math.random() * notiReplies.length)];
             } else {
-              let uniqueMsg = generateStrictUniqueSentence(recentTexts);
+              let moneyMsg = generateShortMoneySentence(recentTexts);
               let tagPrefix = (b > 0 && Math.random() > 0.3) ? `@${peer1.displayName} ` : '';
-              replyText = tagPrefix + uniqueMsg;
+              replyText = tagPrefix + moneyMsg;
             }
 
             const mRep = {

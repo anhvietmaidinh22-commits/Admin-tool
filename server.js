@@ -15,35 +15,32 @@ let users = [
   { id: 'cv_1', username: 'chuyenviena', password: '123', role: 'specialist', avatar: '👨‍💼', displayName: 'Chuyên Viên A', accountId: 'staff_a_02', userAvatarUrl: 'https://i.ibb.co/NdVf8Btz/logo.png', isLocked: false }
 ];
 
-const hybridFirstNames = [
-  'Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Huỳnh', 'Phan', 'Vũ', 'Võ', 'Đặng', 
-  'Bùi', 'Đỗ', 'Hồ', 'Ngô', 'Dương', 'Ý', 'Hải', 'Minh', 'Hoàng', 'Thanh'
-];
-const hybridMiddleNames = [
-  'Văn', 'Thị', 'Đình', 'Hữu', 'Gia', 'Hoàng', 'Thành', 'Bảo', 'Quốc', 'Kim', 
-  'Ngọc', 'Đức', 'Sơn', 'Tấn', 'Nhật', 'Tuấn', 'Phương', 'Mai', 'Thùy', 'Hồng'
-];
-const hybridLastNames = [
-  'Anh', 'Bình', 'Cường', 'Dũng', 'Đạt', 'Hà', 'Hải', 'Hiếu', 'Hòa', 'Huy', 
-  'Khánh', 'Long', 'Nam', 'Nghĩa', 'Phong', 'Phúc', 'Quân', 'Sơn', 'Tài', 'Thắng', 
-  'Thiện', 'Thuận', 'Toàn', 'Trung', 'Tùng', 'Việt', 'Yến', 'Trang', 'Linh', 'Nhung',
-  'Hân', 'Thảo', 'Vy', 'Nhi', 'Hương', 'Diệu', 'Quyên', 'Loan', 'Hạnh', 'Vân'
+const genzNicknames = [
+  'Quạu Cơ', 'Trầm Zn', 'Flexer Chính Hiệu', 'Bảnh Trai Phết', 'Đói Kém', 
+  'Hệ Đốt Lương', 'Genz Lười', 'Đâm Chồi Nảy Lộc', 'Mất Ngủ', 'Hệ Tư Duy', 
+  'Chúa Chốt Đơn', 'Vua Té Nước', 'Lười Nhưng Giàu', 'Hệ Mỏ Lắm', 'Đại Gia Ổi',
+  'Boss Ẩn Danh', 'Cục Súc Đại Nhân', 'Thích Đếm Tiền', 'Sống Lỏ', 'Hệ Bám Sếp',
+  'Mê Tín Mê Tiền', 'Hết Cứu', 'Đại Trưởng Lão', 'Tấm Chiếu Mới', 'Hệ Ỉ I',
+  'Hít Không Khí Sống', 'Chuyên Gia Hóng Biến', 'Vô Hạn Tài Chính', 'Hệ Xúc Xích', 'Thánh Nổ',
+  'Bụt Hoà Lạc', 'Mê Trà Sữa', 'Hệ Mất Xác', 'Chúa Hề', 'Tài Phiệt Giả Nghèo', 'Bấm Phím Đỉnh Cao'
 ];
 
-// GENERATE NGẪU HÀNG NGÀN CON CLONE ĐỘC LẬP
+const genzFirstNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Đỗ', 'Bùi', 'Đăng', 'Hồ', 'Dương', 'Phan', 'Vũ'];
+
+// GENERATE 3,000 CON CLONE TÊN GEN Z
 let cloneUsers = [];
-for(let i = 1; i <= 2000; i++) {
-  let randFullName = hybridFirstNames[Math.floor(Math.random() * hybridFirstNames.length)] + ' ' + 
-                     hybridMiddleNames[Math.floor(Math.random() * hybridMiddleNames.length)] + ' ' + 
-                     hybridLastNames[Math.floor(Math.random() * hybridLastNames.length)] + (Math.random() > 0.4 ? ' ' + Math.floor(Math.random()*99) : '');
+for(let i = 1; i <= 3000; i++) {
+  let randGenZName = genzFirstNames[Math.floor(Math.random() * genzFirstNames.length)] + ' ' + 
+                     genzNicknames[Math.floor(Math.random() * genzNicknames.length)] + ' ' + 
+                     Math.floor(Math.random()*999);
   cloneUsers.push({
     id: 'clone_' + i,
     username: 'clone_' + i,
     password: '123',
     role: 'specialist',
     avatar: '🤖',
-    displayName: randFullName,
-    accountId: 'clone_id_' + (10000 + i),
+    displayName: randGenZName,
+    accountId: 'genz_id_' + (10000 + i),
     userAvatarUrl: 'https://i.ibb.co/NdVf8Btz/logo.png',
     isLocked: false
   });
@@ -68,29 +65,17 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80'
 ];
 
-// Kho từ vựng khổng lồ chống lặp
-const thousandClonesDialoguePool = [
-  "Cứ đi theo sếp là kiểu gì cuối tháng cũng có tiền rủng rỉnh túi, ae tranh thủ hốt mạnh đi",
-  "Vừa mở app lên thấy số liệu nhảy múa chóng mặt, sếp chỉ đường quá đỉnh luôn",
-  "Đoạn này ai không theo sát sếp thì đúng là bỏ lỡ cơ hội hốt bạc lớn trong đời",
-  "Nhìn cái ví dày lên từng ngày mà mát cả ruột, cảm ơn sếp đã mở đường dẫn lối",
-  "Thề là từ lúc về đội sếp làm ăn phát đạt hẳn, tiền vào như nước sông Đà",
-  "Anh em cứ cày cuốc hết mình theo chỉ đạo của sếp đi, lo gì không giàu",
-  "Mấy ông cứ thắc mắc kiếm tiền ở đâu, cứ nhìn cách sếp vận hành là hiểu đỉnh cỡ nào rồi",
-  "Chốt đơn mỏi tay không hết việc, đúng là theo sếp chỉ có hốt trọn thị phần",
-  "Hôm nay hệ thống bên mình lại vừa phá kỷ lục doanh thu mới, phê quá mấy ông ơi",
-  "Đang ngồi uống cà phê mà app cứ ting ting liên tục thế này thì có mà mất ngủ",
-  "Tư duy chiến lược của sếp lúc nào cũng đi trước thời đại một bước, tuyệt vời thật",
-  "Cứ đà này thì chẳng mấy chốc anh em mình tậu xế hộp, lên đời nhà lầu hết lượt",
-  "Vừa đối soát xong dòng tiền tuần này, nhìn con số mà thấy ấm lòng hẳn ra",
-  "Ai còn đang chần chừ thì mau vào việc cùng sếp đi, cơ hội không đợi một ai đâu",
-  "Công nhận theo sát các chiến dịch của sếp là bài học kinh doanh đắt giá nhất",
-  "Làm việc với đội ngũ năng suất cao thế này tự nhiên bản thân cũng phải cố gắng x2",
-  "Vừa chốt nóng mấy hợp đồng to bự, cảm giác hốt bạc nó sướng gì đâu á",
-  "Cứ bám sát nút định hướng của sếp là kiểu gì cũng về đích rực rỡ",
-  "Hôm nay dòng tiền lưu thông mượt quá, anh em cứ đà này mà phát huy nhé",
-  "Theo sếp làm kinh tế đúng là không có điểm chê vào đâu được"
-];
+// HỆ THỐNG GHÉP CÂU TỰ ĐỘNG HÀNG NGÀN BIẾN THỂ KHÔNG BAO GIỜ LẶP
+const subjects = ["Cứ theo sát sếp", "Về đội của sếp", "Làm việc cùng sếp", "Nghe lệnh sếp chỉ đạo", "Được sếp dẫn đường", "Chạy chiến dịch theo sếp"];
+const actions = ["là tiền về ngập ví", "là tài khoản ting ting mỏi tay", "là chốt đơn mỏi miệng", "là hốt bạc tỷ không kịp đếm", "là cuối tháng tậu xế hộp", "là số liệu nhảy múa chóng mặt"];
+const endings = ["thật sự luôn ấy", "không trượt phát nào", "đỉnh chóp chữ ê kéo dài", "phê chữ y luôn", "quá uy tín luôn mấy ông ơi", "chuẩn bài không cần chỉnh"];
+
+function getRandomDynamicSentence() {
+  let sub = subjects[Math.floor(Math.random() * subjects.length)];
+  let act = actions[Math.floor(Math.random() * actions.length)];
+  let end = endings[Math.floor(Math.random() * endings.length)];
+  return `${sub} ${act} ${end} 🔥`;
+}
 
 let appSettings = {
   autoBotsChat: true,
@@ -202,7 +187,7 @@ app.post('/api/create-room', (req, res) => {
 
   const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
   let selectedClones = [];
-  for(let k = 0; k < 50; k++) {
+  for(let k = 0; k < 100; k++) {
     let randC = clonePool[Math.floor(Math.random() * clonePool.length)];
     if(randC && !selectedClones.includes(randC.username)) selectedClones.push(randC.username);
   }
@@ -249,7 +234,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP HÀNG NGÀN CLONE CHÉM GIÓ 24/7 (2.5 GIÂY)
+// VÒNG LẶP HÀNG NGÀN CLONE TỰ ĐỘNG CHÉM GIÓ 24/7 (2.5 GIÂY)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
@@ -266,14 +251,8 @@ setInterval(() => {
 
       while(cl2.id === cl1.id) cl2 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
-      const roomMsgs = messages.filter(m => m.roomId === activeRoom.id);
-      const recentTexts = roomMsgs.slice(-50).map(m => m.text);
-
-      let availablePool = thousandClonesDialoguePool.filter(item => !recentTexts.includes(item));
-      if (availablePool.length === 0) availablePool = thousandClonesDialoguePool;
-
-      let text1 = availablePool[Math.floor(Math.random() * availablePool.length)];
-      let text2 = `@${cl1.displayName} Quá chuẩn luôn bác ơi, cứ theo sếp là ấm cái bụng!`;
+      let text1 = getRandomDynamicSentence();
+      let text2 = `@${cl1.displayName} Chuẩn bài luôn ô giáo, t vừa check ví thấy ting ting rồi nè!`;
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
       const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
@@ -315,32 +294,33 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> KÍCH HOẠT HÀNG LOẠT CLONE NGẪU HÀNG NGÀN CON LẦN LƯỢT TUNG HÔ TRONG VÀI GIÂY
+    // KHI SẾP VỪA NHẮN -> KÍCH HOẠT HÀNG LOẠT CLONE TƯƠNG TÁC CHÉO, TAG TÊN VÀ BÀN BẠC DỒN DẬP
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
         let kw = data.text;
         
-        let dynamicVariations = [
-          `Đúng rồi đấy, vụ "${kw}" này để sếp lo là chuẩn bài, anh em chỉ việc hốt tiền thôi`,
-          `Nghe sếp nói về "${kw}" là thấy máu chiến nổi lên rồi, triển khai ngay và luôn nào`,
-          `Chuẩn không cần chỉnh, theo sát chỉ đạo của sếp vụ "${kw}" kiểu gì cũng bội thu`,
-          `Quá chuẩn luôn, ai chứ sếp phán vụ "${kw}" thì chỉ có chuẩn xác từng centimet`,
-          `Vụ "${kw}" này thơm phức luôn các bác ạ, theo sếp đúng là không bao giờ lỗ`,
-          `Nói thật là từ lúc nghe sếp bàn về "${kw}" là thấy tương lai rủng rỉnh tiền tiêu rồi đấy`,
-          `Quá đỉnh cao, quả này anh em lại chuẩn bị tinh thần đếm tiền mỏi tay với "${kw}"`,
-          `Tuyệt vời ông mặt trời, bám sát chiến lược của sếp vụ "${kw}" này là chắc chắn thắng lớn`
-        ];
-
         let totalClones = 50;
         let delayStep = 150;
 
         for(let i = 0; i < totalClones; i++) {
           setTimeout(() => {
             let randUser = clonePool[Math.floor(Math.random() * clonePool.length)];
-            let randVar = dynamicVariations[Math.floor(Math.random() * dynamicVariations.length)];
-            let tagPrefix = (i > 0 && Math.random() > 0.4) ? `@${clonePool[Math.floor(Math.random() * clonePool.length)].displayName} ` : '';
-            let finalMsgText = tagPrefix + randVar;
+            let randomPeer = clonePool[Math.floor(Math.random() * clonePool.length)];
+            
+            let actionPhrases = [
+              `Úi dồi ôi, nghe sếp chỉ đạo vụ "${kw}" là thấy mùi tiền ngập mặt rồi ae ơi 🔥`,
+              `Chuẩn đét luôn sếp ơi, vụ "${kw}" này để em húp trọn gói cho mà xem`,
+              `Thật sự luôn, hệ tư duy của sếp về "${kw}" đỉnh chóp thế này bảo sao ae ko giàu`,
+              `@${randomPeer.displayName} Chuẩn chưa ông giáo, t bảo từ đầu r mà lị 😂`,
+              `@${randomPeer.displayName} Mày lại chả nhanh trí, chuẩn bị tiền tậu xế hộp thôi ô hay`,
+              `Vụ "${kw}" này thơm phức, ai ko theo thì ráng chịu nha, t là t theo sát sếp tới bến`,
+              `Căng cực, chiến dịch "${kw}" này mà scale lên thì cuối tháng số dư trong ví sập web luôn`
+            ];
+
+            let randReply = actionPhrases[Math.floor(Math.random() * actionPhrases.length)];
+            let tagPrefix = (i > 0 && Math.random() > 0.3) ? `@${clonePool[Math.floor(Math.random() * clonePool.length)].displayName} ` : '';
+            let finalMsgText = tagPrefix + randReply;
 
             const mRep = {
               id: Date.now() + i,

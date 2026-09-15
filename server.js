@@ -64,7 +64,7 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80'
 ];
 
-// MA TRẬN TỔ HỢP TỪ VỰNG VÔ HẠN (HÀNG TRIỆU CÁCH GHÉP KHÔNG BAO GIỜ TRÙNG LẶP)
+// MA TRẬN TỔ HỢP TỪ VỰNG VÔ HẠN CHỐNG LẶP
 const subjects = [
   "Bám sát định hướng của sếp", "Theo đuổi chiến lược này", "Làm việc cùng team sếp", 
   "Nghe lệnh điều phối từ sếp", "Chạy hệ thống theo sếp", "Đi theo con đường sếp vạch ra",
@@ -72,9 +72,9 @@ const subjects = [
 ];
 const actions = [
   "thì tài khoản cứ ting ting reo liên tục", "là doanh số nhảy vọt không thấy đỉnh", 
-  "giúp anh em hốt bạc tỷ mỏi cả tay", "làm dòng tiền thông suốt mượt mà như sunsilk", 
+  "giúp anh em hốt bạc tỷ mỏi cả tay", "làm dòng tiền thông suốt mượt mà", 
   "kéo dài chuỗi ngày chốt đơn ngập mặt", "biến mọi khó khăn thành lợi nhuận khổng lồ",
-  "tạo ra biên độ lợi nhuận cực kỳ khủng khiếp", "đẩy tốc độ tăng trưởng lên tầm cao mới"
+  "tạo ra biên độ lợi nhuận cực kỳ khủng", "đẩy tốc độ tăng trưởng lên tầm cao mới"
 ];
 const modifiers = [
   "không trượt phát nào", "đỉnh chóp chữ ê kéo dài", "phê chữ y thực sự luôn", 
@@ -252,11 +252,11 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP 24/7 (SỬ DỤNG MA TRẬN SINH TỪ VỰNG VÔ HẠN)
+// VÒNG LẶP 24/7 (ĐÃ CHỈNH TỐC ĐỘ 2.5 GIÂY)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
-    if (now - lastUserActivity < 3000) return;
+    if (now - lastUserActivity < 4000) return;
 
     rooms.forEach(activeRoom => {
       if (activeRoom.id === 'room_hubba_system') return;
@@ -280,7 +280,7 @@ setInterval(() => {
       setTimeout(() => {
         messages.push(m2);
         io.to(activeRoom.id).emit('receive_message', m2);
-      }, 400);
+      }, 800);
     });
   }
 }, 2500);
@@ -311,26 +311,26 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> KÍCH HOẠT HÀNG LOẠT CLONE DÙNG MA TRẬN ĐỘC LẬP TƯƠNG TÁC
+    // KHI SẾP VỪA NHẮN -> TỐC ĐỘ PHẢN HỒI ĐƯỢC GIÃN ĐỀU 2.5 GIÂY CHO TỪNG ĐỢT ĐỂ CHỐNG LẶP VÀ TẠO ĐỘ MƯỢT
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
         let kw = data.text;
         
-        let totalClones = 50;
-        let delayStep = 150;
+        let totalBatches = 20; // Số đợt phản hồi rải rác
+        let batchInterval = 2500; // Khoảng cách 2.5 giây mỗi đợt
 
-        for(let i = 0; i < totalClones; i++) {
+        for(let b = 0; b < totalBatches; b++) {
           setTimeout(() => {
             let randUser = clonePool[Math.floor(Math.random() * clonePool.length)];
             let peer1 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
             let dynamicMsg = generateInfiniteUniqueSentence(kw);
-            let tagPrefix = (i > 0 && Math.random() > 0.3) ? `@${peer1.displayName} ` : '';
+            let tagPrefix = (b > 0 && Math.random() > 0.3) ? `@${peer1.displayName} ` : '';
             let finalMsgText = tagPrefix + dynamicMsg;
 
             const mRep = {
-              id: Date.now() + i,
+              id: Date.now() + b,
               roomId: data.roomId,
               senderName: randUser.displayName,
               text: finalMsgText,
@@ -341,10 +341,10 @@ io.on('connection', (socket) => {
 
             messages.push(mRep);
             io.to(data.roomId).emit('receive_message', mRep);
-          }, i * delayStep);
+          }, b * batchInterval);
         }
 
-      }, 100);
+      }, 500);
     }
   });
 

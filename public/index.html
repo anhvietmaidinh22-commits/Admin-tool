@@ -17,19 +17,19 @@
 </head>
 <body class="h-[100dvh] flex flex-col justify-center items-center select-none overflow-hidden m-0 p-0">
 
-    <!---------------- MÀN HÌNH INTRO (SPLASH SCREEN) ---------------->
+    <!---------------- MÀN HÌNH INTRO ---------------->
     <div id="introScreen" class="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-900 to-black z-[100] flex flex-col justify-center items-center text-white transition-opacity duration-700">
         <img src="/logo.png" class="w-28 h-28 rounded-[32px] shadow-2xl mb-4 animate-bounce object-cover border-4 border-white/30">
         <h1 class="font-black text-3xl tracking-widest text-white">HUBBA</h1>
-        <p class="text-xs text-blue-200 mt-2 font-semibold">Nền Tảng CSKH & Đối Soát Đỉnh Cao</p>
+        <p class="text-xs text-blue-200 mt-2 font-semibold">Ứng Dụng Nhắn Tin & Đối Soát</p>
     </div>
 
-    <!---------------- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ TÁCH BIỆT (XÓA SẠCH GỢI Ý ADMIN THÔ) ---------------->
+    <!---------------- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ ---------------->
     <div id="authScreen" class="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-900 to-black z-50 flex flex-col justify-center items-center p-6 hidden">
         <div class="bg-white w-full max-w-sm rounded-[36px] p-8 shadow-2xl flex flex-col items-center border border-white/20">
             <img src="/logo.png" alt="Hubba Logo" class="w-20 h-20 rounded-2xl shadow-md object-cover mb-4 border border-slate-100">
             <h1 class="font-extrabold text-2xl text-slate-900 tracking-tight mb-1" id="authTitle">Đăng Nhập HUBBA</h1>
-            <p class="text-xs text-slate-400 font-semibold mb-6 text-center" id="authSubtitle">Quản trị viên hoặc Chuyên viên hệ thống</p>
+            <p class="text-xs text-slate-400 font-semibold mb-6 text-center" id="authSubtitle">Hệ thống nhắn tin nội bộ</p>
 
             <div class="w-full space-y-3.5">
                 <div>
@@ -46,7 +46,7 @@
                 <button id="authPrimaryBtn" onclick="handleLogin()" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold py-4 rounded-2xl text-sm shadow-lg shadow-indigo-600/30 transition">Đăng Nhập</button>
                 
                 <div class="text-center pt-2">
-                    <span id="authToggleText" class="text-xs text-slate-500 font-semibold">Chưa có tài khoản khách hàng? </span>
+                    <span id="authToggleText" class="text-xs text-slate-500 font-semibold">Chưa có tài khoản? </span>
                     <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-xs text-indigo-600 font-extrabold hover:underline">Đăng ký ngay</button>
                 </div>
             </div>
@@ -63,13 +63,13 @@
                 <div class="bg-white px-5 py-4 flex justify-between items-center border-b border-slate-100 shrink-0">
                     <span class="font-extrabold text-lg text-slate-900">Tin nhắn (trực tuyến)</span>
                     
-                    <div class="relative">
+                    <div class="relative" id="plusMenuContainer">
                         <button onclick="togglePlusMenu()" class="w-9 h-9 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center text-slate-700 shadow-sm transition">
                             <i class="fa-solid fa-plus text-sm"></i>
                         </button>
                         <div id="plusMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-2xl border border-slate-100 hidden z-50 py-2">
                             <button onclick="openRoomModal(); togglePlusMenu();" class="w-full px-4 py-2.5 text-left text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center space-x-2.5">
-                                <i class="fa-solid fa-user-plus text-indigo-600"></i><span>Thêm khách</span>
+                                <i class="fa-solid fa-user-plus text-indigo-600"></i><span>Thêm thành viên</span>
                             </button>
                             <button onclick="openRoomModal(); togglePlusMenu();" class="w-full px-4 py-2.5 text-left text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center space-x-2.5">
                                 <i class="fa-solid fa-comments text-indigo-600"></i><span>Tạo nhóm chat</span>
@@ -137,7 +137,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 space-y-2.5">
+                    <div id="quickSwitchContainer" class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 space-y-2.5">
                         <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider">Chuyển Đổi Nhanh Tài Khoản</h4>
                         <div id="quickSwitchList" class="space-y-2"></div>
                     </div>
@@ -148,27 +148,26 @@
 
         </div>
 
-        <!---------------- KHUNG CHAT CHI TIẾT (CHUẨN GIAO DIỆN ANH GỬI) ---------------->
+        <!---------------- KHUNG CHAT CHI TIẾT (CÓ CÀI ĐẶT NHÓM & ĐỔI AVATAR NHÓM) ---------------->
         <div id="chatRoomView" class="absolute inset-0 bg-white z-30 flex flex-col transform translate-x-full transition-transform duration-300">
             <div class="bg-indigo-600 text-white px-4 py-3.5 flex items-center justify-between shrink-0 shadow-md">
                 <div class="flex items-center space-x-3 min-w-0">
                     <button onclick="closeChatRoom()" class="text-white text-lg px-1 hover:opacity-80 transition"><i class="fa-solid fa-arrow-left"></i></button>
-                    <div class="flex items-center space-x-2.5 min-w-0">
+                    <div class="flex items-center space-x-2.5 min-w-0 cursor-pointer" onclick="openGroupSettingsModal()">
                         <img id="activeRoomLogo" src="/logo.png" alt="Logo" class="w-9 h-9 rounded-xl object-cover border border-white/30 shadow-inner shrink-0">
                         <div class="min-w-0">
-                            <h3 id="activeRoomName" class="font-bold text-sm leading-tight truncate">Phòng Hỗ Trợ</h3>
-                            <span class="text-[10px] text-emerald-200 font-semibold">● Trực tuyến</span>
+                            <h3 id="activeRoomName" class="font-bold text-sm leading-tight truncate">Phòng Chat</h3>
+                            <span class="text-[10px] text-emerald-200 font-semibold">● Trực tuyến (Cài đặt nhóm)</span>
                         </div>
                     </div>
                 </div>
                 
                 <div class="flex items-center space-x-1.5 shrink-0">
                     <button onclick="pinCurrentRoomMessage()" id="pinRoomBtn" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-2.5 py-1.5 rounded-xl transition shadow-sm hidden"><i class="fa-solid fa-thumbtack"></i> Ghim</button>
-                    <button onclick="openMembersModal()" class="bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold px-2.5 py-1.5 rounded-xl transition shadow-sm"><i class="fa-solid fa-users"></i></button>
+                    <button onclick="openGroupSettingsModal()" class="bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold px-2.5 py-1.5 rounded-xl transition shadow-sm" title="Cài đặt nhóm"><i class="fa-solid fa-gear"></i></button>
                 </div>
             </div>
 
-            <!-- Banner Ghim Tin Nhắn -->
             <div id="pinnedMsgBanner" class="bg-amber-50 border-b border-amber-200 px-4 py-2 text-xs font-bold text-amber-800 flex items-center justify-between hidden shrink-0">
                 <div class="flex items-center space-x-2 truncate">
                     <i class="fa-solid fa-thumbtack text-amber-600"></i>
@@ -187,9 +186,8 @@
                 <button onclick="clearImagePreview()" class="text-red-500 font-extrabold px-2 py-1 text-sm">✕</button>
             </div>
 
-            <!-- THANH NHẬP TIN NHẮN CHUẨN MẪU ANH GỬI ([+] [📷] [Ô NHẬP CHAT] [😊] [🎤]) -->
             <div class="p-3 bg-white border-t border-slate-100 flex items-center space-x-2 shrink-0 shadow-lg">
-                <button onclick="alert('Mở menu mở rộng tính năng!')" class="text-slate-400 hover:text-indigo-600 text-lg p-1.5 transition"><i class="fa-solid fa-circle-plus"></i></button>
+                <button onclick="alert('Mở menu mở rộng!')" class="text-slate-400 hover:text-indigo-600 text-lg p-1.5 transition"><i class="fa-solid fa-circle-plus"></i></button>
                 
                 <label class="cursor-pointer text-slate-400 hover:text-indigo-600 text-lg p-1.5 transition">
                     <i class="fa-solid fa-camera"></i>
@@ -223,7 +221,32 @@
 
     </div>
 
-    <!-- Modals -->
+    <!-- Modal Cài Đặt Nhóm & Đổi Ảnh Đại Diện Nhóm -->
+    <div id="groupSettingsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-[28px] w-full max-w-sm shadow-2xl space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="font-extrabold text-base text-slate-900">Cài Đặt Nhóm Chat</h3>
+                <button onclick="closeGroupSettingsModal()" class="text-slate-400 font-bold">✕</button>
+            </div>
+            
+            <div class="flex flex-col items-center space-y-2 py-2">
+                <img id="groupAvatarPreview" src="/logo.png" class="w-20 h-20 rounded-2xl object-cover border shadow-sm">
+                <label class="cursor-pointer bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold px-3 py-1.5 rounded-xl text-xs transition">
+                    <i class="fa-solid fa-camera mr-1"></i> Đổi ảnh đại diện nhóm
+                    <input type="file" accept="image/*" class="hidden" onchange="handleGroupAvatarUpload(event)">
+                </label>
+            </div>
+
+            <div class="space-y-2 pt-2 border-t border-slate-100">
+                <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider">Thành viên trong nhóm</h4>
+                <div id="groupMembersList" class="space-y-2 max-h-40 overflow-y-auto"></div>
+            </div>
+
+            <button onclick="closeGroupSettingsModal()" class="w-full py-3 bg-indigo-600 text-white rounded-2xl text-xs font-bold shadow-md">Đóng</button>
+        </div>
+    </div>
+
+    <!-- Modals Phụ -->
     <div id="msgActionModal" class="fixed inset-0 bg-black/40 backdrop-blur-xs hidden flex items-center justify-center p-4 z-50" onclick="closeMsgActionModal()">
         <div class="bg-white rounded-3xl w-full max-w-xs shadow-2xl p-4 space-y-4" onclick="event.stopPropagation()">
             <div class="flex justify-around bg-slate-100 p-2.5 rounded-2xl text-xl">
@@ -239,20 +262,12 @@
         </div>
     </div>
 
-    <div id="membersModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white p-6 rounded-[28px] w-full max-w-sm shadow-2xl space-y-4">
-            <div class="flex justify-between items-center"><h3 class="font-extrabold text-base text-slate-900">Thành Viên Nhóm</h3><button onclick="closeMembersModal()" class="text-slate-400 font-bold">✕</button></div>
-            <div id="groupMembersList" class="space-y-2 max-h-60 overflow-y-auto"></div>
-            <button onclick="closeMembersModal()" class="w-full py-3 bg-indigo-600 text-white rounded-2xl text-xs font-bold">Đóng</button>
-        </div>
-    </div>
-
     <div id="roomModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-white p-6 rounded-[28px] w-full max-w-sm shadow-2xl space-y-4">
-            <h3 class="font-extrabold text-base text-slate-900">Tạo Nhóm / Thêm Khách</h3>
+            <h3 class="font-extrabold text-base text-slate-900">Tạo Nhóm Chat</h3>
             <div class="space-y-3">
-                <input type="text" id="roomNameInput" placeholder="Tên nhóm / Phòng..." class="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-2xl outline-none text-xs font-semibold">
-                <input type="text" id="clientNameInput" placeholder="Tên khách hàng..." class="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-2xl outline-none text-xs font-semibold">
+                <input type="text" id="roomNameInput" placeholder="Tên nhóm..." class="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-2xl outline-none text-xs font-semibold">
+                <input type="text" id="clientNameInput" placeholder="Tên thành viên..." class="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-2xl outline-none text-xs font-semibold">
             </div>
             <div class="flex justify-end space-x-2 pt-2">
                 <button onclick="closeRoomModal()" class="px-4 py-2.5 bg-slate-100 rounded-2xl text-xs font-bold">Đóng</button>
@@ -322,11 +337,11 @@
 
         function toggleAuthMode() {
             isRegisterMode = !isRegisterMode;
-            document.getElementById('authTitle').textContent = isRegisterMode ? 'Đăng Ký Khách Hàng HUBBA' : 'Đăng Nhập HUBBA';
-            document.getElementById('authSubtitle').textContent = isRegisterMode ? 'Tạo tài khoản mới để kết nối hỗ trợ' : 'Quản trị viên hoặc Chuyên viên hệ thống';
+            document.getElementById('authTitle').textContent = isRegisterMode ? 'Đăng Ký HUBBA' : 'Đăng Nhập HUBBA';
+            document.getElementById('authSubtitle').textContent = isRegisterMode ? 'Tạo tài khoản mới' : 'Hệ thống nhắn tin nội bộ';
             document.getElementById('authPrimaryBtn').textContent = isRegisterMode ? 'Đăng Ký' : 'Đăng Nhập';
             document.getElementById('authPrimaryBtn').setAttribute('onclick', isRegisterMode ? 'handleRegister()' : 'handleLogin()');
-            document.getElementById('authToggleText').textContent = isRegisterMode ? 'Đã có tài khoản? ' : 'Chưa có tài khoản khách hàng? ';
+            document.getElementById('authToggleText').textContent = isRegisterMode ? 'Đã có tài khoản? ' : 'Chưa có tài khoản? ';
             document.getElementById('authToggleBtn').textContent = isRegisterMode ? 'Đăng nhập ngay' : 'Đăng ký ngay';
         }
 
@@ -451,15 +466,6 @@
             reader.readAsDataURL(file);
         }
 
-        async function deleteSpecialist(staffId) {
-            if(!confirm('Bạn có chắc chắn muốn xóa chuyên viên này?')) return;
-            await fetch('/api/delete-specialist', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ specialistId })
-            });
-        }
-
         function startApp() {
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('mainAppContainer').classList.remove('hidden');
@@ -469,12 +475,21 @@
             document.getElementById('profileAvatarImg').src = currentUser.userAvatarUrl || '/logo.png';
             document.getElementById('customDisplayNameInput').value = currentUser.displayName || currentUser.username;
 
-            if(currentUser.role === 'admin') {
-                document.getElementById('navStaff').classList.remove('hidden');
-                document.getElementById('pinRoomBtn').classList.remove('hidden');
-            } else {
+            if(currentUser.role === 'client') {
+                document.getElementById('plusMenuContainer').classList.add('hidden');
                 document.getElementById('navStaff').classList.add('hidden');
+                document.getElementById('quickSwitchContainer').classList.add('hidden');
                 document.getElementById('pinRoomBtn').classList.add('hidden');
+            } else {
+                document.getElementById('plusMenuContainer').classList.remove('hidden');
+                document.getElementById('quickSwitchContainer').classList.remove('hidden');
+                if(currentUser.role === 'admin') {
+                    document.getElementById('navStaff').classList.remove('hidden');
+                    document.getElementById('pinRoomBtn').classList.remove('hidden');
+                } else {
+                    document.getElementById('navStaff').classList.add('hidden');
+                    document.getElementById('pinRoomBtn').classList.add('hidden');
+                }
             }
 
             renderRooms();
@@ -576,13 +591,15 @@
                             </select>
                         </div>
                     `;
+                } else if(r.status === 'system') {
+                    actionHtml = `<span class="text-[10px] px-2.5 py-1 rounded-full font-bold bg-blue-100 text-blue-700">Hệ thống</span>`;
                 } else {
                     actionHtml = `<span class="text-[10px] px-2.5 py-1 rounded-full font-bold bg-emerald-100 text-emerald-700">${r.assignedSpecialist ? 'Phụ trách: ' + r.assignedSpecialist : 'Chờ xử lý'}</span>`;
                 }
 
                 div.innerHTML = `
                     <div class="flex items-center space-x-3.5 flex-1 min-w-0 cursor-pointer" onclick="openRoom('${r.id}', '${r.name}')">
-                        <img src="/logo.png" alt="Logo" class="w-12 h-12 rounded-full object-cover border shrink-0 shadow-sm">
+                        <img src="${r.roomAvatarUrl || '/logo.png'}" alt="Logo" class="w-12 h-12 rounded-full object-cover border shrink-0 shadow-sm">
                         <div class="flex-1 min-w-0 pr-2">
                             <h4 class="font-extrabold text-slate-900 text-sm truncate">${r.name}</h4>
                             <p class="text-xs text-slate-400 truncate mt-0.5 font-semibold">Nhấn để xem tin nhắn...</p>
@@ -647,6 +664,15 @@
             }
         }
 
+        async function deleteSpecialist(staffId) {
+            if(!confirm('Bạn có chắc chắn muốn xóa chuyên viên này?')) return;
+            await fetch('/api/delete-specialist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ specialistId })
+            });
+        }
+
         function openRoom(roomId, roomName) {
             currentRoomId = roomId;
             document.getElementById('activeRoomName').textContent = roomName;
@@ -657,6 +683,54 @@
         function closeChatRoom() {
             document.getElementById('chatRoomView').classList.add('translate-x-full');
         }
+
+        // Đổi ảnh đại diện nhóm (Group Avatar)
+        async function handleGroupAvatarUpload(event) {
+            const file = event.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64Img = e.target.result;
+                const res = await fetch('/api/update-room-avatar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ roomId: currentRoomId, roomAvatarUrl: base64Img })
+                });
+                const data = await res.json();
+                if(data.success) {
+                    document.getElementById('groupAvatarPreview').src = base64Img;
+                    document.getElementById('activeRoomLogo').src = base64Img;
+                    alert('Đã đổi ảnh đại diện nhóm thành công!');
+                }
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function openGroupSettingsModal() {
+            const currentRoom = roomsData.find(r => r.id === currentRoomId);
+            if(currentRoom) {
+                document.getElementById('groupAvatarPreview').src = currentRoom.roomAvatarUrl || '/logo.png';
+            }
+            const list = document.getElementById('groupMembersList');
+            list.innerHTML = '';
+            if(currentRoom && currentRoom.members) {
+                currentRoom.members.forEach(memberName => {
+                    const uObj = usersData.find(u => u.username === memberName) || { role: 'client', displayName: memberName, userAvatarUrl: '/logo.png' };
+                    const div = document.createElement('div');
+                    div.className = "p-2.5 rounded-xl bg-slate-50 flex items-center justify-between border border-slate-100 text-xs font-bold";
+                    div.innerHTML = `
+                        <div class="flex items-center space-x-2">
+                            <img src="${uObj.userAvatarUrl || '/logo.png'}" class="w-7 h-7 rounded-full object-cover">
+                            <span class="text-slate-800">${uObj.displayName || memberName}</span>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase ${uObj.role==='admin'?'bg-purple-100 text-purple-700':'bg-emerald-100 text-emerald-700'}">${uObj.role || 'client'}</span>
+                    `;
+                    list.appendChild(div);
+                });
+            }
+            document.getElementById('groupSettingsModal').classList.remove('hidden');
+        }
+        function closeGroupSettingsModal() { document.getElementById('groupSettingsModal').classList.add('hidden'); }
 
         function handleChatImageSelect(event) {
             const file = event.target.files[0];
@@ -678,32 +752,12 @@
             document.getElementById('imagePreviewContainer').classList.add('hidden');
         }
 
-        function openMembersModal() {
-            const list = document.getElementById('groupMembersList');
-            list.innerHTML = '';
-            const currentRoom = roomsData.find(r => r.id === currentRoomId);
-            const currentMembers = currentRoom && currentRoom.members ? currentRoom.members : [currentUser.username];
-
-            currentMembers.forEach(memberName => {
-                const uObj = usersData.find(u => u.username === memberName) || { role: 'client', displayName: memberName, userAvatarUrl: '/logo.png' };
-                const div = document.createElement('div');
-                div.className = "p-3 rounded-2xl bg-slate-50 flex items-center justify-between border border-slate-100 text-xs font-bold";
-                div.innerHTML = `
-                    <div class="flex items-center space-x-2.5">
-                        <img src="${uObj.userAvatarUrl || '/logo.png'}" class="w-8 h-8 rounded-full object-cover">
-                        <span class="text-slate-800">${uObj.displayName || memberName}</span>
-                    </div>
-                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${uObj.role==='admin'?'bg-purple-100 text-purple-700':'bg-emerald-100 text-emerald-700'}">${uObj.role || 'client'}</span>
-                `;
-                list.appendChild(div);
-            });
-            document.getElementById('membersModal').classList.remove('hidden');
-        }
-        function closeMembersModal() { document.getElementById('membersModal').classList.add('hidden'); }
-
         socket.on('load_room_data', (data) => {
             renderMessages(data.messages);
             updatePinnedBanner(data.pinnedMsg);
+            if(data.roomAvatarUrl) {
+                document.getElementById('activeRoomLogo').src = data.roomAvatarUrl;
+            }
         });
 
         socket.on('update_pinned', (data) => {

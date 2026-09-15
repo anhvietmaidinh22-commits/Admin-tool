@@ -47,16 +47,32 @@ let rooms = [
 
 let messages = [
   { id: 1, roomId: 'room_hubba_system', senderName: 'HUBBA ✔', text: 'Thông báo hệ thống an toàn\n2026/09/15\n\nTài khoản hoạt động ổn định.\nThiết bị: Android\nIP: 123.24.88.148', time: '20:35', imageUrl: null, reactions: {} },
-  { id: 2, roomId: 'room_general', senderName: 'QUẢN LÍ HỆ THỐNG', text: 'Chào mừng sếp và hàng trăm anh em đã sẵn sàng bùng nổ!', time: '20:40', imageUrl: null, reactions: {} }
+  { id: 2, roomId: 'room_general', senderName: 'QUẢN LÍ HỆ THỐNG', text: 'Chào mừng sếp đã quay trở lại hệ thống HUBBA!', time: '20:40', imageUrl: null, reactions: {} }
 ];
 
-// Kho ảnh thực tế 100% đời sống (Góc chụp điện thoại, bàn làm việc, quán nước thật)
+// Kho ảnh thực tế 100% đời sống (thỉnh thoảng mới xuất hiện 1 ảnh)
 const realLifeImages = [
-  'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=500&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=500&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&auto=format&fit=crop&q=80'
+  'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=500&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=500&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=500&auto=format&fit=crop&q=80'
+];
+
+const pool1 = [
+  "Uồi, ngồi cà phê góc quen tranh thủ check đơn cùng sếp mà thấy rôm rả phết, nay anh em đóp đậm nhé!",
+  "Hôm nay ai có kèo đi lượn phố không nhỉ, thời tiết này ở nhà thì phí phạm thanh xuân lắm các bác ơi.",
+  "Công nhận từ ngày theo sếp học hỏi được khối thứ, vừa có tiền tiêu vừa được mở mang tầm mắt 🚀",
+  "Ai đó ord cho em ly trà sữa trân châu đường đen với, đói lả người từ nãy giờ rồi 🧋",
+  "Đời đúng là vô thường, chiều nay vừa định ôm gối đi ngủ thì sếp tung kèo mới thơm phức lại phải bật dậy chiến ngay."
+];
+
+const pool2 = [
+  "Các bác cứ mải chơi, em vừa check xong biểu đồ tăng trưởng tuần này mà rụng rời tim gan, đỉnh chóp thực sự!",
+  "Thời tiết kiểu này ngồi văn phòng nhâm nhi cốc cà phê làm việc thì hết nước chấm luôn anh em ạ.",
+  "Ai cóa bí quyết gì làm giàu nhanh chỉ em với, đói kém quá rồi hu hu.",
+  "Vừa làm việc vừa nghe nhạc chill chill, thỉnh thoảng sếp lại bơm thêm vitamin energy vào người nữa thì còn gì bằng.",
+  "Chí lý chí lý! Vote 1000 tym cho câu nói đầy tính triết lý của bác phía trên."
 ];
 
 let appSettings = {
@@ -212,7 +228,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// CLONE TỰ ĐỘNG CHÁY MÁY LIÊN TỤC MỖI 8 GIÂY (NHÓM KHÔNG BAO GIỜ IM LẶNG)
+// CLONE TỰ ĐỘNG CHÁY MÁY MỖI 7 GIÂY (THỈNH THỎANG MỚI GỬI 1 ẢNH)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const activeRoom = rooms[Math.floor(Math.random() * rooms.length)];
@@ -223,9 +239,20 @@ setInterval(() => {
     let c2 = clonePool[Math.floor(Math.random() * clonePool.length)];
     let c3 = clonePool[Math.floor(Math.random() * clonePool.length)];
     
-    let msg1 = { id: Date.now(), roomId: activeRoom.id, senderName: c1.displayName, text: "Uồi nhóm mình dạo này xôm tụ phết nhờ anh em ơi, ae điểm danh cái nào 😂", time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), reactions: {} };
-    let msg2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: c2.displayName, text: `@${c1.displayName} Có mặt luôn bác ơi, đang ngồi cày quốc cùng sếp đây nè hì hì!`, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), reactions: {} };
-    let msg3 = { id: Date.now() + 2, roomId: activeRoom.id, senderName: c3.displayName, text: `@${c2.displayName} Hóng kèo thơm cùng sếp quá cơ, nhìn ví reo vui ghê 🚀`, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: realLifeImages[Math.floor(Math.random() * realLifeImages.length)], reactions: {} };
+    while(c2.id === c1.id) c2 = clonePool[Math.floor(Math.random() * clonePool.length)];
+    while(c3.id === c1.id || c3.id === c2.id) c3 = clonePool[Math.floor(Math.random() * clonePool.length)];
+
+    let t1 = pool1[Math.floor(Math.random() * pool1.length)];
+    let t2 = `@${c1.displayName} Chuẩn không cần chỉnh luôn bác ơi, quá hợp lý!`;
+    let t3 = `@${c2.displayName} Hóng kèo thơm cùng sếp quá cơ 🚀`;
+    
+    // Tỷ lệ thấp (20%): Thỉnh thoảng mới có 1 con gửi ảnh đời thực
+    let shouldSendImg = Math.random() < 0.2;
+    let attachImg = shouldSendImg ? realLifeImages[Math.floor(Math.random() * realLifeImages.length)] : null;
+
+    const msg1 = { id: Date.now(), roomId: activeRoom.id, senderName: c1.displayName, text: t1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: attachImg, reactions: {} };
+    const msg2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: c2.displayName, text: t2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: null, reactions: {} };
+    const msg3 = { id: Date.now() + 2, roomId: activeRoom.id, senderName: c3.displayName, text: t3, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: null, reactions: {} };
 
     messages.push(msg1);
     io.to(activeRoom.id).emit('receive_message', msg1);
@@ -236,10 +263,10 @@ setInterval(() => {
       setTimeout(() => {
         messages.push(msg3);
         io.to(activeRoom.id).emit('receive_message', msg3);
-      }, 1000);
-    }, 1000);
+      }, 800);
+    }, 800);
   }
-}, 8000); // 8 giây tự động chat liên tục
+}, 7000);
 
 io.on('connection', (socket) => {
   socket.on('join_room', (roomId) => {
@@ -266,7 +293,7 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP NHẮN -> 4 CON CLONE ĐỒNG LOẠT TAG TÊN NHAU HÙA THEO CỰC KỲ SỐNG ĐỘNG
+    // KHI SẾP NHẮN -> 4 CON CLONE PHẢN HỒI LẬP TỨC TRONG 0.5 GIÂY, THỈNH THỎANG MỚI CÓ 1 ẢNH
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
@@ -275,11 +302,17 @@ io.on('connection', (socket) => {
         let c3 = clonePool[Math.floor(Math.random() * clonePool.length)];
         let c4 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
-        let r1 = appSettings.programMode && appSettings.cloneScript ? appSettings.cloneScript : `Dạ em nghe sếp ơi! Anh em đang túc trực đầy đủ chiến cùng sếp câu "${data.text}" đây ạ 🔥`;
+        while(c2.id === c1.id) c2 = clonePool[Math.floor(Math.random() * clonePool.length)];
+        while(c3.id === c1.id || c3.id === c2.id) c3 = clonePool[Math.floor(Math.random() * clonePool.length)];
+        while(c4.id === c1.id || c4.id === c2.id || c4.id === c3.id) c4 = clonePool[Math.floor(Math.random() * clonePool.length)];
+
+        let r1 = appSettings.programMode && appSettings.cloneScript ? appSettings.cloneScript : `Dạ em nghe sếp chỉ đạo vụ "${data.text}" đây ạ, anh em đang bám sát chiến dịch từng phút! 🔥`;
         let r2 = `@${c1.displayName} Chuẩn sếp gọi là có mặt ngay lập tức không trượt phát nào!`;
-        let r3 = `@${c2.displayName} @${c1.displayName} Hôm nay có chỉ đạo gì mới thơm phức không các bác ơi?`;
-        let r4 = `Tuyệt vời ông mặt trời! Vote 1000 tym cho sếp 😍`;
-        let attachImg = realLifeImages[Math.floor(Math.random() * realLifeImages.length)];
+        let r3 = `@${c2.displayName} @${c1.displayName} Cứ theo hướng này mà triển khai thôi các bác ơi.`;
+        let r4 = `Quá đỉnh chóp! Vote 1000 tym cho sếp 😍`;
+        
+        let shouldSendImg = Math.random() < 0.25; // 25% tỷ lệ thỉnh thoảng mới có ảnh
+        let attachImg = shouldSendImg ? realLifeImages[Math.floor(Math.random() * realLifeImages.length)] : null;
 
         const m1 = { id: Date.now() + 1, roomId: data.roomId, senderName: c1.displayName, text: r1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: attachImg, reactions: {} };
         messages.push(m1);
@@ -299,12 +332,12 @@ io.on('connection', (socket) => {
               const m4 = { id: Date.now() + 4, roomId: data.roomId, senderName: c4.displayName, text: r4, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: null, reactions: {} };
               messages.push(m4);
               io.to(data.roomId).emit('receive_message', m4);
-            }, 1000);
+            }, 600);
 
-          }, 1000);
-        }, 1000);
+          }, 600);
+        }, 600);
 
-      }, 1500);
+      }, 300);
     }
   });
 

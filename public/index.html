@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0f172a; font-size: 14px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0f172a; font-size: 15px; }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
@@ -88,10 +88,10 @@
                 <div id="roomList" class="flex-1 overflow-y-auto divide-y divide-slate-50"></div>
             </div>
 
-            <!-- TAB 2: NHÂN SỰ (CHỈ ADMIN THẤY) -->
+            <!-- TAB 2: QUẢN LÝ NHÂN SỰ & QUẢN LÍ KHÁCH HÀNG (DÀNH CHO ADMIN) -->
             <div id="tabStaff" class="absolute inset-0 flex flex-col bg-slate-50 z-0 hidden">
                 <div class="bg-white px-5 py-4 border-b border-slate-100 flex justify-between items-center shrink-0">
-                    <span class="font-extrabold text-base text-slate-900">Quản Lý Nhân Sự</span>
+                    <span class="font-extrabold text-base text-slate-900">Quản Lý Nhân Sự & Khách Hàng</span>
                     <button onclick="openStaffModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-2xl shadow-md transition">
                         <i class="fa-solid fa-user-plus mr-1"></i> Thêm Chuyên Viên
                     </button>
@@ -137,8 +137,8 @@
                         </div>
                     </div>
 
-                    <!-- MỤC CLONE SETTINGS (DÀNH CHO ADMIN/CHUYÊN VIÊN) -->
-                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 space-y-3">
+                    <!-- CÀI ĐẶT CLONE (DÀNH CHO ADMIN) -->
+                    <div id="cloneSettingsContainer" class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 space-y-3 hidden">
                         <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider flex items-center">
                             <i class="fa-solid fa-robot mr-1.5 text-indigo-600"></i> Cài Đặt Clone & OCR
                         </h4>
@@ -152,19 +152,13 @@
                         </div>
                     </div>
 
-                    <!-- CHỈ ADMIN & CHUYÊN VIÊN MỚI THẤY MỤC CHUYỂN ĐỔI NHANH TÀI KHOẢN -->
-                    <div id="quickSwitchContainer" class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 space-y-2.5">
-                        <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider">Chuyển Đổi Nhanh Tài Khoản</h4>
-                        <div id="quickSwitchList" class="space-y-2"></div>
-                    </div>
-
                     <button onclick="handleLogout()" class="w-full bg-white hover:bg-red-50 border border-red-200 text-red-600 font-extrabold py-3.5 rounded-3xl text-xs transition shadow-sm">Đăng xuất</button>
                 </div>
             </div>
 
         </div>
 
-        <!---------------- KHUNG CHAT CHI TIẾT (CÓ NÚT GỬI TIN NHẮN MÁY BAY GIẤY CHUẨN) ---------------->
+        <!---------------- KHUNG CHAT CHI TIẾT ---------------->
         <div id="chatRoomView" class="absolute inset-0 bg-white z-30 flex flex-col transform translate-x-full transition-transform duration-300">
             <div class="bg-indigo-600 text-white px-4 py-3.5 flex items-center justify-between shrink-0 shadow-md">
                 <div class="flex items-center space-x-3 min-w-0">
@@ -202,7 +196,7 @@
                 <button onclick="clearImagePreview()" class="text-red-500 font-extrabold px-2 py-1 text-sm">✕</button>
             </div>
 
-            <!-- THANH NHẬP CHAT CÓ NÚT GỬI (MÁY BAY GIẤY XANH) -->
+            <!-- THANH NHẬP CHAT CÓ NÚT GỬI MÁY BAY GIẤY CHUẨN XÁC -->
             <div class="p-3 bg-white border-t border-slate-100 flex items-center space-x-2 shrink-0 shadow-lg">
                 <button onclick="alert('Mở menu mở rộng!')" class="text-slate-400 hover:text-indigo-600 text-lg p-1.5 transition"><i class="fa-solid fa-circle-plus"></i></button>
                 
@@ -212,12 +206,11 @@
                 </label>
 
                 <div class="flex-1 bg-slate-100 border border-slate-200 rounded-full px-4 py-2.5 flex items-center space-x-2 focus-within:bg-white focus-within:border-indigo-600 transition">
-                    <input type="text" id="messageInput" placeholder="Tin nhắn..." class="bg-transparent border-none outline-none text-xs sm:text-sm text-slate-800 w-full font-medium" onkeypress="if(event.key === 'Enter') sendMessage()">
+                    <input type="text" id="messageInput" placeholder="Tin nhắn..." class="bg-transparent border-none outline-none text-sm text-slate-800 w-full font-medium" onkeypress="if(event.key === 'Enter') sendMessage()">
                     <i class="fa-regular fa-face-smile text-slate-400 text-base cursor-pointer hover:text-indigo-600"></i>
                 </div>
 
-                <!-- Nút Gửi Tin Nhắn Chuẩn (Máy Bay Giấy) -->
-                <button onclick="sendMessage()" class="bg-indigo-600 hover:bg-indigo-700 text-white w-10 h-10 rounded-full flex items-center justify-center text-sm shadow-md shadow-indigo-600/30 shrink-0 transition">
+                <button onclick="sendMessage()" class="bg-indigo-600 hover:bg-indigo-700 text-white w-10 h-10 rounded-full flex items-center justify-center text-sm shadow-md shadow-indigo-600/30 shrink-0 transition cursor-pointer">
                     <i class="fa-solid fa-paper-plane text-xs"></i>
                 </button>
             </div>
@@ -255,11 +248,6 @@
                     <i class="fa-solid fa-camera mr-1"></i> Đổi ảnh đại diện nhóm
                     <input type="file" accept="image/*" class="hidden" onchange="handleGroupAvatarUpload(event)">
                 </label>
-            </div>
-
-            <div class="space-y-2 pt-2 border-t border-slate-100">
-                <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider">Thành viên trong nhóm</h4>
-                <div id="groupMembersList" class="space-y-2 max-h-40 overflow-y-auto"></div>
             </div>
 
             <button onclick="closeGroupSettingsModal()" class="w-full py-3 bg-indigo-600 text-white rounded-2xl text-xs font-bold shadow-md">Đóng</button>
@@ -435,16 +423,6 @@
             document.getElementById('authScreen').classList.remove('hidden');
         }
 
-        function switchAccount(userId) {
-            const targetUser = usersData.find(u => u.id === userId);
-            if(targetUser) {
-                currentUser = targetUser;
-                localStorage.setItem('hubba_current_user', JSON.stringify(currentUser));
-                startApp();
-                switchTab('message');
-            }
-        }
-
         async function saveDisplayName() {
             const newName = document.getElementById('customDisplayNameInput').value.trim();
             if(!newName) return alert('Vui lòng nhập tên hiển thị mới!');
@@ -504,31 +482,26 @@
             document.getElementById('profileAvatarImg').src = currentUser.userAvatarUrl || '/logo.png';
             document.getElementById('customDisplayNameInput').value = currentUser.displayName || currentUser.username;
 
-            if(document.getElementById('settingOcr')) {
-                document.getElementById('settingOcr').checked = appSettings.autoOcr;
-                document.getElementById('settingBotsChat').checked = appSettings.autoBotsChat;
-            }
-
             if(currentUser.role === 'client') {
                 document.getElementById('plusMenuContainer').classList.add('hidden');
                 document.getElementById('navStaff').classList.add('hidden');
-                document.getElementById('quickSwitchContainer').classList.add('hidden');
+                document.getElementById('cloneSettingsContainer').classList.add('hidden');
                 document.getElementById('pinRoomBtn').classList.add('hidden');
             } else {
                 document.getElementById('plusMenuContainer').classList.remove('hidden');
-                document.getElementById('quickSwitchContainer').classList.remove('hidden');
                 if(currentUser.role === 'admin') {
                     document.getElementById('navStaff').classList.remove('hidden');
+                    document.getElementById('cloneSettingsContainer').classList.remove('hidden');
                     document.getElementById('pinRoomBtn').classList.remove('hidden');
                 } else {
                     document.getElementById('navStaff').classList.add('hidden');
+                    document.getElementById('cloneSettingsContainer').classList.add('hidden');
                     document.getElementById('pinRoomBtn').classList.add('hidden');
                 }
             }
 
             renderRooms();
             renderStaff();
-            renderQuickSwitchList();
         }
 
         socket.on('update_data', (data) => {
@@ -542,30 +515,7 @@
 
             renderRooms();
             renderStaff();
-            renderQuickSwitchList();
         });
-
-        function renderQuickSwitchList() {
-            const container = document.getElementById('quickSwitchList');
-            container.innerHTML = '';
-            usersData.forEach(u => {
-                const isCurrent = currentUser && currentUser.id === u.id;
-                const div = document.createElement('div');
-                div.className = `p-3 rounded-2xl flex items-center justify-between border cursor-pointer transition ${isCurrent ? 'bg-indigo-50/80 border-indigo-200 shadow-sm' : 'bg-slate-50 border-slate-100 hover:bg-white'}`;
-                div.innerHTML = `
-                    <div class="flex items-center space-x-2.5">
-                        <img src="${u.userAvatarUrl || '/logo.png'}" class="w-8 h-8 rounded-full object-cover">
-                        <div>
-                            <p class="font-bold text-xs text-slate-800">${u.displayName || u.username}</p>
-                            <span class="text-[9px] uppercase font-bold text-slate-400">ID: ${u.accountId}</span>
-                        </div>
-                    </div>
-                    <span class="text-[11px] font-black ${isCurrent ? 'text-indigo-600' : 'text-slate-400'}">${isCurrent ? 'Đang dùng' : 'Chuyển'}</span>
-                `;
-                if(!isCurrent) div.onclick = () => switchAccount(u.id);
-                container.appendChild(div);
-            });
-        }
 
         function openRoomModal() { document.getElementById('roomModal').classList.remove('hidden'); }
         function closeRoomModal() { document.getElementById('roomModal').classList.add('hidden'); }
@@ -625,17 +575,21 @@
                             </select>
                         </div>
                     `;
-                } else if(r.status === 'system') {
-                    actionHtml = ``; // Khách hàng không thấy chữ phụ trách
-                } else {
-                    actionHtml = currentUser.role === 'client' ? `` : `<span class="text-[10px] px-2.5 py-1 rounded-full font-bold bg-emerald-100 text-emerald-700">${r.assignedSpecialist ? 'Phụ trách: ' + r.assignedSpecialist : 'Chờ xử lý'}</span>`;
+                }
+
+                // HIỂN THỊ TÊN ĐÚNG THEO PHÂN QUYỀN (KHÁCH THẤY TÊN CHUYÊN VIÊN, CHUYÊN VIÊN THẤY TÊN KHÁCH)
+                let roomDisplayName = r.name;
+                if (currentUser.role === 'client') {
+                    roomDisplayName = r.assignedSpecialist ? (usersData.find(u => u.username === r.assignedSpecialist)?.displayName || r.assignedSpecialist) : 'Hỗ trợ trực tuyến';
+                } else if (currentUser.role === 'specialist' && r.clientName) {
+                    roomDisplayName = r.clientName;
                 }
 
                 div.innerHTML = `
-                    <div class="flex items-center space-x-3.5 flex-1 min-w-0 cursor-pointer" onclick="openRoom('${r.id}', '${r.name}')">
+                    <div class="flex items-center space-x-3.5 flex-1 min-w-0 cursor-pointer" onclick="openRoom('${r.id}', '${roomDisplayName}')">
                         <img src="${r.roomAvatarUrl || '/logo.png'}" alt="Logo" class="w-12 h-12 rounded-full object-cover border shrink-0 shadow-sm">
                         <div class="flex-1 min-w-0 pr-2">
-                            <h4 class="font-extrabold text-slate-900 text-sm truncate">${r.name}</h4>
+                            <h4 class="font-extrabold text-slate-900 text-sm truncate">${roomDisplayName}</h4>
                             <p class="text-xs text-slate-400 truncate mt-0.5 font-semibold">Nhấn để xem tin nhắn...</p>
                         </div>
                     </div>
@@ -645,25 +599,71 @@
             });
         }
 
+        // TAB NHÂN SỰ & QUẢN LÍ KHÁCH HÀNG (DÀNH CHO ADMIN)
         function renderStaff() {
             const list = document.getElementById('staffList');
             list.innerHTML = '';
+
+            // 1. Render Chuyên viên
+            const staffHeader = document.createElement('div');
+            staffHeader.className = "text-xs font-black uppercase text-slate-400 tracking-wider mb-2";
+            staffHeader.textContent = "Danh sách chuyên viên hệ thống";
+            list.appendChild(staffHeader);
+
             usersData.forEach(u => {
                 const div = document.createElement('div');
-                div.className = "bg-white p-4 rounded-3xl flex items-center justify-between shadow-sm border border-slate-100";
+                div.className = "bg-white p-4 rounded-3xl flex items-center justify-between shadow-sm border border-slate-100 mb-2";
                 div.innerHTML = `
                     <div class="flex items-center space-x-3.5">
-                        <img src="${u.userAvatarUrl || '/logo.png'}" class="w-12 h-12 rounded-full object-cover border shadow-inner">
+                        <img src="${u.userAvatarUrl || '/logo.png'}" class="w-11 h-11 rounded-full object-cover border">
                         <div>
                             <h4 class="font-extrabold text-slate-900 text-sm">${u.displayName || u.username}</h4>
                             <p class="text-xs text-slate-400 font-semibold">ID: ${u.accountId}</p>
-                            <span class="inline-block mt-1 text-[9px] px-2.5 py-0.5 rounded-full uppercase font-black ${u.role==='admin'?'bg-purple-100 text-purple-700':'bg-emerald-100 text-emerald-700'}">${u.role}</span>
+                            <span class="inline-block mt-1 text-[9px] px-2 py-0.5 rounded-full uppercase font-black ${u.role==='admin'?'bg-purple-100 text-purple-700':'bg-emerald-100 text-emerald-700'}">${u.role}</span>
                         </div>
                     </div>
                     ${currentUser.role === 'admin' && u.username !== 'admin' ? `<button onclick="deleteSpecialist('${u.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1.5 rounded-xl text-xs font-bold transition">Xóa</button>` : ''}
                 `;
                 list.appendChild(div);
             });
+
+            // 2. Render Quản lí Khách hàng (Theo dõi khách, đổi mk, khóa tài khoản)
+            const clientHeader = document.createElement('div');
+            clientHeader.className = "text-xs font-black uppercase text-slate-400 tracking-wider mt-4 mb-2";
+            clientHeader.textContent = "Quản lí Khách hàng (Theo dõi, Khóa/Mở, Đổi MK)";
+            list.appendChild(clientHeader);
+
+            const clients = usersData.filter(u => u.role === 'client');
+            if(clients.length === 0) {
+                const emptyC = document.createElement('div');
+                emptyC.className = "text-xs text-slate-400 italic p-2";
+                emptyC.textContent = "Chưa có tài khoản khách hàng nào đăng ký.";
+                list.appendChild(emptyC);
+            } else {
+                clients.forEach(c => {
+                    const cDiv = document.createElement('div');
+                    cDiv.className = "bg-white p-4 rounded-3xl space-y-3 shadow-sm border border-slate-100 mb-3";
+                    cDiv.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <img src="${c.userAvatarUrl || '/logo.png'}" class="w-10 h-10 rounded-full object-cover border">
+                                <div>
+                                    <h4 class="font-bold text-xs text-slate-900">${c.displayName || c.username}</h4>
+                                    <span class="text-[10px] ${c.isLocked ? 'text-red-500 font-bold' : 'text-emerald-600 font-bold'}">${c.isLocked ? '🔒 Đã khóa tài khoản' : '🟢 Hoạt động'}</span>
+                                </div>
+                            </div>
+                            <button onclick="toggleLockClient('${c.id}', ${c.isLocked})" class="${c.isLocked ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'} px-3 py-1.5 rounded-xl text-xs font-bold transition">
+                                ${c.isLocked ? 'Mở khóa' : 'Khóa'}
+                            </button>
+                        </div>
+                        <div class="flex space-x-2 pt-1">
+                            <input type="password" id="newpass_${c.id}" placeholder="Mật khẩu mới..." class="flex-1 bg-slate-50 border border-slate-200 px-3 py-2 rounded-xl text-xs outline-none">
+                            <button onclick="adminChangeClientPass('${c.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-xs font-bold">Đổi MK</button>
+                        </div>
+                    `;
+                    list.appendChild(cDiv);
+                });
+            }
         }
 
         async function assignSpecialist(roomId, specialistName) {
@@ -707,6 +707,29 @@
             });
         }
 
+        async function toggleLockClient(clientId, currentStatus) {
+            await fetch('/api/admin-manage-client', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ clientId, isLocked: !currentStatus })
+            });
+        }
+
+        async function adminChangeClientPass(clientId) {
+            const newPassword = document.getElementById(`newpass_${clientId}`).value.trim();
+            if(!newPassword) return alert('Vui lòng nhập mật khẩu mới!');
+            const res = await fetch('/api/admin-manage-client', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ clientId, newPassword })
+            });
+            const data = await res.json();
+            if(data.success) {
+                alert('Đổi mật khẩu khách hàng thành công!');
+                document.getElementById(`newpass_${clientId}`).value = '';
+            }
+        }
+
         function openRoom(roomId, roomName) {
             currentRoomId = roomId;
             document.getElementById('activeRoomName').textContent = roomName;
@@ -743,23 +766,6 @@
             const currentRoom = roomsData.find(r => r.id === currentRoomId);
             if(currentRoom) {
                 document.getElementById('groupAvatarPreview').src = currentRoom.roomAvatarUrl || '/logo.png';
-            }
-            const list = document.getElementById('groupMembersList');
-            list.innerHTML = '';
-            if(currentRoom && currentRoom.members) {
-                currentRoom.members.forEach(memberName => {
-                    const uObj = usersData.find(u => u.username === memberName) || { role: 'client', displayName: memberName, userAvatarUrl: '/logo.png' };
-                    const div = document.createElement('div');
-                    div.className = "p-2.5 rounded-xl bg-slate-50 flex items-center justify-between border border-slate-100 text-xs font-bold";
-                    div.innerHTML = `
-                        <div class="flex items-center space-x-2">
-                            <img src="${uObj.userAvatarUrl || '/logo.png'}" class="w-7 h-7 rounded-full object-cover">
-                            <span class="text-slate-800">${uObj.displayName || memberName}</span>
-                        </div>
-                        <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase ${uObj.role==='admin'?'bg-purple-100 text-purple-700':'bg-emerald-100 text-emerald-700'}">${uObj.role || 'client'}</span>
-                    `;
-                    list.appendChild(div);
-                });
             }
             document.getElementById('groupSettingsModal').classList.remove('hidden');
         }

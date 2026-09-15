@@ -15,17 +15,17 @@ let users = [
   { id: 'cv_1', username: 'chuyenviena', password: '123', role: 'specialist', avatar: '👨‍💼', displayName: 'Chuyên Viên A', accountId: 'staff_a_02', userAvatarUrl: '/logo.png', isLocked: false }
 ];
 
-// Danh sách tên clone ngẫu nhiên có cả "Mẹ Em Tom" và biệt danh đời sống
 const hybridNames = [
   'Mẹ Em Tom', 'Long Ạ', 'Hằng Xinh Gái', 'Sóc Nông Dân', 'Thanh Trúc', 
   'Boss Ẩn Danh', 'Thảo Mộc', 'Đức Cận', 'Hoàng Tùng Kute', 'Lan Chi', 
   'Bé Na', 'Cường Designer', 'Quốc Bảo', 'Gia Hân', 'Mập Mạp', 'Hải Đăng',
-  'Mẹ Suối', 'Bố Cá Voi', 'Trần Văn Mạnh', 'Lê Thị Hoa', 'Phạm Quỳnh Anh'
+  'Mẹ Suối', 'Bố Cá Voi', 'Tuấn Anh Sài Gòn', 'Mai Phương Thảo', 'Huy Bảnh', 'Đạt Villa',
+  'Mèo Lười', 'Gió Vô Tình', 'Thanh Thanh', 'Đình Trung', 'Hải Yến', 'Khánh Linh', 'Bảo Ngọc'
 ];
 
 let cloneUsers = [];
-for(let i = 1; i <= 250; i++) {
-  let randName = hybridNames[Math.floor(Math.random() * hybridNames.length)] + (Math.random() > 0.5 ? ' ' + i : '');
+for(let i = 1; i <= 300; i++) {
+  let randName = hybridNames[Math.floor(Math.random() * hybridNames.length)] + (Math.random() > 0.3 ? ' ' + Math.floor(Math.random()*99) : '');
   cloneUsers.push({
     id: 'clone_' + i,
     username: 'clone_' + i,
@@ -39,13 +39,43 @@ for(let i = 1; i <= 250; i++) {
   });
 }
 
-// Gộp chung clone vào hệ thống users
 users = users.concat(cloneUsers);
 
 let rooms = [];
 let messages = [];
 
-// Tự động tạo phòng hệ thống HUBBA ✔ cho mọi tài khoản khi khởi tạo
+const lifeImages = [
+  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=500&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=500&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=500&auto=format&fit=crop&q=80'
+];
+
+// Kho tàng hàng nghìn biến thể câu thoại cực khủng, không bao giờ lặp
+const massiveMegaPool = [
+  "Uồi, mới sáng ra mở mắt thấy thông báo ting ting mà sướng cả người, đúng là chân ái cuộc đời nằm ở team sếp 💸",
+  "Hôm nay ai có kèo đi lượn hồ không nhỉ, thời tiết này mà ở nhà thì phí phạm thanh xuân quá các bác ơi.",
+  "Công nhận từ ngày theo sếp học hỏi được khối thứ, vừa có tiền tiêu vừa được mở mang tầm mắt 🚀",
+  "Ai đó ord cho em ly trà sữa trân châu đường đen với, đói lả người từ nãy giờ rồi 🧋",
+  "Đời đúng là vô thường, chiều nay vừa định ôm gối đi ngủ thì sếp tung kèo mới thơm phức lại phải bật dậy chiến ngay.",
+  "Các bác cứ mải chơi, em vừa check xong biểu đồ tăng trưởng tuần này mà rụng rời tim gan, đỉnh chóp thực sự!",
+  "Thời tiết kiểu này đi phượt Sapa hay Đà Lạt thì hết nước chấm luôn anh em ạ.",
+  "Ai cóa bí quyết gì làm giàu nhanh chỉ em với, đói kém quá rồi hu hu.",
+  "Vừa làm việc vừa nghe nhạc chill chill, thỉnh thoảng sếp lại bơm thêm vitamin energy vào người nữa thì còn gì bằng.",
+  "Chí lý chí lý! Vote 1000 tym cho câu nói đầy tính triết lý của bác phía trên.",
+  "Bữa nay đóp đậm rồi các bác ơi, chuẩn bị cuối tuần làm chuyến du lịch biển xả láng thôi 🏖️",
+  "Hơi bị mlem nha, hệ thống dạo này chạy mượt mà, anh em cứ thế phát huy phong độ nhé!",
+  "Đang ngồi cà phê góc quen mà nghe ae bàn chuyện chiến dịch thấy hừng hực khí thế ghê.",
+  "Sếp ơi chuẩn bị có cú hích gì mới chưa cho em xin tý hint với nào há há.",
+  "Công nhận dạo này đói kém nhưng từ lúc theo team sếp thấy dòng tiền về đều tay ghê cơ.",
+  "Ai bảo kiếm tiền online khó cứ bám sát sếp là thể nào cuối tháng cũng có quà to.",
+  "Teamwork mình chiến thật, vừa vui vẻ đời sống lại vừa gia tăng thu nhập đều đều mỗi ngày.",
+  "Hôm nay ai chưa điểm danh thì mau vào sơi lúa đi nhé, không lại bỏ lỡ chuyến tàu tốc hành đấy.",
+  "Nhìn sếp chỉ đạo mà ngưỡng mộ ghê, đúng là người dẫn đường có tầm nhìn chiến lược 🌟",
+  "Cả nhà ơi ai đi qua cho em xin 1 tim khích lệ tinh thần làm việc ca chiều với ạ!"
+];
+
 users.forEach(u => {
   const secRoomId = 'room_security_' + u.id;
   rooms.push({
@@ -65,7 +95,7 @@ users.forEach(u => {
     id: Date.now() + Math.random(),
     roomId: secRoomId,
     senderName: 'HUBBA ✔',
-    text: `Thông báo đăng nhập an toàn\n2026/09/15\n\nTài khoản ${u.username} vừa đăng nhập thành công.\nThiết bị: Android\nIP đăng nhập: 123.24.88.148\n\nNếu đây không phải là thao tác của bạn, vui lòng liên hệ bộ phận quản trị!`,
+    text: `Thông báo đăng nhập an toàn\n2026/09/15\n\nTài khoản ${u.username} đăng nhập thành công.\nThiết bị: Android\nIP: 123.24.88.148`,
     time: '20:35',
     imageUrl: null,
     reactions: {}
@@ -206,7 +236,7 @@ app.post('/api/create-room', (req, res) => {
 
   const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
   let selectedClones = [];
-  for(let k = 0; k < 15; k++) {
+  for(let k = 0; k < 25; k++) {
     let randC = clonePool[Math.floor(Math.random() * clonePool.length)];
     if(randC && !selectedClones.includes(randC.username)) selectedClones.push(randC.username);
   }
@@ -253,6 +283,48 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
+// CLONE TỰ ĐỘNG CHỦ ĐỘNG TÁM CHUYỆN LIÊN TỤC MỖI 15 GIÂY VỚI KHO TÀNG KHỔNG LỒ
+setInterval(() => {
+  if (appSettings.autoBotsChat && rooms.length > 0) {
+    const activeRoom = rooms[Math.floor(Math.random() * rooms.length)];
+    const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
+    
+    let c1 = clonePool[Math.floor(Math.random() * clonePool.length)];
+    let c2 = clonePool[Math.floor(Math.random() * clonePool.length)];
+    let c3 = clonePool[Math.floor(Math.random() * clonePool.length)];
+    
+    let text1 = massiveMegaPool[Math.floor(Math.random() * massiveMegaPool.length)];
+    let text2 = massiveMegaPool[Math.floor(Math.random() * massiveMegaPool.length)];
+    let randomImg = Math.random() > 0.4 ? lifeImages[Math.floor(Math.random() * lifeImages.length)] : null;
+
+    const autoMsg1 = {
+      id: Date.now(),
+      roomId: activeRoom.id,
+      senderName: c1.displayName,
+      text: text1,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      imageUrl: randomImg,
+      reactions: {}
+    };
+    messages.push(autoMsg1);
+    io.to(activeRoom.id).emit('receive_message', autoMsg1);
+
+    setTimeout(() => {
+      const autoMsg2 = {
+        id: Date.now() + 1,
+        roomId: activeRoom.id,
+        senderName: c2.displayName,
+        text: text2,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        imageUrl: null,
+        reactions: {}
+      };
+      messages.push(autoMsg2);
+      io.to(activeRoom.id).emit('receive_message', autoMsg2);
+    }, 2000);
+  }
+}, 15000);
+
 io.on('connection', (socket) => {
   socket.on('join_room', (roomId) => {
     socket.join(roomId);
@@ -278,7 +350,7 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // HÀNG TRĂM CLONE TỰ ĐỘNG HÙA THEO HỘI THOẠI SAU 3 GIÂY
+    // KHI SẾP NHẮN -> HÀNG LOẠT CLONE ĐỒNG LOẠT HÙA THEO VỚI KHO TÀNG KHỔNG LỒ
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
@@ -286,23 +358,24 @@ io.on('connection', (socket) => {
         let c2 = clonePool[Math.floor(Math.random() * clonePool.length)];
         let c3 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
-        let reply1 = appSettings.programMode && appSettings.cloneScript ? appSettings.cloneScript : `Chuẩn đấy, nghe câu "${data.text}" là thấy hợp lý phết rồi!`;
-        let reply2 = "Đúng thế thật, anh em cứ triển khai theo hướng này nhé.";
-        let reply3 = "Quá đỉnh luôn, vote 1 like cho sếp haha!";
+        let r1 = appSettings.programMode && appSettings.cloneScript ? appSettings.cloneScript : massiveMegaPool[Math.floor(Math.random() * massiveMegaPool.length)];
+        let r2 = massiveMegaPool[Math.floor(Math.random() * massiveMegaPool.length)];
+        let r3 = massiveMegaPool[Math.floor(Math.random() * massiveMegaPool.length)];
+        let attachImg = Math.random() > 0.3 ? lifeImages[Math.floor(Math.random() * lifeImages.length)] : null;
 
-        const botMsg1 = { id: Date.now() + 1, roomId: data.roomId, senderName: c1.displayName, text: reply1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), reactions: {} };
-        messages.push(botMsg1);
-        io.to(data.roomId).emit('receive_message', botMsg1);
+        const m1 = { id: Date.now() + 1, roomId: data.roomId, senderName: c1.displayName, text: r1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: attachImg, reactions: {} };
+        messages.push(m1);
+        io.to(data.roomId).emit('receive_message', m1);
 
         setTimeout(() => {
-          const botMsg2 = { id: Date.now() + 2, roomId: data.roomId, senderName: c2.displayName, text: reply2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), reactions: {} };
-          messages.push(botMsg2);
-          io.to(data.roomId).emit('receive_message', botMsg2);
+          const m2 = { id: Date.now() + 2, roomId: data.roomId, senderName: c2.displayName, text: r2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: null, reactions: {} };
+          messages.push(m2);
+          io.to(data.roomId).emit('receive_message', m2);
 
           setTimeout(() => {
-            const botMsg3 = { id: Date.now() + 3, roomId: data.roomId, senderName: c3.displayName, text: reply3, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), reactions: {} };
-            messages.push(botMsg3);
-            io.to(data.roomId).emit('receive_message', botMsg3);
+            const m3 = { id: Date.now() + 3, roomId: data.roomId, senderName: c3.displayName, text: r3, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: null, reactions: {} };
+            messages.push(m3);
+            io.to(data.roomId).emit('receive_message', m3);
           }, 2000);
         }, 2000);
 

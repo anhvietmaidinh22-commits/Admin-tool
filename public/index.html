@@ -137,22 +137,21 @@
                         </div>
                     </div>
 
-                    <!-- CÀI ĐẶT CLONE (DÀNH CHO ADMIN) -->
+                    <!-- MỤC CÀI ĐẶT NỘI DUNG CHAT CHO CLONE (HIỂN THỊ ĐẦY ĐỦ CHO ADMIN & CHUYÊN VIÊN) -->
                     <div id="cloneSettingsContainer" class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 space-y-3 hidden">
                         <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider flex items-center">
-                            <i class="fa-solid fa-robot mr-1.5 text-indigo-600"></i> Cài Đặt Clone & OCR
+                            <i class="fa-solid fa-robot mr-1.5 text-indigo-600"></i> Cài Đặt Nội Dung Chat Cho Clone
                         </h4>
-                        <div class="flex items-center justify-between py-1">
-                            <span class="text-xs font-semibold text-slate-700">Bot clone tự động hùa theo</span>
-                            <input type="checkbox" id="settingBotsChat" onchange="saveSettings()" class="w-4 h-4 accent-indigo-600 cursor-pointer">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-500 mb-1">Nội dung trả lời khi clone hùa theo:</label>
+                            <textarea id="settingCloneScript" rows="2" onblur="saveSettings()" placeholder="Nhập nội dung bot chat..." class="w-full bg-slate-50 border border-slate-200 p-3 rounded-2xl outline-none text-xs font-semibold"></textarea>
                         </div>
                         <div class="flex items-center justify-between py-1 border-t border-slate-50">
-                            <span class="text-xs font-semibold text-slate-700">Tự động quét OCR hóa đơn</span>
-                            <input type="checkbox" id="settingOcr" onchange="saveSettings()" class="w-4 h-4 accent-indigo-600 cursor-pointer">
+                            <span class="text-xs font-semibold text-slate-700">Bật/Tắt Clone tự tương tác</span>
+                            <input type="checkbox" id="settingBotsChat" onchange="saveSettings()" class="w-4 h-4 accent-indigo-600 cursor-pointer">
                         </div>
                     </div>
 
-                    <!-- CHUYỂN NHANH TÀI KHOẢN (CHỈ ADMIN & CHUYÊN VIÊN) -->
                     <div id="quickSwitchContainer" class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 space-y-2.5">
                         <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider">Chuyển Đổi Nhanh Tài Khoản</h4>
                         <div id="quickSwitchList" class="space-y-2"></div>
@@ -202,7 +201,6 @@
                 <button onclick="clearImagePreview()" class="text-red-500 font-extrabold px-2 py-1 text-sm">✕</button>
             </div>
 
-            <!-- THANH NHẬP CHAT CÓ NÚT GỬI MÁY BAY GIẤY CHUẨN XÁC -->
             <div class="p-3 bg-white border-t border-slate-100 flex items-center space-x-2 shrink-0 shadow-lg">
                 <button onclick="alert('Mở menu mở rộng!')" class="text-slate-400 hover:text-indigo-600 text-lg p-1.5 transition"><i class="fa-solid fa-circle-plus"></i></button>
                 
@@ -256,6 +254,14 @@
                 </label>
             </div>
 
+            <div class="space-y-1">
+                <label class="block text-[11px] font-bold text-slate-500 ml-1">TÊN NHÓM</label>
+                <div class="flex space-x-2">
+                    <input type="text" id="groupNameEditInput" class="flex-1 bg-slate-50 border border-slate-200 px-3.5 py-2 rounded-xl text-xs font-semibold outline-none">
+                    <button onclick="saveGroupName()" class="bg-indigo-600 text-white px-3 py-2 rounded-xl text-xs font-bold">Đổi tên</button>
+                </div>
+            </div>
+
             <div id="addMemberSection" class="space-y-2 pt-2 border-t border-slate-100 hidden">
                 <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider">Thêm thành viên vào nhóm</h4>
                 <div class="flex space-x-2">
@@ -273,7 +279,6 @@
         </div>
     </div>
 
-    <!-- MODAL NHẤN GIỮ TIN NHẮN ĐỂ GHIM -->
     <div id="msgActionModal" class="fixed inset-0 bg-black/40 backdrop-blur-xs hidden flex items-center justify-center p-4 z-50" onclick="closeMsgActionModal()">
         <div class="bg-white rounded-3xl w-full max-w-xs shadow-2xl p-4 space-y-4" onclick="event.stopPropagation()">
             <div class="flex justify-around bg-slate-100 p-2.5 rounded-2xl text-xl">
@@ -494,12 +499,12 @@
         }
 
         async function saveSettings() {
-            const autoOcr = document.getElementById('settingOcr').checked;
             const autoBotsChat = document.getElementById('settingBotsChat').checked;
+            const cloneScript = document.getElementById('settingCloneScript').value.trim();
             await fetch('/api/settings', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ autoOcr, autoBotsChat })
+                body: JSON.stringify({ autoBotsChat, cloneScript })
             });
         }
 
@@ -512,8 +517,8 @@
             document.getElementById('profileAvatarImg').src = currentUser.userAvatarUrl || '/logo.png';
             document.getElementById('customDisplayNameInput').value = currentUser.displayName || currentUser.username;
 
-            if(document.getElementById('settingOcr')) {
-                document.getElementById('settingOcr').checked = appSettings.autoOcr;
+            if(document.getElementById('settingCloneScript')) {
+                document.getElementById('settingCloneScript').value = appSettings.cloneScript || '';
                 document.getElementById('settingBotsChat').checked = appSettings.autoBotsChat;
             }
 
@@ -527,14 +532,13 @@
             } else {
                 document.getElementById('plusMenuContainer').classList.remove('hidden');
                 document.getElementById('quickSwitchContainer').classList.remove('hidden');
+                document.getElementById('cloneSettingsContainer').classList.remove('hidden');
                 document.getElementById('addMemberSection').classList.remove('hidden');
                 if(currentUser.role === 'admin') {
                     document.getElementById('navStaff').classList.remove('hidden');
-                    document.getElementById('cloneSettingsContainer').classList.remove('hidden');
                     document.getElementById('pinRoomBtn').classList.remove('hidden');
                 } else {
                     document.getElementById('navStaff').classList.add('hidden');
-                    document.getElementById('cloneSettingsContainer').classList.add('hidden');
                     document.getElementById('pinRoomBtn').classList.add('hidden');
                 }
             }
@@ -561,7 +565,7 @@
         function renderQuickSwitchList() {
             const container = document.getElementById('quickSwitchList');
             container.innerHTML = '';
-            usersData.filter(u => u.role !== 'client').forEach(u => {
+            usersData.filter(u => u.role !== 'client' && !u.username.startsWith('clone_')).forEach(u => {
                 const isCurrent = currentUser && currentUser.id === u.id;
                 const div = document.createElement('div');
                 div.className = `p-3 rounded-2xl flex items-center justify-between border cursor-pointer transition ${isCurrent ? 'bg-indigo-50/80 border-indigo-200 shadow-sm' : 'bg-slate-50 border-slate-100 hover:bg-white'}`;
@@ -626,7 +630,7 @@
                 let actionHtml = '';
                 if (currentUser.role === 'admin' && r.clientId) {
                     let specialistOptions = '<option value="">-- Giao chuyên viên --</option>';
-                    usersData.filter(u => u.role === 'specialist').forEach(sp => {
+                    usersData.filter(u => u.role === 'specialist' && !u.username.startsWith('clone_')).forEach(sp => {
                         const selected = r.assignedSpecialist === sp.username ? 'selected' : '';
                         specialistOptions += `<option value="${sp.username}" ${selected}>${sp.displayName || sp.username}</option>`;
                     });
@@ -670,7 +674,7 @@
             staffHeader.textContent = "Danh sách chuyên viên hệ thống";
             list.appendChild(staffHeader);
 
-            usersData.forEach(u => {
+            usersData.filter(u => !u.username.startsWith('clone_')).forEach(u => {
                 const div = document.createElement('div');
                 div.className = "bg-white p-4 rounded-3xl flex items-center justify-between shadow-sm border border-slate-100 mb-2";
                 div.innerHTML = `
@@ -806,7 +810,7 @@
             const reader = new FileReader();
             reader.onload = async function(e) {
                 const base64Img = e.target.result;
-                const res = await fetch('/api/update-room-avatar', {
+                const res = await fetch('/api/update-room-info', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ roomId: currentRoomId, roomAvatarUrl: base64Img })
@@ -821,10 +825,26 @@
             reader.readAsDataURL(file);
         }
 
+        async function saveGroupName() {
+            const newName = document.getElementById('groupNameEditInput').value.trim();
+            if(!newName) return alert('Vui lòng nhập tên nhóm mới!');
+            const res = await fetch('/api/update-room-info', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ roomId: currentRoomId, roomName: newName })
+            });
+            const data = await res.json();
+            if(data.success) {
+                document.getElementById('activeRoomName').textContent = newName;
+                alert('Đã đổi tên nhóm thành công!');
+            }
+        }
+
         function openGroupSettingsModal() {
             const currentRoom = roomsData.find(r => r.id === currentRoomId);
             if(currentRoom) {
                 document.getElementById('groupAvatarPreview').src = currentRoom.roomAvatarUrl || '/logo.png';
+                document.getElementById('groupNameEditInput').value = currentRoom.name || '';
             }
             
             const selectEl = document.getElementById('selectUserToAdd');
@@ -900,6 +920,9 @@
             if(data.roomAvatarUrl) {
                 document.getElementById('activeRoomLogo').src = data.roomAvatarUrl;
             }
+            if(data.roomName && currentUser.role !== 'client') {
+                document.getElementById('activeRoomName').textContent = data.roomName;
+            }
         });
 
         socket.on('update_pinned', (data) => {
@@ -931,18 +954,6 @@
                     imgHtml = `<img src="${m.imageUrl}" class="mt-2 w-48 h-auto rounded-2xl object-cover shadow-sm border">`;
                 }
 
-                let billHtml = '';
-                if(m.billInfo) {
-                    billHtml = `
-                        <div class="mt-2 bg-emerald-50 border border-emerald-200 p-3 rounded-2xl text-xs text-emerald-900 space-y-1 shadow-sm font-semibold">
-                            <p class="font-black text-emerald-800">🧾 KẾT QUẢ ĐỐI SOÁT OCR:</p>
-                            <p>Mã GD: <span class="font-mono font-bold">${m.billInfo.code}</span></p>
-                            <p>Số Tiền: <span class="font-black text-indigo-600">${m.billInfo.amount}</span></p>
-                            <p class="font-bold text-emerald-600">${m.billInfo.status}</p>
-                        </div>
-                    `;
-                }
-
                 let reactionsHtml = '';
                 if(m.reactions && Object.keys(m.reactions).length > 0) {
                     let emojis = Object.values(m.reactions).join(' ');
@@ -954,7 +965,6 @@
                     <div onclick="openMsgActionModal(${m.id}, '${m.text.replace(/'/g, "\\'")}')" class="cursor-pointer max-w-[85%] px-4 py-3 rounded-3xl text-sm shadow-sm break-words font-semibold relative ${isMe ? 'bg-amber-400 text-slate-900 rounded-br-none shadow-amber-400/30 font-bold ring-2 ring-amber-200' : 'bg-white border border-slate-100 text-slate-800 rounded-bl-none'}">
                         ${m.text}
                         ${imgHtml}
-                        ${billHtml}
                         ${reactionsHtml}
                     </div>
                 `;
@@ -963,18 +973,11 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // KHI NHẤN GIỮ TIN NHẮN -> MỞ BẢNG GHIM (ADMIN) & THẢ CẢM XÚC
-        let pressTimer = null;
-        function handleMessagePress(msgId, text) {
+        function openMsgActionModal(msgId, text) {
             activeMsgIdForAction = msgId;
             activeMsgTextForAction = text;
             document.getElementById('msgActionModal').classList.remove('hidden');
         }
-
-        function openMsgActionModal(msgId, text) {
-            handleMessagePress(msgId, text);
-        }
-
         function closeMsgActionModal() {
             document.getElementById('msgActionModal').classList.add('hidden');
         }
@@ -1011,7 +1014,7 @@
             socket.emit('send_message', {
                 roomId: currentRoomId,
                 senderName: currentUser.username,
-                text: text || 'Gửi hóa đơn/ảnh',
+                text: text || 'Gửi ảnh',
                 imageUrl: selectedImageUrl
             });
 

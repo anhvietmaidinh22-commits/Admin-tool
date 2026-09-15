@@ -50,7 +50,6 @@ let messages = [
   { id: 2, roomId: 'room_general', senderName: 'QUẢN LÍ HỆ THỐNG', text: 'Chào mừng sếp đã quay trở lại hệ thống HUBBA!', time: '20:40', imageUrl: null, reactions: {} }
 ];
 
-// Kho ảnh thực tế 100% đời sống (thỉnh thoảng mới xuất hiện 1 ảnh)
 const realLifeImages = [
   'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&auto=format&fit=crop&q=80',
   'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=500&auto=format&fit=crop&q=80',
@@ -59,20 +58,19 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=500&auto=format&fit=crop&q=80'
 ];
 
-const pool1 = [
-  "Uồi, ngồi cà phê góc quen tranh thủ check đơn cùng sếp mà thấy rôm rả phết, nay anh em đóp đậm nhé!",
-  "Hôm nay ai có kèo đi lượn phố không nhỉ, thời tiết này ở nhà thì phí phạm thanh xuân lắm các bác ơi.",
-  "Công nhận từ ngày theo sếp học hỏi được khối thứ, vừa có tiền tiêu vừa được mở mang tầm mắt 🚀",
-  "Ai đó ord cho em ly trà sữa trân châu đường đen với, đói lả người từ nãy giờ rồi 🧋",
-  "Đời đúng là vô thường, chiều nay vừa định ôm gối đi ngủ thì sếp tung kèo mới thơm phức lại phải bật dậy chiến ngay."
+// Kho tàng tung hô sếp, đời sống ấm no, rủng rỉnh tiền tiêu
+const praisePool1 = [
+  "Công nhận từ ngày theo team sếp, đời sống sang trang hẳn, lúc nào ví cũng rủng rỉnh tiêu bét nhè 💸",
+  "Mới sáng mở mắt ra thấy tài khoản ting ting reo vui, đúng là chọn đúng chân ái cuộc đời nằm ở team sếp 🚀",
+  "Nghĩ lại ngày trước cứ loay hoay, từ lúc được sếp dẫn dắt thì mọi thứ mượt mà, đúng là đỉnh chóp thực sự!",
+  "Anh em cứ yên tâm tuyệt đối đi, theo sát chỉ đạo của sếp thì chỉ có ấm cái bụng trở lên thôi.",
+  "Vừa ngồi cà phê đếm tiền lời tuần này mà sướng rơn cả người, cảm ơn sếp lớn nhiều lắm nha 😍"
 ];
 
-const pool2 = [
-  "Các bác cứ mải chơi, em vừa check xong biểu đồ tăng trưởng tuần này mà rụng rời tim gan, đỉnh chóp thực sự!",
-  "Thời tiết kiểu này ngồi văn phòng nhâm nhi cốc cà phê làm việc thì hết nước chấm luôn anh em ạ.",
-  "Ai cóa bí quyết gì làm giàu nhanh chỉ em với, đói kém quá rồi hu hu.",
-  "Vừa làm việc vừa nghe nhạc chill chill, thỉnh thoảng sếp lại bơm thêm vitamin energy vào người nữa thì còn gì bằng.",
-  "Chí lý chí lý! Vote 1000 tym cho câu nói đầy tính triết lý của bác phía trên."
+const praisePool2 = [
+  "Thật sự luôn, tầm nhìn chiến lược của sếp thì không có điểm nào chê được.",
+  "Chuẩn bài luôn bác ơi, đời sống sung túc thế này thì ai làm lại team mình nữa hì hì.",
+  "Cứ đà này cuối năm anh em lại sắm ô tô xây nhà to thôi các bác nhỉ."
 ];
 
 let appSettings = {
@@ -81,6 +79,8 @@ let appSettings = {
   cloneScript: '',
   appLogo: 'https://i.ibb.co/NdVf8Btz/logo.png'
 };
+
+let lastUserActivity = 0;
 
 app.get('/api/settings', (req, res) => {
   res.json({ success: true, settings: appSettings });
@@ -228,9 +228,12 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// CLONE TỰ ĐỘNG CHÁY MÁY MỖI 7 GIÂY (THỈNH THỎANG MỚI GỬI 1 ẢNH)
+// CLONE TỰ ĐỘNG TÁM CHUYỆN LIÊN TỤC (TUNG HÔ SẾP VÀ ĐỜI SỐNG ẤM NO) MỖI 6 GIÂY
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
+    const now = Date.now();
+    if (now - lastUserActivity < 30000) return;
+
     const activeRoom = rooms[Math.floor(Math.random() * rooms.length)];
     if (activeRoom.id === 'room_hubba_system') return;
 
@@ -242,12 +245,11 @@ setInterval(() => {
     while(c2.id === c1.id) c2 = clonePool[Math.floor(Math.random() * clonePool.length)];
     while(c3.id === c1.id || c3.id === c2.id) c3 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
-    let t1 = pool1[Math.floor(Math.random() * pool1.length)];
-    let t2 = `@${c1.displayName} Chuẩn không cần chỉnh luôn bác ơi, quá hợp lý!`;
-    let t3 = `@${c2.displayName} Hóng kèo thơm cùng sếp quá cơ 🚀`;
+    let t1 = praisePool1[Math.floor(Math.random() * praisePool1.length)];
+    let t2 = `@${c1.displayName} ${praisePool2[Math.floor(Math.random() * praisePool2.length)]}`;
+    let t3 = `@${c2.displayName} Đúng vậy, cảm ơn sếp đã mang lại cuộc sống ấm no cho anh em 🌟`;
     
-    // Tỷ lệ thấp (20%): Thỉnh thoảng mới có 1 con gửi ảnh đời thực
-    let shouldSendImg = Math.random() < 0.2;
+    let shouldSendImg = Math.random() < 0.15;
     let attachImg = shouldSendImg ? realLifeImages[Math.floor(Math.random() * realLifeImages.length)] : null;
 
     const msg1 = { id: Date.now(), roomId: activeRoom.id, senderName: c1.displayName, text: t1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: attachImg, reactions: {} };
@@ -263,10 +265,10 @@ setInterval(() => {
       setTimeout(() => {
         messages.push(msg3);
         io.to(activeRoom.id).emit('receive_message', msg3);
-      }, 800);
-    }, 800);
+      }, 700);
+    }, 700);
   }
-}, 7000);
+}, 6000);
 
 io.on('connection', (socket) => {
   socket.on('join_room', (roomId) => {
@@ -277,6 +279,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('send_message', (data) => {
+    lastUserActivity = Date.now();
     const senderObj = users.find(u => u.username === data.senderName) || { displayName: data.senderName };
     const actualSenderName = senderObj.displayName || data.senderName;
 
@@ -293,7 +296,7 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP NHẮN -> 4 CON CLONE PHẢN HỒI LẬP TỨC TRONG 0.5 GIÂY, THỈNH THỎANG MỚI CÓ 1 ẢNH
+    // KHI SẾP VỪA NHẮN -> TOÀN BỘ CLONE LẬP TỨC HÙA THEO VÀ TUNG HÔ SẾP TRONG 30 GIÂY TIẾP THEO
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
@@ -306,12 +309,12 @@ io.on('connection', (socket) => {
         while(c3.id === c1.id || c3.id === c2.id) c3 = clonePool[Math.floor(Math.random() * clonePool.length)];
         while(c4.id === c1.id || c4.id === c2.id || c4.id === c3.id) c4 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
-        let r1 = appSettings.programMode && appSettings.cloneScript ? appSettings.cloneScript : `Dạ em nghe sếp chỉ đạo vụ "${data.text}" đây ạ, anh em đang bám sát chiến dịch từng phút! 🔥`;
-        let r2 = `@${c1.displayName} Chuẩn sếp gọi là có mặt ngay lập tức không trượt phát nào!`;
-        let r3 = `@${c2.displayName} @${c1.displayName} Cứ theo hướng này mà triển khai thôi các bác ơi.`;
-        let r4 = `Quá đỉnh chóp! Vote 1000 tym cho sếp 😍`;
+        let r1 = appSettings.programMode && appSettings.cloneScript ? appSettings.cloneScript : `Chuẩn quá sếp ơi! Nghe sếp chỉ đạo vụ "${data.text}" là anh em biết ngay chuẩn bị hốt bạc to rồi 🔥`;
+        let r2 = `@${c1.displayName} Quá chuẩn luôn bác, theo sếp lúc nào đời sống cũng ấm no rủng rỉnh!`;
+        let r3 = `@${c2.displayName} @${c1.displayName} Chuẩn không cần chỉnh, vote 1000 tym cho tầm nhìn của sếp 😍`;
+        let r4 = `Anh em cứ bám sát sếp thế này thì chẳng mấy chốc mà phất lớn, tuyệt vời ông mặt trời!`;
         
-        let shouldSendImg = Math.random() < 0.25; // 25% tỷ lệ thỉnh thoảng mới có ảnh
+        let shouldSendImg = Math.random() < 0.2;
         let attachImg = shouldSendImg ? realLifeImages[Math.floor(Math.random() * realLifeImages.length)] : null;
 
         const m1 = { id: Date.now() + 1, roomId: data.roomId, senderName: c1.displayName, text: r1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: attachImg, reactions: {} };
@@ -337,7 +340,7 @@ io.on('connection', (socket) => {
           }, 600);
         }, 600);
 
-      }, 300);
+      }, 250);
     }
   });
 

@@ -22,7 +22,8 @@ const cloneNames = ['Minh Hoàng', 'Lan Anh', 'Đức Anh', 'Thanh Hằng', 'Qu�
 
 let appSettings = {
   autoBotsChat: true,
-  cloneScript: 'Dạ em nghe sếp ơi, để em xử lý ngay và luôn ạ!',
+  programMode: false,
+  cloneScript: 'Dạ em nghe sếp ơi, để em xử lý ngay lập tức ạ!',
   appLogo: '/logo.png'
 };
 
@@ -31,8 +32,9 @@ app.get('/api/settings', (req, res) => {
 });
 
 app.post('/api/settings', (req, res) => {
-  const { autoBotsChat, cloneScript, appLogo } = req.body;
+  const { autoBotsChat, programMode, cloneScript, appLogo } = req.body;
   if(autoBotsChat !== undefined) appSettings.autoBotsChat = autoBotsChat;
+  if(programMode !== undefined) appSettings.programMode = programMode;
   if(cloneScript !== undefined) appSettings.cloneScript = cloneScript;
   if(appLogo !== undefined) appSettings.appLogo = appLogo;
 
@@ -40,6 +42,7 @@ app.post('/api/settings', (req, res) => {
   res.json({ success: true, settings: appSettings });
 });
 
+// Cập nhật thông tin phòng (Tên nhóm & Ảnh đại diện nhóm)
 app.post('/api/update-room-info', (req, res) => {
   const { roomId, roomName, roomAvatarUrl } = req.body;
   const room = rooms.find(r => r.id === roomId);
@@ -50,6 +53,18 @@ app.post('/api/update-room-info', (req, res) => {
 
   io.emit('update_data', { rooms, users });
   res.json({ success: true, room, rooms });
+});
+
+app.post('/api/update-profile', (req, res) => {
+  const { userId, displayName, userAvatarUrl } = req.body;
+  const user = users.find(u => u.id === userId);
+  if (!user) return res.status(400).json({ success: false, message: 'Không tìm thấy người dùng!' });
+
+  if(displayName) user.displayName = displayName;
+  if(userAvatarUrl) user.userAvatarUrl = userAvatarUrl;
+
+  io.emit('update_data', { rooms, users });
+  res.json({ success: true, user, users });
 });
 
 app.post('/api/add-member', (req, res) => {
@@ -155,19 +170,8 @@ app.post('/api/login', (req, res) => {
     }
   }
 
-  res.json({ success: true, user, rooms, users, settings: appSettings });
-});
-
-app.post('/api/update-profile', (req, res) => {
-  const { userId, displayName, userAvatarUrl } = req.body;
-  const user = users.find(u => u.id === userId);
-  if (!user) return res.status(400).json({ success: false, message: 'Không tìm thấy người dùng!' });
-
-  if(displayName) user.displayName = displayName;
-  if(userAvatarUrl) user.userAvatarUrl = userAvatarUrl;
-
   io.emit('update_data', { rooms, users });
-  res.json({ success: true, user, users });
+  res.json({ success: true, user, rooms, users, settings: appSettings });
 });
 
 app.post('/api/delete-specialist', (req, res) => {
@@ -248,11 +252,11 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // CLONE TỰ ĐỘNG HÙA THEO SAU 3 GIÂY VỚI NỘI DUNG CÀI ĐẶT RIÊNG
+    // CLONE TỰ ĐỘNG HÙA THEO SAU 3 GIÂY
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const randomCloneName = cloneNames[Math.floor(Math.random() * cloneNames.length)];
-        const replyText = appSettings.cloneScript || "Dạ em nghe sếp ơi, để em kiểm tra ngay lập tức ạ!";
+        const replyText = appSettings.programMode && appSettings.cloneScript ? appSettings.cloneScript : "Dạ em nghe sếp ơi, để em kiểm tra ngay lập tức ạ!";
 
         const botReply = {
           id: Date.now() + 1,

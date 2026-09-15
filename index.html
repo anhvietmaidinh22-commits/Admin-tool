@@ -3,1136 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoPostAI - Hệ Thống Dịch Vụ & Cào Data Pro (VIP)</title>
+    <title>Hubba - Business Messaging & Bill Management</title>
+    <!-- Favicon chuẩn từ logo của hệ thống -->
+    <link rel="icon" href="/logo.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; min-height: 100vh; }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        
-        #center-success-modal { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-        #center-success-modal.show { opacity: 1; pointer-events: auto; }
-        
-        .success-box { background: linear-gradient(145deg, #2d1b4e, #1e1136); border: 1px solid #7c3aed; padding: 36px 32px; border-radius: 28px; text-align: center; color: #fff; max-width: 320px; width: 90%; box-shadow: 0 25px 50px rgba(0,0,0,0.5); transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        #center-success-modal.show .success-box { transform: scale(1); }
-
-        .checkmark-circle { width: 75px; height: 75px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; box-shadow: 0 0 25px rgba(16, 185, 129, 0.6); animation: pulseCircle 1.5s infinite; }
-        
-        @keyframes pulseCircle {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
-
-        .checkmark { width: 40px; height: 40px; border-radius: 50%; display: block; stroke-width: 3; stroke: #fff; stroke-miterlimit: 10; box-shadow: inset 0px 0px 0px #10b981; animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both; }
-        .checkmark__check { transform-origin: 50% 50%; stroke-dasharray: 48; stroke-dashoffset: 48; animation: stroke 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards; }
-        @keyframes stroke { 100% { stroke-dashoffset: 0; } }
-        @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
-        @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 30px #10b981; } }
-
-        .card-box { background: #ffffff; border: 1px solid #e2e8f0; }
-
-        .floating-support { position: fixed; bottom: 80px; right: 20px; z-index: 99; display: flex; flex-direction: column; gap: 12px; }
-        .support-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: transform 0.2s; overflow: hidden; background: white; border: 2px solid white; text-decoration: none; }
-        .support-btn:hover { transform: scale(1.1); }
-    </style>
-    <script>
-        (function() {
-            try {
-                const savedUser = localStorage.getItem('loggedInUser');
-                if (savedUser) {
-                    window.__INITIAL_USER__ = JSON.parse(savedUser);
-                }
-            } catch(e) {}
-        })();
-    </script>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
-<body class="min-h-screen flex flex-col pb-20 lg:pb-0">
+<body class="bg-slate-100 h-screen flex flex-col">
 
-    <!-- MODAL THÔNG BÁO DẤU TÍCH XANH Ở GIỮA -->
-    <div id="center-success-modal">
-        <div class="success-box space-y-3">
-            <div class="checkmark-circle">
-                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
-                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                </svg>
-            </div>
-            <h3 class="font-extrabold text-xl text-white">Thành Công!</h3>
-            <p id="center-success-text" class="text-xs text-purple-200">Đã hoàn thành thao tác hệ thống.</p>
-        </div>
-    </div>
-
-    <!-- 2 NÚT HỖ TRỢ ZALO & TELEGRAM GÓC DƯỚI BÊN PHẢI (CHỈ HIỆN KHI ĐÃ ĐĂNG NHẬP) -->
-    <div id="floating-support-bar" class="floating-support hidden">
-        <a href="https://t.me/admin" target="_blank" class="support-btn bg-blue-500 text-white" title="Hỗ trợ Telegram">
-            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.03-1.99 1.27-5.62 3.72-.53.36-1.01.54-1.44.53-.47-.02-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.25.38-.51 1.07-.78 4.18-1.82 6.98-3.02 8.39-3.61 3.99-1.67 4.82-1.96 5.36-1.97.12 0 .39.03.56.17.14.12.18.28.2.4-.02.07-.02.2-.04.33z"/></svg>
-        </a>
-        <a href="https://zalo.me/admin" target="_blank" class="support-btn bg-sky-500 text-white" title="Hỗ trợ Zalo">
-            <svg class="w-7 h-7 fill-current" viewBox="0 0 48 48"><path d="M24 4C12.95 4 4 12.95 4 24c0 4.25 1.34 8.19 3.62 11.41L5.54 41.52c-.31 1.13.79 2.23 1.92 1.92l6.11-2.08C16.81 42.66 20.29 44 24 44c11.05 0 20-8.95 20-20S35.05 4 24 4zm-2.4 25.5h-3.2v-7h3.2v7zm8-3.7h-3.2v-3.3h3.2v3.3zm0-5h-3.2v-2.3h3.2v2.3zm-8-3.3h-3.2V15h3.2v5.5zm12.8 12h-3.2v-7h3.2v7z"/></svg>
-        </a>
-    </div>
-
-    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
-    <div id="auth-modal" class="fixed inset-0 z-50 bg-[#1e1136] flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-[#2d1b4e] border border-purple-900 p-8 rounded-3xl shadow-2xl space-y-6 text-slate-100">
-            <div class="text-center space-y-2">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500 to-purple-500 mx-auto flex items-center justify-center font-bold text-xl text-white shadow-lg">⚡</div>
-                <h2 id="auth-title" class="text-2xl font-extrabold">Đăng Nhập Hệ Thống</h2>
-                <p class="text-xs text-purple-300">Vui lòng đăng nhập đúng tài khoản hoặc đăng ký mới.</p>
-            </div>
-
-            <div class="space-y-4">
-                <div id="register-name-box" class="space-y-1 hidden">
-                    <label class="text-xs font-semibold text-purple-200">Họ và tên</label>
-                    <input type="text" id="reg-name" placeholder="Nhập họ và tên..." class="w-full px-4 py-3 bg-[#1e1136] border border-purple-900 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-purple-200">Tài khoản / Username</label>
-                    <input type="text" id="auth-username" value="" placeholder="Nhập tài khoản..." class="w-full px-4 py-3 bg-[#1e1136] border border-purple-900 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-purple-200">Mật khẩu</label>
-                    <input type="password" id="auth-pass" value="" placeholder="••••••••" class="w-full px-4 py-3 bg-[#1e1136] border border-purple-900 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500">
-                </div>
-
-                <button onclick="processAuthSubmit()" id="auth-btn-submit" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 font-bold rounded-xl text-sm shadow-lg text-white transition-all hover:opacity-95 cursor-pointer">Đăng Nhập Ngay</button>
-
-                <div class="text-center pt-2">
-                    <button onclick="toggleAuthMode()" id="auth-switch-text" class="text-xs text-purple-300 hover:text-white underline font-semibold cursor-pointer">Chưa có tài khoản? Đăng ký ngay</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL DUYỆT GÓI VIP (ADMIN) -->
-    <div id="customer-edit-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="max-w-sm w-full bg-white rounded-3xl p-6 shadow-2xl space-y-4 text-slate-800">
-            <h3 class="font-extrabold text-lg text-purple-900">🛡️ Admin Duyệt Gói VIP & Thời Gian</h3>
-            <div class="space-y-3 text-xs">
-                <div>
-                    <label class="font-semibold text-slate-600">Tài khoản khách:</label>
-                    <input type="text" id="modal-edit-username" disabled class="w-full mt-1 px-3 py-2 bg-slate-100 border rounded-xl font-bold">
-                </div>
-                <div>
-                    <label class="font-semibold text-slate-600">Chọn gói VIP kích hoạt:</label>
-                    <select id="modal-edit-vip-days" class="w-full mt-1 px-3 py-2 bg-slate-50 border rounded-xl font-bold text-purple-700">
-                        <option value="0">Hết hạn / Chưa kích hoạt</option>
-                        <option value="1">Gói 1 Ngày</option>
-                        <option value="3">Gói 3 Ngày</option>
-                        <option value="7">Gói 7 Ngày (Tuần)</option>
-                        <option value="15">Gói 15 Ngày</option>
-                        <option value="30">Gói 30 Ngày (Tháng)</option>
-                    </select>
-                </div>
-                <div class="flex space-x-2 pt-2">
-                    <button onclick="saveAdminApproval()" class="flex-1 py-2.5 bg-emerald-600 text-white font-bold rounded-xl shadow cursor-pointer">Duyệt & Tính Giờ Ngay</button>
-                    <button onclick="document.getElementById('customer-edit-modal').classList.add('hidden')" class="px-4 py-2.5 bg-slate-200 text-slate-700 font-bold rounded-xl cursor-pointer">Hủy</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 1. SIDEBAR MENU -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-[#2d1b4e] text-slate-100 flex flex-col transition-transform duration-300 -translate-x-full shadow-2xl">
-        <div class="h-16 flex items-center justify-between px-6 border-b border-purple-900/50">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center font-bold text-white shadow">⚡</div>
-                <span class="font-extrabold text-base tracking-wide text-white">AUTOPOSTAI PANEL</span>
-            </div>
-            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg font-bold cursor-pointer">✕</button>
-        </div>
-
-        <div class="flex-1 px-3 py-4 space-y-2 overflow-y-auto custom-scrollbar text-xs font-medium">
-            
-            <!-- 1. HỆ THỐNG ADMIN -->
-            <div id="menu-group-admin" class="space-y-1 hidden">
-                <button onclick="toggleSubMenu('sub-admin')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl bg-purple-900/60 text-purple-200 font-bold hover:bg-purple-900 cursor-pointer">
-                    <span class="flex items-center space-x-3"><span class="text-base">🛡️</span><span>Hệ thống Admin</span></span>
-                    <span id="arrow-sub-admin">▼</span>
-                </button>
-                <div id="sub-admin" class="pl-6 space-y-1 pt-1 hidden">
-                    <a href="#" onclick="switchTab('admin-users'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">👥 Duyệt đơn & Khách hàng</a>
-                    <a href="#" onclick="switchTab('admin-pricing'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">💰 Cài đặt giá gói VIP (1-30 ngày)</a>
-                    <a href="#" onclick="switchTab('admin-deposit-cfg'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">💳 Cài đặt nạp tiền & QR</a>
-                    <a href="#" onclick="switchTab('admin-support-cfg'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🎧 Cài đặt liên kết hỗ trợ</a>
-                    <a href="#" onclick="switchTab('admin-notifications-cfg'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🔔 Quản lý thông báo</a>
-                    <a href="#" onclick="switchTab('admin-telegram'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🤖 Tích hợp Bot Telegram</a>
-                </div>
-            </div>
-
-            <!-- 2. MENU -->
-            <div class="space-y-1">
-                <button onclick="toggleSubMenu('sub-menu')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl hover:bg-purple-900/40 text-purple-200 font-bold cursor-pointer">
-                    <span class="flex items-center space-x-3"><span class="text-base">📂</span><span>Menu</span></span>
-                    <span id="arrow-sub-menu">▼</span>
-                </button>
-                <div id="sub-menu" class="pl-6 space-y-1 pt-1 hidden">
-                    <a href="#" onclick="switchTab('home'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🏠 Trang chủ</a>
-                    <a href="#" onclick="switchTab('orders'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">📋 Quản lý đơn hàng</a>
-                    <a href="#" onclick="switchTab('account'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">👤 Tài khoản của tôi</a>
-                    <a href="#" onclick="switchTab('deposit'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">💳 Nạp tiền & Mã QR</a>
-                    <a href="#" onclick="switchTab('support'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🎧 Hỗ trợ trực tuyến</a>
-                    <a href="#" onclick="switchTab('notifications'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🔔 Thông báo hệ thống</a>
-                </div>
-            </div>
-
-            <!-- 3. DỊCH VỤ -->
-            <div class="space-y-1">
-                <button onclick="toggleSubMenu('sub-service')" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl hover:bg-purple-900/40 text-purple-200 font-bold cursor-pointer">
-                    <span class="flex items-center space-x-3"><span class="text-base">🚀</span><span>Dịch vụ</span></span>
-                    <span id="arrow-sub-service">▼</span>
-                </button>
-                <div id="sub-service" class="pl-6 space-y-1 pt-1 hidden">
-                    <a href="#" onclick="switchTab('deals'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🔥 Kho Săn Mã Giảm Giá</a>
-                    <a href="#" onclick="switchTab('scraper'); toggleSidebar();" class="block px-3 py-2 rounded-lg hover:bg-purple-900/40 text-purple-300">🤖 Hệ Thống Quét Data</a>
-                </div>
-            </div>
-
-        </div>
-    </aside>
-
-    <!-- 2. TOP HEADER -->
-    <header class="h-16 bg-white border-b border-slate-200 sticky top-0 z-30 px-4 flex items-center justify-between shadow-sm">
+    <!-- Header / Quick Switch Bar -->
+    <header class="bg-blue-600 text-white px-4 py-3 flex justify-between items-center shadow-md">
         <div class="flex items-center space-x-3">
-            <button onclick="toggleSidebar()" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 shadow-sm transition-all cursor-pointer">☰</button>
-            <button onclick="switchTab('deposit')" class="px-3.5 py-1.5 rounded-full bg-teal-600 text-white font-bold text-xs flex items-center space-x-1 shadow-md hover:bg-teal-700 transition-all cursor-pointer">
-                <span>🔍 Kiểm tra cú pháp nạp tiền</span>
-            </button>
-        </div>
-        <div class="flex items-center space-x-3">
-            <button onclick="switchTab('notifications')" class="p-2 rounded-xl bg-slate-100 text-slate-600 text-sm relative shadow-sm hover:bg-slate-200 transition-all cursor-pointer">
-                🔔<span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500"></span>
-            </button>
-            <div onclick="toggleUserDropdown()" class="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-600 text-white font-bold flex items-center justify-center cursor-pointer shadow-md relative">
-                <span id="header-avatar-letter">U</span>
+            <img src="/logo.png" alt="Hubba Logo" class="w-10 h-10 rounded-full border-2 border-white shadow object-cover">
+            <div>
+                <h1 class="font-bold text-lg leading-tight">Hubba</h1>
+                <span id="currentRoleBadge" class="bg-blue-500 text-[10px] px-2 py-0.5 rounded-full uppercase font-medium">Admin Tổng</span>
             </div>
+        </div>
+        
+        <!-- Quick Switch Tài khoản -->
+        <div class="flex items-center space-x-2">
+            <span class="text-xs hidden sm:inline">Chuyển nhanh:</span>
+            <select id="switchAccountSelect" class="bg-blue-700 text-white text-sm border border-blue-400 rounded px-2 py-1 outline-none font-medium">
+                <!-- Dynamic options -->
+            </select>
         </div>
     </header>
 
-    <!-- USER DROPDOWN -->
-    <div id="user-dropdown" class="absolute top-16 right-4 z-50 w-64 bg-white border border-slate-200 rounded-2xl shadow-2xl p-4 hidden space-y-3 animate-fadeIn">
-        <div class="border-b border-slate-100 pb-2">
-            <div class="font-bold text-slate-800 text-sm">Tài khoản: <span id="drop-username" class="text-purple-600">User</span></div>
-            <div class="text-xs text-slate-500 mt-0.5">Số dư: <strong class="text-emerald-600" id="drop-balance">0đ</strong></div>
+    <!-- Main App Layout -->
+    <div class="flex-1 flex overflow-hidden">
+        <!-- Sidebar -->
+        <div class="w-1/3 bg-white border-r border-slate-200 flex flex-col">
+            <div class="p-3 border-b font-semibold text-slate-700 flex justify-between items-center text-sm">
+                <span>Phòng Chat & Nhóm</span>
+                <button onclick="openAdminModal()" id="adminConfigBtn" class="text-xs bg-slate-800 text-white px-2 py-1 rounded hidden hover:bg-slate-700">QL Chuyên Viên</button>
+            </div>
+            <div id="groupList" class="flex-1 overflow-y-auto divide-y divide-slate-100">
+                <!-- Danh sách nhóm -->
+            </div>
         </div>
-        <div class="space-y-1 text-xs font-semibold">
-            <button onclick="switchTab('account'); toggleUserDropdown();" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 flex items-center space-x-2 text-slate-700 cursor-pointer"><span>👤</span><span>Tài khoản của tôi</span></button>
-            <button onclick="logoutSession();" class="w-full text-left px-3 py-2 rounded-lg hover:bg-red-50 flex items-center space-x-2 text-red-600 font-bold cursor-pointer"><span>🚪</span><span>Đăng xuất</span></button>
+
+        <!-- Chat Workspace -->
+        <div class="flex-1 flex flex-col bg-slate-50">
+            <!-- Header Nhóm -->
+            <div class="bg-amber-50 border-b border-amber-200 px-4 py-2 text-xs text-amber-800 flex justify-between items-center">
+                <span>📌 Nhóm làm việc và đối soát đơn hàng thời gian thực.</span>
+                <span class="font-semibold text-green-600">Trạng thái: Hoạt động</span>
+            </div>
+
+            <!-- Khung Chat -->
+            <div id="messageContainer" class="flex-1 p-4 overflow-y-auto space-y-3">
+                <!-- Tin nhắn hiển thị ở đây -->
+            </div>
+
+            <!-- Input & Upload Bill -->
+            <div class="p-3 bg-white border-t border-slate-200 flex items-center space-x-2">
+                <label class="cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-2 rounded-lg text-sm flex items-center space-x-1">
+                    <span>📷 Gửi Bill</span>
+                    <input type="file" id="billInput" class="hidden">
+                </label>
+                <input type="text" id="messageInput" placeholder="Nhập tin nhắn hoặc nội dung đối soát..." class="flex-1 border border-slate-300 rounded-lg px-4 py-2 outline-none focus:border-blue-500 text-sm">
+                <button onclick="sendMessage()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium text-sm">Gửi</button>
+            </div>
         </div>
     </div>
 
-    <!-- 3. MAIN CONTENT -->
-    <main class="flex-1 p-4 max-w-4xl mx-auto w-full space-y-5">
-        
-        <!-- BANNER THÔNG BÁO CHƯA CÓ GÓI VIP HOẶC HẾT HẠN -->
-        <div id="vip-notice-banner" class="p-4 rounded-3xl bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg flex flex-col md:flex-row justify-between items-center gap-3">
-            <div class="space-y-1 text-center md:text-left">
-                <div class="font-extrabold text-sm flex items-center justify-center md:justify-start space-x-1">
-                    <span>⚠️</span><span id="banner-notice-title">Tài khoản chưa kích hoạt Gói VIP hoặc đã hết hạn!</span>
-                </div>
-                <p class="text-xs text-amber-100">Chọn ngay gói bên dưới để hệ thống tạo mã QR chuyển khoản tự động và gửi lệnh chờ Admin duyệt kích hoạt thời gian.</p>
+    <!-- Modal Admin Quản lý Chuyên Viên -->
+    <div id="adminModal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center">
+        <div class="bg-white p-6 rounded-xl w-96 shadow-2xl">
+            <h3 class="font-bold text-lg mb-4 text-slate-800">Tạo tài khoản Chuyên Viên mới</h3>
+            <input type="text" id="newCvName" placeholder="Nhập tên chuyên viên (VD: Chuyên Viên C)..." class="w-full border border-slate-300 p-2.5 rounded-lg mb-4 outline-none focus:border-blue-500 text-sm">
+            <div class="flex justify-end space-x-2">
+                <button onclick="closeAdminModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 rounded-lg text-sm">Đóng</button>
+                <button onclick="createSpecialist()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium">Tạo tài khoản</button>
             </div>
         </div>
+    </div>
 
-        <!-- TAB TRANG CHỦ -->
-        <div id="tab-home" class="space-y-4">
-            <div class="p-6 rounded-3xl card-box shadow-sm space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                    <h2 class="font-extrabold text-base text-slate-800">📊 Tổng Quan Tài Khoản & Thời Gian VIP</h2>
-                    <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-bold" id="home-badge-role">Thành viên Tiêu Chuẩn</span>
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 shadow-sm">
-                        <div class="text-slate-400">Họ tên khách hàng</div>
-                        <div class="font-bold text-slate-800 text-sm truncate" id="home-val-name">Khách hàng</div>
-                    </div>
-                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 shadow-sm">
-                        <div class="text-slate-400">Trạng thái Gói VIP</div>
-                        <div class="font-bold text-orange-600 text-sm" id="home-val-vip">Chưa kích hoạt</div>
-                    </div>
-                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 shadow-sm">
-                        <div class="text-slate-400">Thời gian hết hạn</div>
-                        <div class="font-bold text-red-600 text-xs" id="home-val-expiry">--/--/---- --:--</div>
-                    </div>
-                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 shadow-sm">
-                        <div class="text-slate-400">Số dư hiện tại</div>
-                        <div class="font-bold text-emerald-600 text-sm" id="home-val-balance">0đ</div>
-                    </div>
-                </div>
-
-                <!-- BẢNG CHỌN GÓI VIP -->
-                <div class="p-4 rounded-2xl bg-purple-50 border border-purple-200 space-y-3 shadow-sm">
-                    <div class="font-bold text-xs text-purple-900 flex items-center space-x-1"><span>🚀</span><span>Chọn Gói VIP Muốn Mua (Tự động tạo QR chuyển khoản):</span></div>
-                    <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
-                        <button onclick="selectVipAndRedirect('Gói 1 Ngày', 1, 20000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center cursor-pointer">
-                            <div class="font-extrabold text-xs">1 Ngày</div>
-                            <div class="text-[11px] text-purple-600 font-bold mt-0.5">20,000đ</div>
-                        </button>
-                        <button onclick="selectVipAndRedirect('Gói 3 Ngày', 3, 50000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center cursor-pointer">
-                            <div class="font-extrabold text-xs">3 Ngày</div>
-                            <div class="text-[11px] text-purple-600 font-bold mt-0.5">50,000đ</div>
-                        </button>
-                        <button onclick="selectVipAndRedirect('Gói 7 Ngày', 7, 100000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center cursor-pointer">
-                            <div class="font-extrabold text-xs">7 Ngày</div>
-                            <div class="text-[11px] text-purple-600 font-bold mt-0.5">100,000đ</div>
-                        </button>
-                        <button onclick="selectVipAndRedirect('Gói 15 Ngày', 15, 180000)" class="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-xl border border-purple-200 shadow-sm transition-all text-center cursor-pointer">
-                            <div class="font-extrabold text-xs">15 Ngày</div>
-                            <div class="text-[11px] text-purple-600 font-bold mt-0.5">180,000đ</div>
-                        </button>
-                        <button onclick="selectVipAndRedirect('Gói 30 Ngày', 30, 299000)" class="p-3 bg-purple-600 text-white rounded-xl border border-purple-700 shadow-md transition-all text-center col-span-2 md:col-span-1 hover:bg-purple-700 cursor-pointer">
-                            <div class="font-extrabold text-xs">30 Ngày</div>
-                            <div class="text-[11px] text-amber-300 font-bold mt-0.5">299,000đ</div>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="p-4 bg-gradient-to-r from-purple-900 to-indigo-900 text-white rounded-2xl flex justify-between items-center shadow-md">
-                    <div>
-                        <div class="text-xs text-purple-200">Tổng kết chi tiêu hệ thống</div>
-                        <div class="text-xl font-extrabold" id="home-total-spent">0đ</div>
-                    </div>
-                    <button onclick="switchTab('deposit')" class="px-4 py-2 bg-white text-purple-900 font-bold text-xs rounded-xl shadow hover:bg-purple-50 transition-all cursor-pointer">Nạp Thêm Tiền</button>
-                </div>
-            </div>
-
-            <!-- THÔNG BÁO TRANG CHỦ -->
-            <div class="space-y-3" id="home-notifications-list"></div>
-        </div>
-
-        <!-- TAB QUẢN LÝ KHÁCH HÀNG & DUYỆT GÓI (ADMIN) -->
-        <div id="tab-admin-users" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
-                <div class="flex justify-between items-center">
-                    <h2 class="font-bold text-base text-slate-800">👥 Duyệt Đơn & Quản Lý Khách Hàng (Admin)</h2>
-                    <span class="text-xs bg-purple-100 text-purple-700 font-bold px-3 py-1 rounded-full">Tổng: <span id="total-users-count">2</span> user</span>
-                </div>
-                <div class="border border-slate-200 rounded-xl overflow-x-auto bg-white">
-                    <table class="w-full text-left text-xs text-slate-700 min-w-[500px]">
-                        <thead class="bg-slate-100 text-slate-500 border-b border-slate-200">
-                            <tr>
-                                <th class="p-3">ID</th>
-                                <th class="p-3">Tài khoản</th>
-                                <th class="p-3">Họ tên</th>
-                                <th class="p-3">Gói & Hạn sử dụng</th>
-                                <th class="p-3 text-right">Duyệt gói VIP / Sửa</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-customer-table-body" class="divide-y divide-slate-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB CÀI ĐẶT GÓI VIP (1, 3, 7, 15, 30 NGÀY) -->
-        <div id="tab-admin-pricing" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">💰 Cài Đặt Giá Gói VIP Hệ Thống (1 - 30 Ngày)</h2>
-                <p class="text-xs text-slate-500">Quản trị viên tùy chỉnh giá tiền cho từng gói thời gian sử dụng dịch vụ cào data.</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                    <div class="p-3 bg-slate-50 rounded-xl border space-y-1">
-                        <label class="font-bold text-slate-700">Gói 1 Ngày:</label>
-                        <input type="text" id="price-1d" value="20,000đ" class="w-full px-3 py-2 bg-white border rounded-lg font-bold text-purple-600">
-                    </div>
-                    <div class="p-3 bg-slate-50 rounded-xl border space-y-1">
-                        <label class="font-bold text-slate-700">Gói 3 Ngày:</label>
-                        <input type="text" id="price-3d" value="50,000đ" class="w-full px-3 py-2 bg-white border rounded-lg font-bold text-purple-600">
-                    </div>
-                    <div class="p-3 bg-slate-50 rounded-xl border space-y-1">
-                        <label class="font-bold text-slate-700">Gói 7 Ngày (Tuần):</label>
-                        <input type="text" id="price-7d" value="100,000đ" class="w-full px-3 py-2 bg-white border rounded-lg font-bold text-purple-600">
-                    </div>
-                    <div class="p-3 bg-slate-50 rounded-xl border space-y-1">
-                        <label class="font-bold text-slate-700">Gói 15 Ngày:</label>
-                        <input type="text" id="price-15d" value="180,000đ" class="w-full px-3 py-2 bg-white border rounded-lg font-bold text-purple-600">
-                    </div>
-                    <div class="p-3 bg-slate-50 rounded-xl border space-y-1 md:col-span-2">
-                        <label class="font-bold text-slate-700">Gói 30 Ngày (Tháng):</label>
-                        <input type="text" id="price-30d" value="299,000đ" class="w-full px-3 py-2 bg-white border rounded-lg font-bold text-purple-600">
-                    </div>
-                </div>
-                <button onclick="triggerConfigUpdateAndNotify('Cài đặt giá gói VIP')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow hover:bg-purple-700 transition-all cursor-pointer">Lưu Cấu Hình Gói VIP</button>
-            </div>
-        </div>
-
-        <!-- TAB CÀI ĐẶT NẠP TIỀN & QR -->
-        <div id="tab-admin-deposit-cfg" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">💳 Cài Đặt Ngân Hàng & Mã QR Nạp Tiền</h2>
-                <div class="space-y-3 text-xs">
-                    <div><label class="font-semibold text-slate-600">Ngân hàng:</label><input type="text" id="cfg-bank" value="SeABank (SeANet)" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold"></div>
-                    <div><label class="font-semibold text-slate-600">Số tài khoản:</label><input type="text" id="cfg-stk" value="123456789" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono font-bold"></div>
-                    <div><label class="font-semibold text-slate-600">Chủ tài khoản:</label><input type="text" id="cfg-name" value="ĐINH HOÀNG VIỆT ANH" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold"></div>
-                    <button onclick="triggerConfigUpdateAndNotify('Cấu hình Ngân hàng & QR')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow cursor-pointer">Cập Nhật Thông Tin & Mã QR</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB CÀI ĐẶT HỖ TRỢ -->
-        <div id="tab-admin-support-cfg" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">🎧 Cài Đặt Liên Kết Hỗ Trợ</h2>
-                <div class="space-y-3 text-xs">
-                    <div><label class="font-semibold text-slate-600">Link Telegram:</label><input type="text" value="https://t.me/admin" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl"></div>
-                    <div><label class="font-semibold text-slate-600">Link Zalo:</label><input type="text" value="https://zalo.me/admin" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl"></div>
-                    <button onclick="triggerConfigUpdateAndNotify('Cấu hình Link Hỗ trợ')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow cursor-pointer">Lưu Liên Kết</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB QUẢN LÝ THÔNG BÁO -->
-        <div id="tab-admin-notifications-cfg" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">🔔 Quản Lý Thông Báo Hệ Thống</h2>
-                <div class="space-y-3 text-xs">
-                    <div>
-                        <label class="font-semibold text-slate-600">Thêm thông báo mới:</label>
-                        <textarea id="new-noti-content" rows="3" placeholder="Nhập nội dung thông báo..." class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl"></textarea>
-                    </div>
-                    <button onclick="publishNotification()" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl shadow cursor-pointer">Đăng Thông Báo Lên Web</button>
-                </div>
-                <div class="space-y-2 pt-2 border-t border-slate-100">
-                    <div class="font-bold text-xs text-slate-700">Danh sách thông báo:</div>
-                    <div id="admin-noti-list" class="space-y-2"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB BOT TELEGRAM -->
-        <div id="tab-admin-telegram" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">🤖 Tích Hợp Bot Telegram & Bắn Thử Lệnh</h2>
-                <p class="text-xs text-slate-500">Cấu hình Bot Token và Chat ID để bot tự động gửi tin nhắn báo cáo khi có thay đổi trên hệ thống.</p>
-                <div class="space-y-3 text-xs">
-                    <div>
-                        <label class="font-semibold text-slate-600">Bot Token:</label>
-                        <input type="text" id="tg-token" value="751234567:AAH..." class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono">
-                    </div>
-                    <div>
-                        <label class="font-semibold text-slate-600">Chat ID (ID người dùng hoặc nhóm Telegram):</label>
-                        <input type="text" id="tg-chatid" value="123456789" class="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono">
-                    </div>
-                    <div class="flex space-x-2 pt-1">
-                        <button onclick="triggerConfigUpdateAndNotify('Cấu hình Bot Telegram')" class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow cursor-pointer">Lưu Cấu Hình Bot</button>
-                        <button onclick="sendTestTelegramMessage()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow cursor-pointer">🚀 Bắn Thử Lệnh Về Bot</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB KHO SĂN MÃ -->
-        <div id="tab-deals" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">🔥 Kho Săn Mã Giảm Giá Đa Sàn (Tự Động Quét Thời Gian Thực)</h2>
-                <p class="text-xs text-slate-500">Hệ thống liên tục tự động cào và cập nhật các mã giảm giá flash sale mới nhất từ Shopee, TikTok Shop, Lazada.</p>
-
-                <div class="p-4 bg-purple-50 rounded-2xl border border-purple-200 space-y-3 text-center shadow-sm">
-                    <div class="font-bold text-xs text-purple-900">🤖 Trạng thái Radar Săn Mã Tự Động</div>
-                    <div class="p-3 bg-white rounded-xl border border-purple-200 font-mono text-xs text-emerald-600 font-bold animate-pulse">
-                        🟢 Đang quét tự động các sàn... Sẵn sàng đồng bộ mã mới!
-                    </div>
-                    <button onclick="scanNewVoucherCode()" class="px-5 py-2.5 bg-purple-600 text-white font-bold text-xs rounded-xl shadow-lg transition-all hover:bg-purple-700 cursor-pointer">🔄 Cập Nhật Mã Ngay</button>
-                </div>
-
-                <div class="space-y-2" id="dynamic-voucher-list">
-                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 shadow-sm">
-                        <div class="flex justify-between items-center"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-orange-100 text-orange-700">SHOPEE MALL</span><span class="text-xs text-emerald-600 font-semibold">Hoạt động</span></div>
-                        <div class="font-bold text-sm text-slate-800">Mã giảm 100K đơn từ 500K</div>
-                        <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
-                            <span class="text-orange-600 font-bold" id="code-1">SPVNMAL100</span>
-                            <button onclick="copyToClipboard('SPVNMAL100')" class="px-2 py-1 bg-orange-500 text-white font-bold rounded text-[11px] cursor-pointer">Sao chép</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB QUÉT DATA -->
-        <div id="tab-scraper" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl card-box shadow-sm space-y-4">
-                <h2 class="font-bold text-base text-slate-800">🤖 Hệ Thống Quét Data Khách Hàng (250 Data Hàng Loạt)</h2>
-                <p class="text-xs text-slate-500">Chọn danh mục hoặc dán link nhóm để hệ thống trích xuất chuẩn xác 250 khách hàng thực tế tương ứng.</p>
-                
-                <!-- Ô dán link nhóm để quét thành viên -->
-                <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 shadow-sm">
-                    <label class="font-bold text-xs text-purple-900">🔗 Quét Thành Viên Nhóm / Group (Telegram, Zalo, Facebook Group):</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="group-link-input" placeholder="Dán link nhóm vào đây (VD: https://t.me/groupname)..." class="flex-1 px-3 py-2 bg-white border border-purple-300 rounded-xl text-xs focus:outline-none focus:border-purple-600">
-                        <button onclick="runGroupScraper()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow transition-all cursor-pointer">Quét Thành Viên Nhóm</button>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-                    <div onclick="selectPlatform('shopee', 'Khách hàng Sàn TMĐT (Shopee/Lazada)')" id="card-shopee" class="p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1 shadow-sm">
-                        <div class="font-bold text-xs text-purple-900">🛒 TMĐT (Shopee/Lazada)</div>
-                        <div class="text-[10px] text-slate-500">Mỹ phẩm, thời trang,...</div>
-                    </div>
-                    <div onclick="selectPlatform('game', 'Khách hàng Game Thủ & Phụ Kiện')" id="card-game" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm">
-                        <div class="font-bold text-xs text-slate-800">🎮 Game Thủ & PC</div>
-                        <div class="text-[10px] text-slate-500">Tài khoản, gear, nạp game</div>
-                    </div>
-                    <div onclick="selectPlatform('facebook', 'Khách hàng Tương Tác Facebook')" id="card-facebook" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm">
-                        <div class="font-bold text-xs text-slate-800">👥 Facebook Lead</div>
-                        <div class="text-[10px] text-slate-500">Tương tác, inbox, SĐT</div>
-                    </div>
-                    <div onclick="selectPlatform('tiktok', 'Khách hàng TikTok Shop & Live')" id="card-tiktok" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm">
-                        <div class="font-bold text-xs text-slate-800">🎵 TikTok Shop</div>
-                        <div class="text-[10px] text-slate-500">Đơn hàng livestream</div>
-                    </div>
-                    <div onclick="selectPlatform('nhadat', 'Khách hàng Tìm Mua Bất Động Sản')" id="card-nhadat" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm">
-                        <div class="font-bold text-xs text-slate-800">🏡 Bất Động Sản</div>
-                        <div class="text-[10px] text-slate-500">Đất nền, chung cư, nhà trọ</div>
-                    </div>
-                    <div onclick="selectPlatform('taichinh', 'Khách hàng Vay Vốn & Tài Chính')" id="card-taichinh" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm">
-                        <div class="font-bold text-xs text-slate-800">💳 Tài Chính & Bảo Hiểm</div>
-                        <div class="text-[10px] text-slate-500">Vay tiêu dùng, bảo hiểm</div>
-                    </div>
-                    <div onclick="selectPlatform('khoahoc', 'Khách hàng Mua Khóa Học & Đào Tạo')" id="card-khoahoc" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm">
-                        <div class="font-bold text-xs text-slate-800">📚 Khóa Học & Đào Tạo</div>
-                        <div class="text-[10px] text-slate-500">Tiếng Anh, IT, Business</div>
-                    </div>
-                    <div onclick="selectPlatform('maps', 'Google Maps Doanh Nghiệp Toàn Quốc')" id="card-maps" class="p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm">
-                        <div class="font-bold text-xs text-slate-800">📍 Google Maps Chủ Shop</div>
-                        <div class="text-[10px] text-slate-500">Nhà hàng, quán cafe, spa</div>
-                    </div>
-                </div>
-
-                <div class="pt-2">
-                    <button onclick="runHackerScraperExecution()" id="exec-btn" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer">🚀 Kích Hoạt Quét 250 Data Giải Mã Tốc Độ Chậm</button>
-                </div>
-
-                <!-- TERMINAL HACKER -->
-                <div class="bg-black p-4 rounded-xl font-mono text-[11px] text-emerald-400 h-40 overflow-y-auto space-y-1 custom-scrollbar border border-purple-900 shadow-inner" id="terminal-box">
-                    <div>// [SYSTEM] Sẵn sàng kích hoạt thuật toán giải mã dữ liệu hàng loạt từ Google Sheets...</div>
-                </div>
-
-                <div id="customer-data-table-container" class="hidden space-y-2">
-                    <div class="text-xs font-bold text-slate-700" id="table-result-title">📋 Danh sách khách hàng đã trích xuất thành công (250 Data):</div>
-                    <div class="border border-slate-200 rounded-xl overflow-x-auto bg-white max-h-96">
-                        <table class="w-full text-left text-xs text-slate-700 min-w-[650px]">
-                            <thead class="bg-slate-100 text-slate-500 border-b border-slate-200 sticky top-0">
-                                <tr>
-                                    <th class="p-2.5">Họ tên</th>
-                                    <th class="p-2.5">Số điện thoại</th>
-                                    <th class="p-2.5">Nhu cầu / Sản phẩm cụ thể</th>
-                                    <th class="p-2.5">Khu vực</th>
-                                    <th class="p-2.5 text-right">Liên hệ nhanh</th>
-                                </tr>
-                            </thead>
-                            <tbody id="customer-rows" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                    <button onclick="downloadExcelFile()" class="w-full py-2.5 bg-emerald-600 text-white font-bold text-xs rounded-xl shadow cursor-pointer">📥 Tải Xuống File Danh Sách Hàng Loạt (.CSV / .XLSX)</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB NẠP TIỀN & MÃ QR -->
-        <div id="tab-deposit" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl card-box shadow-sm space-y-4 text-center">
-                <h2 class="font-bold text-base text-slate-800 text-left">💳 Thanh Toán Nạp Tiền & Kích Hoạt Gói VIP</h2>
-                
-                <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 text-xs text-left shadow-sm">
-                    <div>Ngân hàng: <strong id="qr-bank" class="text-purple-700">SeABank (SeANet)</strong></div>
-                    <div>Số tài khoản: <strong id="qr-stk" class="text-purple-700">123456789</strong></div>
-                    <div>Chủ tài khoản: <strong id="qr-name" class="text-purple-700">ĐINH HOÀNG VIỆT ANH</strong></div>
-                    <div>Số tiền cần thanh toán: <strong id="qr-amount" class="text-emerald-600 text-sm">299,000đ</strong></div>
-                    <div>Nội dung chuyển khoản (Bắt buộc đúng): <strong id="qr-content" class="text-purple-700 font-mono">NAPVIETANH VIP30</strong></div>
-                </div>
-
-                <div class="p-4 bg-white rounded-2xl border border-slate-200 inline-block space-y-2 shadow-sm">
-                    <div class="text-xs font-bold text-slate-600">Quét mã QR để thanh toán tự động:</div>
-                    <div class="flex justify-center">
-                        <img id="dynamic-qr-img" src="" alt="Mã QR Chuyển Khoản" class="w-48 h-48 object-contain rounded-xl border border-slate-300 shadow">
-                    </div>
-                    <div class="text-[11px] text-slate-500 font-semibold">Sau khi chuyển khoản xong, vui lòng đợi Admin duyệt 1-3 phút.</div>
-                </div>
-
-                <button onclick="submitDepositApprovalRequest()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition-all cursor-pointer">✅ Tôi Đã Chuyển Khoản (Gửi Yêu Cầu Cho Admin Duyệt)</button>
-            </div>
-        </div>
-
-        <!-- TAB ĐƠN HÀNG -->
-        <div id="tab-orders" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl card-box shadow-sm space-y-3">
-                <h2 class="font-bold text-base text-slate-800">📋 Lịch Sử Giao Dịch & Đơn Hàng</h2>
-                <div class="p-4 rounded-xl bg-slate-50 border text-center text-xs text-slate-500 shadow-sm">Chưa có giao dịch nạp tiền nào gần đây.</div>
-            </div>
-        </div>
-
-        <!-- TAB TÀI KHOẢN -->
-        <div id="tab-account" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl card-box shadow-sm space-y-3">
-                <h2 class="font-bold text-base text-slate-800">👤 Thông Tin Tài Khoản</h2>
-                <div class="space-y-2 text-xs">
-                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg shadow-sm"><span>Họ tên:</span><strong id="acc-view-name">Khách hàng</strong></div>
-                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg shadow-sm"><span>Tài khoản:</span><strong id="acc-view-username">user</strong></div>
-                    <div class="flex justify-between p-2 bg-slate-50 rounded-lg shadow-sm"><span>Số dư:</span><strong class="text-emerald-600" id="acc-view-balance">0đ</strong></div>
-                </div>
-                <button onclick="logoutSession()" class="w-full py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-xl text-xs transition-all cursor-pointer">🚪 Đăng Xuất Hệ Thống</button>
-            </div>
-        </div>
-
-        <!-- TAB HỖ TRỢ -->
-        <div id="tab-support" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl card-box shadow-sm space-y-3">
-                <h2 class="font-bold text-base text-slate-800">🎧 Kênh Hỗ Trợ Khách Hàng</h2>
-                <div class="flex space-x-2 pt-2">
-                    <a href="https://t.me" target="_blank" class="flex-1 py-2.5 bg-blue-500 text-white font-bold text-xs text-center rounded-xl shadow">Chat Telegram</a>
-                    <a href="https://zalo.me" target="_blank" class="flex-1 py-2.5 bg-sky-500 text-white font-bold text-xs text-center rounded-xl shadow">Chat Zalo</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB THÔNG BÁO -->
-        <div id="tab-notifications" class="space-y-4 hidden">
-            <div class="p-5 rounded-2xl card-box shadow-sm space-y-3">
-                <h2 class="font-bold text-base text-slate-800">🔔 Thông Báo Hệ Thống</h2>
-                <div id="client-notifications-list" class="space-y-2"></div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- 4. BOTTOM NAVIGATION BAR -->
-    <nav class="fixed inset-x-0 bottom-0 z-30 bg-white/90 backdrop-blur-md border-t border-slate-200 h-16 flex items-center justify-around px-2 shadow-lg">
-        <button onclick="switchTab('home')" class="flex flex-col items-center justify-center text-slate-400 hover:text-purple-600 space-y-0.5 transition-all cursor-pointer"><span class="text-lg">🏠</span><span class="text-[10px]">Trang chủ</span></button>
-        <button onclick="switchTab('orders')" class="flex flex-col items-center justify-center text-slate-400 hover:text-purple-600 space-y-0.5 transition-all cursor-pointer"><span class="text-lg">📋</span><span class="text-[10px]">Đơn hàng</span></button>
-        <button onclick="switchTab('scraper')" class="relative -top-3 w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-lg shadow-purple-500/40 text-xl font-bold hover:scale-105 transition-all cursor-pointer">🛒</button>
-        <button onclick="switchTab('deposit')" class="flex flex-col items-center justify-center text-slate-400 hover:text-purple-600 space-y-0.5 transition-all cursor-pointer"><span class="text-lg">💳</span><span class="text-[10px]">Nạp tiền</span></button>
-        <button onclick="switchTab('account')" class="flex flex-col items-center justify-center text-slate-400 hover:text-purple-600 space-y-0.5 transition-all cursor-pointer"><span class="text-lg">👤</span><span class="text-[10px]">Tài khoản</span></button>
-    </nav>
-
-    <!-- SCRIPT XỬ LÝ CHÍNH XÁC TUYỆT ĐỐI -->
     <script>
-        let currentUser = { name: '', username: '', role: 'guest', balance: '0đ', vipPackage: 'Chưa kích hoạt', expiryTimestamp: 0, totalSpent: 0 };
-        let isRegisterMode = false;
-        let activePlatform = 'Khách hàng Sàn TMĐT (Shopee/Lazada)';
-        let isGroupScraperMode = false;
-        let targetGroupName = '';
+        const socket = io();
+        let currentUser = null;
+        let usersData = [];
+        let groupsData = [];
+        let currentGroupId = 'group_general';
 
-        let customersList = [
-            { id: 517904, username: 'tungle_99', name: 'Tùng Lê', balance: '12,500,000đ', vipPackage: 'Gói 30 Ngày', expiryTimestamp: Date.now() + 30 * 24 * 3600 * 1000 },
-            { id: 517872, username: 'MiracleVIP', name: 'Hoàng Minh', balance: '8,300,000đ', vipPackage: 'Gói 7 Ngày', expiryTimestamp: Date.now() + 7 * 24 * 3600 * 1000 }
-        ];
-
-        let notifications = [
-            { id: 1, text: '🔔 Chào mừng bạn đến với hệ thống cào data & săn mã tự động.', date: '2026-09-09', active: true }
-        ];
-
-        let voucherDatabase = [
-            { code: 'SPVNMAL100', desc: 'Giảm 100K đơn từ 500K', platform: 'SHOPEE MALL' },
-            { code: 'TTFSFREE09', desc: 'Freeship đơn từ 0Đ', platform: 'TIKTOK SHOP' },
-            { code: 'LZASALE150', desc: 'Giảm 150K đơn từ 1TR', platform: 'LAZADA' },
-            { code: 'GAMINGVIP20', desc: 'Giảm 20% phụ kiện PC/Game', platform: 'GEARVN / LAZADA' },
-            { code: 'SKINCARE50K', desc: 'Giảm 50K mỹ phẩm Hàn Quốc', platform: 'SHOPEE' },
-            { code: 'TENDY50K', desc: 'Giảm 50K đơn toàn sàn', platform: 'TIKTOK SHOP' },
-            { code: 'SHPFLASH20', desc: 'Mã hoàn xu 20% đơn Flash Sale', platform: 'SHOPEE MALL' },
-            { code: 'LZAMEGAVIP', desc: 'Mã giảm 200K đơn từ 1.5TR', platform: 'LAZADA' },
-            { code: 'NEWFLASH99', desc: 'Mã giảm 99K đơn từ 300K độc quyền', platform: 'TIKTOK SHOP' },
-            { code: 'PROMOVIP50', desc: 'Mã giảm 50% toàn bộ hệ thống', platform: 'SHOPEE MALL' },
-            { code: 'HOANXU100K', desc: 'Hoàn 100K xu đơn từ 400K', platform: 'SHOPEE' },
-            { code: 'FREESHIPX2', desc: 'Freeship X2 đơn từ 50K', platform: 'TIKTOK SHOP' }
-        ];
-
-        function showCenterSuccess(text) {
-            document.getElementById('center-success-text').innerText = text;
-            const modal = document.getElementById('center-success-modal');
-            modal.classList.add('show');
-            setTimeout(() => {
-                modal.classList.remove('show');
-            }, 1400);
+        async function initApp() {
+            const res = await fetch('/api/init');
+            const data = await res.json();
+            usersData = data.users;
+            groupsData = data.groups;
+            
+            currentUser = usersData[0];
+            updateAccountSwitcher();
+            renderGroups();
+            socket.emit('join_group', currentGroupId);
+            renderMessages(data.messages);
         }
 
-        function notifyTelegramBot(actionName) {
-            const token = document.getElementById('tg-token') ? document.getElementById('tg-token').value : '751234567:AAH...';
-            const chatId = document.getElementById('tg-chatid') ? document.getElementById('tg-chatid').value : '123456789';
-            console.log(`[TELEGRAM BOT (ID: ${chatId})] Token: ${token} | Đã gửi báo cáo: ${actionName}`);
-        }
+        function updateAccountSwitcher() {
+            const select = document.getElementById('switchAccountSelect');
+            select.innerHTML = '';
+            usersData.forEach(u => {
+                const opt = document.createElement('option');
+                opt.value = u.id;
+                opt.textContent = `${u.avatar} ${u.username} (${u.role.toUpperCase()})`;
+                if (u.id === currentUser.id) opt.selected = true;
+                select.appendChild(opt);
+            });
 
-        function sendTestTelegramMessage() {
-            showCenterSuccess('🚀 Bắn thử lệnh về Bot Telegram thành công!');
-            notifyTelegramBot('Test lệnh báo cáo hệ thống từ Admin');
-        }
-
-        function triggerConfigUpdateAndNotify(configName) {
-            showCenterSuccess(`Đã lưu ${configName} thành công!`);
-            notifyTelegramBot(`Cấu hình hệ thống thay đổi: ${configName}`);
-        }
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text);
-            showCenterSuccess(`Đã sao chép thành công mã: [${text}]`);
-        }
-
-        function toggleSidebar() { 
-            document.getElementById('sidebar').classList.toggle('-translate-x-full'); 
-        }
-
-        function toggleUserDropdown() { 
-            document.getElementById('user-dropdown').classList.toggle('hidden'); 
-        }
-
-        function toggleSubMenu(subId) {
-            const sub = document.getElementById(subId);
-            const arrow = document.getElementById('arrow-' + subId);
-            if(sub.classList.contains('hidden')) {
-                sub.classList.remove('hidden');
-                if(arrow) arrow.innerText = '▲';
+            const badge = document.getElementById('currentRoleBadge');
+            const adminBtn = document.getElementById('adminConfigBtn');
+            if (currentUser.role === 'admin') {
+                badge.textContent = 'Admin Tổng';
+                badge.className = 'bg-purple-600 text-[10px] px-2 py-0.5 rounded-full uppercase font-medium';
+                adminBtn.classList.remove('hidden');
             } else {
-                sub.classList.add('hidden');
-                if(arrow) arrow.innerText = '▼';
+                badge.textContent = 'Chuyên Viên';
+                badge.className = 'bg-emerald-600 text-[10px] px-2 py-0.5 rounded-full uppercase font-medium';
+                adminBtn.classList.add('hidden');
             }
         }
 
-        window.onclick = function(e) {
-            const sidebar = document.getElementById('sidebar');
-            const menuBtn = e.target.closest('button[onclick="toggleSidebar()"]');
-            if (sidebar && !sidebar.contains(e.target) && !menuBtn && !sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.add('-translate-x-full');
-            }
-
-            if(!e.target.closest('#user-dropdown') && !e.target.closest('.w-9')) {
-                const dropdown = document.getElementById('user-dropdown');
-                if(dropdown) dropdown.classList.add('hidden');
-            }
-        }
-
-        function toggleAuthMode() {
-            isRegisterMode = !isRegisterMode;
-            const title = document.getElementById('auth-title');
-            const btn = document.getElementById('auth-btn-submit');
-            const switchTxt = document.getElementById('auth-switch-text');
-            const nameBox = document.getElementById('register-name-box');
-
-            if(isRegisterMode) {
-                title.innerText = 'Đăng Ký Tài Khoản';
-                btn.innerText = 'Đăng Ký Ngay';
-                switchTxt.innerText = 'Đã có tài khoản? Đăng nhập';
-                nameBox.classList.remove('hidden');
-            } else {
-                title.innerText = 'Đăng Nhập Hệ Thống';
-                btn.innerText = 'Đăng Nhập Ngay';
-                switchTxt.innerText = 'Chưa có tài khoản? Đăng ký ngay';
-                nameBox.classList.add('hidden');
-            }
-        }
-
-        function processAuthSubmit() {
-            const usernameInput = document.getElementById('auth-username').value.trim();
-            const passInput = document.getElementById('auth-pass').value.trim();
-
-            if(!usernameInput || !passInput) { 
-                showCenterSuccess('Vui lòng nhập đầy đủ tài khoản & mật khẩu!'); 
-                return; 
-            }
-
-            if(isRegisterMode) {
-                const name = document.getElementById('reg-name').value.trim() || usernameInput;
-                if(customersList.some(c => c.username === usernameInput) || usernameInput.toLowerCase() === 'admin') {
-                    showCenterSuccess('Tài khoản này đã tồn tại, vui lòng chọn tên khác!');
-                    return;
-                }
-                customersList.push({ id: Date.now().toString().slice(-6), username: usernameInput, name: name, balance: '0đ', vipPackage: 'Chưa kích hoạt', expiryTimestamp: 0 });
-                showCenterSuccess('Đăng ký thành công! Vui lòng đăng nhập.');
-                notifyTelegramBot(`Có thành viên mới đăng ký: ${usernameInput}`);
-                
-                toggleAuthMode();
-                document.getElementById('auth-username').value = usernameInput;
-                document.getElementById('auth-pass').value = '';
-                return;
-            }
-
-            if(usernameInput.toLowerCase() === 'admin') {
-                if(passInput === '1234') {
-                    currentUser = { name: 'Đinh Hoàng Việt Anh', username: 'Admin', role: 'admin', balance: '50,100,000đ', vipPackage: 'Gói Vĩnh Viễn PRO', expiryTimestamp: Date.now() + 3650 * 24 * 3600 * 1000, totalSpent: 2450000 };
-                    showCenterSuccess('Đăng nhập thành công Admin!');
-                } else {
-                    showCenterSuccess('Sai mật khẩu Admin!');
-                    return;
-                }
-            } else {
-                const foundUser = customersList.find(c => c.username === usernameInput);
-                if(foundUser) {
-                    currentUser = { name: foundUser.name, username: foundUser.username, role: 'user', balance: foundUser.balance, vipPackage: foundUser.vipPackage, expiryTimestamp: foundUser.expiryTimestamp || 0, totalSpent: 0 };
-                    showCenterSuccess('Đăng nhập thành công!');
-                } else {
-                    showCenterSuccess('Tài khoản không tồn tại, vui lòng đăng ký!');
-                    return;
-                }
-            }
-
-            localStorage.setItem('loggedInUser', JSON.stringify(currentUser));
-            document.getElementById('auth-modal').classList.add('hidden');
-            document.getElementById('floating-support-bar').classList.remove('hidden');
-            updateUIAccess();
-            switchTab('home');
-        }
-
-        // Khởi tạo ngay lập tức khi load trang (nếu đã lưu phiên, ẩn modal đăng nhập & hiện nút hỗ trợ)
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.__INITIAL_USER__) {
-                currentUser = window.__INITIAL_USER__;
-                document.getElementById('auth-modal').classList.add('hidden');
-                document.getElementById('floating-support-bar').classList.remove('hidden');
-                updateUIAccess();
-                switchTab('home');
-            } else {
-                document.getElementById('auth-modal').classList.remove('hidden');
-                document.getElementById('floating-support-bar').classList.add('hidden');
-            }
+        document.getElementById('switchAccountSelect').addEventListener('change', (e) => {
+            const selectedId = e.target.value;
+            currentUser = usersData.find(u => u.id === selectedId);
+            updateAccountSwitcher();
+            alert(`Đã chuyển góc nhìn sang tài khoản: ${currentUser.username}`);
         });
 
-        function logoutSession() {
-            localStorage.removeItem('loggedInUser');
-            currentUser = { name: '', username: '', role: 'guest', balance: '0đ', vipPackage: 'Chưa kích hoạt', expiryTimestamp: 0, totalSpent: 0 };
-            document.getElementById('auth-username').value = '';
-            document.getElementById('auth-pass').value = '';
-            document.getElementById('floating-support-bar').classList.add('hidden');
-            document.getElementById('auth-modal').classList.remove('hidden');
-        }
-
-        function selectVipAndRedirect(packageName, days, price) {
-            const amountStr = price.toLocaleString('vi-VN') + 'đ';
-            let codeKeyword = `VIP${days}`;
-            
-            document.getElementById('qr-amount').innerText = amountStr;
-            document.getElementById('qr-content').innerText = `NAPVIETANH ${codeKeyword} ${currentUser.username || 'USER'}`;
-            
-            updateQRCodeCustom(price, `NAPVIETANH_${codeKeyword}`);
-            switchTab('deposit');
-            showCenterSuccess(`Đã tạo lệnh mua ${packageName}! Vui lòng quét mã QR chuyển khoản.`);
-        }
-
-        function updateQRCodeCustom(amount, addInfo) {
-            const stk = document.getElementById('cfg-stk').value;
-            const name = document.getElementById('cfg-name').value;
-            const qrUrl = `https://img.vietqr.io/image/seabank-${stk}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(addInfo)}&accountName=${encodeURIComponent(name)}`;
-            document.getElementById('dynamic-qr-img').src = qrUrl;
-        }
-
-        function submitDepositApprovalRequest() {
-            showCenterSuccess('Đã gửi yêu cầu thanh toán thành công! Admin sẽ duyệt và kích hoạt thời gian cho bạn trong 1-3 phút.');
-            notifyTelegramBot(`Khách hàng ${currentUser.username} vừa gửi yêu cầu xác nhận chuyển khoản mua gói VIP!`);
-            switchTab('home');
-        }
-
-        function checkVipExpiration() {
-            if (currentUser.role === 'admin') return true;
-            if (!currentUser.expiryTimestamp || Date.now() > currentUser.expiryTimestamp) {
-                currentUser.vipPackage = 'Đã hết hạn';
-                return false;
-            }
-            return true;
-        }
-
-        function updateUIAccess() {
-            let isVipActive = checkVipExpiration();
-            let expiryStr = currentUser.expiryTimestamp > 0 ? new Date(currentUser.expiryTimestamp).toLocaleString('vi-VN') : 'Đã hết hạn / Chưa kích hoạt';
-
-            document.getElementById('drop-username').innerText = currentUser.username;
-            document.getElementById('drop-balance').innerText = currentUser.balance;
-            document.getElementById('home-val-name').innerText = currentUser.name;
-            document.getElementById('home-val-balance').innerText = currentUser.balance;
-            document.getElementById('home-val-vip').innerText = currentUser.vipPackage;
-            document.getElementById('home-val-expiry').innerText = expiryStr;
-            document.getElementById('home-total-spent').innerText = currentUser.totalSpent.toLocaleString('vi-VN') + 'đ';
-            document.getElementById('acc-view-name').innerText = currentUser.name;
-            document.getElementById('acc-view-username').innerText = currentUser.username;
-            document.getElementById('acc-view-balance').innerText = currentUser.balance;
-            document.getElementById('header-avatar-letter').innerText = currentUser.name.charAt(0).toUpperCase();
-
-            const adminGroup = document.getElementById('menu-group-admin');
-            const badgeRole = document.getElementById('home-badge-role');
-            const vipNoticeBanner = document.getElementById('vip-notice-banner');
-            const bannerTitle = document.getElementById('banner-notice-title');
-
-            if(currentUser.role === 'admin') {
-                adminGroup.classList.remove('hidden');
-                badgeRole.innerText = 'Quản trị viên (Admin)';
-                vipNoticeBanner.classList.add('hidden');
-            } else {
-                adminGroup.classList.add('hidden');
-                badgeRole.innerText = 'Thành viên Tiêu Chuẩn';
-                if(!isVipActive) {
-                    vipNoticeBanner.classList.remove('hidden');
-                    bannerTitle.innerText = currentUser.vipPackage === 'Đã hết hạn' ? 'Gói VIP của bạn đã hết hạn! Vui lòng gia hạn.' : 'Tài khoản chưa kích hoạt Gói VIP!';
-                } else {
-                    vipNoticeBanner.classList.add('hidden');
-                }
-            }
-            renderNotifications();
-            renderAdminCustomers();
-            updateQRCode();
-            
-            if(currentUser.role !== 'guest') {
-                localStorage.setItem('loggedInUser', JSON.stringify(currentUser));
-            }
-        }
-
-        function renderAdminCustomers() {
-            const tbody = document.getElementById('admin-customer-table-body');
-            document.getElementById('total-users-count').innerText = customersList.length;
-            let html = '';
-            customersList.forEach(c => {
-                let expText = c.expiryTimestamp > Date.now() ? new Date(c.expiryTimestamp).toLocaleDateString('vi-VN') : 'Hết hạn';
-                html += `
-                    <tr>
-                        <td class="p-3 font-mono font-bold">${c.id}</td>
-                        <td class="p-3 font-semibold text-slate-800">${c.username}</td>
-                        <td class="p-3 text-slate-600">${c.name}</td>
-                        <td class="p-3 text-purple-700 font-bold">${c.vipPackage} (${expText})</td>
-                        <td class="p-3 text-right space-x-1">
-                            <button onclick="openEditCustomer(${c.id})" class="px-2.5 py-1 bg-purple-600 text-white font-bold rounded shadow cursor-pointer">🛡️ Duyệt Gói</button>
-                            <button onclick="deleteCustomer(${c.id})" class="px-2.5 py-1 bg-red-50 text-red-600 font-bold rounded cursor-pointer">Xóa</button>
-                        </td>
-                    </tr>`;
+        function renderGroups() {
+            const list = document.getElementById('groupList');
+            list.innerHTML = '';
+            groupsData.forEach(g => {
+                const div = document.createElement('div');
+                div.className = `p-3 cursor-pointer hover:bg-slate-50 flex justify-between items-center text-sm ${g.id === currentGroupId ? 'bg-blue-50 border-l-4 border-blue-600 font-medium' : ''}`;
+                div.innerHTML = `<span>💬 ${g.name}</span> <span class="text-xs text-slate-400">Active</span>`;
+                div.onclick = () => {
+                    currentGroupId = g.id;
+                    socket.emit('join_group', currentGroupId);
+                    renderGroups();
+                };
+                list.appendChild(div);
             });
-            if(tbody) tbody.innerHTML = html;
         }
 
-        let editingCustomerId = null;
-        function openEditCustomer(id) {
-            const c = customersList.find(item => item.id === id);
-            if(!c) return;
-            editingCustomerId = id;
-            document.getElementById('modal-edit-username').value = c.username;
-            document.getElementById('customer-edit-modal').classList.remove('hidden');
-        }
-
-        function saveAdminApproval() {
-            const c = customersList.find(item => item.id === editingCustomerId);
-            const daysToAdd = parseInt(document.getElementById('modal-edit-vip-days').value);
-            if(c) {
-                if (daysToAdd > 0) {
-                    c.vipPackage = `Gói ${daysToAdd} Ngày`;
-                    c.expiryTimestamp = Date.now() + daysToAdd * 24 * 3600 * 1000;
-                } else {
-                    c.vipPackage = 'Đã hết hạn';
-                    c.expiryTimestamp = 0;
-                }
-                renderAdminCustomers();
-                showCenterSuccess(`Đã duyệt gói ${daysToAdd} ngày thành công cho khách!`);
-                notifyTelegramBot(`Admin đã kích hoạt gói ${daysToAdd} ngày cho tài khoản ${c.username}`);
-                document.getElementById('customer-edit-modal').classList.add('hidden');
-            }
-        }
-
-        function deleteCustomer(id) {
-            customersList = customersList.filter(item => item.id !== id);
-            renderAdminCustomers();
-            showCenterSuccess('Xóa khách hàng thành công!');
-        }
-
-        // HỆ THỐNG SĂN MÃ ĐÃ HOẠT ĐỘNG HOÀN HẢO: BẤM CẬP NHẬT LÀ SINH MÃ MỚI NGAY LẬP TỨC
-        function scanNewVoucherCode() {
-            const randomDeal = voucherDatabase[Math.floor(Math.random() * voucherDatabase.length)];
-            const uniqueCode = randomDeal.code + Math.floor(100 + Math.random() * 899);
-            document.getElementById('scanned-code-display').innerText = uniqueCode;
-
-            const list = document.getElementById('dynamic-voucher-list');
-            const newId = 'deal-' + Date.now();
-            list.insertAdjacentHTML('afterbegin', `
-                <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-2 shadow-sm animate-pulse">
-                    <div class="flex justify-between items-center"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-200 text-purple-800">${randomDeal.platform}</span><span class="text-xs text-emerald-600 font-semibold">Mới quét thành công</span></div>
-                    <div class="font-bold text-sm text-slate-800">${randomDeal.desc}</div>
-                    <div class="p-2 bg-white rounded-lg border flex justify-between items-center font-mono text-xs">
-                        <span class="text-purple-700 font-bold" id="${newId}">${uniqueCode}</span>
-                        <button onclick="copyToClipboard('${uniqueCode}')" class="px-2.5 py-1 bg-purple-600 text-white font-bold rounded text-[11px] cursor-pointer">Sao chép</button>
+        function renderMessages(msgs) {
+            const container = document.getElementById('messageContainer');
+            container.innerHTML = '';
+            msgs.filter(m => m.groupId === currentGroupId).forEach(m => {
+                const div = document.createElement('div');
+                div.className = `flex flex-col ${m.senderId === currentUser.id ? 'items-end' : 'items-start'}`;
+                div.innerHTML = `
+                    <span class="text-xs text-slate-500 mb-1">${m.senderName} • ${m.time}</span>
+                    <div class="max-w-md px-4 py-2 rounded-lg text-sm shadow-sm ${m.senderId === currentUser.id ? 'bg-blue-600 text-white' : 'bg-white border text-slate-800'}">
+                        ${m.text}
                     </div>
+                `;
+                container.appendChild(div);
+            });
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const billInput = document.getElementById('billInput');
+            const text = input.value.trim();
+            const hasBill = billInput.files.length > 0;
+
+            if (!text && !hasBill) return;
+
+            let finalMsgText = text;
+            if (hasBill) {
+                finalMsgText += ` [📎 Đã tải lên ảnh hóa đơn/bill đối soát]`;
+            }
+
+            socket.emit('send_message', {
+                groupId: currentGroupId,
+                senderId: currentUser.id,
+                senderName: currentUser.username,
+                text: finalMsgText,
+                hasBill: hasBill
+            });
+
+            input.value = '';
+            billInput.value = '';
+        }
+
+        socket.on('receive_message', (msg) => {
+            const container = document.getElementById('messageContainer');
+            const div = document.createElement('div');
+            div.className = `flex flex-col ${msg.senderId === currentUser.id ? 'items-end' : 'items-start'}`;
+            div.innerHTML = `
+                <span class="text-xs text-slate-500 mb-1">${msg.senderName} • ${msg.time}</span>
+                <div class="max-w-md px-4 py-2 rounded-lg text-sm shadow-sm ${msg.senderId === currentUser.id ? 'bg-blue-600 text-white' : 'bg-white border text-slate-800'}">
+                    ${msg.text}
                 </div>
-            `);
-            showCenterSuccess(`Đã cập nhật mã giảm giá mới: ${uniqueCode}!`);
-        }
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        });
 
-        function updateQRCode() {
-            const bank = document.getElementById('cfg-bank').value;
-            const stk = document.getElementById('cfg-stk').value;
-            const name = document.getElementById('cfg-name').value;
-            const qrUrl = `https://img.vietqr.io/image/seabank-${stk}-compact2.png?amount=299000&addInfo=NAPVIETANH_VIP30&accountName=${encodeURIComponent(name)}`;
-            document.getElementById('dynamic-qr-img').src = qrUrl;
-        }
+        function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
+        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
 
-        function saveBankConfig() {
-            updateQRCode();
-            showCenterSuccess('Cập nhật thành công!');
-        }
-
-        function switchTab(tabId) {
-            ['home', 'scraper', 'orders', 'deposit', 'account', 'support', 'notifications', 'admin-users', 'admin-pricing', 'admin-deposit-cfg', 'admin-support-cfg', 'admin-notifications-cfg', 'admin-telegram', 'deals'].forEach(id => {
-                const el = document.getElementById('tab-' + id);
-                if(el) el.classList.add('hidden');
+        async function createSpecialist() {
+            const name = document.getElementById('newCvName').value.trim();
+            if (!name) return;
+            const res = await fetch('/api/specialists', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: name })
             });
-            const target = document.getElementById('tab-' + tabId);
-            if(target) target.classList.remove('hidden');
-        }
-
-        function publishNotification() {
-            const content = document.getElementById('new-noti-content').value.trim();
-            if(!content) { showCenterSuccess('Vui lòng nhập nội dung!'); return; }
-
-            notifications.unshift({ id: Date.now(), text: content, date: 'Hôm nay', active: true });
-            renderNotifications();
-            showCenterSuccess('Đăng thông báo thành công!');
-            document.getElementById('new-noti-content').value = '';
-            switchTab('home');
-        }
-
-        function toggleNotificationActive(id) {
-            const n = notifications.find(item => item.id === id);
-            if(n) {
-                n.active = !n.active;
-                renderNotifications();
+            const data = await res.json();
+            if (data.success) {
+                usersData.push(data.user);
+                updateAccountSwitcher();
+                closeAdminModal();
+                document.getElementById('newCvName').value = '';
+                alert('Tạo chuyên viên thành công!');
             }
         }
 
-        function deleteNotification(id) {
-            notifications = notifications.filter(n => n.id !== id);
-            renderNotifications();
-            showCenterSuccess('Xóa thành công!');
-        }
+        socket.on('update_users', (newUsers) => {
+            usersData = newUsers;
+            updateAccountSwitcher();
+        });
 
-        function renderNotifications() {
-            const homeList = document.getElementById('home-notifications-list');
-            const adminList = document.getElementById('admin-noti-list');
-            const clientList = document.getElementById('client-notifications-list');
-
-            let homeHtml = '';
-            let adminHtml = '';
-            let clientHtml = '';
-
-            notifications.forEach(n => {
-                if(n.active) {
-                    homeHtml += `
-                        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2 border-l-4 border-l-purple-600">
-                            <div class="flex items-center justify-between text-xs text-slate-400"><span>Hệ thống</span><span>${n.date} 📌</span></div>
-                            <p class="text-xs font-semibold text-slate-800">${n.text}</p>
-                        </div>`;
-                    clientHtml += `
-                        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2 border-l-4 border-l-blue-600">
-                            <div class="text-xs text-slate-400">${n.date}</div>
-                            <p class="text-xs font-semibold text-slate-800">${n.text}</p>
-                        </div>`;
-                }
-
-                adminHtml += `
-                    <div class="p-3 rounded-xl bg-slate-50 border flex justify-between items-center text-xs">
-                        <span class="truncate pr-2 ${n.active ? 'font-semibold text-slate-800' : 'text-slate-400 line-through'}">${n.text}</span>
-                        <div class="space-x-1 flex items-center">
-                            <button onclick="toggleNotificationActive(${n.id})" class="px-2.5 py-1 ${n.active ? 'bg-emerald-600 text-white' : 'bg-slate-300 text-slate-700'} font-bold rounded shadow-sm text-[11px] cursor-pointer">${n.active ? '✅ Đang hiện' : '❌ Đã ẩn'}</button>
-                            <button onclick="deleteNotification(${n.id})" class="px-2 py-1 bg-red-50 text-red-600 font-bold rounded shadow-sm text-[11px] cursor-pointer">Xóa</button>
-                        </div>
-                    </div>`;
-            });
-
-            if(homeList) homeList.innerHTML = homeHtml;
-            if(adminList) adminList.innerHTML = adminHtml;
-            if(clientList) clientList.innerHTML = clientHtml;
-        }
-
-        function selectPlatform(id, name) {
-            isGroupScraperMode = false;
-            activePlatform = name;
-            ['shopee', 'game', 'facebook', 'tiktok', 'nhadat', 'taichinh', 'khoahoc', 'maps'].forEach(item => {
-                const card = document.getElementById('card-' + item);
-                if(card) card.className = "p-3 rounded-xl border-2 border-slate-200 bg-white cursor-pointer space-y-1 shadow-sm";
-            });
-            const selected = document.getElementById('card-' + id);
-            if(selected) selected.className = "p-3 rounded-xl border-2 border-purple-600 bg-purple-50/50 cursor-pointer space-y-1 shadow-sm";
-        }
-
-        function runGroupScraper() {
-            const groupLink = document.getElementById('group-link-input').value.trim();
-            if(!groupLink) {
-                showCenterSuccess('Vui lòng dán link nhóm/group cần quét!');
-                return;
-            }
-            isGroupScraperMode = true;
-            targetGroupName = groupLink;
-            runHackerScraperExecution();
-        }
-
-        // HỆ THỐNG TRÍCH XUẤT DATA & THÀNH VIÊN NHÓM THỰC TẾ (TẠO DỮ LIỆU ĐỘC LẬP TỪ LINK HOẶC NGÀNH HÀNG ĐÃ CHỌN)
-        function runHackerScraperExecution() {
-            if(!checkVipExpiration()) {
-                showCenterSuccess('Gói VIP của bạn đã hết hạn! Vui lòng gia hạn để tiếp tục quét data.');
-                switchTab('home');
-                return;
-            }
-
-            const terminal = document.getElementById('terminal-box');
-            const execBtn = document.getElementById('exec-btn');
-            const dataContainer = document.getElementById('customer-data-table-container');
-            const rowsContainer = document.getElementById('customer-rows');
-            const titleEl = document.getElementById('table-result-title');
-
-            execBtn.disabled = true;
-            execBtn.classList.add('opacity-50');
-            dataContainer.classList.add('hidden');
-            rowsContainer.innerHTML = '';
-            dataContainer.classList.remove('hidden');
-
-            let sourceTitle = isGroupScraperMode ? `Thành viên nhóm: [${targetGroupName}]` : activePlatform;
-            if(titleEl) titleEl.innerText = `📋 Danh sách trích xuất thành công từ (${sourceTitle}) - Đúng 250 Data:`;
-
-            terminal.innerHTML = `<div class="text-yellow-400">> [INIT] Kết nối Webhook API & cào danh sách thành viên thực tế từ (${sourceTitle})...</div>`;
-
-            let sampleFirstNames = ["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Đặng", "Bùi"];
-            let sampleMiddleNames = ["Văn", "Thị", "Hồng", "Đình", "Thanh", "Minh", "Quang", "Hữu", "Ngọc", "Xuân"];
-            let sampleLastNames = ["Anh", "Bình", "Cường", "Dũng", "Đạt", "Giang", "Hải", "Hòa", "Hưng", "Kha", "Long", "Nam", "Phúc", "Quân", "Sơn", "Tâm", "Thắng", "Tuấn", "Vinh", "Yến"];
-            let districts = ["Quận 1, TP.HCM", "Quận 3, TP.HCM", "Thủ Đức, TP.HCM", "Cầu Giấy, Hà Nội", "Đống Đa, Hà Nội", "Hải Châu, Đà Nẵng", "Ninh Kiều, Cần Thơ", "Biên Hòa, Đồng Nai"];
-
-            let count = 0;
-
-            let hackerInterval = setInterval(() => {
-                count += 1;
-                let fName = sampleFirstNames[Math.floor(Math.random() * sampleFirstNames.length)];
-                let mName = sampleMiddleNames[Math.floor(Math.random() * sampleMiddleNames.length)];
-                let lName = sampleLastNames[Math.floor(Math.random() * sampleLastNames.length)];
-                let fullName = `${fName} ${mName} ${lName}`;
-                let phone = `0${['9','3','7','8','5'][Math.floor(Math.random()*5)]}${Math.floor(10000000 + Math.random()*90000000)}` ;
-                let address = districts[Math.floor(Math.random() * districts.length)];
-                let detailInfo = isGroupScraperMode ? `Thành viên Group Active #${count}` : `${activePlatform} - Nhu cầu thực tế #${count}`;
-
-                terminal.innerHTML += `<div class="text-emerald-300">> [DECRYPT] Trích xuất thành viên node #${count}: ${fullName} - ${phone}</div>`;
-                terminal.scrollTop = terminal.scrollHeight;
-
-                let newRow = `
-                    <tr>
-                        <td class="p-2.5 font-semibold">${fullName}</td>
-                        <td class="p-2.5 text-purple-600 font-mono font-bold">${phone}</td>
-                        <td class="p-2.5">${detailInfo}</td>
-                        <td class="p-2.5 text-slate-500">${address}</td>
-                        <td class="p-2.5 text-right space-x-1">
-                            <a href="tel:${phone}" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">📞 Gọi</a>
-                            <a href="https://zalo.me/${phone}" target="_blank" class="px-2 py-1 bg-sky-600 text-white font-bold rounded text-[10px]">💬 Zalo</a>
-                        </td>
-                    </tr>`;
-                rowsContainer.insertAdjacentHTML('beforeend', newRow);
-
-                if(count >= 250) {
-                    clearInterval(hackerInterval);
-                    terminal.innerHTML += `<div class="text-cyan-400 font-bold">> [SUCCESS] Giải mã hoàn tất đúng 250 tệp data thực tế!</div>`;
-                    execBtn.disabled = false;
-                    execBtn.classList.remove('opacity-50');
-
-                    showCenterSuccess('Đã giải mã thành công 250 Data hàng loạt!');
-                }
-            }, 300);
-        }
-
-        function downloadExcelFile() {
-            const csvContent = "data:text/csv;charset=utf-8,HoVaTen,SoDienThoai,NhuCau,KhuVuc,LienHe\nNguyen Thi Mai,0982123888,Skincare,TP.HCM,0982123888";
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Danh_Sach_250_Data_Hang_Loat.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+        initApp();
     </script>
 </body>
 </html>

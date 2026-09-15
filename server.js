@@ -21,7 +21,9 @@ const hybridNames = [
   'Bé Na', 'Cường Designer', 'Quốc Bảo', 'Gia Hân', 'Mập Mạp', 'Hải Đăng',
   'Mẹ Suối', 'Bố Cá Voi', 'Tuấn Anh Sài Gòn', 'Mai Phương Thảo', 'Huy Bảnh', 'Đạt Villa',
   'Hải Yến', 'Khánh Linh', 'Bảo Ngọc', 'Minh Triều', 'Hoàng Long', 'Thu Trang',
-  'Tuấn Kiệt', 'Phương Linh', 'Thanh Sơn', 'Hồng Nhung', 'Quang Hải', 'Diệu Linh'
+  'Tuấn Kiệt', 'Phương Linh', 'Thanh Sơn', 'Hồng Nhung', 'Quang Hải', 'Diệu Linh',
+  'Đức Huy', 'Hồng Sơn', 'Ngọc Mai', 'Vân Anh', 'Hữu Thắng', 'Kim Oanh',
+  'Thành Nam', 'Mỹ Tâm', 'Quốc Huy', 'Lan Phương', 'Đình Trọng', 'Thùy Dương'
 ];
 
 let cloneUsers = [];
@@ -228,11 +230,11 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP CHÁY MÁY TỰ ĐỘNG CHÉM GIÓ 24/7 (ĐÚNG CHU KỲ 0.8 GIÂY)
+// VÒNG LẶP TỰ ĐỘNG CHÉM GIÓ 24/7 (TỐC ĐỘ 1.3 GIÂY)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
-    if (now - lastUserActivity < 2000) return;
+    if (now - lastUserActivity < 2500) return;
 
     rooms.forEach(activeRoom => {
       if (activeRoom.id === 'room_hubba_system') return;
@@ -242,10 +244,8 @@ setInterval(() => {
 
       let cl1 = clonePool[Math.floor(Math.random() * clonePool.length)];
       let cl2 = clonePool[Math.floor(Math.random() * clonePool.length)];
-      let cl3 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
       while(cl2.id === cl1.id) cl2 = clonePool[Math.floor(Math.random() * clonePool.length)];
-      while(cl3.id === cl1.id || cl3.id === cl2.id) cl3 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
       const roomMsgs = messages.filter(m => m.roomId === activeRoom.id);
       const recentTexts = roomMsgs.slice(-30).map(m => m.text);
@@ -255,14 +255,9 @@ setInterval(() => {
 
       let text1 = availablePool[Math.floor(Math.random() * availablePool.length)];
       let text2 = `@${cl1.displayName} Chuẩn không cần chỉnh luôn bác ơi, tiền về rủng rỉnh!`;
-      let text3 = `@${cl2.displayName} @${cl1.displayName} Cứ theo sát sếp thế này thì chẳng mấy chốc phất lớn 🚀`;
 
-      let shouldSendImg = Math.random() < 0.15;
-      let attachImg = shouldSendImg ? realLifeImages[Math.floor(Math.random() * realLifeImages.length)] : null;
-
-      const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: attachImg, reactions: {} };
+      const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
       const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
-      const m3 = { id: Date.now() + 2, roomId: activeRoom.id, senderName: cl3.displayName, text: text3, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
 
       messages.push(m1);
       io.to(activeRoom.id).emit('receive_message', m1);
@@ -270,14 +265,10 @@ setInterval(() => {
       setTimeout(() => {
         messages.push(m2);
         io.to(activeRoom.id).emit('receive_message', m2);
-        setTimeout(() => {
-          messages.push(m3);
-          io.to(activeRoom.id).emit('receive_message', m3);
-        }, 250);
-      }, 250);
+      }, 300);
     });
   }
-}, 800); // 0.8 giây chuẩn xác
+}, 1300); // 1.3 giây chuẩn xác
 
 io.on('connection', (socket) => {
   socket.on('join_room', (roomId) => {
@@ -305,66 +296,49 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> 6 CON CLONE ĐỒNG LOẠT TRANG TRANH NHAU TUNG HÔ TRONG 0.1 GIÂY
+    // KHI SẾP VỪA NHẮN -> KÍCH HOẠT KHOẢNG 50 CON CLONE LẦN LƯỢT TUNG HÔ TRONG VÒNG VÀI GIÂY
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
-        let c1 = clonePool[Math.floor(Math.random() * clonePool.length)];
-        let c2 = clonePool[Math.floor(Math.random() * clonePool.length)];
-        let c3 = clonePool[Math.floor(Math.random() * clonePool.length)];
-        let c4 = clonePool[Math.floor(Math.random() * clonePool.length)];
-        let c5 = clonePool[Math.floor(Math.random() * clonePool.length)];
-        let c6 = clonePool[Math.floor(Math.random() * clonePool.length)];
+        
+        let lower = data.text.toLowerCase();
+        let baseKeyword = data.text;
+        
+        let templates = [
+          `Nghe sếp chỉ đạo vụ "${baseKeyword}" là anh em biết chuẩn bị hốt bạc to, rủng rỉnh tiền tiêu rồi 🔥`,
+          `Quá chuẩn luôn sếp ơi, theo sát sếp vụ "${baseKeyword}" là lúc nào tài khoản cũng ting ting!`,
+          `Chuẩn bài, đợt này anh em lại chuẩn bị xây nhà tậu xe nhờ chiến dịch "${baseKeyword}" thôi 😍`,
+          `Tầm nhìn chiến lược của sếp về vụ "${baseKeyword}" thì đỉnh chóp khỏi phải bàn cãi rồi!`,
+          `Hóng thành quả cùng sếp nhé, năng lượng chiến dịch "${baseKeyword}" ngập tràn luôn 🌟`,
+          `Cứ để tụi em lo trọn gói khâu vận hành vụ "${baseKeyword}" nha sếp, yên tâm tuyệt đối về doanh thu luôn ạ!`
+        ];
 
-        while(c2.id === c1.id) c2 = clonePool[Math.floor(Math.random() * clonePool.length)];
-        while(c3.id === c1.id || c3.id === c2.id) c3 = clonePool[Math.floor(Math.random() * clonePool.length)];
-        while(c4.id === c1.id || c4.id === c2.id || c4.id === c3.id) c4 = clonePool[Math.floor(Math.random() * clonePool.length)];
-        while(c5.id === c1.id || c5.id === c2.id || c5.id === c3.id || c5.id === c4.id) c5 = clonePool[Math.floor(Math.random() * clonePool.length)];
-        while(c6.id === c1.id || c6.id === c2.id || c6.id === c3.id || c6.id === c4.id || c6.id === c5.id) c6 = clonePool[Math.floor(Math.random() * clonePool.length)];
+        // Tạo chuỗi phản hồi liên tục từ 45-50 con clone khác nhau
+        let totalClonesToTrigger = 48;
+        let delayStep = 120; // Khoảng cách thời gian giữa các tin nhắn phản hồi
 
-        let r1 = appSettings.programMode && appSettings.cloneScript ? appSettings.cloneScript : `Nghe sếp chỉ đạo vụ "${data.text}" là anh em biết chuẩn bị hốt bạc to, rủng rỉnh tiền tiêu rồi 🔥`;
-        let r2 = `@${c1.displayName} Quá chuẩn luôn sếp ơi, theo sát sếp là lúc nào tài khoản cũng ting ting!`;
-        let r3 = `@${c2.displayName} @${c1.displayName} Chuẩn bài, đợt này anh em lại chuẩn bị xây nhà tậu xe thôi 😍`;
-        let r4 = `@${c3.displayName} Tầm nhìn chiến lược của sếp thì đỉnh chóp khỏi phải bàn cãi rồi!`;
-        let r5 = `@${c4.displayName} Hóng thành quả cùng sếp nhé, năng lượng ngập tràn luôn 🌟`;
-        let r6 = `Cứ để tụi em lo trọn gói khâu vận hành nha sếp, yên tâm tuyệt đối về doanh thu luôn ạ!`;
-
-        const m1 = { id: Date.now() + 1, roomId: data.roomId, senderName: c1.displayName, text: r1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
-        messages.push(m1);
-        io.to(data.roomId).emit('receive_message', m1);
-
-        setTimeout(() => {
-          const m2 = { id: Date.now() + 2, roomId: data.roomId, senderName: c2.displayName, text: r2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
-          messages.push(m2);
-          io.to(data.roomId).emit('receive_message', m2);
-
+        for(let i = 0; i < totalClonesToTrigger; i++) {
           setTimeout(() => {
-            const m3 = { id: Date.now() + 3, roomId: data.roomId, senderName: c3.displayName, text: r3, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
-            messages.push(m3);
-            io.to(data.roomId).emit('receive_message', m3);
+            let randomClone = clonePool[Math.floor(Math.random() * clonePool.length)];
+            let randomTemplate = templates[Math.floor(Math.random() * templates.length)];
+            let replyText = (i > 0 && Math.random() > 0.4) ? `@${clonePool[Math.floor(Math.random() * clonePool.length)].displayName} ${randomTemplate}` : randomTemplate;
 
-            setTimeout(() => {
-              const m4 = { id: Date.now() + 4, roomId: data.roomId, senderName: c4.displayName, text: r4, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
-              messages.push(m4);
-              io.to(data.roomId).emit('receive_message', m4);
+            const mRep = {
+              id: Date.now() + i,
+              roomId: data.roomId,
+              senderName: randomClone.displayName,
+              text: replyText,
+              time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+              imageUrl: null,
+              reactions: {}
+            };
 
-              setTimeout(() => {
-                const m5 = { id: Date.now() + 5, roomId: data.roomId, senderName: c5.displayName, text: r5, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
-                messages.push(m5);
-                io.to(data.roomId).emit('receive_message', m5);
+            messages.push(mRep);
+            io.to(data.roomId).emit('receive_message', mRep);
+          }, i * delayStep);
+        }
 
-                setTimeout(() => {
-                  const m6 = { id: Date.now() + 6, roomId: data.roomId, senderName: c6.displayName, text: r6, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
-                  messages.push(m6);
-                  io.to(data.roomId).emit('receive_message', m6);
-                }, 200);
-
-              }, 200);
-            }, 200);
-          }, 200);
-        }, 200);
-
-      }, 50);
+      }, 100);
     }
   });
 

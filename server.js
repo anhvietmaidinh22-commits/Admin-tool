@@ -21,8 +21,7 @@ const genzNicknames = [
   'Chúa Chốt Đơn', 'Vua Té Nước', 'Lười Nhưng Giàu', 'Hệ Mỏ Lắm', 'Đại Gia Ổi',
   'Boss Ẩn Danh', 'Cục Súc Đại Nhân', 'Thích Đếm Tiền', 'Sống Lỏ', 'Hệ Bám Sếp',
   'Mê Tín Mê Tiền', 'Hết Cứu', 'Đại Trưởng Lão', 'Tấm Chiếu Mới', 'Hệ Ỉ I',
-  'Hít Không Khí Sống', 'Chuyên Gia Hóng Biến', 'Vô Hạn Tài Chính', 'Hệ Xúc Xích', 'Thánh Nổ',
-  'Bụt Hoà Lạc', 'Mê Trà Sữa', 'Hệ Mất Xác', 'Chúa Hề', 'Tài Phiệt Giả Nghèo', 'Bấm Phím Đỉnh Cao'
+  'Hít Không Khí Sống', 'Chuyên Gia Hóng Biến', 'Vô Hạn Tài Chính', 'Hệ Xúc Xích', 'Thánh Nổ'
 ];
 
 const genzFirstNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Đỗ', 'Bùi', 'Đăng', 'Hồ', 'Dương', 'Phan', 'Vũ'];
@@ -65,16 +64,35 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80'
 ];
 
-// HỆ THỐNG GHÉP CÂU TỰ ĐỘNG HÀNG NGÀN BIẾN THỂ KHÔNG BAO GIỜ LẶP
-const subjects = ["Cứ theo sát sếp", "Về đội của sếp", "Làm việc cùng sếp", "Nghe lệnh sếp chỉ đạo", "Được sếp dẫn đường", "Chạy chiến dịch theo sếp"];
-const actions = ["là tiền về ngập ví", "là tài khoản ting ting mỏi tay", "là chốt đơn mỏi miệng", "là hốt bạc tỷ không kịp đếm", "là cuối tháng tậu xế hộp", "là số liệu nhảy múa chóng mặt"];
-const endings = ["thật sự luôn ấy", "không trượt phát nào", "đỉnh chóp chữ ê kéo dài", "phê chữ y luôn", "quá uy tín luôn mấy ông ơi", "chuẩn bài không cần chỉnh"];
+// MA TRẬN TỔ HỢP TỪ VỰNG VÔ HẠN (HÀNG TRIỆU CÁCH GHÉP KHÔNG BAO GIỜ TRÙNG LẶP)
+const subjects = [
+  "Bám sát định hướng của sếp", "Theo đuổi chiến lược này", "Làm việc cùng team sếp", 
+  "Nghe lệnh điều phối từ sếp", "Chạy hệ thống theo sếp", "Đi theo con đường sếp vạch ra",
+  "Triển khai mô hình của sếp", "Phối hợp nhịp nhàng với sếp", "Bắt nhịp xu hướng cùng sếp"
+];
+const actions = [
+  "thì tài khoản cứ ting ting reo liên tục", "là doanh số nhảy vọt không thấy đỉnh", 
+  "giúp anh em hốt bạc tỷ mỏi cả tay", "làm dòng tiền thông suốt mượt mà như sunsilk", 
+  "kéo dài chuỗi ngày chốt đơn ngập mặt", "biến mọi khó khăn thành lợi nhuận khổng lồ",
+  "tạo ra biên độ lợi nhuận cực kỳ khủng khiếp", "đẩy tốc độ tăng trưởng lên tầm cao mới"
+];
+const modifiers = [
+  "không trượt phát nào", "đỉnh chóp chữ ê kéo dài", "phê chữ y thực sự luôn", 
+  "quá uy tín cho một cuộc tình", "làm ae đứng ngồi không yên", "khiến đối thủ ngửi khói dài dài",
+  "vượt mọi kỳ vọng KPI đề ra", "bẻ lái tương lai rủng rỉnh tiền tiêu"
+];
+const emojis = ["🔥", "🚀", "💰", "🌟", "💸", "🎯", "😎", "💪"];
 
-function getRandomDynamicSentence() {
+function generateInfiniteUniqueSentence(customKeyword = "") {
   let sub = subjects[Math.floor(Math.random() * subjects.length)];
   let act = actions[Math.floor(Math.random() * actions.length)];
-  let end = endings[Math.floor(Math.random() * endings.length)];
-  return `${sub} ${act} ${end} 🔥`;
+  let mod = modifiers[Math.floor(Math.random() * modifiers.length)];
+  let emo = emojis[Math.floor(Math.random() * emojis.length)];
+
+  if (customKeyword && Math.random() > 0.25) {
+    return `Về vụ "${customKeyword}" thì ${sub.toLowerCase()} ${act}, ${mod} ${emo}`;
+  }
+  return `${sub} ${act}, ${mod} ${emo}`;
 }
 
 let appSettings = {
@@ -187,7 +205,7 @@ app.post('/api/create-room', (req, res) => {
 
   const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
   let selectedClones = [];
-  for(let k = 0; k < 100; k++) {
+  for(let k = 0; k < 150; k++) {
     let randC = clonePool[Math.floor(Math.random() * clonePool.length)];
     if(randC && !selectedClones.includes(randC.username)) selectedClones.push(randC.username);
   }
@@ -234,7 +252,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP HÀNG NGÀN CLONE TỰ ĐỘNG CHÉM GIÓ 24/7 (2.5 GIÂY)
+// VÒNG LẶP 24/7 (SỬ DỤNG MA TRẬN SINH TỪ VỰNG VÔ HẠN)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
@@ -248,11 +266,10 @@ setInterval(() => {
 
       let cl1 = clonePool[Math.floor(Math.random() * clonePool.length)];
       let cl2 = clonePool[Math.floor(Math.random() * clonePool.length)];
-
       while(cl2.id === cl1.id) cl2 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
-      let text1 = getRandomDynamicSentence();
-      let text2 = `@${cl1.displayName} Chuẩn bài luôn ô giáo, t vừa check ví thấy ting ting rồi nè!`;
+      let text1 = generateInfiniteUniqueSentence();
+      let text2 = `@${cl1.displayName} Chuẩn xác từng centimet luôn ô giáo ơi, ví đang dày lên trông thấy!`;
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
       const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
@@ -279,7 +296,7 @@ io.on('connection', (socket) => {
   socket.on('send_message', (data) => {
     lastUserActivity = Date.now();
     const senderObj = users.find(u => u.username === data.senderName) || { displayName: data.senderName };
-    const actualSenderName = senderObj.displayName || data.senderName;
+    const actualSenderName = senderObj.displayName || (data.senderName === 'admin' ? 'QUẢN LÍ HỆ THỐNG' : data.senderName);
 
     const newMessage = {
       id: Date.now(),
@@ -294,7 +311,7 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> KÍCH HOẠT HÀNG LOẠT CLONE TƯƠNG TÁC CHÉO, TAG TÊN VÀ BÀN BẠC DỒN DẬP
+    // KHI SẾP VỪA NHẮN -> KÍCH HOẠT HÀNG LOẠT CLONE DÙNG MA TRẬN ĐỘC LẬP TƯƠNG TÁC
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
@@ -306,21 +323,11 @@ io.on('connection', (socket) => {
         for(let i = 0; i < totalClones; i++) {
           setTimeout(() => {
             let randUser = clonePool[Math.floor(Math.random() * clonePool.length)];
-            let randomPeer = clonePool[Math.floor(Math.random() * clonePool.length)];
-            
-            let actionPhrases = [
-              `Úi dồi ôi, nghe sếp chỉ đạo vụ "${kw}" là thấy mùi tiền ngập mặt rồi ae ơi 🔥`,
-              `Chuẩn đét luôn sếp ơi, vụ "${kw}" này để em húp trọn gói cho mà xem`,
-              `Thật sự luôn, hệ tư duy của sếp về "${kw}" đỉnh chóp thế này bảo sao ae ko giàu`,
-              `@${randomPeer.displayName} Chuẩn chưa ông giáo, t bảo từ đầu r mà lị 😂`,
-              `@${randomPeer.displayName} Mày lại chả nhanh trí, chuẩn bị tiền tậu xế hộp thôi ô hay`,
-              `Vụ "${kw}" này thơm phức, ai ko theo thì ráng chịu nha, t là t theo sát sếp tới bến`,
-              `Căng cực, chiến dịch "${kw}" này mà scale lên thì cuối tháng số dư trong ví sập web luôn`
-            ];
+            let peer1 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
-            let randReply = actionPhrases[Math.floor(Math.random() * actionPhrases.length)];
-            let tagPrefix = (i > 0 && Math.random() > 0.3) ? `@${clonePool[Math.floor(Math.random() * clonePool.length)].displayName} ` : '';
-            let finalMsgText = tagPrefix + randReply;
+            let dynamicMsg = generateInfiniteUniqueSentence(kw);
+            let tagPrefix = (i > 0 && Math.random() > 0.3) ? `@${peer1.displayName} ` : '';
+            let finalMsgText = tagPrefix + dynamicMsg;
 
             const mRep = {
               id: Date.now() + i,

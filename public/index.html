@@ -137,14 +137,18 @@
                         </div>
                     </div>
 
-                    <!-- MỤC CÀI ĐẶT NỘI DUNG CHAT CHO CLONE (HIỂN THỊ ĐẦY ĐỦ CHO ADMIN & CHUYÊN VIÊN) -->
+                    <!-- MỤC CÀI ĐẶT CHƯƠNG TRÌNH & CLONE -->
                     <div id="cloneSettingsContainer" class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 space-y-3 hidden">
                         <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider flex items-center">
-                            <i class="fa-solid fa-robot mr-1.5 text-indigo-600"></i> Cài Đặt Nội Dung Chat Cho Clone
+                            <i class="fa-solid fa-robot mr-1.5 text-indigo-600"></i> Cài Đặt Chương Trình Cho Clone
                         </h4>
+                        <div class="flex items-center justify-between py-1 bg-indigo-50/60 p-2.5 rounded-2xl">
+                            <span class="text-xs font-bold text-indigo-900">Bật chạy chương trình riêng</span>
+                            <input type="checkbox" id="settingProgramMode" onchange="saveSettings()" class="w-4 h-4 accent-indigo-600 cursor-pointer">
+                        </div>
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-500 mb-1">Nội dung trả lời khi clone hùa theo:</label>
-                            <textarea id="settingCloneScript" rows="2" onblur="saveSettings()" placeholder="Nhập nội dung bot chat..." class="w-full bg-slate-50 border border-slate-200 p-3 rounded-2xl outline-none text-xs font-semibold"></textarea>
+                            <label class="block text-[11px] font-bold text-slate-500 mb-1">Nội dung chương trình (chỉ khi bật ở trên):</label>
+                            <textarea id="settingCloneScript" rows="2" onblur="saveSettings()" placeholder="Nhập nội dung chương trình..." class="w-full bg-slate-50 border border-slate-200 p-3 rounded-2xl outline-none text-xs font-semibold"></textarea>
                         </div>
                         <div class="flex items-center justify-between py-1 border-t border-slate-50">
                             <span class="text-xs font-semibold text-slate-700">Bật/Tắt Clone tự tương tác</span>
@@ -500,12 +504,16 @@
 
         async function saveSettings() {
             const autoBotsChat = document.getElementById('settingBotsChat').checked;
+            const programMode = document.getElementById('settingProgramMode').checked;
             const cloneScript = document.getElementById('settingCloneScript').value.trim();
             await fetch('/api/settings', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ autoBotsChat, cloneScript })
+                body: JSON.stringify({ autoBotsChat, programMode, cloneScript })
             });
+            appSettings.autoBotsChat = autoBotsChat;
+            appSettings.programMode = programMode;
+            appSettings.cloneScript = cloneScript;
         }
 
         function startApp() {
@@ -520,6 +528,7 @@
             if(document.getElementById('settingCloneScript')) {
                 document.getElementById('settingCloneScript').value = appSettings.cloneScript || '';
                 document.getElementById('settingBotsChat').checked = appSettings.autoBotsChat;
+                document.getElementById('settingProgramMode').checked = appSettings.programMode;
             }
 
             if(currentUser.role === 'client') {
@@ -646,7 +655,7 @@
 
                 let roomDisplayName = r.name;
                 if (currentUser.role === 'client') {
-                    roomDisplayName = 'HUBBA';
+                    roomDisplayName = 'HUBBA ✔';
                 } else if (currentUser.role === 'specialist' && r.clientName) {
                     roomDisplayName = r.clientName;
                 }
@@ -922,6 +931,8 @@
             }
             if(data.roomName && currentUser.role !== 'client') {
                 document.getElementById('activeRoomName').textContent = data.roomName;
+            } else if(currentUser.role === 'client') {
+                document.getElementById('activeRoomName').textContent = 'HUBBA ✔';
             }
         });
 

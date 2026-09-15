@@ -266,7 +266,7 @@
                 </div>
             </div>
 
-            <div id="addMemberSection" class="space-y-2 pt-2 border-t border-slate-100 hidden">
+            <div id="addMemberSection" class="space-y-2 pt-2 border-t border-slate-100">
                 <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider">Thêm thành viên vào nhóm</h4>
                 <div class="flex space-x-2">
                     <select id="selectUserToAdd" class="flex-1 bg-slate-50 border border-slate-200 px-3 py-2 rounded-xl text-xs font-semibold outline-none"></select>
@@ -538,12 +538,10 @@
                 document.getElementById('quickSwitchContainer').classList.add('hidden');
                 document.getElementById('cloneSettingsContainer').classList.add('hidden');
                 document.getElementById('pinRoomBtn').classList.add('hidden');
-                document.getElementById('addMemberSection').classList.add('hidden');
             } else {
                 document.getElementById('plusMenuContainer').classList.remove('hidden');
                 document.getElementById('quickSwitchContainer').classList.remove('hidden');
                 document.getElementById('cloneSettingsContainer').classList.remove('hidden');
-                document.getElementById('addMemberSection').classList.remove('hidden');
                 if(currentUser.role === 'admin') {
                     document.getElementById('navStaff').classList.remove('hidden');
                     document.getElementById('pinRoomBtn').classList.remove('hidden');
@@ -570,6 +568,9 @@
             renderRooms();
             renderStaff();
             renderQuickSwitchList();
+            if(currentRoomId) {
+                socket.emit('join_room', currentRoomId);
+            }
         });
 
         function renderQuickSwitchList() {
@@ -834,7 +835,8 @@
             });
             const data = await res.json();
             if(data.success) {
-                alert(`Đã thêm ${username} vào nhóm!`);
+                alert(`Đã thêm ${username} vào nhóm thành công!`);
+                roomsData = data.rooms;
                 openGroupSettingsModal();
             }
         }

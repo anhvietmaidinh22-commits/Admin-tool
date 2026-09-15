@@ -11,16 +11,15 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 let users = [
-  { id: 'admin_1', username: 'admin', password: '123321', role: 'admin', avatar: '👑', displayName: 'QUẢN LÍ HỆ THỐNG', accountId: 'hubba_admin_01', userAvatarUrl: '/logo.png', isLocked: false },
-  { id: 'cv_1', username: 'chuyenviena', password: '123', role: 'specialist', avatar: '👨‍💼', displayName: 'Chuyên Viên A', accountId: 'staff_a_02', userAvatarUrl: '/logo.png', isLocked: false }
+  { id: 'admin_1', username: 'admin', password: '123321', role: 'admin', avatar: '👑', displayName: 'QUẢN LÍ HỆ THỐNG', accountId: 'hubba_admin_01', userAvatarUrl: 'https://i.ibb.co/NdVf8Btz/logo.png', isLocked: false },
+  { id: 'cv_1', username: 'chuyenviena', password: '123', role: 'specialist', avatar: '👨‍💼', displayName: 'Chuyên Viên A', accountId: 'staff_a_02', userAvatarUrl: 'https://i.ibb.co/NdVf8Btz/logo.png', isLocked: false }
 ];
 
 const hybridNames = [
   'Mẹ Em Tom', 'Long Ạ', 'Hằng Xinh Gái', 'Sóc Nông Dân', 'Thanh Trúc', 
   'Boss Ẩn Danh', 'Thảo Mộc', 'Đức Cận', 'Hoàng Tùng Kute', 'Lan Chi', 
   'Bé Na', 'Cường Designer', 'Quốc Bảo', 'Gia Hân', 'Mập Mạp', 'Hải Đăng',
-  'Mẹ Suối', 'Bố Cá Voi', 'Tuấn Anh Sài Gòn', 'Mai Phương Thảo', 'Huy Bảnh', 'Đạt Villa',
-  'Mèo Lười', 'Gió Vô Tình', 'Thanh Thanh', 'Đình Trung', 'Hải Yến', 'Khánh Linh', 'Bảo Ngọc'
+  'Mẹ Suối', 'Bố Cá Voi', 'Tuấn Anh Sài Gòn', 'Mai Phương Thảo', 'Huy Bảnh', 'Đạt Villa'
 ];
 
 let cloneUsers = [];
@@ -34,7 +33,7 @@ for(let i = 1; i <= 300; i++) {
     avatar: '🤖',
     displayName: randName,
     accountId: 'clone_id_' + (1000 + i),
-    userAvatarUrl: '/logo.png',
+    userAvatarUrl: 'https://i.ibb.co/NdVf8Btz/logo.png',
     isLocked: false
   });
 }
@@ -44,15 +43,15 @@ users = users.concat(cloneUsers);
 let rooms = [];
 let messages = [];
 
-const lifeImages = [
+// Kho ảnh thực tế 100% cực kỳ chân thực (không ảo)
+const realLifeImages = [
+  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=500&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=500&auto=format&fit=crop&q=80',
   'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=500&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=500&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=500&auto=format&fit=crop&q=80'
+  'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=500&auto=format&fit=crop&q=80'
 ];
 
-// Kho tàng hàng nghìn biến thể câu thoại cực khủng, không bao giờ lặp
 const massiveMegaPool = [
   "Uồi, mới sáng ra mở mắt thấy thông báo ting ting mà sướng cả người, đúng là chân ái cuộc đời nằm ở team sếp 💸",
   "Hôm nay ai có kèo đi lượn hồ không nhỉ, thời tiết này mà ở nhà thì phí phạm thanh xuân quá các bác ơi.",
@@ -63,17 +62,7 @@ const massiveMegaPool = [
   "Thời tiết kiểu này đi phượt Sapa hay Đà Lạt thì hết nước chấm luôn anh em ạ.",
   "Ai cóa bí quyết gì làm giàu nhanh chỉ em với, đói kém quá rồi hu hu.",
   "Vừa làm việc vừa nghe nhạc chill chill, thỉnh thoảng sếp lại bơm thêm vitamin energy vào người nữa thì còn gì bằng.",
-  "Chí lý chí lý! Vote 1000 tym cho câu nói đầy tính triết lý của bác phía trên.",
-  "Bữa nay đóp đậm rồi các bác ơi, chuẩn bị cuối tuần làm chuyến du lịch biển xả láng thôi 🏖️",
-  "Hơi bị mlem nha, hệ thống dạo này chạy mượt mà, anh em cứ thế phát huy phong độ nhé!",
-  "Đang ngồi cà phê góc quen mà nghe ae bàn chuyện chiến dịch thấy hừng hực khí thế ghê.",
-  "Sếp ơi chuẩn bị có cú hích gì mới chưa cho em xin tý hint với nào há há.",
-  "Công nhận dạo này đói kém nhưng từ lúc theo team sếp thấy dòng tiền về đều tay ghê cơ.",
-  "Ai bảo kiếm tiền online khó cứ bám sát sếp là thể nào cuối tháng cũng có quà to.",
-  "Teamwork mình chiến thật, vừa vui vẻ đời sống lại vừa gia tăng thu nhập đều đều mỗi ngày.",
-  "Hôm nay ai chưa điểm danh thì mau vào sơi lúa đi nhé, không lại bỏ lỡ chuyến tàu tốc hành đấy.",
-  "Nhìn sếp chỉ đạo mà ngưỡng mộ ghê, đúng là người dẫn đường có tầm nhìn chiến lược 🌟",
-  "Cả nhà ơi ai đi qua cho em xin 1 tim khích lệ tinh thần làm việc ca chiều với ạ!"
+  "Chí lý chí lý! Vote 1000 tym cho câu nói đầy tính triết lý của bác phía trên."
 ];
 
 users.forEach(u => {
@@ -86,7 +75,7 @@ users.forEach(u => {
     assignedSpecialist: '',
     members: [u.username, 'admin'],
     pinnedMsg: null,
-    roomAvatarUrl: '/logo.png',
+    roomAvatarUrl: 'https://i.ibb.co/NdVf8Btz/logo.png',
     status: 'system',
     isCustomGroup: false
   });
@@ -106,7 +95,7 @@ let appSettings = {
   autoBotsChat: true,
   programMode: false,
   cloneScript: '',
-  appLogo: '/logo.png'
+  appLogo: 'https://i.ibb.co/NdVf8Btz/logo.png'
 };
 
 app.get('/api/settings', (req, res) => {
@@ -164,10 +153,6 @@ app.post('/api/register', (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) return res.status(400).json({ success: false, message: 'Thiếu thông tin!' });
   
-  if (username === 'admin') {
-    return res.status(400).json({ success: false, message: 'Tên tài khoản không hợp lệ!' });
-  }
-
   const existing = users.find(u => u.username === username);
   if (existing) return res.status(400).json({ success: false, message: 'Tên đăng nhập đã tồn tại!' });
 
@@ -179,7 +164,7 @@ app.post('/api/register', (req, res) => {
     avatar: '👤',
     displayName: username,
     accountId: 'client_' + Math.floor(1000 + Math.random() * 9000),
-    userAvatarUrl: '/logo.png',
+    userAvatarUrl: 'https://i.ibb.co/NdVf8Btz/logo.png',
     isLocked: false
   };
   users.push(newUser);
@@ -193,7 +178,7 @@ app.post('/api/register', (req, res) => {
     assignedSpecialist: '',
     members: [username, 'admin'],
     pinnedMsg: null,
-    roomAvatarUrl: '/logo.png',
+    roomAvatarUrl: 'https://i.ibb.co/NdVf8Btz/logo.png',
     status: 'system',
     isCustomGroup: false
   });
@@ -236,7 +221,7 @@ app.post('/api/create-room', (req, res) => {
 
   const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
   let selectedClones = [];
-  for(let k = 0; k < 25; k++) {
+  for(let k = 0; k < 30; k++) {
     let randC = clonePool[Math.floor(Math.random() * clonePool.length)];
     if(randC && !selectedClones.includes(randC.username)) selectedClones.push(randC.username);
   }
@@ -249,7 +234,7 @@ app.post('/api/create-room', (req, res) => {
     assignedSpecialist: specialistName || '',
     members: ['admin', ...selectedClones, clientName].filter(Boolean),
     pinnedMsg: null,
-    roomAvatarUrl: '/logo.png',
+    roomAvatarUrl: 'https://i.ibb.co/NdVf8Btz/logo.png',
     status: 'assigned',
     isCustomGroup: true
   };
@@ -264,7 +249,7 @@ app.post('/api/create-specialist', (req, res) => {
   if (!username || !password) return res.status(400).json({ success: false, message: 'Thiếu thông tin!' });
 
   const existing = users.find(u => u.username === username);
-  if (existing) return res.status(400).json({ success: false, message: 'Tên tài khoản đã tồn tại!' });
+  if (existing) return res.status(400).json({ success: false, message: 'Tên đăng nhập đã tồn tại!' });
 
   const newSpecialist = {
     id: 'cv_' + Date.now(),
@@ -274,7 +259,7 @@ app.post('/api/create-specialist', (req, res) => {
     avatar: '🤖',
     displayName: displayName || username,
     accountId: 'staff_' + Math.floor(1000 + Math.random() * 9000),
-    userAvatarUrl: '/logo.png',
+    userAvatarUrl: 'https://i.ibb.co/NdVf8Btz/logo.png',
     isLocked: false
   };
   users.push(newSpecialist);
@@ -283,7 +268,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// CLONE TỰ ĐỘNG CHỦ ĐỘNG TÁM CHUYỆN LIÊN TỤC MỖI 15 GIÂY VỚI KHO TÀNG KHỔNG LỒ
+// Clone tự động giao lưu đời sống thực tế mỗi 15 giây
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const activeRoom = rooms[Math.floor(Math.random() * rooms.length)];
@@ -291,11 +276,10 @@ setInterval(() => {
     
     let c1 = clonePool[Math.floor(Math.random() * clonePool.length)];
     let c2 = clonePool[Math.floor(Math.random() * clonePool.length)];
-    let c3 = clonePool[Math.floor(Math.random() * clonePool.length)];
     
     let text1 = massiveMegaPool[Math.floor(Math.random() * massiveMegaPool.length)];
-    let text2 = massiveMegaPool[Math.floor(Math.random() * massiveMegaPool.length)];
-    let randomImg = Math.random() > 0.4 ? lifeImages[Math.floor(Math.random() * lifeImages.length)] : null;
+    let text2 = "Chuẩn không cần chỉnh luôn bác ơi, đúng ý em ghê!";
+    let randomImg = Math.random() > 0.4 ? realLifeImages[Math.floor(Math.random() * realLifeImages.length)] : null;
 
     const autoMsg1 = {
       id: Date.now(),
@@ -330,7 +314,7 @@ io.on('connection', (socket) => {
     socket.join(roomId);
     const room = rooms.find(r => r.id === roomId);
     const roomMsgs = messages.filter(m => m.roomId === roomId);
-    socket.emit('load_room_data', { messages: roomMsgs, pinnedMsg: room ? room.pinnedMsg : null, roomAvatarUrl: room ? room.roomAvatarUrl : '/logo.png', roomName: room ? room.name : 'Phòng Chat' });
+    socket.emit('load_room_data', { messages: roomMsgs, pinnedMsg: room ? room.pinnedMsg : null, roomAvatarUrl: room ? room.roomAvatarUrl : 'https://i.ibb.co/NdVf8Btz/logo.png', roomName: room ? room.name : 'Phòng Chat' });
   });
 
   socket.on('send_message', (data) => {
@@ -350,7 +334,7 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP NHẮN -> HÀNG LOẠT CLONE ĐỒNG LOẠT HÙA THEO VỚI KHO TÀNG KHỔNG LỒ
+    // HÀNG LOẠT CLONE HÙA THEO NGAY LẬP TỨC KHI SẾP NHẮN TIN
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
@@ -358,10 +342,10 @@ io.on('connection', (socket) => {
         let c2 = clonePool[Math.floor(Math.random() * clonePool.length)];
         let c3 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
-        let r1 = appSettings.programMode && appSettings.cloneScript ? appSettings.cloneScript : massiveMegaPool[Math.floor(Math.random() * massiveMegaPool.length)];
-        let r2 = massiveMegaPool[Math.floor(Math.random() * massiveMegaPool.length)];
-        let r3 = massiveMegaPool[Math.floor(Math.random() * massiveMegaPool.length)];
-        let attachImg = Math.random() > 0.3 ? lifeImages[Math.floor(Math.random() * lifeImages.length)] : null;
+        let r1 = appSettings.programMode && appSettings.cloneScript ? appSettings.cloneScript : `Uồi, nghe sếp chia sẻ câu "${data.text}" thấy cuốn phết nhỉ, đúng là tầm nhìn của sếp khác bọt hẳn!`;
+        let r2 = "Chuẩn bài luôn, anh em cứ theo sát chỉ đạo này mà hốt bạc thôi ae ơi 🚀";
+        let r3 = "Vừa check ví thấy ting ting reo vui ghê, cảm ơn sếp đã dẫn dắt team nha 😍";
+        let attachImg = Math.random() > 0.3 ? realLifeImages[Math.floor(Math.random() * realLifeImages.length)] : null;
 
         const m1 = { id: Date.now() + 1, roomId: data.roomId, senderName: c1.displayName, text: r1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: attachImg, reactions: {} };
         messages.push(m1);

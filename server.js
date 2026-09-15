@@ -16,7 +16,7 @@ let users = [
 ];
 
 const genzNicknames = [
-  'Quạu Cơ', 'Trầm Zn', 'mẹ em bin', 'Bảnh Trai Phết', 'Tài Phiệt', 
+  'Quạu Cơ', 'Trầm Zn', 'Flexer Chính Hiệu', 'Bảnh Trai Phết', 'Tài Phiệt', 
   'Hệ Đốt Lương', 'Genz Lười', 'Đâm Chồi Nảy Lộc', 'Mất Ngủ', 'Hệ Tư Duy', 
   'Chúa Chốt Đơn', 'Vua Té Nước', 'Lười Nhưng Giàu', 'Hệ Mỏ Lắm', 'Đại Gia Ổi',
   'Boss Ẩn Danh', 'Cục Súc Đại Nhân', 'Thích Đếm Tiền', 'Sống Lỏ', 'Hệ Bám Sếp',
@@ -63,30 +63,34 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80'
 ];
 
-// KHO TỪ VỰNG KINH DOANH ĐỘC LẬP (ĐẢM BẢO KHÔNG LẶP)
-const moneyVerbs = ["chốt đơn", "ting ting", "hốt bạc", "kiếm tiền", "nổ đơn", "thu hồi vốn", "scale số", "bơm tiền", "chạy ads", "úp sọt", "gom hàng", "đẩy số"];
-const moneyNouns = ["mỏi tay", "ngập ví", "cháy phố", "sập web", "bội thu", "rủng rỉnh", "phê lòi", "ấm cái bụng", "bạt ngàn", "tẹt ga", "đột phá", "cực căng"];
-const moneyAdjs = ["luôn sếp ơi", "quá uy tín", "đỉnh chóp", "cháy quá", "quá bén", "mượt mà", "chuẩn bài", "khét lẹt", "vãi chưởng", "hết nước chấm"];
+// KHO TỪ VỰNG MỞ RỘNG CỰC KỲ ĐỒ SỘ (HÀNG TRIỆU TỔ HỢP KHÔNG BAO GIỜ TRÙNG)
+const bigVerbs = ["chốt đơn", "ting ting", "hốt bạc", "kiếm tiền", "nổ đơn", "thu hồi vốn", "scale số", "bơm tiền", "chạy ads", "úp sọt", "gom hàng", "đẩy số", "vào tiền", "bắt đáy", "chốt sổ", "quay vòng"];
+const bigAdverbs = ["nhanh tay", "liền tay", "gấp", "ngay và luôn", "liền", "liền đi", "liền nào", "liền giùm", "gấp rút", "liên tục"];
+const bigNouns = ["bội thu", "ngập ví", "cháy phố", "sập web", "rủng rỉnh", "phê lòi", "ấm cái bụng", "bạt ngàn", "tẹt ga", "đột phá", "cực căng", "siêu tốc", "vô cực", "bão hòa", "lãi khủng", "căng đét"];
+const bigTails = ["đừng bỏ lỡ", "quá uy tín", "đỉnh chóp", "cháy quá", "quá bén", "mượt mà", "chuẩn bài", "khét lẹt", "vãi chưởng", "hết nước chấm", "anh em ơi", "nhé ae", "phết đấy", "căng cực", "quá đã", "thật sự"];
 
-function generateUniqueMoneySentence(recentTexts = []) {
+function generateMassiveUniqueSentence(recentTexts = []) {
   let attempts = 0;
   let candidate = "";
   do {
-    let v = moneyVerbs[Math.floor(Math.random() * moneyVerbs.length)];
-    let n = moneyNouns[Math.floor(Math.random() * moneyNouns.length)];
-    let a = moneyAdjs[Math.floor(Math.random() * moneyAdjs.length)];
+    let v = bigVerbs[Math.floor(Math.random() * bigVerbs.length)];
+    let adv = bigAdverbs[Math.floor(Math.random() * bigAdverbs.length)];
+    let n = bigNouns[Math.floor(Math.random() * bigNouns.length)];
+    let t = bigTails[Math.floor(Math.random() * bigTails.length)];
     
     let patterns = [
-      `${v} ${n} ${a}`,
+      `${v} ${adv} ${n} ${t}`,
+      `Cứ ${v} là ${n} ${t}`,
+      `Phen này ${v} ${n} ${t}`,
+      `${v} ${n} ${adv}`,
       `Đúng bài ${v} ${n}`,
-      `Phen này ${v} ${n} ${a}`,
-      `${v} ${n} đi ae`,
-      `Cứ ${v} ${n} là ${a}`
+      `${v} ${adv} cho ${n} ${t}`,
+      `Cố lên ae ${v} ${n}`
     ];
     
     candidate = patterns[Math.floor(Math.random() * patterns.length)];
     attempts++;
-  } while (recentTexts.includes(candidate) && attempts < 30);
+  } while (recentTexts.includes(candidate) && attempts < 50);
   
   return candidate;
 }
@@ -265,11 +269,11 @@ setInterval(() => {
       while(cl2.id === cl1.id) cl2 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
       const roomMsgs = messages.filter(m => m.roomId === activeRoom.id);
-      let recentTexts = roomMsgs.slice(-50).map(m => m.text);
+      let recentTexts = roomMsgs.slice(-100).map(m => m.text);
 
-      let text1 = generateUniqueMoneySentence(recentTexts);
+      let text1 = generateMassiveUniqueSentence(recentTexts);
       recentTexts.push(text1);
-      let text2 = `@${cl1.displayName} ${generateUniqueMoneySentence(recentTexts)}`;
+      let text2 = `@${cl1.displayName} ${generateMassiveUniqueSentence(recentTexts)}`;
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
       const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
@@ -311,7 +315,7 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> SINH CÂU HOÀN TOÀN ĐỘNG, CHỐNG LẶP, RẢI ĐỀU 2.5 GIÂY
+    // KHI SẾP VỪA NHẮN -> SINH CÂU HOÀN TOÀN ĐỘNG, KIỂM TRA BỘ NHỚ LỊCH SỬ 100 TIN NHẮN ĐỂ CHỐNG LẶP
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
@@ -327,26 +331,24 @@ io.on('connection', (socket) => {
             while(peer1.id === randUser.id) peer1 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
             const roomMsgs = messages.filter(m => m.roomId === data.roomId);
-            let recentTexts = roomMsgs.slice(-60).map(m => m.text);
+            let recentTexts = roomMsgs.slice(-100).map(m => m.text);
 
             let replyText = "";
 
-            // XỬ LÝ LỆNH NGẮN GỌN (CHỈ KHI SẾP GÕ ĐÚNG TỪ KHÓA)
             if (lowerKw === 'alo') {
-              let aloArr = ["Alo nghe sếp, có kèo gì mới đấy ạ", "Alo alo, sẵn sàng hốt bạc cùng sếp nhé", "Nghe đây sếp ơi, đang sẵn đơn lắm rồi", "Sếp chỉ đạo đi ae sẵn sàng rồi"];
+              let aloArr = ["nghe sếp, có kèo gì mới đấy ạ", "sẵn sàng hốt bạc cùng sếp nhé", "đang sẵn đơn lắm rồi", "sếp chỉ đạo đi ae sẵn sàng rồi"];
               replyText = aloArr[Math.floor(Math.random() * aloArr.length)];
             } else if (lowerKw.includes('chờ tin') || lowerKw.includes('chờ lệnh')) {
-              let waitArr = ["Đã rõ sếp, anh em vị trí sẵn sàng chờ tin sếp", "Rõ thưa sếp, đang nín thở chờ lệnh xuất kích", "Tuân lệnh sếp, ae túc trực 24/7 chờ ting ting", "Đợi tin sếp là lên đỉnh doanh thu"];
+              let waitArr = ["đã rõ sếp, anh em vị trí sẵn sàng chờ tin", "đang nín thở chờ lệnh xuất kích", "ae túc trực 24/7 chờ ting ting", "đợi tin sếp là lên đỉnh doanh thu"];
               replyText = waitArr[Math.floor(Math.random() * waitArr.length)];
             } else if (lowerKw.includes('nhóm im') || lowerKw.includes('trầm')) {
-              let quietArr = ["Không ai im cả đâu sếp, ae đang chuẩn bị tinh thần nổ đơn", "Sôi động ngay lập tức, sếp cho chỉ đạo để anh em hốt bạc đi", "Đâu lại vào đấy ngay, ae đang lót dép hóng lệnh sếp", "Không thể chậm trễ, nhao vào chốt đơn thui ae ơi"];
+              let quietArr = ["không ai im cả đâu sếp, ae đang chuẩn bị tinh thần nổ đơn", "sôi động ngay lập tức, sếp cho chỉ đạo đi", "ae đang lót dép hóng lệnh sếp", "không thể chậm trễ, nhao vào chốt đơn thui"];
               replyText = quietArr[Math.floor(Math.random() * quietArr.length)];
             } else if (lowerKw.includes('trật tự') || lowerKw.includes('thông báo')) {
-              let notiArr = ["Rõ thưa sếp, anh em nghiêm túc lắng nghe thông báo", "Đã rõ, tất cả trật tự hướng về sếp ạ", "Tuân lệnh sếp, ae trật tự nghe chỉ đạo quan trọng", "Nghiêm, mọi người chú ý lắng nghe sếp thông báo"];
+              let notiArr = ["rõ thưa sếp, anh em nghiêm túc lắng nghe", "đã rõ, tất cả trật tự hướng về sếp ạ", "ae trật tự nghe chỉ đạo quan trọng", "mọi người chú ý lắng nghe sếp thông báo"];
               replyText = notiArr[Math.floor(Math.random() * notiArr.length)];
             } else {
-              // MẶC ĐỊNH BẬN RỘN CHỐNG LẶP TUYỆT ĐỐI
-              let moneyMsg = generateUniqueMoneySentence(recentTexts);
+              let moneyMsg = generateMassiveUniqueSentence(recentTexts);
               let tagPrefix = (b > 0 && Math.random() > 0.3) ? `@${peer1.displayName} ` : '';
               replyText = tagPrefix + moneyMsg;
             }

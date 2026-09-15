@@ -10,7 +10,6 @@ const io = new Server(server);
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Cố định sẵn tài khoản Admin và các Chuyên viên nội bộ hệ thống
 let users = [
   { id: 'admin_1', username: 'admin', password: '123321', role: 'admin', avatar: '👑' },
   { id: 'cv_1', username: 'chuyenviena', password: '123', role: 'specialist', avatar: '👨‍💼' },
@@ -18,20 +17,20 @@ let users = [
 ];
 
 let rooms = [
-  { id: 'room_general', name: 'Phòng Chung Tổng', clientId: null, assignedSpecialist: null, status: 'active' }
+  { id: 'room_general', name: 'Phòng Chung Tổng', clientId: null, assignedSpecialist: null, status: 'active', isCustomGroup: false },
+  { id: 'group_demo', name: 'Nhóm Đối Soát Bill TikTok Shop', clientId: null, assignedSpecialist: null, status: 'active', isCustomGroup: true }
 ];
 
 let messages = [
   { id: 1, roomId: 'room_general', senderName: 'Hệ thống', text: 'Chào mừng đến với tổng đài Hubba!', time: '18:00' }
 ];
 
-// API Đăng ký khách hàng mới
 app.post('/api/register', (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) return res.status(400).json({ success: false, message: 'Thiếu thông tin!' });
   
   if (username === 'admin') {
-    return res.status(400).json({ success: false, message: 'Tên tài khoản admin đã tồn tại!' });
+    return res.status(400).json({ success: false, message: 'Tên tài khoản admin không được trùng!' });
   }
 
   const existing = users.find(u => u.username === username);
@@ -41,27 +40,26 @@ app.post('/api/register', (req, res) => {
     id: 'user_' + Date.now(),
     username: username,
     password: password,
-    role: 'client', // Khách hàng đăng ký mới luôn là client
+    role: 'client',
     avatar: '👤'
   };
   users.push(newUser);
 
-  // Tự động tạo phòng chat riêng cho khách để Admin phân công
   const newRoom = {
     id: 'room_' + newUser.id,
     name: `Khách: ${username}`,
     clientId: newUser.id,
     clientName: username,
     assignedSpecialist: 'Chưa phân công',
-    status: 'waiting'
+    status: 'waiting',
+    isCustomGroup: false
   };
   rooms.push(newRoom);
 
-  io.emit('update_rooms', rooms);
+  io.emit('update_data', { rooms, users });
   res.json({ success: true, user: { id: newUser.id, username: newUser.username, role: newUser.role } });
 });
 
-// API Đăng nhập
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   const user = users.find(u => u.username === username && u.password === password);
@@ -70,7 +68,44 @@ app.post('/api/login', (req, res) => {
   res.json({ success: true, user: { id: user.id, username: user.username, role: user.role }, rooms, users });
 });
 
-// API Admin phân công Chuyên viên phụ trách phòng chat
+app.post('/api/create-group', (req, res) => {
+  const { name } = req.body;
+  if (!name) return res.status(400).json({ success: false, message: 'Tên nhóm không được để trống!' });
+
+  const newGroup = {
+    id: 'group_' + Date.now(),
+    name: name,
+    clientId: null,
+    assignedSpecialist: null,
+    status: 'active',
+    isCustomGroup: true
+  };
+  rooms.push(newGroup);
+
+  io.emit('update_data', { rooms, users });
+  res.json({ success: true, rooms });
+});
+
+app.post('/api/create-specialist', (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) return res.status(400).json({ success: false, message: 'Thiếu thông tin chuyên viên!' });
+
+  const existing = users.find(u => u.username === username);
+  if (existing) return res.status(400).json({ success: false, message: 'Tên tài khoản đã tồn tại!' });
+
+  const newSpecialist = {
+    id: 'cv_' + Date.now(),
+    username: username,
+    password: password,
+    role: 'specialist',
+    avatar: '🧑‍💻'
+  };
+  users.push(newSpecialist);
+
+  io.emit('update_data', { rooms, users });
+  res.json({ success: true, users });
+});
+
 app.post('/api/assign-room', (req, res) => {
   const { roomId, specialistName } = req.body;
   const room = rooms.find(r => r.id === roomId);
@@ -79,11 +114,10 @@ app.post('/api/assign-room', (req, res) => {
   room.assignedSpecialist = specialistName;
   room.status = 'assigned';
 
-  io.emit('update_rooms', rooms);
+  io.emit('update_data', { rooms, users });
   res.json({ success: true, rooms });
 });
 
-// Socket.io real-time
 io.on('connection', (socket) => {
   socket.on('join_room', (roomId) => {
     socket.join(roomId);

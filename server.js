@@ -11,8 +11,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 let users = [
-  { id: 'admin_1', username: 'admin', password: '123321', role: 'admin', avatar: '👑', displayName: 'QUẢN LÍ HỆ THỐNG', accountId: 'hubba_admin_01', userAvatarUrl: '/logo.png' },
-  { id: 'cv_1', username: 'chuyenviena', password: '123', role: 'specialist', avatar: '👨‍💼', displayName: 'Chuyên Viên A', accountId: 'staff_a_02', userAvatarUrl: '/logo.png' }
+  { id: 'admin_1', username: 'admin', password: '123321', role: 'admin', avatar: '👑', displayName: 'QUẢN LÍ HỆ THỐNG', accountId: 'hubba_admin_01', userAvatarUrl: '/logo.png', isLocked: false },
+  { id: 'cv_1', username: 'chuyenviena', password: '123', role: 'specialist', avatar: '👨‍💼', displayName: 'Chuyên Viên A', accountId: 'staff_a_02', userAvatarUrl: '/logo.png', isLocked: false }
 ];
 
 let rooms = [];
@@ -48,6 +48,19 @@ app.post('/api/settings', (req, res) => {
   res.json({ success: true, settings: appSettings });
 });
 
+// Admin quản lý khách: Đổi mật khẩu hoặc Khóa tài khoản
+app.post('/api/admin-manage-client', (req, res) => {
+  const { clientId, newPassword, isLocked } = req.body;
+  const client = users.find(u => u.id === clientId);
+  if(!client) return res.status(400).json({ success: false, message: 'Không tìm thấy khách hàng!' });
+
+  if(newPassword) client.password = newPassword;
+  if(isLocked !== undefined) client.isLocked = isLocked;
+
+  io.emit('update_data', { rooms, users });
+  res.json({ success: true, users });
+});
+
 app.post('/api/update-room-avatar', (req, res) => {
   const { roomId, roomAvatarUrl } = req.body;
   const room = rooms.find(r => r.id === roomId);
@@ -77,7 +90,8 @@ app.post('/api/register', (req, res) => {
     avatar: '👤',
     displayName: username,
     accountId: 'client_' + Math.floor(1000 + Math.random() * 9000),
-    userAvatarUrl: '/logo.png'
+    userAvatarUrl: '/logo.png',
+    isLocked: false
   };
   users.push(newUser);
 
@@ -86,7 +100,7 @@ app.post('/api/register', (req, res) => {
   
   const securityRoom = {
     id: securityRoomId,
-    name: username,
+    name: 'Hỗ trợ hệ thống',
     clientId: newUser.id,
     clientName: username,
     assignedSpecialist: '',
@@ -101,7 +115,7 @@ app.post('/api/register', (req, res) => {
   messages.push({
     id: Date.now(),
     roomId: securityRoomId,
-    senderName: 'HUBBA',
+    senderName: 'HUBBA ✔',
     text: `Thông báo đăng nhập an toàn\n${nowStr}\n\nTài khoản ${username} vừa đăng ký và đăng nhập thành công.\nThiết bị: Android\nIP: 123.24.88.148`,
     time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     imageUrl: null,
@@ -119,6 +133,10 @@ app.post('/api/login', (req, res) => {
   const user = users.find(u => u.username === username && u.password === password);
   if (!user) return res.status(400).json({ success: false, message: 'Sai tài khoản hoặc mật khẩu!' });
 
+  if(user.isLocked) {
+    return res.status(400).json({ success: false, message: 'Tài khoản của bạn đã bị khóa bởi quản trị viên!' });
+  }
+
   if (user.role === 'client') {
     const hasSecRoom = rooms.find(r => r.clientId === user.id);
     if (!hasSecRoom) {
@@ -126,7 +144,7 @@ app.post('/api/login', (req, res) => {
       const securityRoomId = 'room_security_' + user.id;
       rooms.push({
         id: securityRoomId,
-        name: user.displayName || user.username,
+        name: 'Hỗ trợ hệ thống',
         clientId: user.id,
         clientName: user.username,
         assignedSpecialist: '',
@@ -139,7 +157,7 @@ app.post('/api/login', (req, res) => {
       messages.push({
         id: Date.now(),
         roomId: securityRoomId,
-        senderName: 'HUBBA',
+        senderName: 'HUBBA ✔',
         text: `Thông báo đăng nhập an toàn\n${nowStr}\n\nTài khoản ${user.username} vừa đăng nhập thành công.\nIP: 123.24.88.148`,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         imageUrl: null,
@@ -209,7 +227,8 @@ app.post('/api/create-specialist', (req, res) => {
     avatar: '🤖',
     displayName: displayName || username,
     accountId: 'staff_' + Math.floor(1000 + Math.random() * 9000),
-    userAvatarUrl: '/logo.png'
+    userAvatarUrl: '/logo.png',
+    isLocked: false
   };
   users.push(newSpecialist);
 

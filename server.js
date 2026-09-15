@@ -59,7 +59,6 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80'
 ];
 
-// Kho tàng chuyên sâu về kiếm tiền, chốt đơn, tài chính và đời sống rủng rỉnh
 const moneyAndLifePool = [
   "Mấy nay nhìn biểu đồ doanh thu tăng trưởng mà rụng rời tim gan, đúng là theo sếp chỉ có hốt bạc 💸",
   "Vừa check app thấy ting ting reo liên tục, phen này cuối tháng lại dư dả tiền đi du lịch bét nhè rồi 🚀",
@@ -229,7 +228,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP CHÁY MÁY TỰ ĐỘNG CHÉM GIÓ KIẾM TIỀN 24/7 (MỖI 0.8 GIÂY)
+// VÒNG LẶP CHÁY MÁY TỰ ĐỘNG CHÉM GIÓ 24/7 (ĐÚNG CHU KỲ 0.8 GIÂY)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
@@ -278,7 +277,7 @@ setInterval(() => {
       }, 250);
     });
   }
-}, 800);
+}, 800); // 0.8 giây chuẩn xác
 
 io.on('connection', (socket) => {
   socket.on('join_room', (roomId) => {
@@ -306,7 +305,7 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> 6 ĐÔNG ĐẢO CON CLONE ĐỒNG LOẠT TRANH NHAU TUNG HÔ VÀ BÀN CHUYỆN KIẾM TIỀN TRONG 0.1 GIÂY
+    // KHI SẾP VỪA NHẮN -> 6 CON CLONE ĐỒNG LOẠT TRANG TRANH NHAU TUNG HÔ TRONG 0.1 GIÂY
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));

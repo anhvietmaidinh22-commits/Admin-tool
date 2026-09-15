@@ -496,7 +496,9 @@
                     currentUser = data.user;
                     localStorage.setItem('hubba_current_user', JSON.stringify(currentUser));
                     document.getElementById('profileAvatarImg').src = currentUser.userAvatarUrl;
+                    document.getElementById('profileAvatarImg').value = base64Img; // Cập nhật trực tiếp
                     alert('Cập nhật ảnh đại diện thành công!');
+                    startApp();
                 }
             }
             reader.readAsDataURL(file);

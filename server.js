@@ -15,15 +15,67 @@ let users = [
   { id: 'cv_1', username: 'chuyenviena', password: '123', role: 'specialist', avatar: '👨‍💼', displayName: 'Chuyên Viên A', accountId: 'staff_a_02', userAvatarUrl: '/logo.png', isLocked: false }
 ];
 
+// Danh sách tên clone ngẫu nhiên có cả "Mẹ Em Tom" và biệt danh đời sống
+const hybridNames = [
+  'Mẹ Em Tom', 'Long Ạ', 'Hằng Xinh Gái', 'Sóc Nông Dân', 'Thanh Trúc', 
+  'Boss Ẩn Danh', 'Thảo Mộc', 'Đức Cận', 'Hoàng Tùng Kute', 'Lan Chi', 
+  'Bé Na', 'Cường Designer', 'Quốc Bảo', 'Gia Hân', 'Mập Mạp', 'Hải Đăng',
+  'Mẹ Suối', 'Bố Cá Voi', 'Trần Văn Mạnh', 'Lê Thị Hoa', 'Phạm Quỳnh Anh'
+];
+
+let cloneUsers = [];
+for(let i = 1; i <= 250; i++) {
+  let randName = hybridNames[Math.floor(Math.random() * hybridNames.length)] + (Math.random() > 0.5 ? ' ' + i : '');
+  cloneUsers.push({
+    id: 'clone_' + i,
+    username: 'clone_' + i,
+    password: '123',
+    role: 'specialist',
+    avatar: '🤖',
+    displayName: randName,
+    accountId: 'clone_id_' + (1000 + i),
+    userAvatarUrl: '/logo.png',
+    isLocked: false
+  });
+}
+
+// Gộp chung clone vào hệ thống users
+users = users.concat(cloneUsers);
+
 let rooms = [];
 let messages = [];
 
-const cloneNames = ['Minh Hoàng', 'Lan Anh', 'Đức Anh', 'Thanh Hằng', 'Quốc Bảo', 'Thuỳ Linh', 'Gia Hân', 'Hoàng Long'];
+// Tự động tạo phòng hệ thống HUBBA ✔ cho mọi tài khoản khi khởi tạo
+users.forEach(u => {
+  const secRoomId = 'room_security_' + u.id;
+  rooms.push({
+    id: secRoomId,
+    name: 'HUBBA ✔',
+    clientId: u.role === 'client' ? u.id : null,
+    clientName: u.username,
+    assignedSpecialist: '',
+    members: [u.username, 'admin'],
+    pinnedMsg: null,
+    roomAvatarUrl: '/logo.png',
+    status: 'system',
+    isCustomGroup: false
+  });
+
+  messages.push({
+    id: Date.now() + Math.random(),
+    roomId: secRoomId,
+    senderName: 'HUBBA ✔',
+    text: `Thông báo đăng nhập an toàn\n2026/09/15\n\nTài khoản ${u.username} vừa đăng nhập thành công.\nThiết bị: Android\nIP đăng nhập: 123.24.88.148\n\nNếu đây không phải là thao tác của bạn, vui lòng liên hệ bộ phận quản trị!`,
+    time: '20:35',
+    imageUrl: null,
+    reactions: {}
+  });
+});
 
 let appSettings = {
   autoBotsChat: true,
   programMode: false,
-  cloneScript: 'Dạ em nghe sếp ơi, để em xử lý ngay lập tức ạ!',
+  cloneScript: '',
   appLogo: '/logo.png'
 };
 
@@ -42,7 +94,6 @@ app.post('/api/settings', (req, res) => {
   res.json({ success: true, settings: appSettings });
 });
 
-// Cập nhật thông tin phòng (Tên nhóm & Ảnh đại diện nhóm)
 app.post('/api/update-room-info', (req, res) => {
   const { roomId, roomName, roomAvatarUrl } = req.body;
   const room = rooms.find(r => r.id === roomId);
@@ -103,12 +154,10 @@ app.post('/api/register', (req, res) => {
   };
   users.push(newUser);
 
-  const nowStr = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
   const securityRoomId = 'room_security_' + newUser.id;
-
   rooms.push({
     id: securityRoomId,
-    name: 'HUBBA',
+    name: 'HUBBA ✔',
     clientId: newUser.id,
     clientName: username,
     assignedSpecialist: '',
@@ -123,8 +172,8 @@ app.post('/api/register', (req, res) => {
     id: Date.now(),
     roomId: securityRoomId,
     senderName: 'HUBBA ✔',
-    text: `Thông báo đăng nhập an toàn\n${nowStr}\n\nTài khoản của bạn vừa đăng ký thành công trên thiết bị mới.\nThời gian: ${new Date().toLocaleTimeString()}\nIP đăng nhập: 123.24.88.148\n\nNếu đây không phải là thao tác của bạn, vui lòng liên hệ ngay bộ phận quản trị!`,
-    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    text: `Thông báo đăng nhập an toàn\n2026/09/15\n\nTài khoản ${username} vừa đăng ký thành công.\nThiết bị: Android\nIP: 123.24.88.148`,
+    time: '20:35',
     imageUrl: null,
     reactions: {}
   });
@@ -139,36 +188,6 @@ app.post('/api/login', (req, res) => {
   if (!user) return res.status(400).json({ success: false, message: 'Sai tài khoản hoặc mật khẩu!' });
 
   if(user.isLocked) return res.status(400).json({ success: false, message: 'Tài khoản đã bị khóa!' });
-
-  if (user.role === 'client') {
-    const hasSecRoom = rooms.find(r => r.clientId === user.id);
-    if (!hasSecRoom) {
-      const nowStr = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
-      const securityRoomId = 'room_security_' + user.id;
-
-      rooms.push({
-        id: securityRoomId,
-        name: 'HUBBA',
-        clientId: user.id,
-        clientName: user.username,
-        assignedSpecialist: '',
-        members: [user.username, 'admin'],
-        pinnedMsg: null,
-        roomAvatarUrl: '/logo.png',
-        status: 'system',
-        isCustomGroup: false
-      });
-      messages.push({
-        id: Date.now(),
-        roomId: securityRoomId,
-        senderName: 'HUBBA ✔',
-        text: `Thông báo đăng nhập an toàn\n${nowStr}\n\nTài khoản của bạn vừa đăng nhập thành công trên thiết bị mới.\nThời gian: ${new Date().toLocaleTimeString()}\nIP đăng nhập: 123.24.88.148`,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        imageUrl: null,
-        reactions: {}
-      });
-    }
-  }
 
   io.emit('update_data', { rooms, users });
   res.json({ success: true, user, rooms, users, settings: appSettings });
@@ -185,13 +204,20 @@ app.post('/api/create-room', (req, res) => {
   const { name, clientName, specialistName } = req.body;
   if (!name) return res.status(400).json({ success: false, message: 'Thiếu tên nhóm!' });
 
+  const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
+  let selectedClones = [];
+  for(let k = 0; k < 15; k++) {
+    let randC = clonePool[Math.floor(Math.random() * clonePool.length)];
+    if(randC && !selectedClones.includes(randC.username)) selectedClones.push(randC.username);
+  }
+
   const newRoom = {
     id: 'room_' + Date.now(),
     name: name,
     clientId: null,
     clientName: clientName || 'Thành viên',
     assignedSpecialist: specialistName || '',
-    members: ['admin', clientName].filter(Boolean),
+    members: ['admin', ...selectedClones, clientName].filter(Boolean),
     pinnedMsg: null,
     roomAvatarUrl: '/logo.png',
     status: 'assigned',
@@ -252,23 +278,34 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // CLONE TỰ ĐỘNG HÙA THEO SAU 3 GIÂY
+    // HÀNG TRĂM CLONE TỰ ĐỘNG HÙA THEO HỘI THOẠI SAU 3 GIÂY
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
-        const randomCloneName = cloneNames[Math.floor(Math.random() * cloneNames.length)];
-        const replyText = appSettings.programMode && appSettings.cloneScript ? appSettings.cloneScript : "Dạ em nghe sếp ơi, để em kiểm tra ngay lập tức ạ!";
+        const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
+        let c1 = clonePool[Math.floor(Math.random() * clonePool.length)];
+        let c2 = clonePool[Math.floor(Math.random() * clonePool.length)];
+        let c3 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
-        const botReply = {
-          id: Date.now() + 1,
-          roomId: data.roomId,
-          senderName: randomCloneName,
-          text: replyText,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          imageUrl: null,
-          reactions: {}
-        };
-        messages.push(botReply);
-        io.to(data.roomId).emit('receive_message', botReply);
+        let reply1 = appSettings.programMode && appSettings.cloneScript ? appSettings.cloneScript : `Chuẩn đấy, nghe câu "${data.text}" là thấy hợp lý phết rồi!`;
+        let reply2 = "Đúng thế thật, anh em cứ triển khai theo hướng này nhé.";
+        let reply3 = "Quá đỉnh luôn, vote 1 like cho sếp haha!";
+
+        const botMsg1 = { id: Date.now() + 1, roomId: data.roomId, senderName: c1.displayName, text: reply1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), reactions: {} };
+        messages.push(botMsg1);
+        io.to(data.roomId).emit('receive_message', botMsg1);
+
+        setTimeout(() => {
+          const botMsg2 = { id: Date.now() + 2, roomId: data.roomId, senderName: c2.displayName, text: reply2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), reactions: {} };
+          messages.push(botMsg2);
+          io.to(data.roomId).emit('receive_message', botMsg2);
+
+          setTimeout(() => {
+            const botMsg3 = { id: Date.now() + 3, roomId: data.roomId, senderName: c3.displayName, text: reply3, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), reactions: {} };
+            messages.push(botMsg3);
+            io.to(data.roomId).emit('receive_message', botMsg3);
+          }, 2000);
+        }, 2000);
+
       }, 3000);
     }
   });

@@ -48,7 +48,6 @@ app.post('/api/settings', (req, res) => {
   res.json({ success: true, settings: appSettings });
 });
 
-// API Đổi ảnh đại diện nhóm (Group Avatar)
 app.post('/api/update-room-avatar', (req, res) => {
   const { roomId, roomAvatarUrl } = req.body;
   const room = rooms.find(r => r.id === roomId);
@@ -87,11 +86,11 @@ app.post('/api/register', (req, res) => {
   
   const securityRoom = {
     id: securityRoomId,
-    name: 'HUBBA',
+    name: username,
     clientId: newUser.id,
     clientName: username,
     assignedSpecialist: '',
-    members: [username],
+    members: [username, 'admin'],
     pinnedMsg: null,
     roomAvatarUrl: '/logo.png',
     status: 'system',
@@ -103,7 +102,7 @@ app.post('/api/register', (req, res) => {
     id: Date.now(),
     roomId: securityRoomId,
     senderName: 'HUBBA',
-    text: `Thông báo đăng nhập an toàn\n${nowStr}\n\nTài khoản của bạn đang được thử đăng nhập trên một thiết bị mới.\nThời gian đăng nhập: ${new Date().toLocaleTimeString()}\nPhương thức: Đăng nhập bằng mật khẩu\nLoại thiết bị: Android\nIP đăng nhập: 123.24.88.148\n\nNếu đây không phải là thao tác của bạn, vui lòng liên hệ ngay bộ phận quản trị!`,
+    text: `Thông báo đăng nhập an toàn\n${nowStr}\n\nTài khoản ${username} vừa đăng ký và đăng nhập thành công.\nThiết bị: Android\nIP: 123.24.88.148`,
     time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     imageUrl: null,
     billInfo: null,
@@ -112,7 +111,7 @@ app.post('/api/register', (req, res) => {
   });
 
   io.emit('update_data', { rooms, users });
-  res.json({ success: true, user: { id: newUser.id, username: newUser.username, role: newUser.role } });
+  res.json({ success: true, user: { id: newUser.id, username: newUser.username, role: newUser.role, displayName: newUser.displayName } });
 });
 
 app.post('/api/login', (req, res) => {
@@ -127,11 +126,11 @@ app.post('/api/login', (req, res) => {
       const securityRoomId = 'room_security_' + user.id;
       rooms.push({
         id: securityRoomId,
-        name: 'HUBBA',
+        name: user.displayName || user.username,
         clientId: user.id,
         clientName: user.username,
         assignedSpecialist: '',
-        members: [user.username],
+        members: [user.username, 'admin'],
         pinnedMsg: null,
         roomAvatarUrl: '/logo.png',
         status: 'system',
@@ -141,7 +140,7 @@ app.post('/api/login', (req, res) => {
         id: Date.now(),
         roomId: securityRoomId,
         senderName: 'HUBBA',
-        text: `Thông báo đăng nhập an toàn\n${nowStr}\n\nTài khoản của bạn vừa đăng nhập thành công trên thiết bị mới.\nThời gian: ${new Date().toLocaleTimeString()}\nIP: 123.24.88.148`,
+        text: `Thông báo đăng nhập an toàn\n${nowStr}\n\nTài khoản ${user.username} vừa đăng nhập thành công.\nIP: 123.24.88.148`,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         imageUrl: null,
         billInfo: null,

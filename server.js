@@ -1,380 +1,115 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hubba - Nhắn tin & Đối soát</title>
-    <link rel="icon" href="/logo.png" type="image/png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="bg-slate-100 h-[100dvh] flex flex-col font-sans select-none overflow-hidden m-0 p-0">
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const path = require('path');
 
-    <div class="flex-1 flex flex-col bg-white max-w-md mx-auto w-full h-full relative shadow-xl overflow-hidden">
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 
-        <!---------------- CÁC TAB NỘI DUNG (CHIẾM KHÔNG GIAN CÒN LẠI) ---------------->
-        <div class="flex-1 relative overflow-hidden flex flex-col">
-            
-            <!-- TAB 1: TIN NHẮN -->
-            <div id="tabMessage" class="absolute inset-0 flex flex-col bg-white z-10">
-                <div class="bg-white px-4 py-3 flex justify-between items-center border-b border-slate-100 shrink-0">
-                    <span class="font-bold text-lg text-slate-900">Hubba Chat & Đối Soát</span>
-                    <button onclick="openAdminModal()" id="adminTopBtn" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hidden shadow-sm">
-                        <i class="fa-solid fa-plus text-sm"></i>
-                    </button>
-                </div>
-                <div id="groupList" class="flex-1 overflow-y-auto divide-y divide-slate-50"></div>
-            </div>
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-            <!-- TAB 2: DANH BẠ -->
-            <div id="tabContact" class="absolute inset-0 flex flex-col bg-slate-50 z-0 hidden">
-                <div class="bg-white px-4 py-3 border-b border-slate-100 font-bold text-lg text-slate-900 shrink-0">Danh bạ nội bộ</div>
-                <div class="p-4 space-y-3 overflow-y-auto flex-1" id="contactList"></div>
-            </div>
+// Dữ liệu mẫu ban đầu
+let users = [
+  { id: 'admin_1', username: 'admin', password: '123', role: 'admin', avatar: '👑' },
+  { id: 'cv_1', username: 'chuyenviena', password: '123', role: 'specialist', avatar: '👨‍💼' }
+];
 
-            <!-- TAB 3: KHÁM PHÁ -->
-            <div id="tabExplore" class="absolute inset-0 flex flex-col bg-slate-50 z-0 hidden">
-                <div class="bg-white px-4 py-3 border-b border-slate-100 font-bold text-lg text-slate-900 shrink-0">Tiện ích Hubba</div>
-                <div class="p-4 space-y-3 overflow-y-auto flex-1">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0">
-                            <i class="fa-solid fa-robot"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-800 text-sm">Hệ thống OCR Bóc Tách Bill</h4>
-                            <p class="text-xs text-slate-500 mt-0.5">Tự động đọc mã giao dịch và xác thực đối soát ngân hàng chính xác.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+// Danh sách phòng chat (Mỗi khách hàng đăng ký sẽ tự động tạo một phòng chat riêng)
+let rooms = [
+  { id: 'room_general', name: 'Phòng Chung Tổng', clientId: null, assignedSpecialist: null, status: 'active' }
+];
 
-            <!-- TAB 4: CỦA TÔI (ĐỔI QUYỀN ADMIN / CHUYÊN VIÊN) -->
-            <div id="tabProfile" class="absolute inset-0 flex flex-col bg-slate-50 z-0 hidden">
-                <div class="bg-white px-4 py-3 border-b border-slate-100 font-bold text-lg text-slate-900 shrink-0">Tài khoản của tôi</div>
-                
-                <div class="bg-white p-4 flex items-center space-x-4 mt-2 border-y border-slate-100 shrink-0">
-                    <img src="/logo.png" alt="Avatar" class="w-14 h-14 rounded-full border shadow-sm object-cover">
-                    <div class="flex-1 min-w-0">
-                        <h3 id="profileName" class="font-bold text-slate-900 text-base truncate">Khách hàng vãng lai</h3>
-                        <p id="profileRole" class="text-xs text-slate-500 font-medium mt-0.5">Quyền: Khách (Chỉ nhắn tin & gửi bill)</p>
-                    </div>
-                </div>
+let messages = [
+  { id: 1, roomId: 'room_general', senderName: 'Hệ thống', text: 'Chào mừng đến với tổng đài Hubba!', time: '18:00' }
+];
 
-                <div class="mt-3 bg-white divide-y divide-slate-100 border-y border-slate-100 shrink-0">
-                    <div class="px-4 py-3.5 flex justify-between items-center text-sm text-slate-700">
-                        <div class="flex items-center space-x-3">
-                            <i class="fa-solid fa-user-shield text-blue-500 w-5"></i>
-                            <span class="text-xs font-semibold">Chuyển đổi quyền nội bộ</span>
-                        </div>
-                        <select id="switchAccountSelect" onchange="changeAccount(this.value)" class="bg-slate-100 text-slate-800 text-xs rounded-lg px-2.5 py-2 outline-none font-medium border border-slate-200">
-                        </select>
-                    </div>
-                    <div onclick="openAdminModal()" id="profileAdminMenu" class="px-4 py-3.5 flex justify-between items-center text-sm text-slate-700 cursor-pointer hover:bg-slate-50 hidden">
-                        <div class="flex items-center space-x-3">
-                            <i class="fa-solid fa-user-plus text-emerald-500 w-5"></i>
-                            <span class="text-xs font-semibold">Thêm nhân sự Chuyên viên mới</span>
-                        </div>
-                        <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-                    </div>
-                </div>
-            </div>
+// API Đăng ký tài khoản mới (Khách hàng) -> Đồng thời tạo phòng chat riêng cho khách đó
+app.post('/api/register', (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) return res.status(400).json({ success: false, message: 'Thiếu thông tin!' });
+  
+  const existing = users.find(u => u.username === username);
+  if (existing) return res.status(400).json({ success: false, message: 'Tên đăng nhập đã tồn tại!' });
 
-        </div>
+  const newUser = {
+    id: 'user_' + Date.now(),
+    username: username,
+    password: password,
+    role: 'client',
+    avatar: '👤'
+  };
+  users.push(newUser);
 
-        <!---------------- KHUNG CHAT CHI TIẾT (TRƯỢT PHỦ LÊN TRÊN) ---------------->
-        <div id="chatRoomView" class="absolute inset-0 bg-white z-30 flex flex-col transform translate-x-full transition-transform duration-300">
-            <div class="bg-blue-600 text-white px-4 py-3 flex items-center justify-between shrink-0 shadow-sm">
-                <div class="flex items-center space-x-3">
-                    <button onclick="closeChatRoom()" class="text-white text-lg px-1"><i class="fa-solid fa-arrow-left"></i></button>
-                    <div>
-                        <h3 id="activeRoomName" class="font-bold text-sm leading-tight">Nhóm Chung</h3>
-                        <span class="text-[10px] text-emerald-200">Trực tuyến</span>
-                    </div>
-                </div>
-            </div>
-            <div id="messageContainer" class="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50"></div>
-            <div class="p-2.5 bg-white border-t border-slate-100 flex items-center space-x-2 shrink-0">
-                <label class="cursor-pointer text-slate-500 hover:text-blue-600 p-2 text-lg">
-                    <i class="fa-regular fa-image"></i>
-                    <input type="file" id="billInput" class="hidden">
-                </label>
-                <input type="text" id="messageInput" placeholder="Nhập tin nhắn..." class="flex-1 bg-slate-100 border-none rounded-full px-4 py-2.5 outline-none text-xs sm:text-sm text-slate-800">
-                <button onclick="sendMessage()" class="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center text-sm shadow-sm shrink-0">
-                    <i class="fa-solid fa-paper-plane"></i>
-                </button>
-            </div>
-        </div>
+  // Tự động tạo phòng chat riêng cho khách hàng mới này để Admin phân quyền
+  const newRoom = {
+    id: 'room_' + newUser.id,
+    name: `Khách: ${username}`,
+    clientId: newUser.id,
+    clientName: username,
+    assignedSpecialist: 'Chưa phân công',
+    status: 'waiting' // Trạng thái chờ Admin phân công
+  };
+  rooms.push(newRoom);
 
-        <!---------------- THANH NAVIGATION BAR CỐ ĐỊNH Ở ĐÁY MÀN HÌNH ---------------->
-        <div class="bg-white border-t border-slate-200 h-14 flex justify-around items-center shrink-0 z-20 w-full shadow-lg">
-            <button onclick="switchTab('message')" id="navMsg" class="flex flex-col items-center justify-center flex-1 text-blue-600 transition py-1">
-                <i class="fa-solid fa-comment text-base"></i>
-                <span class="text-[10px] mt-0.5 font-medium">Tin nhắn</span>
-            </button>
-            <button onclick="switchTab('contact')" id="navContact" class="flex flex-col items-center justify-center flex-1 text-slate-400 transition py-1">
-                <i class="fa-solid fa-address-book text-base"></i>
-                <span class="text-[10px] mt-0.5 font-medium">Danh bạ</span>
-            </button>
-            <button onclick="switchTab('explore')" id="navExplore" class="flex flex-col items-center justify-center flex-1 text-slate-400 transition py-1">
-                <i class="fa-solid fa-compass text-base"></i>
-                <span class="text-[10px] mt-0.5 font-medium">Khám phá</span>
-            </button>
-            <button onclick="switchTab('profile')" id="navProfile" class="flex flex-col items-center justify-center flex-1 text-slate-400 transition py-1">
-                <i class="fa-solid fa-user text-base"></i>
-                <span class="text-[10px] mt-0.5 font-medium">Của tôi</span>
-            </button>
-        </div>
+  // Báo realtime cho Admin thấy có khách hàng mới đăng ký & chờ phân công
+  io.emit('update_rooms', rooms);
 
-    </div>
+  res.json({ success: true, user: { id: newUser.id, username: newUser.username, role: newUser.role } });
+});
 
-    <!-- Modal Admin Tạo Nhân Sự -->
-    <div id="adminModal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white p-5 rounded-2xl w-full max-w-sm shadow-2xl">
-            <h3 class="font-bold text-base mb-3 text-slate-900">Thêm Chuyên Viên Mới</h3>
-            <input type="text" id="newCvName" placeholder="Tên nhân sự..." class="w-full bg-slate-100 border-none p-3 rounded-xl mb-4 outline-none text-sm text-slate-800">
-            <div class="flex justify-end space-x-2">
-                <button onclick="closeAdminModal()" class="px-4 py-2 bg-slate-100 rounded-xl text-xs font-medium text-slate-600">Đóng</button>
-                <button onclick="createSpecialist()" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-medium">Xác nhận</button>
-            </div>
-        </div>
-    </div>
+// API Đăng nhập
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+  const user = users.find(u => u.username === username && u.password === password);
+  if (!user) return res.status(400).json({ success: false, message: 'Sai tài khoản hoặc mật khẩu!' });
 
-    <script>
-        const socket = io();
-        let currentUser = { id: 'guest', username: 'Khách hàng', role: 'guest' };
-        let usersData = [];
-        let groupsData = [];
-        let currentGroupId = 'group_general';
+  res.json({ success: true, user: { id: user.id, username: user.username, role: user.role }, rooms, users });
+});
 
-        async function initApp() {
-            const res = await fetch('/api/init');
-            const data = await res.json();
-            usersData = data.users;
-            groupsData = data.groups;
-            
-            updateAccountInfo();
-            renderGroups();
-            renderContacts();
-            socket.emit('join_group', currentGroupId);
-            renderMessages(data.messages);
-        }
+// API Admin phân công Chuyên viên phụ trách phòng chat của khách
+app.post('/api/assign-room', (req, res) => {
+  const { roomId, specialistName } = req.body;
+  const room = rooms.find(r => r.id === roomId);
+  if (!room) return res.status(400).json({ success: false, message: 'Không tìm thấy phòng!' });
 
-        function updateAccountInfo() {
-            const select = document.getElementById('switchAccountSelect');
-            select.innerHTML = '<option value="guest">-- Chọn quyền nội bộ --</option>';
-            usersData.forEach(u => {
-                const opt = document.createElement('option');
-                opt.value = u.id;
-                opt.textContent = `${u.username} (${u.role.toUpperCase()})`;
-                if (currentUser && u.id === currentUser.id) opt.selected = true;
-                select.appendChild(opt);
-            });
+  room.assignedSpecialist = specialistName;
+  room.status = 'assigned'; // Đã được phân công
 
-            const profileName = document.getElementById('profileName');
-            const profileRole = document.getElementById('profileRole');
-            const adminTopBtn = document.getElementById('adminTopBtn');
-            const profileAdminMenu = document.getElementById('profileAdminMenu');
+  // Cập nhật realtime cho toàn hệ thống
+  io.emit('update_rooms', rooms);
+  res.json({ success: true, rooms });
+});
 
-            if (currentUser.role === 'guest') {
-                profileName.textContent = 'Khách hàng vãng lai';
-                profileRole.textContent = 'Quyền: Khách (Nhắn tin & gửi bill)';
-                adminTopBtn.classList.add('hidden');
-                profileAdminMenu.classList.add('hidden');
-            } else if (currentUser.role === 'admin') {
-                profileName.textContent = currentUser.username;
-                profileRole.textContent = 'Quyền: Quản trị viên Tổng (Admin)';
-                adminTopBtn.classList.remove('hidden');
-                profileAdminMenu.classList.remove('hidden');
-            } else {
-                profileName.textContent = currentUser.username;
-                profileRole.textContent = 'Quyền: Chuyên viên đối soát';
-                adminTopBtn.classList.add('hidden');
-                profileAdminMenu.classList.add('hidden');
-            }
-        }
+// Socket.io real-time
+io.on('connection', (socket) => {
+  socket.on('join_room', (roomId) => {
+    socket.join(roomId);
+    const roomMsgs = messages.filter(m => m.roomId === roomId);
+    socket.emit('load_messages', roomMsgs);
+  });
 
-        function changeAccount(val) {
-            if (val === 'guest') {
-                currentUser = { id: 'guest', username: 'Khách hàng', role: 'guest' };
-            } else {
-                currentUser = usersData.find(u => u.id === val);
-            }
-            updateAccountInfo();
-            renderContacts();
-        }
+  socket.on('send_message', (data) => {
+    let messageText = data.text;
+    if (data.hasBill) {
+      messageText += ` [🤖 OCR Tự động: Xác thực bill thành công!]`;
+    }
 
-        function switchTab(tabName) {
-            document.getElementById('tabMessage').style.zIndex = "0";
-            document.getElementById('tabContact').style.zIndex = "0";
-            document.getElementById('tabExplore').style.zIndex = "0";
-            document.getElementById('tabProfile').style.zIndex = "0";
+    const newMessage = {
+      id: Date.now(),
+      roomId: data.roomId,
+      senderName: data.senderName,
+      text: messageText,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
 
-            document.getElementById('tabMessage').classList.add('hidden');
-            document.getElementById('tabContact').classList.add('hidden');
-            document.getElementById('tabExplore').classList.add('hidden');
-            document.getElementById('tabProfile').classList.add('hidden');
+    messages.push(newMessage);
+    io.to(data.roomId).emit('receive_message', newMessage);
+  });
+});
 
-            document.getElementById('navMsg').className = "flex flex-col items-center justify-center flex-1 text-slate-400 transition py-1";
-            document.getElementById('navContact').className = "flex flex-col items-center justify-center flex-1 text-slate-400 transition py-1";
-            document.getElementById('navExplore').className = "flex flex-col items-center justify-center flex-1 text-slate-400 transition";
-            document.getElementById('navProfile').className = "flex flex-col items-center justify-center flex-1 text-slate-400 transition";
-
-            if(tabName === 'message') {
-                const el = document.getElementById('tabMessage');
-                el.classList.remove('hidden');
-                el.style.zIndex = "10";
-                document.getElementById('navMsg').className = "flex flex-col items-center justify-center flex-1 text-blue-600 transition py-1";
-            } else if(tabName === 'contact') {
-                const el = document.getElementById('tabContact');
-                el.classList.remove('hidden');
-                el.style.zIndex = "10";
-                document.getElementById('navContact').className = "flex flex-col items-center justify-center flex-1 text-blue-600 transition py-1";
-            } else if(tabName === 'explore') {
-                const el = document.getElementById('tabExplore');
-                el.classList.remove('hidden');
-                el.style.zIndex = "10";
-                document.getElementById('navExplore').className = "flex flex-col items-center justify-center flex-1 text-blue-600 transition py-1";
-            } else if(tabName === 'profile') {
-                const el = document.getElementById('tabProfile');
-                el.classList.remove('hidden');
-                el.style.zIndex = "10";
-                document.getElementById('navProfile').className = "flex flex-col items-center justify-center flex-1 text-blue-600 transition py-1";
-            }
-        }
-
-        function renderGroups() {
-            const list = document.getElementById('groupList');
-            list.innerHTML = '';
-            groupsData.forEach(g => {
-                const div = document.createElement('div');
-                div.className = "px-4 py-3.5 flex items-center space-x-3 cursor-pointer hover:bg-slate-50 transition border-b border-slate-50";
-                div.innerHTML = `
-                    <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-base shrink-0 shadow-sm">HB</div>
-                    <div class="flex-1 min-w-0">
-                        <div class="flex justify-between items-baseline">
-                            <h4 class="font-bold text-slate-900 text-sm truncate">${g.name}</h4>
-                            <span class="text-[10px] text-emerald-600 font-medium">Trực tuyến</span>
-                        </div>
-                        <p class="text-xs text-slate-500 truncate mt-0.5">Nhấn để vào phòng chat đối soát bill...</p>
-                    </div>
-                `;
-                div.onclick = () => {
-                    currentGroupId = g.id;
-                    document.getElementById('activeRoomName').textContent = g.name;
-                    socket.emit('join_group', currentGroupId);
-                    document.getElementById('chatRoomView').classList.remove('translate-x-full');
-                };
-                list.appendChild(div);
-            });
-        }
-
-        function renderContacts() {
-            const list = document.getElementById('contactList');
-            list.innerHTML = '';
-            usersData.forEach(u => {
-                const div = document.createElement('div');
-                div.className = "bg-white p-3.5 rounded-2xl flex items-center space-x-3 shadow-sm border border-slate-100";
-                div.innerHTML = `
-                    <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-700">${u.username.charAt(0)}</div>
-                    <div class="flex-1">
-                        <h4 class="font-bold text-slate-800 text-sm">${u.username}</h4>
-                        <span class="text-[10px] px-2 py-0.5 rounded-full uppercase font-semibold ${u.role==='admin'?'bg-purple-100 text-purple-700':'bg-emerald-100 text-emerald-700'}">${u.role}</span>
-                    </div>
-                `;
-                list.appendChild(div);
-            });
-        }
-
-        function closeChatRoom() {
-            document.getElementById('chatRoomView').classList.add('translate-x-full');
-        }
-
-        function renderMessages(msgs) {
-            const container = document.getElementById('messageContainer');
-            container.innerHTML = '';
-            msgs.filter(m => m.groupId === currentGroupId).forEach(m => {
-                const div = document.createElement('div');
-                div.className = `flex flex-col ${m.senderId === currentUser.id ? 'items-end' : 'items-start'}`;
-                div.innerHTML = `
-                    <span class="text-[10px] text-slate-400 px-1 mb-0.5">${m.senderName}</span>
-                    <div class="max-w-[80%] px-4 py-2.5 rounded-2xl text-xs sm:text-sm shadow-sm break-words ${m.senderId === currentUser.id ? 'bg-blue-600 text-white rounded-br-none' : 'bg-white border border-slate-100 text-slate-800 rounded-bl-none'}">
-                        ${m.text}
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const billInput = document.getElementById('billInput');
-            const text = input.value.trim();
-            const hasBill = billInput.files.length > 0;
-
-            if (!text && !hasBill) return;
-
-            let finalMsgText = text;
-            if (hasBill) {
-                finalMsgText += ` [📎 Đã tải lên hóa đơn đối soát OCR]`;
-            }
-
-            socket.emit('send_message', {
-                groupId: currentGroupId,
-                senderId: currentUser.id !== 'guest' ? currentUser.id : 'guest_user',
-                senderName: currentUser.username,
-                text: finalMsgText,
-                hasBill: hasBill
-            });
-
-            input.value = '';
-            billInput.value = '';
-        }
-
-        socket.on('receive_message', (msg) => {
-            const container = document.getElementById('messageContainer');
-            const div = document.createElement('div');
-            div.className = `flex flex-col ${msg.senderId === currentUser.id ? 'items-end' : 'items-start'}`;
-            div.innerHTML = `
-                <span class="text-[10px] text-slate-400 px-1 mb-0.5">${msg.senderName}</span>
-                <div class="max-w-[80%] px-4 py-2.5 rounded-2xl text-xs sm:text-sm shadow-sm break-words ${msg.senderId === currentUser.id ? 'bg-blue-600 text-white rounded-br-none' : 'bg-white border border-slate-100 text-slate-800 rounded-bl-none'}">
-                    ${msg.text}
-                </div>
-            `;
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
-        });
-
-        function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
-        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
-
-        async function createSpecialist() {
-            const name = document.getElementById('newCvName').value.trim();
-            if (!name) return;
-            const res = await fetch('/api/specialists', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: name })
-            });
-            const data = await res.json();
-            if (data.success) {
-                usersData.push(data.user);
-                updateAccountInfo();
-                renderContacts();
-                closeAdminModal();
-                document.getElementById('newCvName').value = '';
-                alert('Tạo chuyên viên thành công!');
-            }
-        }
-
-        socket.on('update_users', (newUsers) => {
-            usersData = newUsers;
-            updateAccountInfo();
-            renderContacts();
-        });
-
-        initApp();
-    </script>
-</body>
-</html>
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Hubba server đang chạy tại cổng ${PORT}`);
+});

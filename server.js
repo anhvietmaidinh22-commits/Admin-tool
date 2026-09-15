@@ -63,35 +63,47 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80'
 ];
 
-// KHO TỪ VỰNG MỞ RỘNG CỰC KỲ ĐỒ SỘ (HÀNG TRIỆU TỔ HỢP KHÔNG BAO GIỜ TRÙNG)
-const bigVerbs = ["chốt đơn", "ting ting", "hốt bạc", "kiếm tiền", "nổ đơn", "thu hồi vốn", "scale số", "bơm tiền", "chạy ads", "úp sọt", "gom hàng", "đẩy số", "vào tiền", "bắt đáy", "chốt sổ", "quay vòng"];
-const bigAdverbs = ["nhanh tay", "liền tay", "gấp", "ngay và luôn", "liền", "liền đi", "liền nào", "liền giùm", "gấp rút", "liên tục"];
-const bigNouns = ["bội thu", "ngập ví", "cháy phố", "sập web", "rủng rỉnh", "phê lòi", "ấm cái bụng", "bạt ngàn", "tẹt ga", "đột phá", "cực căng", "siêu tốc", "vô cực", "bão hòa", "lãi khủng", "căng đét"];
-const bigTails = ["đừng bỏ lỡ", "quá uy tín", "đỉnh chóp", "cháy quá", "quá bén", "mượt mà", "chuẩn bài", "khét lẹt", "vãi chưởng", "hết nước chấm", "anh em ơi", "nhé ae", "phết đấy", "căng cực", "quá đã", "thật sự"];
+const storyStarters = [
+  "hôm qua thức khuya check đơn mà sáng nay sập nguồn luôn các ông ạ",
+  "vừa làm cốc cafe đá xong tỉnh cả người, chuẩn bị chiến tiếp",
+  "dạo này ae thấy hệ thống chạy mượt không, tôi thấy êm phết rồi đấy",
+  "ngồi nhìn số dư nhảy mà công nhận cuốn thực sự",
+  "tính ra làm việc cùng sếp đúng là mở mang tầm mắt bao nhiêu"
+];
 
-function generateMassiveUniqueSentence(recentTexts = []) {
-  let attempts = 0;
+const shareReplies = [
+  "chuẩn luôn ông ơi, tôi cũng vừa thế xong",
+  "công nhận đấy, nghĩ lại vẫn thấy đỉnh",
+  "thế thì ông phải cố gắng hơn nữa rồi",
+  "chuẩn bài đấy, cứ đà này thì ấm",
+  "đồng quan điểm với ông luôn, quá chuẩn",
+  "nghe cuốn thế, để tôi áp dụng xem sao"
+];
+
+const praiseAndMoney = [
+  "nhờ có sếp dẫn đường nên cái gì cũng thuận lợi",
+  "sếp lớn tài tình thật, ae cứ thế phát huy",
+  "chờ lệnh sếp là tiền về ngập ví thôi",
+  "đỉnh cao tư duy của sếp làm ae nể phục",
+  "cứ bám sát sếp là thể nào cũng hốt bạc"
+];
+
+function generateInteractiveDialogue(recentTexts = []) {
+  let randType = Math.random();
   let candidate = "";
+  let attempts = 0;
+
   do {
-    let v = bigVerbs[Math.floor(Math.random() * bigVerbs.length)];
-    let adv = bigAdverbs[Math.floor(Math.random() * bigAdverbs.length)];
-    let n = bigNouns[Math.floor(Math.random() * bigNouns.length)];
-    let t = bigTails[Math.floor(Math.random() * bigTails.length)];
-    
-    let patterns = [
-      `${v} ${adv} ${n} ${t}`,
-      `Cứ ${v} là ${n} ${t}`,
-      `Phen này ${v} ${n} ${t}`,
-      `${v} ${n} ${adv}`,
-      `Đúng bài ${v} ${n}`,
-      `${v} ${adv} cho ${n} ${t}`,
-      `Cố lên ae ${v} ${n}`
-    ];
-    
-    candidate = patterns[Math.floor(Math.random() * patterns.length)];
+    if (randType < 0.4) {
+      candidate = storyStarters[Math.floor(Math.random() * storyStarters.length)];
+    } else if (randType < 0.7) {
+      candidate = shareReplies[Math.floor(Math.random() * shareReplies.length)];
+    } else {
+      candidate = praiseAndMoney[Math.floor(Math.random() * praiseAndMoney.length)];
+    }
     attempts++;
-  } while (recentTexts.includes(candidate) && attempts < 50);
-  
+  } while (recentTexts.includes(candidate) && attempts < 30);
+
   return candidate;
 }
 
@@ -252,7 +264,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP BACKGROUND 2.5 GIÂY
+// VÒNG LẶP BACKGROUND CHUẨN 3.5 GIÂY
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
@@ -269,11 +281,11 @@ setInterval(() => {
       while(cl2.id === cl1.id) cl2 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
       const roomMsgs = messages.filter(m => m.roomId === activeRoom.id);
-      let recentTexts = roomMsgs.slice(-100).map(m => m.text);
+      let recentTexts = roomMsgs.slice(-150).map(m => m.text);
 
-      let text1 = generateMassiveUniqueSentence(recentTexts);
+      let text1 = generateInteractiveDialogue(recentTexts);
       recentTexts.push(text1);
-      let text2 = `@${cl1.displayName} ${generateMassiveUniqueSentence(recentTexts)}`;
+      let text2 = `@${cl1.displayName} ${generateInteractiveDialogue(recentTexts)}`;
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
       const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
@@ -284,10 +296,10 @@ setInterval(() => {
       setTimeout(() => {
         messages.push(m2);
         io.to(activeRoom.id).emit('receive_message', m2);
-      }, 800);
+      }, 1000);
     });
   }
-}, 2500);
+}, 3500);
 
 io.on('connection', (socket) => {
   socket.on('join_room', (roomId) => {
@@ -315,14 +327,14 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> SINH CÂU HOÀN TOÀN ĐỘNG, KIỂM TRA BỘ NHỚ LỊCH SỬ 100 TIN NHẮN ĐỂ CHỐNG LẶP
+    // KHI SẾP VỪA NHẮN -> PHẢN HỒI ĐÚNG NHỊP ĐỘ CHUẨN 3.5 GIÂY
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
-        let lowerKw = (data.text || "").toLowerCase();
+        let userMsg = data.text || "";
         
         let totalBatches = 15; 
-        let batchInterval = 2500; 
+        let batchInterval = 3500; 
 
         for(let b = 0; b < totalBatches; b++) {
           setTimeout(() => {
@@ -331,33 +343,32 @@ io.on('connection', (socket) => {
             while(peer1.id === randUser.id) peer1 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
             const roomMsgs = messages.filter(m => m.roomId === data.roomId);
-            let recentTexts = roomMsgs.slice(-100).map(m => m.text);
+            let recentTexts = roomMsgs.slice(-150).map(m => m.text);
 
             let replyText = "";
+            let subText = userMsg.length > 20 ? userMsg.substring(0, 20) + "..." : userMsg;
 
-            if (lowerKw === 'alo') {
-              let aloArr = ["nghe sếp, có kèo gì mới đấy ạ", "sẵn sàng hốt bạc cùng sếp nhé", "đang sẵn đơn lắm rồi", "sếp chỉ đạo đi ae sẵn sàng rồi"];
+            if (userMsg.toLowerCase() === 'alo') {
+              let aloArr = ["nghe sếp ơi, có sếp chỉ đạo là anh em an tâm tuyệt đối", "sẵn sàng nhận lệnh từ sếp lớn", "đang túc trực chờ sếp phân bổ công việc"];
               replyText = aloArr[Math.floor(Math.random() * aloArr.length)];
-            } else if (lowerKw.includes('chờ tin') || lowerKw.includes('chờ lệnh')) {
-              let waitArr = ["đã rõ sếp, anh em vị trí sẵn sàng chờ tin", "đang nín thở chờ lệnh xuất kích", "ae túc trực 24/7 chờ ting ting", "đợi tin sếp là lên đỉnh doanh thu"];
-              replyText = waitArr[Math.floor(Math.random() * waitArr.length)];
-            } else if (lowerKw.includes('nhóm im') || lowerKw.includes('trầm')) {
-              let quietArr = ["không ai im cả đâu sếp, ae đang chuẩn bị tinh thần nổ đơn", "sôi động ngay lập tức, sếp cho chỉ đạo đi", "ae đang lót dép hóng lệnh sếp", "không thể chậm trễ, nhao vào chốt đơn thui"];
-              replyText = quietArr[Math.floor(Math.random() * quietArr.length)];
-            } else if (lowerKw.includes('trật tự') || lowerKw.includes('thông báo')) {
-              let notiArr = ["rõ thưa sếp, anh em nghiêm túc lắng nghe", "đã rõ, tất cả trật tự hướng về sếp ạ", "ae trật tự nghe chỉ đạo quan trọng", "mọi người chú ý lắng nghe sếp thông báo"];
-              replyText = notiArr[Math.floor(Math.random() * notiArr.length)];
             } else {
-              let moneyMsg = generateMassiveUniqueSentence(recentTexts);
-              let tagPrefix = (b > 0 && Math.random() > 0.3) ? `@${peer1.displayName} ` : '';
-              replyText = tagPrefix + moneyMsg;
+              let formats = [
+                `chuẩn rồi sếp ơi, về việc "${subText}" thì anh em hoàn toàn ủng hộ`,
+                `đồng quan điểm với sếp về "${subText}", quá chuẩn xác`,
+                `nghe sếp nhắc đến "${subText}" là ae biết phải làm gì rồi`,
+                `chuẩn bài "${subText}", nhờ có sếp định hướng mà mọi thứ mượt mà hẳn`
+              ];
+              replyText = formats[Math.floor(Math.random() * formats.length)];
             }
+
+            let tagPrefix = (b > 0 && Math.random() > 0.3) ? `@${peer1.displayName} ` : '';
+            let finalReply = tagPrefix + replyText;
 
             const mRep = {
               id: Date.now() + b,
               roomId: data.roomId,
               senderName: randUser.displayName,
-              text: replyText,
+              text: finalReply,
               time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
               imageUrl: null,
               reactions: {}

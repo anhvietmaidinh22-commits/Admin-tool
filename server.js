@@ -20,8 +20,7 @@ const hybridNames = [
   'Boss Ẩn Danh', 'Thảo Mộc', 'Đức Cận', 'Hoàng Tùng Kute', 'Lan Chi', 
   'Bé Na', 'Cường Designer', 'Quốc Bảo', 'Gia Hân', 'Mập Mạp', 'Hải Đăng',
   'Mẹ Suối', 'Bố Cá Voi', 'Tuấn Anh Sài Gòn', 'Mai Phương Thảo', 'Huy Bảnh', 'Đạt Villa',
-  'Hải Yến', 'Khánh Linh', 'Bảo Ngọc', 'Minh Triều', 'Hoàng Long', 'Thu Trang',
-  'Tuấn Kiệt', 'Phương Linh', 'Thanh Sơn', 'Hồng Nhung', 'Quang Hải', 'Diệu Linh'
+  'Hải Yến', 'Khánh Linh', 'Bảo Ngọc', 'Minh Triều', 'Hoàng Long', 'Thu Trang'
 ];
 
 let cloneUsers = [];
@@ -56,11 +55,9 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&auto=format&fit=crop&q=80',
   'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=500&auto=format&fit=crop&q=80',
   'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=500&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=500&auto=format&fit=crop&q=80'
+  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80'
 ];
 
-// Kho tàng hàng chục mẫu câu đa dạng chống lặp tuyệt đối
 const massiveRealChatPool = [
   "Mấy ông ơi chiều nay có ai đi làm cốc trà chanh chém gió không, ngồi văn phòng mãi cuồng chân quá",
   "Vừa định ngủ trưa thì lại đói bụng, ai ord hộ ly trà sữa béo ngậy với",
@@ -73,12 +70,7 @@ const massiveRealChatPool = [
   "Đang ngồi nghe nhạc chill chill thì lại thèm đi du lịch Sapa quá các bác ạ",
   "Ai có link nhạc gì hay hay gửi lên đây cho tui nghe ké với nào",
   "Sáng ra mở mắt thấy thời tiết mát mẻ tự nhiên thấy yêu đời hẳn ra",
-  "Có ai rành về công nghệ không tư vấn giúp em con máy tính cày việc với",
-  "Chiều nay hẹn nhau đá trận bóng giao lưu đi anh em ơi, người cứng hết cả rồi",
-  "Vừa được thưởng nóng xong, phấn khởi quá đi mất các bác ạ haha",
-  "Cả tuần nay toàn ăn mì tôm, thèm một bữa cơm nhà mẹ nấu quá đi",
-  "Ai biết quán lẩu nào ngon quanh khu này không giới thiệu em với",
-  "Cuối tuần này có ai tổ chức đi camping đâu không cho em ké một suất với"
+  "Có ai rành về công nghệ không tư vấn giúp em con máy tính cày việc với"
 ];
 
 let appSettings = {
@@ -89,7 +81,7 @@ let appSettings = {
 };
 
 let lastUserActivity = 0;
-let recentMessagesCache = []; // Bộ nhớ đệm chống lặp câu chữ
+let recentMessagesCache = [];
 
 app.get('/api/settings', (req, res) => {
   res.json({ success: true, settings: appSettings });
@@ -239,11 +231,11 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// CLONE TỰ ĐỘNG CHÁY MÁY MỖI 1.5 GIÂY (CHỐNG LẶP TUYỆT ĐỐI)
+// CLONE TỰ ĐỘNG LIÊN TỤC MỖI 0.5 GIÂY (CHẠY KHÔNG NGỪNG NGHỈ)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
-    if (now - lastUserActivity < 15000) return;
+    if (now - lastUserActivity < 2000) return; // Chỉ nhường sếp 2 giây ngắn ngủi
 
     const activeRoom = rooms[Math.floor(Math.random() * rooms.length)];
     if (activeRoom.id === 'room_hubba_system') return;
@@ -254,7 +246,6 @@ setInterval(() => {
 
     while(cl2.id === cl1.id) cl2 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
-    // Lọc bỏ các câu vừa xuất hiện trong cache để không bị lặp
     let availablePool = massiveRealChatPool.filter(item => !recentMessagesCache.includes(item));
     if (availablePool.length === 0) {
       recentMessagesCache = [];
@@ -265,13 +256,10 @@ setInterval(() => {
     recentMessagesCache.push(text1);
     if(recentMessagesCache.length > 15) recentMessagesCache.shift();
 
-    let text2 = `@${cl1.displayName} Chuẩn không cần chỉnh luôn bác ơi, quá hợp lý!`;
+    let text2 = `@${cl1.displayName} Chuẩn không cần chỉnh luôn bác ơi!`;
 
-    let shouldSendImg = Math.random() < 0.1;
-    let attachImg = shouldSendImg ? realLifeImages[Math.floor(Math.random() * realLifeImages.length)] : null;
-
-    const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: attachImg, reactions: {} };
-    const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: null, reactions: {} };
+    const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
+    const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
 
     messages.push(m1);
     io.to(activeRoom.id).emit('receive_message', m1);
@@ -279,9 +267,9 @@ setInterval(() => {
     setTimeout(() => {
       messages.push(m2);
       io.to(activeRoom.id).emit('receive_message', m2);
-    }, 400);
+    }, 200);
   }
-}, 1500);
+}, 500); // Đẩy tốc độ lên 0.5 giây/lần
 
 io.on('connection', (socket) => {
   socket.on('join_room', (roomId) => {
@@ -301,7 +289,7 @@ io.on('connection', (socket) => {
       roomId: data.roomId,
       senderName: actualSenderName,
       text: data.text,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
       imageUrl: data.imageUrl || null,
       reactions: {}
     };
@@ -309,7 +297,7 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> PHẢN HỒI LẬP TỨC TRONG 0.2 GIÂY
+    // KHI SẾP VỪA NHẮN -> PHẢN HỒI LẬP TỨC TRONG 0.1 GIÂY
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
@@ -320,31 +308,34 @@ io.on('connection', (socket) => {
         while(c2.id === c1.id) c2 = clonePool[Math.floor(Math.random() * clonePool.length)];
         while(c3.id === c1.id || c3.id === c2.id) c3 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
-        let r1 = appSettings.programMode && appSettings.cloneScript ? appSettings.cloneScript : `Ơi sếp ơi, vừa thấy sếp nhắn "${data.text}" là em có mặt ngay lập tức nè 😄`;
-        let r2 = `@${c1.displayName} Chuẩn luôn sếp, vụ này để anh em phối hợp xử lý mượt mà luôn!`;
+        let lower = data.text.toLowerCase();
+        let targetReply = `Ơi sếp ơi, nghe sếp nhắn "${data.text}" là em có mặt ngay lập tức nè 😄`;
+        if (lower.includes('tiền') || lower.includes('đơn') || lower.includes('thu nhập')) {
+          targetReply = `Chuẩn luôn sếp ơi, vụ "${data.text}" này để anh em phối hợp hốt bạc rủng rỉnh luôn 💸`;
+        }
+
+        let r1 = appSettings.programMode && appSettings.cloneScript ? appSettings.cloneScript : targetReply;
+        let r2 = `@${c1.displayName} Chuẩn sếp, vụ này để anh em bám sát xử lý mượt mà luôn!`;
         let r3 = `@${c2.displayName} @${c1.displayName} Quá uy tín, cứ theo chỉ đạo của sếp mà chiến thôi ae ơi 🚀`;
 
-        let shouldSendImg = Math.random() < 0.2;
-        let attachImg = shouldSendImg ? realLifeImages[Math.floor(Math.random() * realLifeImages.length)] : null;
-
-        const m1 = { id: Date.now() + 1, roomId: data.roomId, senderName: c1.displayName, text: r1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: attachImg, reactions: {} };
+        const m1 = { id: Date.now() + 1, roomId: data.roomId, senderName: c1.displayName, text: r1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
         messages.push(m1);
         io.to(data.roomId).emit('receive_message', m1);
 
         setTimeout(() => {
-          const m2 = { id: Date.now() + 2, roomId: data.roomId, senderName: c2.displayName, text: r2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: null, reactions: {} };
+          const m2 = { id: Date.now() + 2, roomId: data.roomId, senderName: c2.displayName, text: r2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
           messages.push(m2);
           io.to(data.roomId).emit('receive_message', m2);
 
           setTimeout(() => {
-            const m3 = { id: Date.now() + 3, roomId: data.roomId, senderName: c3.displayName, text: r3, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), imageUrl: null, reactions: {} };
+            const m3 = { id: Date.now() + 3, roomId: data.roomId, senderName: c3.displayName, text: r3, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
             messages.push(m3);
             io.to(data.roomId).emit('receive_message', m3);
-          }, 400);
+          }, 200);
 
-        }, 400);
+        }, 200);
 
-      }, 150);
+      }, 50);
     }
   });
 

@@ -19,8 +19,8 @@
             <p class="text-xs text-slate-400 mb-6 text-center">Hệ thống phân công và hỗ trợ khách hàng</p>
 
             <div class="w-full space-y-3">
-                <input type="text" id="authUsername" placeholder="Tên đăng nhập (vd: admin hoặc khách hàng)" class="w-full bg-slate-100 border border-slate-200 px-4 py-3 rounded-xl text-sm outline-none focus:border-blue-500">
-                <input type="password" id="authPassword" placeholder="Mật khẩu" class="w-full bg-slate-100 border border-slate-200 px-4 py-3 rounded-xl text-sm outline-none focus:border-blue-500">
+                <input type="text" id="authUsername" placeholder="Tên đăng nhập (Admin: admin)" class="w-full bg-slate-100 border border-slate-200 px-4 py-3 rounded-xl text-sm outline-none focus:border-blue-500">
+                <input type="password" id="authPassword" placeholder="Mật khẩu (Admin: 123321)" class="w-full bg-slate-100 border border-slate-200 px-4 py-3 rounded-xl text-sm outline-none focus:border-blue-500">
                 
                 <div id="authErrorMsg" class="text-red-500 text-xs text-center font-medium hidden"></div>
 
@@ -35,7 +35,7 @@
 
         <div class="flex-1 relative overflow-hidden flex flex-col">
             
-            <!-- TAB 1: DANH SÁCH PHÒNG CHAT & THÔNG BÁO CHO ADMIN -->
+            <!-- TAB 1: DANH SÁCH PHÒNG CHAT -->
             <div id="tabMessage" class="absolute inset-0 flex flex-col bg-white z-10">
                 <div class="bg-white px-4 py-3 flex justify-between items-center border-b border-slate-100 shrink-0">
                     <div>
@@ -43,11 +43,10 @@
                         <p id="headerSubtitle" class="text-[10px] text-slate-500">Đang tải...</p>
                     </div>
                 </div>
-                <!-- Danh sách phòng chat / khách hàng chờ phân công -->
                 <div id="roomList" class="flex-1 overflow-y-auto divide-y divide-slate-50"></div>
             </div>
 
-            <!-- TAB 2: CÁ NHÂN & ĐĂNG XUẤT -->
+            <!-- TAB 2: CÁ NHÂN -->
             <div id="tabProfile" class="absolute inset-0 flex flex-col bg-slate-50 z-0 hidden">
                 <div class="bg-white px-4 py-3 border-b border-slate-100 font-bold text-lg text-slate-900 shrink-0">Tài khoản</div>
                 
@@ -66,7 +65,7 @@
 
         </div>
 
-        <!---------------- KHUNG CHAT CHI TIẾT GIỮA KHÁCH VÀ CHUYÊN VIÊN ---------------->
+        <!---------------- KHUNG CHAT CHI TIẾT ---------------->
         <div id="chatRoomView" class="absolute inset-0 bg-white z-30 flex flex-col transform translate-x-full transition-transform duration-300">
             <div class="bg-blue-600 text-white px-4 py-3 flex items-center justify-between shrink-0 shadow-sm">
                 <div class="flex items-center space-x-3">
@@ -159,7 +158,7 @@
             const data = await res.json();
 
             if(data.success) {
-                alert('Đăng ký tài khoản thành công! Hãy bấm Đăng Nhập để vào hệ thống.');
+                alert('Đăng ký khách hàng thành công! Hãy đăng nhập bằng tài khoản vừa tạo.');
                 errDiv.classList.add('hidden');
             } else {
                 errDiv.textContent = data.message;
@@ -203,13 +202,10 @@
             const list = document.getElementById('roomList');
             list.innerHTML = '';
 
-            // Lọc phòng hiển thị theo quyền
             let displayRooms = roomsData;
             if (currentUser.role === 'client') {
-                // Khách chỉ thấy phòng của chính mình
                 displayRooms = roomsData.filter(r => r.clientId === currentUser.id || r.id === 'room_general');
             } else if (currentUser.role === 'specialist') {
-                // Chuyên viên chỉ thấy phòng được phân công cho mình hoặc phòng chung
                 displayRooms = roomsData.filter(r => r.assignedSpecialist === currentUser.username || r.id === 'room_general');
             }
 
@@ -219,7 +215,6 @@
                 
                 let actionHtml = '';
                 if (currentUser.role === 'admin' && r.clientId) {
-                    // Hiển thị dropdown cho Admin chọn Chuyên viên gán việc
                     let specialistOptions = '<option value="">-- Chọn Chuyên viên --</option>';
                     usersData.filter(u => u.role === 'specialist').forEach(sp => {
                         const selected = r.assignedSpecialist === sp.username ? 'selected' : '';

@@ -1,94 +1,101 @@
 import os
+import json
 import requests
 from datetime import datetime
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Token và Chat ID của sếp
 TOKEN = "8986371446:AAEo6hNxWqXwQ181L8YXz68t1SVHeYiLo7g"
 CHAT_ID = "8348914397"
 
-# Biến lưu trữ trạng thái doanh thu trong ngày
-daily_total_in = 0
-daily_tx_count = 0
-daily_amounts = []
-last_reset_date = datetime.now().strftime('%Y-%m-%d')
-latest_accumulated = "Chưa cập nhật số dư"
-latest_gateway = "N/A"
+# Tên file lưu trữ dữ liệu vĩnh viễn trên server
+DATA_FILE = "revenue_data.json"
 
-def check_and_reset_day():
-    global daily_total_in, daily_tx_count, daily_amounts, last_reset_date
-    current_date = datetime.now().strftime('%Y-%m-%d')
-    if current_date != last_reset_date:
-        daily_total_in = 0
-        daily_tx_count = 0
-        daily_amounts = []
-        last_reset_date = current_date
+def load_data():
+    """Hàm đọc dữ liệu từ file JSON"""
+    today_str = datetime.now().strftime('%Y-%m-%d')
+    if os.path.exists(DATA_FILE):
+        try:
+            with open(DATA_FILE, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                # Nếu sang ngày mới, tự động reset dữ liệu
+                if data.get('date') != today_str:
+                    return {"date": today_str, "total_in": 0.0, "tx_count": 0, "amounts": [], "latest_accumulated": "Chưa cập nhật", "latest_gateway": "N/A"}
+                return data
+        except Exception:
+            pass
+    return {"date": today_str, "total_in": 0.0, "tx_count": 0, "amounts": [], "latest_accumulated": "Chưa cập nhật", "latest_gateway": "N/A"}
+
+def save_data(data):
+    """Hàm ghi dữ liệu xuống file JSON"""
+    try:
+        with open(DATA_FILE, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+    except Exception as e:
+        print(f"Error saving data: {e}")
 
 @app.route('/')
 def home():
     return "Bot Financial Management is running!", 200
 
-# Endpoint để Pipedream gọi vào đúng 21h hàng ngày để lấy bảng tổng kết
+# Endpoint để Pipedream gọi vào đúng 21h hàng ngày
 @app.route('/trigger-summary', methods=['POST'])
 def trigger_summary():
-    global daily_total_in, daily_tx_count, daily_amounts, latest_accumulated, latest_gateway
     try:
-        check_and_reset_day()
-        
-        # Tính toán các chỉ số phụ
-        avg_amount = int(daily_total_in / daily_tx_count) if daily_tx_count > 0 else 0
-        max_amount = int(max(daily_amounts)) if daily_amounts else 0
-        min_amount = int(min(daily_amounts)) if daily_amounts else 0
+        data = load_data()
+        total_in = data.get("total_in", 0.0)
+        tx_count = data.get("tx_count", 0)
+        amounts = data.get("amounts", [])
+        accumulated = data.get("latest_accumulated", "Chưa cập nhật")
+        gateway = data.get("latest_gateway", "N/A")
+
+        avg_amount = int(total_in / tx_count) if tx_count > 0 else 0
+        max_amount = int(max(amounts)) if amounts else 0
+        min_amount = int(min(amounts)) if amounts else 0
         now_str = datetime.now().strftime('%d/%m/%Y - %H:%M:%S')
 
         summary_message = (
             f"📊 *TỔNG KẾT HÔM NAY NHÉ SẾP* 💲🏧\n"
             f"━━━━━━━━━━━━━━━━━━━\n"
             f"📅 Ngày báo cáo: `{now_str}`\n"
-            f"💰 Tổng tiền thu: `{int(daily_total_in):,}` VNĐ\n"
-            f"📦 Tổng số giao dịch: `{daily_tx_count}` đơn\n"
-            f"💎 Số dư hiện có: `{latest_accumulated}`\n"
+            f"💰 Tổng tiền thu: `{int(total_in):,}` VNĐ\n"
+            f"📦 Tổng số giao dịch: `{tx_count}` đơn\n"
+            f"💎 Số dư hiện có: `{accumulated}`\n"
             f"📈 Trung bình/đơn: `{avg_amount:,}` VNĐ\n"
             f"🚀 Đơn khủng nhất: `+{max_amount:,}` VNĐ\n"
             f"☕ Đơn nhỏ nhất: `+{min_amount:,}` VNĐ\n"
-            f"🏛️ Ngân hàng chính: `{latest_gateway}`\n"
+            f"🏛️ Ngân hàng chính: `{gateway}`\n"
             f"━━━━━━━━━━━━━━━━━━━\n"
             f"🔥 *Chúc sếp ngủ ngon, mai lại đếm tiền mỏi tay!*"
         )
 
         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-        payload = {
-            "chat_id": CHAT_ID,
-            "text": summary_message,
-            "parse_mode": "Markdown"
-        }
+        payload = {"chat_id": CHAT_ID, "text": summary_message, "parse_mode": "Markdown"}
         requests.post(url, json=payload)
         return jsonify({"status": "success", "message": "Summary sent!"}), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-# Endpoint nhận Webhook chuyển tiền từ SePay (ACB)
+# Endpoint nhận Webhook chuyển tiền từ SePay
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    global daily_total_in, daily_tx_count, daily_amounts, latest_accumulated, latest_gateway
     try:
-        data = request.json
-        if not data:
+        req_data = request.json
+        if not req_data:
             return jsonify({"status": "error"}), 400
 
-        gateway = data.get('gateway', 'N/A')
-        transactionDate = data.get('transactionDate', 'N/A')
-        accountNumber = data.get('accountNumber', 'N/A')
-        content = data.get('content', 'N/A')
-        transferType = data.get('transferType', 'in')
-        transferAmount = data.get('transferAmount', 0)
+        gateway = req_data.get('gateway', 'N/A')
+        transactionDate = req_data.get('transactionDate', 'N/A')
+        accountNumber = req_data.get('accountNumber', 'N/A')
+        content = req_data.get('content', 'N/A')
+        transferType = req_data.get('transferType', 'in')
+        transferAmount = req_data.get('transferAmount', 0)
         
-        # Lấy linh hoạt tên biến số dư từ SePay
-        raw_accumulated = data.get('accumulated') or data.get('balance') or data.get('afterBalance')
+        raw_accumulated = req_data.get('accumulated') or req_data.get('balance') or req_data.get('afterBalance')
 
-        check_and_reset_day()
+        # Tải dữ liệu hiện tại từ file JSON lên
+        data = load_data()
 
         try:
             amount_val = float(transferAmount)
@@ -98,20 +105,23 @@ def webhook():
         if raw_accumulated is not None:
             try:
                 acc_val = float(raw_accumulated)
-                latest_accumulated = f"{int(acc_val):,} VNĐ"
+                data["latest_accumulated"] = f"{int(acc_val):,} VNĐ"
             except (ValueError, TypeError):
                 pass
 
-        latest_gateway = gateway
+        data["latest_gateway"] = gateway
 
-        # Nếu là giao dịch tiền vào (in)
+        # Nếu là tiền vào, tiến hành cộng dồn chính xác
         if transferType == 'in':
-            daily_total_in += amount_val
-            daily_tx_count += 1
-            daily_amounts.append(amount_val)
+            data["total_in"] += amount_val
+            data["tx_count"] += 1
+            data["amounts"].append(amount_val)
             
+            # Lưu lại vào file JSON ngay lập tức
+            save_data(data)
+
             formatted_amount = f"{int(amount_val):,}"
-            formatted_daily_total = f"{int(daily_total_in):,}"
+            formatted_daily_total = f"{int(data['total_in']):,}"
 
             message = (
                 f"🚨 *CÓ TIỀN CÓ TIỀN SẾP ƠI 💰💰💵* 🚨\n"
@@ -120,18 +130,14 @@ def webhook():
                 f"💵 Số tiền: `+{formatted_amount}` VNĐ\n"
                 f"💬 Nội dung: {content}\n"
                 f"💳 Tài khoản: `{accountNumber}`\n"
-                f"💎 Số dư: `{latest_accumulated}`\n"
+                f"💎 Số dư: `{data['latest_accumulated']}`\n"
                 f"📈 Tổng thu hôm nay: `{formatted_daily_total}` VNĐ\n"
                 f"⏰ Thời gian giao dịch: `{transactionDate}`\n"
                 f"━━━━━━━━━━━━━━━━━━━"
             )
 
             url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-            payload = {
-                "chat_id": CHAT_ID,
-                "text": message,
-                "parse_mode": "Markdown"
-            }
+            payload = {"chat_id": CHAT_ID, "text": message, "parse_mode": "Markdown"}
             requests.post(url, json=payload)
 
         return jsonify({"status": "success"}), 200

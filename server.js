@@ -17,12 +17,11 @@ let users = [
 ];
 
 let rooms = [
-  { id: 'room_general', name: 'Phòng Chung Tổng', clientId: null, assignedSpecialist: null, status: 'active', isCustomGroup: false },
-  { id: 'group_demo', name: 'Nhóm Đối Soát Bill TikTok Shop', clientId: null, assignedSpecialist: null, status: 'active', isCustomGroup: true }
+  { id: 'room_general', name: 'Phòng Chung Tổng Đối Soát', clientId: null, assignedSpecialist: null, status: 'active', isCustomGroup: false }
 ];
 
 let messages = [
-  { id: 1, roomId: 'room_general', senderName: 'Hệ thống', text: 'Chào mừng đến với tổng đài Hubba!', time: '18:00' }
+  { id: 1, roomId: 'room_general', senderName: 'Hệ thống', text: 'Chào mừng đến với tổng đài Hubba!', time: '18:00', billInfo: null }
 ];
 
 app.post('/api/register', (req, res) => {
@@ -30,7 +29,7 @@ app.post('/api/register', (req, res) => {
   if (!username || !password) return res.status(400).json({ success: false, message: 'Thiếu thông tin!' });
   
   if (username === 'admin') {
-    return res.status(400).json({ success: false, message: 'Tên tài khoản admin không được trùng!' });
+    return res.status(400).json({ success: false, message: 'Tên tài khoản admin đã tồn tại!' });
   }
 
   const existing = users.find(u => u.username === username);
@@ -39,7 +38,7 @@ app.post('/api/register', (req, res) => {
   const newUser = {
     id: 'user_' + Date.now(),
     username: username,
-    password: password,
+    password: password || '123',
     role: 'client',
     avatar: '👤'
   };
@@ -47,7 +46,7 @@ app.post('/api/register', (req, res) => {
 
   const newRoom = {
     id: 'room_' + newUser.id,
-    name: `Khách: ${username}`,
+    name: `Phòng Hỗ Trợ: ${username}`,
     clientId: newUser.id,
     clientName: username,
     assignedSpecialist: 'Chưa phân công',
@@ -68,19 +67,59 @@ app.post('/api/login', (req, res) => {
   res.json({ success: true, user: { id: user.id, username: user.username, role: user.role }, rooms, users });
 });
 
-app.post('/api/create-group', (req, res) => {
-  const { name } = req.body;
-  if (!name) return res.status(400).json({ success: false, message: 'Tên nhóm không được để trống!' });
+app.post('/api/auto-clone-bills', (req, res) => {
+  const { billNames } = req.body;
+  if (!billNames || billNames.length === 0) {
+    return res.status(400).json({ success: false, message: 'Không có dữ liệu bill!' });
+  }
 
-  const newGroup = {
-    id: 'group_' + Date.now(),
+  let createdRooms = [];
+  billNames.forEach((name, index) => {
+    const cleanName = name.replace(/\.[^/.]+$/, "");
+    const newRoomId = 'clone_' + Date.now() + '_' + index;
+    const newRoom = {
+      id: newRoomId,
+      name: `Bill: ${cleanName}`,
+      clientId: null,
+      assignedSpecialist: 'Chưa phân công',
+      status: 'waiting',
+      isCustomGroup: true
+    };
+    rooms.push(newRoom);
+    createdRooms.push(newRoom);
+
+    messages.push({
+      id: Date.now() + index,
+      roomId: newRoomId,
+      senderName: 'Hệ thống OCR',
+      text: `Đã tự động nhận diện bill của: ${cleanName}`,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      billInfo: {
+        code: 'TXN_' + Math.floor(100000 + Math.random() * 900000),
+        amount: (Math.floor(Math.random() * 90) + 10) * 10000 + ' VNĐ',
+        status: '✅ Tự động đối soát thành công'
+      }
+    });
+  });
+
+  io.emit('update_data', { rooms, users });
+  res.json({ success: true, rooms, count: createdRooms.length });
+});
+
+app.post('/api/create-room', (req, res) => {
+  const { name, clientName, specialistName } = req.body;
+  if (!name) return res.status(400).json({ success: false, message: 'Tên phòng không được để trống!' });
+
+  const newRoom = {
+    id: 'room_' + Date.now(),
     name: name,
-    clientId: null,
-    assignedSpecialist: null,
-    status: 'active',
+    clientId: 'client_' + Date.now(),
+    clientName: clientName || 'Khách vãng lai',
+    assignedSpecialist: specialistName || 'Chưa phân công',
+    status: 'assigned',
     isCustomGroup: true
   };
-  rooms.push(newGroup);
+  rooms.push(newRoom);
 
   io.emit('update_data', { rooms, users });
   res.json({ success: true, rooms });
@@ -126,17 +165,13 @@ io.on('connection', (socket) => {
   });
 
   socket.on('send_message', (data) => {
-    let messageText = data.text;
-    if (data.hasBill) {
-      messageText += ` [🤖 OCR Tự động: Xác thực bill thành công!]`;
-    }
-
     const newMessage = {
       id: Date.now(),
       roomId: data.roomId,
       senderName: data.senderName,
-      text: messageText,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      text: data.text,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      billInfo: null
     };
 
     messages.push(newMessage);

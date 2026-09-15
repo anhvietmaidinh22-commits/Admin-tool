@@ -15,24 +15,21 @@ let users = [
   { id: 'cv_1', username: 'chuyenviena', password: '123', role: 'specialist', avatar: '👨‍💼', displayName: 'Chuyên Viên A', accountId: 'staff_a_02', userAvatarUrl: '/logo.png' }
 ];
 
-let rooms = [
-  { id: 'room_general', name: 'Phòng Chung Tổng Đối Soát', clientId: null, assignedSpecialist: null, members: ['admin', 'chuyenviena'], pinnedMsg: null, status: 'active', isCustomGroup: false }
-];
+let rooms = [];
 
 let billRepository = [
   { name: 'Bill_NguyenVanA', amount: '150,000 VNĐ', code: 'TXN_882910', url: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&auto=format&fit=crop&q=80' },
   { name: 'Bill_TranThiB', amount: '320,000 VNĐ', code: 'TXN_993821', url: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&auto=format&fit=crop&q=80' }
 ];
 
-let messages = [
-  { id: 1, roomId: 'room_general', senderName: 'QUẢN LÍ HỆ THỐNG', text: 'Chào mừng đến với HUBBA! Hệ thống đối soát chuẩn thương hiệu đã sẵn sàng.', time: '18:00', imageUrl: null, billInfo: null, reactions: {} }
-];
+let messages = [];
 
 let appSettings = {
   autoOcr: true,
   autoBotsChat: true,
   programScript: 'Chương trình đối soát: Bot tự động gửi bill khi nhận lệnh.',
-  appLogo: '/logo.png'
+  appLogo: '/logo.png',
+  cloneNaming: 'name'
 };
 
 app.get('/api/settings', (req, res) => {
@@ -40,14 +37,26 @@ app.get('/api/settings', (req, res) => {
 });
 
 app.post('/api/settings', (req, res) => {
-  const { autoOcr, autoBotsChat, programScript, appLogo } = req.body;
+  const { autoOcr, autoBotsChat, programScript, appLogo, cloneNaming } = req.body;
   if(autoOcr !== undefined) appSettings.autoOcr = autoOcr;
   if(autoBotsChat !== undefined) appSettings.autoBotsChat = autoBotsChat;
   if(programScript !== undefined) appSettings.programScript = programScript;
   if(appLogo !== undefined) appSettings.appLogo = appLogo;
+  if(cloneNaming !== undefined) appSettings.cloneNaming = cloneNaming;
 
   io.emit('update_settings', appSettings);
   res.json({ success: true, settings: appSettings });
+});
+
+// API Đổi ảnh đại diện nhóm (Group Avatar)
+app.post('/api/update-room-avatar', (req, res) => {
+  const { roomId, roomAvatarUrl } = req.body;
+  const room = rooms.find(r => r.id === roomId);
+  if (!room) return res.status(400).json({ success: false, message: 'Không tìm thấy nhóm!' });
+
+  room.roomAvatarUrl = roomAvatarUrl;
+  io.emit('update_data', { rooms, users });
+  res.json({ success: true, room, rooms });
 });
 
 app.post('/api/register', (req, res) => {
@@ -55,7 +64,7 @@ app.post('/api/register', (req, res) => {
   if (!username || !password) return res.status(400).json({ success: false, message: 'Thiếu thông tin!' });
   
   if (username === 'admin') {
-    return res.status(400).json({ success: false, message: 'Tên tài khoản admin không được trùng!' });
+    return res.status(400).json({ success: false, message: 'Tên tài khoản không hợp lệ!' });
   }
 
   const existing = users.find(u => u.username === username);
@@ -73,18 +82,34 @@ app.post('/api/register', (req, res) => {
   };
   users.push(newUser);
 
-  const newRoom = {
-    id: 'room_' + newUser.id,
-    name: `Hỗ trợ: ${username}`,
+  const nowStr = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
+  const securityRoomId = 'room_security_' + newUser.id;
+  
+  const securityRoom = {
+    id: securityRoomId,
+    name: 'HUBBA',
     clientId: newUser.id,
     clientName: username,
-    assignedSpecialist: 'Chưa phân công',
-    members: [username, 'admin'],
+    assignedSpecialist: '',
+    members: [username],
     pinnedMsg: null,
-    status: 'waiting',
+    roomAvatarUrl: '/logo.png',
+    status: 'system',
     isCustomGroup: false
   };
-  rooms.push(newRoom);
+  rooms.push(securityRoom);
+
+  messages.push({
+    id: Date.now(),
+    roomId: securityRoomId,
+    senderName: 'HUBBA',
+    text: `Thông báo đăng nhập an toàn\n${nowStr}\n\nTài khoản của bạn đang được thử đăng nhập trên một thiết bị mới.\nThời gian đăng nhập: ${new Date().toLocaleTimeString()}\nPhương thức: Đăng nhập bằng mật khẩu\nLoại thiết bị: Android\nIP đăng nhập: 123.24.88.148\n\nNếu đây không phải là thao tác của bạn, vui lòng liên hệ ngay bộ phận quản trị!`,
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    imageUrl: null,
+    billInfo: null,
+    reactions: {},
+    isSystemSecurity: true
+  });
 
   io.emit('update_data', { rooms, users });
   res.json({ success: true, user: { id: newUser.id, username: newUser.username, role: newUser.role } });
@@ -94,6 +119,37 @@ app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   const user = users.find(u => u.username === username && u.password === password);
   if (!user) return res.status(400).json({ success: false, message: 'Sai tài khoản hoặc mật khẩu!' });
+
+  if (user.role === 'client') {
+    const hasSecRoom = rooms.find(r => r.clientId === user.id);
+    if (!hasSecRoom) {
+      const nowStr = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
+      const securityRoomId = 'room_security_' + user.id;
+      rooms.push({
+        id: securityRoomId,
+        name: 'HUBBA',
+        clientId: user.id,
+        clientName: user.username,
+        assignedSpecialist: '',
+        members: [user.username],
+        pinnedMsg: null,
+        roomAvatarUrl: '/logo.png',
+        status: 'system',
+        isCustomGroup: false
+      });
+      messages.push({
+        id: Date.now(),
+        roomId: securityRoomId,
+        senderName: 'HUBBA',
+        text: `Thông báo đăng nhập an toàn\n${nowStr}\n\nTài khoản của bạn vừa đăng nhập thành công trên thiết bị mới.\nThời gian: ${new Date().toLocaleTimeString()}\nIP: 123.24.88.148`,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        imageUrl: null,
+        billInfo: null,
+        reactions: {},
+        isSystemSecurity: true
+      });
+    }
+  }
 
   res.json({ success: true, user, rooms, users, settings: appSettings });
 });
@@ -119,16 +175,17 @@ app.post('/api/delete-specialist', (req, res) => {
 
 app.post('/api/create-room', (req, res) => {
   const { name, clientName, specialistName } = req.body;
-  if (!name) return res.status(400).json({ success: false, message: 'Thiếu tên phòng!' });
+  if (!name) return res.status(400).json({ success: false, message: 'Thiếu tên nhóm!' });
 
   const newRoom = {
     id: 'room_' + Date.now(),
     name: name,
-    clientId: 'client_' + Date.now(),
-    clientName: clientName || 'Khách vãng lai',
-    assignedSpecialist: specialistName || 'Chưa phân công',
-    members: ['admin', specialistName, clientName].filter(Boolean),
+    clientId: null,
+    clientName: clientName || 'Thành viên',
+    assignedSpecialist: specialistName || '',
+    members: ['admin', specialistName].filter(Boolean),
     pinnedMsg: null,
+    roomAvatarUrl: '/logo.png',
     status: 'assigned',
     isCustomGroup: true
   };
@@ -180,7 +237,7 @@ io.on('connection', (socket) => {
     socket.join(roomId);
     const room = rooms.find(r => r.id === roomId);
     const roomMsgs = messages.filter(m => m.roomId === roomId);
-    socket.emit('load_room_data', { messages: roomMsgs, pinnedMsg: room ? room.pinnedMsg : null });
+    socket.emit('load_room_data', { messages: roomMsgs, pinnedMsg: room ? room.pinnedMsg : null, roomAvatarUrl: room ? room.roomAvatarUrl : '/logo.png' });
   });
 
   socket.on('send_message', (data) => {

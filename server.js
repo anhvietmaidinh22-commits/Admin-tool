@@ -26,7 +26,6 @@ const genzNicknames = [
 
 const genzFirstNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Đỗ', 'Bùi', 'Đăng', 'Hồ', 'Dương', 'Phan', 'Vũ'];
 
-// GENERATE 3,000 CON CLONE TÊN GEN Z
 let cloneUsers = [];
 for(let i = 1; i <= 3000; i++) {
   let randGenZName = genzFirstNames[Math.floor(Math.random() * genzFirstNames.length)] + ' ' + 
@@ -64,29 +63,42 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80'
 ];
 
-// MA TRẬN TỔ HỢP TỪ VỰNG VÔ HẠN CHỐNG LẶP
-const subjects = [
-  "Bám sát định hướng của sếp", "Theo đuổi chiến lược này", "Làm việc cùng team sếp", 
-  "Nghe lệnh điều phối từ sếp", "Chạy hệ thống theo sếp", "Đi theo con đường sếp vạch ra",
-  "Triển khai mô hình của sếp", "Phối hợp nhịp nhàng với sếp", "Bắt nhịp xu hướng cùng sếp"
+// KHO TỪ VỰNG MỞ RỘNG ĐỒ SỘ (HÀNG TRIỆU CÁCH KẾT HỢP ĐẢM BẢO KHÔNG LẶP)
+const poolStarters = [
+  "Thật sự là nhìn cách", "Phải công nhận rằng hướng", "Không thể chối cãi là tư duy", 
+  "Mỗi lần nghe", "Càng ngẫm về", "Từ lúc áp dụng", "Tính toán kỹ thì", "Đúng là nhìn nhận từ"
 ];
-const actions = [
-  "thì tài khoản cứ ting ting reo liên tục", "là doanh số nhảy vọt không thấy đỉnh", 
-  "giúp anh em hốt bạc tỷ mỏi cả tay", "làm dòng tiền thông suốt mượt mà", 
-  "kéo dài chuỗi ngày chốt đơn ngập mặt", "biến mọi khó khăn thành lợi nhuận khổng lồ"
-];
-const modifiers = [
-  "không trượt phát nào", "đỉnh chóp chữ ê kéo dài", "phê chữ y thực sự luôn", 
-  "quá uy tín cho một cuộc tình", "làm ae đứng ngồi không yên", "khiến đối thủ ngửi khói dài dài"
-];
-const emojis = ["🔥", "🚀", "💰", "🌟", "💸", "🎯"];
 
-function generateInfiniteUniqueSentence() {
-  let sub = subjects[Math.floor(Math.random() * subjects.length)];
-  let act = actions[Math.floor(Math.random() * actions.length)];
-  let mod = modifiers[Math.floor(Math.random() * modifiers.length)];
-  let emo = emojis[Math.floor(Math.random() * emojis.length)];
-  return `${sub} ${act}, ${mod} ${emo}`;
+const poolSubjects = [
+  "sếp chỉ đạo", "đường lối sếp vạch ra", "cách sếp scale hệ thống", 
+  "chiến lược sếp vừa tung", "mô hình kinh doanh của sếp", "bước đi của sếp"
+];
+
+const poolActions = [
+  "mang lại nguồn lợi nhuận khủng khiếp", "giúp anh em hốt bạc mỏi tay không kịp đếm", 
+  "làm dòng tiền thông suốt mượt mà như lụa", "đẩy tốc độ chốt đơn bùng nổ vượt mọi giới hạn",
+  "kéo dài chuỗi ngày ting ting rủng rỉnh ví", "giúp team mình thống lĩnh trọn vẹn thị phần"
+];
+
+const poolEndings = [
+  "không tìm ra điểm yếu nào luôn mấy ô ơi", "đỉnh chóp chữ ê kéo dài thực sự đấy", 
+  "quá uy tín cho một màn bứt tốc ngoạn mục", "làm ae đứng ngồi không yên vì quá phấn khởi",
+  "khiến đối thủ nhìn vào chỉ biết khóc thét", "xứng đáng điểm tuyệt đối cho tầm nhìn chiến lược"
+];
+
+const poolEmojis = ["🔥", "🚀", "💰", "🌟", "💸", "🎯", "😎", "💪", "⚡", "🏆"];
+
+function generateMassiveUniqueSentence(keyword = "") {
+  let starter = poolStarters[Math.floor(Math.random() * poolStarters.length)];
+  let subj = poolSubjects[Math.floor(Math.random() * poolSubjects.length)];
+  let action = poolActions[Math.floor(Math.random() * poolActions.length)];
+  let ending = poolEndings[Math.floor(Math.random() * poolEndings.length)];
+  let emoji = poolEmojis[Math.floor(Math.random() * poolEmojis.length)];
+
+  if (keyword) {
+    return `${starter} ${subj} về "${keyword}" ${action}, ${ending} ${emoji}`;
+  }
+  return `${starter} ${subj} ${action}, ${ending} ${emoji}`;
 }
 
 let appSettings = {
@@ -246,7 +258,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP 24/7 (2.5 GIÂY)
+// VÒNG LẶP BACKGROUND CHÉM GIÓ 2.5 GIÂY
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
@@ -262,8 +274,8 @@ setInterval(() => {
       let cl2 = clonePool[Math.floor(Math.random() * clonePool.length)];
       while(cl2.id === cl1.id) cl2 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
-      let text1 = generateInfiniteUniqueSentence();
-      let text2 = `@${cl1.displayName} Chuẩn xác từng centimet luôn ô giáo ơi, ví đang dày lên trông thấy!`;
+      let text1 = generateMassiveUniqueSentence();
+      let text2 = `@${cl1.displayName} Công nhận chuẩn không cần chỉnh, số liệu nhảy múa thế này thì ấm cái bụng rồi!`;
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
       const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
@@ -305,35 +317,24 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> BẮT TRỌNG TÂM LỜI GỌI CỦA SẾP ĐỂ ĐÁP LẠI CHUẨN XÁC RẢI ĐỀU 2.5 GIÂY
+    // KHI SẾP VỪA NHẮN -> HỆ THỐNG SINH CÂU HOÀN TOÀN MỚI, TỐC ĐỘ 2.5 GIÂY ĐỀU ĐẶN
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
         let kw = data.text;
-        let lowerKw = kw.toLowerCase();
         
-        let totalBatches = 20; 
+        let totalBatches = 15; 
         let batchInterval = 2500; 
 
         for(let b = 0; b < totalBatches; b++) {
           setTimeout(() => {
             let randUser = clonePool[Math.floor(Math.random() * clonePool.length)];
             let peer1 = clonePool[Math.floor(Math.random() * clonePool.length)];
+            while(peer1.id === randUser.id) peer1 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
-            let replyText = "";
-            if (lowerKw.includes('mọi người') || lowerKw.includes('anh em') || lowerKw.includes('ae') || lowerKw.includes('ai ơi') || lowerKw.includes('chào')) {
-              let callReplies = [
-                `Dạ em nghe sếp ơi, anh em có mặt đầy đủ không sót một ai ạ! 🔥`,
-                `Dạ em đây sếp, nghe sếp gọi cái là tụi em có mặt ngay lập tức nè 🚀`,
-                `Dạ em chào sếp, anh em đang hừng hực khí thế chờ chỉ đạo của sếp đây ạ 💰`,
-                `Ơi sếp ơi, tụi em lúc nào cũng túc trực sẵn sàng hốt bạc cùng sếp nhé!`
-              ];
-              replyText = callReplies[Math.floor(Math.random() * callReplies.length)];
-            } else {
-              let dynamicMsg = generateInfiniteUniqueSentence(kw);
-              let tagPrefix = (b > 0 && Math.random() > 0.3) ? `@${peer1.displayName} ` : '';
-              replyText = tagPrefix + dynamicMsg;
-            }
+            let uniqueMsg = generateMassiveUniqueSentence(kw);
+            let tagPrefix = (b > 0 && Math.random() > 0.3) ? `@${peer1.displayName} ` : '';
+            let replyText = tagPrefix + uniqueMsg;
 
             const mRep = {
               id: Date.now() + b,

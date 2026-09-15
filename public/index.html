@@ -3,54 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hubba - Tổng Đài CSKH & Đối Soát Bill</title>
+    <title>Hubba - Nền Tảng Đối Soát Bill Pro</title>
     <link rel="icon" href="/logo.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
 </head>
-<body class="bg-slate-100 h-[100dvh] flex flex-col font-sans select-none overflow-hidden m-0 p-0">
+<body class="bg-slate-900 h-[100dvh] flex flex-col justify-center items-center select-none overflow-hidden m-0 p-0">
 
     <!---------------- MÀN HÌNH ĐĂNG NHẬP ---------------->
-    <div id="authScreen" class="absolute inset-0 bg-blue-600 z-50 flex flex-col justify-center items-center p-6">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl flex flex-col items-center">
-            <img src="/logo.png" alt="Hubba Logo" class="w-16 h-16 rounded-full shadow-md object-cover mb-3 border-2 border-blue-500">
-            <h1 class="font-bold text-2xl text-slate-900 mb-1">Hubba CSKH</h1>
-            <p class="text-xs text-slate-400 mb-6 text-center">Admin: <span class="font-bold text-blue-600">admin</span> / <span class="font-bold text-blue-600">123321</span></p>
+    <div id="authScreen" class="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-700 to-slate-900 z-50 flex flex-col justify-center items-center p-6">
+        <div class="bg-white w-full max-w-sm rounded-[36px] p-8 shadow-2xl flex flex-col items-center border border-white/20">
+            <img id="appLogoDisplay" src="/logo.png" alt="Hubba Logo" class="w-20 h-20 rounded-2xl shadow-md object-cover mb-3 border-2 border-blue-500">
+            <h1 class="font-extrabold text-2xl text-slate-900 tracking-tight mb-1">Hubba Pro</h1>
+            <p class="text-xs text-slate-400 font-medium mb-6 text-center">Hệ thống CSKH & Đối Soát Bill Thông Minh</p>
 
-            <div class="w-full space-y-3">
-                <input type="text" id="authUsername" value="admin" placeholder="Tên đăng nhập" class="w-full bg-slate-100 border border-slate-200 px-4 py-3 rounded-xl text-sm outline-none focus:border-blue-500 font-medium">
-                <input type="password" id="authPassword" value="123321" placeholder="Mật khẩu" class="w-full bg-slate-100 border border-slate-200 px-4 py-3 rounded-xl text-sm outline-none focus:border-blue-500 font-medium">
+            <div class="w-full space-y-3.5">
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-500 mb-1 ml-1">TÊN ĐĂNG NHẬP</label>
+                    <input type="text" id="authUsername" value="admin" class="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm outline-none focus:border-blue-500 focus:bg-white transition font-semibold text-slate-800">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-500 mb-1 ml-1">MẬT KHẨU</label>
+                    <input type="password" id="authPassword" value="123321" class="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm outline-none focus:border-blue-500 focus:bg-white transition font-semibold text-slate-800">
+                </div>
                 
-                <div id="authErrorMsg" class="text-red-500 text-xs text-center font-medium hidden"></div>
+                <div id="authErrorMsg" class="text-red-500 text-xs text-center font-bold hidden"></div>
 
-                <button onclick="handleLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm shadow-md transition">Đăng Nhập</button>
-                <button onclick="handleRegister()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl text-sm transition">Đăng Ký Khách Hàng Mới</button>
+                <button onclick="handleLogin()" class="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold py-3.5 rounded-2xl text-sm shadow-lg shadow-blue-500/30 transition">Đăng Nhập Ngay</button>
+                <button onclick="handleRegister()" class="w-full bg-slate-100 hover:bg-slate-200 active:scale-[0.98] text-slate-700 font-bold py-3.5 rounded-2xl text-sm transition">Đăng Ký Khách Hàng</button>
             </div>
         </div>
     </div>
 
     <!---------------- ỨNG DỤNG CHÍNH ---------------->
-    <div id="mainAppContainer" class="flex-1 flex flex-col bg-white max-w-md mx-auto w-full h-full relative shadow-xl overflow-hidden hidden">
+    <div id="mainAppContainer" class="flex-1 flex flex-col bg-white max-w-md mx-auto w-full h-full relative shadow-2xl overflow-hidden hidden">
 
         <div class="flex-1 relative overflow-hidden flex flex-col">
             
-            <!-- TAB 1: DANH SÁCH PHÒNG CHAT -->
+            <!-- TAB 1: PHÒNG CHAT -->
             <div id="tabMessage" class="absolute inset-0 flex flex-col bg-white z-10">
-                <div class="bg-white px-4 py-3 flex justify-between items-center border-b border-slate-100 shrink-0">
-                    <div class="flex items-center space-x-2.5">
-                        <img src="/logo.png" alt="Logo" class="w-8 h-8 rounded-full object-cover border">
+                <div class="bg-white px-4 py-3.5 flex justify-between items-center border-b border-slate-100 shrink-0">
+                    <div class="flex items-center space-x-3">
+                        <img id="headerLogoImg" src="/logo.png" alt="Logo" class="w-9 h-9 rounded-xl object-cover shadow-sm border">
                         <div>
-                            <span id="headerTitle" class="font-bold text-base text-slate-900">Danh Sách Phòng Chat</span>
-                            <p id="headerSubtitle" class="text-[10px] text-slate-500">Hệ thống CSKH real-time</p>
+                            <span class="font-extrabold text-base text-slate-900 tracking-tight">Trung Tâm Đối Soát</span>
+                            <p class="text-[10px] text-slate-400 font-semibold">Realtime Group Engine</p>
                         </div>
                     </div>
                     
                     <div class="flex items-center space-x-2">
-                        <button onclick="openRoomModal()" class="bg-blue-600 text-white text-xs font-bold px-2.5 py-2 rounded-xl shadow-sm">
-                            <i class="fa-solid fa-user-plus"></i> Thêm Khách
+                        <button onclick="openRoomModal()" class="bg-blue-50 hover:bg-blue-100 text-blue-600 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center space-x-1">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Thêm</span>
                         </button>
-                        <label id="batchUploadBtn" class="cursor-pointer bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-2.5 py-2 rounded-xl shadow-sm flex items-center space-x-1 transition hidden">
+                        <label id="batchUploadBtn" class="cursor-pointer bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md shadow-emerald-500/20 flex items-center space-x-1 transition hidden">
                             <i class="fa-solid fa-file-arrow-up"></i>
                             <span>Up Bill Loạt</span>
                             <input type="file" id="batchBillInput" accept="image/*" multiple class="hidden" onchange="handleBatchBills(event)">
@@ -62,105 +73,199 @@
 
             <!-- TAB 2: QUẢN LÝ NHÂN SỰ -->
             <div id="tabStaff" class="absolute inset-0 flex flex-col bg-slate-50 z-0 hidden">
-                <div class="bg-white px-4 py-3 border-b border-slate-100 flex justify-between items-center shrink-0">
-                    <span class="font-bold text-lg text-slate-900">Quản Lý Nhân Sự</span>
-                    <button onclick="openStaffModal()" class="bg-blue-600 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-sm">
+                <div class="bg-white px-4 py-3.5 border-b border-slate-100 flex justify-between items-center shrink-0">
+                    <span class="font-extrabold text-base text-slate-900">Quản Lý Nhân Sự</span>
+                    <button onclick="openStaffModal()" class="bg-blue-600 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-md shadow-blue-500/20 transition">
                         <i class="fa-solid fa-user-plus mr-1"></i> Thêm Chuyên Viên
                     </button>
                 </div>
                 <div id="staffList" class="p-4 space-y-3 overflow-y-auto flex-1"></div>
             </div>
 
-            <!-- TAB 3: CÁ NHÂN & CHUYỂN ĐỔI NHANH TÀI KHOẢN (SWITCH ACCOUNT) -->
+            <!-- TAB 3: CÁ NHÂN & CÀI ĐẶT APP LOGO -->
             <div id="tabProfile" class="absolute inset-0 flex flex-col bg-slate-50 z-0 hidden">
-                <div class="bg-white px-4 py-3 border-b border-slate-100 font-bold text-lg text-slate-900 shrink-0">Cá nhân hệ thống</div>
+                <div class="bg-white px-4 py-3.5 border-b border-slate-100 font-extrabold text-base text-slate-900 shrink-0">Hồ Sơ & Cài Đặt App</div>
                 
-                <div class="bg-white p-4 flex items-center space-x-4 mt-2 border-y border-slate-100 shrink-0">
-                    <img src="/logo.png" alt="Avatar" class="w-14 h-14 rounded-full border shadow-sm object-cover">
-                    <div class="flex-1 min-w-0">
-                        <h3 id="profileName" class="font-bold text-slate-900 text-base truncate">User</h3>
-                        <p id="profileRole" class="text-xs text-blue-600 font-medium mt-0.5">Quyền</p>
+                <div class="p-4 space-y-4 overflow-y-auto flex-1">
+                    <div class="bg-white p-4 rounded-3xl flex items-center space-x-4 shadow-sm border border-slate-200/60">
+                        <img id="profileAvatarImg" src="/logo.png" alt="Avatar" class="w-14 h-14 rounded-2xl border shadow-inner object-cover">
+                        <div class="flex-1 min-w-0">
+                            <h3 id="profileName" class="font-bold text-slate-900 text-base truncate">User</h3>
+                            <p id="profileRole" class="text-xs text-blue-600 font-bold mt-0.5">Quyền</p>
+                            <span class="inline-block mt-1 px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[9px] font-extrabold rounded-full">TRỰC TUYẾN</span>
+                        </div>
+                    </div>
+
+                    <!-- Phần Chỉnh Sửa Ảnh Đại Diện / Logo App -->
+                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-200/60 space-y-3">
+                        <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider flex items-center">
+                            <i class="fa-solid fa-image mr-1.5 text-blue-600"></i> Thay Đổi Logo / Ảnh Đại Diện App
+                        </h4>
+                        <div class="flex items-center space-x-3">
+                            <img id="settingsLogoPreview" src="/logo.png" class="w-12 h-12 rounded-xl object-cover border shadow-sm">
+                            <label class="cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-2.5 rounded-2xl text-xs transition">
+                                <i class="fa-solid fa-upload mr-1"></i> Tải Ảnh Mới
+                                <input type="file" accept="image/*" class="hidden" onchange="handleAppLogoUpload(event)">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-200/60 space-y-3">
+                        <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider flex items-center">
+                            <i class="fa-solid fa-scroll mr-1.5 text-blue-600"></i> Kịch Bản Chương Trình Bot
+                        </h4>
+                        <div>
+                            <textarea id="settingScript" rows="2" onblur="saveSettings()" placeholder="Nhập kịch bản chương trình..." class="w-full bg-slate-50 border border-slate-200 p-3 rounded-2xl outline-none text-xs text-slate-800 font-medium focus:bg-white focus:border-blue-500 transition"></textarea>
+                        </div>
+                        <div class="flex items-center justify-between py-1 border-t border-slate-50">
+                            <span class="text-xs font-semibold text-slate-700">Bot clone tự động hùa theo</span>
+                            <input type="checkbox" id="settingBotsChat" onchange="saveSettings()" class="w-4 h-4 accent-blue-600 cursor-pointer">
+                        </div>
+                        <div class="flex items-center justify-between py-1 border-t border-slate-50">
+                            <span class="text-xs font-semibold text-slate-700">Tự động quét OCR hóa đơn</span>
+                            <input type="checkbox" id="settingOcr" onchange="saveSettings()" class="w-4 h-4 accent-blue-600 cursor-pointer">
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-200/60 space-y-2.5">
+                        <h4 class="font-extrabold text-xs text-slate-400 uppercase tracking-wider flex items-center">
+                            <i class="fa-solid fa-shuffle mr-1.5 text-blue-600"></i> Chuyển Đổi Nhanh Tài Khoản
+                        </h4>
+                        <div id="quickSwitchList" class="space-y-2"></div>
                     </div>
                 </div>
 
-                <!-- Khu vực chuyển đổi nhanh tài khoản trực tiếp trên app -->
-                <div class="p-4 space-y-3 flex-1 overflow-y-auto">
-                    <h4 class="font-bold text-xs text-slate-500 uppercase tracking-wider">⚡ Chuyển Đổi Nhanh Tài Khoản</h4>
-                    <div id="quickSwitchList" class="space-y-2">
-                        <!-- Danh sách tài khoản sẽ được render bằng JS -->
-                    </div>
-                </div>
-
-                <div class="p-4 bg-white border-t border-slate-200">
-                    <button onclick="handleLogout()" class="w-full bg-white border border-red-200 text-red-600 font-bold py-3 rounded-2xl text-sm shadow-sm hover:bg-red-50 transition">Đăng Xuất Hoàn Toàn</button>
+                <div class="p-4 bg-white border-t border-slate-100 shrink-0">
+                    <button onclick="handleLogout()" class="w-full bg-slate-100 hover:bg-red-50 border border-slate-200 hover:border-red-200 text-slate-700 hover:text-red-600 font-bold py-3 rounded-2xl text-xs transition shadow-sm">Đăng Xuất Hoàn Toàn</button>
                 </div>
             </div>
 
         </div>
 
-        <!---------------- KHUNG CHAT CHI TIẾT ---------------->
+        <!---------------- KHUNG CHAT CHI TIẾT PRO ---------------->
         <div id="chatRoomView" class="absolute inset-0 bg-white z-30 flex flex-col transform translate-x-full transition-transform duration-300">
-            <div class="bg-blue-600 text-white px-4 py-3 flex items-center justify-between shrink-0 shadow-sm">
-                <div class="flex items-center space-x-3">
-                    <button onclick="closeChatRoom()" class="text-white text-lg px-1"><i class="fa-solid fa-arrow-left"></i></button>
-                    <div class="flex items-center space-x-2">
-                        <img src="/logo.png" alt="Logo" class="w-7 h-7 rounded-full object-cover border border-white/50">
-                        <div>
-                            <h3 id="activeRoomName" class="font-bold text-sm leading-tight">Phòng Hỗ Trợ</h3>
-                            <span id="activeRoomStatus" class="text-[10px] text-emerald-200">Trực tuyến (Admin & Chuyên viên)</span>
+            <!-- Header Chat -->
+            <div class="bg-blue-600 text-white px-4 py-3.5 flex items-center justify-between shrink-0 shadow-md">
+                <div class="flex items-center space-x-3 min-w-0">
+                    <button onclick="closeChatRoom()" class="text-white text-lg px-1 hover:opacity-80 transition"><i class="fa-solid fa-arrow-left"></i></button>
+                    <div class="flex items-center space-x-2.5 min-w-0">
+                        <img id="activeRoomLogo" src="/logo.png" alt="Logo" class="w-8 h-8 rounded-xl object-cover border border-white/40 shadow-inner shrink-0">
+                        <div class="min-w-0">
+                            <h3 id="activeRoomName" class="font-bold text-sm leading-tight truncate">Phòng Hỗ Trợ</h3>
+                            <span class="text-[10px] text-emerald-200 font-semibold">● Đang trực tuyến</span>
                         </div>
                     </div>
                 </div>
+                
+                <div class="flex items-center space-x-1.5 shrink-0">
+                    <!-- Nút Thêm Thành Viên Vào Nhóm -->
+                    <button onclick="openAddMemberModal()" class="bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold px-2.5 py-1.5 rounded-xl transition shadow-sm flex items-center space-x-1" title="Thêm thành viên">
+                        <i class="fa-solid fa-user-plus text-[11px]"></i>
+                        <span>Thêm</span>
+                    </button>
+                    <!-- Nút xem thành viên nhóm -->
+                    <button onclick="openMembersModal()" class="bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold px-2.5 py-1.5 rounded-xl transition shadow-sm flex items-center space-x-1">
+                        <i class="fa-solid fa-users text-[11px]"></i>
+                    </button>
+                </div>
             </div>
+
+            <!-- Khung tin nhắn -->
             <div id="messageContainer" class="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50"></div>
-            <div class="p-2.5 bg-white border-t border-slate-200 flex items-center space-x-2 shrink-0">
-                <input type="text" id="messageInput" placeholder="Nhập tin nhắn..." class="flex-1 bg-slate-100 border border-slate-200 rounded-full px-4 py-2.5 outline-none text-xs sm:text-sm text-slate-800">
-                <button onclick="sendMessage()" class="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center text-sm shadow-sm shrink-0 hover:bg-blue-700 transition">
+
+            <!-- Preview ảnh trước khi gửi -->
+            <div id="imagePreviewContainer" class="hidden px-4 py-2 bg-slate-100 border-t border-slate-200 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <img id="previewImgTag" src="" alt="Preview" class="w-12 h-12 rounded-xl object-cover border shadow-sm">
+                    <span class="text-xs font-bold text-slate-700 truncate" id="previewFileName">Đã chọn ảnh bill</span>
+                </div>
+                <button onclick="clearImagePreview()" class="text-red-500 font-extrabold px-2 py-1 text-sm">✕</button>
+            </div>
+
+            <!-- Thanh nhập tin nhắn chuyên nghiệp -->
+            <div class="p-3 bg-white border-t border-slate-100 flex items-center space-x-2 shrink-0 shadow-lg">
+                <label class="cursor-pointer text-slate-400 hover:text-blue-600 p-2 text-xl transition" title="Gửi ảnh / Hóa đơn">
+                    <i class="fa-regular fa-image"></i>
+                    <input type="file" id="chatImageInput" accept="image/*" class="hidden" onchange="handleChatImageSelect(event)">
+                </label>
+
+                <input type="text" id="messageInput" placeholder="Nhập tin nhắn..." class="flex-1 bg-slate-50 border border-slate-200 rounded-full px-4 py-3 outline-none text-xs sm:text-sm text-slate-800 focus:bg-white focus:border-blue-500 transition font-medium">
+                
+                <button onclick="sendMessage()" class="bg-blue-600 hover:bg-blue-700 text-white w-11 h-11 rounded-full flex items-center justify-center text-sm shadow-md shadow-blue-500/30 shrink-0 transition">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </div>
         </div>
 
-        <!---------------- THANH NAVIGATION BAR ---------------->
-        <div id="navBarContainer" class="bg-white border-t border-slate-200 h-14 flex justify-around items-center shrink-0 z-20 w-full shadow-lg">
+        <!---------------- NAVIGATION BAR ---------------->
+        <div id="navBarContainer" class="bg-white border-t border-slate-100 h-16 flex justify-around items-center shrink-0 z-20 w-full shadow-lg">
             <button onclick="switchTab('message')" id="navMsg" class="flex flex-col items-center justify-center flex-1 text-blue-600 transition py-1">
-                <i class="fa-solid fa-comments text-base"></i>
-                <span class="text-[10px] mt-0.5 font-medium">Hỗ trợ</span>
+                <i class="fa-solid fa-comments text-lg"></i>
+                <span class="text-[10px] mt-1 font-bold">Đối Soát</span>
             </button>
-            <button onclick="switchTab('staff')" id="navStaff" class="flex flex-col items-center justify-center flex-1 text-slate-400 transition py-1 hidden">
-                <i class="fa-solid fa-users-gear text-base"></i>
-                <span class="text-[10px] mt-0.5 font-medium">Nhân sự</span>
+            <button onclick="switchTab('staff')" id="navStaff" class="flex flex-col items-center justify-center flex-1 text-slate-400 hover:text-slate-600 transition py-1 hidden">
+                <i class="fa-solid fa-users-gear text-lg"></i>
+                <span class="text-[10px] mt-1 font-bold">Nhân Sự</span>
             </button>
-            <button onclick="switchTab('profile')" id="navProfile" class="flex flex-col items-center justify-center flex-1 text-slate-400 transition py-1">
-                <i class="fa-solid fa-user text-base"></i>
-                <span class="text-[10px] mt-0.5 font-medium">Cá nhân</span>
+            <button onclick="switchTab('profile')" id="navProfile" class="flex flex-col items-center justify-center flex-1 text-slate-400 hover:text-slate-600 transition py-1">
+                <i class="fa-solid fa-user-gear text-lg"></i>
+                <span class="text-[10px] mt-1 font-bold">Cá Nhân</span>
             </button>
         </div>
 
     </div>
 
-    <!-- Modal Thêm Khách Vào Phòng Chat -->
-    <div id="roomModal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white p-5 rounded-2xl w-full max-w-sm shadow-2xl space-y-3">
-            <h3 class="font-bold text-base text-slate-900">Thêm Khách Vào Phòng Chat</h3>
-            <input type="text" id="roomNameInput" placeholder="Tên phòng (VD: Hỗ trợ A)..." class="w-full bg-slate-100 border-none p-3 rounded-xl outline-none text-sm text-slate-800">
-            <input type="text" id="clientNameInput" placeholder="Tên khách hàng..." class="w-full bg-slate-100 border-none p-3 rounded-xl outline-none text-sm text-slate-800">
+    <!-- Modal Thêm Thành Viên Vào Nhóm -->
+    <div id="addMemberModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-[28px] w-full max-w-sm shadow-2xl space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="font-extrabold text-base text-slate-900">Thêm Thành Viên Vào Nhóm</h3>
+                <button onclick="closeAddMemberModal()" class="text-slate-400 font-bold hover:text-slate-600">✕</button>
+            </div>
+            <p class="text-xs text-slate-400">Chọn tài khoản/bot clone để thêm vào phòng chat hiện tại:</p>
+            <div id="availableUsersToAdd" class="space-y-2 max-h-60 overflow-y-auto"></div>
+            <button onclick="closeAddMemberModal()" class="w-full py-3 bg-slate-100 text-slate-700 rounded-2xl text-xs font-bold">Đóng</button>
+        </div>
+    </div>
+
+    <!-- Modal Xem Thành Viên Nhóm -->
+    <div id="membersModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-[28px] w-full max-w-sm shadow-2xl space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="font-extrabold text-base text-slate-900">Thành Viên Trong Nhóm</h3>
+                <button onclick="closeMembersModal()" class="text-slate-400 font-bold hover:text-slate-600">✕</button>
+            </div>
+            <div id="groupMembersList" class="space-y-2 max-h-60 overflow-y-auto"></div>
+            <button onclick="closeMembersModal()" class="w-full py-3 bg-blue-600 text-white rounded-2xl text-xs font-bold shadow-md">Đóng</button>
+        </div>
+    </div>
+
+    <!-- Modal Thêm Phòng -->
+    <div id="roomModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-[28px] w-full max-w-sm shadow-2xl space-y-4">
+            <h3 class="font-extrabold text-base text-slate-900">Thêm Phòng Hỗ Trợ Mới</h3>
+            <div class="space-y-3">
+                <input type="text" id="roomNameInput" placeholder="Tên phòng..." class="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-2xl outline-none text-xs text-slate-800 font-semibold">
+                <input type="text" id="clientNameInput" placeholder="Tên khách hàng..." class="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-2xl outline-none text-xs text-slate-800 font-semibold">
+            </div>
             <div class="flex justify-end space-x-2 pt-2">
-                <button onclick="closeRoomModal()" class="px-4 py-2 bg-slate-100 rounded-xl text-xs font-medium text-slate-600">Đóng</button>
-                <button onclick="createRoomWithClient()" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-medium">Tạo & Thêm</button>
+                <button onclick="closeRoomModal()" class="px-4 py-2.5 bg-slate-100 rounded-2xl text-xs font-bold text-slate-600">Đóng</button>
+                <button onclick="createRoomWithClient()" class="px-4 py-2.5 bg-blue-600 text-white rounded-2xl text-xs font-bold shadow-md shadow-blue-500/20">Xác Nhận</button>
             </div>
         </div>
     </div>
 
     <!-- Modal Thêm Nhân Sự -->
-    <div id="staffModal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white p-5 rounded-2xl w-full max-w-sm shadow-2xl space-y-3">
-            <h3 class="font-bold text-base text-slate-900">Thêm Tài Khoản Chuyên Viên</h3>
-            <input type="text" id="newStaffUser" placeholder="Tên đăng nhập..." class="w-full bg-slate-100 border-none p-3 rounded-xl outline-none text-sm text-slate-800">
-            <input type="password" id="newStaffPass" placeholder="Mật khẩu..." class="w-full bg-slate-100 border-none p-3 rounded-xl outline-none text-sm text-slate-800">
+    <div id="staffModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-[28px] w-full max-w-sm shadow-2xl space-y-4">
+            <h3 class="font-extrabold text-base text-slate-900">Thêm Tài Khoản Chuyên Viên / Bot</h3>
+            <div class="space-y-3">
+                <input type="text" id="newStaffUser" placeholder="Tên tài khoản..." class="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-2xl outline-none text-xs text-slate-800 font-semibold">
+                <input type="password" id="newStaffPass" placeholder="Mật khẩu..." class="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-2xl outline-none text-xs text-slate-800 font-semibold">
+            </div>
             <div class="flex justify-end space-x-2 pt-2">
-                <button onclick="closeStaffModal()" class="px-4 py-2 bg-slate-100 rounded-xl text-xs font-medium text-slate-600">Đóng</button>
-                <button onclick="createSpecialist()" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-medium">Xác Nhận</button>
+                <button onclick="closeStaffModal()" class="px-4 py-2.5 bg-slate-100 rounded-2xl text-xs font-bold text-slate-600">Đóng</button>
+                <button onclick="createSpecialist()" class="px-4 py-2.5 bg-blue-600 text-white rounded-2xl text-xs font-bold shadow-md shadow-blue-500/20">Thêm Mới</button>
             </div>
         </div>
     </div>
@@ -171,6 +276,8 @@
         let roomsData = [];
         let usersData = [];
         let currentRoomId = null;
+        let appSettings = {};
+        let selectedImageUrl = null;
 
         async function handleLogin() {
             const username = document.getElementById('authUsername').value.trim();
@@ -194,6 +301,7 @@
                 currentUser = data.user;
                 roomsData = data.rooms;
                 usersData = data.users;
+                appSettings = data.settings;
                 startApp();
             } else {
                 errDiv.textContent = data.message;
@@ -234,14 +342,73 @@
             document.getElementById('authScreen').classList.remove('hidden');
         }
 
-        // Chuyển đổi nhanh tài khoản trực tiếp ngay trên app mà không cần login lại
         function switchAccount(userId) {
             const targetUser = usersData.find(u => u.id === userId);
             if(targetUser) {
                 currentUser = { id: targetUser.id, username: targetUser.username, role: targetUser.role };
                 startApp();
                 switchTab('message');
-                alert(`Đã chuyển sang tài khoản: ${targetUser.username} (${targetUser.role.toUpperCase()})`);
+            }
+        }
+
+        async function saveSettings() {
+            const autoOcr = document.getElementById('settingOcr').checked;
+            const autoBotsChat = document.getElementById('settingBotsChat').checked;
+            const programScript = document.getElementById('settingScript').value.trim();
+
+            const res = await fetch('/api/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ autoOcr, autoBotsChat, programScript })
+            });
+            const data = await res.json();
+            if(data.success) {
+                appSettings = data.settings;
+            }
+        }
+
+        // Tải lên ảnh đại diện / logo app trực tiếp
+        async function handleAppLogoUpload(event) {
+            const file = event.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64Img = e.target.result;
+                const res = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ appLogo: base64Img })
+                });
+                const data = await res.json();
+                if(data.success) {
+                    appSettings = data.settings;
+                    updateAppLogoImages(appSettings.appLogo);
+                    alert('Cập nhật logo ứng dụng thành công!');
+                }
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function updateAppLogoImages(logoUrl) {
+            if(!logoUrl) return;
+            document.getElementById('appLogoDisplay').src = logoUrl;
+            document.getElementById('headerLogoImg').src = logoUrl;
+            document.getElementById('profileAvatarImg').src = logoUrl;
+            document.getElementById('settingsLogoPreview').src = logoUrl;
+            document.getElementById('activeRoomLogo').src = logoUrl;
+        }
+
+        socket.on('update_settings', (settings) => {
+            appSettings = settings;
+            applySettingsToUI();
+        });
+
+        function applySettingsToUI() {
+            if(document.getElementById('settingScript')) {
+                document.getElementById('settingScript').value = appSettings.programScript || '';
+                document.getElementById('settingOcr').checked = appSettings.autoOcr;
+                document.getElementById('settingBotsChat').checked = appSettings.autoBotsChat;
+                updateAppLogoImages(appSettings.appLogo);
             }
         }
 
@@ -251,6 +418,8 @@
             
             document.getElementById('profileName').textContent = currentUser.username;
             document.getElementById('profileRole').textContent = `Vai trò: ${currentUser.role.toUpperCase()}`;
+
+            applySettingsToUI();
 
             if(currentUser.role === 'admin') {
                 document.getElementById('navStaff').classList.remove('hidden');
@@ -282,16 +451,16 @@
             usersData.forEach(u => {
                 const isCurrent = currentUser && currentUser.id === u.id;
                 const div = document.createElement('div');
-                div.className = `p-3 rounded-xl flex items-center justify-between border cursor-pointer transition ${isCurrent ? 'bg-blue-50 border-blue-300 shadow-sm' : 'bg-white border-slate-200 hover:bg-slate-50'}`;
+                div.className = `p-3 rounded-2xl flex items-center justify-between border cursor-pointer transition ${isCurrent ? 'bg-blue-50/80 border-blue-300 shadow-sm' : 'bg-slate-50 border-slate-200/60 hover:bg-white'}`;
                 div.innerHTML = `
                     <div class="flex items-center space-x-2.5">
-                        <span class="text-lg">${u.avatar || '👤'}</span>
+                        <span class="text-base">${u.avatar || '👤'}</span>
                         <div>
                             <p class="font-bold text-xs text-slate-800">${u.username}</p>
-                            <span class="text-[9px] uppercase font-semibold text-slate-400">${u.role}</span>
+                            <span class="text-[9px] uppercase font-bold text-slate-400">${u.role}</span>
                         </div>
                     </div>
-                    <span class="text-xs font-bold ${isCurrent ? 'text-blue-600' : 'text-slate-400'}">${isCurrent ? 'Đang dùng' : 'Chuyển'}</span>
+                    <span class="text-[11px] font-black ${isCurrent ? 'text-blue-600' : 'text-slate-400'}">${isCurrent ? 'Đang dùng' : 'Chuyển'}</span>
                 `;
                 if(!isCurrent) {
                     div.onclick = () => switchAccount(u.id);
@@ -311,14 +480,13 @@
             const res = await fetch('/api/create-room', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, clientName, specialistName: currentUser.role === 'specialist' ? currentUser.username : 'Chưa phân công' })
+                body: JSON.stringify({ name, clientName, specialistName: currentUser.role === 'specialist' ? currentUser.username : 'Bot_KếToán' })
             });
             const data = await res.json();
             if(data.success) {
                 closeRoomModal();
                 document.getElementById('roomNameInput').value = '';
                 document.getElementById('clientNameInput').value = '';
-                alert('Thêm phòng và khách thành công!');
             }
         }
 
@@ -358,7 +526,7 @@
             }
 
             if(displayRooms.length === 0) {
-                list.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs">Chưa có phòng hỗ trợ nào.</div>`;
+                list.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs font-medium">Chưa có phòng hỗ trợ nào.</div>`;
                 return;
             }
 
@@ -376,21 +544,21 @@
 
                     actionHtml = `
                         <div class="flex items-center space-x-2" onclick="event.stopPropagation()">
-                            <select onchange="assignSpecialist('${r.id}', this.value)" class="bg-blue-50 text-blue-700 text-xs font-bold rounded-lg px-2 py-1.5 border border-blue-200 outline-none">
+                            <select onchange="assignSpecialist('${r.id}', this.value)" class="bg-blue-50 text-blue-700 text-xs font-bold rounded-lg px-2.5 py-1.5 border border-blue-200 outline-none shadow-sm">
                                 ${specialistOptions}
                             </select>
                         </div>
                     `;
                 } else {
-                    actionHtml = `<span class="text-[10px] px-2 py-1 rounded-full font-medium bg-emerald-100 text-emerald-700">${r.assignedSpecialist ? 'Phụ trách: ' + r.assignedSpecialist : 'Đang chờ'}</span>`;
+                    actionHtml = `<span class="text-[10px] px-2.5 py-1 rounded-full font-bold bg-emerald-100 text-emerald-700">${r.assignedSpecialist ? 'Phụ trách: ' + r.assignedSpecialist : 'Đang chờ'}</span>`;
                 }
 
                 div.innerHTML = `
-                    <div class="flex items-center space-x-3 flex-1 min-w-0 cursor-pointer" onclick="openRoom('${r.id}', '${r.name}')">
-                        <img src="/logo.png" alt="Logo" class="w-12 h-12 rounded-full object-cover border shrink-0 shadow-sm">
+                    <div class="flex items-center space-x-3.5 flex-1 min-w-0 cursor-pointer" onclick="openRoom('${r.id}', '${r.name}')">
+                        <img id="roomItemImg" src="${appSettings.appLogo || '/logo.png'}" alt="Logo" class="w-12 h-12 rounded-2xl object-cover border shrink-0 shadow-sm">
                         <div class="flex-1 min-w-0 pr-2">
                             <h4 class="font-bold text-slate-900 text-sm truncate">${r.name}</h4>
-                            <p class="text-xs text-slate-500 truncate mt-0.5">Nhấn để vào phòng chat trực tuyến...</p>
+                            <p class="text-xs text-slate-400 truncate mt-0.5 font-medium">Nhấn để xem tin nhắn từ nhóm...</p>
                         </div>
                     </div>
                     ${actionHtml}
@@ -404,13 +572,13 @@
             list.innerHTML = '';
             usersData.forEach(u => {
                 const div = document.createElement('div');
-                div.className = "bg-white p-3.5 rounded-2xl flex items-center justify-between shadow-sm border border-slate-100";
+                div.className = "bg-white p-4 rounded-3xl flex items-center justify-between shadow-sm border border-slate-200/60";
                 div.innerHTML = `
-                    <div class="flex items-center space-x-3">
-                        <img src="/logo.png" alt="Logo" class="w-10 h-10 rounded-full object-cover border">
+                    <div class="flex items-center space-x-3.5">
+                        <div class="w-11 h-11 rounded-2xl bg-slate-100 flex items-center justify-center text-xl shadow-inner">${u.avatar || '👤'}</div>
                         <div>
-                            <h4 class="font-bold text-slate-800 text-sm">${u.username}</h4>
-                            <span class="text-[10px] px-2 py-0.5 rounded-full uppercase font-semibold ${u.role==='admin'?'bg-purple-100 text-purple-700':'bg-emerald-100 text-emerald-700'}">${u.role}</span>
+                            <h4 class="font-bold text-slate-900 text-sm">${u.username}</h4>
+                            <span class="text-[10px] px-2.5 py-0.5 rounded-full uppercase font-black ${u.role==='admin'?'bg-purple-100 text-purple-700':'bg-emerald-100 text-emerald-700'}">${u.role}</span>
                         </div>
                     </div>
                 `;
@@ -445,7 +613,7 @@
                 closeStaffModal();
                 document.getElementById('newStaffUser').value = '';
                 document.getElementById('newStaffPass').value = '';
-                alert('Tạo tài khoản chuyên viên thành công!');
+                alert('Tạo chuyên viên/bot thành công!');
             } else {
                 alert(data.message);
             }
@@ -462,6 +630,92 @@
             document.getElementById('chatRoomView').classList.add('translate-x-full');
         }
 
+        function handleChatImageSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedImageUrl = e.target.result;
+                    document.getElementById('previewImgTag').src = selectedImageUrl;
+                    document.getElementById('previewFileName').textContent = file.name;
+                    document.getElementById('imagePreviewContainer').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function clearImagePreview() {
+            selectedImageUrl = null;
+            document.getElementById('chatImageInput').value = '';
+            document.getElementById('imagePreviewContainer').classList.add('hidden');
+        }
+
+        // Modal Thêm Thành Viên Vào Nhóm
+        function openAddMemberModal() {
+            const list = document.getElementById('availableUsersToAdd');
+            list.innerHTML = '';
+            const currentRoom = roomsData.find(r => r.id === currentRoomId);
+            const currentMembers = currentRoom && currentRoom.members ? currentRoom.members : [];
+
+            usersData.forEach(u => {
+                if(!currentMembers.includes(u.username)) {
+                    const div = document.createElement('div');
+                    div.className = "p-3 rounded-2xl bg-slate-50 flex items-center justify-between border border-slate-100 text-xs font-bold";
+                    div.innerHTML = `
+                        <div class="flex items-center space-x-2.5">
+                            <span class="text-base">${u.avatar || '👤'}</span>
+                            <span class="text-slate-800">${u.username}</span>
+                        </div>
+                        <button onclick="addMemberToRoom('${u.username}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-xl text-xs shadow-sm">Thêm</button>
+                    `;
+                    list.appendChild(div);
+                }
+            });
+            if(list.innerHTML === '') {
+                list.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">Tất cả thành viên đã có trong nhóm.</p>`;
+            }
+            document.getElementById('addMemberModal').classList.remove('hidden');
+        }
+        function closeAddMemberModal() { document.getElementById('addMemberModal').classList.add('hidden'); }
+
+        async function addMemberToRoom(username) {
+            const res = await fetch('/api/add-member', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ roomId: currentRoomId, username })
+            });
+            const data = await res.json();
+            if(data.success) {
+                alert(`Đã thêm ${username} vào nhóm thành công!`);
+                closeAddMemberModal();
+                openMembersModal(); // Refresh danh sách
+            }
+        }
+
+        // Modal Xem Thành Viên
+        function openMembersModal() {
+            const list = document.getElementById('groupMembersList');
+            list.innerHTML = '';
+            const currentRoom = roomsData.find(r => r.id === currentRoomId);
+            const currentMembers = currentRoom && currentRoom.members ? currentRoom.members : [currentUser.username];
+
+            currentMembers.forEach(memberName => {
+                const uObj = usersData.find(u => u.username === memberName) || { role: 'client', avatar: '👤' };
+                const div = document.createElement('div');
+                div.className = "p-3 rounded-2xl bg-slate-50 flex items-center justify-between border border-slate-100 text-xs font-bold";
+                div.innerHTML = `
+                    <div class="flex items-center space-x-2.5">
+                        <span class="text-base">${uObj.avatar || '👤'}</span>
+                        <span class="text-slate-800">${memberName}</span>
+                    </div>
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${uObj.role==='admin'?'bg-purple-100 text-purple-700':'bg-emerald-100 text-emerald-700'}">${uObj.role || 'client'}</span>
+                `;
+                list.appendChild(div);
+            });
+            document.getElementById('membersModal').classList.remove('hidden');
+        }
+        function closeMembersModal() { document.getElementById('membersModal').classList.add('hidden'); }
+
         socket.on('load_messages', (msgs) => { renderMessages(msgs); });
 
         function renderMessages(msgs) {
@@ -472,22 +726,28 @@
                 const div = document.createElement('div');
                 div.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
                 
+                let imgHtml = '';
+                if(m.imageUrl) {
+                    imgHtml = `<img src="${m.imageUrl}" class="mt-2 w-48 h-auto rounded-2xl object-cover shadow-sm border">`;
+                }
+
                 let billHtml = '';
                 if(m.billInfo) {
                     billHtml = `
-                        <div class="mt-2 bg-emerald-50 border border-emerald-200 p-2.5 rounded-xl text-xs text-emerald-800 space-y-1">
-                            <p class="font-bold">🧾 KẾT QUẢ BÓC TÁCH OCR TỰ ĐỘNG:</p>
-                            <p>Mã Giao Dịch: <span class="font-mono font-bold">${m.billInfo.code}</span></p>
-                            <p>Số Tiền: <span class="font-bold text-blue-600">${m.billInfo.amount}</span></p>
-                            <p class="font-semibold text-emerald-600">${m.billInfo.status}</p>
+                        <div class="mt-2 bg-emerald-50 border border-emerald-200 p-3 rounded-2xl text-xs text-emerald-900 space-y-1 shadow-sm font-semibold">
+                            <p class="font-black text-emerald-800">🧾 KẾT QUẢ ĐỐI SOÁT OCR:</p>
+                            <p>Mã GD: <span class="font-mono font-bold">${m.billInfo.code}</span></p>
+                            <p>Số Tiền: <span class="font-black text-blue-600">${m.billInfo.amount}</span></p>
+                            <p class="font-bold text-emerald-600">${m.billInfo.status}</p>
                         </div>
                     `;
                 }
 
                 div.innerHTML = `
-                    <span class="text-[10px] text-slate-400 px-1 mb-0.5">${m.senderName} • ${m.time}</span>
-                    <div class="max-w-[85%] px-4 py-2.5 rounded-2xl text-xs sm:text-sm shadow-sm break-words ${isMe ? 'bg-blue-600 text-white rounded-br-none' : 'bg-white border border-slate-100 text-slate-800 rounded-bl-none'}">
+                    <span class="text-[10px] text-slate-400 px-1 mb-1 font-bold">${m.senderName} • ${m.time}</span>
+                    <div class="max-w-[85%] px-4 py-3 rounded-3xl text-xs sm:text-sm shadow-sm break-words font-medium ${isMe ? 'bg-blue-600 text-white rounded-br-none shadow-blue-500/20' : 'bg-white border border-slate-200/60 text-slate-800 rounded-bl-none'}">
                         ${m.text}
+                        ${imgHtml}
                         ${billHtml}
                     </div>
                 `;
@@ -499,15 +759,17 @@
         function sendMessage() {
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
-            if (!text) return;
+            if (!text && !selectedImageUrl) return;
 
             socket.emit('send_message', {
                 roomId: currentRoomId,
                 senderName: currentUser.username,
-                text: text
+                text: text || 'Gửi hóa đơn/ảnh đối soát',
+                imageUrl: selectedImageUrl
             });
 
             input.value = '';
+            clearImagePreview();
         }
 
         socket.on('receive_message', (msg) => {
@@ -517,22 +779,28 @@
                 const div = document.createElement('div');
                 div.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
                 
+                let imgHtml = '';
+                if(msg.imageUrl) {
+                    imgHtml = `<img src="${msg.imageUrl}" class="mt-2 w-48 h-auto rounded-2xl object-cover shadow-sm border">`;
+                }
+
                 let billHtml = '';
                 if(msg.billInfo) {
                     billHtml = `
-                        <div class="mt-2 bg-emerald-50 border border-emerald-200 p-2.5 rounded-xl text-xs text-emerald-800 space-y-1">
-                            <p class="font-bold">🧾 KẾT QUẢ BÓC TÁCH OCR TỰ ĐỘNG:</p>
-                            <p>Mã Giao Dịch: <span class="font-mono font-bold">${msg.billInfo.code}</span></p>
-                            <p>Số Tiền: <span class="font-bold text-blue-600">${msg.billInfo.amount}</span></p>
-                            <p class="font-semibold text-emerald-600">${msg.billInfo.status}</p>
+                        <div class="mt-2 bg-emerald-50 border border-emerald-200 p-3 rounded-2xl text-xs text-emerald-900 space-y-1 shadow-sm font-semibold">
+                            <p class="font-black text-emerald-800">🧾 KẾT QUẢ ĐỐI SOÁT OCR:</p>
+                            <p>Mã GD: <span class="font-mono font-bold">${msg.billInfo.code}</span></p>
+                            <p>Số Tiền: <span class="font-black text-blue-600">${msg.billInfo.amount}</span></p>
+                            <p class="font-bold text-emerald-600">${msg.billInfo.status}</p>
                         </div>
                     `;
                 }
 
                 div.innerHTML = `
-                    <span class="text-[10px] text-slate-400 px-1 mb-0.5">${msg.senderName} • ${msg.time}</span>
-                    <div class="max-w-[85%] px-4 py-2.5 rounded-2xl text-xs sm:text-sm shadow-sm break-words ${isMe ? 'bg-blue-600 text-white rounded-br-none' : 'bg-white border border-slate-100 text-slate-800 rounded-bl-none'}">
+                    <span class="text-[10px] text-slate-400 px-1 mb-1 font-bold">${msg.senderName} • ${msg.time}</span>
+                    <div class="max-w-[85%] px-4 py-3 rounded-3xl text-xs sm:text-sm shadow-sm break-words font-medium ${isMe ? 'bg-blue-600 text-white rounded-br-none shadow-blue-500/20' : 'bg-white border border-slate-200/60 text-slate-800 rounded-bl-none'}">
                         ${msg.text}
+                        ${imgHtml}
                         ${billHtml}
                     </div>
                 `;
@@ -546,9 +814,9 @@
             document.getElementById('tabStaff').classList.add('hidden');
             document.getElementById('tabProfile').classList.add('hidden');
 
-            document.getElementById('navMsg').className = "flex flex-col items-center justify-center flex-1 text-slate-400 transition py-1";
-            document.getElementById('navStaff').className = "flex flex-col items-center justify-center flex-1 text-slate-400 transition py-1";
-            document.getElementById('navProfile').className = "flex flex-col items-center justify-center flex-1 text-slate-400 transition py-1";
+            document.getElementById('navMsg').className = "flex flex-col items-center justify-center flex-1 text-slate-400 hover:text-slate-600 transition py-1";
+            document.getElementById('navStaff').className = "flex flex-col items-center justify-center flex-1 text-slate-400 hover:text-slate-600 transition py-1";
+            document.getElementById('navProfile').className = "flex flex-col items-center justify-center flex-1 text-slate-400 hover:text-slate-600 transition py-1";
 
             if(tabName === 'message') {
                 document.getElementById('tabMessage').classList.remove('hidden');

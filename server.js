@@ -73,25 +73,19 @@ const subjects = [
 const actions = [
   "thì tài khoản cứ ting ting reo liên tục", "là doanh số nhảy vọt không thấy đỉnh", 
   "giúp anh em hốt bạc tỷ mỏi cả tay", "làm dòng tiền thông suốt mượt mà", 
-  "kéo dài chuỗi ngày chốt đơn ngập mặt", "biến mọi khó khăn thành lợi nhuận khổng lồ",
-  "tạo ra biên độ lợi nhuận cực kỳ khủng", "đẩy tốc độ tăng trưởng lên tầm cao mới"
+  "kéo dài chuỗi ngày chốt đơn ngập mặt", "biến mọi khó khăn thành lợi nhuận khổng lồ"
 ];
 const modifiers = [
   "không trượt phát nào", "đỉnh chóp chữ ê kéo dài", "phê chữ y thực sự luôn", 
-  "quá uy tín cho một cuộc tình", "làm ae đứng ngồi không yên", "khiến đối thủ ngửi khói dài dài",
-  "vượt mọi kỳ vọng KPI đề ra", "bẻ lái tương lai rủng rỉnh tiền tiêu"
+  "quá uy tín cho một cuộc tình", "làm ae đứng ngồi không yên", "khiến đối thủ ngửi khói dài dài"
 ];
-const emojis = ["🔥", "🚀", "💰", "🌟", "💸", "🎯", "😎", "💪"];
+const emojis = ["🔥", "🚀", "💰", "🌟", "💸", "🎯"];
 
-function generateInfiniteUniqueSentence(customKeyword = "") {
+function generateInfiniteUniqueSentence() {
   let sub = subjects[Math.floor(Math.random() * subjects.length)];
   let act = actions[Math.floor(Math.random() * actions.length)];
   let mod = modifiers[Math.floor(Math.random() * modifiers.length)];
   let emo = emojis[Math.floor(Math.random() * emojis.length)];
-
-  if (customKeyword && Math.random() > 0.25) {
-    return `Về vụ "${customKeyword}" thì ${sub.toLowerCase()} ${act}, ${mod} ${emo}`;
-  }
   return `${sub} ${act}, ${mod} ${emo}`;
 }
 
@@ -252,7 +246,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP 24/7 (ĐÃ CHỈNH TỐC ĐỘ 2.5 GIÂY)
+// VÒNG LẶP 24/7 (2.5 GIÂY)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
@@ -311,29 +305,41 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> TỐC ĐỘ PHẢN HỒI ĐƯỢC GIÃN ĐỀU 2.5 GIÂY CHO TỪNG ĐỢT ĐỂ CHỐNG LẶP VÀ TẠO ĐỘ MƯỢT
+    // KHI SẾP VỪA NHẮN -> BẮT TRỌNG TÂM LỜI GỌI CỦA SẾP ĐỂ ĐÁP LẠI CHUẨN XÁC RẢI ĐỀU 2.5 GIÂY
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
         let kw = data.text;
+        let lowerKw = kw.toLowerCase();
         
-        let totalBatches = 20; // Số đợt phản hồi rải rác
-        let batchInterval = 2500; // Khoảng cách 2.5 giây mỗi đợt
+        let totalBatches = 20; 
+        let batchInterval = 2500; 
 
         for(let b = 0; b < totalBatches; b++) {
           setTimeout(() => {
             let randUser = clonePool[Math.floor(Math.random() * clonePool.length)];
             let peer1 = clonePool[Math.floor(Math.random() * clonePool.length)];
 
-            let dynamicMsg = generateInfiniteUniqueSentence(kw);
-            let tagPrefix = (b > 0 && Math.random() > 0.3) ? `@${peer1.displayName} ` : '';
-            let finalMsgText = tagPrefix + dynamicMsg;
+            let replyText = "";
+            if (lowerKw.includes('mọi người') || lowerKw.includes('anh em') || lowerKw.includes('ae') || lowerKw.includes('ai ơi') || lowerKw.includes('chào')) {
+              let callReplies = [
+                `Dạ em nghe sếp ơi, anh em có mặt đầy đủ không sót một ai ạ! 🔥`,
+                `Dạ em đây sếp, nghe sếp gọi cái là tụi em có mặt ngay lập tức nè 🚀`,
+                `Dạ em chào sếp, anh em đang hừng hực khí thế chờ chỉ đạo của sếp đây ạ 💰`,
+                `Ơi sếp ơi, tụi em lúc nào cũng túc trực sẵn sàng hốt bạc cùng sếp nhé!`
+              ];
+              replyText = callReplies[Math.floor(Math.random() * callReplies.length)];
+            } else {
+              let dynamicMsg = generateInfiniteUniqueSentence(kw);
+              let tagPrefix = (b > 0 && Math.random() > 0.3) ? `@${peer1.displayName} ` : '';
+              replyText = tagPrefix + dynamicMsg;
+            }
 
             const mRep = {
               id: Date.now() + b,
               roomId: data.roomId,
               senderName: randUser.displayName,
-              text: finalMsgText,
+              text: replyText,
               time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
               imageUrl: null,
               reactions: {}

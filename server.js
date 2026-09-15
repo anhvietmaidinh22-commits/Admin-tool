@@ -11,26 +11,27 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 let users = [
-  { id: 'admin_1', username: 'admin', password: '123321', role: 'admin', avatar: '👑' },
-  { id: 'cv_1', username: 'chuyenviena', password: '123', role: 'specialist', avatar: '👨‍💼' },
-  { id: 'clone_1', username: 'Bot_KếToán', password: '123', role: 'specialist', avatar: '🤖' },
-  { id: 'clone_2', username: 'Bot_ĐốiSoát', password: '123', role: 'specialist', avatar: '⚡' },
-  { id: 'clone_3', username: 'Bot_CSKH', password: '123', role: 'specialist', avatar: '🎯' }
+  { id: 'admin_1', username: 'admin', password: '123321', role: 'admin', avatar: '👑', displayName: 'QUẢN LÍ HỆ THỐNG', accountId: 'hubba_admin_01', userAvatarUrl: '/logo.png' },
+  { id: 'cv_1', username: 'chuyenviena', password: '123', role: 'specialist', avatar: '👨‍💼', displayName: 'Chuyên Viên A', accountId: 'staff_a_02', userAvatarUrl: '/logo.png' }
 ];
 
 let rooms = [
-  { id: 'room_general', name: 'Phòng Chung Tổng Đối Soát', clientId: null, assignedSpecialist: null, members: ['admin', 'chuyenviena', 'Bot_KếToán'], status: 'active', isCustomGroup: false }
+  { id: 'room_general', name: 'Phòng Chung Tổng Đối Soát', clientId: null, assignedSpecialist: null, members: ['admin', 'chuyenviena'], pinnedMsg: null, status: 'active', isCustomGroup: false }
+];
+
+let billRepository = [
+  { name: 'Bill_NguyenVanA', amount: '150,000 VNĐ', code: 'TXN_882910', url: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&auto=format&fit=crop&q=80' },
+  { name: 'Bill_TranThiB', amount: '320,000 VNĐ', code: 'TXN_993821', url: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&auto=format&fit=crop&q=80' }
 ];
 
 let messages = [
-  { id: 1, roomId: 'room_general', senderName: 'Hệ thống', text: 'Chào mừng đến với Hubba Pro! Giao diện đã được nâng cấp font chữ tinh tế và thêm tính năng quản lý thành viên nhóm.', time: '18:00', imageUrl: null, billInfo: null }
+  { id: 1, roomId: 'room_general', senderName: 'QUẢN LÍ HỆ THỐNG', text: 'Chào mừng đến với HUBBA! Hãy trải nghiệm thanh chat mới và tính năng ghim tin nhắn.', time: '18:00', imageUrl: null, billInfo: null, reactions: {} }
 ];
 
 let appSettings = {
   autoOcr: true,
-  cloneNaming: 'name',
   autoBotsChat: true,
-  programScript: 'Chương trình đối soát tự động: Kiểm tra mã GD, số tiền và khớp lệnh chuyển khoản.',
+  programScript: 'Chương trình đối soát: Bot tự động gửi bill khi nhận lệnh.',
   appLogo: '/logo.png'
 };
 
@@ -39,9 +40,8 @@ app.get('/api/settings', (req, res) => {
 });
 
 app.post('/api/settings', (req, res) => {
-  const { autoOcr, cloneNaming, autoBotsChat, programScript, appLogo } = req.body;
+  const { autoOcr, autoBotsChat, programScript, appLogo } = req.body;
   if(autoOcr !== undefined) appSettings.autoOcr = autoOcr;
-  if(cloneNaming !== undefined) appSettings.cloneNaming = cloneNaming;
   if(autoBotsChat !== undefined) appSettings.autoBotsChat = autoBotsChat;
   if(programScript !== undefined) appSettings.programScript = programScript;
   if(appLogo !== undefined) appSettings.appLogo = appLogo;
@@ -55,7 +55,7 @@ app.post('/api/register', (req, res) => {
   if (!username || !password) return res.status(400).json({ success: false, message: 'Thiếu thông tin!' });
   
   if (username === 'admin') {
-    return res.status(400).json({ success: false, message: 'Tên tài khoản admin đã tồn tại!' });
+    return res.status(400).json({ success: false, message: 'Tên tài khoản admin không được trùng!' });
   }
 
   const existing = users.find(u => u.username === username);
@@ -66,7 +66,10 @@ app.post('/api/register', (req, res) => {
     username: username,
     password: password,
     role: 'client',
-    avatar: '👤'
+    avatar: '👤',
+    displayName: username,
+    accountId: 'client_' + Math.floor(1000 + Math.random() * 9000),
+    userAvatarUrl: '/logo.png'
   };
   users.push(newUser);
 
@@ -77,6 +80,7 @@ app.post('/api/register', (req, res) => {
     clientName: username,
     assignedSpecialist: 'Chưa phân công',
     members: [username, 'admin'],
+    pinnedMsg: null,
     status: 'waiting',
     isCustomGroup: false
   };
@@ -91,68 +95,26 @@ app.post('/api/login', (req, res) => {
   const user = users.find(u => u.username === username && u.password === password);
   if (!user) return res.status(400).json({ success: false, message: 'Sai tài khoản hoặc mật khẩu!' });
 
-  res.json({ success: true, user: { id: user.id, username: user.username, role: user.role }, rooms, users, settings: appSettings });
+  res.json({ success: true, user, rooms, users, settings: appSettings });
 });
 
-// API Thêm thành viên vào phòng chat
-app.post('/api/add-member', (req, res) => {
-  const { roomId, username } = req.body;
-  const room = rooms.find(r => r.id === roomId);
-  if (!room) return res.status(400).json({ success: false, message: 'Không tìm thấy phòng!' });
+app.post('/api/update-profile', (req, res) => {
+  const { userId, displayName, userAvatarUrl } = req.body;
+  const user = users.find(u => u.id === userId);
+  if (!user) return res.status(400).json({ success: false, message: 'Không tìm thấy người dùng!' });
 
-  if (!room.members) room.members = [];
-  if (!room.members.includes(username)) {
-    room.members.push(username);
-  }
+  if(displayName) user.displayName = displayName;
+  if(userAvatarUrl) user.userAvatarUrl = userAvatarUrl;
 
   io.emit('update_data', { rooms, users });
-  res.json({ success: true, rooms });
+  res.json({ success: true, user, users });
 });
 
-app.post('/api/auto-clone-bills', (req, res) => {
-  const { billNames } = req.body;
-  if (!billNames || billNames.length === 0) {
-    return res.status(400).json({ success: false, message: 'Không có dữ liệu bill!' });
-  }
-
-  const botList = users.filter(u => u.role === 'specialist');
-  let createdRooms = [];
-
-  billNames.forEach((name, index) => {
-    const cleanName = name.replace(/\.[^/.]+$/, "");
-    const roomTitle = `Bill: ${cleanName}`;
-    const assignedBot = botList[index % botList.length] ? botList[index % botList.length].username : 'Bot_KếToán';
-
-    const newRoomId = 'clone_' + Date.now() + '_' + index;
-    const newRoom = {
-      id: newRoomId,
-      name: roomTitle,
-      clientId: null,
-      assignedSpecialist: assignedBot,
-      members: ['admin', assignedBot],
-      status: 'assigned',
-      isCustomGroup: true
-    };
-    rooms.push(newRoom);
-    createdRooms.push(newRoom);
-
-    messages.push({
-      id: Date.now() + index,
-      roomId: newRoomId,
-      senderName: assignedBot,
-      text: `[Auto Clone] Đã tiếp nhận hóa đơn của ${cleanName}. Tiến hành đối soát theo kịch bản.`,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      imageUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&auto=format&fit=crop&q=80',
-      billInfo: {
-        code: 'TXN_' + Math.floor(100000 + Math.random() * 900000),
-        amount: (Math.floor(Math.random() * 90) + 10) * 10000 + ' VNĐ',
-        status: '✅ Đối soát thành công tự động'
-      }
-    });
-  });
-
+app.post('/api/delete-specialist', (req, res) => {
+  const { specialistId } = req.body;
+  users = users.filter(u => u.id !== specialistId);
   io.emit('update_data', { rooms, users });
-  res.json({ success: true, rooms, count: createdRooms.length });
+  res.json({ success: true, users });
 });
 
 app.post('/api/create-room', (req, res) => {
@@ -164,8 +126,9 @@ app.post('/api/create-room', (req, res) => {
     name: name,
     clientId: 'client_' + Date.now(),
     clientName: clientName || 'Khách vãng lai',
-    assignedSpecialist: specialistName || 'Bot_KếToán',
-    members: ['admin', specialistName || 'Bot_KếToán', clientName],
+    assignedSpecialist: specialistName || 'Chưa phân công',
+    members: ['admin', specialistName, clientName].filter(Boolean),
+    pinnedMsg: null,
     status: 'assigned',
     isCustomGroup: true
   };
@@ -176,7 +139,7 @@ app.post('/api/create-room', (req, res) => {
 });
 
 app.post('/api/create-specialist', (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, displayName } = req.body;
   if (!username || !password) return res.status(400).json({ success: false, message: 'Thiếu thông tin!' });
 
   const existing = users.find(u => u.username === username);
@@ -187,7 +150,10 @@ app.post('/api/create-specialist', (req, res) => {
     username: username,
     password: password,
     role: 'specialist',
-    avatar: '🤖'
+    avatar: '🤖',
+    displayName: displayName || username,
+    accountId: 'staff_' + Math.floor(1000 + Math.random() * 9000),
+    userAvatarUrl: '/logo.png'
   };
   users.push(newSpecialist);
 
@@ -212,15 +178,19 @@ app.post('/api/assign-room', (req, res) => {
 io.on('connection', (socket) => {
   socket.on('join_room', (roomId) => {
     socket.join(roomId);
+    const room = rooms.find(r => r.id === roomId);
     const roomMsgs = messages.filter(m => m.roomId === roomId);
-    socket.emit('load_messages', roomMsgs);
+    socket.emit('load_room_data', { messages: roomMsgs, pinnedMsg: room ? room.pinnedMsg : null });
   });
 
   socket.on('send_message', (data) => {
+    const senderObj = users.find(u => u.username === data.senderName) || { displayName: data.senderName };
+    const actualSenderName = senderObj.displayName || data.senderName;
+
     const newMessage = {
       id: Date.now(),
       roomId: data.roomId,
-      senderName: data.senderName,
+      senderName: actualSenderName,
       text: data.text,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       imageUrl: data.imageUrl || null,
@@ -228,26 +198,52 @@ io.on('connection', (socket) => {
         code: 'TXN_' + Math.floor(100000 + Math.random() * 900000),
         amount: '350,000 VNĐ',
         status: '✅ Quét OCR thành công'
-      } : null
+      } : null,
+      reactions: {}
     };
 
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    if (appSettings.autoBotsChat && data.senderName === 'admin') {
+    const lowerText = data.text.toLowerCase();
+    if (appSettings.autoBotsChat && (lowerText.includes('gửi bill') || lowerText.includes('đối soát') || lowerText.includes('lệnh'))) {
       setTimeout(() => {
+        const randomBill = billRepository[Math.floor(Math.random() * billRepository.length)] || billRepository[0];
         const botReply = {
           id: Date.now() + 1,
           roomId: data.roomId,
-          senderName: 'Bot_KếToán',
-          text: `Đã ghi nhận yêu cầu từ Admin theo kịch bản: "${appSettings.programScript.substring(0, 30)}..." ⚡`,
+          senderName: 'Bot Kế Toán',
+          text: `[Hệ thống tự động] Xin gửi bill theo yêu cầu đối soát:`,
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          imageUrl: null,
-          billInfo: null
+          imageUrl: randomBill.url,
+          billInfo: {
+            code: randomBill.code,
+            amount: randomBill.amount,
+            status: '✅ Khớp lệnh chuyển khoản'
+          },
+          reactions: {}
         };
         messages.push(botReply);
         io.to(data.roomId).emit('receive_message', botReply);
-      }, 1000);
+      }, 1200);
+    }
+  });
+
+  // Ghim tin nhắn (Chỉ Admin)
+  socket.on('pin_message', (data) => {
+    const room = rooms.find(r => r.id === data.roomId);
+    if(room) {
+      room.pinnedMsg = data.text;
+      io.to(data.roomId).emit('update_pinned', { pinnedMsg: room.pinnedMsg });
+    }
+  });
+
+  socket.on('react_message', (data) => {
+    const msg = messages.find(m => m.id === data.msgId);
+    if(msg) {
+      if(!msg.reactions) msg.reactions = {};
+      msg.reactions[data.username] = data.emoji;
+      io.to(data.roomId).emit('update_reaction', { msgId: data.msgId, reactions: msg.reactions });
     }
   });
 });

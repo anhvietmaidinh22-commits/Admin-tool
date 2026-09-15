@@ -18,23 +18,23 @@
 <body class="h-[100dvh] flex flex-col justify-center items-center select-none overflow-hidden m-0 p-0">
 
     <!---------------- MÀN HÌNH INTRO (SPLASH SCREEN) ---------------->
-    <div id="introScreen" class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-slate-900 to-black z-[100] flex flex-col justify-center items-center text-white transition-opacity duration-700">
-        <img src="/logo.png" class="w-24 h-24 rounded-3xl shadow-2xl mb-4 animate-bounce object-cover border-2 border-indigo-500">
-        <h1 class="font-extrabold text-3xl tracking-widest text-white">HUBBA</h1>
-        <p class="text-xs text-indigo-300 mt-2 font-medium">Hệ thống CSKH & Đối Soát Đỉnh Cao</p>
+    <div id="introScreen" class="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-900 to-black z-[100] flex flex-col justify-center items-center text-white transition-opacity duration-700">
+        <img src="/logo.png" class="w-28 h-28 rounded-[32px] shadow-2xl mb-4 animate-bounce object-cover border-4 border-white/30">
+        <h1 class="font-black text-3xl tracking-widest text-white">HUBBA</h1>
+        <p class="text-xs text-blue-200 mt-2 font-semibold">Nền Tảng CSKH & Đối Soát Đỉnh Cao</p>
     </div>
 
-    <!---------------- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ TÁCH BIỆT ---------------->
-    <div id="authScreen" class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-slate-900 to-black z-50 flex flex-col justify-center items-center p-6 hidden">
+    <!---------------- MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ TÁCH BIỆT (XÓA SẠCH GỢI Ý ADMIN THÔ) ---------------->
+    <div id="authScreen" class="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-900 to-black z-50 flex flex-col justify-center items-center p-6 hidden">
         <div class="bg-white w-full max-w-sm rounded-[36px] p-8 shadow-2xl flex flex-col items-center border border-white/20">
-            <img id="appLogoDisplay" src="/logo.png" alt="Hubba Logo" class="w-20 h-20 rounded-2xl shadow-md object-cover mb-4 border border-slate-100">
+            <img src="/logo.png" alt="Hubba Logo" class="w-20 h-20 rounded-2xl shadow-md object-cover mb-4 border border-slate-100">
             <h1 class="font-extrabold text-2xl text-slate-900 tracking-tight mb-1" id="authTitle">Đăng Nhập HUBBA</h1>
-            <p class="text-xs text-slate-500 font-semibold mb-6 text-center" id="authSubtitle">Quản trị viên hoặc Chuyên viên hệ thống</p>
+            <p class="text-xs text-slate-400 font-semibold mb-6 text-center" id="authSubtitle">Quản trị viên hoặc Chuyên viên hệ thống</p>
 
             <div class="w-full space-y-3.5">
                 <div>
                     <label class="block text-[11px] font-bold text-slate-500 mb-1.5 ml-1">TÊN ĐĂNG NHẬP</label>
-                    <input type="text" id="authUsername" placeholder="Nhập tài khoản..." class="w-full bg-slate-50 border border-slate-200 px-4 py-3.5 rounded-2xl text-sm outline-none focus:border-indigo-600 focus:bg-white transition font-semibold text-slate-800">
+                    <input type="text" id="authUsername" placeholder="Nhập tên đăng nhập..." class="w-full bg-slate-50 border border-slate-200 px-4 py-3.5 rounded-2xl text-sm outline-none focus:border-indigo-600 focus:bg-white transition font-semibold text-slate-800">
                 </div>
                 <div>
                     <label class="block text-[11px] font-bold text-slate-500 mb-1.5 ml-1">MẬT KHẨU</label>
@@ -148,7 +148,7 @@
 
         </div>
 
-        <!---------------- KHUNG CHAT CHI TIẾT (CHUẨN MẪU ANH GỬI) ---------------->
+        <!---------------- KHUNG CHAT CHI TIẾT (CHUẨN GIAO DIỆN ANH GỬI) ---------------->
         <div id="chatRoomView" class="absolute inset-0 bg-white z-30 flex flex-col transform translate-x-full transition-transform duration-300">
             <div class="bg-indigo-600 text-white px-4 py-3.5 flex items-center justify-between shrink-0 shadow-md">
                 <div class="flex items-center space-x-3 min-w-0">
@@ -189,7 +189,7 @@
 
             <!-- THANH NHẬP TIN NHẮN CHUẨN MẪU ANH GỬI ([+] [📷] [Ô NHẬP CHAT] [😊] [🎤]) -->
             <div class="p-3 bg-white border-t border-slate-100 flex items-center space-x-2 shrink-0 shadow-lg">
-                <button onclick="toggleChatPlusMenu()" class="text-slate-400 hover:text-indigo-600 text-lg p-1.5 transition"><i class="fa-solid fa-circle-plus"></i></button>
+                <button onclick="alert('Mở menu mở rộng tính năng!')" class="text-slate-400 hover:text-indigo-600 text-lg p-1.5 transition"><i class="fa-solid fa-circle-plus"></i></button>
                 
                 <label class="cursor-pointer text-slate-400 hover:text-indigo-600 text-lg p-1.5 transition">
                     <i class="fa-solid fa-camera"></i>
@@ -288,22 +288,19 @@
         let activeMsgTextForAction = '';
         let isRegisterMode = false;
 
-        // Intro screen 1.5s
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const intro = document.getElementById('introScreen');
                 intro.style.opacity = '0';
                 setTimeout(() => intro.remove(), 700);
 
-                // Kiểm tra session lưu trong localStorage
                 const savedUser = localStorage.getItem('hubba_current_user');
                 if(savedUser) {
                     currentUser = JSON.parse(savedUser);
-                    // Lấy dữ liệu sơ bộ từ server để sync
                     fetch('/api/login', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ username: currentUser.username, password: currentUser.password || '123321' })
+                        body: JSON.stringify({ username: currentUser.username, password: currentUser.password })
                     }).then(res => res.json()).then(data => {
                         if(data.success) {
                             currentUser = data.user;
@@ -357,7 +354,7 @@
 
             if(data.success) {
                 currentUser = data.user;
-                currentUser.password = password; // Lưu tạm để check session
+                currentUser.password = password;
                 localStorage.setItem('hubba_current_user', JSON.stringify(currentUser));
                 roomsData = data.rooms;
                 usersData = data.users;
@@ -474,7 +471,7 @@
 
             if(currentUser.role === 'admin') {
                 document.getElementById('navStaff').classList.remove('hidden');
-                document.getElementById('pinRoomBtn').classList.remove('hidden'); // Admin thấy nút ghim
+                document.getElementById('pinRoomBtn').classList.remove('hidden');
             } else {
                 document.getElementById('navStaff').classList.add('hidden');
                 document.getElementById('pinRoomBtn').classList.add('hidden');
@@ -550,7 +547,6 @@
             if (currentUser.role === 'admin') {
                 displayRooms = roomsData;
             } else if (currentUser.role === 'specialist') {
-                // CHỈ CHUYÊN VIÊN ĐƯỢC PHÂN CÔNG MỚI THẤY KHÁCH CỦA MÌNH
                 displayRooms = roomsData.filter(r => r.assignedSpecialist === currentUser.username || r.isCustomGroup || r.id === 'room_general');
             } else {
                 displayRooms = roomsData.filter(r => r.clientId === currentUser.id);
@@ -759,7 +755,7 @@
 
                 div.innerHTML = `
                     <span class="text-[11px] text-slate-400 px-1 mb-1 font-extrabold">${m.senderName} • ${m.time}</span>
-                    <div onclick="openMsgActionModal(${m.id}, '${m.text.replace(/'/g, "\\'")}')" class="cursor-pointer max-w-[85%] px-4 py-3 rounded-3xl text-sm shadow-sm break-words font-semibold relative ${isMe ? 'bg-indigo-600 text-white rounded-br-none shadow-indigo-600/30 font-bold ring-2 ring-indigo-300' : 'bg-white border border-slate-100 text-slate-800 rounded-bl-none'}">
+                    <div onclick="openMsgActionModal(${m.id}, '${m.text.replace(/'/g, "\\'")}')" class="cursor-pointer max-w-[85%] px-4 py-3 rounded-3xl text-sm shadow-sm break-words font-semibold relative ${isMe ? 'bg-amber-400 text-slate-900 rounded-br-none shadow-amber-400/30 font-bold ring-2 ring-amber-200' : 'bg-white border border-slate-100 text-slate-800 rounded-bl-none'}">
                         ${m.text}
                         ${imgHtml}
                         ${billHtml}

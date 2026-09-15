@@ -10,7 +10,7 @@ const io = new Server(server);
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Quản lý dữ liệu người dùng và phân quyền trong bộ nhớ
+// Danh sách nhân sự hệ thống
 let users = [
   { id: 'admin_1', username: 'Admin Tổng', role: 'admin', avatar: '👑' },
   { id: 'cv_1', username: 'Chuyên Viên A', role: 'specialist', avatar: '👨‍💼' },
@@ -18,24 +18,22 @@ let users = [
 ];
 
 let groups = [
-  { id: 'group_general', name: 'Nhóm Chung & Đối Soát Bill', muted: false, members: ['admin_1', 'cv_1', 'cv_2'] }
+  { id: 'group_general', name: 'Nhóm Chung & Đối Soát Bill', members: ['admin_1', 'cv_1', 'cv_2'] }
 ];
 
 let messages = [
   { id: 1, groupId: 'group_general', senderId: 'admin_1', senderName: 'Admin Tổng', text: 'Chào mừng anh em đến với hệ thống Hubba!', time: '18:00' }
 ];
 
-let pinnedMessages = [];
-
 // API khởi tạo dữ liệu
 app.get('/api/init', (req, res) => {
-  res.json({ users, groups, messages, pinnedMessages });
+  res.json({ users, groups, messages });
 });
 
 // API Admin tạo Chuyên viên mới
 app.post('/api/specialists', (req, res) => {
   const { username } = req.body;
-  if (!username) return res.status(400).json({ error: 'Tên chuyên viên không được để trống' });
+  if (!username) return res.status(400).json({ error: 'Tên không được để trống' });
   
   const newCv = {
     id: 'cv_' + Date.now(),
@@ -48,10 +46,8 @@ app.post('/api/specialists', (req, res) => {
   res.json({ success: true, user: newCv });
 });
 
-// Xử lý kết nối thời gian thực qua Socket.IO
+// Xử lý Socket.io real-time
 io.on('connection', (socket) => {
-  console.log('Client connected:', socket.id);
-
   socket.on('join_group', (groupId) => {
     socket.join(groupId);
   });
@@ -59,9 +55,9 @@ io.on('connection', (socket) => {
   socket.on('send_message', (data) => {
     let messageText = data.text;
     
-    // Giả lập OCR bóc tách tên người trả tiền trên bill đối soát
+    // Giả lập OCR bóc tách bill tự động
     if (data.hasBill) {
-      messageText += ` [🤖 OCR Tự động: Đã bóc tách tên người chuyển tiền - Khớp lệnh đối soát thành công!]`;
+      messageText += ` [🤖 OCR Tự động: Đã xác thực chuyển khoản thành công!]`;
     }
 
     const newMessage = {

@@ -25,7 +25,7 @@ let billRepository = [
 ];
 
 let messages = [
-  { id: 1, roomId: 'room_general', senderName: 'QUẢN LÍ HỆ THỐNG', text: 'Chào mừng đến với HUBBA! Hãy trải nghiệm thanh chat mới và tính năng ghim tin nhắn.', time: '18:00', imageUrl: null, billInfo: null, reactions: {} }
+  { id: 1, roomId: 'room_general', senderName: 'QUẢN LÍ HỆ THỐNG', text: 'Chào mừng đến với HUBBA! Hệ thống đối soát chuẩn thương hiệu đã sẵn sàng.', time: '18:00', imageUrl: null, billInfo: null, reactions: {} }
 ];
 
 let appSettings = {
@@ -229,7 +229,6 @@ io.on('connection', (socket) => {
     }
   });
 
-  // Ghim tin nhắn (Chỉ Admin)
   socket.on('pin_message', (data) => {
     const room = rooms.find(r => r.id === data.roomId);
     if(room) {
@@ -250,5 +249,5 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Hubba server đang chạy tại cổng ${PORT}`);
+  console.log(`HUBBA server đang chạy tại cổng ${PORT}`);
 });

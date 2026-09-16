@@ -231,38 +231,34 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: QUẢN TRỊ (CÀI ĐẶT SỐ LƯỢNG CON CLONE NHẬN NỘI DUNG RIÊNG) -->
+                <!-- TAB 3: QUẢN TRỊ (CÀI ĐẶT CLONE & QUẢN LÝ NHÓM) -->
                 <div id="tabAdmin" class="hidden p-4 space-y-4">
                     <div class="bg-indigo-900 text-white p-4 rounded-2xl shadow-md space-y-2">
                         <div class="flex items-center space-x-2">
                             <i class="fa-solid fa-robot text-amber-400 text-lg"></i>
-                            <h3 class="text-xs font-bold tracking-wide">Cài Đặt Kịch Bản Cho Từng Nhóm Clone</h3>
+                            <h3 class="text-xs font-bold tracking-wide">Trung Tâm Quản Trị & Cài Đặt Clone</h3>
                         </div>
-                        <p class="text-[11px] text-indigo-200">Chỉ định chính xác số lượng con clone nhận nội dung trả lời riêng, các con còn lại hoạt động bình thường.</p>
+                        <p class="text-[11px] text-indigo-200">Quản lý kịch bản 3,000+ clone, tạo/xóa nhóm và chuyển đổi tài khoản.</p>
                     </div>
 
-                    <!-- Bảng Cài Đặt Số Lượng & Nội Dung Clone -->
+                    <!-- Cài đặt kịch bản clone -->
                     <div class="bg-white border border-slate-100 rounded-2xl p-4 space-y-3 shadow-sm">
-                        <h4 class="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Cấu hình nội dung cho nhóm clone</h4>
+                        <h4 class="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Cài đặt kịch bản cho nhóm clone</h4>
                         <div class="space-y-2.5">
                             <div>
-                                <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Số lượng con clone nhận kịch bản này (Ví dụ: 100):</label>
+                                <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Số lượng con clone nhận kịch bản:</label>
                                 <input type="number" id="cloneSpecificCount" value="100" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none">
                             </div>
                             <div>
-                                <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Từ khóa khách nhắn (Ví dụ: Alo, Giá):</label>
+                                <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Từ khóa khách nhắn (Ví dụ: Alo):</label>
                                 <input type="text" id="cloneSpecificKeyword" placeholder="Nhập từ khóa..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none">
                             </div>
                             <div>
-                                <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Nội dung trả lời đúng trọng tâm của nhóm này:</label>
+                                <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Nội dung trả lời đúng trọng tâm:</label>
                                 <textarea id="cloneSpecificReply" rows="2" placeholder="Nhập câu trả lời..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none"></textarea>
                             </div>
-                            <div>
-                                <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Tải ảnh đính kèm (nếu có):</label>
-                                <input type="file" id="cloneSpecificImage" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700">
-                            </div>
                             <button onclick="saveSpecificCloneScript()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-2.5 rounded-xl font-semibold text-xs shadow-md transition">
-                                Lưu Kịch Bản Cho Nhóm Clone Này
+                                Lưu Kịch Bản Clone
                             </button>
                         </div>
                     </div>
@@ -352,7 +348,7 @@
                     <div class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50" id="systemNotifMessagesList"></div>
                 </div>
 
-                <!-- GIAO DIỆN PHÒNG CHAT NHÓM -->
+                <!-- GIAO DIỆN PHÒNG CHAT NHÓM (CÓ BẢNG CHỈNH SỬA NHÓM) -->
                 <div id="chatRoomView" class="hidden absolute inset-0 bg-white flex flex-col z-20">
                     <header class="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between shrink-0">
                         <div class="flex items-center space-x-3">
@@ -360,8 +356,7 @@
                             <h2 id="roomChatTitle" class="text-xs font-bold text-slate-900">Phòng Chat</h2>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <button onclick="openAddMemberModal()" class="text-xs text-blue-600 font-semibold bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100 flex items-center gap-1"><i class="fa-solid fa-user-plus text-[10px]"></i> Thêm khách</button>
-                            <button onclick="togglePinned()" class="text-slate-500 hover:text-slate-800 text-xs"><i class="fa-solid fa-thumbtack text-amber-500"></i> Ghim</button>
+                            <button onclick="openGroupSettingsModal()" class="text-xs text-blue-600 font-semibold bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100 flex items-center gap-1"><i class="fa-solid fa-gear text-[10px]"></i> Cài đặt nhóm</button>
                         </div>
                     </header>
 
@@ -442,19 +437,29 @@
         </div>
     </div>
 
-    <!-- MODAL THÊM KHÁCH VÀO PHÒNG CHAT -->
-    <div id="addMemberModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <!-- MODAL CHỈNH SỬA NHÓM (ĐỔI TÊN, THÊM/XÓA THÀNH VIÊN) -->
+    <div id="groupSettingsModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white border border-slate-200 p-6 rounded-3xl w-full max-w-sm shadow-2xl space-y-4">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="font-bold text-slate-800 text-xs">Thêm Khách Vào Phòng Chat</h3>
-                <button onclick="closeAddMemberModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+                <h3 class="font-bold text-slate-800 text-xs">Cài Đặt & Chỉnh Sửa Nhóm</h3>
+                <button onclick="closeGroupSettingsModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-3 text-xs">
                 <div>
-                    <label class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Tên hoặc ID khách hàng</label>
-                    <input type="text" id="guestNameInput" placeholder="Nhập tên khách..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none">
+                    <label class="font-semibold text-slate-500 uppercase tracking-wider block mb-1">Đổi tên nhóm</label>
+                    <input type="text" id="editGroupNameInput" placeholder="Nhập tên mới..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-800 focus:outline-none">
+                    <button onclick="submitEditGroupName()" class="w-full mt-1.5 bg-blue-600 text-white py-2 rounded-xl font-semibold transition">Cập nhật tên</button>
                 </div>
-                <button onclick="submitAddMember()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl font-semibold text-xs shadow-md transition">Thêm Khách Vào Phòng</button>
+                <div>
+                    <label class="font-semibold text-slate-500 uppercase tracking-wider block mb-1">Thêm thành viên / Khách</label>
+                    <input type="text" id="addGroupMemberInput" placeholder="Tên khách hàng..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-800 focus:outline-none">
+                    <button onclick="submitAddGroupMember()" class="w-full mt-1.5 bg-emerald-600 text-white py-2 rounded-xl font-semibold transition">Thêm vào nhóm</button>
+                </div>
+                <div>
+                    <label class="font-semibold text-slate-500 uppercase tracking-wider block mb-1">Xóa thành viên khỏi nhóm</label>
+                    <input type="text" id="removeGroupMemberInput" placeholder="Tên thành viên cần xóa..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-800 focus:outline-none">
+                    <button onclick="submitRemoveGroupMember()" class="w-full mt-1.5 bg-rose-600 text-white py-2 rounded-xl font-semibold transition">Xóa khỏi nhóm</button>
+                </div>
             </div>
         </div>
     </div>
@@ -822,23 +827,40 @@
             }
         }
 
-        function openAddMemberModal() {
+        function openGroupSettingsModal() {
             if(userRole !== 'admin' && userRole !== 'specialist' && userRole !== 'chuyenvien') {
-                return showToast('Bạn không có quyền thêm khách!');
+                return showToast('Bạn không có quyền chỉnh sửa nhóm!');
             }
-            document.getElementById('addMemberModal').classList.remove('hidden');
+            document.getElementById('groupSettingsModal').classList.remove('hidden');
         }
 
-        function closeAddMemberModal() {
-            document.getElementById('addMemberModal').classList.add('hidden');
+        function closeGroupSettingsModal() {
+            document.getElementById('groupSettingsModal').classList.add('hidden');
         }
 
-        function submitAddMember() {
-            const guestName = document.getElementById('guestNameInput').value.trim();
-            if(!guestName) return showToast('Vui lòng nhập tên khách hàng!');
-            closeAddMemberModal();
-            document.getElementById('guestNameInput').value = '';
-            showToast(`Đã thêm khách [${guestName}] vào phòng chat thành công!`);
+        function submitEditGroupName() {
+            const newName = document.getElementById('editGroupNameInput').value.trim();
+            if(!newName) return showToast('Vui lòng nhập tên mới cho nhóm!');
+            document.getElementById('roomChatTitle').innerText = newName;
+            closeGroupSettingsModal();
+            document.getElementById('editGroupNameInput').value = '';
+            showToast('Đã đổi tên nhóm thành công!');
+        }
+
+        function submitAddGroupMember() {
+            const name = document.getElementById('addGroupMemberInput').value.trim();
+            if(!name) return showToast('Vui lòng nhập tên thành viên!');
+            closeGroupSettingsModal();
+            document.getElementById('addGroupMemberInput').value = '';
+            showToast(`Đã thêm thành công [${name}] vào nhóm!`);
+        }
+
+        function submitRemoveGroupMember() {
+            const name = document.getElementById('removeGroupMemberInput').value.trim();
+            if(!name) return showToast('Vui lòng nhập tên thành viên cần xóa!');
+            closeGroupSettingsModal();
+            document.getElementById('removeGroupMemberInput').value = '';
+            showToast(`Đã xóa thành công [${name}] khỏi nhóm!`);
         }
 
         function saveSpecificCloneScript() {

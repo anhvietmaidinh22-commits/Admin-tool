@@ -78,7 +78,8 @@ const peerChatPool = [
 
 const reactionIcons = ['❤️', '😂', '👍', '🔥', '😍', '👏'];
 
-const bossTag = '<span style="color: #2196F3; font-weight: bold;">@QUẢN LÍ HỆ THỐNG</span>';
+// TÊN SẾP MÀU XANH AN TOÀN ĐÚNG CHUẨN GIAO DIỆN
+const bossTag = '<span style="color: #2196F3; font-weight: 700;">@QUẢN LÍ HỆ THỐNG</span>';
 
 function generateFlexibleSentence(recentTexts = []) {
   let attempts = 0;
@@ -105,26 +106,30 @@ function generateFlexibleSentence(recentTexts = []) {
   return candidate;
 }
 
-// BOT KIỂM DUYỆT TỰ ĐỘNG XÓA TIN NHẮN TRÙNG LẶP
+// BOT KIỂM DUYỆT TỰ ĐỘNG XÓA TRÙNG LẶP VÀ ĐỒNG BỘ GIAO DIỆN
 function checkAndCleanDuplicates(roomId, ioServer) {
   const roomMsgs = messages.filter(m => m.roomId === roomId);
   const seenTexts = new Set();
+  let validMessages = [];
   let hasDeleted = false;
 
+  // Giữ lại tin nhắn đầu tiên xuất hiện, các tin nhắn trùng lặp phía sau sẽ bị loại bỏ
   roomMsgs.forEach(m => {
-    // Nếu tin nhắn thuần túy đã xuất hiện trước đó trong phòng -> Xóa
     if (seenTexts.has(m.text)) {
-      messages = messages.filter(msg => msg.id !== m.id);
-      hasDeleted = true;
+      hasDeleted = true; // Phát hiện trùng -> Đánh dấu xóa
     } else {
       seenTexts.add(m.text);
+      validMessages.push(m);
     }
   });
 
   if (hasDeleted) {
-    const updatedRoomMsgs = messages.filter(m => m.roomId === roomId);
+    // Cập nhật lại mảng tin nhắn tổng, loại bỏ các tin trùng của phòng này
+    messages = messages.filter(m => m.roomId !== roomId).concat(validMessages);
+
+    // Gửi lệnh làm mới toàn bộ danh sách tin nhắn xuống client để xóa ngay lập tức
     ioServer.to(roomId).emit('load_room_data', { 
-      messages: updatedRoomMsgs, 
+      messages: validMessages, 
       pinnedMsg: null, 
       roomAvatarUrl: 'https://i.ibb.co/NdVf8Btz/logo.png', 
       roomName: 'Phòng Chat' 
@@ -289,7 +294,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP BACKGROUND CHUẨN 3.5 GIÂY (CÓ BOT QUÉT & XÓA TRÙNG LẶP)
+// VÒNG LẶP BACKGROUND CHUẨN 3.5 GIÂY
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
@@ -310,7 +315,7 @@ setInterval(() => {
 
       let text1 = generateFlexibleSentence(recentTexts);
       recentTexts.push(text1);
-      let tagPeer = (Math.random() > 0.6) ? `@${cl1.displayName} ` : '';
+      let tagPeer = (Math.random() > 0.6) ? `<span style="color: #2196F3; font-weight: 600;">@${cl1.displayName}</span> ` : '';
       let text2 = tagPeer + generateFlexibleSentence(recentTexts);
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
@@ -318,8 +323,6 @@ setInterval(() => {
 
       messages.push(m1);
       io.to(activeRoom.id).emit('receive_message', m1);
-
-      // Kích hoạt bot kiểm duyệt xóa trùng lặp ngay lập tức
       checkAndCleanDuplicates(activeRoom.id, io);
 
       if (roomMsgs.length > 0 && Math.random() > 0.3) {
@@ -395,7 +398,7 @@ io.on('connection', (socket) => {
               replyBody = dynamicMsg;
             }
 
-            let tagPrefix = (b > 0 && Math.random() > 0.4) ? `@${peer1.displayName} ` : '';
+            let tagPrefix = (b > 0 && Math.random() > 0.4) ? `<span style="color: #2196F3; font-weight: 600;">@${peer1.displayName}</span> ` : '';
             let finalReply = tagPrefix + replyBody;
 
             const mRep = {

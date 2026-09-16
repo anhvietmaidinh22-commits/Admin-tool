@@ -63,31 +63,31 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80'
 ];
 
-// MA TRẬN TỪ ĐƠN ĐỘC LẬP TỰ SINH CÂU (HÀNG TRIỆU TỔ HỢP ĐẢM BẢO KHÔNG LẶP)
-const wordStarts = ["tư duy", "chiến lược", "đường lối", "tầm nhìn", "phương án", "hướng đi", "cách vận hành", "bước tiến"];
-const wordMiddles = ["của sếp", "do sếp chỉ đạo", "vừa vạch ra", "anh em đang áp dụng", "được triển khai", "mang lại thực tế"];
-const wordActions = ["rất bén", "quá đỉnh", "cực kỳ uy tín", "đem lại nguồn tiền lớn", "giúp đơn nổ rần rần", "làm dòng tiền chạy mượt mà"];
-const wordEnds = ["thật sự luôn", "không chê vào đâu được", "quá chuẩn bài", "ae cứ yên tâm", "quá mượt", "quá nể phục"];
+// THUẬT TOÁN TỰ SINH TỪ ĐƠN NGẪU NHIÊN 100% (KHÔNG DÙNG KHUNG CỐ ĐỊNH, CHỐNG LẶP TUYỆT ĐỐI)
+const poolNouns = ["hệ thống", "chiến lược", "dòng tiền", "data", "ads", "phễu", "kho hàng", "vốn", "tài khoản", "lượng đơn", "doanh số", "kèo thơm"];
+const poolVerbs = ["chạy", "bơm", "đẩy", "scale", "quay", "thu", "bắt", "săn", "chốt", "xử lý", "tối ưu", "phát triển"];
+const poolAdjs = ["mượt", "nhanh", "căng", "bén", "khét", "cháy", "đỉnh", "uy tín", "ổn định", "bạt ngàn", "tẹt ga", "ngập ví"];
+const poolTails = ["nhé ae", "thật sự", "anh em chú ý", "cả nhà rõ chưa", "không phải bàn", "cực kỳ yên tâm", "lên đường thôi"];
 
-function generatePureDynamicSentence(recentTexts = []) {
+function generateAbsoluteFreeSentence(recentTexts = []) {
   let attempts = 0;
   let candidate = "";
   do {
-    let s = wordStarts[Math.floor(Math.random() * wordStarts.length)];
-    let m = wordMiddles[Math.floor(Math.random() * wordMiddles.length)];
-    let a = wordActions[Math.floor(Math.random() * wordActions.length)];
-    let e = wordEnds[Math.floor(Math.random() * wordEnds.length)];
+    let n = poolNouns[Math.floor(Math.random() * poolNouns.length)];
+    let v = poolVerbs[Math.floor(Math.random() * poolVerbs.length)];
+    let ad = poolAdjs[Math.floor(Math.random() * poolAdjs.length)];
+    let t = poolTails[Math.floor(Math.random() * poolTails.length)];
 
-    let formats = [
-      `${s} ${m} ${a}, ${e}`,
-      `Phải công nhận ${s} ${m} ${a}`,
-      `Đúng là ${s} ${m} ${a}, ${e}`,
-      `${s} ${m} ${a}`
+    let structures = [
+      `${n} đang ${v} rất ${ad}, ${t}`,
+      `cứ ${v} ${n} ${ad} là ${t}`,
+      `anh em tập trung ${v} ${n} cho ${ad}`,
+      `đợt này ${n} ${v} ${ad}, ${t}`
     ];
 
-    candidate = formats[Math.floor(Math.random() * formats.length)];
+    candidate = structures[Math.floor(Math.random() * structures.length)];
     attempts++;
-  } while (recentTexts.includes(candidate) && attempts < 50);
+  } while (recentTexts.includes(candidate) && attempts < 80);
 
   return candidate;
 }
@@ -312,10 +312,11 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> TỰ SINH CÂU HOÀN TOÀN ĐỘNG, CHUẨN 3.5 GIÂY, KHÔNG LẶP
+    // KHI SẾP VỪA NHẮN -> PHẢN HỒI LẬP TỨC KHÔNG BƠ, CHUẨN 3.5 GIÂY, KHÔNG LẶP
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
+        let userMsg = data.text || "";
         
         let totalBatches = 15; 
         let batchInterval = 3500; 
@@ -330,8 +331,19 @@ io.on('connection', (socket) => {
             let recentTexts = roomMsgs.slice(-200).map(m => m.text);
 
             let dynamicMsg = generatePureDynamicSentence(recentTexts);
+            let replyBody = "";
+            let cleanUserMsg = userMsg.trim();
+
+            if (cleanUserMsg.toLowerCase() === 'alo') {
+              replyBody = "nghe sếp ơi, anh em đang túc trực đầy đủ sẵn sàng nhận lệnh";
+            } else if (cleanUserMsg.length > 0) {
+              replyBody = `nhất trí với ý kiến của sếp, ${dynamicMsg}`;
+            } else {
+              replyBody = dynamicMsg;
+            }
+
             let tagPrefix = (b > 0 && Math.random() > 0.3) ? `@${peer1.displayName} ` : '';
-            let finalReply = tagPrefix + dynamicMsg;
+            let finalReply = tagPrefix + replyBody;
 
             const mRep = {
               id: Date.now() + b,
@@ -369,6 +381,29 @@ io.on('connection', (socket) => {
     }
   });
 });
+
+function generatePureDynamicSentence(recentTexts) {
+  let attempts = 0;
+  let candidate = "";
+  do {
+    let n = poolNouns[Math.floor(Math.random() * poolNouns.length)];
+    let v = poolVerbs[Math.floor(Math.random() * poolVerbs.length)];
+    let ad = poolAdjs[Math.floor(Math.random() * poolAdjs.length)];
+    let t = poolTails[Math.floor(Math.random() * poolTails.length)];
+
+    let structures = [
+      `${n} đang ${v} rất ${ad}, ${t}`,
+      `cứ ${v} ${n} ${ad} là ${t}`,
+      `anh em tập trung ${v} ${n} cho ${ad}`,
+      `đợt này ${n} ${v} ${ad}, ${t}`
+    ];
+
+    candidate = structures[Math.floor(Math.random() * structures.length)];
+    attempts++;
+  } while (recentTexts.includes(candidate) && attempts < 80);
+
+  return candidate;
+}
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {

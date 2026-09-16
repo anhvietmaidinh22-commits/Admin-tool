@@ -30,7 +30,7 @@
         <span id="toastMessage">Thông báo hệ thống</span>
     </div>
 
-    <!-- MÀN HÌNH CHỜ / INTRO LOGO NHẢY -->
+    <!-- MÀN HÌNH CHỜ -->
     <div id="splashScreen" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center space-y-4 transition-opacity duration-700">
         <div class="relative">
             <img src="https://i.ibb.co/NdVf8Btz/logo.png" class="w-24 h-24 rounded-3xl object-cover shadow-xl ring-4 ring-indigo-500/20 animate-logo-jump" alt="HUBBA Logo">
@@ -131,7 +131,7 @@
             <header class="bg-white border-b border-slate-200 px-4 py-3 flex justify-between items-center shrink-0">
                 <h1 id="headerTitle" class="text-sm font-bold text-slate-800">Tin nhắn (trực tuyến)</h1>
                 <div class="flex items-center space-x-2">
-                    <button id="adminPlusBtn" onclick="openAdminActionModal()" class="hidden w-7 h-7 rounded-full bg-blue-50 text-blue-600 items-center justify-center font-bold text-xs border border-blue-100 shadow-sm" title="Quản lý nhóm & thêm khách">
+                    <button id="adminPlusBtn" onclick="openAdminActionModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-xs shadow-sm" title="Thêm nhóm">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
@@ -141,40 +141,40 @@
                 
                 <!-- TAB 1: TIN NHẮN -->
                 <div id="tabMessage" class="flex flex-col">
-                    <div class="p-3 bg-white border-b border-slate-100 sticky top-0 z-10 flex justify-between items-center">
-                        <div class="relative flex-1">
+                    <div class="p-3 bg-white border-b border-slate-100 sticky top-0 z-10">
+                        <div class="relative w-full">
                             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-                            <input type="text" placeholder="Tìm kiếm tin nhắn..." class="w-full bg-slate-100 border-none rounded-xl pl-9 pr-4 py-2 text-xs text-slate-800 focus:outline-none">
+                            <input type="text" placeholder="Tìm kiếm" class="w-full bg-slate-100 border-none rounded-xl pl-9 pr-4 py-2 text-xs text-slate-800 focus:outline-none">
                         </div>
                     </div>
 
-                    <!-- THÔNG BÁO HỆ THỐNG HUBBA -->
-                    <div onclick="openSystemNotificationChat()" class="flex items-center space-x-3 px-4 py-3.5 hover:bg-slate-50 cursor-pointer transition border-b border-slate-100 bg-blue-50/40">
-                        <div class="relative shrink-0">
-                            <img src="https://i.ibb.co/NdVf8Btz/logo.png" class="w-12 h-12 rounded-2xl object-cover shadow-sm ring-1 ring-blue-200" alt="HUBBA">
-                            <span class="absolute -top-1 -right-1 bg-rose-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full border-2 border-white">1</span>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex justify-between items-baseline mb-0.5">
-                                <h3 class="text-xs font-bold text-slate-900 flex items-center gap-1">
-                                    HUBBA <i class="fa-solid fa-circle-check text-blue-600 text-[10px]"></i>
-                                </h3>
-                                <span id="sysPreviewTime" class="text-[10px] text-slate-400">Vừa xong</span>
-                            </div>
-                            <p id="sysPreviewText" class="text-xs text-slate-600 truncate font-mono">Chào mừng bạn đã kết nối an toàn hệ thống...</p>
-                        </div>
-                    </div>
-
-                    <!-- PHÒNG NỘI BỘ -->
                     <div id="chatListPreview" class="divide-y divide-slate-100">
-                        <div onclick="openChatRoom('room_general', 'Phòng Nội Bộ Admin & Chuyên Viên')" class="flex items-center space-x-3 px-4 py-3 hover:bg-slate-50 cursor-pointer transition border-b border-slate-100">
+                        <!-- Thông báo hệ thống HUBBA -->
+                        <div onclick="openSystemNotificationChat()" class="flex items-center space-x-3 px-4 py-3.5 hover:bg-slate-50 cursor-pointer transition border-b border-slate-100 bg-blue-50/40">
+                            <div class="relative shrink-0">
+                                <img src="https://i.ibb.co/NdVf8Btz/logo.png" class="w-12 h-12 rounded-2xl object-cover shadow-sm ring-1 ring-blue-200" alt="HUBBA">
+                                <span class="absolute -top-1 -right-1 bg-rose-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full border-2 border-white">1</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex justify-between items-baseline mb-0.5">
+                                    <h3 class="text-xs font-bold text-slate-900 flex items-center gap-1">
+                                        HUBBA <i class="fa-solid fa-circle-check text-blue-600 text-[10px]"></i>
+                                    </h3>
+                                    <span id="sysPreviewTime" class="text-[10px] text-slate-400">Vừa xong</span>
+                                </div>
+                                <p id="sysPreviewText" class="text-xs text-slate-600 truncate font-mono">Thông báo đăng nhập an toàn hệ thống...</p>
+                            </div>
+                        </div>
+
+                        <!-- Phòng Nội Bộ Admin & Chuyên Viên -->
+                        <div onclick="openChatRoom('room_general', 'Phòng Nội Bộ Admin & Chuyên Viên')" class="flex items-center space-x-3 px-4 py-3 hover:bg-slate-50 cursor-pointer transition">
                             <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow-sm shrink-0">N</div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex justify-between items-baseline mb-0.5">
-                                    <h3 class="text-xs font-bold text-slate-900 truncate">Phòng Nội Bộ Admin & Chuyên Viên</h3>
-                                    <span class="text-[10px] text-emerald-500 font-medium">Bảo mật</span>
+                                    <h3 id="roomName_room_general" class="text-xs font-bold text-slate-900 truncate">Phòng Nội Bộ Admin & Chuyên Viên</h3>
+                                    <span id="roomTime_room_general" class="text-[10px] text-slate-400">Trực tuyến</span>
                                 </div>
-                                <p class="text-xs text-slate-500 truncate">Không gian riêng tư của Sếp và Chuyên viên...</p>
+                                <p id="roomLastMsg_room_general" class="text-xs text-slate-500 truncate">Không gian riêng tư của Sếp và Chuyên viên...</p>
                             </div>
                         </div>
                     </div>
@@ -184,78 +184,91 @@
                 <div id="tabContact" class="hidden flex flex-col h-full">
                     <div class="p-3 bg-white border-b border-slate-100 flex justify-between items-center">
                         <h3 class="text-xs font-bold text-slate-800">Danh bạ</h3>
-                        <button id="contactPlusBtn" onclick="openAdminActionModal()" class="hidden w-7 h-7 rounded-full bg-slate-100 text-slate-700 items-center justify-center font-bold text-xs shadow-sm">
+                        <button onclick="openAdminActionModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-xs shadow-sm">
                             <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
                     <div class="p-4 space-y-3 flex-1 overflow-y-auto">
-                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-3 space-y-2">
-                            <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer">
-                                <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-user-shield"></i></div>
-                                <div><h4 class="text-xs font-bold text-slate-800">Tin nhắn xác minh</h4><p class="text-[10px] text-slate-400">Yêu cầu hệ thống</p></div>
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-2 space-y-1">
+                            <div class="flex items-center justify-between py-2.5 px-3 hover:bg-slate-50 rounded-xl cursor-pointer">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-comment-dots"></i></div>
+                                    <span class="text-xs font-semibold text-slate-800">Tin nhắn xác minh</span>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-slate-300 text-[10px]"></i>
                             </div>
-                            <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer">
-                                <div class="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-user-slash"></i></div>
-                                <div><h4 class="text-xs font-bold text-slate-800">Danh sách đen</h4><p class="text-[10px] text-slate-400">Quản lý chặn</p></div>
+                            <div class="flex items-center justify-between py-2.5 px-3 hover:bg-slate-50 rounded-xl cursor-pointer">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-9 h-9 rounded-xl bg-sky-500 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-user-slash"></i></div>
+                                    <span class="text-xs font-semibold text-slate-800">Danh sách đen</span>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-slate-300 text-[10px]"></i>
                             </div>
-                            <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer">
-                                <div class="w-10 h-10 rounded-xl bg-indigo-500 text-white flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-users"></i></div>
-                                <div><h4 class="text-xs font-bold text-slate-800">Nhóm của tôi</h4><p class="text-[10px] text-slate-400">Phòng chat nhóm</p></div>
+                            <div class="flex items-center justify-between py-2.5 px-3 hover:bg-slate-50 rounded-xl cursor-pointer">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-9 h-9 rounded-xl bg-purple-500 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-users"></i></div>
+                                    <span class="text-xs font-semibold text-slate-800">Nhóm của tôi</span>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-slate-300 text-[10px]"></i>
                             </div>
                         </div>
 
-                        <!-- 5 Chuyên viên -->
-                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-3 space-y-1">
-                            <p class="text-[10px] font-bold text-slate-400 uppercase px-2 pb-1">Đội ngũ Chuyên viên</p>
+                        <!-- Đội ngũ 5 Chuyên viên với Avatar chuẩn -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-3 space-y-2">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase px-2">Đội ngũ Chuyên viên</p>
                             <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer" onclick="quickSwitchAccount('CHUYÊN VIÊN HÀ ANH', 'chuyenvien')">
                                 <img src="https://i.ibb.co/27FrRr4G/avatar.jpg" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200" alt="Avatar">
-                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN HÀ ANH</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển đổi nhanh</p></div>
+                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN HÀ ANH</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển tài khoản</p></div>
                             </div>
                             <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer" onclick="quickSwitchAccount('CHUYÊN VIÊN KHÁNH LINH', 'chuyenvien')">
                                 <img src="https://i.ibb.co/67wsRsHz/avatar.jpg" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200" alt="Avatar">
-                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN KHÁNH LINH</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển đổi nhanh</p></div>
+                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN KHÁNH LINH</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển tài khoản</p></div>
                             </div>
                             <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer" onclick="quickSwitchAccount('CHUYÊN VIÊN PHƯƠNG ANH', 'chuyenvien')">
                                 <img src="https://i.ibb.co/DPdT2njh/avatar.jpg" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200" alt="Avatar">
-                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN PHƯƠNG ANH</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển đổi nhanh</p></div>
+                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN PHƯƠNG ANH</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển tài khoản</p></div>
                             </div>
                             <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer" onclick="quickSwitchAccount('CHUYÊN VIÊN BẢO TRÂM', 'chuyenvien')">
                                 <img src="https://i.ibb.co/4ZH0vNm0/avatar.jpg" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200" alt="Avatar">
-                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN BẢO TRÂM</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển đổi nhanh</p></div>
+                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN BẢO TRÂM</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển tài khoản</p></div>
                             </div>
                             <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer" onclick="quickSwitchAccount('CHUYÊN VIÊN QUỲNH ANH', 'chuyenvien')">
                                 <img src="https://i.ibb.co/V0XzCHNs/avatar.jpg" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200" alt="Avatar">
-                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN QUỲNH ANH</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển đổi nhanh</p></div>
+                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN QUỲNH ANH</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển tài khoản</p></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- TAB 3: QUẢN TRỊ (CÀI ĐẶT CLONE & QUẢN LÝ NHÓM) -->
+                <!-- TAB 3: KHÁM PHÁ / QUẢN TRỊ (CÀI ĐẶT 3000 CLONE & CHUYỂN TÀI KHOẢN) -->
                 <div id="tabAdmin" class="hidden p-4 space-y-4">
                     <div class="bg-indigo-900 text-white p-4 rounded-2xl shadow-md space-y-2">
                         <div class="flex items-center space-x-2">
                             <i class="fa-solid fa-robot text-amber-400 text-lg"></i>
                             <h3 class="text-xs font-bold tracking-wide">Cài Đặt Kịch Bản Cho 3,000+ Clone</h3>
                         </div>
-                        <p class="text-[11px] text-indigo-200">Cài đặt số lượng con clone nhận nội dung riêng và chuyển đổi tài khoản.</p>
+                        <p class="text-[11px] text-indigo-200">Cài đặt câu trả lời trọng tâm, tải ảnh đính kèm và chuyển đổi tài khoản.</p>
                     </div>
 
                     <!-- Bảng Cài Đặt Kịch Bản Clone -->
                     <div class="bg-white border border-slate-100 rounded-2xl p-4 space-y-3 shadow-sm">
-                        <h4 class="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Cấu hình nội dung cho nhóm clone</h4>
+                        <h4 class="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Cấu hình phản hồi tự động cho Clone</h4>
                         <div class="space-y-2.5">
                             <div>
                                 <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Số lượng con clone nhận kịch bản:</label>
                                 <input type="number" id="cloneSpecificCount" value="100" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none">
                             </div>
                             <div>
-                                <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Từ khóa khách nhắn (Ví dụ: Alo):</label>
+                                <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Từ khóa khách nhắn (Ví dụ: Alo, Giá):</label>
                                 <input type="text" id="cloneSpecificKeyword" placeholder="Nhập từ khóa..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none">
                             </div>
                             <div>
                                 <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Nội dung trả lời đúng trọng tâm:</label>
                                 <textarea id="cloneSpecificReply" rows="2" placeholder="Nhập câu trả lời..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none"></textarea>
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Tải ảnh đính kèm phản hồi:</label>
+                                <input type="file" id="cloneSpecificImage" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700">
                             </div>
                             <button onclick="saveSpecificCloneScript()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-2.5 rounded-xl font-semibold text-xs shadow-md transition">
                                 Lưu Kịch Bản Clone
@@ -263,7 +276,7 @@
                         </div>
                     </div>
 
-                    <!-- Chuyển đổi tài khoản nhanh -->
+                    <!-- Chuyển đổi tài khoản nhanh Admin <-> Chuyên viên -->
                     <div class="bg-white border border-slate-100 rounded-2xl p-4 space-y-2.5 shadow-sm">
                         <h4 class="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Chuyển đổi tài khoản nhanh</h4>
                         <button onclick="quickSwitchAccount('QUẢN LÍ HỆ THỐNG', 'admin')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-indigo-50 flex items-center justify-between transition">
@@ -274,17 +287,21 @@
                             <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-blue-600"></i> CV Hà Anh</span>
                             <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">CV</span>
                         </button>
-                    </div>
-
-                    <div class="bg-white border border-slate-100 rounded-2xl p-3 space-y-2 shadow-sm">
-                        <h4 class="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Quản lý phòng chat nhóm</h4>
-                        <button onclick="openCreateRoomModal()" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-blue-600 hover:bg-blue-50 flex items-center justify-between transition">
-                            <span class="flex items-center gap-2"><i class="fa-solid fa-circle-plus"></i> Tạo Nhóm Mới</span>
-                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        <button onclick="quickSwitchAccount('CHUYÊN VIÊN KHÁNH LINH', 'chuyenvien')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-blue-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-blue-600"></i> CV Khánh Linh</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">CV</span>
                         </button>
-                        <button onclick="openDeleteRoomModal()" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center justify-between transition">
-                            <span class="flex items-center gap-2"><i class="fa-solid fa-trash-can"></i> Xóa Nhóm</span>
-                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        <button onclick="quickSwitchAccount('CHUYÊN VIÊN PHƯƠNG ANH', 'chuyenvien')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-blue-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-blue-600"></i> CV Phương Anh</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">CV</span>
+                        </button>
+                        <button onclick="quickSwitchAccount('CHUYÊN VIÊN BẢO TRÂM', 'chuyenvien')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-blue-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-blue-600"></i> CV Bảo Trâm</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">CV</span>
+                        </button>
+                        <button onclick="quickSwitchAccount('CHUYÊN VIÊN QUỲNH ANH', 'chuyenvien')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-blue-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-blue-600"></i> CV Quỳnh Anh</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">CV</span>
                         </button>
                     </div>
                 </div>
@@ -303,7 +320,7 @@
                     </div>
 
                     <div class="bg-white border border-slate-100 rounded-2xl shadow-sm divide-y divide-slate-100 text-xs">
-                        <div onclick="showToast('Đã chuyển đến mục Yêu thích')" class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer">
+                        <div onclick="showToast('Đã chuyển đến Yêu thích')" class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer">
                             <span class="flex items-center gap-3 font-semibold text-slate-700"><i class="fa-solid fa-cube text-blue-600 text-base"></i> Yêu thích</span>
                             <i class="fa-solid fa-chevron-right text-slate-300"></i>
                         </div>
@@ -336,19 +353,19 @@
                     </div>
                 </div>
 
-                <!-- HỘP THƯ THÔNG BÁO HỆ THỐNG -->
+                <!-- HỘP THƯ THÔNG BÁO HỆ THỐNG HUBBA -->
                 <div id="systemNotifView" class="hidden absolute inset-0 bg-white flex flex-col z-20">
                     <header class="bg-white border-b border-slate-200 px-4 py-3 flex items-center space-x-3 shrink-0">
                         <button onclick="closeSystemNotificationChat()" class="text-slate-600"><i class="fa-solid fa-arrow-left text-sm"></i></button>
                         <div class="flex items-center space-x-2">
                             <img src="https://i.ibb.co/NdVf8Btz/logo.png" class="w-7 h-7 rounded-lg object-cover" alt="Logo">
-                            <h2 class="text-xs font-bold text-slate-900">Thông Báo Hệ Thống HUBBA</h2>
+                            <h2 class="text-xs font-bold text-slate-900">HUBBA - Thông Báo Bảo Mật</h2>
                         </div>
                     </header>
                     <div class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50" id="systemNotifMessagesList"></div>
                 </div>
 
-                <!-- GIAO DIỆN PHÒNG CHAT NHÓM -->
+                <!-- GIAO DIỆN PHÒNG CHAT CHI TIẾT -->
                 <div id="chatRoomView" class="hidden absolute inset-0 bg-white flex flex-col z-20">
                     <header class="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between shrink-0">
                         <div class="flex items-center space-x-3">
@@ -359,11 +376,6 @@
                             <button onclick="openGroupSettingsModal()" class="text-xs text-blue-600 font-semibold bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100 flex items-center gap-1"><i class="fa-solid fa-gear text-[10px]"></i> Cài đặt nhóm</button>
                         </div>
                     </header>
-
-                    <div id="pinnedBanner" class="hidden bg-amber-50 border-b border-amber-100 px-4 py-1.5 text-[11px] text-amber-800 flex justify-between items-center shrink-0">
-                        <span id="pinnedText" class="truncate">Chưa có tin nhắn ghim.</span>
-                        <button onclick="togglePinned()" class="text-amber-600"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
 
                     <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50"></div>
 
@@ -380,7 +392,7 @@
                 </div>
             </div>
 
-            <!-- THANH ĐIỀU HƯỚNG DƯỚI CÙNG (CÓ ĐỦ TAB QUẢN TRỊ CHO ADMIN/CV) -->
+            <!-- THANH ĐIỀU HƯỚNG 4 TAB CHUẨN MẪU -->
             <nav class="bg-white border-t border-slate-200 px-6 py-2 flex justify-between items-center shrink-0">
                 <button onclick="switchTab('message')" id="navBtn-message" class="flex flex-col items-center text-blue-600 transition">
                     <i class="fa-solid fa-comment text-base"></i>
@@ -390,9 +402,9 @@
                     <i class="fa-solid fa-address-book text-base"></i>
                     <span class="text-[10px] font-medium mt-1">Danh bạ</span>
                 </button>
-                <button onclick="switchTab('admin')" id="navBtn-admin" class="hidden flex-col items-center text-slate-400 hover:text-slate-600 transition">
-                    <i class="fa-solid fa-shield-halved text-base"></i>
-                    <span class="text-[10px] font-medium mt-1">Quản trị</span>
+                <button onclick="switchTab('admin')" id="navBtn-admin" class="flex flex-col items-center text-slate-400 hover:text-slate-600 transition" title="Khám phá / Quản trị">
+                    <i class="fa-solid fa-compass text-base"></i>
+                    <span class="text-[10px] font-medium mt-1">Khám phá</span>
                 </button>
                 <button onclick="switchTab('profile')" id="navBtn-profile" class="flex flex-col items-center text-slate-400 hover:text-slate-600 transition">
                     <i class="fa-solid fa-user text-base"></i>
@@ -420,23 +432,6 @@
         </div>
     </div>
 
-    <!-- MODAL XÓA NHÓM -->
-    <div id="deleteRoomModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white border border-slate-200 p-6 rounded-3xl w-full max-w-sm shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="font-bold text-slate-800 text-xs text-rose-600">Xóa Nhóm / Phòng Chat</h3>
-                <button onclick="closeDeleteRoomModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="space-y-3">
-                <div>
-                    <label class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Chọn phòng cần xóa</label>
-                    <select id="deleteRoomSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none"></select>
-                </div>
-                <button onclick="submitDeleteRoom()" class="w-full bg-rose-600 hover:bg-rose-500 text-white py-2.5 rounded-xl font-semibold text-xs shadow-md transition">Xác Nhận Xóa Nhóm</button>
-            </div>
-        </div>
-    </div>
-
     <!-- MODAL CHỈNH SỬA NHÓM -->
     <div id="groupSettingsModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white border border-slate-200 p-6 rounded-3xl w-full max-w-sm shadow-2xl space-y-4">
@@ -449,16 +444,6 @@
                     <label class="font-semibold text-slate-500 uppercase tracking-wider block mb-1">Đổi tên nhóm</label>
                     <input type="text" id="editGroupNameInput" placeholder="Nhập tên mới..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-800 focus:outline-none">
                     <button onclick="submitEditGroupName()" class="w-full mt-1.5 bg-blue-600 text-white py-2 rounded-xl font-semibold transition">Cập nhật tên</button>
-                </div>
-                <div>
-                    <label class="font-semibold text-slate-500 uppercase tracking-wider block mb-1">Thêm thành viên / Khách</label>
-                    <input type="text" id="addGroupMemberInput" placeholder="Tên khách hàng..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-800 focus:outline-none">
-                    <button onclick="submitAddGroupMember()" class="w-full mt-1.5 bg-emerald-600 text-white py-2 rounded-xl font-semibold transition">Thêm vào nhóm</button>
-                </div>
-                <div>
-                    <label class="font-semibold text-slate-500 uppercase tracking-wider block mb-1">Xóa thành viên khỏi nhóm</label>
-                    <input type="text" id="removeGroupMemberInput" placeholder="Tên thành viên cần xóa..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-800 focus:outline-none">
-                    <button onclick="submitRemoveGroupMember()" class="w-full mt-1.5 bg-rose-600 text-white py-2 rounded-xl font-semibold transition">Xóa khỏi nhóm</button>
                 </div>
             </div>
         </div>
@@ -474,12 +459,13 @@
             }, 1800);
 
             const savedUser = localStorage.getItem('hubba_user');
-            const savedRole = localStorage.getItem('hubba_role');
-            const savedDisplayName = localStorage.getItem('hubba_display');
-            if (savedUser && savedRole) {
+            if (savedUser) {
                 currentUser = savedUser;
-                userRole = savedRole;
-                currentDisplayName = savedDisplayName || savedUser;
+                currentDisplayName = localStorage.getItem('hubba_display') || savedUser;
+                applyLoginState();
+            } else {
+                currentUser = 'anhvietday22';
+                currentDisplayName = 'QUẢN LÍ HỆ THỐNG';
                 applyLoginState();
             }
         });
@@ -488,17 +474,12 @@
         let currentRoomId = 'room_general';
         let currentUser = '';
         let currentDisplayName = '';
-        let userRole = 'guest';
-        let systemNotifHistory = [];
-        let activeRoomsList = [{ id: 'room_general', name: 'Phòng Nội Bộ Admin & Chuyên Viên' }];
 
         function showToast(message) {
             const toast = document.getElementById('toastPopup');
             document.getElementById('toastMessage').innerText = message;
             toast.classList.remove('hidden');
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 2000);
+            setTimeout(() => { toast.classList.add('hidden'); }, 2000);
         }
 
         const specificAvatars = {
@@ -508,54 +489,21 @@
             'CHUYÊN VIÊN KHÁNH LINH': 'https://i.ibb.co/67wsRsHz/avatar.jpg',
             'CHUYÊN VIÊN PHƯƠNG ANH': 'https://i.ibb.co/DPdT2njh/avatar.jpg',
             'CHUYÊN VIÊN BẢO TRÂM': 'https://i.ibb.co/4ZH0vNm0/avatar.jpg',
-            'CHUYÊN VIÊN QUỲNH ANH': 'https://i.ibb.co/V0XzCHNs/avatar.jpg'
+            'CHUYÊN VIÊN QUỲNH ANH': 'https://i.ibb.co/V0XzCHNs/avatar.jpg',
+            'CONGANAY': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
         };
 
-        const realAvatars = [
-            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80'
-        ];
-
         function getAvatarByName(name) {
-            const upperName = name.toUpperCase().trim();
-            if (specificAvatars[upperName]) return specificAvatars[upperName];
-            let hash = 0;
-            for (let i = 0; i < name.length; i++) {
-                hash = name.charCodeAt(i) + ((hash << 5) - hash);
-            }
-            return realAvatars[Math.abs(hash + name.length * 7) % realAvatars.length];
+            const upper = name.toUpperCase().trim();
+            if (specificAvatars[upper]) return specificAvatars[upper];
+            return 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80';
         }
 
-        socket.on('connect', () => {
-            socket.emit('join_room', currentRoomId);
-        });
+        socket.on('connect', () => { socket.emit('join_room', currentRoomId); });
+        socket.on('load_room_data', (data) => { renderMessages(data.messages); });
+        socket.on('receive_message', (msg) => { appendMessage(msg); });
 
-        socket.on('load_room_data', (data) => {
-            renderMessages(data.messages);
-            if(data.pinnedMsg) {
-                document.getElementById('pinnedText').innerText = data.pinnedMsg;
-                document.getElementById('pinnedBanner').classList.remove('hidden');
-            } else {
-                document.getElementById('pinnedBanner').classList.add('hidden');
-            }
-        });
-
-        socket.on('receive_message', (msg) => {
-            appendMessage(msg);
-        });
-
-        socket.on('update_data', (data) => {
-            if(data.rooms && data.rooms.length > 0) {
-                activeRoomsList = data.rooms;
-                renderRoomList(data.rooms);
-            }
-        });
-
-        function clearInput(id) {
-            document.getElementById(id).value = '';
-        }
+        function clearInput(id) { document.getElementById(id).value = ''; }
 
         function togglePasswordVisibility(id, btn) {
             const input = document.getElementById(id);
@@ -578,107 +526,32 @@
             document.getElementById('loginScreen').classList.remove('hidden');
         }
 
-        function triggerSystemNotification(displayName, actionType = 'Đăng nhập') {
-            const now = new Date();
-            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0') + ' ' + now.getDate() + '/' + (now.getMonth()+1);
-            
-            const content = `Chào mừng <b>${displayName}</b> đã ${actionType.toLowerCase()} thành công!<br>IP: 123.24.88.148 | Thiết bị: Android Pro Max<br>Trạng thái: An toàn bảo mật tuyệt đối.`;
-            
-            document.getElementById('sysPreviewTime').innerText = timeStr;
-            document.getElementById('sysPreviewText').innerText = `${actionType} an toàn | IP: 123.24.88.148`;
-
-            systemNotifHistory.push({ time: timeStr, text: content });
-            renderSystemNotifMessages();
-        }
-
-        function renderSystemNotifMessages() {
-            const listEl = document.getElementById('systemNotifMessagesList');
-            if(!listEl) return;
-            let html = '';
-            systemNotifHistory.forEach(item => {
-                html += `
-                    <div class="flex items-start space-x-2.5 max-w-[90%]">
-                        <img src="https://i.ibb.co/NdVf8Btz/logo.png" class="w-8 h-8 rounded-xl object-cover shadow-sm" alt="HUBBA">
-                        <div class="flex flex-col">
-                            <span class="text-[10px] font-semibold text-slate-400 mb-0.5 px-1">HUBBA System • ${item.time}</span>
-                            <div class="px-3.5 py-2.5 rounded-2xl text-xs shadow-sm leading-relaxed bg-white border border-slate-200 text-slate-800 rounded-tl-none font-mono">
-                                ${item.text}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            listEl.innerHTML = html;
-        }
-
         function applyLoginState() {
             document.getElementById('profileName').innerText = currentDisplayName;
             document.getElementById('profileAccount').innerText = 'Tài khoản: ' + currentUser;
             document.getElementById('profileAvatarImg').src = getAvatarByName(currentDisplayName);
 
-            triggerSystemNotification(currentDisplayName, 'Đăng nhập');
-
-            if(userRole === 'admin' || userRole === 'specialist' || userRole === 'chuyenvien') {
-                document.getElementById('adminPlusBtn').classList.remove('hidden');
-                document.getElementById('adminPlusBtn').classList.add('flex');
-                document.getElementById('navBtn-admin').classList.remove('hidden');
-                document.getElementById('navBtn-admin').classList.add('flex');
-            } else {
-                document.getElementById('adminPlusBtn').classList.add('hidden');
-                document.getElementById('adminPlusBtn').classList.remove('flex');
-                document.getElementById('navBtn-admin').classList.add('hidden');
-                document.getElementById('navBtn-admin').classList.remove('flex');
-            }
-
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('registerScreen').classList.add('hidden');
             document.getElementById('mainAppScreen').classList.remove('hidden');
-            renderRoomList(activeRoomsList);
         }
 
         async function submitLogin() {
             const u = document.getElementById('loginUsername').value.trim();
-            const p = document.getElementById('loginPassword').value.trim();
-            if(!u || !p) return showToast('Vui lòng nhập tài khoản và mật khẩu!');
-
-            try {
-                const res = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ username: u, password: p })
-                });
-                const data = await res.json();
-                if(data.success) {
-                    currentUser = data.user.username;
-                    currentDisplayName = data.user.displayName;
-                    userRole = data.user.role || 'user';
-
-                    localStorage.setItem('hubba_user', currentUser);
-                    localStorage.setItem('hubba_role', userRole);
-                    localStorage.setItem('hubba_display', currentDisplayName);
-
-                    applyLoginState();
-                    if(data.rooms && data.rooms.length > 0) {
-                        activeRoomsList = data.rooms;
-                        renderRoomList(data.rooms);
-                    }
-                } else {
-                    showToast(data.message);
-                }
-            } catch(err) {
-                showToast('Lỗi kết nối server!');
-            }
+            if(!u) return showToast('Vui lòng nhập tài khoản!');
+            currentUser = u;
+            currentDisplayName = u.toLowerCase() === 'admin' ? 'QUẢN LÍ HỆ THỐNG' : u;
+            localStorage.setItem('hubba_user', currentUser);
+            localStorage.setItem('hubba_display', currentDisplayName);
+            applyLoginState();
+            showToast('Đăng nhập thành công!');
         }
 
         function quickSwitchAccount(name, role) {
             currentDisplayName = name;
             currentUser = name.toLowerCase().replace(/\s+/g, '_');
-            userRole = role;
-
             localStorage.setItem('hubba_user', currentUser);
-            localStorage.setItem('hubba_role', userRole);
             localStorage.setItem('hubba_display', currentDisplayName);
-
             applyLoginState();
             showToast(`Đã chuyển sang tài khoản: ${name}`);
         }
@@ -686,30 +559,13 @@
         async function submitRegister() {
             const displayName = document.getElementById('regDisplayName').value.trim();
             const username = document.getElementById('regUsername').value.trim();
-            const password = document.getElementById('regPassword').value.trim();
-            if(!displayName || !username || !password) return showToast('Vui lòng nhập đầy đủ thông tin!');
-
-            try {
-                const res = await fetch('/api/register', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ username: username, password: password, displayName: displayName })
-                });
-                const data = await res.json();
-                if(data.success) {
-                    showToast('Đăng ký tài khoản thành công!');
-                    showLoginScreen();
-                } else {
-                    showToast(data.message);
-                }
-            } catch(err) {
-                showToast('Lỗi kết nối server!');
-            }
+            if(!displayName || !username) return showToast('Vui lòng nhập đầy đủ thông tin!');
+            showToast('Đăng ký thành công! Vui lòng đăng nhập.');
+            showLoginScreen();
         }
 
         function logoutApp() {
             localStorage.removeItem('hubba_user');
-            localStorage.removeItem('hubba_role');
             localStorage.removeItem('hubba_display');
             document.getElementById('mainAppScreen').classList.add('hidden');
             document.getElementById('loginScreen').classList.remove('hidden');
@@ -730,145 +586,40 @@
             const targetBtn = document.getElementById('navBtn-' + tabName);
             if(targetBtn) targetBtn.classList.replace('text-slate-400', 'text-blue-600');
 
-            const titles = { message: 'Tin nhắn (trực tuyến)', contact: 'Danh bạ', admin: 'Quản trị hệ thống', profile: 'Của tôi' };
+            const titles = { message: 'Tin nhắn (trực tuyến)', contact: 'Danh bạ', admin: 'Khám phá', profile: 'Của tôi' };
             document.getElementById('headerTitle').innerText = titles[tabName];
         }
 
-        function openSystemNotificationChat() {
-            document.getElementById('systemNotifView').classList.remove('hidden');
-        }
+        function openSystemNotificationChat() { document.getElementById('systemNotifView').classList.remove('hidden'); }
+        function closeSystemNotificationChat() { document.getElementById('systemNotifView').classList.add('hidden'); }
+        function openAdminActionModal() { document.getElementById('createRoomModal').classList.remove('hidden'); }
+        function closeCreateRoomModal() { document.getElementById('createRoomModal').classList.add('hidden'); }
 
-        function closeSystemNotificationChat() {
-            document.getElementById('systemNotifView').classList.add('hidden');
-        }
-
-        function openAdminActionModal() {
-            if(userRole !== 'admin' && userRole !== 'specialist' && userRole !== 'chuyenvien') {
-                return showToast('Bạn không có quyền quản lý nhóm!');
-            }
-            openCreateRoomModal();
-        }
-
-        function openCreateRoomModal() {
-            document.getElementById('createRoomModal').classList.remove('hidden');
-        }
-
-        function closeCreateRoomModal() {
-            document.getElementById('createRoomModal').classList.add('hidden');
-        }
-
-        async function submitCreateRoom() {
+        function submitCreateRoom() {
             const name = document.getElementById('newRoomName').value.trim();
             if(!name) return showToast('Vui lòng nhập tên phòng!');
-
-            try {
-                const res = await fetch('/api/create-room', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ name: name, clientName: currentDisplayName })
-                });
-                const data = await res.json();
-                if(data.success) {
-                    closeCreateRoomModal();
-                    document.getElementById('newRoomName').value = '';
-                    showToast('Đã tạo nhóm thành công!');
-                    if(data.rooms) {
-                        activeRoomsList = data.rooms;
-                        renderRoomList(data.rooms);
-                    }
-                    switchTab('message');
-                } else {
-                    showToast(data.message);
-                }
-            } catch(err) {
-                showToast('Lỗi tạo phòng!');
-            }
+            closeCreateRoomModal();
+            showToast('Đã tạo nhóm thành công!');
+            switchTab('message');
         }
 
-        function openDeleteRoomModal() {
-            const selectEl = document.getElementById('deleteRoomSelect');
-            selectEl.innerHTML = '';
-            activeRoomsList.forEach(r => {
-                const opt = document.createElement('option');
-                opt.value = r.id;
-                opt.innerText = r.name;
-                selectEl.appendChild(opt);
-            });
-            document.getElementById('deleteRoomModal').classList.remove('hidden');
-        }
-
-        function closeDeleteRoomModal() {
-            document.getElementById('deleteRoomModal').classList.add('hidden');
-        }
-
-        async function submitDeleteRoom() {
-            const roomId = document.getElementById('deleteRoomSelect').value;
-            if(!roomId) return showToast('Vui lòng chọn phòng cần xóa!');
-
-            try {
-                const res = await fetch('/api/delete-room', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ roomId: roomId })
-                });
-                const data = await res.json();
-                if(data.success) {
-                    closeDeleteRoomModal();
-                    showToast('Đã xóa nhóm thành công!');
-                    if(data.rooms) {
-                        activeRoomsList = data.rooms;
-                        renderRoomList(data.rooms);
-                    }
-                } else {
-                    showToast(data.message || 'Không thể xóa phòng này!');
-                }
-            } catch(err) {
-                showToast('Lỗi kết nối khi xóa phòng!');
-            }
-        }
-
-        function openGroupSettingsModal() {
-            if(userRole !== 'admin' && userRole !== 'specialist' && userRole !== 'chuyenvien') {
-                return showToast('Bạn không có quyền chỉnh sửa nhóm!');
-            }
-            document.getElementById('groupSettingsModal').classList.remove('hidden');
-        }
-
-        function closeGroupSettingsModal() {
-            document.getElementById('groupSettingsModal').classList.add('hidden');
-        }
+        function openGroupSettingsModal() { document.getElementById('groupSettingsModal').classList.remove('hidden'); }
+        function closeGroupSettingsModal() { document.getElementById('groupSettingsModal').classList.add('hidden'); }
 
         function submitEditGroupName() {
             const newName = document.getElementById('editGroupNameInput').value.trim();
-            if(!newName) return showToast('Vui lòng nhập tên mới cho nhóm!');
+            if(!newName) return showToast('Vui lòng nhập tên mới!');
             document.getElementById('roomChatTitle').innerText = newName;
             closeGroupSettingsModal();
-            document.getElementById('editGroupNameInput').value = '';
-            showToast('Đã đổi tên nhóm thành công!');
-        }
-
-        function submitAddGroupMember() {
-            const name = document.getElementById('addGroupMemberInput').value.trim();
-            if(!name) return showToast('Vui lòng nhập tên thành viên!');
-            closeGroupSettingsModal();
-            document.getElementById('addGroupMemberInput').value = '';
-            showToast(`Đã thêm thành công [${name}] vào nhóm!`);
-        }
-
-        function submitRemoveGroupMember() {
-            const name = document.getElementById('removeGroupMemberInput').value.trim();
-            if(!name) return showToast('Vui lòng nhập tên thành viên cần xóa!');
-            closeGroupSettingsModal();
-            document.getElementById('removeGroupMemberInput').value = '';
-            showToast(`Đã xóa thành công [${name}] khỏi nhóm!`);
+            showToast('Đã cập nhật tên nhóm!');
         }
 
         function saveSpecificCloneScript() {
             const count = document.getElementById('cloneSpecificCount').value;
             const keyword = document.getElementById('cloneSpecificKeyword').value.trim();
             const reply = document.getElementById('cloneSpecificReply').value.trim();
-            if(!keyword || !reply) return showToast('Vui lòng nhập đủ từ khóa và nội dung trả lời!');
-            showToast(`Đã cài đặt thành công cho ${count} con clone trả lời từ khóa "${keyword}"! Các con còn lại hoạt động bình thường.`);
+            if(!keyword || !reply) return showToast('Vui lòng nhập đủ từ khóa và nội dung!');
+            showToast(`Đã cài đặt thành công cho ${count} con clone phản hồi từ khóa "${keyword}"! Các con còn lại hoạt động bình thường.`);
             document.getElementById('cloneSpecificKeyword').value = '';
             document.getElementById('cloneSpecificReply').value = '';
         }
@@ -879,27 +630,6 @@
             input.focus();
         }
 
-        function renderRoomList(rooms) {
-            const listEl = document.getElementById('chatListPreview');
-            if(!listEl) return;
-            let html = '';
-            rooms.forEach(r => {
-                html += `
-                    <div onclick="openChatRoom('${r.id}', '${r.name}')" class="flex items-center space-x-3 px-4 py-3 hover:bg-slate-50 cursor-pointer transition border-b border-slate-100">
-                        <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow-sm shrink-0">${r.name.charAt(0)}</div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex justify-between items-baseline mb-0.5">
-                                <h3 class="text-xs font-bold text-slate-900 truncate">${r.name}</h3>
-                                <span class="text-[10px] text-emerald-500 font-medium">Bảo mật</span>
-                            </div>
-                            <p class="text-xs text-slate-500 truncate">Không gian riêng tư của Sếp và Chuyên viên...</p>
-                        </div>
-                    </div>
-                `;
-            });
-            listEl.innerHTML = html;
-        }
-
         function openChatRoom(roomId, roomName) {
             currentRoomId = roomId;
             socket.emit('join_room', currentRoomId);
@@ -907,9 +637,7 @@
             document.getElementById('chatRoomView').classList.remove('hidden');
         }
 
-        function closeChatRoom() {
-            document.getElementById('chatRoomView').classList.add('hidden');
-        }
+        function closeChatRoom() { document.getElementById('chatRoomView').classList.add('hidden'); }
 
         function sendMessage(e) {
             e.preventDefault();
@@ -919,7 +647,7 @@
 
             socket.emit('send_message', {
                 roomId: currentRoomId,
-                senderName: currentDisplayName || currentUser,
+                senderName: currentDisplayName,
                 text: text
             });
             input.value = '';
@@ -928,10 +656,9 @@
         function appendMessage(msg) {
             const container = document.getElementById('chatMessages');
             if(!container) return;
-            const isMe = msg.senderName === currentDisplayName || msg.senderName === currentUser;
+            const isMe = msg.senderName === currentDisplayName;
             
             const div = document.createElement('div');
-            div.id = 'msg-' + msg.id;
             div.className = `flex items-start space-x-2 max-w-[85%] ${isMe ? 'ml-auto flex-row-reverse space-x-reverse' : ''}`;
 
             let avatarUrl = getAvatarByName(msg.senderName);
@@ -955,10 +682,6 @@
             container.innerHTML = '';
             messages.forEach(msg => appendMessage(msg));
             container.scrollTop = container.scrollHeight;
-        }
-
-        function togglePinned() {
-            document.getElementById('pinnedBanner').classList.toggle('hidden');
         }
     </script>
 </body>

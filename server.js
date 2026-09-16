@@ -59,40 +59,47 @@ let messages = [
 const reactionIcons = ['❤️', '😂', '👍', '🔥', '😍', '👏'];
 const bossTag = '@QUẢN LÍ HỆ THỐNG';
 
-// KHO TỪ VỰNG MÔNG MÊNH, NHIỀU CẢM XÚC & BIÊN THIÊN VẠN LÍ
-const poolSubjects = ["đêm khuya ngồi ngẫm lại", "chợt nhận ra", "tính sương sương thì", "nhìn dòng tiền chạy qua", "cảm giác cày nhiệm vụ lúc này", "lướt lại chặng đường vừa qua"];
-const poolActions = ["thấy thu nhập hôm nay trôi dạt và mượt mà hơn hôm qua nhiều", "sau đúng 2 ngày thử việc nhận trọn mốc lương cứng 300k mà lòng phơi phới", "chạm tay được vào khoản tiền đủ để tậu món đồ ao ước bấy lâu", "thấy từng nỗ lực nhỏ nhoi bắt đầu đơm hoa kết trái", "ôm ấp hy vọng về một tương lai rủng rỉnh ví tiền"];
-const poolAtmospheres = ["mọi thứ cứ lãng đễnh trôi", "cuốn hút đến lạ kỳ", "nghĩ lại thấy ấm áp hẳn", "cảm xúc cứ dâng trào khó tả", "thực sự mãn nguyện vô cùng"];
+// KHO CÂU CHÁT NGẮN GỌN, HỒN NHIÊN, HỆ DÂN CÀY THỰC CHIẾN 100%
+const humanChatPool = [
+  "nay nhận đủ 300k lương cứng sướng vãi",
+  "hôm nay cày task cuốn phết ae ạ",
+  "đủ tiền tậu món đồ thích từ lâu rồi nhé",
+  "thử việc 2 ngày nhận 300k cứng quá ngon",
+  "hôm nay số dư rủng rỉnh hơn hôm qua nhiều",
+  "làm ly cafe rồi ngồi cày task tiếp thôi",
+  "công nhận chăm chỉ làm task thấy đói thế nào được",
+  "nhận 300k tiền tươi thóc thật uy tín vl",
+  "ae nay cày ác chiến phết nhỉ",
+  "kiếm tiền chỗ sếp lúc nào cũng yên tâm",
+  "sắm được món đồ ao ước rồi, nhẹ cả người",
+  "thu nhập hôm nay ấm hơn hôm qua hẳn",
+  "cày task mỏi tay nhưng đáng ae ạ",
+  "đẩy nhanh tiến độ đi anh em ơi",
+  "lương cứng về tài khoản, ấm cái bụng",
+  "ông nào chưa xong task thì mau lên nhé",
+  "tôi điểm danh từ sáng tới giờ đây này",
+  "hôm nay đóp đơn mỏi tay luôn",
+  "chuẩn bài rồi, cứ thế mà phát huy thôi"
+];
 
-function generateMongMenhSentence(recentTexts = []) {
+function generateHumanSentence(recentTexts = []) {
   let attempts = 0;
   let candidate = "";
   do {
-    let sub = poolSubjects[Math.floor(Math.random() * poolSubjects.length)];
-    let act = poolActions[Math.floor(Math.random() * poolActions.length)];
-    let atm = poolAtmospheres[Math.floor(Math.random() * poolAtmospheres.length)];
+    candidate = humanChatPool[Math.floor(Math.random() * humanChatPool.length)];
 
-    let structures = [
-      `${sub}, ${act}, ${atm}`,
-      `hình như ${sub} ${act}, ${atm}`,
-      `${act}, để rồi ${sub} ${atm}`,
-      `có những lúc ${sub} ${act}, ${atm}`
-    ];
-
-    candidate = structures[Math.floor(Math.random() * structures.length)];
-
-    // Thỉnh thoảng thoắt ẩn thoắt hiện tag tên sếp cho có chiều sâu
-    if (Math.random() > 0.88) {
-      candidate = `${bossTag} ơi, ${candidate}`;
+    // Cực kỳ hạn chế tag sếp (chỉ 10%), để tự anh em chém gió với nhau cho giống thật
+    if (Math.random() > 0.90) {
+      candidate = `${bossTag} duyệt giúp anh em mẻ task này với nhé`;
     }
 
     attempts++;
-  } while (recentTexts.includes(candidate) && attempts < 100);
+  } while (recentTexts.includes(candidate) && attempts < 80);
 
   return candidate;
 }
 
-// BOT KIỂM DUYỆT CHỐNG SPAM / XÓA SẠCH TIN NHẮN TRÙNG LẶP
+// BOT KIỂM DUYỆT CHỐNG TRÙNG LẶP
 function checkAndCleanDuplicates(roomId, ioServer) {
   const roomMsgs = messages.filter(m => m.roomId === roomId);
   const seenTexts = new Set();
@@ -101,7 +108,7 @@ function checkAndCleanDuplicates(roomId, ioServer) {
 
   roomMsgs.forEach(m => {
     if (seenTexts.has(m.text)) {
-      hasDeleted = true; // Trùng lặp -> Xóa vĩnh viễn
+      hasDeleted = true;
     } else {
       seenTexts.add(m.text);
       validMessages.push(m);
@@ -276,7 +283,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP BACKGROUND CHUẨN 3.5 GIÂY
+// VÒNG LẶP BACKGROUND 3.5 GIÂY (CHÁT CHÉO TỰ NHIÊN)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
@@ -295,10 +302,10 @@ setInterval(() => {
       const roomMsgs = messages.filter(m => m.roomId === activeRoom.id);
       let recentTexts = roomMsgs.slice(-200).map(m => m.text);
 
-      let text1 = generateMongMenhSentence(recentTexts);
+      let text1 = generateHumanSentence(recentTexts);
       recentTexts.push(text1);
-      let tagPeer = (Math.random() > 0.5) ? `@${cl1.displayName} ` : '';
-      let text2 = tagPeer + generateMongMenhSentence(recentTexts);
+      let tagPeer = (Math.random() > 0.6) ? `@${cl1.displayName} ` : '';
+      let text2 = tagPeer + generateHumanSentence(recentTexts);
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
       const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
@@ -351,7 +358,7 @@ io.on('connection', (socket) => {
     io.to(data.roomId).emit('receive_message', newMessage);
     checkAndCleanDuplicates(data.roomId, io);
 
-    // KHI SẾP VỪA NHẮN -> TOÀN BỘ CLONE BẺ LÁI TẬP TRUNG HƯỞNG ỨNG MÔNG MÊNH THEO Ý SẾP
+    // KHI SẾP VỪA NHẮN -> CLONE TẬP TRUNG HƯỞNG ỨNG NGẮN GỌN NHƯ NGƯỜI THẬT
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
@@ -371,23 +378,23 @@ io.on('connection', (socket) => {
             let recentTexts = roomMsgs.slice(-200).map(m => m.text);
 
             let replyBody = "";
-            let snippet = cleanUserMsg.length > 25 ? cleanUserMsg.substring(0, 25) + "..." : cleanUserMsg;
+            let snippet = cleanUserMsg.length > 20 ? cleanUserMsg.substring(0, 20) + "..." : cleanUserMsg;
 
             if (cleanUserMsg.toLowerCase() === 'alo') {
-              replyBody = `${bossTag} lắng nghe chỉ đạo từ sếp, anh em đang chìm đắm trong tiến độ nhiệm vụ rực rỡ đây ạ`;
+              replyBody = `${bossTag} nghe sếp ơi, ae đang cày task căng lắm đây`;
             } else if (cleanUserMsg.length > 0) {
-              let focusOptions = [
-                `ngẫm nghĩ về "${snippet}" mà ${bossTag} vừa chia sẻ, chợt thấy thu nhập hôm nay trôi dạt ấm áp hơn hôm qua nhiều`,
-                `lắng nghe ${bossTag} nhắc tới "${snippet}", lòng bỗng rộn ràng hướng về cảm giác tậu được món đồ ao ước`,
-                `thông điệp về "${snippet}" từ ${bossTag} thực sự chạm đến cảm xúc, nhận trọn lương cứng 300k sau 2 ngày thử việc đúng là ngọt ngào`,
-                `chìm đắm trong ý tưởng "${snippet}" của ${bossTag}, anh em cảm thấy từng nhịp cày nhiệm vụ đều vô cùng mãn nguyện`
+              let humanReplyOptions = [
+                `chuẩn luôn ${bossTag}, nghe "${snippet}" là ae có động lực cày liền`,
+                `chuẩn bài rồi ${bossTag}, vụ "${snippet}" này ae làm mượt ngay`,
+                `nhất trí với ${bossTag} nhé, ae đang tăng tốc vụ "${snippet}" đây`,
+                `chuẩn không cần chỉnh ${bossTag} ơi, chiến thôi`
               ];
-              replyBody = focusOptions[Math.floor(Math.random() * focusOptions.length)];
+              replyBody = humanReplyOptions[Math.floor(Math.random() * humanReplyOptions.length)];
             } else {
-              replyBody = generateMongMenhSentence(recentTexts);
+              replyBody = generateHumanSentence(recentTexts);
             }
 
-            let tagPrefix = (b > 0 && Math.random() > 0.4) ? `@${peer1.displayName} ` : '';
+            let tagPrefix = (b > 0 && Math.random() > 0.5) ? `@${peer1.displayName} ` : '';
             let finalReply = tagPrefix + replyBody;
 
             const mRep = {

@@ -24,7 +24,7 @@
 </head>
 <body class="h-screen flex flex-col overflow-hidden select-none">
 
-    <!-- POPUP THÔNG BÁO HIỆN ĐẠI (THAY THẾ ALERT TÙ) -->
+    <!-- POPUP THÔNG BÁO HIỆN ĐẠI -->
     <div id="toastPopup" class="hidden fixed top-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl z-50 text-xs font-semibold flex items-center space-x-2 transition-all duration-300">
         <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
         <span id="toastMessage">Thông báo hệ thống</span>
@@ -219,29 +219,59 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: QUẢN TRỊ (CHUYỂN NHANH ADMIN <-> CHUYÊN VIÊN) -->
+                <!-- TAB 3: QUẢN TRỊ (ĐẦY ĐỦ CÁC CHỨC NĂNG ĐIỀU HÀNH CHO ADMIN & CV) -->
                 <div id="tabAdmin" class="hidden p-4 space-y-4">
                     <div class="bg-indigo-900 text-white p-4 rounded-2xl shadow-md space-y-2">
                         <div class="flex items-center space-x-2">
                             <i class="fa-solid fa-shield-halved text-amber-400 text-lg"></i>
-                            <h3 class="text-xs font-bold tracking-wide">Chuyển Đổi Tài Khoản Nhanh</h3>
+                            <h3 class="text-xs font-bold tracking-wide">Trung Tâm Điều Hành HUBBA</h3>
                         </div>
-                        <p class="text-[11px] text-indigo-200">Bấm trực tiếp để chuyển quyền giữa Admin và Chuyên viên nhắn tin với khách ngay lập tức.</p>
+                        <p class="text-[11px] text-indigo-200">Chuyển đổi tài khoản trực tiếp và quản trị nhóm chat chuyên nghiệp.</p>
                     </div>
 
+                    <!-- Bảng chuyển đổi nhanh tài khoản -->
                     <div class="bg-white border border-slate-100 rounded-2xl p-4 space-y-2.5 shadow-sm">
-                        <h4 class="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Chọn nhanh tài khoản trực tuyến</h4>
-                        <button onclick="quickSwitchAccount('QUẢN LÍ HỆ THỐNG', 'admin')" class="w-full text-left px-3.5 py-3 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-indigo-50 flex items-center justify-between transition">
-                            <span class="flex items-center gap-2"><i class="fa-solid fa-crown text-amber-500"></i> Chuyển về tài khoản Admin</span>
+                        <h4 class="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Chuyển đổi tài khoản nhanh (Nhắn tin trực tiếp)</h4>
+                        <button onclick="quickSwitchAccount('QUẢN LÍ HỆ THỐNG', 'admin')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-indigo-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-crown text-amber-500"></i> Tài khoản Admin</span>
                             <span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">Admin</span>
                         </button>
-                        <button onclick="quickSwitchAccount('CHUYÊN VIÊN HÀ ANH', 'chuyenvien')" class="w-full text-left px-3.5 py-3 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-blue-50 flex items-center justify-between transition">
-                            <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-blue-600"></i> Chuyển sang CV Hà Anh</span>
+                        <button onclick="quickSwitchAccount('CHUYÊN VIÊN HÀ ANH', 'chuyenvien')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-blue-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-blue-600"></i> CV Hà Anh</span>
                             <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">CV</span>
                         </button>
-                        <button onclick="quickSwitchAccount('CHUYÊN VIÊN KHÁNH LINH', 'chuyenvien')" class="w-full text-left px-3.5 py-3 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-blue-50 flex items-center justify-between transition">
-                            <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-blue-600"></i> Chuyển sang CV Khánh Linh</span>
+                        <button onclick="quickSwitchAccount('CHUYÊN VIÊN KHÁNH LINH', 'chuyenvien')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-blue-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-blue-600"></i> CV Khánh Linh</span>
                             <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">CV</span>
+                        </button>
+                        <button onclick="quickSwitchAccount('CHUYÊN VIÊN PHƯƠNG ANH', 'chuyenvien')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-blue-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-blue-600"></i> CV Phương Anh</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">CV</span>
+                        </button>
+                        <button onclick="quickSwitchAccount('CHUYÊN VIÊN BẢO TRÂM', 'chuyenvien')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-blue-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-blue-600"></i> CV Bảo Trâm</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">CV</span>
+                        </button>
+                        <button onclick="quickSwitchAccount('CHUYÊN VIÊN QUỲNH ANH', 'chuyenvien')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-blue-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-blue-600"></i> CV Quỳnh Anh</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">CV</span>
+                        </button>
+                    </div>
+
+                    <!-- Bảng thao tác nhóm -->
+                    <div class="bg-white border border-slate-100 rounded-2xl p-3 space-y-2 shadow-sm">
+                        <h4 class="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Quản lý phòng chat nhóm</h4>
+                        <button onclick="openCreateRoomModal()" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-blue-600 hover:bg-blue-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-circle-plus"></i> Tạo Nhóm Mới</span>
+                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        </button>
+                        <button onclick="openDeleteRoomModal()" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-trash-can"></i> Xóa Nhóm</span>
+                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        </button>
+                        <button onclick="openManageMembersModal()" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-emerald-600 hover:bg-emerald-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-users-gear"></i> Thêm / Xóa Thành Viên</span>
+                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
                         </button>
                     </div>
                 </div>
@@ -403,7 +433,6 @@
                 setTimeout(() => splash.remove(), 700);
             }, 1800);
 
-            // Tự động khôi phục phiên đăng nhập từ localStorage để không bị out khi reload
             const savedUser = localStorage.getItem('hubba_user');
             const savedRole = localStorage.getItem('hubba_role');
             const savedDisplayName = localStorage.getItem('hubba_display');
@@ -583,7 +612,6 @@
                     currentDisplayName = data.user.displayName;
                     userRole = data.user.role || 'user';
 
-                    // Lưu vào localStorage để không bị out khi reload trang
                     localStorage.setItem('hubba_user', currentUser);
                     localStorage.setItem('hubba_role', userRole);
                     localStorage.setItem('hubba_display', currentDisplayName);
@@ -601,7 +629,6 @@
             }
         }
 
-        // Chuyển đổi nhanh tài khoản Admin <-> Chuyên viên ngay trong app không cần đăng xuất
         function quickSwitchAccount(name, role) {
             currentDisplayName = name;
             currentUser = name.toLowerCase().replace(/\s+/g, '_');
@@ -678,7 +705,6 @@
             if(userRole !== 'admin' && userRole !== 'specialist' && userRole !== 'chuyenvien') {
                 return showToast('Bạn không có quyền quản lý nhóm!');
             }
-            // Mở modal tạo/xóa nhóm nhanh
             openCreateRoomModal();
         }
 

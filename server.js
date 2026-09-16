@@ -19,7 +19,7 @@ const genzNicknames = [
   'Quạu Cơ', 'Trầm Zn', 'Flexer Chính Hiệu', 'Bảnh Trai Phết', 'Tài Phiệt', 
   'Hệ Đốt Lương', 'Genz Lười', 'Đâm Chồi Nảy Lộc', 'Mất Ngủ', 'Hệ Tư Duy', 
   'Chúa Chốt Đơn', 'Vua Té Nước', 'Lười Nhưng Giàu', 'Hệ Mỏ Lắm', 'Đại Gia Ổi',
-  'Boss Ẩn Danh', 'Cục Súc Đại Nhân', 'Thích Đếm Tiền', 'Sống Lỏ', 'Hệ Bám Sếp',
+  'Boss Ẩn Danh', 'Cục Súc Đại Nhân', 'Thích Đếm Tiền', 'Hệ Sống Lỏ', 'Hệ Bám Sếp',
   'Mê Tín Mê Tiền', 'Hết Cứu', 'Đại Trưởng Lão', 'Tấm Chiếu Mới', 'Hệ Ỉ I',
   'Hít Không Khí Sống', 'Chuyên Gia Hóng Biến', 'Vô Hạn Tài Chính', 'Hệ Xúc Xích', 'Thánh Nổ'
 ];
@@ -63,55 +63,46 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80'
 ];
 
-// KHO TỪ VỰNG KHỔNG LỒ: Đan xen chuyện đời thường, lên kèo kiếm tiền và tag sếp
-const lifeTopics = [
-  "vừa làm cốc cafe đá xong tỉnh cả người", 
-  "ngồi canh hệ thống từ sáng tới giờ mỏi hết cả lưng", 
-  "đêm qua thức khuya check đơn mà sáng nay phê quá", 
-  "lướt group thấy anh em nổ đơn rôm rả mà ham",
-  "tính ra làm việc tốc độ này ae sớm tài khoản khủng"
+const taskVerbs = ["hoàn thành", "chạy task", "làm nhiệm vụ", "đẩy số lượng", "xử lý tiến độ", "gấp rút hoàn thành", "cày cuốc"];
+const taskObjects = ["đợt nhiệm vụ này", "hệ thống task", "chỉ tiêu giao", "data công việc", "tiến độ hôm nay", "khoản nhiệm vụ chính"];
+const taskModifiers = ["mượt mà", "căng đét", "vô cùng năng suất", "chạy cực trâu", "rất ổn định", "bạt ngàn kết quả"];
+const taskTails = ["anh em chú ý bám sát nhé", "cứ đà này là sớm về đích", "tuyệt vời ông mặt trời", "ae tranh thủ đẩy mạnh tốc độ", "thật sự rất năng suất"];
+
+const peerChatPool = [
+  "hôm qua thức khuya làm task mà sáng nay ngáp ngắn ngáp dài",
+  "vừa làm cốc cafe ngồi check lại bảng nhiệm vụ thấy trôi phết",
+  "ae dạo này làm nhiệm vụ tốc độ thế nào rồi, tôi thấy ae cày ác quá",
+  "ngồi nhìn bảng tiến độ nhảy liên tục mà công nhận cuốn thực sự",
+  "tính ra làm việc chung với team thế này có động lực hẳn"
 ];
 
-const businessActions = [
-  "lên kèo hốt bạc đi sếp ơi", 
-  "anh em đang túc trực chờ sếp phát lệnh chốt đơn", 
-  "xin chỉ thị mở rộng phễu kiếm tiền từ sếp", 
-  "bơm thêm ngân sách chạy ads để húp trọn thị trường đi sếp",
-  "cần sếp duyệt ngay chiến lược scale số đợt này"
-];
+// KHO ICON CẢM XÚC ĐA DẠNG CHO CLONE THẢ TIM, MẶT CƯỜI
+const reactionIcons = ['❤️', '😂', '👍', '🔥', '😍', '👏'];
 
-const praiseBoss = [
-  "nhờ có tư duy của sếp mà anh em lúc nào cũng rủng rỉnh",
-  "đúng là tầm nhìn của sếp lúc nào cũng đi trước thời đại",
-  "ae cứ bám sát sếp là thể nào cũng ấm cái bụng",
-  "ngưỡng mộ cách điều hành hệ thống của sếp thật sự"
-];
+// TAG QUẢN LÍ HỆ THỐNG MÀU XANH RÕ RÀNG
+const bossTag = '<span style="color: #2196F3; font-weight: bold;">@QUẢN LÍ HỆ THỐNG</span>';
 
-const dynamicEnds = [
-  "thật sự luôn", "quá bén", "không phải bàn", "căng cực", "mượt mà", "chuẩn chỉnh", "ae chú ý nhé"
-];
-
-function generateVibrantChat(recentTexts = []) {
+function generateFlexibleSentence(recentTexts = []) {
   let attempts = 0;
   let candidate = "";
   do {
     let randType = Math.random();
-    let t = lifeTopics[Math.floor(Math.random() * lifeTopics.length)];
-    let b = businessActions[Math.floor(Math.random() * businessActions.length)];
-    let p = praiseBoss[Math.floor(Math.random() * praiseBoss.length)];
-    let e = dynamicEnds[Math.floor(Math.random() * dynamicEnds.length)];
+    
+    if (randType < 0.45) {
+      candidate = peerChatPool[Math.floor(Math.random() * peerChatPool.length)];
+    } else if (randType < 0.75) {
+      let v = taskVerbs[Math.floor(Math.random() * taskVerbs.length)];
+      let o = taskObjects[Math.floor(Math.random() * taskObjects.length)];
+      let m = taskModifiers[Math.floor(Math.random() * taskModifiers.length)];
+      let t = taskTails[Math.floor(Math.random() * taskTails.length)];
+      candidate = `${o} đang được ${v} rất ${m}, ${t}`;
+    } else {
+      let bAction = ["xem xét giúp ae tiến độ task này với", "cho ý kiến chỉ đạo để ae tối ưu nhiệm vụ nhé", "kiểm tra giúp phần đối soát nhiệm vụ với ạ", "lên dây cót tinh thần cho ae cày cuốc nào"][Math.floor(Math.random() * 4)];
+      candidate = `${bossTag} sếp ơi, ${bAction}`;
+    }
 
-    let formats = [
-      `@QUẢN LÍ HỆ THỐNG ${b}, ${p}`,
-      `${t}, @QUẢN LÍ HỆ THỐNG cho cái chỉ đạo để ae húp trọn gói nhé`,
-      `đúng là ${p}, @QUẢN LÍ HỆ THỐNG xem xét ${b} đi ạ`,
-      `${t}, ${b}, ${e}`,
-      `báo cáo @QUẢN LÍ HỆ THỐNG là ${p}, ${b}`
-    ];
-
-    candidate = formats[Math.floor(Math.random() * formats.length)];
     attempts++;
-  } while (recentTexts.includes(candidate) && attempts < 80);
+  } while (recentTexts.includes(candidate) && attempts < 60);
 
   return candidate;
 }
@@ -273,7 +264,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP BACKGROUND CHUẨN 3.5 GIÂY (TAG SẾP & LÊN KÈO)
+// VÒNG LẶP BACKGROUND CHUẨN 3.5 GIÂY (CÓ TỰ ĐỘNG THẢ ICON CẢM XÚC NGẪU NHIÊN)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
@@ -292,15 +283,25 @@ setInterval(() => {
       const roomMsgs = messages.filter(m => m.roomId === activeRoom.id);
       let recentTexts = roomMsgs.slice(-200).map(m => m.text);
 
-      let text1 = generateVibrantChat(recentTexts);
+      let text1 = generateFlexibleSentence(recentTexts);
       recentTexts.push(text1);
-      let text2 = `@${cl1.displayName} ${generateVibrantChat(recentTexts)}`;
+      let tagPeer = (Math.random() > 0.6) ? `<span style="color: #2196F3; font-weight: bold;">@${cl1.displayName}</span> ` : '';
+      let text2 = tagPeer + generateFlexibleSentence(recentTexts);
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
       const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
 
       messages.push(m1);
       io.to(activeRoom.id).emit('receive_message', m1);
+
+      // Thỉnh thoảng tự động thả icon ngẫu nhiên cho tin nhắn trước đó
+      if (roomMsgs.length > 0 && Math.random() > 0.3) {
+        let targetMsg = roomMsgs[Math.floor(Math.random() * roomMsgs.length)];
+        let randomIcon = reactionIcons[Math.floor(Math.random() * reactionIcons.length)];
+        if(!targetMsg.reactions) targetMsg.reactions = {};
+        targetMsg.reactions[cl2.displayName] = randomIcon;
+        io.to(activeRoom.id).emit('update_reaction', { msgId: targetMsg.id, reactions: targetMsg.reactions });
+      }
 
       setTimeout(() => {
         messages.push(m2);
@@ -336,7 +337,7 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> PHẢN HỒI BÁM SÁT, TAG TÊN VÀ LÊN KÈO, CHUẨN 3.5 GIÂY
+    // KHI SẾP VỪA NHẮN -> PHẢN HỒI LINH HOẠT, BÁM SÁT NHIỆM VỤ, CHUẨN 3.5 GIÂY
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
@@ -354,19 +355,19 @@ io.on('connection', (socket) => {
             const roomMsgs = messages.filter(m => m.roomId === data.roomId);
             let recentTexts = roomMsgs.slice(-200).map(m => m.text);
 
-            let dynamicMsg = generateVibrantChat(recentTexts);
+            let dynamicMsg = generateFlexibleSentence(recentTexts);
             let replyBody = "";
             let cleanUserMsg = userMsg.trim();
 
             if (cleanUserMsg.toLowerCase() === 'alo') {
-              replyBody = "@QUẢN LÍ HỆ THỐNG nghe sếp ơi, anh em đang túc trực đầy đủ sẵn sàng nhận kèo hốt bạc";
+              replyBody = `${bossTag} nghe sếp ơi, anh em đang túc trực đầy đủ để xử lý nhiệm vụ`;
             } else if (cleanUserMsg.length > 0) {
-              replyBody = `chuẩn quá @QUẢN LÍ HỆ THỐNG ơi, ${dynamicMsg}`;
+              replyBody = `nhất trí với ý kiến của ${bossTag}, ${dynamicMsg}`;
             } else {
               replyBody = dynamicMsg;
             }
 
-            let tagPrefix = (b > 0 && Math.random() > 0.3) ? `@${peer1.displayName} ` : '';
+            let tagPrefix = (b > 0 && Math.random() > 0.4) ? `<span style="color: #2196F3; font-weight: bold;">@${peer1.displayName}</span> ` : '';
             let finalReply = tagPrefix + replyBody;
 
             const mRep = {
@@ -381,6 +382,15 @@ io.on('connection', (socket) => {
 
             messages.push(mRep);
             io.to(data.roomId).emit('receive_message', mRep);
+
+            // Thỉnh thoảng clone tự động thả icon cảm xúc ngẫu nhiên vào tin nhắn
+            if (roomMsgs.length > 0 && Math.random() > 0.4) {
+              let targetMsg = roomMsgs[Math.floor(Math.random() * roomMsgs.length)];
+              let randomIcon = reactionIcons[Math.floor(Math.random() * reactionIcons.length)];
+              if(!targetMsg.reactions) targetMsg.reactions = {};
+              targetMsg.reactions[randUser.displayName] = randomIcon;
+              io.to(data.roomId).emit('update_reaction', { msgId: targetMsg.id, reactions: targetMsg.reactions });
+            }
           }, b * batchInterval);
         }
 

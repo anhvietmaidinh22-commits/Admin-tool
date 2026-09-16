@@ -78,8 +78,8 @@ const peerChatPool = [
 
 const reactionIcons = ['❤️', '😂', '👍', '🔥', '😍', '👏'];
 
-// TÊN SẾP MÀU XANH AN TOÀN ĐÚNG CHUẨN GIAO DIỆN
-const bossTag = '<span style="color: #2196F3; font-weight: 700;">@QUẢN LÍ HỆ THỐNG</span>';
+// Text thuần túy 100%, không dính mã HTML gây lỗi giao diện
+const bossPlainText = '@QUẢN LÍ HỆ THỐNG';
 
 function generateFlexibleSentence(recentTexts = []) {
   let attempts = 0;
@@ -97,7 +97,7 @@ function generateFlexibleSentence(recentTexts = []) {
       candidate = `${o} đang được ${v} rất ${m}, ${t}`;
     } else {
       let bAction = ["xem xét giúp ae tiến độ task này với", "cho ý kiến chỉ đạo để ae tối ưu nhiệm vụ nhé", "kiểm tra giúp phần đối soát nhiệm vụ với ạ", "lên dây cót tinh thần cho ae cày cuốc nào"][Math.floor(Math.random() * 4)];
-      candidate = `${bossTag} sếp ơi, ${bAction}`;
+      candidate = `${bossPlainText} sếp ơi, ${bAction}`;
     }
 
     attempts++;
@@ -106,17 +106,16 @@ function generateFlexibleSentence(recentTexts = []) {
   return candidate;
 }
 
-// BOT KIỂM DUYỆT TỰ ĐỘNG XÓA TRÙNG LẶP VÀ ĐỒNG BỘ GIAO DIỆN
+// HÀM KIỂM DUYỆT & XÓA SẠCH TIN NHẮN TRÙNG LẶP
 function checkAndCleanDuplicates(roomId, ioServer) {
   const roomMsgs = messages.filter(m => m.roomId === roomId);
   const seenTexts = new Set();
   let validMessages = [];
   let hasDeleted = false;
 
-  // Giữ lại tin nhắn đầu tiên xuất hiện, các tin nhắn trùng lặp phía sau sẽ bị loại bỏ
   roomMsgs.forEach(m => {
     if (seenTexts.has(m.text)) {
-      hasDeleted = true; // Phát hiện trùng -> Đánh dấu xóa
+      hasDeleted = true;
     } else {
       seenTexts.add(m.text);
       validMessages.push(m);
@@ -124,10 +123,7 @@ function checkAndCleanDuplicates(roomId, ioServer) {
   });
 
   if (hasDeleted) {
-    // Cập nhật lại mảng tin nhắn tổng, loại bỏ các tin trùng của phòng này
     messages = messages.filter(m => m.roomId !== roomId).concat(validMessages);
-
-    // Gửi lệnh làm mới toàn bộ danh sách tin nhắn xuống client để xóa ngay lập tức
     ioServer.to(roomId).emit('load_room_data', { 
       messages: validMessages, 
       pinnedMsg: null, 
@@ -315,7 +311,7 @@ setInterval(() => {
 
       let text1 = generateFlexibleSentence(recentTexts);
       recentTexts.push(text1);
-      let tagPeer = (Math.random() > 0.6) ? `<span style="color: #2196F3; font-weight: 600;">@${cl1.displayName}</span> ` : '';
+      let tagPeer = (Math.random() > 0.6) ? `@${cl1.displayName} ` : '';
       let text2 = tagPeer + generateFlexibleSentence(recentTexts);
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
@@ -391,14 +387,14 @@ io.on('connection', (socket) => {
             let cleanUserMsg = userMsg.trim();
 
             if (cleanUserMsg.toLowerCase() === 'alo') {
-              replyBody = `${bossTag} nghe sếp ơi, anh em đang túc trực đầy đủ để xử lý nhiệm vụ`;
+              replyBody = `${bossPlainText} nghe sếp ơi, anh em đang túc trực đầy đủ để xử lý nhiệm vụ`;
             } else if (cleanUserMsg.length > 0) {
-              replyBody = `nhất trí với ý kiến của ${bossTag}, ${dynamicMsg}`;
+              replyBody = `nhất trí với ý kiến của ${bossPlainText}, ${dynamicMsg}`;
             } else {
               replyBody = dynamicMsg;
             }
 
-            let tagPrefix = (b > 0 && Math.random() > 0.4) ? `<span style="color: #2196F3; font-weight: 600;">@${peer1.displayName}</span> ` : '';
+            let tagPrefix = (b > 0 && Math.random() > 0.4) ? `@${peer1.displayName} ` : '';
             let finalReply = tagPrefix + replyBody;
 
             const mRep = {

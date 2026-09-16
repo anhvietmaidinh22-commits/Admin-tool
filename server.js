@@ -76,10 +76,8 @@ const peerChatPool = [
   "tính ra làm việc chung với team thế này có động lực hẳn"
 ];
 
-// KHO ICON CẢM XÚC ĐA DẠNG CHO CLONE THẢ TIM, MẶT CƯỜI
 const reactionIcons = ['❤️', '😂', '👍', '🔥', '😍', '👏'];
 
-// TAG QUẢN LÍ HỆ THỐNG MÀU XANH RÕ RÀNG
 const bossTag = '<span style="color: #2196F3; font-weight: bold;">@QUẢN LÍ HỆ THỐNG</span>';
 
 function generateFlexibleSentence(recentTexts = []) {
@@ -102,9 +100,36 @@ function generateFlexibleSentence(recentTexts = []) {
     }
 
     attempts++;
-  } while (recentTexts.includes(candidate) && attempts < 60);
+  } while (recentTexts.includes(candidate) && attempts < 80);
 
   return candidate;
+}
+
+// BOT KIỂM DUYỆT TỰ ĐỘNG XÓA TIN NHẮN TRÙNG LẶP
+function checkAndCleanDuplicates(roomId, ioServer) {
+  const roomMsgs = messages.filter(m => m.roomId === roomId);
+  const seenTexts = new Set();
+  let hasDeleted = false;
+
+  roomMsgs.forEach(m => {
+    // Nếu tin nhắn thuần túy đã xuất hiện trước đó trong phòng -> Xóa
+    if (seenTexts.has(m.text)) {
+      messages = messages.filter(msg => msg.id !== m.id);
+      hasDeleted = true;
+    } else {
+      seenTexts.add(m.text);
+    }
+  });
+
+  if (hasDeleted) {
+    const updatedRoomMsgs = messages.filter(m => m.roomId === roomId);
+    ioServer.to(roomId).emit('load_room_data', { 
+      messages: updatedRoomMsgs, 
+      pinnedMsg: null, 
+      roomAvatarUrl: 'https://i.ibb.co/NdVf8Btz/logo.png', 
+      roomName: 'Phòng Chat' 
+    });
+  }
 }
 
 let appSettings = {
@@ -264,7 +289,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP BACKGROUND CHUẨN 3.5 GIÂY (CÓ TỰ ĐỘNG THẢ ICON CẢM XÚC NGẪU NHIÊN)
+// VÒNG LẶP BACKGROUND CHUẨN 3.5 GIÂY (CÓ BOT QUÉT & XÓA TRÙNG LẶP)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
@@ -285,7 +310,7 @@ setInterval(() => {
 
       let text1 = generateFlexibleSentence(recentTexts);
       recentTexts.push(text1);
-      let tagPeer = (Math.random() > 0.6) ? `<span style="color: #2196F3; font-weight: bold;">@${cl1.displayName}</span> ` : '';
+      let tagPeer = (Math.random() > 0.6) ? `@${cl1.displayName} ` : '';
       let text2 = tagPeer + generateFlexibleSentence(recentTexts);
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
@@ -294,7 +319,9 @@ setInterval(() => {
       messages.push(m1);
       io.to(activeRoom.id).emit('receive_message', m1);
 
-      // Thỉnh thoảng tự động thả icon ngẫu nhiên cho tin nhắn trước đó
+      // Kích hoạt bot kiểm duyệt xóa trùng lặp ngay lập tức
+      checkAndCleanDuplicates(activeRoom.id, io);
+
       if (roomMsgs.length > 0 && Math.random() > 0.3) {
         let targetMsg = roomMsgs[Math.floor(Math.random() * roomMsgs.length)];
         let randomIcon = reactionIcons[Math.floor(Math.random() * reactionIcons.length)];
@@ -306,6 +333,7 @@ setInterval(() => {
       setTimeout(() => {
         messages.push(m2);
         io.to(activeRoom.id).emit('receive_message', m2);
+        checkAndCleanDuplicates(activeRoom.id, io);
       }, 1000);
     });
   }
@@ -336,8 +364,8 @@ io.on('connection', (socket) => {
 
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
+    checkAndCleanDuplicates(data.roomId, io);
 
-    // KHI SẾP VỪA NHẮN -> PHẢN HỒI LINH HOẠT, BÁM SÁT NHIỆM VỤ, CHUẨN 3.5 GIÂY
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
@@ -367,7 +395,7 @@ io.on('connection', (socket) => {
               replyBody = dynamicMsg;
             }
 
-            let tagPrefix = (b > 0 && Math.random() > 0.4) ? `<span style="color: #2196F3; font-weight: bold;">@${peer1.displayName}</span> ` : '';
+            let tagPrefix = (b > 0 && Math.random() > 0.4) ? `@${peer1.displayName} ` : '';
             let finalReply = tagPrefix + replyBody;
 
             const mRep = {
@@ -382,8 +410,8 @@ io.on('connection', (socket) => {
 
             messages.push(mRep);
             io.to(data.roomId).emit('receive_message', mRep);
+            checkAndCleanDuplicates(data.roomId, io);
 
-            // Thỉnh thoảng clone tự động thả icon cảm xúc ngẫu nhiên vào tin nhắn
             if (roomMsgs.length > 0 && Math.random() > 0.4) {
               let targetMsg = roomMsgs[Math.floor(Math.random() * roomMsgs.length)];
               let randomIcon = reactionIcons[Math.floor(Math.random() * reactionIcons.length)];

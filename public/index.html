@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HUBBA System Pro Max</title>
+    <title>HUBBA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/socket.io/socket.io.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -24,13 +24,19 @@
 </head>
 <body class="h-screen flex flex-col overflow-hidden select-none">
 
+    <!-- POPUP THÔNG BÁO HIỆN ĐẠI (THAY THẾ ALERT TÙ) -->
+    <div id="toastPopup" class="hidden fixed top-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl z-50 text-xs font-semibold flex items-center space-x-2 transition-all duration-300">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+        <span id="toastMessage">Thông báo hệ thống</span>
+    </div>
+
     <!-- MÀN HÌNH CHỜ / INTRO LOGO NHẢY -->
     <div id="splashScreen" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center space-y-4 transition-opacity duration-700">
         <div class="relative">
             <img src="https://i.ibb.co/NdVf8Btz/logo.png" class="w-24 h-24 rounded-3xl object-cover shadow-xl ring-4 ring-indigo-500/20 animate-logo-jump" alt="HUBBA Logo">
         </div>
         <div class="text-center space-y-1">
-            <h1 class="text-base font-bold text-slate-800 tracking-widest">HUBBA SYSTEM</h1>
+            <h1 class="text-base font-bold text-slate-800 tracking-widest">HUBBA</h1>
             <p class="text-xs text-indigo-600 font-medium tracking-wide">Đang khởi tạo bảo mật...</p>
         </div>
     </div>
@@ -67,14 +73,6 @@
                         <input type="password" id="loginPassword" placeholder="Mật khẩu" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-600 transition shadow-inner">
                         <button onclick="togglePasswordVisibility('loginPassword', this)" class="absolute right-4 top-3.5 text-slate-400 hover:text-slate-600 text-xs"><i class="fa-regular fa-eye"></i></button>
                     </div>
-
-                    <div class="flex justify-between items-center text-xs px-1 pt-1">
-                        <label class="flex items-center space-x-2 cursor-pointer">
-                            <input type="checkbox" checked class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4">
-                            <span class="text-slate-600 font-medium">Ghi nhớ mật khẩu</span>
-                        </label>
-                        <a href="#" onclick="alert('Vui lòng liên hệ Admin để khôi phục mật khẩu!'); return false;" class="text-indigo-600 font-medium hover:underline">Quên mật khẩu?</a>
-                    </div>
                 </div>
 
                 <button onclick="submitLogin()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-3.5 rounded-2xl text-xs font-bold shadow-lg shadow-blue-600/25 transition">
@@ -83,7 +81,7 @@
             </div>
 
             <div class="text-center pb-2">
-                <span class="text-[11px] text-slate-400 font-medium">Phiên bản: 1.0.0</span>
+                <span class="text-[11px] text-slate-400 font-medium">HUBBA</span>
             </div>
         </div>
 
@@ -123,17 +121,19 @@
             </div>
 
             <div class="text-center pb-2">
-                <span class="text-[11px] text-slate-400 font-medium">Bảo mật hệ thống Pro Max</span>
+                <span class="text-[11px] text-slate-400 font-medium">HUBBA</span>
             </div>
         </div>
 
-        <!-- ================= MÀN HÌNH CHÍNH (SAU KHI ĐĂNG NHẬP) ================= -->
+        <!-- ================= MÀN HÌNH CHÍNH ================= -->
         <div id="mainAppScreen" class="hidden flex-1 flex flex-col bg-white relative overflow-hidden">
             
             <header class="bg-white border-b border-slate-200 px-4 py-3 flex justify-between items-center shrink-0">
                 <h1 id="headerTitle" class="text-sm font-bold text-slate-800">Tin nhắn (trực tuyến)</h1>
                 <div class="flex items-center space-x-2">
-                    <span id="currentUserBadge" class="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-100">Thành Viên</span>
+                    <button id="adminPlusBtn" onclick="openAdminActionModal()" class="hidden w-7 h-7 rounded-full bg-blue-50 text-blue-600 items-center justify-center font-bold text-xs border border-blue-100 shadow-sm" title="Quản lý nhóm">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
                 </div>
             </header>
 
@@ -142,13 +142,13 @@
                 <!-- TAB 1: TIN NHẮN -->
                 <div id="tabMessage" class="flex flex-col">
                     <div class="p-3 bg-white border-b border-slate-100 sticky top-0 z-10 flex justify-between items-center">
-                        <div class="relative flex-1 mr-2">
+                        <div class="relative flex-1">
                             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
                             <input type="text" placeholder="Tìm kiếm tin nhắn..." class="w-full bg-slate-100 border-none rounded-xl pl-9 pr-4 py-2 text-xs text-slate-800 focus:outline-none">
                         </div>
                     </div>
 
-                    <!-- MỤC THÔNG BÁO HỆ THỐNG HUBBA -->
+                    <!-- THÔNG BÁO HỆ THỐNG HUBBA -->
                     <div onclick="openSystemNotificationChat()" class="flex items-center space-x-3 px-4 py-3.5 hover:bg-slate-50 cursor-pointer transition border-b border-slate-100 bg-blue-50/40">
                         <div class="relative shrink-0">
                             <img src="https://i.ibb.co/NdVf8Btz/logo.png" class="w-12 h-12 rounded-2xl object-cover shadow-sm ring-1 ring-blue-200" alt="HUBBA">
@@ -165,84 +165,135 @@
                         </div>
                     </div>
 
-                    <!-- Danh sách phòng nhóm chat -->
-                    <div id="chatListPreview" class="divide-y divide-slate-100">
-                        <!-- Render phòng -->
-                    </div>
+                    <div id="chatListPreview" class="divide-y divide-slate-100"></div>
                 </div>
 
-                <!-- TAB 2: DANH BẠ (5 CHUYÊN VIÊN) -->
-                <div id="tabContact" class="hidden p-4 space-y-3">
-                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-3 space-y-2">
-                        <div class="flex items-center space-x-3 py-2 px-2 border-b border-slate-100 pb-3">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-user-shield"></i></div>
-                            <div><h4 class="text-xs font-bold text-slate-800">Đội ngũ Chuyên viên Hệ thống</h4><p class="text-[10px] text-slate-400">Trực tuyến 24/7</p></div>
-                        </div>
-                        <div class="pt-1 space-y-1">
+                <!-- TAB 2: DANH BẠ -->
+                <div id="tabContact" class="hidden flex flex-col h-full">
+                    <div class="p-3 bg-white border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="text-xs font-bold text-slate-800">Danh bạ</h3>
+                        <button id="contactPlusBtn" onclick="openAdminActionModal()" class="hidden w-7 h-7 rounded-full bg-slate-100 text-slate-700 items-center justify-center font-bold text-xs shadow-sm">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="p-4 space-y-3 flex-1 overflow-y-auto">
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-3 space-y-2">
                             <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-user-shield"></i></div>
+                                <div><h4 class="text-xs font-bold text-slate-800">Tin nhắn xác minh</h4><p class="text-[10px] text-slate-400">Yêu cầu hệ thống</p></div>
+                            </div>
+                            <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer">
+                                <div class="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-user-slash"></i></div>
+                                <div><h4 class="text-xs font-bold text-slate-800">Danh sách đen</h4><p class="text-[10px] text-slate-400">Quản lý chặn</p></div>
+                            </div>
+                            <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-500 text-white flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-users"></i></div>
+                                <div><h4 class="text-xs font-bold text-slate-800">Nhóm của tôi</h4><p class="text-[10px] text-slate-400">Phòng chat nhóm</p></div>
+                            </div>
+                        </div>
+
+                        <!-- 5 Chuyên viên -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-3 space-y-1">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase px-2 pb-1">Đội ngũ Chuyên viên</p>
+                            <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer" onclick="quickSwitchAccount('CHUYÊN VIÊN HÀ ANH', 'chuyenvien')">
                                 <img src="https://i.ibb.co/27FrRr4G/avatar.jpg" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200" alt="Avatar">
-                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN HÀ ANH</h4><p class="text-[10px] text-emerald-500 font-medium">Trực tuyến</p></div>
+                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN HÀ ANH</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển đổi nhanh</p></div>
                             </div>
-                            <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer">
+                            <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer" onclick="quickSwitchAccount('CHUYÊN VIÊN KHÁNH LINH', 'chuyenvien')">
                                 <img src="https://i.ibb.co/67wsRsHz/avatar.jpg" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200" alt="Avatar">
-                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN KHÁNH LINH</h4><p class="text-[10px] text-emerald-500 font-medium">Trực tuyến</p></div>
+                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN KHÁNH LINH</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển đổi nhanh</p></div>
                             </div>
-                            <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer">
+                            <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer" onclick="quickSwitchAccount('CHUYÊN VIÊN PHƯƠNG ANH', 'chuyenvien')">
                                 <img src="https://i.ibb.co/DPdT2njh/avatar.jpg" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200" alt="Avatar">
-                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN PHƯƠNG ANH</h4><p class="text-[10px] text-emerald-500 font-medium">Trực tuyến</p></div>
+                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN PHƯƠNG ANH</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển đổi nhanh</p></div>
                             </div>
-                            <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer">
+                            <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer" onclick="quickSwitchAccount('CHUYÊN VIÊN BẢO TRÂM', 'chuyenvien')">
                                 <img src="https://i.ibb.co/4ZH0vNm0/avatar.jpg" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200" alt="Avatar">
-                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN BẢO TRÂM</h4><p class="text-[10px] text-emerald-500 font-medium">Trực tuyến</p></div>
+                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN BẢO TRÂM</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển đổi nhanh</p></div>
                             </div>
-                            <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer">
+                            <div class="flex items-center space-x-3 py-2 px-2 hover:bg-slate-50 rounded-xl cursor-pointer" onclick="quickSwitchAccount('CHUYÊN VIÊN QUỲNH ANH', 'chuyenvien')">
                                 <img src="https://i.ibb.co/V0XzCHNs/avatar.jpg" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200" alt="Avatar">
-                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN QUỲNH ANH</h4><p class="text-[10px] text-emerald-500 font-medium">Trực tuyến</p></div>
+                                <div><h4 class="text-xs font-bold text-slate-800">CHUYÊN VIÊN QUỲNH ANH</h4><p class="text-[10px] text-emerald-500 font-medium">Bấm để chuyển đổi nhanh</p></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- TAB 3: QUẢN TRỊ (CHỈ HIỂN THỊ CHO ADMIN & CHUYÊN VIÊN) -->
+                <!-- TAB 3: QUẢN TRỊ (CHUYỂN NHANH ADMIN <-> CHUYÊN VIÊN) -->
                 <div id="tabAdmin" class="hidden p-4 space-y-4">
                     <div class="bg-indigo-900 text-white p-4 rounded-2xl shadow-md space-y-2">
                         <div class="flex items-center space-x-2">
                             <i class="fa-solid fa-shield-halved text-amber-400 text-lg"></i>
-                            <h3 class="text-xs font-bold tracking-wide">Trung Tâm Quản Trị Hệ Thống Pro Max</h3>
+                            <h3 class="text-xs font-bold tracking-wide">Chuyển Đổi Tài Khoản Nhanh</h3>
                         </div>
-                        <p class="text-[11px] text-indigo-200">Khu vực kiểm soát quyền hạn, tạo nhóm chat và điều phối nhân sự clone.</p>
+                        <p class="text-[11px] text-indigo-200">Bấm trực tiếp để chuyển quyền giữa Admin và Chuyên viên nhắn tin với khách ngay lập tức.</p>
                     </div>
 
-                    <div class="bg-white border border-slate-100 rounded-2xl p-3 space-y-2 shadow-sm">
-                        <h4 class="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Chức năng quản trị viên</h4>
-                        <button onclick="openCreateRoomModal()" class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold text-blue-600 hover:bg-blue-50 flex items-center justify-between transition">
-                            <span class="flex items-center gap-2"><i class="fa-solid fa-plus-circle"></i> Tạo Nhóm / Phòng Chat Mới</span>
-                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    <div class="bg-white border border-slate-100 rounded-2xl p-4 space-y-2.5 shadow-sm">
+                        <h4 class="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Chọn nhanh tài khoản trực tuyến</h4>
+                        <button onclick="quickSwitchAccount('QUẢN LÍ HỆ THỐNG', 'admin')" class="w-full text-left px-3.5 py-3 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-indigo-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-crown text-amber-500"></i> Chuyển về tài khoản Admin</span>
+                            <span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">Admin</span>
                         </button>
-                        <button onclick="openManageMembersModal()" class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold text-emerald-600 hover:bg-emerald-50 flex items-center justify-between transition">
-                            <span class="flex items-center gap-2"><i class="fa-solid fa-users-gear"></i> Thêm / Xóa Thành Viên Nhóm</span>
-                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        <button onclick="quickSwitchAccount('CHUYÊN VIÊN HÀ ANH', 'chuyenvien')" class="w-full text-left px-3.5 py-3 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-blue-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-blue-600"></i> Chuyển sang CV Hà Anh</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">CV</span>
+                        </button>
+                        <button onclick="quickSwitchAccount('CHUYÊN VIÊN KHÁNH LINH', 'chuyenvien')" class="w-full text-left px-3.5 py-3 rounded-xl text-xs font-semibold text-slate-800 bg-slate-50 hover:bg-blue-50 flex items-center justify-between transition">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-blue-600"></i> Chuyển sang CV Khánh Linh</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">CV</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- TAB 4: CỦA TÔI -->
-                <div id="tabProfile" class="hidden p-4 space-y-4">
-                    <div class="bg-white border border-slate-100 rounded-2xl p-4 flex items-center space-x-3 shadow-sm">
-                        <img id="profileAvatarImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" class="w-14 h-14 rounded-2xl object-cover shadow border border-slate-200 shrink-0" alt="Avatar">
-                        <div>
-                            <h3 id="profileName" class="text-sm font-bold text-slate-900">Thành Viên</h3>
-                            <p id="profileAccount" class="text-[11px] text-slate-400">Tài khoản: user</p>
+                <div id="tabProfile" class="hidden p-4 space-y-3">
+                    <div class="bg-white border border-slate-100 rounded-2xl p-4 flex items-center justify-between shadow-sm cursor-pointer hover:bg-slate-50">
+                        <div class="flex items-center space-x-3">
+                            <img id="profileAvatarImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" class="w-14 h-14 rounded-2xl object-cover shadow border border-slate-200 shrink-0" alt="Avatar">
+                            <div>
+                                <h3 id="profileName" class="text-sm font-bold text-slate-900">conganay</h3>
+                                <p id="profileAccount" class="text-[11px] text-slate-400">Tài khoản: anhvietday22</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 rounded-2xl shadow-sm divide-y divide-slate-100 text-xs">
+                        <div onclick="showToast('Đã chuyển đến mục Yêu thích')" class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer">
+                            <span class="flex items-center gap-3 font-semibold text-slate-700"><i class="fa-solid fa-cube text-blue-600 text-base"></i> Yêu thích</span>
+                            <i class="fa-solid fa-chevron-right text-slate-300"></i>
+                        </div>
+                        <div onclick="showToast('Đã chuyển đến Thông báo & âm thanh')" class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer">
+                            <span class="flex items-center gap-3 font-semibold text-slate-700"><i class="fa-regular fa-bell text-blue-600 text-base"></i> Thông báo & âm thanh</span>
+                            <i class="fa-solid fa-chevron-right text-slate-300"></i>
+                        </div>
+                        <div onclick="showToast('Đã chuyển đến Cài đặt bảo mật')" class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer">
+                            <span class="flex items-center gap-3 font-semibold text-slate-700"><i class="fa-solid fa-shield-halved text-blue-600 text-base"></i> Cài đặt bảo mật</span>
+                            <i class="fa-solid fa-chevron-right text-slate-300"></i>
+                        </div>
+                        <div onclick="showToast('Đã chuyển đến Dữ liệu & lưu trữ')" class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer">
+                            <span class="flex items-center gap-3 font-semibold text-slate-700"><i class="fa-solid fa-database text-blue-600 text-base"></i> Dữ liệu & lưu trữ</span>
+                            <i class="fa-solid fa-chevron-right text-slate-300"></i>
+                        </div>
+                        <div onclick="showToast('Đã chuyển đến Ngôn ngữ')" class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer">
+                            <span class="flex items-center gap-3 font-semibold text-slate-700"><i class="fa-solid fa-globe text-blue-600 text-base"></i> Ngôn ngữ</span>
+                            <i class="fa-solid fa-chevron-right text-slate-300"></i>
+                        </div>
+                        <div onclick="showToast('HUBBA v1.0.0')" class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer">
+                            <span class="flex items-center gap-3 font-semibold text-slate-700"><i class="fa-solid fa-circle-info text-blue-600 text-base"></i> Giới thiệu HUBBA</span>
+                            <i class="fa-solid fa-chevron-right text-slate-300"></i>
                         </div>
                     </div>
-                    <div class="bg-white border border-slate-100 rounded-2xl p-2 space-y-1">
-                        <button onclick="logoutApp()" class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center gap-2">
-                            <i class="fa-solid fa-right-from-bracket"></i> Đăng Xuất Hệ Thống
+
+                    <div class="pt-2">
+                        <button onclick="logoutApp()" class="w-full bg-white border border-slate-200 text-rose-600 font-bold py-3 rounded-2xl text-xs shadow-sm hover:bg-rose-50 transition">
+                            Đăng xuất
                         </button>
                     </div>
                 </div>
 
-                <!-- GIAO DIỆN HỘP THƯ THÔNG BÁO HỆ THỐNG -->
+                <!-- HỘP THƯ THÔNG BÁO HỆ THỐNG -->
                 <div id="systemNotifView" class="hidden absolute inset-0 bg-white flex flex-col z-20">
                     <header class="bg-white border-b border-slate-200 px-4 py-3 flex items-center space-x-3 shrink-0">
                         <button onclick="closeSystemNotificationChat()" class="text-slate-600"><i class="fa-solid fa-arrow-left text-sm"></i></button>
@@ -275,8 +326,8 @@
 
                     <div class="p-3 bg-white border-t border-slate-200 shrink-0">
                         <form id="chatForm" onsubmit="sendMessage(event)" class="flex items-center space-x-2">
-                            <button type="button" onclick="triggerSendImage()" class="text-slate-400 hover:text-blue-600 p-1.5 transition" title="Gửi ảnh"><i class="fa-regular fa-image text-base"></i></button>
-                            <button type="button" onclick="triggerInsertEmoji()" class="text-slate-400 hover:text-blue-600 p-1.5 transition" title="Chọn biểu tượng cảm xúc"><i class="fa-regular fa-face-smile text-base"></i></button>
+                            <button type="button" onclick="showToast('Đã chọn hình ảnh')" class="text-slate-400 hover:text-blue-600 p-1.5 transition" title="Gửi ảnh"><i class="fa-regular fa-image text-base"></i></button>
+                            <button type="button" onclick="triggerInsertEmoji()" class="text-slate-400 hover:text-blue-600 p-1.5 transition" title="Biểu tượng cảm xúc"><i class="fa-regular fa-face-smile text-base"></i></button>
                             <input type="text" id="messageInput" autocomplete="off" placeholder="Nhập tin nhắn..." class="flex-1 bg-slate-100 border-none rounded-xl px-4 py-2.5 text-xs text-slate-800 focus:outline-none">
                             <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-sm transition">
                                 Gửi
@@ -286,8 +337,8 @@
                 </div>
             </div>
 
-            <!-- THANH ĐIỀU HƯỚNG DƯỚI CÙNG (CÓ TAB QUẢN TRỊ CHO ADMIN/CV) -->
-            <nav class="bg-white border-t border-slate-200 px-5 py-2 flex justify-between items-center shrink-0">
+            <!-- THANH ĐIỀU HƯỚNG DƯỚI CÙNG -->
+            <nav class="bg-white border-t border-slate-200 px-6 py-2 flex justify-between items-center shrink-0">
                 <button onclick="switchTab('message')" id="navBtn-message" class="flex flex-col items-center text-blue-600 transition">
                     <i class="fa-solid fa-comment text-base"></i>
                     <span class="text-[10px] font-medium mt-1">Tin nhắn</span>
@@ -296,7 +347,6 @@
                     <i class="fa-solid fa-address-book text-base"></i>
                     <span class="text-[10px] font-medium mt-1">Danh bạ</span>
                 </button>
-                <!-- Tab Quản trị ẩn mặc định, chỉ hiện khi đăng nhập tài khoản Admin hoặc Chuyên viên -->
                 <button onclick="switchTab('admin')" id="navBtn-admin" class="hidden flex-col items-center text-slate-400 hover:text-slate-600 transition">
                     <i class="fa-solid fa-shield-halved text-base"></i>
                     <span class="text-[10px] font-medium mt-1">Quản trị</span>
@@ -327,7 +377,24 @@
         </div>
     </div>
 
-    <!-- SCRIPT XỬ LÝ GIAO DIỆN & PHÂN QUYỀN TAB QUẢN TRỊ -->
+    <!-- MODAL XÓA NHÓM -->
+    <div id="deleteRoomModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white border border-slate-200 p-6 rounded-3xl w-full max-w-sm shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="font-bold text-slate-800 text-xs text-rose-600">Xóa Nhóm / Phòng Chat</h3>
+                <button onclick="closeDeleteRoomModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mb-1">Chọn phòng cần xóa</label>
+                    <select id="deleteRoomSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-800 focus:outline-none"></select>
+                </div>
+                <button onclick="submitDeleteRoom()" class="w-full bg-rose-600 hover:bg-rose-500 text-white py-2.5 rounded-xl font-semibold text-xs shadow-md transition">Xác Nhận Xóa Nhóm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT XỬ LÝ -->
     <script>
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -335,6 +402,17 @@
                 splash.style.opacity = '0';
                 setTimeout(() => splash.remove(), 700);
             }, 1800);
+
+            // Tự động khôi phục phiên đăng nhập từ localStorage để không bị out khi reload
+            const savedUser = localStorage.getItem('hubba_user');
+            const savedRole = localStorage.getItem('hubba_role');
+            const savedDisplayName = localStorage.getItem('hubba_display');
+            if (savedUser && savedRole) {
+                currentUser = savedUser;
+                userRole = savedRole;
+                currentDisplayName = savedDisplayName || savedUser;
+                applyLoginState();
+            }
         });
 
         const socket = io();
@@ -343,6 +421,16 @@
         let currentDisplayName = '';
         let userRole = 'guest';
         let systemNotifHistory = [];
+        let activeRoomsList = [];
+
+        function showToast(message) {
+            const toast = document.getElementById('toastPopup');
+            document.getElementById('toastMessage').innerText = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 2000);
+        }
 
         const specificAvatars = {
             'QUẢN LÍ HỆ THỐNG': 'https://i.ibb.co/8g26F9bB/8g26F9bB.jpg',
@@ -390,7 +478,10 @@
         });
 
         socket.on('update_data', (data) => {
-            if(data.rooms) renderRoomList(data.rooms);
+            if(data.rooms) {
+                activeRoomsList = data.rooms;
+                renderRoomList(data.rooms);
+            }
         });
 
         function clearInput(id) {
@@ -451,10 +542,34 @@
             listEl.innerHTML = html;
         }
 
+        function applyLoginState() {
+            document.getElementById('profileName').innerText = currentDisplayName;
+            document.getElementById('profileAccount').innerText = 'Tài khoản: ' + currentUser;
+            document.getElementById('profileAvatarImg').src = getAvatarByName(currentDisplayName);
+
+            triggerSystemNotification(currentDisplayName, 'Đăng nhập');
+
+            if(userRole === 'admin' || userRole === 'specialist' || userRole === 'chuyenvien') {
+                document.getElementById('adminPlusBtn').classList.remove('hidden');
+                document.getElementById('adminPlusBtn').classList.add('flex');
+                document.getElementById('navBtn-admin').classList.remove('hidden');
+                document.getElementById('navBtn-admin').classList.add('flex');
+            } else {
+                document.getElementById('adminPlusBtn').classList.add('hidden');
+                document.getElementById('adminPlusBtn').classList.remove('flex');
+                document.getElementById('navBtn-admin').classList.add('hidden');
+                document.getElementById('navBtn-admin').classList.remove('flex');
+            }
+
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('registerScreen').classList.add('hidden');
+            document.getElementById('mainAppScreen').classList.remove('hidden');
+        }
+
         async function submitLogin() {
             const u = document.getElementById('loginUsername').value.trim();
             const p = document.getElementById('loginPassword').value.trim();
-            if(!u || !p) return alert('Vui lòng nhập tài khoản và mật khẩu!');
+            if(!u || !p) return showToast('Vui lòng nhập tài khoản và mật khẩu!');
 
             try {
                 const res = await fetch('/api/login', {
@@ -468,42 +583,43 @@
                     currentDisplayName = data.user.displayName;
                     userRole = data.user.role || 'user';
 
-                    document.getElementById('profileName').innerText = currentDisplayName;
-                    document.getElementById('profileAccount').innerText = 'Tài khoản: ' + currentUser;
-                    
-                    if(userRole === 'admin' || currentUser === 'admin') {
-                        document.getElementById('profileAvatarImg').src = 'https://i.ibb.co/8g26F9bB/8g26F9bB.jpg';
+                    // Lưu vào localStorage để không bị out khi reload trang
+                    localStorage.setItem('hubba_user', currentUser);
+                    localStorage.setItem('hubba_role', userRole);
+                    localStorage.setItem('hubba_display', currentDisplayName);
+
+                    applyLoginState();
+                    if(data.rooms) {
+                        activeRoomsList = data.rooms;
+                        renderRoomList(data.rooms);
                     }
-
-                    triggerSystemNotification(currentDisplayName, 'Đăng nhập');
-
-                    // Hiển thị tab Quản trị nếu có quyền Admin hoặc Chuyên viên
-                    if(userRole === 'admin' || userRole === 'specialist' || userRole === 'chuyenvien') {
-                        document.getElementById('currentUserBadge').innerText = userRole === 'admin' ? 'Admin 👑' : 'Chuyên Viên 💼';
-                        document.getElementById('navBtn-admin').classList.remove('hidden');
-                        document.getElementById('navBtn-admin').classList.add('flex');
-                    } else {
-                        document.getElementById('currentUserBadge').innerText = 'Thành Viên';
-                        document.getElementById('navBtn-admin').classList.add('hidden');
-                        document.getElementById('navBtn-admin').classList.remove('flex');
-                    }
-
-                    document.getElementById('loginScreen').classList.add('hidden');
-                    document.getElementById('mainAppScreen').classList.remove('hidden');
-                    if(data.rooms) renderRoomList(data.rooms);
                 } else {
-                    alert(data.message);
+                    showToast(data.message);
                 }
             } catch(err) {
-                alert('Lỗi kết nối server!');
+                showToast('Lỗi kết nối server!');
             }
+        }
+
+        // Chuyển đổi nhanh tài khoản Admin <-> Chuyên viên ngay trong app không cần đăng xuất
+        function quickSwitchAccount(name, role) {
+            currentDisplayName = name;
+            currentUser = name.toLowerCase().replace(/\s+/g, '_');
+            userRole = role;
+
+            localStorage.setItem('hubba_user', currentUser);
+            localStorage.setItem('hubba_role', userRole);
+            localStorage.setItem('hubba_display', currentDisplayName);
+
+            applyLoginState();
+            showToast(`Đã chuyển sang tài khoản: ${name}`);
         }
 
         async function submitRegister() {
             const displayName = document.getElementById('regDisplayName').value.trim();
             const username = document.getElementById('regUsername').value.trim();
             const password = document.getElementById('regPassword').value.trim();
-            if(!displayName || !username || !password) return alert('Vui lòng nhập đầy đủ thông tin đăng ký!');
+            if(!displayName || !username || !password) return showToast('Vui lòng nhập đầy đủ thông tin!');
 
             try {
                 const res = await fetch('/api/register', {
@@ -513,20 +629,23 @@
                 });
                 const data = await res.json();
                 if(data.success) {
-                    triggerSystemNotification(displayName, 'Đăng ký');
-                    alert('Đăng ký thành công! Vui lòng đăng nhập.');
+                    showToast('Đăng ký tài khoản thành công!');
                     showLoginScreen();
                 } else {
-                    alert(data.message);
+                    showToast(data.message);
                 }
             } catch(err) {
-                alert('Lỗi kết nối server!');
+                showToast('Lỗi kết nối server!');
             }
         }
 
         function logoutApp() {
+            localStorage.removeItem('hubba_user');
+            localStorage.removeItem('hubba_role');
+            localStorage.removeItem('hubba_display');
             document.getElementById('mainAppScreen').classList.add('hidden');
             document.getElementById('loginScreen').classList.remove('hidden');
+            showToast('Đã đăng xuất tài khoản!');
         }
 
         function switchTab(tabName) {
@@ -555,10 +674,15 @@
             document.getElementById('systemNotifView').classList.add('hidden');
         }
 
-        function openCreateRoomModal() {
+        function openAdminActionModal() {
             if(userRole !== 'admin' && userRole !== 'specialist' && userRole !== 'chuyenvien') {
-                return alert('Bạn không có quyền tạo nhóm!');
+                return showToast('Bạn không có quyền quản lý nhóm!');
             }
+            // Mở modal tạo/xóa nhóm nhanh
+            openCreateRoomModal();
+        }
+
+        function openCreateRoomModal() {
             document.getElementById('createRoomModal').classList.remove('hidden');
         }
 
@@ -568,7 +692,7 @@
 
         async function submitCreateRoom() {
             const name = document.getElementById('newRoomName').value.trim();
-            if(!name) return alert('Vui lòng nhập tên phòng!');
+            if(!name) return showToast('Vui lòng nhập tên phòng!');
 
             try {
                 const res = await fetch('/api/create-room', {
@@ -580,32 +704,60 @@
                 if(data.success) {
                     closeCreateRoomModal();
                     document.getElementById('newRoomName').value = '';
-                    if(data.rooms) renderRoomList(data.rooms);
+                    showToast('Đã tạo nhóm thành công!');
+                    if(data.rooms) {
+                        activeRoomsList = data.rooms;
+                        renderRoomList(data.rooms);
+                    }
                     switchTab('message');
                 } else {
-                    alert(data.message);
+                    showToast(data.message);
                 }
             } catch(err) {
-                alert('Lỗi tạo phòng!');
+                showToast('Lỗi tạo phòng!');
             }
         }
 
-        function openManageMembersModal() {
-            if(userRole !== 'admin' && userRole !== 'specialist' && userRole !== 'chuyenvien') {
-                return alert('Bạn không có quyền quản lý thành viên!');
-            }
-            let action = prompt('Chọn thao tác quản lý nhóm:\n1. Thêm thành viên\n2. Xóa thành viên');
-            if(action === '1') {
-                let addName = prompt('Nhập tên thành viên muốn thêm vào nhóm:');
-                if(addName) alert('Đã thêm thành công: ' + addName);
-            } else if(action === '2') {
-                let delName = prompt('Nhập tên thành viên muốn xóa khỏi nhóm:');
-                if(delName) alert('Đã xóa thành công: ' + delName);
-            }
+        function openDeleteRoomModal() {
+            const selectEl = document.getElementById('deleteRoomSelect');
+            selectEl.innerHTML = '';
+            activeRoomsList.forEach(r => {
+                const opt = document.createElement('option');
+                opt.value = r.id;
+                opt.innerText = r.name;
+                selectEl.appendChild(opt);
+            });
+            document.getElementById('deleteRoomModal').classList.remove('hidden');
         }
 
-        function triggerSendImage() {
-            alert('Tính năng chọn và gửi hình ảnh đang sẵn sàng!');
+        function closeDeleteRoomModal() {
+            document.getElementById('deleteRoomModal').classList.add('hidden');
+        }
+
+        async function submitDeleteRoom() {
+            const roomId = document.getElementById('deleteRoomSelect').value;
+            if(!roomId) return showToast('Vui lòng chọn phòng cần xóa!');
+
+            try {
+                const res = await fetch('/api/delete-room', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ roomId: roomId })
+                });
+                const data = await res.json();
+                if(data.success) {
+                    closeDeleteRoomModal();
+                    showToast('Đã xóa nhóm thành công!');
+                    if(data.rooms) {
+                        activeRoomsList = data.rooms;
+                        renderRoomList(data.rooms);
+                    }
+                } else {
+                    showToast(data.message || 'Không thể xóa phòng này!');
+                }
+            } catch(err) {
+                showToast('Lỗi kết nối khi xóa phòng!');
+            }
         }
 
         function triggerInsertEmoji() {

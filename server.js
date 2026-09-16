@@ -59,47 +59,49 @@ let messages = [
 const reactionIcons = ['❤️', '😂', '👍', '🔥', '😍', '👏'];
 const bossTag = '@QUẢN LÍ HỆ THỐNG';
 
-// KHO CÂU CHÁT NGẮN GỌN, HỒN NHIÊN, HỆ DÂN CÀY THỰC CHIẾN 100%
-const humanChatPool = [
-  "nay nhận đủ 300k lương cứng sướng vãi",
-  "hôm nay cày task cuốn phết ae ạ",
-  "đủ tiền tậu món đồ thích từ lâu rồi nhé",
-  "thử việc 2 ngày nhận 300k cứng quá ngon",
-  "hôm nay số dư rủng rỉnh hơn hôm qua nhiều",
-  "làm ly cafe rồi ngồi cày task tiếp thôi",
-  "công nhận chăm chỉ làm task thấy đói thế nào được",
-  "nhận 300k tiền tươi thóc thật uy tín vl",
-  "ae nay cày ác chiến phết nhỉ",
-  "kiếm tiền chỗ sếp lúc nào cũng yên tâm",
-  "sắm được món đồ ao ước rồi, nhẹ cả người",
-  "thu nhập hôm nay ấm hơn hôm qua hẳn",
-  "cày task mỏi tay nhưng đáng ae ạ",
-  "đẩy nhanh tiến độ đi anh em ơi",
-  "lương cứng về tài khoản, ấm cái bụng",
-  "ông nào chưa xong task thì mau lên nhé",
-  "tôi điểm danh từ sáng tới giờ đây này",
-  "hôm nay đóp đơn mỏi tay luôn",
-  "chuẩn bài rồi, cứ thế mà phát huy thôi"
+// KHO MẢNH TỪ ĐỘC LẬP TỰ DO (ĐỜI THƯỜNG, CÀY TASK, TÁN NGẨU KHÔNG RẬP KHUÔN)
+const partA = [
+  "tính ra ngồi", "đêm hôm", "sáng sớm ra", "từ lúc", "đoạn này", "lướt một vòng", "ngồi check lại", "công nhận là", 
+  "thời gian qua", "nghĩ lại thấy", "hôm nay", "đợt này"
+];
+const partB = [
+  "làm nhiệm vụ căng phết", "cày task cuốn thực sự", "ngồi ôm máy tính mỏi cả nhừ người", "pha ly cafe rồi chiến tiếp", 
+  "kiểm tra số dư thấy ấm lòng", "nhận lương cứng 300k sau 2 ngày thử việc mượt quá", "làm việc với team thấy cuốn", "anh em cày cuốc nhiệt tình ghê"
+];
+const partC = [
+  "ae chú ý bám sát tiến độ nhé", "không uổng công thức đêm cày", "cứ đà này sớm tậu được món đồ thích", 
+  "anh em nào chưa xong thì đẩy nhanh lên nào", "thực sự quá ổn áp luôn", "tôi vừa check qua thấy mượt lắm rồi", "mai lại tiếp tục chiến đấu tẹt ga"
 ];
 
-function generateHumanSentence(recentTexts = []) {
+function generateFreeFlowSentence(recentTexts = []) {
   let attempts = 0;
   let candidate = "";
   do {
-    candidate = humanChatPool[Math.floor(Math.random() * humanChatPool.length)];
+    let a = partA[Math.floor(Math.random() * partA.length)];
+    let b = partB[Math.floor(Math.random() * partB.length)];
+    let c = partC[Math.floor(Math.random() * partC.length)];
 
-    // Cực kỳ hạn chế tag sếp (chỉ 10%), để tự anh em chém gió với nhau cho giống thật
-    if (Math.random() > 0.90) {
-      candidate = `${bossTag} duyệt giúp anh em mẻ task này với nhé`;
+    let structures = [
+      `${a} ${b}, ${c}`,
+      `${b}, ${a} thấy ${c}`,
+      `${a} ${b} mà ${c}`,
+      `${b}. ${c}`
+    ];
+
+    candidate = structures[Math.floor(Math.random() * structures.length)];
+
+    // Thỉnh thoảng cực kỳ thưa thớt mới tag sếp (tỷ lệ 8%)
+    if (Math.random() > 0.92) {
+      candidate = `${bossTag} xem xét duyệt tiến độ giúp anh em với nhé`;
     }
 
     attempts++;
-  } while (recentTexts.includes(candidate) && attempts < 80);
+  } while (recentTexts.includes(candidate) && attempts < 120);
 
   return candidate;
 }
 
-// BOT KIỂM DUYỆT CHỐNG TRÙNG LẶP
+// BOT KIỂM DUYỆT CHỐNG TRÙNG LẶP GẮT GAO
 function checkAndCleanDuplicates(roomId, ioServer) {
   const roomMsgs = messages.filter(m => m.roomId === roomId);
   const seenTexts = new Set();
@@ -283,7 +285,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP BACKGROUND 3.5 GIÂY (CHÁT CHÉO TỰ NHIÊN)
+// VÒNG LẶP BACKGROUND 3.5 GIÂY (CHÁT CHÉO TỰ NHIÊN, KHÔNG LẶP)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
@@ -302,10 +304,10 @@ setInterval(() => {
       const roomMsgs = messages.filter(m => m.roomId === activeRoom.id);
       let recentTexts = roomMsgs.slice(-200).map(m => m.text);
 
-      let text1 = generateHumanSentence(recentTexts);
+      let text1 = generateFreeFlowSentence(recentTexts);
       recentTexts.push(text1);
       let tagPeer = (Math.random() > 0.6) ? `@${cl1.displayName} ` : '';
-      let text2 = tagPeer + generateHumanSentence(recentTexts);
+      let text2 = tagPeer + generateFreeFlowSentence(recentTexts);
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
       const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
@@ -358,7 +360,7 @@ io.on('connection', (socket) => {
     io.to(data.roomId).emit('receive_message', newMessage);
     checkAndCleanDuplicates(data.roomId, io);
 
-    // KHI SẾP VỪA NHẮN -> CLONE TẬP TRUNG HƯỞNG ỨNG NGẮN GỌN NHƯ NGƯỜI THẬT
+    // KHI SẾP VỪA NHẮN -> CLONE HƯỞNG ỨNG TỰ NHIÊN BÁM SÁT NỘI DUNG
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
@@ -381,17 +383,17 @@ io.on('connection', (socket) => {
             let snippet = cleanUserMsg.length > 20 ? cleanUserMsg.substring(0, 20) + "..." : cleanUserMsg;
 
             if (cleanUserMsg.toLowerCase() === 'alo') {
-              replyBody = `${bossTag} nghe sếp ơi, ae đang cày task căng lắm đây`;
+              replyBody = `${bossTag} nghe lệnh sếp ơi, ae đang cày nhiệm vụ căng phết đây`;
             } else if (cleanUserMsg.length > 0) {
-              let humanReplyOptions = [
-                `chuẩn luôn ${bossTag}, nghe "${snippet}" là ae có động lực cày liền`,
-                `chuẩn bài rồi ${bossTag}, vụ "${snippet}" này ae làm mượt ngay`,
-                `nhất trí với ${bossTag} nhé, ae đang tăng tốc vụ "${snippet}" đây`,
-                `chuẩn không cần chỉnh ${bossTag} ơi, chiến thôi`
+              let naturalOptions = [
+                `chuẩn rồi ${bossTag}, nghe "${snippet}" là ae có động lực cày tiếp`,
+                `chuẩn bài "${snippet}" của ${bossTag} đấy, ae đang chiến mượt luôn`,
+                `nhất trí với ${bossTag}, vụ "${snippet}" này làm nhanh gọn lẹ thôi`,
+                `chuẩn không cần chỉnh ${bossTag} ơi, ae đang hùa vào đẩy số đây`
               ];
-              replyBody = humanReplyOptions[Math.floor(Math.random() * humanReplyOptions.length)];
+              replyBody = naturalOptions[Math.floor(Math.random() * naturalOptions.length)];
             } else {
-              replyBody = generateHumanSentence(recentTexts);
+              replyBody = generateFreeFlowSentence(recentTexts);
             }
 
             let tagPrefix = (b > 0 && Math.random() > 0.5) ? `@${peer1.displayName} ` : '';

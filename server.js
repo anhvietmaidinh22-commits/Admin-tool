@@ -63,29 +63,53 @@ const realLifeImages = [
   'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&auto=format&fit=crop&q=80'
 ];
 
-// THUẬT TOÁN TỰ SINH TỪ ĐƠN NGẪU NHIÊN 100% (KHÔNG DÙNG KHUNG CỐ ĐỊNH, CHỐNG LẶP TUYỆT ĐỐI)
-const poolNouns = ["hệ thống", "chiến lược", "dòng tiền", "data", "ads", "phễu", "kho hàng", "vốn", "tài khoản", "lượng đơn", "doanh số", "kèo thơm"];
-const poolVerbs = ["chạy", "bơm", "đẩy", "scale", "quay", "thu", "bắt", "săn", "chốt", "xử lý", "tối ưu", "phát triển"];
-const poolAdjs = ["mượt", "nhanh", "căng", "bén", "khét", "cháy", "đỉnh", "uy tín", "ổn định", "bạt ngàn", "tẹt ga", "ngập ví"];
-const poolTails = ["nhé ae", "thật sự", "anh em chú ý", "cả nhà rõ chưa", "không phải bàn", "cực kỳ yên tâm", "lên đường thôi"];
+// KHO TỪ VỰNG KHỔNG LỒ: Đan xen chuyện đời thường, lên kèo kiếm tiền và tag sếp
+const lifeTopics = [
+  "vừa làm cốc cafe đá xong tỉnh cả người", 
+  "ngồi canh hệ thống từ sáng tới giờ mỏi hết cả lưng", 
+  "đêm qua thức khuya check đơn mà sáng nay phê quá", 
+  "lướt group thấy anh em nổ đơn rôm rả mà ham",
+  "tính ra làm việc tốc độ này ae sớm tài khoản khủng"
+];
 
-function generateAbsoluteFreeSentence(recentTexts = []) {
+const businessActions = [
+  "lên kèo hốt bạc đi sếp ơi", 
+  "anh em đang túc trực chờ sếp phát lệnh chốt đơn", 
+  "xin chỉ thị mở rộng phễu kiếm tiền từ sếp", 
+  "bơm thêm ngân sách chạy ads để húp trọn thị trường đi sếp",
+  "cần sếp duyệt ngay chiến lược scale số đợt này"
+];
+
+const praiseBoss = [
+  "nhờ có tư duy của sếp mà anh em lúc nào cũng rủng rỉnh",
+  "đúng là tầm nhìn của sếp lúc nào cũng đi trước thời đại",
+  "ae cứ bám sát sếp là thể nào cũng ấm cái bụng",
+  "ngưỡng mộ cách điều hành hệ thống của sếp thật sự"
+];
+
+const dynamicEnds = [
+  "thật sự luôn", "quá bén", "không phải bàn", "căng cực", "mượt mà", "chuẩn chỉnh", "ae chú ý nhé"
+];
+
+function generateVibrantChat(recentTexts = []) {
   let attempts = 0;
   let candidate = "";
   do {
-    let n = poolNouns[Math.floor(Math.random() * poolNouns.length)];
-    let v = poolVerbs[Math.floor(Math.random() * poolVerbs.length)];
-    let ad = poolAdjs[Math.floor(Math.random() * poolAdjs.length)];
-    let t = poolTails[Math.floor(Math.random() * poolTails.length)];
+    let randType = Math.random();
+    let t = lifeTopics[Math.floor(Math.random() * lifeTopics.length)];
+    let b = businessActions[Math.floor(Math.random() * businessActions.length)];
+    let p = praiseBoss[Math.floor(Math.random() * praiseBoss.length)];
+    let e = dynamicEnds[Math.floor(Math.random() * dynamicEnds.length)];
 
-    let structures = [
-      `${n} đang ${v} rất ${ad}, ${t}`,
-      `cứ ${v} ${n} ${ad} là ${t}`,
-      `anh em tập trung ${v} ${n} cho ${ad}`,
-      `đợt này ${n} ${v} ${ad}, ${t}`
+    let formats = [
+      `@QUẢN LÍ HỆ THỐNG ${b}, ${p}`,
+      `${t}, @QUẢN LÍ HỆ THỐNG cho cái chỉ đạo để ae húp trọn gói nhé`,
+      `đúng là ${p}, @QUẢN LÍ HỆ THỐNG xem xét ${b} đi ạ`,
+      `${t}, ${b}, ${e}`,
+      `báo cáo @QUẢN LÍ HỆ THỐNG là ${p}, ${b}`
     ];
 
-    candidate = structures[Math.floor(Math.random() * structures.length)];
+    candidate = formats[Math.floor(Math.random() * formats.length)];
     attempts++;
   } while (recentTexts.includes(candidate) && attempts < 80);
 
@@ -249,7 +273,7 @@ app.post('/api/create-specialist', (req, res) => {
   res.json({ success: true, users });
 });
 
-// VÒNG LẶP BACKGROUND CHUẨN 3.5 GIÂY
+// VÒNG LẶP BACKGROUND CHUẨN 3.5 GIÂY (TAG SẾP & LÊN KÈO)
 setInterval(() => {
   if (appSettings.autoBotsChat && rooms.length > 0) {
     const now = Date.now();
@@ -268,9 +292,9 @@ setInterval(() => {
       const roomMsgs = messages.filter(m => m.roomId === activeRoom.id);
       let recentTexts = roomMsgs.slice(-200).map(m => m.text);
 
-      let text1 = generatePureDynamicSentence(recentTexts);
+      let text1 = generateVibrantChat(recentTexts);
       recentTexts.push(text1);
-      let text2 = `@${cl1.displayName} ${generatePureDynamicSentence(recentTexts)}`;
+      let text2 = `@${cl1.displayName} ${generateVibrantChat(recentTexts)}`;
 
       const m1 = { id: Date.now(), roomId: activeRoom.id, senderName: cl1.displayName, text: text1, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
       const m2 = { id: Date.now() + 1, roomId: activeRoom.id, senderName: cl2.displayName, text: text2, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }), imageUrl: null, reactions: {} };
@@ -312,7 +336,7 @@ io.on('connection', (socket) => {
     messages.push(newMessage);
     io.to(data.roomId).emit('receive_message', newMessage);
 
-    // KHI SẾP VỪA NHẮN -> PHẢN HỒI LẬP TỨC KHÔNG BƠ, CHUẨN 3.5 GIÂY, KHÔNG LẶP
+    // KHI SẾP VỪA NHẮN -> PHẢN HỒI BÁM SÁT, TAG TÊN VÀ LÊN KÈO, CHUẨN 3.5 GIÂY
     if (appSettings.autoBotsChat) {
       setTimeout(() => {
         const clonePool = users.filter(u => u.role === 'specialist' && u.username.startsWith('clone_'));
@@ -330,14 +354,14 @@ io.on('connection', (socket) => {
             const roomMsgs = messages.filter(m => m.roomId === data.roomId);
             let recentTexts = roomMsgs.slice(-200).map(m => m.text);
 
-            let dynamicMsg = generatePureDynamicSentence(recentTexts);
+            let dynamicMsg = generateVibrantChat(recentTexts);
             let replyBody = "";
             let cleanUserMsg = userMsg.trim();
 
             if (cleanUserMsg.toLowerCase() === 'alo') {
-              replyBody = "nghe sếp ơi, anh em đang túc trực đầy đủ sẵn sàng nhận lệnh";
+              replyBody = "@QUẢN LÍ HỆ THỐNG nghe sếp ơi, anh em đang túc trực đầy đủ sẵn sàng nhận kèo hốt bạc";
             } else if (cleanUserMsg.length > 0) {
-              replyBody = `nhất trí với ý kiến của sếp, ${dynamicMsg}`;
+              replyBody = `chuẩn quá @QUẢN LÍ HỆ THỐNG ơi, ${dynamicMsg}`;
             } else {
               replyBody = dynamicMsg;
             }
@@ -381,29 +405,6 @@ io.on('connection', (socket) => {
     }
   });
 });
-
-function generatePureDynamicSentence(recentTexts) {
-  let attempts = 0;
-  let candidate = "";
-  do {
-    let n = poolNouns[Math.floor(Math.random() * poolNouns.length)];
-    let v = poolVerbs[Math.floor(Math.random() * poolVerbs.length)];
-    let ad = poolAdjs[Math.floor(Math.random() * poolAdjs.length)];
-    let t = poolTails[Math.floor(Math.random() * poolTails.length)];
-
-    let structures = [
-      `${n} đang ${v} rất ${ad}, ${t}`,
-      `cứ ${v} ${n} ${ad} là ${t}`,
-      `anh em tập trung ${v} ${n} cho ${ad}`,
-      `đợt này ${n} ${v} ${ad}, ${t}`
-    ];
-
-    candidate = structures[Math.floor(Math.random() * structures.length)];
-    attempts++;
-  } while (recentTexts.includes(candidate) && attempts < 80);
-
-  return candidate;
-}
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {

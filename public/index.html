@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HUBBA Pro Max System - Trang Chủ</title>
+    <title>HUBBA Pro Max System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/socket.io/socket.io.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -13,36 +13,90 @@
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+
+        @keyframes pulseLogo {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.08); opacity: 0.85; }
+        }
+        .animate-logo-jump {
+            animation: pulseLogo 1.5s infinite ease-in-out;
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden">
 
-    <!-- Modal Đăng nhập Phân Quyền -->
-    <div id="authModal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <!-- MÀN HÌNH CHỜ / INTRO LOGO NHẢY (SPLASH SCREEN) -->
+    <div id="splashScreen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center space-y-4 transition-opacity duration-700">
+        <div class="relative">
+            <img src="https://i.ibb.co/NdVf8Btz/logo.png" class="w-24 h-24 rounded-3xl object-cover shadow-2xl ring-4 ring-indigo-500/40 animate-logo-jump" alt="HUBBA Logo">
+        </div>
+        <div class="text-center space-y-1">
+            <h1 class="text-lg font-bold text-white tracking-widest">HUBBA SYSTEM</h1>
+            <p class="text-xs text-indigo-400 font-medium tracking-wide">Đang khởi động hệ thống Pro Max...</p>
+        </div>
+    </div>
+
+    <!-- MODAL ĐĂNG NHẬP (RIÊNG BIỆT) -->
+    <div id="loginModal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800/80 p-8 rounded-3xl w-full max-w-md shadow-2xl space-y-6">
             <div class="text-center space-y-3">
                 <img src="https://i.ibb.co/NdVf8Btz/logo.png" class="w-16 h-16 rounded-2xl mx-auto shadow-xl object-cover ring-2 ring-indigo-500/30" alt="Logo">
-                <h2 class="text-xl font-bold text-white tracking-wide">HUBBA SYSTEM</h2>
-                <p class="text-xs text-slate-400">Đăng nhập tài khoản quản trị & chuyên viên</p>
+                <h2 class="text-xl font-bold text-white tracking-wide">ĐĂNG NHẬP HỆ THỐNG</h2>
+                <p class="text-xs text-slate-400">Truy cập không gian quản trị & chuyên viên</p>
             </div>
             <div class="space-y-4">
                 <div>
                     <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">Tên tài khoản</label>
-                    <input type="text" id="authUsername" placeholder="Nhập username..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                    <input type="text" id="loginUsername" placeholder="Nhập username..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
                 </div>
                 <div>
                     <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">Mật khẩu</label>
-                    <input type="password" id="authPassword" placeholder="Nhập mật khẩu..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                    <input type="password" id="loginPassword" placeholder="Nhập mật khẩu..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
                 </div>
-                <div class="flex gap-3 pt-2">
-                    <button onclick="handleLogin()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl font-semibold text-sm shadow-lg shadow-indigo-600/25 transition">Đăng Nhập</button>
-                    <button onclick="closeAuthModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-400 px-4 rounded-xl text-sm"><i class="fa-solid fa-xmark"></i></button>
+                <div class="flex flex-col gap-2.5 pt-2">
+                    <button onclick="submitLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl font-semibold text-sm shadow-lg shadow-indigo-600/25 transition">Đăng Nhập Ngay</button>
+                    <div class="flex justify-between items-center text-xs pt-1 px-1">
+                        <span class="text-slate-400">Chưa có tài khoản? <button onclick="switchToRegister()" class="text-indigo-400 font-semibold hover:underline">Đăng ký ngay</button></span>
+                        <button onclick="closeLoginModal()" class="text-slate-500 hover:text-slate-300">Đóng</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MÀN HÌNH TRANG CHỦ & INTRO HUBBA -->
+    <!-- MODAL ĐĂNG KÝ (RIÊNG BIỆT - CÓ THÊM TÊN & ID) -->
+    <div id="registerModal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800/80 p-8 rounded-3xl w-full max-w-md shadow-2xl space-y-5">
+            <div class="text-center space-y-2">
+                <img src="https://i.ibb.co/NdVf8Btz/logo.png" class="w-14 h-14 rounded-2xl mx-auto shadow-xl object-cover ring-2 ring-emerald-500/30" alt="Logo">
+                <h2 class="text-xl font-bold text-white tracking-wide">ĐĂNG KÝ TÀI KHOẢN</h2>
+                <p class="text-xs text-slate-400">Tạo tài khoản thành viên / chuyên viên mới</p>
+            </div>
+            <div class="space-y-3.5">
+                <div>
+                    <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Tên hiển thị (Display Name)</label>
+                    <input type="text" id="regDisplayName" placeholder="Ví dụ: Chuyên Viên B..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                </div>
+                <div>
+                    <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Mã ID / Tên đăng nhập</label>
+                    <input type="text" id="regUsername" placeholder="Ví dụ: staff_b_03..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                </div>
+                <div>
+                    <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Mật khẩu</label>
+                    <input type="password" id="regPassword" placeholder="Nhập mật khẩu bảo mật..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                </div>
+                <div class="flex flex-col gap-2.5 pt-2">
+                    <button onclick="submitRegister()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl font-semibold text-sm shadow-lg shadow-emerald-600/25 transition">Đăng Ký Tài Khoản</button>
+                    <div class="flex justify-between items-center text-xs pt-1 px-1">
+                        <span class="text-slate-400">Đã có tài khoản? <button onclick="switchToLogin()" class="text-emerald-400 font-semibold hover:underline">Đăng nhập</button></span>
+                        <button onclick="closeRegisterModal()" class="text-slate-500 hover:text-slate-300">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MÀN HÌNH TRANG CHỦ & THÔNG BÁO HỆ THỐNG HUBBA -->
     <div id="homeScreen" class="flex-1 flex flex-col bg-slate-950 overflow-y-auto">
         <!-- Header Trang Chủ -->
         <header class="bg-slate-900/90 border-b border-slate-800 px-8 py-4 flex justify-between items-center shadow-lg backdrop-blur-sm shrink-0">
@@ -51,32 +105,23 @@
                 <span class="text-base font-bold text-white tracking-wider">HUBBA SYSTEM</span>
             </div>
             <div class="flex items-center space-x-3">
-                <button onclick="openAuthModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-md transition flex items-center gap-2">
-                    <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Quản Trị
+                <button onclick="openLoginModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-md transition flex items-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập
+                </button>
+                <button onclick="openRegisterModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-xl text-xs font-semibold border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus"></i> Đăng Ký
                 </button>
             </div>
         </header>
 
-        <!-- Nội dung Trang chủ & Intro Hubba -->
+        <!-- Nội dung Trang chủ & Thông báo hệ thống HUBBA -->
         <main class="flex-1 max-w-4xl w-full mx-auto p-8 space-y-6 my-auto">
-            
-            <!-- INTRO HUBBA SECTION -->
-            <div class="bg-gradient-to-r from-indigo-900/40 via-slate-900/80 to-slate-900/80 border border-indigo-500/30 rounded-3xl p-6 shadow-xl space-y-3">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-md">
-                        <i class="fa-solid fa-cube"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white tracking-wide">Giới Thiệu HUBBA Pro Max</h2>
-                        <p class="text-xs text-indigo-400 font-medium">Hệ thống tương tác & mô phỏng nhân sự thông minh</p>
-                    </div>
-                </div>
-                <p class="text-xs text-slate-300 leading-relaxed pt-1">
-                    HUBBA cung cấp giải pháp vận hành không gian làm việc trực tuyến tự động hóa hoàn toàn. Tích hợp hàng nghìn clone bot hoạt động thông minh, mô phỏng nhịp độ đối soát, trao đổi công việc và báo cáo tiến độ theo thời gian thực với độ chân thực tuyệt đối.
-                </p>
+            <div class="text-center space-y-2">
+                <span class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-xs font-semibold px-3 py-1 rounded-full">Hệ Thống Tự Động Hóa Pro Max v5.0</span>
+                <h1 class="text-2xl font-bold text-white tracking-wide">Cổng Chào Mừng & Giám Sát Hệ Thống</h1>
             </div>
 
-            <!-- Bảng Thông Báo Hệ Thống HUBBA (Chào mừng & IP / Thiết bị) -->
+            <!-- Bảng Thông Báo Hệ Thống HUBBA -->
             <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
                 <div class="flex items-center space-x-3 border-b border-slate-800 pb-3">
                     <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
@@ -129,7 +174,7 @@
                 <div class="flex items-center space-x-2.5 bg-slate-800/80 px-3.5 py-1.5 rounded-xl border border-slate-700/70">
                     <span id="userAvatarDisplay" class="text-base">👤</span>
                     <span id="currentUsernameDisplay" class="text-xs font-bold text-slate-300">Khách Tham Quan</span>
-                    <button onclick="openAuthModal()" class="text-xs text-indigo-400 hover:text-indigo-300 ml-1 font-semibold" title="Đăng nhập quản trị"><i class="fa-solid fa-right-to-bracket"></i></button>
+                    <button onclick="openLoginModal()" class="text-xs text-indigo-400 hover:text-indigo-300 ml-1 font-semibold" title="Đăng nhập"><i class="fa-solid fa-right-to-bracket"></i></button>
                 </div>
             </div>
         </header>
@@ -182,6 +227,14 @@
 
     <!-- Script điều hướng & Socket.io -->
     <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                splash.style.opacity = '0';
+                setTimeout(() => splash.remove(), 700);
+            }, 1800);
+        });
+
         const socket = io();
         let currentRoomId = 'room_general';
         let currentUser = 'visitor_' + Math.floor(Math.random() * 1000);
@@ -251,17 +304,38 @@
             }
         });
 
-        function openAuthModal() {
-            document.getElementById('authModal').classList.remove('hidden');
+        // QUẢN LÝ MODAL ĐĂNG NHẬP & ĐĂNG KÝ TÁCH BIỆT
+        function openLoginModal() {
+            document.getElementById('registerModal').classList.add('hidden');
+            document.getElementById('loginModal').classList.remove('hidden');
         }
 
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.add('hidden');
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
         }
 
-        async function handleLogin() {
-            const u = document.getElementById('authUsername').value.trim();
-            const p = document.getElementById('authPassword').value.trim();
+        function openRegisterModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('registerModal').classList.remove('hidden');
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').classList.add('hidden');
+        }
+
+        function switchToRegister() {
+            closeLoginModal();
+            openRegisterModal();
+        }
+
+        function switchToLogin() {
+            closeRegisterModal();
+            openLoginModal();
+        }
+
+        async function submitLogin() {
+            const u = document.getElementById('loginUsername').value.trim();
+            const p = document.getElementById('loginPassword').value.trim();
             if(!u || !p) return alert('Vui lòng nhập đầy đủ thông tin!');
 
             try {
@@ -276,9 +350,34 @@
                     currentDisplayName = data.user.displayName;
                     document.getElementById('currentUsernameDisplay').innerText = currentDisplayName;
                     document.getElementById('userAvatarDisplay').innerText = data.user.avatar || '👑';
-                    closeAuthModal();
+                    closeLoginModal();
                     enterChatRoom();
                     if(data.rooms) renderRoomList(data.rooms);
+                } else {
+                    alert(data.message);
+                }
+            } catch(err) {
+                alert('Lỗi kết nối server!');
+            }
+        }
+
+        async function submitRegister() {
+            const displayName = document.getElementById('regDisplayName').value.trim();
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+
+            if(!displayName || !username || !password) return alert('Vui lòng nhập đầy đủ thông tin tên, ID và mật khẩu!');
+
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ username: username, password: password, displayName: displayName })
+                });
+                const data = await res.json();
+                if(data.success) {
+                    alert('Đăng ký thành công! Hãy tiến hành Đăng Nhập.');
+                    switchToLogin();
                 } else {
                     alert(data.message);
                 }

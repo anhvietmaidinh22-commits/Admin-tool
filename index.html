@@ -18,6 +18,17 @@
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
             border: 4px solid #ffffff;
         }
+        /* Khung tròn eKYC chuẩn ngân hàng */
+        .ekyc-circle-cam {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #F59E0B;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+            margin: 0 auto;
+            position: relative;
+        }
     </style>
 </head>
 <body class="bg-white text-slate-900 min-h-screen flex flex-col justify-between selection:bg-amber-300 selection:text-slate-900 pb-20">
@@ -257,12 +268,12 @@
                 <button onclick="nextStep(3)" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-4 rounded-2xl font-black text-sm shadow-md transition mt-2">Tiếp Tục Xác Thực</button>
             </div>
 
-            <!-- TRANG 4: eKYC -->
+            <!-- TRANG 4: eKYC NÂNG CẤP CHUẨN NGÂN HÀNG -->
             <div id="step4" class="space-y-4 hidden">
                 <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 text-xs md:text-sm text-amber-900 space-y-1">
                     <p class="font-black">📌 Xác thực eKYC ngân hàng:</p>
-                    <p class="text-xs text-amber-800">1. CCCD: Chọn tải ảnh hoặc chụp trực tiếp.</p>
-                    <p class="text-xs text-amber-800">2. Video: Hệ thống tự động quay và lưu sau 3 giây.</p>
+                    <p class="text-xs text-amber-800">1. CCCD: Chọn tải ảnh có sẵn hoặc chụp trực tiếp.</p>
+                    <p class="text-xs text-amber-800">2. Video khuôn mặt: Tự động quay theo hướng dẫn xoay trái/phải.</p>
                 </div>
 
                 <!-- CCCD Mặt Trước -->
@@ -271,14 +282,14 @@
                     <div class="grid grid-cols-2 gap-2">
                         <label class="border-2 border-dashed border-slate-300 rounded-xl p-2.5 text-center bg-slate-50 hover:border-amber-400 cursor-pointer transition text-xs font-bold text-slate-700 flex items-center justify-center">
                             📁 Tải ảnh có sẵn
-                            <input type="file" accept="image/*" onchange="handleFileSelect(this, 'previewFront')" class="hidden">
+                            <input type="file" accept="image/*" onchange="previewSelectedImage(this, 'previewFront')" class="hidden">
                         </label>
                         <label class="border-2 border-dashed border-slate-300 rounded-xl p-2.5 text-center bg-slate-50 hover:border-amber-400 cursor-pointer transition text-xs font-bold text-slate-700 flex items-center justify-center">
-                            📷 Chụp ảnh trực tiếp
-                            <input type="file" accept="image/*" capture="environment" onchange="handleFileSelect(this, 'previewFront')" class="hidden">
+                            📷 Chụp trực tiếp
+                            <input type="file" accept="image/*" capture="environment" onchange="previewSelectedImage(this, 'previewFront')" class="hidden">
                         </label>
                     </div>
-                    <div id="previewFront" class="text-center text-xs text-slate-400 pt-1">Chưa chọn ảnh mặt trước</div>
+                    <div id="previewFront" class="mt-2 text-center"></div>
                 </div>
 
                 <!-- CCCD Mặt Sau -->
@@ -287,26 +298,32 @@
                     <div class="grid grid-cols-2 gap-2">
                         <label class="border-2 border-dashed border-slate-300 rounded-xl p-2.5 text-center bg-slate-50 hover:border-amber-400 cursor-pointer transition text-xs font-bold text-slate-700 flex items-center justify-center">
                             📁 Tải ảnh có sẵn
-                            <input type="file" accept="image/*" onchange="handleFileSelect(this, 'previewBack')" class="hidden">
+                            <input type="file" accept="image/*" onchange="previewSelectedImage(this, 'previewBack')" class="hidden">
                         </label>
                         <label class="border-2 border-dashed border-slate-300 rounded-xl p-2.5 text-center bg-slate-50 hover:border-amber-400 cursor-pointer transition text-xs font-bold text-slate-700 flex items-center justify-center">
-                            📷 Chụp ảnh trực tiếp
-                            <input type="file" accept="image/*" capture="environment" onchange="handleFileSelect(this, 'previewBack')" class="hidden">
+                            📷 Chụp trực tiếp
+                            <input type="file" accept="image/*" capture="environment" onchange="previewSelectedImage(this, 'previewBack')" class="hidden">
                         </label>
                     </div>
-                    <div id="previewBack" class="text-center text-xs text-slate-400 pt-1">Chưa chọn ảnh mặt sau</div>
+                    <div id="previewBack" class="mt-2 text-center"></div>
                 </div>
 
-                <!-- QUAY VIDEO eKYC TỰ ĐỘNG -->
-                <div class="border border-slate-200 p-4 rounded-2xl bg-slate-50 text-center space-y-2">
-                    <label class="block text-xs font-bold text-slate-700">Xác thực khuôn mặt (Quay trái, phải, nhìn thẳng)</label>
-                    <div class="relative w-full h-36 bg-black rounded-xl overflow-hidden border border-slate-200 shadow-inner">
-                        <video id="webcam" autoplay playsinline muted class="w-full h-full object-cover"></video>
+                <!-- QUAY VIDEO eKYC VÒNG TRÒN THÔNG MINH -->
+                <div class="border border-slate-200 p-4 rounded-2xl bg-slate-50 text-center space-y-3">
+                    <label class="block text-xs font-bold text-slate-700">Xác thực khuôn mặt (eKYC Video)</label>
+                    
+                    <!-- Khung camera vòng tròn -->
+                    <div class="ekyc-circle-cam bg-black shadow-inner">
+                        <video id="webcam" autoplay playsinline muted class="w-full h-full object-cover scale-125"></video>
                     </div>
+
+                    <div id="ekycInstruction" class="text-xs font-black text-amber-600 bg-amber-50 py-1.5 px-3 rounded-full inline-block border border-amber-200">
+                        Nhấn nút bên dưới để bắt đầu xác thực
+                    </div>
+
                     <div class="pt-1">
-                        <button type="button" onclick="startAutoEkyc()" id="ekycBtn" class="bg-amber-500 hover:bg-amber-600 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition shadow">Bắt Đầu Quay Tự Động</button>
+                        <button type="button" onclick="startAutoEkyc()" id="ekycBtn" class="bg-amber-500 hover:bg-amber-600 text-white px-6 py-2.5 rounded-xl text-xs font-extrabold transition shadow">Bắt Đầu Quay Tự Động</button>
                     </div>
-                    <p id="camStatus" class="text-xs text-slate-500 font-bold">Trạng thái: Nhấn bắt đầu để quay eKYC</p>
                 </div>
 
                 <button onclick="submitFinalData()" id="finalBtn" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-2xl font-black text-sm shadow-lg shadow-emerald-500/25 transition">Gửi Hồ Sơ Xét Duyệt</button>
@@ -558,7 +575,6 @@
             if(e.key === 'Enter') sendChatMessage();
         }
 
-        // --- KIỂM TRA SỐ ĐIỆN THOẠI CHUẨN XÁC, BÁO SAI NẾU KHÔNG TỒN TẠI ---
         async function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const text = input.value.trim();
@@ -633,6 +649,69 @@
 
         function setQuickNote(text) {
             document.getElementById('editNote').value = text;
+        }
+
+        function copySyntax() {
+            const syntaxText = document.getElementById('syntaxText').textContent;
+            navigator.clipboard.writeText(syntaxText).then(() => {
+                alert("Đã sao chép cú pháp: " + syntaxText);
+            });
+        }
+
+        // --- XỬ LÝ ẢNH CCCD (HIỂN THỊ THUMBNAIL ẢNH ĐÃ CHỌN) ---
+        function previewSelectedImage(input, previewId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(previewId).innerHTML = `
+                        <div class="relative w-full h-20 rounded-xl overflow-hidden border border-amber-300 shadow">
+                            <img src="${e.target.result}" class="w-full h-full object-cover">
+                            <span class="absolute bottom-1 right-1 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">Đã chọn</span>
+                        </div>`;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // --- QUAY VIDEO eKYC VÒNG TRÒN TỰ ĐỘNG CHUẨN NGÂN HÀNG ---
+        async function startAutoEkyc() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                const videoEl = document.getElementById('webcam');
+                videoEl.srcObject = stream;
+                
+                const btn = document.getElementById('ekycBtn');
+                btn.disabled = true;
+                btn.classList.add('opacity-50');
+                
+                let chunks = [];
+                let recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+                
+                recorder.ondataavailable = e => { if(e.data.size > 0) chunks.push(e.data); };
+                recorder.onstop = () => {
+                    videoBlob = new Blob(chunks, { type: 'video/webm' });
+                    stream.getTracks().forEach(track => track.stop());
+                    document.getElementById('ekycInstruction').textContent = "✅ Xác thực khuôn mặt thành công!";
+                    document.getElementById('ekycInstruction').className = "text-xs font-black text-emerald-600 bg-emerald-50 py-1.5 px-3 rounded-full inline-block border border-emerald-200";
+                    btn.textContent = "Đã Hoàn Thành";
+                };
+
+                recorder.start();
+                
+                const instEl = document.getElementById('ekycInstruction');
+                instEl.textContent = "🔄 Đang quay: Nhìn thẳng vào camera...";
+                
+                setTimeout(() => { instEl.textContent = "⬅️ Quay đầu sang TRÁI nhẹ nhàng..."; }, 1200);
+                setTimeout(() => { instEl.textContent = "➡️ Quay đầu sang PHẢI nhẹ nhàng..."; }, 2500);
+                setTimeout(() => { instEl.textContent = "⬆️ Ngước nhẹ mặt lên trên..."; }, 3800);
+                setTimeout(() => { 
+                    instEl.textContent = "⏳ Đang lưu dữ liệu eKYC..."; 
+                    recorder.stop();
+                }, 5000);
+
+            } catch(e) {
+                alert("Không thể truy cập camera. Vui lòng cấp quyền trình duyệt trên điện thoại!");
+            }
         }
 
         const tickerMessages = [
@@ -755,16 +834,6 @@
                 </div>`;
             });
             container.innerHTML = html;
-        }
-
-        function previewImage(input, previewId) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" class="w-full h-16 object-cover rounded-xl shadow">`;
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
         }
 
         function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }

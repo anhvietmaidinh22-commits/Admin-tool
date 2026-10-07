@@ -45,6 +45,7 @@
             </div>
             
             <div class="flex items-center space-x-2">
+                <!-- NÚT TÀI KHOẢN TRÊN HEADER ĐÃ ĐƯỢC ĐỒNG BỘ CHUẨN XÁC -->
                 <button id="userAccountBtn" onclick="handleHeaderAccountClick()" class="text-xs md:text-sm font-extrabold text-slate-900 bg-amber-400 hover:bg-amber-500 px-4 py-2.5 rounded-xl shadow-sm transition">Đăng Nhập</button>
             </div>
         </div>
@@ -604,7 +605,6 @@
             if(e.key === 'Enter') sendChatMessage();
         }
 
-        // --- BOT CHECK SĐT KHÁCH CHUẨN XÁC, GỬI HD VAY VÀ HỎI THÊM ---
         async function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const text = input.value.trim();
@@ -617,7 +617,7 @@
                 const found = allLoans.find(l => l.user === text || (l.rPhone && l.rPhone.includes(text)));
                 setTimeout(() => {
                     if(found) {
-                        addBotMessage(`Dạ em đã tra cứu thấy thông tin khoản vay của số ${text}:\n\n📋 **HỢP ĐỒNG VAY TÍN DỤNG**\n- Khách hàng: ${found.name}\n- Số tiền vay: ${found.amount} (${found.term})\n- Đóng hàng tháng: ${found.monthlyPayment}\n- Mục đích vay: ${found.purpose}\n- Trạng thái hồ sơ: ${found.status}\n- Ngân hàng nhận: ${found.bankName} (${found.bankAccount})\n\n👉 Dạ anh/chị có cần em hỗ trợ gì thêm về khoản vay này không ạ?`, "Bot Trợ Lý");
+                        addBotMessage(`Dạ em đã tìm thấy hồ sơ của SĐT ${text}:\n- Khoản vay: ${found.amount} (${found.term})\n- Đóng hàng tháng: ${found.monthlyPayment}\n- Trạng thái: ${found.status}\n\nAnh/chị có cần em hỗ trợ gì thêm về khoản vay không ạ?`, "Bot Trợ Lý");
                     } else {
                         addBotMessage(`❌ Số điện thoại ${text} chưa đăng ký hồ sơ hoặc không chính xác. Vui lòng kiểm tra lại số điện thoại hoặc tạo đơn vay mới!`, "Bot Trợ Lý");
                     }
@@ -814,7 +814,7 @@
             document.getElementById('step4').classList.add('hidden');
             document.getElementById('progressContainer').classList.add('hidden');
 
-            if(!currentUser && !isAdminLoggedIn) {
+            if(!currentUser && !isAdminLoggedIn && tabName !== 'home' && tabName !== 'loanInfo') {
                 openAuthModal();
                 return;
             }
@@ -827,9 +827,11 @@
             } else if(tabName === 'loanInfo') {
                 document.getElementById('tabLoanInfo').classList.remove('hidden');
             } else if(tabName === 'applications') {
+                if(!currentUser && !isAdminLoggedIn) { openAuthModal(); return; }
                 renderClientApplications();
                 document.getElementById('tabApplications').classList.remove('hidden');
             } else if(tabName === 'profile') {
+                if(!currentUser && !isAdminLoggedIn) { openAuthModal(); return; }
                 if (isAdminLoggedIn) {
                     document.getElementById('adminPanel').classList.remove('hidden');
                 } else {

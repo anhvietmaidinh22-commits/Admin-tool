@@ -166,8 +166,8 @@
                             <span class="font-black text-sm">100.000.000 ₫</span>
                         </div>
                         <div class="text-right">
-                            <span class="text-emerald-300 block text-[10px] uppercase font-bold">Trạng thái định danh</span>
-                            <span class="font-black text-xs bg-emerald-500/30 px-2 py-0.5 rounded-full">✅ Đã xác thực eKYC</span>
+                            <span class="text-amber-200 block text-[10px] uppercase font-bold">Trạng thái định danh</span>
+                            <span id="ekycBadge" class="font-black text-xs bg-amber-400/40 text-white px-2.5 py-0.5 rounded-full">⏳ Chưa định danh</span>
                         </div>
                     </div>
                 </div>
@@ -458,7 +458,7 @@
         </div>
     </nav>
 
-    <!-- MODAL THÔNG BÁO TÙY CHỈNH (THAY THẾ ALERT THÔ) -->
+    <!-- MODAL THÔNG BÁO TÙY CHỈNH (HIỆN RÕ RÀNG KHI ĐĂNG KÝ/ĐĂNG NHẬP) -->
     <div id="customModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-xs w-full p-6 text-center space-y-4 shadow-2xl">
             <div id="modalIcon" class="text-4xl">✅</div>
@@ -714,6 +714,18 @@
                     document.getElementById('profileFullName').textContent = currentUserName || "Khách hàng";
                     document.getElementById('profileUserPhone').textContent = "SĐT: " + currentUser;
                     document.getElementById('profileAvatar').textContent = (currentUserName || "K").charAt(0).toUpperCase();
+                    
+                    // Kiểm tra xem khách đã gửi hồ sơ eKYC chưa để hiển thị đúng trạng thái định danh
+                    const userLoan = allLoans.find(l => l.user === currentUser);
+                    const badge = document.getElementById('ekycBadge');
+                    if(userLoan) {
+                        badge.textContent = "✅ Đã xác thực eKYC";
+                        badge.className = "font-black text-xs bg-emerald-500/30 text-white px-2.5 py-0.5 rounded-full";
+                    } else {
+                        badge.textContent = "⏳ Chưa định danh";
+                        badge.className = "font-black text-xs bg-amber-400/40 text-white px-2.5 py-0.5 rounded-full";
+                    }
+
                     document.getElementById('tabProfile').classList.remove('hidden');
                 }
             }
@@ -770,7 +782,7 @@
             }
         }
 
-        // --- ĐĂNG KÝ: KIỂM TRA TRÙNG LẶP VÀ THÔNG BÁO CHUẨN XÁC ---
+        // --- ĐĂNG KÝ: KIỂM TRA TRÙNG LẶP VÀ HIỆN THÔNG BÁO CHUẨN XÁC ---
         function handleRegister() {
             const name = document.getElementById('regName').value.trim();
             const phone = document.getElementById('regPhone').value.trim();
@@ -790,13 +802,13 @@
             users.push({ name, phone, pass });
             localStorage.setItem('ff_users', JSON.stringify(users));
 
-            // Hiển thị thông báo đăng ký thành công và chuyển sang form đăng nhập
-            showModal("Đăng Ký Thành Công", "Chúc mừng bạn đã đăng ký tài khoản thành công! Mời bạn đăng nhập để tiếp tục.", "🎉");
+            // Hiển thị popup thông báo đăng ký thành công ngay lập tức
+            showModal("Đăng Ký Thành Công", "Đăng ký thành công! Mời bạn đăng nhập.", "🎉");
             document.getElementById('loginPhone').value = phone;
             switchAuthTab('login');
         }
 
-        // --- ĐĂNG NHẬP: KIỂM TRA TÀI KHOẢN CHÍNH XÁC ---
+        // --- ĐĂNG NHẬP: KIỂM TRA TÀI KHOẢN VÀ BÁO LỖI LỊCH SỰ ---
         function handleLogin() {
             const user = document.getElementById('loginPhone').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
@@ -822,7 +834,7 @@
             const foundUser = users.find(u => u.phone === user && u.pass === pass);
 
             if (!foundUser) {
-                showModal("Đăng Nhập Thất Bại", "Số điện thoại hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại!", "❌");
+                showModal("Đăng Nhập Thất Bại", "Số điện thoại hoặc mật khẩu không chính xác!", "❌");
                 return;
             }
 

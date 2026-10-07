@@ -429,7 +429,7 @@
         </div>
     </main>
 
-    <!-- NÚT HỖ TRỢ NỔI (LIÊN KẾT TELEGRAM BOT, FB PAGE, ZALO) -->
+    <!-- NÚT HỖ TRỢ NỔI -->
     <div class="fixed bottom-24 right-4 z-40 flex flex-col space-y-2">
         <a id="floatingTele" href="https://t.me/financefast1" target="_blank" class="w-11 h-11 bg-sky-500 hover:bg-sky-600 text-white rounded-full flex items-center justify-center shadow-xl font-bold text-lg transition-transform hover:scale-105" title="Telegram Bot">✈️</a>
         <a id="floatingZalo" href="https://zalo.me/" target="_blank" class="w-11 h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-xl font-bold text-xs transition-transform hover:scale-105" title="Zalo">Zalo</a>
@@ -457,6 +457,16 @@
             </button>
         </div>
     </nav>
+
+    <!-- MODAL THÔNG BÁO TÙY CHỈNH (THAY THẾ ALERT THÔ) -->
+    <div id="customModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-xs w-full p-6 text-center space-y-4 shadow-2xl">
+            <div id="modalIcon" class="text-4xl">✅</div>
+            <h3 id="modalTitle" class="text-lg font-black text-slate-900">Thông Báo</h3>
+            <p id="modalText" class="text-xs text-slate-600 font-semibold"></p>
+            <button onclick="closeCustomModal()" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-3 rounded-xl font-black text-xs shadow-md transition">Xác Nhận</button>
+        </div>
+    </div>
 
     <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
@@ -515,6 +525,17 @@
         let fbLink = localStorage.getItem('ff_fb_link') || 'https://www.facebook.com/share/1cXjmBVEA5/';
         let zaloLink = localStorage.getItem('ff_zalo_link') || 'https://zalo.me/';
 
+        function showModal(title, text, icon = "✅") {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalText').textContent = text;
+            document.getElementById('modalIcon').textContent = icon;
+            document.getElementById('customModal').classList.remove('hidden');
+        }
+
+        function closeCustomModal() {
+            document.getElementById('customModal').classList.add('hidden');
+        }
+
         function applySupportLinks() {
             document.getElementById('floatingTele').href = teleLink;
             document.getElementById('floatingFb').href = fbLink;
@@ -533,7 +554,7 @@
             localStorage.setItem('ff_tele_link', teleLink);
             localStorage.setItem('ff_fb_link', fbLink);
             localStorage.setItem('ff_zalo_link', zaloLink);
-            applySupportLinks();
+            showModal("Thành Công", "Đã lưu cấu hình hỗ trợ thành công!");
         }
 
         function setQuickNote(text) {
@@ -543,7 +564,7 @@
         function copySyntax() {
             const syntaxText = document.getElementById('syntaxText').textContent;
             navigator.clipboard.writeText(syntaxText).then(() => {
-                alert("Đã sao chép cú pháp: " + syntaxText);
+                showModal("Thành Công", "Đã sao chép cú pháp: " + syntaxText);
             });
         }
 
@@ -597,7 +618,7 @@
                 }, 6500);
 
             } catch(e) {
-                alert("Không thể truy cập camera. Vui lòng cấp quyền trình duyệt trên điện thoại!");
+                showModal("Lỗi Camera", "Không thể truy cập camera. Vui lòng cấp quyền trình duyệt trên điện thoại!", "⚠️");
             }
         }
 
@@ -749,29 +770,41 @@
             }
         }
 
+        // --- ĐĂNG KÝ: KIỂM TRA TRÙNG LẶP VÀ THÔNG BÁO CHUẨN XÁC ---
         function handleRegister() {
             const name = document.getElementById('regName').value.trim();
             const phone = document.getElementById('regPhone').value.trim();
             const pass = document.getElementById('regPass').value.trim();
 
-            if(!name || !phone || !pass) { return; }
+            if(!name || !phone || !pass) {
+                showModal("Lỗi Đăng Ký", "Vui lòng nhập đầy đủ họ tên, số điện thoại và mật khẩu!", "⚠️");
+                return;
+            }
             
             let users = JSON.parse(localStorage.getItem('ff_users') || '[]');
             if(users.some(u => u.phone === phone)) {
+                showModal("Trùng Lập Tài Khoản", "Số điện thoại này đã được đăng ký trên hệ thống. Vui lòng chọn số khác hoặc đăng nhập!", "⚠️");
                 return;
             }
+
             users.push({ name, phone, pass });
             localStorage.setItem('ff_users', JSON.stringify(users));
 
+            // Hiển thị thông báo đăng ký thành công và chuyển sang form đăng nhập
+            showModal("Đăng Ký Thành Công", "Chúc mừng bạn đã đăng ký tài khoản thành công! Mời bạn đăng nhập để tiếp tục.", "🎉");
             document.getElementById('loginPhone').value = phone;
             switchAuthTab('login');
         }
 
+        // --- ĐĂNG NHẬP: KIỂM TRA TÀI KHOẢN CHÍNH XÁC ---
         function handleLogin() {
             const user = document.getElementById('loginPhone').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
 
-            if(!user || !pass) { return; }
+            if(!user || !pass) {
+                showModal("Lỗi Đăng Nhập", "Vui lòng nhập số điện thoại và mật khẩu!", "⚠️");
+                return;
+            }
 
             if(user === "admin" && pass === "123") {
                 isAdminLoggedIn = true;
@@ -781,6 +814,7 @@
                 closeAuthModal();
                 document.getElementById('userAccountBtn').textContent = "🛡️ Quản Trị";
                 switchTab('home');
+                showModal("Xin Chào Admin", "Đăng nhập trang quản trị thành công!", "🛡️");
                 return;
             }
 
@@ -788,7 +822,7 @@
             const foundUser = users.find(u => u.phone === user && u.pass === pass);
 
             if (!foundUser) {
-                alert("Số điện thoại hoặc mật khẩu không chính xác!");
+                showModal("Đăng Nhập Thất Bại", "Số điện thoại hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại!", "❌");
                 return;
             }
 
@@ -894,6 +928,7 @@
         function startLoanProcess() {
             if(!currentUser && !isAdminLoggedIn) {
                 openAuthModal();
+                showModal("Yêu Cầu Đăng Nhập", "Vui lòng đăng nhập tài khoản trước khi tạo hồ sơ vay!", "⚠️");
                 return;
             }
             formData.amount = document.getElementById('amountDisplay').textContent;
@@ -923,7 +958,10 @@
                 formData.income = document.getElementById('pIncome').value;
                 formData.payDay = document.getElementById('pPayDay').value;
 
-                if(!formData.name || !formData.dob || !formData.cccd || !formData.company) { return; }
+                if(!formData.name || !formData.dob || !formData.cccd || !formData.company) {
+                    showModal("Thiếu Thông Tin", "Vui lòng điền đầy đủ thông tin cá nhân!", "⚠️");
+                    return;
+                }
                 document.getElementById('step1').classList.add('hidden');
                 document.getElementById('step2').classList.remove('hidden');
                 updateProgress(2, 'Bước 2/4: Người thân tham chiếu', 50);
@@ -931,7 +969,10 @@
                 formData.rName = document.getElementById('rName1').value;
                 formData.rPhone = document.getElementById('rPhone1').value;
                 formData.rRelation = document.getElementById('rRelation').value;
-                if(!formData.rName || !formData.rPhone) { return; }
+                if(!formData.rName || !formData.rPhone) {
+                    showModal("Thiếu Thông Tin", "Vui lòng nhập thông tin người thân tham chiếu!", "⚠️");
+                    return;
+                }
                 document.getElementById('step2').classList.add('hidden');
                 document.getElementById('step3').classList.remove('hidden');
                 updateProgress(3, 'Bước 3/4: Tài khoản nhận giải ngân', 75);
@@ -939,7 +980,10 @@
                 formData.bankName = document.getElementById('bankName').value;
                 formData.bankAccount = document.getElementById('bankAccount').value;
                 formData.bankOwner = document.getElementById('bankOwner').value;
-                if(!formData.bankAccount || !formData.bankName) { return; }
+                if(!formData.bankAccount || !formData.bankName) {
+                    showModal("Thiếu Thông Tin", "Vui lòng nhập thông tin tài khoản ngân hàng nhận tiền!", "⚠️");
+                    return;
+                }
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('step4').classList.remove('hidden');
                 updateProgress(4, 'Bước 4/4: Xác thực eKYC', 100);
@@ -947,7 +991,10 @@
         }
 
         async function submitFinalData() {
-            if(!videoBlob) { return; }
+            if(!videoBlob) {
+                showModal("Chưa Xác Thực", "Vui lòng hoàn thành quay video khuôn mặt eKYC trước khi gửi hồ sơ!", "⚠️");
+                return;
+            }
             const btn = document.getElementById('finalBtn');
             btn.disabled = true;
             btn.textContent = "Đang gửi hồ sơ về hệ thống...";

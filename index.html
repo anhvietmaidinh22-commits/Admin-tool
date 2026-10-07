@@ -45,7 +45,6 @@
             </div>
             
             <div class="flex items-center space-x-2">
-                <!-- NÚT TÀI KHOẢN TRÊN HEADER ĐÃ ĐƯỢC ĐỒNG BỘ CHUẨN XÁC -->
                 <button id="userAccountBtn" onclick="handleHeaderAccountClick()" class="text-xs md:text-sm font-extrabold text-slate-900 bg-amber-400 hover:bg-amber-500 px-4 py-2.5 rounded-xl shadow-sm transition">Đăng Nhập</button>
             </div>
         </div>
@@ -434,7 +433,7 @@
         </div>
     </main>
 
-    <!-- NÚT HỖ TRỢ NỔI -->
+    <!-- NÚT HỖ TRỢ NỔI (HIỆN TÊN THƯƠNG HIỆU FINANCE FAST) -->
     <div class="fixed bottom-24 right-4 z-40">
         <button onclick="toggleChatBox()" class="flex items-center space-x-2 bg-amber-500 hover:bg-amber-600 text-white px-4 py-3 rounded-full shadow-2xl transition-transform hover:scale-105 font-black text-xs">
             <span class="text-xl">💬</span>
@@ -535,7 +534,6 @@
         let currentUserName = localStorage.getItem('ff_current_name') || null;
         let isAdminLoggedIn = localStorage.getItem('ff_is_admin') === 'true';
 
-        // CSKH ngẫu nhiên theo phiên
         const agentNames = ["Hạ Nhiên", "Bảo Trân", "Minh Thư", "Khánh Linh", "Thuỳ Dương", "Phương Anh"];
         let assignedAgent = localStorage.getItem('ff_assigned_agent_' + currentUser);
         if (!assignedAgent) {
@@ -781,6 +779,7 @@
             checkLoginState();
         };
 
+        // --- KIỂM TRA TRẠNG THÁI ĐĂNG NHẬP ỔN ĐỊNH, KHÔNG BỊ VĂNG KHI LOAD LẠI TRANG ---
         function checkLoginState() {
             if (isAdminLoggedIn) {
                 document.getElementById('userAccountBtn').textContent = "🛡️ Quản Trị";
@@ -813,11 +812,6 @@
             document.getElementById('step3').classList.add('hidden');
             document.getElementById('step4').classList.add('hidden');
             document.getElementById('progressContainer').classList.add('hidden');
-
-            if(!currentUser && !isAdminLoggedIn && tabName !== 'home' && tabName !== 'loanInfo') {
-                openAuthModal();
-                return;
-            }
 
             if(tabName === 'home') {
                 document.getElementById('stepHome').classList.remove('hidden');
@@ -1131,15 +1125,7 @@
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ 
-                        chat_id: CHAT_ID, 
-                        text: msg,
-                        reply_markup: {
-                            inline_keyboard: [
-                                [{ text: `💬 Trả lời khách #${currentUser}`, url: `https://t.me/` }]
-                            ]
-                        }
-                    })
+                    body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
                 });
 
                 switchTab('applications');

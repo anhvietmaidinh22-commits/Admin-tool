@@ -636,14 +636,18 @@
 
         async function saveCloudData() {
             localStorage.setItem('ff_loans', JSON.stringify(allLoans));
-            fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': MASTER_KEY
-                },
-                body: JSON.stringify({ loans: allLoans })
-            }).catch(e => console.log("Lỗi đồng bộ mây", e));
+            try {
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': MASTER_KEY
+                    },
+                    body: JSON.stringify({ loans: allLoans })
+                });
+            } catch(e) {
+                console.log("Lỗi đồng bộ mây", e);
+            }
         }
 
         function setQuickNote(text) {
@@ -1094,7 +1098,7 @@
             };
 
             allLoans.unshift(newLoan);
-            saveCloudData();
+            await saveCloudData(); // Đảm bảo đẩy thẳng lên đám mây thành công trước khi chuyển màn hình
 
             switchTab('applications');
 

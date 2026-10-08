@@ -645,7 +645,7 @@
         // TẢI DỮ LIỆU ĐỒNG BỘ TRỰC TIẾP TỪ VPS (SAVE.PHP)
         async function loadLoansFromVPS() {
             try {
-                let res = await fetch('/save.php');
+                let res = await fetch(window.location.origin + '/save.php');
                 let data = await res.json();
                 if(Array.isArray(data)) {
                     allLoans = data;
@@ -657,7 +657,7 @@
         // LƯU DỮ LIỆU ĐỒNG BỘ TRỰC TIẾP LÊN VPS (SAVE.PHP)
         async function saveCloudData(loanObj) {
             try {
-                await fetch('/save.php', {
+                await fetch(window.location.origin + '/save.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(loanObj)
@@ -668,7 +668,6 @@
             }
         }
 
-        // Tự động tải dữ liệu từ VPS ngay khi mở trang và lặp lại mỗi 5 giây cho Admin
         loadLoansFromVPS();
         setInterval(() => {
             if(isAdminLoggedIn) loadLoansFromVPS();
@@ -786,9 +785,8 @@
             if(currentSelectedLoanId === null) return;
             if(confirm("Bạn có chắc chắn muốn xóa vĩnh viễn đơn vay này không?")) {
                 let userPhone = allLoans[currentSelectedLoanId].user || allLoans[currentSelectedLoanId].User;
-                // Gửi request xóa hoặc lọc bỏ trên mảng
                 allLoans.splice(currentSelectedLoanId, 1);
-                fetch('/save.php', {
+                fetch(window.location.origin + '/save.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: 'delete', user: userPhone })

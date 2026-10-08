@@ -1016,12 +1016,9 @@
             let users = JSON.parse(localStorage.getItem('ff_users') || '[]');
             let foundUser = users.find(u => u.phone === user && u.pass === pass);
 
-            // Cho phép Admin truy cập mọi tài khoản hoặc tự động chấp nhận tài khoản khách vừa đăng ký
             if (!foundUser) {
-                // Tự động lưu tài khoản vào danh sách chung nếu đúng cấu hình số điện thoại
-                foundUser = { name: "Khách hàng", phone: user, pass: pass };
-                users.push(foundUser);
-                localStorage.setItem('ff_users', JSON.stringify(users));
+                showModal("Đăng Nhập Thất Bại", "Số điện thoại hoặc mật khẩu không chính xác!", "❌");
+                return;
             }
 
             currentUser = foundUser.phone;

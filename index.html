@@ -593,7 +593,7 @@
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHpRwmdjeTMiuP14LiJR21s0sZ0pK-F6G4AztG4WDvDwZVDsLjBm6Vs6oKrmdL3Me/exec";
 
         let formData = {};
-        let allLoans = JSON.parse(localStorage.getItem('ff_loans_hybrid') || '[]');
+        let allLoans = JSON.parse(localStorage.getItem('ff_loans_cloud') || '[]');
         let currentSelectedLoanId = null;
         let currentFilter = 'ALL';
 
@@ -643,33 +643,51 @@
             showModal("Thành Công", "Đã lưu cấu hình hỗ trợ thành công!");
         }
 
+        // Tải dữ liệu từ Google Sheets
         async function fetchCloudData() {
             try {
                 let res = await fetch(SCRIPT_URL);
                 let json = await res.json();
-                if(json && Array.isArray(json.loans) && json.loans.length > 0) {
-                    let cloudLoans = json.loans.reverse();
-                    let merged = [...allLoans];
-                    cloudLoans.forEach(c => {
-                        let exists = merged.some(m => String(m.user || m.User) === String(c.user || c.User) && String(m.time || m.Time) === String(c.time || c.Time));
-                        if(!exists) merged.push(c);
-                    });
-                    allLoans = merged;
-                    localStorage.setItem('ff_loans_hybrid', JSON.stringify(allLoans));
+                if(json && Array.isArray(json.loans)) {
+                    allLoans = json.loans.reverse();
+                    localStorage.setItem('ff_loans_cloud', JSON.stringify(allLoans));
                 }
-            } catch(e) {}
+            } catch(e) {
+                allLoans = JSON.parse(localStorage.getItem('ff_loans_cloud') || '[]');
+            }
             if(isAdminLoggedIn) renderAdminLoanList();
         }
 
+        // Lưu / Cập nhật dữ liệu lên Google Sheets
         async function saveCloudData(loanObj) {
-            allLoans.unshift(loanObj);
-            localStorage.setItem('ff_loans_hybrid', JSON.stringify(allLoans));
+            let existsIndex = allLoans.findIndex(l => String(l.user || l.User) === String(loanObj.user || loanObj.User));
+            if(existsIndex !== -1) {
+                allLoans[existsIndex] = loanObj;
+            } else {
+                allLoans.unshift(loanObj);
+            }
+            localStorage.setItem('ff_loans_cloud', JSON.stringify(allLoans));
+
             try {
-                fetch(SCRIPT_URL, {
+                await fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(loanObj)
+                });
+            } catch(e) {}
+        }
+
+        // Xóa đơn trên Google Sheets và bộ nhớ
+        async function deleteCloudData(userPhone) {
+            allLoans = allLoans.filter(l => String(l.user || l.User) !== String(userPhone));
+            localStorage.setItem('ff_loans_cloud', JSON.stringify(allLoans));
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user: userPhone, action: 'delete' })
                 });
             } catch(e) {}
         }
@@ -700,7 +718,7 @@
             });
 
             if(filteredLoans.length === 0) {
-                listEl.innerHTML = `<div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 text-center">Không có hồ sơ nào trong mục này.</div>`;
+                listEl.innerHTML = `<div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 text-center">Chưa có hồ sơ nào trong mục này.</div>`;
                 return;
             }
 
@@ -755,7 +773,7 @@
             allLoans[currentSelectedLoanId].note = document.getElementById('editNote').value;
             allLoans[currentSelectedLoanId].Note = document.getElementById('editNote').value;
 
-            localStorage.setItem('ff_loans_hybrid', JSON.stringify(allLoans));
+            await saveCloudData(allLoans[currentSelectedLoanId]);
             renderAdminLoanList();
             closeAdminDetail();
             showModal("Thành Công", "Đã cập nhật trạng thái tiến độ: " + newStatus);
@@ -775,18 +793,17 @@
             l.note = document.getElementById('editNote').value;
             l.Note = l.note;
 
-            localStorage.setItem('ff_loans_hybrid', JSON.stringify(allLoans));
+            await saveCloudData(l);
             renderAdminLoanList();
             closeAdminDetail();
-            showModal("Thành Công", "Đã lưu lại thông tin đơn vay!");
+            showModal("Thành Công", "Đã lưu lại thông tin đơn vay lên Google Sheets!");
         }
 
-        // Tính năng xóa đơn ảo / đơn test
         async function deleteCurrentLoan() {
             if(currentSelectedLoanId === null) return;
             if(confirm("Bạn có chắc chắn muốn xóa vĩnh viễn đơn vay này không?")) {
-                allLoans.splice(currentSelectedLoanId, 1);
-                localStorage.setItem('ff_loans_hybrid', JSON.stringify(allLoans));
+                let userPhone = allLoans[currentSelectedLoanId].user || allLoans[currentSelectedLoanId].User;
+                await deleteCloudData(userPhone);
                 renderAdminLoanList();
                 closeAdminDetail();
                 showModal("Đã Xóa", "Đơn vay đã được xóa khỏi hệ thống.");

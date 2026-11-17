@@ -134,7 +134,7 @@
                             </div>
 
                             <!-- CTA Button -->
-                            <button onclick="startRegistration()" class="w-full py-4 bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary text-white font-bold rounded-2xl shadow-lg shadow-blue-500/30 transition transform active:scale-95 flex items-center justify-center space-x-2">
+                            <button onclick="openAuthModal()" class="w-full py-4 bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary text-white font-bold rounded-2xl shadow-lg shadow-blue-500/30 transition transform active:scale-95 flex items-center justify-center space-x-2">
                                 <span>Đăng Ký Vay Ngay</span>
                                 <i class="fa-solid fa-arrow-right"></i>
                             </button>
@@ -155,18 +155,18 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-center space-y-4">
                         <div class="w-14 h-14 bg-blue-100 text-primary rounded-2xl flex items-center justify-center text-xl font-black mx-auto">1</div>
-                        <h3 class="font-bold text-lg text-slate-900">Điền thông tin & E-KYC</h3>
-                        <p class="text-sm text-slate-600">Cung cấp thông tin cá nhân chính chủ và tải ảnh CCCD 2 mặt kèm ảnh chân dung.</p>
+                        <h3 class="font-bold text-lg text-slate-900">Đăng ký tài khoản</h3>
+                        <p class="text-sm text-slate-600">Nhập số điện thoại để xác thực tài khoản vay vốn nhanh chóng.</p>
                     </div>
                     <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-center space-y-4">
                         <div class="w-14 h-14 bg-blue-100 text-primary rounded-2xl flex items-center justify-center text-xl font-black mx-auto">2</div>
                         <h3 class="font-bold text-lg text-slate-900">Hệ thống AI xét duyệt</h3>
-                        <p class="text-sm text-slate-600">Hệ thống tự động chấm điểm tín dụng và thẩm định hồ sơ nhanh chóng trong vòng 5 phút.</p>
+                        <p class="text-sm text-slate-600">Điền thông tin CCCD & E-KYC để hệ thống chấm điểm tín dụng trong 5 phút.</p>
                     </div>
                     <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-center space-y-4">
                         <div class="w-14 h-14 bg-emerald-100 text-secondary rounded-2xl flex items-center justify-center text-xl font-black mx-auto">3</div>
                         <h3 class="font-bold text-lg text-slate-900">Nhận tiền giải ngân</h3>
-                        <p class="text-sm text-slate-600">Tiền được chuyển thẳng vào số tài khoản ngân hàng cá nhân của bạn ngay sau khi phê duyệt.</p>
+                        <p class="text-sm text-slate-600">Tiền được chuyển thẳng vào tài khoản ngân hàng cá nhân sau khi được duyệt.</p>
                     </div>
                 </div>
             </div>
@@ -181,6 +181,32 @@
             <p class="text-xs text-slate-500">&copy; 2026 Gia Phát Financial. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- ================= STEP 0: LOGIN / REGISTER PHONE MODAL ================= -->
+    <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 relative shadow-2xl">
+            <button onclick="closeModal('authModal')" class="absolute top-6 right-6 text-slate-400 hover:text-slate-700 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center space-y-2">
+                <div class="w-14 h-14 bg-blue-50 text-primary rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                </div>
+                <h3 class="text-2xl font-black text-slate-900">Đăng Ký / Đăng Nhập</h3>
+                <p class="text-xs text-slate-500">Nhập số điện thoại của bạn để bắt đầu khởi tạo khoản vay</p>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Số điện thoại chính chủ</label>
+                    <input type="tel" id="authPhone" placeholder="VD: 0912345678" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium">
+                </div>
+                <button onclick="verifyPhoneAndProceed()" class="w-full py-4 bg-primary hover:bg-sky-600 text-white font-bold rounded-2xl shadow-lg transition">
+                    Tiếp Tục
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- ================= MODAL: FULL REGISTRATION & EKYC FLOW ================= -->
     <div id="registrationModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
@@ -203,8 +229,8 @@
                             <input type="text" id="fullName" placeholder="VD: NGUYỄN VĂN A" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Số điện thoại chính chủ</label>
-                            <input type="tel" id="phoneNum" placeholder="VD: 0912345678" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium">
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Số điện thoại đã xác thực</label>
+                            <input type="tel" id="phoneNum" readonly class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 text-sm font-medium cursor-not-allowed">
                         </div>
                     </div>
 
@@ -315,7 +341,7 @@
                     </div>
                 </div>
 
-                <!-- Risk Error State (Triggered after 5 seconds simulation or countdown) -->
+                <!-- Risk Error State -->
                 <div id="errorState" class="hidden space-y-6">
                     <div class="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-3xl mx-auto shadow-inner">
                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -394,7 +420,6 @@
             document.getElementById('amountDisplay').innerText = Number(amount).toLocaleString('vi-VN') + ' VNĐ';
             document.getElementById('termDisplay').innerText = term + ' Tháng';
 
-            // Simple interest calculation simulation
             let monthlyInterestRate = 0.015; // 1.5% per month
             let principalPerMonth = amount / term;
             let interestPerMonth = amount * monthlyInterestRate;
@@ -403,7 +428,24 @@
             document.getElementById('monthlyPayment').innerText = Math.round(totalMonthly).toLocaleString('vi-VN') + ' VNĐ';
         }
 
-        function startRegistration() {
+        // Mở popup nhập SĐT đăng ký/đăng nhập trước
+        function openAuthModal() {
+            document.getElementById('authModal').classList.remove('hidden');
+        }
+
+        // Xác thực SĐT rồi chuyển qua form điền hồ sơ chi tiết
+        function verifyPhoneAndProceed() {
+            const phone = document.getElementById('authPhone').value.trim();
+            if(!phone || phone.length < 9) {
+                alert('Vui lòng nhập số điện thoại hợp lệ!');
+                return;
+            }
+
+            // Đóng modal đăng nhập và truyền SĐT sang form chính
+            closeModal('authModal');
+            document.getElementById('phoneNum').value = phone;
+
+            // Mở modal hồ sơ vay chính
             document.getElementById('registrationModal').classList.remove('hidden');
             document.getElementById('formStep1').classList.remove('hidden');
             document.getElementById('formStep2').classList.add('hidden');
@@ -417,11 +459,10 @@
 
         function submitApplication() {
             const name = document.getElementById('fullName').value;
-            const phone = document.getElementById('phoneNum').value;
             const cccd = document.getElementById('cccdNum').value;
 
-            if(!name || !phone || !cccd) {
-                alert('Vui lòng điền đầy đủ thông tin cá nhân và số CCCD!');
+            if(!name || !cccd) {
+                alert('Vui lòng điền đầy đủ họ tên và số CCCD!');
                 return;
             }
 
@@ -431,7 +472,7 @@
             document.getElementById('loadingState').classList.remove('hidden');
             document.getElementById('errorState').classList.add('hidden');
 
-            // Countdown simulation (fast-forwarded for user testing experience to 5 seconds)
+            // Countdown simulation (5 seconds)
             let seconds = 5;
             const timerEl = document.getElementById('countdownTimer');
             

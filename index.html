@@ -355,7 +355,7 @@
     <!-- ================= MODAL: MULTI-STEP LOAN APPLICATION WIZARD ================= -->
     <div id="applicationModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 sm:p-8 relative">
-            <button onclick="closeModal('applicationModal')" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl">
+            <button onclick="confirmCloseWizard()" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
@@ -414,28 +414,28 @@
                 </button>
             </div>
 
-            <!-- STEP 2 -->
+            <!-- STEP 2: E-KYC có tích hợp capture camera trực tiếp trên mobile -->
             <div id="wizardStep2" class="space-y-4 hidden">
                 <h3 class="text-xl font-black text-white">Bước 2: Chụp ảnh định danh E-KYC</h3>
-                <p class="text-xs text-slate-400">Bấm vào từng ô bên dưới để chọn ảnh hoặc chụp trực tiếp từ điện thoại</p>
+                <p class="text-xs text-slate-400">Bấm vào từng ô bên dưới để chọn Chụp ảnh camera trực tiếp hoặc chọn từ thư viện (Bắt buộc đủ 3 ảnh)</p>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
                     <div onclick="document.getElementById('fileFront').click()" class="border-2 border-dashed border-slate-700 bg-slate-800/50 rounded-2xl p-4 text-center hover:border-primary cursor-pointer transition relative group">
-                        <input type="file" id="fileFront" accept="image/*" class="hidden" onchange="previewImage(this, 'statusFront')">
-                        <i class="fa-solid fa-id-card text-3xl text-blue-400 mb-2"></i>
+                        <input type="file" id="fileFront" accept="image/*" capture="environment" class="hidden" onchange="previewImage(this, 'statusFront', 'front')">
+                        <i class="fa-solid id-card fa-id-card text-3xl text-blue-400 mb-2"></i>
                         <p class="text-xs font-bold text-white">CCCD Mặt Trước</p>
                         <p id="statusFront" class="text-[10px] text-slate-400 mt-1 truncate">Chưa chọn ảnh</p>
                     </div>
 
                     <div onclick="document.getElementById('fileBack').click()" class="border-2 border-dashed border-slate-700 bg-slate-800/50 rounded-2xl p-4 text-center hover:border-primary cursor-pointer transition relative group">
-                        <input type="file" id="fileBack" accept="image/*" class="hidden" onchange="previewImage(this, 'statusBack')">
+                        <input type="file" id="fileBack" accept="image/*" capture="environment" class="hidden" onchange="previewImage(this, 'statusBack', 'back')">
                         <i class="fa-solid fa-id-card text-3xl text-blue-400 mb-2"></i>
                         <p class="text-xs font-bold text-white">CCCD Mặt Sau</p>
                         <p id="statusBack" class="text-[10px] text-slate-400 mt-1 truncate">Chưa chọn ảnh</p>
                     </div>
 
                     <div onclick="document.getElementById('filePortrait').click()" class="border-2 border-dashed border-slate-700 bg-slate-800/50 rounded-2xl p-4 text-center hover:border-primary cursor-pointer transition relative group">
-                        <input type="file" id="filePortrait" accept="image/*" capture="user" class="hidden" onchange="previewImage(this, 'statusPortrait')">
+                        <input type="file" id="filePortrait" accept="image/*" capture="user" class="hidden" onchange="previewImage(this, 'statusPortrait', 'portrait')">
                         <i class="fa-solid fa-camera text-3xl text-emerald-400 mb-2"></i>
                         <p class="text-xs font-bold text-white">Ảnh Chân Dung</p>
                         <p id="statusPortrait" class="text-[10px] text-slate-400 mt-1 truncate">Chưa chọn ảnh</p>
@@ -444,7 +444,7 @@
 
                 <div class="flex space-x-3 pt-4">
                     <button onclick="nextWizardStep(1)" class="w-1/3 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-2xl transition">Quay Lại</button>
-                    <button onclick="nextWizardStep(3)" class="w-2/3 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-2xl shadow-lg transition">Tiếp Tục: Giải Ngân</button>
+                    <button onclick="validateAndProceedStep3()" class="w-2/3 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-2xl shadow-lg transition">Tiếp Tục: Giải Ngân</button>
                 </div>
             </div>
 
@@ -518,7 +518,7 @@
                     </div>
                     <div class="space-y-2">
                         <h3 class="text-xl font-bold text-white">AI Đang Thẩm Định Hồ Sơ Tín Dụng</h3>
-                        <p class="text-xs text-slate-400 max-w-sm mx-auto">Đang kiểm tra lịch sử CIC, điểm tín dụng VNeID và đối chiếu thông tin ngân hàng. Quá trình mất khoảng 5 phút...</p>
+                        <p class="text-xs text-slate-400 max-w-sm mx-auto">Hệ thống đang đối chiếu dữ liệu VNeID và điểm tín dụng CIC. Vui lòng giữ nguyên màn hình trong 5 phút...</p>
                     </div>
                 </div>
 
@@ -551,7 +551,7 @@
         </div>
     </div>
 
-    <!-- ================= MODAL: DASHBOARD (MỤC CHI TIẾT KHOẢN VAY) ================= -->
+    <!-- ================= MODAL: DASHBOARD ================= -->
     <div id="dashboardModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 sm:p-8 relative space-y-6">
             <button onclick="closeModal('dashboardModal')" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl">
@@ -572,8 +572,8 @@
                     <i class="fa-solid fa-triangle-exclamation"></i>
                 </div>
                 <div>
-                    <h4 class="text-sm font-bold text-amber-300" id="dashStatusTitle">Đang chờ xác minh bổ sung thủ công</h4>
-                    <p class="text-xs text-slate-300" id="dashStatusDesc">Hồ sơ đã qua thời gian thẩm định AI, cần kết nối chuyên viên để mở khóa.</p>
+                    <h4 class="text-sm font-bold text-amber-300" id="dashStatusTitle">Đang chờ hệ thống AI thẩm định</h4>
+                    <p class="text-xs text-slate-300" id="dashStatusDesc">Hồ sơ đang trong quá trình xét duyệt 5 phút tự động.</p>
                 </div>
             </div>
 
@@ -663,9 +663,26 @@
             telegram: "https://t.me/vietanhenter",
             messenger: "https://m.me/yourpage"
         };
-        let registeredAccounts = {}; // Lưu tài khoản đã đăng ký (SĐT -> Mật khẩu)
-        let currentUserPhone = "";
-        let isUserLoggedIn = false;
+        let currentUserPhone = localStorage.getItem('gp_user_phone') || "";
+        let isUserLoggedIn = localStorage.getItem('gp_logged_in') === 'true';
+        let kycPhotos = { front: false, back: false, portrait: false };
+        let timerInterval = null;
+
+        window.onload = function() {
+            if (isUserLoggedIn && currentUserPhone) {
+                updateNavState();
+                let savedEndTime = localStorage.getItem('gp_timer_end');
+                if (savedEndTime) {
+                    let remaining = Math.floor((parseInt(savedEndTime) - Date.now()) / 1000);
+                    if (remaining > 0) {
+                        resumeCountdown(remaining);
+                    } else {
+                        showRiskErrorState();
+                    }
+                }
+            }
+            calculateLoan();
+        };
 
         function showCustomAlert(title, message, type = 'info') {
             document.getElementById('customAlertTitle').innerText = title;
@@ -750,23 +767,31 @@
             document.getElementById('monthlyPayment').innerText = Math.round(totalMonthly).toLocaleString('vi-VN') + ' VNĐ';
         }
 
-        // Bấm đăng ký vay từ trang chủ: Kiểm tra nếu chưa đăng nhập thì bắt buộc đăng nhập
         function proceedToApplication() {
             if (!isUserLoggedIn) {
-                showCustomAlert('Yêu Cầu Đăng Nhập', 'Vui lòng đăng nhập hoặc đăng ký tài khoản trước khi điền hồ sơ vay!', 'error');
+                showCustomAlert('Yêu Cầu Đăng Nhập', 'Vui lòng đăng nhập hoặc đăng ký tài khoản trước khi chọn gói vay!', 'error');
                 openAuthModal('login');
             } else {
                 startApplicationWizard();
             }
         }
 
-        function previewImage(input, statusId) {
+        function previewImage(input, statusId, key) {
             if (input.files && input.files[0]) {
                 const fileName = input.files[0].name;
                 const statusEl = document.getElementById(statusId);
-                statusEl.innerText = "Đã tải: " + fileName;
+                statusEl.innerText = "Đã nhận: " + fileName;
                 statusEl.className = "text-[10px] text-emerald-400 mt-1 font-semibold truncate";
+                kycPhotos[key] = true;
             }
+        }
+
+        function validateAndProceedStep3() {
+            if (!kycPhotos.front || !kycPhotos.back || !kycPhotos.portrait) {
+                showCustomAlert('Thiếu Ảnh E-KYC', 'Vui lòng bấm vào chụp ảnh hoặc chọn đủ CCCD mặt trước, mặt sau và ảnh chân dung!', 'error');
+                return;
+            }
+            nextWizardStep(3);
         }
 
         function openAuthModal(mode) {
@@ -801,12 +826,14 @@
                 return;
             }
 
-            // Kiểm tra xem đã đăng ký chưa (mặc định cho phép tài khoản test hoặc tài khoản vừa tạo)
             currentUserPhone = phone;
             isUserLoggedIn = true;
+            localStorage.setItem('gp_logged_in', 'true');
+            localStorage.setItem('gp_user_phone', phone);
+
             updateNavState();
             closeModal('authModal');
-            showCustomAlert('Thành Công', 'Đăng nhập thành công! Hãy chọn khoản vay trên trang chủ và bấm Đăng Ký.', 'success');
+            showCustomAlert('Thành Công', 'Đăng nhập thành công! Hãy chọn số tiền vay trên trang chủ và bấm Đăng Ký Vay.', 'success');
         }
 
         function handleRegister() {
@@ -817,12 +844,8 @@
                 return;
             }
             
-            // Lưu lại tài khoản để đăng nhập
-            registeredAccounts[phone] = pass;
             closeModal('authModal');
-            
-            // Đăng ký xong bắt buộc chuyển qua tab Đăng nhập
-            showCustomAlert('Đăng Ký Thành Công', 'Tài khoản đã được tạo thành công! Vui lòng đăng nhập lại để tiếp tục.', 'success');
+            showCustomAlert('Đăng Ký Thành Công', 'Tài khoản đã được tạo thành công! Vui lòng đăng nhập lại.', 'success');
             setTimeout(() => {
                 openAuthModal('login');
                 document.getElementById('loginPhone').value = phone;
@@ -841,6 +864,16 @@
             document.getElementById('wPhone').value = currentUserPhone;
             nextWizardStep(1);
             initSignaturePad();
+        }
+
+        function confirmCloseWizard() {
+            let savedEndTime = localStorage.getItem('gp_timer_end');
+            if (savedEndTime && Date.now() < parseInt(savedEndTime)) {
+                // Đang trong thời gian đếm ngược 5 phút thì không cho tắt đơn dễ dàng để tránh mất đơn
+                showCustomAlert('Đang Thẩm Định', 'Hồ sơ đang trong quá trình AI xét duyệt 5 phút. Vui lòng không đóng cửa sổ này!', 'error');
+                return;
+            }
+            closeModal('applicationModal');
         }
 
         function nextWizardStep(step) {
@@ -916,22 +949,54 @@
             document.getElementById('dashTerm').innerText = document.getElementById('termDisplay').innerText;
             document.getElementById('dashMonthly').innerText = document.getElementById('monthlyPayment').innerText;
 
-            // Đếm ngược chính xác 5 phút (300 giây) thực tế
-            let totalSeconds = 300;
-            const timerEl = document.getElementById('countdownTimer');
+            let endTime = Date.now() + 300 * 1000;
+            localStorage.setItem('gp_timer_end', endTime);
+
+            startCountdown(300);
+        }
+
+        function startCountdown(totalSeconds) {
+            if (timerInterval) clearInterval(timerInterval);
             
-            const interval = setInterval(() => {
-                totalSeconds--;
-                let m = Math.floor(totalSeconds / 60);
-                let s = totalSeconds % 60;
-                timerEl.innerText = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
-                
-                if(totalSeconds <= 0) {
-                    clearInterval(interval);
-                    document.getElementById('loadingState').classList.add('hidden');
-                    document.getElementById('errorState').classList.remove('hidden');
+            const timerEl = document.getElementById('countdownTimer');
+            timerInterval = setInterval(() => {
+                let savedEndTime = parseInt(localStorage.getItem('gp_timer_end') || '0');
+                let remaining = Math.floor((savedEndTime - Date.now()) / 1000);
+
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    showRiskErrorState();
+                } else {
+                    let m = Math.floor(remaining / 60);
+                    let s = remaining % 60;
+                    if(timerEl) timerEl.innerText = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
                 }
             }, 1000);
+        }
+
+        function resumeCountdown(remaining) {
+            document.getElementById('applicationModal').classList.remove('hidden');
+            for(let i=1; i<=4; i++) {
+                document.getElementById(`wizardStep${i}`).classList.add('hidden');
+            }
+            document.getElementById('wizardStepLoading').classList.remove('hidden');
+            document.getElementById('loadingState').classList.remove('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+
+            document.getElementById('dashAmount').innerText = document.getElementById('amountDisplay').innerText;
+            document.getElementById('dashTerm').innerText = document.getElementById('termDisplay').innerText;
+            document.getElementById('dashMonthly').innerText = document.getElementById('monthlyPayment').innerText;
+
+            startCountdown(remaining);
+        }
+
+        function showRiskErrorState() {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('errorState').classList.remove('hidden');
+            
+            document.getElementById('dashStatusBox').className = "bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex items-center space-x-4";
+            document.getElementById('dashStatusTitle').innerText = "Cần xác minh bổ sung thủ công";
+            document.getElementById('dashStatusDesc').innerText = "Hồ sơ tạm giữ do dấu hiệu rủi ro cao. Vui lòng liên hệ CSKH.";
         }
 
         function openDashboard() {

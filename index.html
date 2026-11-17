@@ -29,6 +29,20 @@
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-primary selection:text-white">
 
+    <!-- ================= LIVE PAYOUT NOTIFICATION TICKER ================= -->
+    <div id="payoutTicker" class="fixed top-20 right-4 z-40 max-w-xs bg-slate-800/90 backdrop-blur-md border border-slate-700 shadow-2xl rounded-2xl p-3.5 flex items-center space-x-3 transition-all duration-500 transform translate-y-0 opacity-100">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-lg">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div class="text-xs overflow-hidden">
+            <p class="font-bold text-white flex items-center justify-between">
+                <span>Giải ngân thành công</span>
+                <span class="text-[10px] text-slate-400 font-normal">Vừa xong</span>
+            </p>
+            <p class="text-slate-300 truncate"><span id="tickerPhone" class="font-semibold text-emerald-400">098****342</span> vừa nhận <span id="tickerAmount" class="font-bold text-white">15.000.000 VNĐ</span></p>
+        </div>
+    </div>
+
     <!-- Header / Navbar -->
     <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -47,10 +61,10 @@
                     <i class="fa-solid fa-headset"></i>
                     <span id="headerHotlineText">CSKH: 0339498650</span>
                 </button>
-                <button onclick="openAuthModal('login')" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-sm border border-slate-700 transition">
+                <button onclick="openAuthModal('login')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-sm border border-slate-700 transition">
                     Đăng Nhập
                 </button>
-                <button onclick="openAuthModal('register')" class="px-5 py-2.5 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl text-sm shadow-lg shadow-primary/30 transition">
+                <button onclick="openAuthModal('register')" class="px-4 py-2 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl text-sm shadow-lg shadow-primary/30 transition">
                     Đăng Ký
                 </button>
             </div>
@@ -66,13 +80,13 @@
                     
                     <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
                         <span class="inline-flex items-center space-x-2 bg-blue-500/10 text-blue-400 border border-blue-500/20 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
-                            <i class="fa-solid fa-bolt-lightning text-yellow-400"></i> <span>Giải Ngân Siêu Tốc Trong 24 Giờ</span>
+                            <i class="fa-solid fa-bolt-lightning text-yellow-400"></i> <span>Xét duyệt tự động chỉ 5 phút • Giải ngân trong ngày</span>
                         </span>
                         <h2 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
                             Vay vốn linh hoạt <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">An toàn & Minh bạch</span>
                         </h2>
                         <p class="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto lg:mx-0">
-                            Nền tảng công nghệ tài chính hàng đầu. Hạn mức lên đến 100.000.000 VNĐ, không cần thế chấp tài sản, bảo mật thông tin tuyệt đối theo tiêu chuẩn quốc tế.
+                            Nền tảng công nghệ tài chính hàng đầu với hệ thống chấm điểm tín dụng AI. <strong class="text-white">Xét duyệt tự động chỉ 5 phút</strong>, hạn mức lên đến 100.000.000 VNĐ, không cần thế chấp tài sản.
                         </p>
                         
                         <div class="grid grid-cols-3 gap-6 pt-6 border-t border-slate-800 max-w-lg mx-auto lg:mx-0">
@@ -81,8 +95,8 @@
                                 <p class="text-xs text-slate-400 font-medium">Lãi suất tối ưu</p>
                             </div>
                             <div>
-                                <p class="text-3xl font-black text-white">3 Phút</p>
-                                <p class="text-xs text-slate-400 font-medium">Thẩm định AI</p>
+                                <p class="text-3xl font-black text-white">5 Phút</p>
+                                <p class="text-xs text-slate-400 font-medium">Xét duyệt tự động</p>
                             </div>
                             <div>
                                 <p class="text-3xl font-black text-white">100%</p>
@@ -131,19 +145,109 @@
                                     <span id="monthlyPayment" class="font-bold text-emerald-400">1.833.000 VNĐ</span>
                                 </div>
                                 <div class="flex justify-between text-sm">
-                                    <span class="text-slate-400">Lãi suất áp dụng:</span>
-                                    <span class="font-semibold text-slate-300">1.5% / tháng</span>
+                                    <span class="text-slate-400">Thời gian duyệt:</span>
+                                    <span class="font-bold text-amber-400"><i class="fa-solid fa-bolt"></i> Tự động 5 phút</span>
                                 </div>
                             </div>
 
                             <button onclick="openAuthModal('register')" class="w-full py-4 bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary text-white font-bold rounded-2xl shadow-lg shadow-primary/30 transition transform active:scale-95 flex items-center justify-center space-x-2">
-                                <span>Tiến Hành Đăng Ký Vay</span>
+                                <span>Tiến Hành Đăng Ký Vay Ngay</span>
                                 <i class="fa-solid fa-arrow-right"></i>
                             </button>
                         </div>
                     </div>
 
                 </div>
+            </div>
+        </section>
+
+        <!-- About & Loan Types -->
+        <section class="py-20 bg-slate-950 border-t border-slate-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <span class="text-xs font-bold tracking-widest text-primary uppercase bg-blue-500/10 px-3.5 py-1.5 rounded-lg border border-blue-500/20">Về Chúng Tôi</span>
+                        <h3 class="text-3xl sm:text-4xl font-black text-white tracking-tight">CÔNG TY TÀI CHÍNH GIA PHÁT</h3>
+                        <p class="text-slate-400 text-base leading-relaxed">
+                            Được thành lập với sứ mệnh kết nối tài chính toàn diện, Gia Phát mang đến giải pháp vay vốn thông minh. Điểm vượt trội của chúng tôi là công nghệ chấm điểm tín dụng AI tiên tiến, cam kết <strong class="text-white">xét duyệt tự động chỉ 5 phút</strong> và giải ngân nhanh chóng vào tài khoản ngân hàng.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 pt-2">
+                            <div class="flex items-center space-x-3 bg-slate-900 p-4 rounded-2xl border border-slate-800">
+                                <i class="fa-solid fa-bolt-lightning text-2xl text-amber-400"></i>
+                                <span class="text-sm font-bold text-white">Duyệt Tự Động 5 Phút</span>
+                            </div>
+                            <div class="flex items-center space-x-3 bg-slate-900 p-4 rounded-2xl border border-slate-800">
+                                <i class="fa-solid fa-hand-holding-dollar text-2xl text-blue-400"></i>
+                                <span class="text-sm font-bold text-white">Không Phí Ẩn</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-tr from-primary/20 to-emerald-500/20 p-8 rounded-3xl border border-slate-800 space-y-6">
+                        <h4 class="text-xl font-bold text-white">Cam kết dịch vụ từ Gia Phát</h4>
+                        <ul class="space-y-4 text-sm text-slate-300">
+                            <li class="flex items-start space-x-3">
+                                <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                                <span>Hệ thống AI xử lý và <strong class="text-white">xét duyệt tự động chỉ 5 phút</strong> sau khi hoàn tất hồ sơ E-KYC.</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                                <span>Thủ tục 100% trực tuyến, không cần thế chấp tài sản hay gặp mặt trực tiếp.</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                                <span>Bảo mật tuyệt đối thông tin khoản vay theo tiêu chuẩn ngân hàng số quốc tế.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="space-y-8">
+                    <div class="text-center max-w-2xl mx-auto space-y-3">
+                        <span class="text-xs font-bold tracking-widest text-emerald-400 uppercase bg-emerald-500/10 px-3.5 py-1.5 rounded-lg border border-emerald-500/20">Sản Phẩm Tài Chính</span>
+                        <h3 class="text-3xl font-black text-white">Các Hình Thức Đăng Ký Vay Phổ Biến</h3>
+                        <p class="text-slate-400 text-sm">Lựa chọn gói vay phù hợp với tiêu chuẩn xét duyệt tự động trong 5 phút.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4 hover:border-primary transition">
+                            <div class="w-12 h-12 bg-blue-500/10 text-blue-400 rounded-2xl flex items-center justify-center text-xl font-bold">
+                                <i class="fa-solid fa-id-card"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-white">Vay Theo CCCD Chính Chủ</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">Hình thức vay nhanh chóng chỉ cần CCCD gắn chip, AI chấm điểm và xét duyệt tự động chỉ 5 phút.</p>
+                            <div class="pt-4 border-t border-slate-800 flex justify-between items-center text-xs">
+                                <span class="text-slate-400">Hạn mức: <strong class="text-white">Đến 20 Triệu</strong></span>
+                                <button onclick="openAuthModal('register')" class="text-primary font-bold hover:underline">Đăng ký ngay &rarr;</button>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4 hover:border-emerald-500 transition">
+                            <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-2xl flex items-center justify-center text-xl font-bold">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-white">Vay Tiêu Dùng Trả Góp</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">Khoản vay lớn phục vụ mua sắm, kinh doanh với kỳ hạn trả góp linh hoạt lên đến 36 tháng.</p>
+                            <div class="pt-4 border-t border-slate-800 flex justify-between items-center text-xs">
+                                <span class="text-slate-400">Hạn mức: <strong class="text-white">Đến 100 Triệu</strong></span>
+                                <button onclick="openAuthModal('register')" class="text-emerald-400 font-bold hover:underline">Đăng ký ngay &rarr;</button>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4 hover:border-blue-500 transition">
+                            <div class="w-12 h-12 bg-purple-500/10 text-purple-400 rounded-2xl flex items-center justify-center text-xl font-bold">
+                                <i class="fa-solid fa-file-invoice-dollar"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-white">Vay Theo Lương / Hóa Đơn</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">Dành cho khách hàng có lương chuyển khoản hoặc hóa đơn điện nước chính chủ với lãi suất ưu đãi thấp nhất.</p>
+                            <div class="pt-4 border-t border-slate-800 flex justify-between items-center text-xs">
+                                <span class="text-slate-400">Hạn mức: <strong class="text-white">Đến 80 Triệu</strong></span>
+                                <button onclick="openAuthModal('register')" class="text-purple-400 font-bold hover:underline">Đăng ký ngay &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
     </main>
@@ -157,24 +261,22 @@
         </div>
     </footer>
 
-    <!-- ================= MODAL: AUTH (ĐĂNG NHẬP / ĐĂNG KÝ TÁCH BIỆT) ================= -->
+    <!-- ================= MODAL: AUTH (ĐĂNG NHẬP / ĐĂNG KÝ) ================= -->
     <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 relative shadow-2xl">
             <button onclick="closeModal('authModal')" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <!-- Tabs Header -->
             <div class="flex bg-slate-800 p-1.5 rounded-2xl">
                 <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-3 text-sm font-bold rounded-xl transition text-white bg-primary shadow-md">Đăng Nhập</button>
                 <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-3 text-sm font-bold rounded-xl transition text-slate-400 hover:text-white">Đăng Ký Mới</button>
             </div>
 
-            <!-- Login Form -->
             <div id="loginFormContainer" class="space-y-4">
                 <div class="space-y-1">
                     <h3 class="text-xl font-black text-white">Chào mừng quay lại</h3>
-                    <p class="text-xs text-slate-400">Đăng nhập để theo dõi trạng thái khoản vay của bạn</p>
+                    <p class="text-xs text-slate-400">Đăng nhập để theo dõi trạng thái hồ sơ vay vốn</p>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Số điện thoại</label>
@@ -189,11 +291,10 @@
                 </button>
             </div>
 
-            <!-- Register Form -->
             <div id="registerFormContainer" class="space-y-4 hidden">
                 <div class="space-y-1">
                     <h3 class="text-xl font-black text-white">Tạo tài khoản vay vốn</h3>
-                    <p class="text-xs text-slate-400">Đăng ký tài khoản nhanh chóng chỉ trong 30 giây</p>
+                    <p class="text-xs text-slate-400">Hệ thống xét duyệt tự động chỉ 5 phút</p>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Số điện thoại chính chủ</label>
@@ -272,27 +373,37 @@
                 </button>
             </div>
 
-            <!-- STEP 2: E-KYC Photos -->
+            <!-- STEP 2: E-KYC Photos (Fixed Clickable Upload Inputs) -->
             <div id="wizardStep2" class="space-y-4 hidden">
                 <h3 class="text-xl font-black text-white">Bước 2: Chụp ảnh định danh E-KYC</h3>
-                <p class="text-xs text-slate-400">Vui lòng tải lên ảnh chụp rõ nét không bị lóa sáng</p>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                    <div class="border-2 border-dashed border-slate-700 bg-slate-800/50 rounded-2xl p-4 text-center hover:border-primary cursor-pointer transition">
+                <p class="text-xs text-slate-400">Bấm vào từng ô bên dưới để chọn ảnh hoặc chụp trực tiếp từ điện thoại</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                    <!-- Front CCCD -->
+                    <div onclick="document.getElementById('fileFront').click()" class="border-2 border-dashed border-slate-700 bg-slate-800/50 rounded-2xl p-4 text-center hover:border-primary cursor-pointer transition relative group">
+                        <input type="file" id="fileFront" accept="image/*" class="hidden" onchange="previewImage(this, 'statusFront')">
                         <i class="fa-solid fa-id-card text-3xl text-blue-400 mb-2"></i>
                         <p class="text-xs font-bold text-white">CCCD Mặt Trước</p>
-                        <input type="file" class="hidden">
+                        <p id="statusFront" class="text-[10px] text-slate-400 mt-1 truncate">Chưa chọn ảnh</p>
                     </div>
-                    <div class="border-2 border-dashed border-slate-700 bg-slate-800/50 rounded-2xl p-4 text-center hover:border-primary cursor-pointer transition">
+
+                    <!-- Back CCCD -->
+                    <div onclick="document.getElementById('fileBack').click()" class="border-2 border-dashed border-slate-700 bg-slate-800/50 rounded-2xl p-4 text-center hover:border-primary cursor-pointer transition relative group">
+                        <input type="file" id="fileBack" accept="image/*" class="hidden" onchange="previewImage(this, 'statusBack')">
                         <i class="fa-solid fa-id-card text-3xl text-blue-400 mb-2"></i>
                         <p class="text-xs font-bold text-white">CCCD Mặt Sau</p>
-                        <input type="file" class="hidden">
+                        <p id="statusBack" class="text-[10px] text-slate-400 mt-1 truncate">Chưa chọn ảnh</p>
                     </div>
-                    <div class="border-2 border-dashed border-slate-700 bg-slate-800/50 rounded-2xl p-4 text-center hover:border-primary cursor-pointer transition">
-                        <i class="fa-solid fa-camera text-3xl text-blue-400 mb-2"></i>
+
+                    <!-- Portrait -->
+                    <div onclick="document.getElementById('filePortrait').click()" class="border-2 border-dashed border-slate-700 bg-slate-800/50 rounded-2xl p-4 text-center hover:border-primary cursor-pointer transition relative group">
+                        <input type="file" id="filePortrait" accept="image/*" capture="user" class="hidden" onchange="previewImage(this, 'statusPortrait')">
+                        <i class="fa-solid fa-camera text-3xl text-emerald-400 mb-2"></i>
                         <p class="text-xs font-bold text-white">Ảnh Chân Dung</p>
-                        <input type="file" class="hidden">
+                        <p id="statusPortrait" class="text-[10px] text-slate-400 mt-1 truncate">Chưa chọn ảnh</p>
                     </div>
                 </div>
+
                 <div class="flex space-x-3 pt-4">
                     <button onclick="nextWizardStep(1)" class="w-1/3 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-2xl transition">Quay Lại</button>
                     <button onclick="nextWizardStep(3)" class="w-2/3 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-2xl shadow-lg transition">Tiếp Tục: Người Thân</button>
@@ -370,7 +481,6 @@
                     </div>
                 </div>
 
-                <!-- Risk Error State After 5 Seconds Simulation -->
                 <div id="errorState" class="hidden space-y-6">
                     <div class="w-20 h-20 bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-full flex items-center justify-center text-3xl mx-auto">
                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -394,7 +504,7 @@
         </div>
     </div>
 
-    <!-- ================= MODAL: ADMIN LOGIN (Tài khoản: admin / Mật khẩu: 1) ================= -->
+    <!-- ================= MODAL: ADMIN LOGIN ================= -->
     <div id="adminLoginModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-6 space-y-4 relative shadow-2xl">
             <button onclick="closeModal('adminLoginModal')" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl">
@@ -453,6 +563,27 @@
         };
         let currentUserPhone = "";
 
+        // Random Live Payout Ticker Loop
+        const randomPhones = ["0982***123", "0934***889", "0975***456", "0901***992", "0968***331", "0912***774", "0865***220"];
+        const randomAmounts = ["10.000.000 VNĐ", "20.000.000 VNĐ", "35.000.000 VNĐ", "50.000.000 VNĐ", "12.000.000 VNĐ", "25.000.000 VNĐ"];
+
+        function updatePayoutTicker() {
+            const p = randomPhones[Math.floor(Math.random() * randomPhones.length)];
+            const a = randomAmounts[Math.floor(Math.random() * randomAmounts.length)];
+            document.getElementById('tickerPhone').innerText = p;
+            document.getElementById('tickerAmount').innerText = a;
+
+            const ticker = document.getElementById('payoutTicker');
+            ticker.classList.remove('opacity-0', 'translate-y-2');
+            ticker.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                ticker.classList.remove('opacity-100', 'translate-y-0');
+                ticker.classList.add('opacity-0', 'translate-y-2');
+            }, 4000);
+        }
+        setInterval(updatePayoutTicker, 7000);
+
         function calculateLoan() {
             const amount = document.getElementById('loanAmount').value;
             const term = document.getElementById('loanTerm').value;
@@ -466,6 +597,16 @@
             let totalMonthly = principalPerMonth + interestPerMonth;
 
             document.getElementById('monthlyPayment').innerText = Math.round(totalMonthly).toLocaleString('vi-VN') + ' VNĐ';
+        }
+
+        // Preview file name when selected
+        function previewImage(input, statusId) {
+            if (input.files && input.files[0]) {
+                const fileName = input.files[0].name;
+                const statusEl = document.getElementById(statusId);
+                statusEl.innerText = "Đã tải lên: " + fileName;
+                statusEl.className = "text-[10px] text-emerald-400 mt-1 font-semibold truncate";
+            }
         }
 
         // Auth Tabs Switcher
@@ -525,14 +666,12 @@
         }
 
         function nextWizardStep(step) {
-            // Hide all steps
             for(let i=1; i<=4; i++) {
                 document.getElementById(`wizardStep${i}`).classList.add('hidden');
                 document.getElementById(`stepIndicator${i}`).className = "w-8 h-8 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center font-bold text-xs border border-slate-700";
             }
             document.getElementById('wizardStepLoading').classList.add('hidden');
 
-            // Show target step
             if(step <= 4) {
                 document.getElementById(`wizardStep${step}`).classList.remove('hidden');
                 for(let i=1; i<=step; i++) {
@@ -542,7 +681,6 @@
         }
 
         function submitFinalApplication() {
-            // Hide steps and show loading state
             for(let i=1; i<=4; i++) {
                 document.getElementById(`wizardStep${i}`).classList.add('hidden');
             }

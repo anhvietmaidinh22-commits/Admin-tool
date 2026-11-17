@@ -29,7 +29,7 @@
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-primary selection:text-white">
 
-    <!-- ================= FLOATING CSKH WIDGET ================= -->
+    <!-- ================= FLOATING CSKH MULTI-CHANNEL WIDGET ================= -->
     <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end space-y-3">
         <div id="cskhMenu" class="hidden flex-col space-y-2 bg-slate-800 border border-slate-700 shadow-2xl rounded-2xl p-3 animate-fadeIn">
             <a id="telegramBtn" href="https://t.me/vietanhenter" target="_blank" class="flex items-center space-x-3 bg-sky-600 hover:bg-sky-500 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-md">
@@ -414,15 +414,15 @@
                 </button>
             </div>
 
-            <!-- STEP 2: E-KYC có tích hợp capture camera trực tiếp trên mobile -->
+            <!-- STEP 2: E-KYC với đầy đủ tính năng chụp ảnh camera & thư viện -->
             <div id="wizardStep2" class="space-y-4 hidden">
                 <h3 class="text-xl font-black text-white">Bước 2: Chụp ảnh định danh E-KYC</h3>
-                <p class="text-xs text-slate-400">Bấm vào từng ô bên dưới để chọn Chụp ảnh camera trực tiếp hoặc chọn từ thư viện (Bắt buộc đủ 3 ảnh)</p>
+                <p class="text-xs text-slate-400">Bấm vào ô bên dưới để chọn Chụp ảnh Camera trực tiếp hoặc Chọn ảnh từ thư viện (Bắt buộc đủ 3 ảnh)</p>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
                     <div onclick="document.getElementById('fileFront').click()" class="border-2 border-dashed border-slate-700 bg-slate-800/50 rounded-2xl p-4 text-center hover:border-primary cursor-pointer transition relative group">
                         <input type="file" id="fileFront" accept="image/*" capture="environment" class="hidden" onchange="previewImage(this, 'statusFront', 'front')">
-                        <i class="fa-solid id-card fa-id-card text-3xl text-blue-400 mb-2"></i>
+                        <i class="fa-solid fa-id-card text-3xl text-blue-400 mb-2"></i>
                         <p class="text-xs font-bold text-white">CCCD Mặt Trước</p>
                         <p id="statusFront" class="text-[10px] text-slate-400 mt-1 truncate">Chưa chọn ảnh</p>
                     </div>
@@ -448,19 +448,51 @@
                 </div>
             </div>
 
-            <!-- STEP 3 -->
+            <!-- STEP 3: Giải ngân với đầy đủ danh sách ngân hàng -->
             <div id="wizardStep3" class="space-y-4 hidden">
                 <h3 class="text-xl font-black text-white">Bước 3: Tài khoản ngân hàng nhận tiền giải ngân</h3>
                 <div class="space-y-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Chọn Ngân hàng</label>
                         <select id="wBankName" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 text-white rounded-xl text-sm">
-                            <option>Techcombank</option>
-                            <option>Vietcombank</option>
-                            <option>ACB</option>
-                            <option>MB Bank</option>
-                            <option>VPBank</option>
-                            <option>BIDV</option>
+                            <optgroup label="Nhóm Ngân Hàng Nhà Nước (Big4)">
+                                <option>Agribank - Ngân hàng Nông nghiệp và PTNT</option>
+                                <option>Vietcombank - Ngân hàng TMCP Ngoại thương</option>
+                                <option>VietinBank - Ngân hàng TMCP Công Thương</option>
+                                <option>BIDV - Ngân hàng TMCP Đầu tư và Phát triển</option>
+                            </optgroup>
+                            <optgroup label="Nhóm Ngân Hàng TMCP Phổ Biến">
+                                <option>Techcombank - Ngân hàng TMCP Kỹ Thương</option>
+                                <option>ACB - Ngân hàng TMCP Á Châu</option>
+                                <option>MB Bank - Ngân hàng TMCP Quân Đội</option>
+                                <option>VPBank - Ngân hàng TMCP Việt Nam Thịnh Vượng</option>
+                                <option>TPBank - Ngân hàng TMCP Tiên Phong</option>
+                                <option>VIB - Ngân hàng TMCP Quốc tế</option>
+                                <option>SHB - Ngân hàng TMCP Sài Gòn - Hà Nội</option>
+                                <option>Sacombank - Ngân hàng TMCP Sài Gòn Thương Tín</option>
+                                <option>HDBank - Ngân hàng TMCP Phát triển TP.HCM</option>
+                                <option>OCB - Ngân hàng TMCP Phương Đông</option>
+                                <option>SeABank - Ngân hàng TMCP Đông Nam Á</option>
+                                <option>MSB - Ngân hàng TMCP Hàng Hải</option>
+                                <option>Eximbank - Ngân hàng TMCP Xuất Nhập Khẩu</option>
+                                <option>LPBank - Ngân hàng TMCP Lộc Phát</option>
+                                <option>Nam A Bank - Ngân hàng TMCP Nam Á</option>
+                                <option>Bac A Bank - Ngân hàng TMCP Bắc Á</option>
+                                <option>KienlongBank - Ngân hàng TMCP Kiên Long</option>
+                                <option>PGBank - Ngân hàng TMCP Thịnh vượng và Phát triển</option>
+                                <option>BVBank - Ngân hàng TMCP Bản Việt</option>
+                                <option>Vikki Digital Bank - Ngân hàng số Vikki</option>
+                            </optgroup>
+                            <optgroup label="Nhóm Ngân Hàng Nước Ngoài & Liên Doanh">
+                                <option>HSBC - Ngân hàng TNHH MTV HSBC Việt Nam</option>
+                                <option>Standard Chartered - Ngân hàng Standard Chartered VN</option>
+                                <option>Shinhan Bank - Ngân hàng TNHH MTV Shinhan Việt Nam</option>
+                                <option>Woori Bank - Ngân hàng TNHH MTV Woori Việt Nam</option>
+                                <option>UOB - Ngân hàng TNHH MTV UOB Việt Nam</option>
+                                <option>CIMB - Ngân hàng TNHH MTV CIMB Việt Nam</option>
+                                <option>Public Bank Vietnam - Ngân hàng Public Việt Nam</option>
+                                <option>Hong Leong Bank - Ngân hàng Hong Leong Việt Nam</option>
+                            </optgroup>
                         </select>
                     </div>
                     <div>
@@ -780,7 +812,7 @@
             if (input.files && input.files[0]) {
                 const fileName = input.files[0].name;
                 const statusEl = document.getElementById(statusId);
-                statusEl.innerText = "Đã nhận: " + fileName;
+                statusEl.innerText = "Đã nhận ảnh: " + fileName;
                 statusEl.className = "text-[10px] text-emerald-400 mt-1 font-semibold truncate";
                 kycPhotos[key] = true;
             }
@@ -788,7 +820,7 @@
 
         function validateAndProceedStep3() {
             if (!kycPhotos.front || !kycPhotos.back || !kycPhotos.portrait) {
-                showCustomAlert('Thiếu Ảnh E-KYC', 'Vui lòng bấm vào chụp ảnh hoặc chọn đủ CCCD mặt trước, mặt sau và ảnh chân dung!', 'error');
+                showCustomAlert('Thiếu Ảnh E-KYC', 'Vui lòng chụp ảnh hoặc chọn đủ CCCD mặt trước, mặt sau và ảnh chân dung!', 'error');
                 return;
             }
             nextWizardStep(3);
@@ -869,7 +901,6 @@
         function confirmCloseWizard() {
             let savedEndTime = localStorage.getItem('gp_timer_end');
             if (savedEndTime && Date.now() < parseInt(savedEndTime)) {
-                // Đang trong thời gian đếm ngược 5 phút thì không cho tắt đơn dễ dàng để tránh mất đơn
                 showCustomAlert('Đang Thẩm Định', 'Hồ sơ đang trong quá trình AI xét duyệt 5 phút. Vui lòng không đóng cửa sổ này!', 'error');
                 return;
             }

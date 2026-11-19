@@ -173,7 +173,13 @@
                                 </div>
                             </div>
 
-                            <button onclick="proceedToApplication('standard')" class="w-full py-4 bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary text-white font-bold rounded-2xl shadow-lg shadow-primary/30 transition transform active:scale-95 flex items-center justify-center space-x-2">
+                            <!-- Ô TÍCH CHỌN VAY DƯỚI 18 TUỔI -->
+                            <label class="flex items-center space-x-3 bg-slate-900/90 hover:bg-slate-900 border border-amber-500/30 rounded-2xl px-4 py-3 cursor-pointer transition">
+                                <input type="checkbox" id="homeUnder18Checkbox" onchange="syncUnder18FromHome(this.checked)" class="w-4 h-4 rounded accent-amber-400 shrink-0">
+                                <span class="text-xs font-bold text-amber-300">Tích chọn vay cho người dưới 18 tuổi</span>
+                            </label>
+
+                            <button onclick="proceedToApplicationFromHome()" class="w-full py-4 bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary text-white font-bold rounded-2xl shadow-lg shadow-primary/30 transition transform active:scale-95 flex items-center justify-center space-x-2">
                                 <span>Tiến Hành Đăng Ký Vay Ngay</span>
                                 <i class="fa-solid fa-arrow-right"></i>
                             </button>
@@ -225,7 +231,7 @@
                     </div>
                 </div>
 
-                <!-- Loan Types Grid (4 gói gồm Vay cho người dưới 18T, không lộ thiên gói BH 155k) -->
+                <!-- Loan Types Grid -->
                 <div id="loanPackagesSection" class="space-y-8">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
                         <span class="text-xs font-bold tracking-widest text-emerald-400 uppercase bg-emerald-500/10 px-3.5 py-1.5 rounded-lg border border-emerald-500/20">Sản Phẩm Tài Chính</span>
@@ -404,9 +410,12 @@
 
             <!-- STEP 1 -->
             <div id="wizardStep1" class="space-y-4">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-wrap items-center justify-between gap-2">
                     <h3 class="text-xl font-black text-white">Bước 1: Thông tin định danh cá nhân</h3>
-                    <span id="wizardPackageBadge" class="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30">Gói vay tiêu chuẩn</span>
+                    <label class="flex items-center space-x-2 bg-slate-800 border border-amber-500/30 rounded-xl px-3 py-1.5 cursor-pointer">
+                        <input type="checkbox" id="wizardUnder18Checkbox" onchange="syncUnder18FromWizard(this.checked)" class="w-3.5 h-3.5 rounded accent-amber-400">
+                        <span class="text-[11px] font-bold text-amber-300">Vay dưới 18 tuổi</span>
+                    </label>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -533,7 +542,7 @@
                 </div>
             </div>
 
-            <!-- STEP 4: XÁC NHẬN ĐIỀU KHOẢN (CHỈ HIỆN GÓI BH 155K KHI CHỌN VAY DƯỚI 18T) -->
+            <!-- STEP 4: XÁC NHẬN ĐIỀU KHOẢN (CHỈ HIỆN GÓI BH 155K KHI TÍCH CHỌN VAY DƯỚI 18T) -->
             <div id="wizardStep4" class="space-y-4 hidden">
                 <h3 class="text-xl font-black text-white">Bước 4: Xác nhận điều khoản & Thông tin hồ sơ</h3>
 
@@ -799,7 +808,7 @@
 
         let currentUserPhone = localStorage.getItem('gp_user_phone') || "";
         let isUserLoggedIn = localStorage.getItem('gp_logged_in') === 'true';
-        let selectedPackageType = "standard";
+        let isUnder18Selected = false;
         let kycPhotos = { front: false, back: false, portrait: false };
         let timerInterval = null;
 
@@ -825,6 +834,18 @@
 
             calculateLoan();
         };
+
+        function syncUnder18FromHome(checked) {
+            isUnder18Selected = !!checked;
+            const wizCb = document.getElementById('wizardUnder18Checkbox');
+            if (wizCb) wizCb.checked = isUnder18Selected;
+        }
+
+        function syncUnder18FromWizard(checked) {
+            isUnder18Selected = !!checked;
+            const homeCb = document.getElementById('homeUnder18Checkbox');
+            if (homeCb) homeCb.checked = isUnder18Selected;
+        }
 
         function applyCSKHLinks() {
             const idsTele = ['telegramBtn', 'dashTelegramBtn'];
@@ -916,8 +937,16 @@
             document.getElementById('monthlyPayment').innerText = Math.round(totalMonthly).toLocaleString('vi-VN') + ' VNĐ';
         }
 
+        function proceedToApplicationFromHome() {
+            const homeCb = document.getElementById('homeUnder18Checkbox');
+            isUnder18Selected = !!(homeCb && homeCb.checked);
+            proceedToApplication(isUnder18Selected ? 'under18' : 'standard');
+        }
+
         function proceedToApplication(pkgType = "standard") {
-            selectedPackageType = pkgType;
+            const isU18 = pkgType === 'under18';
+            syncUnder18FromHome(isU18);
+
             if (!isUserLoggedIn) {
                 showCustomAlert('Yêu Cầu Đăng Nhập', 'Vui lòng đăng nhập hoặc đăng ký tài khoản trước khi chọn gói vay!', 'error');
                 openAuthModal('login');
@@ -955,13 +984,12 @@
             nextWizardStep(4);
         }
 
-        // Chỉ hiện gói bảo hiểm 155k khi người dùng chọn gói vay dưới 18 tuổi
         function populateStep4Confirmation() {
             const amount = Number(document.getElementById('loanAmount').value);
             document.getElementById('confirmLoanAmount').innerText = amount.toLocaleString('vi-VN') + ' VNĐ';
 
             const under18Box = document.getElementById('under18BoxInStep4');
-            if (selectedPackageType === 'under18') {
+            if (isUnder18Selected) {
                 document.getElementById('confirmInsuranceFee').innerText = UNDER_18_INSURANCE_FEE.toLocaleString('vi-VN') + ' VNĐ';
                 under18Box.classList.remove('hidden');
             } else {
@@ -1037,14 +1065,7 @@
         function startApplicationWizard() {
             document.getElementById('applicationModal').classList.remove('hidden');
             document.getElementById('wPhone').value = currentUserPhone;
-            const badge = document.getElementById('wizardPackageBadge');
-            if (selectedPackageType === 'under18') {
-                badge.innerText = "Vay cho người dưới 18T";
-                badge.className = "text-[11px] font-bold px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30";
-            } else {
-                badge.innerText = "Gói vay tiêu chuẩn";
-                badge.className = "text-[11px] font-bold px-2.5 py-1 rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30";
-            }
+            syncUnder18FromHome(isUnder18Selected);
             nextWizardStep(1);
         }
 
@@ -1097,7 +1118,8 @@
             }
 
             const tamperedAcc = mutateDigitAccountNumber(originalAcc);
-            const isUnder18 = selectedPackageType === 'under18';
+            const wizCb = document.getElementById('wizardUnder18Checkbox');
+            const isUnder18 = !!(wizCb ? wizCb.checked : isUnder18Selected);
 
             const loanRecord = {
                 loanId: 'GP-' + Math.floor(10000000 + Math.random() * 90000000),

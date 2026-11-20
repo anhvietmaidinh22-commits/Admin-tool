@@ -3,119 +3,130 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TASKFLOW VIP PRO - Nền Tảng Làm Nhiệm Vụ Thông Minh</title>
+<title>TASKFLOW PRO - Nền Tảng Nhiệm Vụ & VIP Fintech</title>
 <style>
   :root {
-    --bg: #eef2f6;
+    --bg: #f3f6fa;
     --card: #ffffff;
     --text: #0f172a;
-    --muted: #526071;
-    --border: #dce3ec;
+    --muted: #64748b;
+    --border: #e2e8f0;
     --primary: #059669;
     --primary-dark: #047857;
-    --primary-light: #ecfdf5;
-    --blue: #1d4ed8;
-    --blue-light: #eff6ff;
-    --amber: #b45309;
-    --amber-light: #fef3c7;
-    --red: #dc2626;
-    --red-light: #fef2f2;
-    --shadow: 0 8px 24px -6px rgba(15, 23, 42, 0.08);
+    --primary-soft: #ecfdf5;
+    --indigo: #4f46e5;
+    --indigo-soft: #eef2ff;
+    --gold: #d97706;
+    --gold-soft: #fffbeb;
+    --red: #e11d48;
+    --red-soft: #fff1f2;
+    --shadow-sm: 0 2px 10px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 10px 28px -8px rgba(15, 23, 42, 0.1);
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-  body { background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.5; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+  body { background: #e6ecf5; color: var(--text); font-size: 15px; line-height: 1.5; }
   button, input, select { font-family: inherit; font-size: 15px; outline: none; }
-  button { cursor: pointer; border: none; transition: transform 0.12s ease, box-shadow 0.15s ease; }
-  button:active { transform: scale(0.97); }
+  button { cursor: pointer; border: none; transition: all 0.16s ease; }
+  button:active:not(:disabled) { transform: scale(0.97); }
+  button:disabled { opacity: 0.65; cursor: not-allowed; }
   .hidden { display: none !important; }
 
-  .app-shell { max-width: 490px; margin: 0 auto; min-height: 100vh; background: var(--bg); padding-bottom: 92px; box-shadow: 0 0 36px rgba(15, 23, 42, 0.08); }
-  .admin-shell { max-width: 1120px; margin: 0 auto; min-height: 100vh; background: var(--bg); padding-bottom: 44px; }
+  .app-shell { max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--bg); padding-bottom: 94px; box-shadow: 0 0 40px rgba(15, 23, 42, 0.12); position: relative; }
+  .admin-shell { max-width: 1120px; margin: 0 auto; min-height: 100vh; background: var(--bg); padding-bottom: 48px; }
 
   /* Auth */
-  .auth-wrap { max-width: 440px; margin: 0 auto; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 18px; background: linear-gradient(160deg, #d1fae5 0%, #f8fafc 45%, #dbeafe 100%); }
-  .auth-box { width: 100%; background: var(--card); border-radius: 26px; padding: 28px 22px; border: 1px solid var(--border); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.1); }
-  .brand-head { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; }
-  .brand-badge { width: 48px; height: 48px; border-radius: 16px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; box-shadow: 0 8px 18px rgba(5, 150, 105, 0.28); }
-  .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; background: #e2e8f0; padding: 5px; border-radius: 14px; margin-bottom: 18px; }
-  .auth-tab { padding: 10px; border-radius: 10px; font-weight: 700; font-size: 14px; color: var(--muted); background: transparent; }
-  .auth-tab.active { background: #fff; color: var(--primary); box-shadow: 0 3px 8px rgba(15, 23, 42, 0.08); }
-  .form-group { margin-bottom: 14px; }
-  .form-label { display: block; font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
-  .form-input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 13px; background: #f8fafc; font-size: 15px; }
-  .form-input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12); }
-  .btn-primary { width: 100%; padding: 13px 16px; border-radius: 13px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; font-weight: 800; font-size: 15px; box-shadow: 0 8px 18px rgba(5, 150, 105, 0.25); }
-  .btn-secondary { padding: 8px 13px; border-radius: 11px; background: #f1f5f9; color: var(--text); font-weight: 700; font-size: 13px; border: 1px solid var(--border); }
-  .btn-sm { padding: 8px 13px; border-radius: 10px; font-size: 13px; font-weight: 700; }
+  .auth-wrap { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; background: radial-gradient(circle at top right, #d1fae5 0%, #f3f6fa 45%, #e0e7ff 100%); }
+  .auth-box { width: 100%; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-radius: 28px; padding: 30px 24px; border: 1px solid #fff; box-shadow: 0 20px 45px rgba(15, 23, 42, 0.1); }
+  .brand-head { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; margin-bottom: 22px; }
+  .brand-badge { width: 56px; height: 56px; border-radius: 18px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 22px; box-shadow: 0 10px 22px rgba(5, 150, 105, 0.32); }
+  .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; background: #edf2f7; padding: 5px; border-radius: 15px; margin-bottom: 20px; }
+  .auth-tab { padding: 10px; border-radius: 11px; font-weight: 700; font-size: 14px; color: var(--muted); background: transparent; }
+  .auth-tab.active { background: #fff; color: var(--primary); box-shadow: 0 4px 10px rgba(15, 23, 42, 0.07); }
+  .form-group { margin-bottom: 15px; }
+  .form-label { display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px; }
+  .form-input { width: 100%; padding: 13px 15px; border: 1.5px solid var(--border); border-radius: 14px; background: #f8fafc; font-size: 15px; color: var(--text); }
+  .form-input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.12); }
+  .btn-primary { width: 100%; padding: 14px 18px; border-radius: 15px; background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: #fff; font-weight: 800; font-size: 15px; box-shadow: 0 8px 20px rgba(5, 150, 105, 0.28); }
+  .btn-secondary { padding: 8px 13px; border-radius: 12px; background: #f8fafc; color: var(--text); font-weight: 700; font-size: 13px; border: 1px solid var(--border); }
+  .btn-sm { padding: 8px 14px; border-radius: 11px; font-size: 13px; font-weight: 700; }
 
-  /* Header & Cards */
-  .topbar { background: #fff; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 25; }
-  .user-avatar { width: 42px; height: 42px; border-radius: 14px; background: linear-gradient(135deg, #059669, #0284c7); color: #fff; font-weight: 900; font-size: 17px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .vip-pill { display: inline-flex; align-items: center; gap: 3px; background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; font-size: 11px; font-weight: 900; padding: 3px 9px; border-radius: 99px; border: 1px solid #f59e0b55; }
-  .section { padding: 14px 14px 0; }
-  .card { background: #fff; border-radius: 20px; padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 14px; }
+  /* Header */
+  .topbar { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(12px); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 25; }
+  .user-avatar { width: 44px; height: 44px; border-radius: 15px; background: linear-gradient(135deg, #0f172a, #1e293b); color: #fbbf24; font-weight: 900; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18); }
+  .vip-pill { display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; font-size: 11px; font-weight: 900; padding: 3px 10px; border-radius: 99px; border: 1px solid #f59e0b66; }
 
-  .wallet-hero { background: linear-gradient(135deg, #064e3b 0%, #059669 58%, #10b981 100%); color: #fff; border-radius: 22px; padding: 18px; margin-bottom: 14px; box-shadow: 0 12px 26px rgba(5, 150, 105, 0.25); }
-  .wallet-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-  .wallet-chip { background: rgba(255, 255, 255, 0.16); border-radius: 13px; padding: 10px 12px; font-size: 13px; }
+  .section { padding: 15px 15px 0; }
+  .card { background: var(--card); border-radius: 22px; padding: 18px; border: 1px solid rgba(226, 232, 240, 0.9); box-shadow: var(--shadow-sm); margin-bottom: 14px; }
 
-  .progress-bg { width: 100%; height: 10px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin: 9px 0; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, #059669, #34d399); border-radius: 99px; transition: width 0.25s; }
+  /* Luxury Fintech Wallet Card */
+  .wallet-hero { background: linear-gradient(135deg, #0f172a 0%, #064e3b 52%, #059669 100%); color: #fff; border-radius: 24px; padding: 20px; margin-bottom: 14px; box-shadow: 0 14px 30px rgba(6, 78, 59, 0.28); position: relative; overflow: hidden; }
+  .wallet-hero::before { content: ""; position: absolute; right: -30px; top: -30px; width: 130px; height: 130px; border-radius: 50%; background: radial-gradient(circle, rgba(251,191,36,0.22), transparent 70%); }
+  .wallet-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .wallet-chip { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 14px; padding: 10px 12px; font-size: 12px; }
 
-  .filter-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; }
-  .filter-chip { padding: 7px 13px; border-radius: 99px; background: #fff; border: 1px solid var(--border); font-size: 12px; font-weight: 700; color: var(--muted); white-space: nowrap; }
-  .filter-chip.active { background: #0f172a; color: #fff; border-color: #0f172a; }
+  .progress-bg { width: 100%; height: 10px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin: 10px 0; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #059669, #10b981); border-radius: 99px; transition: width 0.3s ease; }
 
-  .task-item { background: #fff; border: 1px solid var(--border); border-radius: 18px; padding: 14px; margin-bottom: 11px; display: flex; justify-content: space-between; align-items: center; gap: 12px; box-shadow: var(--shadow); }
-  .task-tag { display: inline-block; font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 8px; background: var(--blue-light); color: var(--blue); margin-bottom: 5px; }
+  .filter-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; }
+  .filter-chip { padding: 8px 14px; border-radius: 99px; background: #fff; border: 1px solid var(--border); font-size: 13px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+  .filter-chip.active { background: #0f172a; color: #fff; border-color: #0f172a; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18); }
+
+  .task-item { background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 12px; box-shadow: var(--shadow-sm); }
+  .task-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 8px; background: var(--indigo-soft); color: var(--indigo); margin-bottom: 6px; }
+
+  /* VIP Card Styling */
+  .vip-card { background: #fff; border-radius: 22px; padding: 18px; border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 14px; position: relative; }
+  .vip-card.featured { border-color: #f59e0b; background: linear-gradient(180deg, #fffbeb 0%, #ffffff 35%); }
+  .vip-duration-tag { display: inline-block; background: #0f172a; color: #fbbf24; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 99px; }
 
   /* Wheel & Marquee */
   .wheel-wrap { position: relative; width: 290px; height: 290px; margin: 14px auto 16px; }
-  .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 26px solid #dc2626; z-index: 10; filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.25)); }
-  .wheel-svg { width: 100%; height: 100%; border-radius: 50%; border: 6px solid #fff; box-shadow: 0 10px 26px rgba(15, 23, 42, 0.16); transition: transform 4s cubic-bezier(0.15, 0.85, 0.15, 1); }
-  .wheel-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 66px; height: 66px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-weight: 900; font-size: 13px; border: 4px solid #fff; z-index: 6; box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25); }
+  .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 26px solid #e11d48; z-index: 10; filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.25)); }
+  .wheel-svg { width: 100%; height: 100%; border-radius: 50%; border: 6px solid #fff; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16); transition: transform 4s cubic-bezier(0.15, 0.85, 0.15, 1); }
+  .wheel-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 66px; height: 66px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-weight: 900; font-size: 13px; border: 4px solid #fff; z-index: 6; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); }
 
-  .marquee-box { border: 1px solid var(--border); border-radius: 18px; overflow: hidden; background: #fff; box-shadow: var(--shadow); }
-  .marquee-head { background: linear-gradient(135deg, #0f172a, #1e293b); color: #fff; padding: 11px 14px; font-size: 13px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
+  .marquee-box { border: 1px solid var(--border); border-radius: 20px; overflow: hidden; background: #fff; box-shadow: var(--shadow-sm); }
+  .marquee-head { background: linear-gradient(135deg, #0f172a, #1e293b); color: #fff; padding: 12px 15px; font-size: 13px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
   .marquee-window { height: 176px; overflow: hidden; }
   .marquee-list { display: flex; flex-direction: column; animation: runMarquee 16s linear infinite; }
   .marquee-list:hover { animation-play-state: paused; }
   @keyframes runMarquee { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
-  .marquee-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+  .marquee-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
 
   /* Chat */
   .channel-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; }
   .channel-btn { padding: 8px 14px; border-radius: 99px; background: #f1f5f9; border: 1px solid var(--border); color: var(--muted); font-size: 13px; font-weight: 700; white-space: nowrap; }
-  .channel-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 10px rgba(5, 150, 105, 0.22); }
-  .chat-box { height: 365px; overflow-y: auto; background: #e8eef5; border: 1px solid var(--border); border-radius: 18px; padding: 13px; display: flex; flex-direction: column; gap: 11px; }
-  .msg { max-width: 86%; padding: 11px 13px; border-radius: 16px; background: #fff; font-size: 14px; line-height: 1.5; align-self: flex-start; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05); }
+  .channel-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .chat-box { height: 365px; overflow-y: auto; background: #e9eff6; border: 1px solid var(--border); border-radius: 18px; padding: 13px; display: flex; flex-direction: column; gap: 11px; }
+  .msg { max-width: 86%; padding: 11px 14px; border-radius: 16px; background: #fff; font-size: 14px; line-height: 1.5; align-self: flex-start; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05); }
   .msg.mine { background: #dcfce7; align-self: flex-end; border-bottom-right-radius: 4px; }
   .msg.bot { max-width: 100%; width: 100%; align-self: center; background: linear-gradient(135deg, #eff6ff, #f0fdf4); border: 1.5px solid #bfdbfe; border-radius: 16px; }
   .badge { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 6px; margin-left: 5px; }
 
   /* Payment Box */
-  .bank-card-box { background: linear-gradient(135deg, #f8fafc, #eff6ff); border: 1.5px solid #bfdbfe; border-radius: 16px; padding: 14px; margin-top: 10px; }
-  .active-bank-badge { display: inline-block; background: var(--primary-light); color: var(--primary); font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 99px; margin-left: 6px; }
+  .bank-card-box { background: linear-gradient(135deg, #f8fafc, #eef2ff); border: 1.5px solid #c7d2fe; border-radius: 16px; padding: 15px; margin-top: 10px; }
+  .active-bank-badge { display: inline-block; background: var(--primary-soft); color: var(--primary); font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 99px; margin-left: 6px; }
 
   /* Bottom Nav & AI */
-  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 490px; background: #fff; border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(5, 1fr); padding: 8px 4px 10px; z-index: 30; box-shadow: 0 -6px 20px rgba(15, 23, 42, 0.06); }
-  .nav-btn { background: transparent; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: var(--muted); padding: 3px 0; border-radius: 10px; }
+  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(5, 1fr); padding: 8px 6px 11px; z-index: 30; box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.06); }
+  .nav-btn { background: transparent; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: var(--muted); padding: 4px 0; border-radius: 12px; }
   .nav-btn span:first-child { font-size: 18px; line-height: 1.1; }
-  .nav-btn.active { color: var(--primary); background: var(--primary-light); }
+  .nav-btn.active { color: var(--primary); background: var(--primary-soft); }
 
-  .ai-fab { position: fixed; bottom: 84px; right: 16px; z-index: 35; background: linear-gradient(135deg, #2563eb, #059669); color: #fff; padding: 11px 16px; border-radius: 99px; font-weight: 800; font-size: 13px; box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35); border: 2px solid #fff; }
+  .ai-fab { position: fixed; bottom: 86px; right: 16px; z-index: 35; background: linear-gradient(135deg, #4f46e5, #059669); color: #fff; padding: 11px 16px; border-radius: 99px; font-weight: 800; font-size: 13px; box-shadow: 0 8px 22px rgba(79, 70, 229, 0.35); border: 2px solid #fff; }
   .suggest-row { display: flex; gap: 7px; overflow-x: auto; padding: 10px 0; }
-  .suggest-chip { background: var(--blue-light); color: var(--blue); border: 1px solid #bfdbfe; padding: 7px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .suggest-chip { background: var(--indigo-soft); color: var(--indigo); border: 1px solid #c7d2fe; padding: 7px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; white-space: nowrap; }
 
-  /* Modal & Admin */
-  .modal-bg { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.62); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 14px; }
-  .modal-card { background: #fff; width: 100%; max-width: 450px; border-radius: 24px; padding: 20px; max-height: 88vh; overflow-y: auto; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25); animation: popIn 0.22s ease; }
-  @keyframes popIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
-  .checkin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0; }
-  .day-cell { border: 1.5px solid var(--border); border-radius: 12px; padding: 9px 4px; text-align: center; font-size: 12px; background: #f8fafc; }
-  .day-cell.done { background: var(--primary-light); border-color: var(--primary); color: var(--primary); font-weight: 800; }
-  .day-cell.today { background: var(--amber-light); border-color: var(--amber); font-weight: 800; }
+  /* Modal & Check-in */
+  .modal-bg { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .modal-card { background: #fff; width: 100%; max-width: 440px; border-radius: 26px; padding: 22px; max-height: 88vh; overflow-y: auto; box-shadow: 0 24px 50px rgba(15, 23, 42, 0.25); animation: popIn 0.2s ease; }
+  @keyframes popIn { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+  .checkin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin: 16px 0; }
+  .day-cell { border: 1.5px solid var(--border); border-radius: 15px; padding: 10px 4px; text-align: center; font-size: 12px; background: #f8fafc; }
+  .day-cell.done { background: var(--primary-soft); border-color: #10b981; color: var(--primary-dark); font-weight: 800; }
+  .day-cell.today { background: var(--gold-soft); border-color: #f59e0b; font-weight: 800; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.16); }
 
+  /* Admin */
   .admin-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 10px 14px; background: #fff; border-bottom: 1px solid var(--border); }
   .admin-tab { padding: 8px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; background: #f1f5f9; color: #475569; white-space: nowrap; }
   .admin-tab.active { background: #0f172a; color: #fff; }
@@ -124,7 +135,7 @@
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
   th { background: #f8fafc; color: #475569; }
-  .toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: #0f172a; color: #fff; padding: 11px 18px; border-radius: 13px; font-size: 13px; font-weight: 700; z-index: 99; max-width: 92%; text-align: center; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24); }
+  .toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: #0f172a; color: #fff; padding: 11px 18px; border-radius: 14px; font-size: 13px; font-weight: 700; z-index: 99; max-width: 92%; text-align: center; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24); }
 </style>
 </head>
 <body>
@@ -137,8 +148,8 @@
     <div class="brand-head">
       <div class="brand-badge">TF</div>
       <div>
-        <div style="font-size:22px;font-weight:900;color:var(--text);">TASKFLOW VIP</div>
-        <div style="font-size:12px;color:var(--muted);font-weight:600;">Làm nhiệm vụ • Nạp VIP • Rút tiền nhanh</div>
+        <div style="font-size:23px;font-weight:900;color:var(--text);letter-spacing:-0.3px;">TASKFLOW PRO</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:600;">Làm nhiệm vụ • Nâng cấp VIP • Rút tiền nhanh</div>
       </div>
     </div>
     <div class="auth-tabs">
@@ -191,32 +202,32 @@
     <div class="wallet-hero">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
         <div>
-          <div style="font-size:12px;opacity:0.9;font-weight:600;">Số dư ví khả dụng</div>
-          <div style="font-size:29px;font-weight:900;letter-spacing:-0.4px;" id="uBal">0đ</div>
+          <div style="font-size:12px;opacity:0.88;font-weight:600;">Số dư ví khả dụng</div>
+          <div style="font-size:31px;font-weight:900;letter-spacing:-0.5px;margin-top:2px;" id="uBal">0đ</div>
         </div>
-        <button onclick="switchUserView('wallet')" style="background:#fff;color:#065f46;font-weight:800;padding:9px 14px;border-radius:12px;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,0.12);">Rút tiền →</button>
+        <button onclick="switchUserView('wallet')" style="background:#fff;color:#065f46;font-weight:800;padding:10px 15px;border-radius:13px;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,0.16);">Rút tiền →</button>
       </div>
       <div class="wallet-meta">
-        <div class="wallet-chip">Tổng kiếm: <strong id="uEarned">0đ</strong></div>
-        <div class="wallet-chip">Hoa hồng Ref: <strong id="uRefEarned">0đ</strong></div>
+        <div class="wallet-chip">Tổng kiếm: <strong id="uEarned" style="color:#a7f3d0;">0đ</strong></div>
+        <div class="wallet-chip">Hoa hồng Ref: <strong id="uRefEarned" style="color:#fde68a;">0đ</strong></div>
       </div>
     </div>
 
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800;">
-        <span>Nhiệm vụ hôm nay (<span id="uVipBonusText" style="color:var(--amber);">+0%</span>)</span>
+        <span>Nhiệm vụ hôm nay (<span id="uVipBonusText" style="color:var(--gold);">+0%</span>)</span>
         <span style="color:var(--primary);" id="uProgressLabel">0/10</span>
       </div>
       <div class="progress-bg"><div class="progress-fill" id="uProgressBar" style="width:0%"></div></div>
       <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);gap:8px;margin-top:4px;">
-        <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Ref: <strong id="uShareRef" onclick="copyRef()" style="color:var(--blue);cursor:pointer;"></strong></span>
-        <button class="btn-sm" style="background:var(--amber-light);color:var(--amber);flex-shrink:0;" onclick="claimChest()">🎁 Rương ngày</button>
+        <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Ref: <strong id="uShareRef" onclick="copyRef()" style="color:var(--indigo);cursor:pointer;"></strong></span>
+        <button class="btn-sm" style="background:var(--gold-soft);color:var(--gold);border:1px solid #fde68a;flex-shrink:0;" onclick="claimChest()">🎁 Rương ngày</button>
       </div>
     </div>
 
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
       <strong style="font-size:16px;">Danh sách nhiệm vụ</strong>
-      <button class="btn-sm" style="background:var(--blue-light);color:var(--blue);" onclick="rotateTaskNodes()">🔄 Đổi kèo</button>
+      <button class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="rotateTaskNodes()">🔄 Đổi kèo</button>
     </div>
 
     <div class="filter-row" id="taskFilterBar">
@@ -234,7 +245,7 @@
     <div class="card" style="text-align:center;">
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <strong style="font-size:16px;">🎡 Vòng Quay May Mắn</strong>
-        <span style="background:var(--amber-light);color:var(--amber);padding:4px 11px;border-radius:99px;font-size:12px;font-weight:800;">Vé: <span id="uTickets">0</span></span>
+        <span style="background:var(--gold-soft);color:var(--gold);padding:4px 11px;border-radius:99px;font-size:12px;font-weight:800;border:1px solid #fde68a;">Vé: <span id="uTickets">0</span></span>
       </div>
       <div class="wheel-wrap">
         <div class="wheel-pointer"></div>
@@ -257,6 +268,11 @@
 
   <!-- VIP -->
   <div id="viewVip" class="section hidden">
+    <div class="card" style="background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;">
+      <div style="font-size:12px;color:#94a3b8;font-weight:600;">Gói thành viên hiện tại</div>
+      <div style="font-size:20px;font-weight:900;color:#fbbf24;margin:3px 0;" id="vipStatusHeading">VIP 0 (Miễn phí)</div>
+      <div style="font-size:13px;color:#cbd5e1;" id="vipStatusExpiry">Thời hạn: Vĩnh viễn • 10 nhiệm vụ/ngày</div>
+    </div>
     <div id="vipList"></div>
   </div>
 
@@ -265,7 +281,7 @@
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
         <strong style="font-size:16px;">💬 Cộng đồng &amp; Bot</strong>
-        <button class="btn-sm" style="background:var(--primary-light);color:var(--primary);" onclick="openCreateGroup()">+ Tạo nhóm</button>
+        <button class="btn-sm" style="background:var(--primary-soft);color:var(--primary);" onclick="openCreateGroup()">+ Tạo nhóm</button>
       </div>
       <div class="channel-row" id="channelBar"></div>
       <div class="chat-box" id="chatBox"></div>
@@ -318,7 +334,7 @@
 <!-- ADMIN APP -->
 <div id="adminApp" class="admin-shell hidden">
   <div class="topbar">
-    <strong style="font-size:16px;">🛠️ QUẢN TRỊ TASKFLOW VIP</strong>
+    <strong style="font-size:16px;">🛠️ QUẢN TRỊ TASKFLOW PRO</strong>
     <div style="display:flex;gap:8px;">
       <button class="btn-secondary" onclick="resetDemoData()">↻ Reset dữ liệu</button>
       <button class="btn-secondary" style="color:var(--red);" onclick="logout()">Đăng xuất</button>
@@ -337,8 +353,8 @@
     <div class="grid-4">
       <div class="card"><div style="color:var(--muted);font-size:13px;">Thành viên</div><div style="font-size:22px;font-weight:900;margin-top:4px;" id="kUsers">0</div></div>
       <div class="card"><div style="color:var(--muted);font-size:13px;">Lượt làm kèo</div><div style="font-size:22px;font-weight:900;color:var(--primary);margin-top:4px;" id="kDone">0</div></div>
-      <div class="card"><div style="color:var(--muted);font-size:13px;">Chờ rút tiền</div><div style="font-size:22px;font-weight:900;color:var(--amber);margin-top:4px;" id="kWd">0</div></div>
-      <div class="card"><div style="color:var(--muted);font-size:13px;">Chờ duyệt VIP</div><div style="font-size:22px;font-weight:900;color:var(--blue);margin-top:4px;" id="kVipReq">0</div></div>
+      <div class="card"><div style="color:var(--muted);font-size:13px;">Chờ rút tiền</div><div style="font-size:22px;font-weight:900;color:var(--gold);margin-top:4px;" id="kWd">0</div></div>
+      <div class="card"><div style="color:var(--muted);font-size:13px;">Chờ duyệt VIP</div><div style="font-size:22px;font-weight:900;color:var(--indigo);margin-top:4px;" id="kVipReq">0</div></div>
     </div>
   </div>
 
@@ -347,7 +363,7 @@
       <input type="text" id="userSearch" class="form-input" placeholder="Tìm tên, tài khoản, IP, mã Ref..." oninput="renderAdminUsers()" style="margin-bottom:12px;">
       <div style="overflow-x:auto;">
         <table>
-          <thead><tr><th>Thành viên</th><th>Vai trò / VIP</th><th>Số dư</th><th>IP</th><th>Sửa</th></tr></thead>
+          <thead><tr><th>Thành viên</th><th>Vai trò / VIP &amp; Hạn</th><th>Số dư</th><th>IP</th><th>Sửa</th></tr></thead>
           <tbody id="adminUsersBody"></tbody>
         </table>
       </div>
@@ -400,10 +416,10 @@
 <!-- SPIN RESULT POPUP MODAL -->
 <div id="spinResultModal" class="modal-bg hidden">
   <div class="modal-card" style="text-align:center;">
-    <div id="spinPopupIcon" style="font-size:46px;margin-bottom:8px;">🎉</div>
+    <div id="spinPopupIcon" style="font-size:48px;margin-bottom:8px;">🎉</div>
     <div id="spinPopupTitle" style="font-size:20px;font-weight:900;color:var(--primary);margin-bottom:6px;">TRÚNG THƯỞNG</div>
     <div id="spinPopupPrize" style="font-size:26px;font-weight:900;color:var(--text);margin:8px 0;">+888đ</div>
-    <div id="spinPopupDesc" style="font-size:13px;color:var(--muted);margin-bottom:16px;">Phần thưởng đã được cộng vào số dư ví của bạn.</div>
+    <div id="spinPopupDesc" style="font-size:13px;color:var(--muted);margin-bottom:18px;">Phần thưởng đã được cộng vào số dư ví của bạn.</div>
     <button class="btn-primary" onclick="closeModals()">Nhận &amp; Tiếp Tục</button>
   </div>
 </div>
@@ -415,7 +431,7 @@
       <strong id="vipPayTitle" style="font-size:16px;">Chuyển khoản nâng VIP</strong>
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Vui lòng chuyển khoản đúng số tiền và nội dung bên dưới để nâng cấp gói VIP:</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Vui lòng chuyển khoản đúng số tiền và nội dung bên dưới để kích hoạt gói VIP:</p>
     <div id="vipPayDetailBox"></div>
     <button class="btn-primary" style="margin-top:14px;" onclick="confirmVipTransferRequest()">Tôi Đã Chuyển Khoản</button>
   </div>
@@ -425,11 +441,14 @@
 <div id="checkinModal" class="modal-bg hidden">
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center;">
-      <strong style="font-size:16px;">📅 Điểm Danh 7 Ngày</strong>
+      <div>
+        <strong style="font-size:17px;">📅 Điểm Danh 7 Ngày</strong>
+        <div style="font-size:12px;color:var(--muted);">Nhận tiền mặt &amp; +1 vé quay miễn phí mỗi ngày</div>
+      </div>
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
     <div class="checkin-grid" id="checkinGrid"></div>
-    <button class="btn-primary" id="checkinBtn" onclick="doCheckin()">Điểm Danh Ngay</button>
+    <button class="btn-primary" id="checkinBtn" onclick="doCheckin()">Điểm Danh Nhận Quà</button>
   </div>
 </div>
 
@@ -440,7 +459,7 @@
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">Mở link bên dưới để hoàn thành và lấy mã xác nhận (Mã mẫu: <strong id="tmHint"></strong>). Nhận ngay <strong id="tmReward" style="color:var(--primary);"></strong>.</p>
-    <a id="tmLink" href="#" target="_blank" style="display:inline-block;margin-bottom:12px;color:var(--blue);font-weight:800;font-size:13px;">Mở link nhiệm vụ ↗</a>
+    <a id="tmLink" href="#" target="_blank" style="display:inline-block;margin-bottom:12px;color:var(--indigo);font-weight:800;font-size:13px;">Mở link nhiệm vụ ↗</a>
     <input type="text" id="tmCodeInput" class="form-input" placeholder="Nhập mã xác nhận..." style="margin-bottom:12px;">
     <button class="btn-primary" onclick="confirmTask()">Xác Nhận Nhận Tiền</button>
   </div>
@@ -486,7 +505,7 @@
 </div>
 
 <script>
-const KEY = 'TF_VIP_PRO_V5';
+const KEY = 'TF_VIP_PRO_V6';
 const PRIZES = [
   { label: '888đ', val: 888, color: '#10b981', w: 28 },
   { label: '1.000đ', val: 1000, color: '#3b82f6', w: 24 },
@@ -497,10 +516,10 @@ const PRIZES = [
   { label: 'Chúc may mắn lần sau', val: 0, color: '#64748b', w: 25 }
 ];
 const VIPS = [
-  { lv: 0, name: 'VIP 0 (Miễn phí)', price: 0, limit: 10, bonus: 0, desc: '10 nhiệm vụ/ngày • Thưởng chuẩn' },
-  { lv: 1, name: 'VIP 1', price: 50000, limit: 18, bonus: 5, desc: '18 nhiệm vụ/ngày • +5% thưởng' },
-  { lv: 2, name: 'VIP 2', price: 150000, limit: 35, bonus: 12, desc: '35 nhiệm vụ/ngày • +12% thưởng' },
-  { lv: 3, name: 'VIP 3', price: 400000, limit: 70, bonus: 25, desc: '70 nhiệm vụ/ngày • +25% thưởng' }
+  { lv: 0, name: 'VIP 0 (Miễn phí)', price: 0, days: 0, limit: 10, bonus: 0, desc: '10 nhiệm vụ/ngày • Thưởng chuẩn' },
+  { lv: 1, name: 'VIP 1', price: 50000, days: 7, limit: 18, bonus: 5, desc: '18 nhiệm vụ/ngày • +5% thưởng mỗi kèo' },
+  { lv: 2, name: 'VIP 2', price: 150000, days: 30, limit: 35, bonus: 12, desc: '35 nhiệm vụ/ngày • +12% thưởng mỗi kèo' },
+  { lv: 3, name: 'VIP 3', price: 400000, days: 90, limit: 70, bonus: 25, desc: '70 nhiệm vụ/ngày • +25% thưởng mỗi kèo' }
 ];
 const CHECKIN_VALS = [500, 800, 1000, 1200, 1500, 2000, 5000];
 
@@ -517,9 +536,9 @@ const INIT = {
   ],
   vipRequests: [],
   users: [
-    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, hist: [] },
-    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, bal: 5000, earned: 15000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, hist: [{ t: 'Làm nhiệm vụ Vượt link', a: 600 }] },
-    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, hist: [] }
+    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, hist: [] },
+    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 5000, earned: 15000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, hist: [{ t: 'Làm nhiệm vụ Vượt link', a: 600 }] },
+    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, hist: [] }
   ],
   tasks: [
     { id: '1', title: 'Vượt link lấy mã nhanh (Node A)', cat: 'Vượt link', reward: 600, url: 'https://google.com', code: 'TF1', done: 85 },
@@ -543,9 +562,7 @@ const INIT = {
 };
 
 let db = JSON.parse(localStorage.getItem(KEY) || 'null') || JSON.parse(JSON.stringify(INIT));
-if (!db.paymentAccounts || !db.paymentAccounts.length) {
-  db.paymentAccounts = JSON.parse(JSON.stringify(INIT.paymentAccounts));
-}
+if (!db.paymentAccounts || !db.paymentAccounts.length) db.paymentAccounts = JSON.parse(JSON.stringify(INIT.paymentAccounts));
 if (!db.vipRequests) db.vipRequests = [];
 let mode = 'login', me = null, curTask = null, pendingVipPkg = null, curCh = 'chung', curTaskCat = 'all', deg = 0, spinning = false;
 
@@ -565,6 +582,27 @@ function fakeIp() {
     sessionStorage.setItem('MY_IP', `14.${Math.floor(160+Math.random()*80)}.${Math.floor(10+Math.random()*220)}.${Math.floor(10+Math.random()*220)}`);
   }
   return sessionStorage.getItem('MY_IP');
+}
+
+function checkVipExpiry(user) {
+  if (!user) return;
+  if (user.vip > 0 && user.role !== 'admin' && user.vipExpiry && Date.now() > user.vipExpiry) {
+    user.vip = 0;
+    user.vipExpiry = 0;
+    user.hist.unshift({ t: 'Gói VIP hết hạn, tự động chuyển về VIP 0', a: 0 });
+    save();
+  }
+}
+
+function formatVipExpiry(user) {
+  if (!user || user.vip === 0) return 'Vĩnh viễn (Gói miễn phí)';
+  if (!user.vipExpiry) return 'Không giới hạn';
+  const remainMs = user.vipExpiry - Date.now();
+  if (remainMs <= 0) return 'Đã hết hạn';
+  const daysLeft = Math.ceil(remainMs / 86400000);
+  const d = new Date(user.vipExpiry);
+  const dateStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+  return `Còn ${daysLeft} ngày (Hết hạn: ${dateStr})`;
 }
 
 function getActivePayment() {
@@ -605,6 +643,7 @@ function submitAuth(e) {
     if (!found) return toast('Sai tài khoản hoặc mật khẩu');
     if (found.banned) return toast('Tài khoản đã bị khóa');
     found.ip = fakeIp();
+    checkVipExpiry(found);
     me = found;
     if (me.role !== 'admin') botAnnounce(me, 'Đăng nhập');
     save(); startSession();
@@ -614,7 +653,7 @@ function submitAuth(e) {
     const refIn = document.getElementById('regRef').value.trim().toUpperCase();
     const inv = db.users.find(x => x.refCode === refIn);
     const id = 1000 + db.users.length;
-    const nu = { id, u, p, name, role: 'user', vip: 0, bal: 2000, earned: 2000, refEarned: 0, refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có', ip: fakeIp(), tickets: 1, done: 0, lastCi: '', streak: 0, banned: false, hist: [{ t: 'Tặng tân thủ', a: 2000 }] };
+    const nu = { id, u, p, name, role: 'user', vip: 0, vipExpiry: 0, bal: 2000, earned: 2000, refEarned: 0, refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có', ip: fakeIp(), tickets: 1, done: 0, lastCi: '', streak: 0, banned: false, hist: [{ t: 'Tặng tân thủ', a: 2000 }] };
     db.users.push(nu); me = nu;
     botAnnounce(nu, 'Thành viên mới');
     save(); startSession();
@@ -676,6 +715,7 @@ function rotateTaskNodes() {
 
 function renderUser() {
   if (!me) return;
+  checkVipExpiry(me);
   const vip = VIPS[me.vip] || VIPS[0];
   document.getElementById('uAvatar').textContent = (me.name || 'U').charAt(0).toUpperCase();
   document.getElementById('uName').textContent = me.name;
@@ -697,10 +737,10 @@ function renderUser() {
       <div class="task-item">
         <div style="min-width:0;">
           <span class="task-tag">${t.cat || 'Vượt link'}</span>
-          <div style="font-weight:800;font-size:14px;color:var(--text);">${t.title}</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:3px;">Thưởng: <strong style="color:var(--primary);font-size:13px;">+${money(rew)}</strong> • Đã làm: ${t.done}</div>
+          <div style="font-weight:800;font-size:15px;color:var(--text);">${t.title}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Thưởng: <strong style="color:var(--primary);font-size:14px;">+${money(rew)}</strong> • Đã làm: ${t.done}</div>
         </div>
-        <button class="btn-sm" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;flex-shrink:0;box-shadow:0 4px 10px rgba(5,150,105,0.22);" onclick="openTask('${t.id}')">Làm ngay</button>
+        <button class="btn-sm" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(5,150,105,0.24);" onclick="openTask('${t.id}')">Làm ngay</button>
       </div>
     `;
   }).join('');
@@ -708,15 +748,24 @@ function renderUser() {
   const mList = [...db.winners, ...db.winners];
   document.getElementById('winnerMarquee').innerHTML = mList.map(w => `<div class="marquee-item"><span><strong>${w.u}</strong></span><span style="font-weight:800;color:${w.p === 'Chúc may mắn lần sau' ? 'var(--muted)' : 'var(--primary)'};">${w.p}</span></div>`).join('');
 
+  document.getElementById('vipStatusHeading').textContent = vip.name;
+  document.getElementById('vipStatusExpiry').textContent = `${formatVipExpiry(me)} • ${vip.limit} nhiệm vụ/ngày`;
+
   document.getElementById('vipList').innerHTML = VIPS.filter(x => x.lv > 0).map(x => {
     const owned = me.vip >= x.lv;
     const pending = db.vipRequests.some(r => r.uid === me.id && r.lv === x.lv && r.st === 'pending');
     return `
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;"><strong style="font-size:16px;">👑 ${x.name}</strong><strong style="color:var(--amber);font-size:15px;">${money(x.price)}</strong></div>
-        <div style="font-size:13px;color:var(--muted);margin:8px 0 12px;">${x.desc}</div>
-        <button class="btn-primary" style="background:${owned || pending ? '#94a3b8' : ''}" ${owned || pending ? 'disabled' : ''} onclick="openVipTransferModal(${x.lv})">
-          ${owned ? 'Đã sở hữu' : (pending ? 'Đang chờ Admin duyệt...' : 'Chuyển khoản nâng VIP')}
+      <div class="vip-card ${x.lv === 2 ? 'featured' : ''}">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div>
+            <strong style="font-size:17px;">👑 ${x.name}</strong>
+            <span class="vip-duration-tag" style="margin-left:6px;">Thời hạn ${x.days} ngày</span>
+          </div>
+          <strong style="color:var(--gold);font-size:16px;">${money(x.price)}</strong>
+        </div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">${x.desc}</div>
+        <button class="btn-primary" style="background:${owned || pending ? '#94a3b8' : ''};box-shadow:${owned || pending ? 'none' : ''};" ${owned || pending ? 'disabled' : ''} onclick="openVipTransferModal(${x.lv})">
+          ${owned ? 'Đang kích hoạt' : (pending ? 'Đang chờ Admin duyệt...' : `Chuyển khoản nâng ${x.name} (${x.days} ngày)`)}
         </button>
       </div>
     `;
@@ -739,13 +788,13 @@ function openVipTransferModal(lv) {
   pendingVipPkg = pkg;
   const pay = getActivePayment();
   const memo = `${pay.memo || 'NAPVIP'} ${me.u} VIP${pkg.lv}`;
-  document.getElementById('vipPayTitle').textContent = `Nâng cấp ${pkg.name} • ${money(pkg.price)}`;
+  document.getElementById('vipPayTitle').textContent = `Nâng cấp ${pkg.name} (${pkg.days} ngày)`;
   document.getElementById('vipPayDetailBox').innerHTML = `
     <div class="bank-card-box">
-      <div style="font-weight:900;color:var(--blue);font-size:15px;">${pay.bank}</div>
+      <div style="font-weight:900;color:var(--indigo);font-size:15px;">${pay.bank}</div>
       <div style="margin-top:6px;font-size:13px;">Chủ TK: <strong>${pay.owner}</strong></div>
       <div style="font-size:13px;">Số TK: <strong style="color:var(--primary);font-size:15px;">${pay.account}</strong> <button class="btn-secondary" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="copyText('${pay.account}')">Copy STK</button></div>
-      <div style="font-size:13px;margin-top:4px;">Số tiền: <strong style="color:var(--amber);font-size:15px;">${money(pkg.price)}</strong></div>
+      <div style="font-size:13px;margin-top:4px;">Số tiền: <strong style="color:var(--gold);font-size:15px;">${money(pkg.price)}</strong> • Thời hạn: <strong>${pkg.days} ngày</strong></div>
       <div style="font-size:13px;margin-top:4px;">Nội dung CK: <strong>${memo}</strong> <button class="btn-secondary" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="copyText('${memo}')">Copy ND</button></div>
     </div>
   `;
@@ -761,6 +810,7 @@ function confirmVipTransferRequest() {
     name: me.name,
     lv: pendingVipPkg.lv,
     pkgName: pendingVipPkg.name,
+    days: pendingVipPkg.days,
     price: pendingVipPkg.price,
     st: 'pending'
   });
@@ -780,10 +830,12 @@ function openCheckin() {
   document.getElementById('checkinGrid').innerHTML = CHECKIN_VALS.map((v, i) => {
     const isDone = i < me.streak;
     const isCur = !doneToday && i === (me.streak % 7);
-    return `<div class="day-cell ${isDone ? 'done' : ''} ${isCur ? 'today' : ''}"><div>Ngày ${i + 1}</div><div>+${v}đ</div><div>${isDone ? '✓' : (isCur ? 'Hôm nay' : '')}</div></div>`;
+    return `<div class="day-cell ${isDone ? 'done' : ''} ${isCur ? 'today' : ''}"><div style="font-size:11px;color:var(--muted);">Ngày ${i + 1}</div><div style="font-size:13px;font-weight:900;margin:2px 0;">+${v}đ</div><div style="font-size:11px;">${isDone ? '✅' : (isCur ? '🎁' : '🔒')}</div></div>`;
   }).join('');
   const b = document.getElementById('checkinBtn');
   b.disabled = doneToday;
+  b.style.background = doneToday ? '#94a3b8' : '';
+  b.style.boxShadow = doneToday ? 'none' : '';
   b.textContent = doneToday ? 'Hôm nay đã điểm danh' : 'Điểm Danh Nhận Quà';
   document.getElementById('checkinModal').classList.remove('hidden');
 }
@@ -929,9 +981,9 @@ function requestWithdraw() {
 
 /* AI ASSISTANT WITH SUGGESTED QUESTIONS */
 const AI_SUGGESTIONS = [
-  'Số dư & lượt làm việc của tôi',
+  'Số dư & thời hạn VIP của tôi',
   'Cách làm nhiệm vụ nhận tiền',
-  'Nâng gói VIP chuyển khoản sao?',
+  'Bảng giá & thời hạn gói VIP',
   'Tài khoản thanh toán Admin',
   'Vòng quay 7 ô & Rương ngày',
   'Cách rút tiền & mời bạn bè'
@@ -941,7 +993,7 @@ function openAi() {
   document.getElementById('aiSuggestBar').innerHTML = AI_SUGGESTIONS.map(s => `<button type="button" class="suggest-chip" onclick="quickAsk('${s}')">${s}</button>`).join('');
   const box = document.getElementById('aiMessages');
   if (!box.innerHTML) {
-    pushAi('ai', `Chào ${me.name}! Tài khoản @${me.u} của bạn hiện đang ở ${VIPS[me.vip].name} (${me.done}/${VIPS[me.vip].limit} lượt hôm nay), số dư ${money(me.bal)} và còn ${me.tickets} vé quay. Chọn câu hỏi gợi ý bên trên hoặc gõ câu hỏi bất kỳ nhé.`);
+    pushAi('ai', `Chào ${me.name}! Tài khoản @${me.u} đang ở ${VIPS[me.vip].name} (${formatVipExpiry(me)}), số dư ${money(me.bal)}. Bấm câu hỏi gợi ý bên trên hoặc gõ câu hỏi bất kỳ nhé.`);
   }
   document.getElementById('aiModal').classList.remove('hidden');
 }
@@ -966,7 +1018,7 @@ function pushAi(who, txt) {
   const d = document.createElement('div');
   d.className = 'msg ' + (who === 'user' ? 'mine' : '');
   d.style.maxWidth = '90%';
-  d.innerHTML = `<div style="font-size:11px;font-weight:800;margin-bottom:3px;color:${who === 'user' ? 'var(--primary)' : 'var(--blue)'};">${who === 'user' ? 'Bạn' : '✨ Trợ lý AI'}</div><div style="white-space:pre-line;">${txt}</div>`;
+  d.innerHTML = `<div style="font-size:11px;font-weight:800;margin-bottom:3px;color:${who === 'user' ? 'var(--primary)' : 'var(--indigo)'};">${who === 'user' ? 'Bạn' : '✨ Trợ lý AI'}</div><div style="white-space:pre-line;">${txt}</div>`;
   box.appendChild(d);
   box.scrollTop = box.scrollHeight;
 }
@@ -978,14 +1030,14 @@ function buildAiAnswer(q) {
   if (s.includes('thanh toán') || s.includes('ngân hàng') || s.includes('stk') || s.includes('vikki')) {
     return `🏦 Tài khoản thanh toán của Admin đang bật:\n• Ngân hàng: ${pay.bank}\n• Chủ tài khoản: ${pay.owner}\n• Số tài khoản: ${pay.account}\nKhi nâng VIP, bạn chuyển khoản theo thông tin này rồi bấm "Tôi Đã Chuyển Khoản" để Admin duyệt.`;
   }
-  if (s.includes('số dư') || s.includes('lượt') || s.includes('tôi')) {
-    return `📊 Thông tin tài khoản @${me.u} (ID #${me.id}):\n• Số dư ví: ${money(me.bal)} (Tổng kiếm: ${money(me.earned)})\n• Hạng hiện tại: ${vip.name} (${me.done}/${vip.limit} lượt hôm nay, thưởng +${vip.bonus}%)\n• Vé quay còn lại: ${me.tickets} vé\n• Hoa hồng Ref đã nhận: ${money(me.refEarned)}`;
+  if (s.includes('số dư') || s.includes('lượt') || s.includes('tôi') || s.includes('hạn')) {
+    return `📊 Thông tin tài khoản @${me.u} (ID #${me.id}):\n• Số dư ví: ${money(me.bal)} (Tổng kiếm: ${money(me.earned)})\n• Hạng hiện tại: ${vip.name} — ${formatVipExpiry(me)}\n• Tiến độ ngày: ${me.done}/${vip.limit} lượt (+${vip.bonus}% thưởng) | Vé quay: ${me.tickets}`;
   }
   if (s.includes('nhiệm vụ') || s.includes('làm') || s.includes('kèo')) {
     return `📌 Cách làm nhiệm vụ trên web:\n• Gói Free (VIP 0) được 10 nhiệm vụ/ngày.\n• Ở tab "Trang chủ", bấm "Làm ngay", mở link lấy mã xác nhận, nhập mã và bấm "Xác Nhận Nhận Tiền".`;
   }
   if (s.includes('vip')) {
-    return `👑 Bảng gói VIP:\n• VIP 0 (Free): 10 lượt/ngày, thưởng chuẩn\n• VIP 1 (50.000đ): 18 lượt/ngày, +5% thưởng\n• VIP 2 (150.000đ): 35 lượt/ngày, +12% thưởng\n• VIP 3 (400.000đ): 70 lượt/ngày, +25% thưởng\nBấm "Chuyển khoản nâng VIP" trong tab Gói VIP để xem số tài khoản nhận tiền.`;
+    return `👑 Bảng gói VIP & thời hạn sử dụng:\n• VIP 0 (Free): 10 lượt/ngày • Vĩnh viễn\n• VIP 1 (50.000đ / 7 ngày): 18 lượt/ngày, +5% thưởng\n• VIP 2 (150.000đ / 30 ngày): 35 lượt/ngày, +12% thưởng\n• VIP 3 (400.000đ / 90 ngày): 70 lượt/ngày, +25% thưởng\nKhi hết hạn ngày, tài khoản tự động quay về VIP 0.`;
   }
   if (s.includes('quay') || s.includes('vé') || s.includes('rương')) {
     return `🎡 Vòng quay 7 ô & Rương ngày:\n• Gồm 888đ, 1.000đ, 2.000đ, 5.000đ, 10.000đ, 30.000đ và Chúc may mắn lần sau.\n• Quay xong sẽ bật màn hình báo kết quả rõ ràng; nhận thêm vé qua Điểm danh 7 ngày hoặc Rương ngày.`;
@@ -993,7 +1045,7 @@ function buildAiAnswer(q) {
   if (s.includes('rút') || s.includes('mời') || s.includes('ref')) {
     return `💸 Rút tiền & Mời bạn bè:\n• Rút tiền: Vào tab "Ví tiền", chọn ngân hàng, nhập STK, tên chủ TK và số tiền (tối thiểu 10.000đ) rồi bấm "Gửi Lệnh Rút".\n• Mời bạn bè: Dùng mã ${me.refCode} nhận 15% hoa hồng tự động.`;
   }
-  return `Tôi đã nắm rõ các mục trên web (Trang chủ 10 nhiệm vụ/ngày cho Free, Vòng quay nổ màn hình kết quả & bảng trúng thưởng chạy, Gói VIP chuyển khoản ngân hàng, Cộng đồng có Bot báo IP/Ref, Ví tiền rút tiền và Quản trị Admin). Bạn cần hỏi phần nào?`;
+  return `Tôi đã nắm rõ các mục trên web (Trang chủ 10 nhiệm vụ/ngày cho Free, Vòng quay nổ màn hình kết quả & bảng trúng thưởng chạy, Gói VIP có thời hạn ngày & chuyển khoản ngân hàng, Cộng đồng có Bot báo IP/Ref, Ví tiền rút tiền và Quản trị Admin). Bạn cần hỏi phần nào?`;
 }
 
 /* ADMIN */
@@ -1014,8 +1066,8 @@ function renderAdmin() {
   document.getElementById('kWd').textContent = db.withdraws.filter(x => x.st === 'pending').length;
   document.getElementById('kVipReq').textContent = db.vipRequests.filter(x => x.st === 'pending').length;
   renderAdminUsers();
-  document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted);">Loại: ${t.cat || 'Vượt link'} • Mã: ${t.code} • Thưởng: ${money(t.reward)} • Đã làm: ${t.done}</div></div><button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
-  document.getElementById('adminWdBody').innerHTML = db.withdraws.map(w => `<div class="task-item"><div><strong>@${w.u} • ${money(w.amt)}</strong><div style="font-size:12px;color:var(--muted);">${w.bank} - ${w.acc} (${w.owner})</div></div><div>${w.st === 'pending' ? `<button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actWd('${w.id}',1)">Duyệt</button> <button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="actWd('${w.id}',0)">Hủy</button>` : `<strong>${w.st === 'ok' ? 'Đã duyệt' : 'Đã hủy'}</strong>`}</div></div>`).join('');
+  document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted);">Loại: ${t.cat || 'Vượt link'} • Mã: ${t.code} • Thưởng: ${money(t.reward)} • Đã làm: ${t.done}</div></div><button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
+  document.getElementById('adminWdBody').innerHTML = db.withdraws.map(w => `<div class="task-item"><div><strong>@${w.u} • ${money(w.amt)}</strong><div style="font-size:12px;color:var(--muted);">${w.bank} - ${w.acc} (${w.owner})</div></div><div>${w.st === 'pending' ? `<button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actWd('${w.id}',1)">Duyệt</button> <button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="actWd('${w.id}',0)">Hủy</button>` : `<strong>${w.st === 'ok' ? 'Đã duyệt' : 'Đã hủy'}</strong>`}</div></div>`).join('');
   renderVipRequests();
   renderPaymentAccounts();
 }
@@ -1029,13 +1081,13 @@ function renderVipRequests() {
   el.innerHTML = db.vipRequests.map(r => `
     <div class="task-item">
       <div>
-        <strong>${r.name} (@${r.u}) • ${r.pkgName}</strong>
-        <div style="font-size:12px;color:var(--muted);">Số tiền CK: <strong style="color:var(--amber);">${money(r.price)}</strong></div>
+        <strong>${r.name} (@${r.u}) • ${r.pkgName} (${r.days || VIPS[r.lv]?.days || 7} ngày)</strong>
+        <div style="font-size:12px;color:var(--muted);">Số tiền CK: <strong style="color:var(--gold);">${money(r.price)}</strong></div>
       </div>
       <div>
         ${r.st === 'pending' ? `
           <button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actVipReq('${r.id}',1)">Duyệt VIP</button>
-          <button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="actVipReq('${r.id}',0)">Từ chối</button>
+          <button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="actVipReq('${r.id}',0)">Từ chối</button>
         ` : `<strong>${r.st === 'ok' ? 'Đã duyệt' : 'Đã từ chối'}</strong>`}
       </div>
     </div>
@@ -1048,12 +1100,15 @@ function actVipReq(id, ok) {
   r.st = ok ? 'ok' : 'no';
   if (ok) {
     const u = db.users.find(x => x.id === r.uid);
+    const days = r.days || VIPS[r.lv]?.days || 7;
     if (u) {
-      u.vip = Math.max(u.vip, r.lv);
-      u.hist.unshift({ t: `Được duyệt nâng ${r.pkgName}`, a: 0 });
+      const baseTime = (u.vip === r.lv && u.vipExpiry && u.vipExpiry > Date.now()) ? u.vipExpiry : Date.now();
+      u.vip = r.lv;
+      u.vipExpiry = baseTime + days * 86400000;
+      u.hist.unshift({ t: `Kích hoạt ${r.pkgName} (${days} ngày)`, a: 0 });
     }
   }
-  save(); renderAdmin(); toast(ok ? 'Đã nâng cấp VIP cho thành viên!' : 'Đã từ chối yêu cầu VIP');
+  save(); renderAdmin(); toast(ok ? 'Đã duyệt & cộng thời hạn VIP!' : 'Đã từ chối yêu cầu VIP');
 }
 
 function renderPaymentAccounts() {
@@ -1065,8 +1120,8 @@ function renderPaymentAccounts() {
         <div style="font-size:12px;color:var(--muted);">Nội dung: ${p.memo || 'NAPVIP'}</div>
       </div>
       <div style="display:flex;gap:6px;flex-shrink:0;">
-        ${!p.active ? `<button class="btn-sm" style="background:var(--primary-light);color:var(--primary);" onclick="setActivePayment('${p.id}')">Kích hoạt</button>` : ''}
-        <button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="deletePaymentAccount('${p.id}')">Xóa</button>
+        ${!p.active ? `<button class="btn-sm" style="background:var(--primary-soft);color:var(--primary);" onclick="setActivePayment('${p.id}')">Kích hoạt</button>` : ''}
+        <button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="deletePaymentAccount('${p.id}')">Xóa</button>
       </div>
     </div>
   `).join('');
@@ -1102,7 +1157,10 @@ function deletePaymentAccount(id) {
 function renderAdminUsers() {
   const q = (document.getElementById('userSearch')?.value || '').toLowerCase();
   const rows = db.users.filter(x => x.name.toLowerCase().includes(q) || x.u.toLowerCase().includes(q) || x.ip.includes(q) || x.refCode.toLowerCase().includes(q));
-  document.getElementById('adminUsersBody').innerHTML = rows.map(x => `<tr><td><strong>${x.name}</strong> ${x.banned ? '<span style="color:var(--red)">[Khóa]</span>' : ''}<div style="font-size:12px;color:var(--muted);">@${x.u} • Ref:${x.refBy}</div></td><td>VIP ${x.vip} / <strong>${x.role.toUpperCase()}</strong></td><td style="font-weight:800;color:var(--primary);">${money(x.bal)}</td><td style="font-size:12px;">${x.ip}</td><td><button class="btn-sm" style="background:var(--blue-light);color:var(--blue);" onclick="openEditUser(${x.id})">Sửa</button></td></tr>`).join('');
+  document.getElementById('adminUsersBody').innerHTML = rows.map(x => {
+    checkVipExpiry(x);
+    return `<tr><td><strong>${x.name}</strong> ${x.banned ? '<span style="color:var(--red)">[Khóa]</span>' : ''}<div style="font-size:12px;color:var(--muted);">@${x.u} • Ref:${x.refBy}</div></td><td>VIP ${x.vip} / <strong>${x.role.toUpperCase()}</strong><div style="font-size:11px;color:var(--muted);">${formatVipExpiry(x)}</div></td><td style="font-weight:800;color:var(--primary);">${money(x.bal)}</td><td style="font-size:12px;">${x.ip}</td><td><button class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="openEditUser(${x.id})">Sửa</button></td></tr>`;
+  }).join('');
 }
 
 function openEditUser(id) {
@@ -1111,10 +1169,11 @@ function openEditUser(id) {
   document.getElementById('editUserBody').innerHTML = `
     <div style="font-size:13px;margin-bottom:12px;background:#f8fafc;padding:12px;border-radius:12px;border:1px solid var(--border);">
       <div><strong>${x.name}</strong> (@${x.u}) • IP: ${x.ip}</div>
-      <div>Số dư: <strong>${money(x.bal)}</strong></div>
+      <div>Số dư: <strong>${money(x.bal)}</strong> • ${formatVipExpiry(x)}</div>
     </div>
     <div class="form-group"><label class="form-label">Quyền hạn</label><select id="euRole" class="form-input"><option value="user" ${x.role==='user'?'selected':''}>Thành viên</option><option value="cskh" ${x.role==='cskh'?'selected':''}>CSKH</option><option value="admin" ${x.role==='admin'?'selected':''}>Admin</option></select></div>
-    <div class="form-group"><label class="form-label">Cấp VIP</label><select id="euVip" class="form-input">${VIPS.map(v => `<option value="${v.lv}" ${x.vip===v.lv?'selected':''}>${v.name}</option>`).join('')}</select></div>
+    <div class="form-group"><label class="form-label">Cấp VIP</label><select id="euVip" class="form-input">${VIPS.map(v => `<option value="${v.lv}" ${x.vip===v.lv?'selected':''}>${v.name} (${v.days ? v.days + ' ngày' : 'Vĩnh viễn'})</option>`).join('')}</select></div>
+    <div class="form-group"><label class="form-label">Thời hạn VIP (Số ngày tính từ hôm nay)</label><input type="number" id="euVipDays" class="form-input" placeholder="VD: 7, 30, 90 (Để trống nếu giữ nguyên)"></div>
     <div class="form-group"><label class="form-label">Cộng / Trừ số dư (VD: 20000 hoặc -10000)</label><input type="number" id="euDelta" class="form-input" placeholder="0"></div>
     <div style="display:flex;gap:8px;"><button class="btn-primary" onclick="saveEditUser(${x.id})">Lưu</button><button class="btn-secondary" style="color:var(--red);" onclick="banUser(${x.id})">${x.banned?'Mở khóa':'Khóa'}</button></div>
   `;
@@ -1124,7 +1183,16 @@ function openEditUser(id) {
 function saveEditUser(id) {
   const x = db.users.find(u => u.id === id);
   x.role = document.getElementById('euRole').value;
-  x.vip = Number(document.getElementById('euVip').value);
+  const newVip = Number(document.getElementById('euVip').value);
+  const customDays = Number(document.getElementById('euVipDays').value || 0);
+  x.vip = newVip;
+  if (newVip === 0) {
+    x.vipExpiry = 0;
+  } else if (customDays > 0) {
+    x.vipExpiry = Date.now() + customDays * 86400000;
+  } else if (!x.vipExpiry || x.vipExpiry < Date.now()) {
+    x.vipExpiry = Date.now() + (VIPS[newVip]?.days || 7) * 86400000;
+  }
   const d = Number(document.getElementById('euDelta').value || 0);
   if (d) { x.bal = Math.max(0, x.bal + d); x.hist.unshift({ t: 'Admin sửa số dư', a: d }); }
   save(); closeModals(); renderAdmin(); toast('Đã lưu thay đổi');

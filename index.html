@@ -91,14 +91,20 @@
   .btn-secondary { padding: 8px 13px; border-radius: 12px; background: #f8fafc; color: var(--text); font-weight: 700; font-size: 13px; border: 1px solid var(--border); }
   .btn-sm { padding: 8px 14px; border-radius: 11px; font-size: 13px; font-weight: 700; }
 
-  /* Header */
+  /* Header + Bell */
   .topbar { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(12px); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 25; }
   .user-avatar-img { width: 44px; height: 44px; border-radius: 14px; object-fit: cover; flex-shrink: 0; border: 1.5px solid var(--border); background: #090d16; }
   .ai-avatar-img { width: 38px; height: 38px; border-radius: 12px; object-fit: cover; flex-shrink: 0; border: 1.5px solid var(--border); background: #090d16; }
   .vip-pill { display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; font-size: 11px; font-weight: 900; padding: 3px 10px; border-radius: 99px; border: 1px solid #f59e0b66; }
+  .bell-btn { position: relative; padding: 8px 11px; border-radius: 12px; background: #f8fafc; border: 1px solid var(--border); font-size: 14px; font-weight: 800; color: var(--text); }
+  .bell-badge { position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 999px; background: var(--red); color: #fff; font-size: 10px; font-weight: 900; display: inline-flex; align-items: center; justify-content: center; }
 
   .section { padding: 15px 15px 0; }
   .card { background: var(--card); border-radius: 22px; padding: 18px; border: 1px solid rgba(226, 232, 240, 0.9); box-shadow: var(--shadow-sm); margin-bottom: 14px; }
+
+  /* Home Notice Banner */
+  .home-notice-banner { background: linear-gradient(135deg, #fffbeb, #eff6ff); border: 1.5px solid #f59e0b; border-radius: 20px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm); }
+  .home-notice-item { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 10px 12px; margin-top: 8px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
 
   /* Luxury Fintech Wallet Card */
   .wallet-hero { background: linear-gradient(135deg, #0f172a 0%, #064e3b 52%, #059669 100%); color: #fff; border-radius: 24px; padding: 20px; margin-bottom: 14px; box-shadow: 0 14px 30px rgba(6, 78, 59, 0.28); position: relative; overflow: hidden; }
@@ -283,7 +289,8 @@
         <div style="font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="uIdRef">ID #1001 • Mã Ref: TF1001</div>
       </div>
     </div>
-    <div style="display:flex;gap:7px;flex-shrink:0;">
+    <div style="display:flex;gap:6px;flex-shrink:0;">
+      <button type="button" class="bell-btn" onclick="openNoticeModal()">🔔<span id="userBellBadge" class="bell-badge hidden">0</span></button>
       <button class="btn-secondary" onclick="openCheckin()">📅 Điểm danh</button>
       <button class="btn-secondary" style="color:var(--red);" onclick="logout()">Thoát</button>
     </div>
@@ -291,6 +298,8 @@
 
   <!-- HOME -->
   <div id="viewHome" class="section">
+    <div id="homeNoticeBanner" class="home-notice-banner hidden"></div>
+
     <div class="wallet-hero">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
         <div>
@@ -640,7 +649,7 @@
     </div>
   </div>
 
-  <!-- ADMIN SET NOTIFICATION -->
+  <!-- ADMIN SET NOTIFICATION + REMOVE -->
   <div id="aViewNotify" class="section hidden">
     <div class="card">
       <strong style="display:block;margin-bottom:12px;font-size:16px;">📢 Set Thông Báo Cho Thành Viên</strong>
@@ -659,6 +668,11 @@
         <textarea id="notifyBodyInp" rows="3" class="form-input" placeholder="Nhập nội dung muốn thông báo..."></textarea>
       </div>
       <button class="btn-primary" onclick="sendAdminNotification()">Gửi Thông Báo Ngay</button>
+
+      <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
+        <strong style="display:block;margin-bottom:8px;font-size:15px;">📋 Danh sách thông báo đã gửi (Có thể gỡ)</strong>
+        <div id="adminSentNoticesList"></div>
+      </div>
     </div>
   </div>
 
@@ -699,6 +713,17 @@
   <img id="aiFabLogoImg" src="https://i.ibb.co/BVJmNDvX/IMG-20261121-002013.png" alt="AI" class="ai-fab-logo">
   <span>Trợ lý AI</span>
 </button>
+
+<!-- USER NOTICE MODAL (BELL) -->
+<div id="noticeModal" class="modal-bg hidden">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <strong style="font-size:16px;">🔔 Thông Báo Của Bạn</strong>
+      <button type="button" class="btn-secondary" onclick="closeNoticeModal()">✕</button>
+    </div>
+    <div id="noticeModalList"></div>
+  </div>
+</div>
 
 <!-- WITHDRAW SUCCESS DETAIL POPUP ON HOME -->
 <div id="withdrawSuccessModal" class="modal-bg hidden">
@@ -801,10 +826,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V15';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V15';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V15';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V15';
+const KEY = 'TF_VIP_PRO_CLOUD_V16';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V16';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V16';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V16';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -850,6 +875,15 @@ const INIT = {
     inviterBonus: 5000,
     inviteeBonus: 2000
   },
+  adminNotices: [
+    {
+      id: 'NTF_WELCOME_01',
+      target: 'ALL',
+      title: 'Chào mừng bạn gia nhập TASKFLOW PRO!',
+      body: 'Hệ thống đã sẵn sàng để bạn làm nhiệm vụ trên Trang chủ, điểm danh nhận vé quay, mở Rương ngày và tham gia Nhóm Cộng Đồng.',
+      createdAt: Date.now()
+    }
+  ],
   leaderboard: buildDefaultLeaderboard(),
   promoCodes: [
     { id: 'PRM1', code: 'TASKFLOW5K', reward: 5000, maxUses: 100, usedBy: [] }
@@ -875,9 +909,9 @@ const INIT = {
   ],
   vipRequests: [],
   users: [
-    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], hist: [] },
-    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], hist: [{ t: 'Làm nhiệm vụ Vượt link', a: 600 }] },
-    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], hist: [] }
+    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] },
+    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [{ t: 'Làm nhiệm vụ Vượt link', a: 600 }] },
+    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] }
   ],
   tasks: [
     { id: '1', title: 'Vượt link lấy mã nhanh (Node A)', cat: 'Vượt link', reward: 600, url: 'https://google.com', code: 'TF1', done: 85 },
@@ -928,6 +962,7 @@ function normalizeDb(raw) {
   if (!merged.refConfig || typeof merged.refConfig !== 'object') merged.refConfig = Object.assign({}, INIT.refConfig);
   merged.refConfig.inviterBonus = Number(merged.refConfig.inviterBonus ?? 5000);
   merged.refConfig.inviteeBonus = Number(merged.refConfig.inviteeBonus ?? 2000);
+  if (!Array.isArray(merged.adminNotices)) merged.adminNotices = [];
   if (!Array.isArray(merged.leaderboard) || !merged.leaderboard.length) merged.leaderboard = buildDefaultLeaderboard();
   if (!Array.isArray(merged.promoCodes)) merged.promoCodes = JSON.parse(JSON.stringify(INIT.promoCodes));
   if (!Array.isArray(merged.minigames)) merged.minigames = JSON.parse(JSON.stringify(INIT.minigames));
@@ -940,6 +975,7 @@ function normalizeDb(raw) {
   if (!Array.isArray(merged.users) || !merged.users.length) merged.users = JSON.parse(JSON.stringify(INIT.users));
   merged.users.forEach(u => {
     if (!Array.isArray(u.seenApprovedWdIds)) u.seenApprovedWdIds = [];
+    if (!Array.isArray(u.dismissedNotifyIds)) u.dismissedNotifyIds = [];
     if (typeof u.deposit50kDone !== 'boolean') u.deposit50kDone = false;
   });
   if (!Array.isArray(merged.tasks)) merged.tasks = JSON.parse(JSON.stringify(INIT.tasks));
@@ -963,6 +999,113 @@ let mode = 'login', me = null, curTask = null, pendingVipPkg = null, pendingAler
 let aiDraggedMoved = false;
 let reactionLockUntil = 0;
 let lastTypingPush = 0;
+
+function getUserActiveNotices() {
+  if (!me) return [];
+  if (!Array.isArray(me.dismissedNotifyIds)) me.dismissedNotifyIds = [];
+  return (db.adminNotices || []).filter(n => {
+    const matchTarget = (n.target === 'ALL' || n.target === me.u);
+    const notDismissed = !me.dismissedNotifyIds.includes(n.id);
+    return matchTarget && notDismissed;
+  });
+}
+
+function dismissUserNotice(noticeId) {
+  if (!me) return;
+  if (!Array.isArray(me.dismissedNotifyIds)) me.dismissedNotifyIds = [];
+  if (!me.dismissedNotifyIds.includes(noticeId)) {
+    me.dismissedNotifyIds.push(noticeId);
+    save();
+    renderUserNotices();
+    toast('Đã gỡ thông báo');
+  }
+}
+
+function adminRemoveNotice(noticeId) {
+  if (!me || me.role !== 'admin') return;
+  db.adminNotices = (db.adminNotices || []).filter(n => n.id !== noticeId);
+  save();
+  renderAdminSentNotices();
+  toast('Đã gỡ thông báo khỏi hệ thống');
+}
+
+function renderUserNotices() {
+  if (!me || me.role === 'admin') return;
+  const activeList = getUserActiveNotices();
+  const badge = document.getElementById('userBellBadge');
+  if (badge) {
+    badge.textContent = String(activeList.length);
+    badge.classList.toggle('hidden', activeList.length === 0);
+  }
+
+  const banner = document.getElementById('homeNoticeBanner');
+  if (banner) {
+    if (!activeList.length) {
+      banner.classList.add('hidden');
+      banner.innerHTML = '';
+    } else {
+      banner.classList.remove('hidden');
+      banner.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <strong style="font-size:13px;color:#92400e;">📢 THÔNG BÁO MỚI (${activeList.length})</strong>
+          <span style="font-size:11px;color:var(--muted);">Hiển thị tại Trang chủ</span>
+        </div>
+        ${activeList.map(n => `
+          <div class="home-notice-item">
+            <div style="min-width:0;">
+              <div style="font-size:13px;font-weight:800;color:var(--text);">${n.title}</div>
+              <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:2px;">${n.body}</div>
+            </div>
+            <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);flex-shrink:0;" onclick="dismissUserNotice('${n.id}')">Gỡ</button>
+          </div>
+        `).join('')}
+      `;
+    }
+  }
+
+  const modalList = document.getElementById('noticeModalList');
+  if (modalList) {
+    modalList.innerHTML = activeList.length
+      ? activeList.map(n => `
+          <div class="home-notice-item">
+            <div style="min-width:0;">
+              <div style="font-size:13px;font-weight:800;color:var(--text);">${n.title}</div>
+              <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:2px;">${n.body}</div>
+            </div>
+            <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);flex-shrink:0;" onclick="dismissUserNotice('${n.id}')">Gỡ</button>
+          </div>
+        `).join('')
+      : '<div style="font-size:13px;color:var(--muted);padding:12px 0;text-align:center;">Không có thông báo mới nào.</div>';
+  }
+}
+
+function renderAdminSentNotices() {
+  const el = document.getElementById('adminSentNoticesList');
+  if (!el) return;
+  const list = db.adminNotices || [];
+  if (!list.length) {
+    el.innerHTML = '<div style="font-size:13px;color:var(--muted);">Chưa có thông báo nào đang hoạt động.</div>';
+    return;
+  }
+  el.innerHTML = list.map(n => `
+    <div class="task-item">
+      <div style="min-width:0;">
+        <strong>${n.title}</strong> <span class="badge" style="background:#eef2ff;color:#4f46e5;">${n.target === 'ALL' ? 'Tất cả' : '@' + n.target}</span>
+        <div style="font-size:12px;color:var(--muted);white-space:pre-line;margin-top:3px;">${n.body}</div>
+      </div>
+      <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);flex-shrink:0;" onclick="adminRemoveNotice('${n.id}')">Gỡ thông báo</button>
+    </div>
+  `).join('');
+}
+
+function openNoticeModal() {
+  renderUserNotices();
+  document.getElementById('noticeModal')?.classList.remove('hidden');
+}
+
+function closeNoticeModal() {
+  document.getElementById('noticeModal')?.classList.add('hidden');
+}
 
 function getReadCountsMap() {
   try {
@@ -1342,7 +1485,7 @@ function toast(m) {
   clearTimeout(el._t); el._t = setTimeout(() => el.classList.add('hidden'), 2800);
 }
 function closeModals() {
-  ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal', 'spinResultModal', 'withdrawSuccessModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal', 'spinResultModal', 'withdrawSuccessModal', 'noticeModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
 }
 
 function getApprovedWithdrawCount(user) {
@@ -1476,7 +1619,7 @@ async function submitAuth(e) {
       bal: startBal, earned: startBal, refEarned: grantRef ? inviteeReward : 0,
       refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có',
       ip: clientIp, tickets: 1, done: 0, lastCi: '', streak: 0, banned: false,
-      deposit50kDone: false, seenApprovedWdIds: [],
+      deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [],
       hist: grantRef
         ? [{ t: 'Tặng tân thủ', a: 2000 }, { t: `Thưởng nhập mã Ref ${inv.refCode}`, a: inviteeReward }]
         : [{ t: 'Tặng tân thủ', a: 2000 }]
@@ -1781,6 +1924,7 @@ function renderActiveChat() {
 function renderUser() {
   if (!me) return;
   checkVipExpiry(me);
+  renderUserNotices();
   const vip = VIPS[me.vip] || VIPS[0];
   document.getElementById('uName').textContent = me.name;
   document.getElementById('uVipPill').textContent = vip.name.split(' ')[0] + ' ' + vip.name.split(' ')[1];
@@ -2290,6 +2434,7 @@ function renderAdmin() {
 
   renderAdminUsers();
   renderAdminPromoAndMinigame();
+  renderAdminSentNotices();
   document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted);">Loại: ${t.cat || 'Vượt link'} • Mã: ${t.code} • Thưởng: ${money(t.reward)} • Đã làm: ${t.done}</div></div><button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
   document.getElementById('adminWdBody').innerHTML = db.withdraws.map(w => `
     <div class="task-item" style="flex-wrap:wrap;">
@@ -2314,6 +2459,15 @@ function sendAdminNotification() {
   const body = (document.getElementById('notifyBodyInp')?.value || '').trim();
   if (!body) return toast('Nhập nội dung thông báo');
 
+  if (!Array.isArray(db.adminNotices)) db.adminNotices = [];
+  db.adminNotices.unshift({
+    id: 'NTF_' + Date.now() + '_' + Math.floor(Math.random() * 999),
+    target,
+    title,
+    body,
+    createdAt: Date.now()
+  });
+
   const recipients = target === 'ALL'
     ? db.users.filter(u => u.role !== 'admin')
     : db.users.filter(u => u.u === target);
@@ -2336,6 +2490,7 @@ function sendAdminNotification() {
   document.getElementById('notifyTitleInp').value = '';
   document.getElementById('notifyBodyInp').value = '';
   save();
+  renderAdmin();
   toast(`Đã gửi thông báo tới ${recipients.length} thành viên!`);
 }
 

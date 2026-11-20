@@ -136,12 +136,14 @@
   @keyframes runMarquee { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
   .marquee-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
 
-  /* Chat & CSKH / Group Links */
+  /* Chat & CSKH / Group Links + Unread Counter Badge */
   .cskh-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
   .cskh-link-btn { display: flex; align-items: center; justify-content: center; gap: 5px; padding: 9px 8px; border-radius: 12px; font-size: 12px; font-weight: 800; text-decoration: none; border: 1px solid var(--border); }
-  .channel-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; }
-  .channel-btn { padding: 8px 14px; border-radius: 99px; background: #f1f5f9; border: 1px solid var(--border); color: var(--muted); font-size: 13px; font-weight: 700; white-space: nowrap; }
+  .channel-row { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 12px; }
+  .channel-btn { position: relative; display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 99px; background: #f1f5f9; border: 1px solid var(--border); color: var(--muted); font-size: 13px; font-weight: 700; white-space: nowrap; }
   .channel-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .ch-count-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: #e11d48; color: #fff; font-size: 10px; font-weight: 900; line-height: 1; }
+  .channel-btn.active .ch-count-badge { background: #fbbf24; color: #0f172a; }
   .chat-box { height: 340px; overflow-y: auto; background: #e9eff6; border: 1px solid var(--border); border-radius: 18px; padding: 13px; display: flex; flex-direction: column; gap: 11px; }
   .msg { max-width: 86%; padding: 11px 14px; border-radius: 16px; background: #fff; font-size: 14px; line-height: 1.5; align-self: flex-start; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05); }
   .msg.mine { background: #dcfce7; align-self: flex-end; border-bottom-right-radius: 4px; }
@@ -164,14 +166,15 @@
 
   .rule-alert-box { background: var(--gold-soft); border: 1px solid #fde68a; border-radius: 14px; padding: 11px 13px; font-size: 12px; color: #78350f; margin-bottom: 12px; }
 
-  /* Bottom Nav & AI */
-  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(5, 1fr); padding: 8px 6px 11px; z-index: 30; box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.06); }
-  .nav-btn { background: transparent; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: var(--muted); padding: 4px 0; border-radius: 12px; }
-  .nav-btn span:first-child { font-size: 18px; line-height: 1.1; }
+  /* Bottom Nav & Draggable AI */
+  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(6, 1fr); padding: 8px 4px 11px; z-index: 30; box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.06); }
+  .nav-btn { background: transparent; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; color: var(--muted); padding: 4px 0; border-radius: 12px; }
+  .nav-btn span:first-child { font-size: 17px; line-height: 1.1; }
   .nav-btn.active { color: var(--primary); background: var(--primary-soft); }
 
-  .ai-fab { position: fixed; bottom: 86px; right: 16px; z-index: 35; background: linear-gradient(135deg, #4f46e5, #059669); color: #fff; padding: 9px 14px 9px 10px; border-radius: 99px; font-weight: 800; font-size: 13px; box-shadow: 0 8px 22px rgba(79, 70, 229, 0.35); border: 2px solid #fff; display: inline-flex; align-items: center; gap: 7px; }
-  .ai-fab-logo { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.7); background: #090d16; }
+  .ai-fab { position: fixed; bottom: 86px; right: 16px; z-index: 45; background: linear-gradient(135deg, #4f46e5, #059669); color: #fff; padding: 9px 14px 9px 10px; border-radius: 99px; font-weight: 800; font-size: 13px; box-shadow: 0 8px 22px rgba(79, 70, 229, 0.35); border: 2px solid #fff; display: inline-flex; align-items: center; gap: 7px; touch-action: none; user-select: none; }
+  .ai-fab.dragging { transform: scale(1.04); box-shadow: 0 14px 30px rgba(15, 23, 42, 0.35); transition: none; }
+  .ai-fab-logo { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.7); background: #090d16; pointer-events: none; }
   .suggest-row { display: flex; gap: 7px; overflow-x: auto; padding: 10px 0; }
   .suggest-chip { background: var(--indigo-soft); color: var(--indigo); border: 1px solid #c7d2fe; padding: 7px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; white-space: nowrap; }
 
@@ -189,7 +192,7 @@
   .admin-tab { padding: 8px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; background: #f1f5f9; color: #475569; white-space: nowrap; }
   .admin-tab.active { background: #0f172a; color: #fff; }
   .grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  @media (min-width: 768px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } .ai-fab { bottom: 24px; right: 24px; } }
+  @media (min-width: 768px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
   th { background: #f8fafc; color: #475569; }
@@ -294,6 +297,16 @@
       </div>
     </div>
 
+    <!-- MÃ GIẢM GIÁ & MINIGAME NHANH -->
+    <div class="card">
+      <strong style="display:block;margin-bottom:8px;font-size:15px;">🎟️ Nhập Mã Giảm Giá / Quà Tặng</strong>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="redeemPromoInput" class="form-input" placeholder="Nhập mã ưu đãi...">
+        <button class="btn-primary" style="width:auto;padding:0 16px;" onclick="redeemPromoCode()">Nhận</button>
+      </div>
+      <div id="minigameUserBox" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);"></div>
+    </div>
+
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
       <strong style="font-size:16px;">Danh sách nhiệm vụ</strong>
       <button class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="rotateTaskNodes()">🔄 Đổi kèo</button>
@@ -345,6 +358,29 @@
     <div id="vipList"></div>
   </div>
 
+  <!-- REFERRAL DEDICATED TAB -->
+  <div id="viewRef" class="section hidden">
+    <div class="card">
+      <strong style="font-size:16px;display:block;margin-bottom:8px;">🤝 Tuyển Ref &amp; Nhận Hoa Hồng</strong>
+      <div id="refRewardPolicyBox" class="rule-alert-box"></div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:6px;">Mã giới thiệu của bạn:</div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;">
+        <input type="text" id="refMyCodeBox" class="form-input" readonly style="font-weight:900;color:var(--indigo);">
+        <button class="btn-primary" style="width:auto;padding:0 16px;" onclick="copyRefCodeOnly()">Copy mã</button>
+      </div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:6px;">Link mời đăng ký:</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" id="refMyLinkBox" class="form-input" readonly>
+        <button class="btn-secondary" onclick="copyRef()">Copy link</button>
+      </div>
+    </div>
+    <div class="card">
+      <strong style="font-size:15px;display:block;margin-bottom:8px;">📊 Thống kê tuyển Ref</strong>
+      <div style="font-size:13px;">Tổng tiền hoa hồng Ref đã nhận: <strong id="refTabEarned" style="color:var(--primary);">0đ</strong></div>
+      <div style="font-size:13px;margin-top:4px;">Người giới thiệu của bạn: <strong id="refTabInviter">Không có</strong></div>
+    </div>
+  </div>
+
   <!-- USER CHAT & CSKH & GROUP -->
   <div id="viewChat" class="section hidden">
     <div class="card">
@@ -379,7 +415,20 @@
       <div class="form-group">
         <label class="form-label">Ngân hàng</label>
         <select id="wdBank" class="form-input">
-          <option>MB Bank</option><option>Vietcombank</option><option>Techcombank</option><option>BIDV</option><option>MoMo</option>
+          <option>MB Bank</option>
+          <option>Vietcombank</option>
+          <option>Techcombank</option>
+          <option>BIDV</option>
+          <option>VietinBank</option>
+          <option>ACB</option>
+          <option>VPBank</option>
+          <option>TPBank</option>
+          <option>Sacombank</option>
+          <option>VIB</option>
+          <option>HDBank</option>
+          <option>SHB</option>
+          <option>Vikki Digital Bank</option>
+          <option>MoMo</option>
         </select>
       </div>
       <div class="form-group">
@@ -406,7 +455,8 @@
   <nav class="bottom-nav">
     <button class="nav-btn active" id="nBtnHome" onclick="switchUserView('home')"><span>🏠</span><span>Trang chủ</span></button>
     <button class="nav-btn" id="nBtnWheel" onclick="switchUserView('wheel')"><span>🎡</span><span>Vòng quay</span></button>
-    <button class="nav-btn" id="nBtnVip" onclick="switchUserView('vip')"><span>👑</span><span>Gói VIP</span></button>
+    <button class="nav-btn" id="nBtnVip" onclick="switchUserView('vip')"><span>👑</span><span>VIP</span></button>
+    <button class="nav-btn" id="nBtnRef" onclick="switchUserView('ref')"><span>🤝</span><span>Tuyển Ref</span></button>
     <button class="nav-btn" id="nBtnChat" onclick="switchUserView('chat')"><span>💬</span><span>Cộng đồng</span></button>
     <button class="nav-btn" id="nBtnWallet" onclick="switchUserView('wallet')"><span>💳</span><span>Ví tiền</span></button>
   </nav>
@@ -435,7 +485,8 @@
     <button class="admin-tab" id="aBtnVipReq" onclick="switchAdminView('vipReq')">👑 Duyệt VIP</button>
     <button class="admin-tab" id="aBtnPay" onclick="switchAdminView('pay')">🏦 Tài khoản nhận</button>
     <button class="admin-tab" id="aBtnChat" onclick="switchAdminView('chat')">💬 Nhóm &amp; Chat</button>
-    <button class="admin-tab" id="aBtnLinks" onclick="switchAdminView('links')">🔗 Link CSKH &amp; Nhóm</button>
+    <button class="admin-tab" id="aBtnPromo" onclick="switchAdminView('promo')">🎟️ Mã &amp; Minigame</button>
+    <button class="admin-tab" id="aBtnLinks" onclick="switchAdminView('links')">🔗 Link &amp; Thưởng Ref</button>
   </div>
 
   <div id="aViewDash" class="section">
@@ -522,28 +573,68 @@
     </div>
   </div>
 
+  <!-- ADMIN PROMO CODES & MINIGAME -->
+  <div id="aViewPromo" class="section hidden">
+    <div class="card">
+      <strong style="display:block;margin-bottom:10px;font-size:16px;">🎟️ Tạo Mã Giảm Giá / Mã Quà Tặng</strong>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+        <input type="text" id="promoCodeInp" class="form-input" placeholder="Mã (VD: TF5000)">
+        <input type="number" id="promoValInp" class="form-input" placeholder="Tiền thưởng (VD: 5000)">
+        <input type="number" id="promoMaxInp" class="form-input" placeholder="Số lượt dùng (VD: 50)">
+      </div>
+      <button class="btn-primary" style="margin-top:10px;" onclick="createPromoCode()">Tạo Mã Giảm Giá</button>
+      <div id="adminPromoList" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="card">
+      <strong style="display:block;margin-bottom:10px;font-size:16px;">🎮 Tạo Minigame Đố Vui Nhận Thưởng</strong>
+      <div class="form-group">
+        <label class="form-label">Câu hỏi minigame</label>
+        <input type="text" id="mgQuestionInp" class="form-input" placeholder="VD: 2 + 2 bằng mấy?">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <input type="text" id="mgAnswerInp" class="form-input" placeholder="Đáp án đúng (VD: 4)">
+        <input type="number" id="mgRewardInp" class="form-input" placeholder="Tiền thưởng (VD: 2000)">
+      </div>
+      <button class="btn-primary" style="margin-top:10px;" onclick="createMinigame()">Lưu &amp; Kích Hoạt Minigame</button>
+      <div id="adminMinigameList" style="margin-top:12px;"></div>
+    </div>
+  </div>
+
   <div id="aViewLinks" class="section hidden">
     <div class="card">
+      <strong style="display:block;margin-bottom:12px;font-size:16px;">🤝 Tùy Chỉnh Thưởng Tuyển Ref (Mặc định: 5.000đ / 2.000đ)</strong>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+        <div>
+          <label class="form-label">Người tuyển nhận (VNĐ)</label>
+          <input type="number" id="cfgRefInviterBonus" class="form-input" placeholder="5000">
+        </div>
+        <div>
+          <label class="form-label">Người được mời nhận (VNĐ)</label>
+          <input type="number" id="cfgRefInviteeBonus" class="form-input" placeholder="2000">
+        </div>
+      </div>
+
       <strong style="display:block;margin-bottom:12px;font-size:16px;">🔗 Cấu hình Link Zalo CSKH, Telegram CSKH &amp; Nhóm Trò Chuyện</strong>
       <div class="form-group">
-        <label class="form-label">Link Zalo CSKH (VD: https://zalo.me/0898851000 hoặc zalo.me/0898851000)</label>
+        <label class="form-label">Link Zalo CSKH</label>
         <input type="text" id="cfgZaloLink" class="form-input" placeholder="https://zalo.me/...">
       </div>
       <div class="form-group">
-        <label class="form-label">Link Telegram CSKH (VD: https://t.me/Vietanhenter hoặc @Vietanhenter)</label>
+        <label class="form-label">Link Telegram CSKH</label>
         <input type="text" id="cfgTgLink" class="form-input" placeholder="https://t.me/...">
       </div>
       <div class="form-group">
-        <label class="form-label">Link Nhóm Trò Chuyện Cộng Đồng (Zalo / Telegram Group)</label>
-        <input type="text" id="cfgGroupLink" class="form-input" placeholder="https://t.me/... hoặc https://zalo.me/g/...">
+        <label class="form-label">Link Nhóm Trò Chuyện Cộng Đồng</label>
+        <input type="text" id="cfgGroupLink" class="form-input" placeholder="https://t.me/...">
       </div>
-      <button class="btn-primary" onclick="saveSupportLinks()">Lưu Liên Kết CSKH &amp; Nhóm</button>
+      <button class="btn-primary" onclick="saveSupportLinks()">Lưu Thưởng Ref &amp; Liên Kết</button>
     </div>
   </div>
 </div>
 
-<!-- AI FLOAT BUTTON -->
-<button id="aiFloatBtn" class="ai-fab hidden" onclick="openAi()">
+<!-- DRAGGABLE AI FLOAT BUTTON -->
+<button id="aiFloatBtn" class="ai-fab hidden" onclick="handleAiFabClick()">
   <img id="aiFabLogoImg" src="https://i.ibb.co/BVJmNDvX/IMG-20261121-002013.png" alt="AI" class="ai-fab-logo">
   <span>Trợ lý AI</span>
 </button>
@@ -604,7 +695,7 @@
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">Mở link bên dưới để hoàn thành và lấy mã xác nhận (Mã mẫu: <strong id="tmHint"></strong>). Nhận ngay <strong id="tmReward" style="color:var(--primary);"></strong>.</p>
-    <a id="tmLink" href="#" target="_blank" style="display:inline-block;margin-bottom:12px;color:var(--indigo);font-weight:800;font-size:13px;">Mở link nhiệm vụ ↗</a>
+    <a id="tmLink" href="#" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-bottom:12px;color:var(--indigo);font-weight:800;font-size:13px;">Mở link nhiệm vụ ↗</a>
     <input type="text" id="tmCodeInput" class="form-input" placeholder="Nhập mã xác nhận..." style="margin-bottom:12px;">
     <button class="btn-primary" onclick="confirmTask()">Xác Nhận Nhận Tiền</button>
   </div>
@@ -662,7 +753,9 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V10';
+const KEY = 'TF_VIP_PRO_CLOUD_V12';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V12';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V12';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -686,6 +779,16 @@ const VIPS = [
 const CHECKIN_VALS = [500, 800, 1000, 1200, 1500, 2000, 5000];
 
 const INIT = {
+  refConfig: {
+    inviterBonus: 5000,
+    inviteeBonus: 2000
+  },
+  promoCodes: [
+    { id: 'PRM1', code: 'TASKFLOW5K', reward: 5000, maxUses: 100, usedBy: [] }
+  ],
+  minigames: [
+    { id: 'MG1', question: 'Nền tảng này tên là gì? (Gõ: TASKFLOW PRO)', answer: 'TASKFLOW PRO', reward: 2000, claimedBy: [] }
+  ],
   supportLinks: {
     zalo: 'https://zalo.me/',
     telegram: 'https://t.me/',
@@ -754,6 +857,11 @@ applyBrandLogo();
 function normalizeDb(raw) {
   const base = raw && typeof raw === 'object' ? raw : {};
   const merged = Object.assign({}, INIT, base);
+  if (!merged.refConfig || typeof merged.refConfig !== 'object') merged.refConfig = Object.assign({}, INIT.refConfig);
+  merged.refConfig.inviterBonus = Number(merged.refConfig.inviterBonus ?? 5000);
+  merged.refConfig.inviteeBonus = Number(merged.refConfig.inviteeBonus ?? 2000);
+  if (!Array.isArray(merged.promoCodes)) merged.promoCodes = JSON.parse(JSON.stringify(INIT.promoCodes));
+  if (!Array.isArray(merged.minigames)) merged.minigames = JSON.parse(JSON.stringify(INIT.minigames));
   if (!merged.supportLinks || typeof merged.supportLinks !== 'object') merged.supportLinks = Object.assign({}, INIT.supportLinks);
   merged.supportLinks.zalo = sanitizeUrl(merged.supportLinks.zalo, 'https://zalo.me/');
   merged.supportLinks.telegram = sanitizeUrl(merged.supportLinks.telegram, 'https://t.me/');
@@ -778,6 +886,92 @@ function normalizeDb(raw) {
 
 let db = normalizeDb(JSON.parse(localStorage.getItem(KEY) || 'null'));
 let mode = 'login', me = null, curTask = null, pendingVipPkg = null, pendingAlertWd = null, newPayQrData = '', curCh = 'congdong', curTaskCat = 'all', deg = 0, spinning = false, isSyncing = false, realClientIp = '';
+let aiDraggedMoved = false;
+
+/* DRAGGABLE AI BUTTON */
+(function initDraggableAiFab() {
+  const btn = document.getElementById('aiFloatBtn');
+  if (!btn) return;
+  try {
+    const saved = JSON.parse(localStorage.getItem(AI_POS_KEY) || 'null');
+    if (saved && typeof saved.left === 'number' && typeof saved.top === 'number') {
+      btn.style.left = saved.left + 'px';
+      btn.style.top = saved.top + 'px';
+      btn.style.right = 'auto';
+      btn.style.bottom = 'auto';
+    }
+  } catch (e) {}
+
+  let startX = 0, startY = 0, origLeft = 0, origTop = 0, activeDrag = false;
+
+  function onStart(clientX, clientY) {
+    const rect = btn.getBoundingClientRect();
+    startX = clientX;
+    startY = clientY;
+    origLeft = rect.left;
+    origTop = rect.top;
+    aiDraggedMoved = false;
+    activeDrag = true;
+    btn.classList.add('dragging');
+    btn.style.left = origLeft + 'px';
+    btn.style.top = origTop + 'px';
+    btn.style.right = 'auto';
+    btn.style.bottom = 'auto';
+  }
+
+  function onMove(clientX, clientY) {
+    if (!activeDrag) return;
+    const dx = clientX - startX;
+    const dy = clientY - startY;
+    if (Math.abs(dx) > 6 || Math.abs(dy) > 6) aiDraggedMoved = true;
+    const rect = btn.getBoundingClientRect();
+    const maxL = Math.max(8, window.innerWidth - rect.width - 8);
+    const maxT = Math.max(8, window.innerHeight - rect.height - 8);
+    const nextL = Math.min(maxL, Math.max(8, origLeft + dx));
+    const nextT = Math.min(maxT, Math.max(8, origTop + dy));
+    btn.style.left = nextL + 'px';
+    btn.style.top = nextT + 'px';
+  }
+
+  function onEnd() {
+    if (!activeDrag) return;
+    activeDrag = false;
+    btn.classList.remove('dragging');
+    if (aiDraggedMoved) {
+      const rect = btn.getBoundingClientRect();
+      const snapLeft = (rect.left + rect.width / 2 < window.innerWidth / 2) ? 12 : Math.max(12, window.innerWidth - rect.width - 12);
+      const clampedTop = Math.min(Math.max(12, rect.top), Math.max(12, window.innerHeight - rect.height - 16));
+      btn.style.left = snapLeft + 'px';
+      btn.style.top = clampedTop + 'px';
+      localStorage.setItem(AI_POS_KEY, JSON.stringify({ left: snapLeft, top: clampedTop }));
+      setTimeout(() => { aiDraggedMoved = false; }, 120);
+    }
+  }
+
+  btn.addEventListener('touchstart', (e) => {
+    if (!e.touches.length) return;
+    onStart(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
+  window.addEventListener('touchmove', (e) => {
+    if (!activeDrag || !e.touches.length) return;
+    onMove(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
+  window.addEventListener('touchend', onEnd);
+
+  btn.addEventListener('mousedown', (e) => {
+    onStart(e.clientX, e.clientY);
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!activeDrag) return;
+    onMove(e.clientX, e.clientY);
+  });
+  window.addEventListener('mouseup', onEnd);
+})();
+
+function handleAiFabClick() {
+  if (aiDraggedMoved) return;
+  openAi();
+}
 
 /* INTRO SPLASH CONTROL */
 function dismissIntro() {
@@ -786,7 +980,7 @@ function dismissIntro() {
   el.classList.add('fade-out');
   setTimeout(() => el.classList.add('hidden'), 460);
 }
-setTimeout(dismissIntro, 2200);
+setTimeout(dismissIntro, 2000);
 
 /* TELEGRAM BOT NOTIFICATION */
 function notifyTelegram(text) {
@@ -812,7 +1006,7 @@ function testTelegramBot() {
   toast('Đã gửi tin nhắn test tới Telegram Chat ID ' + TG_CHAT_ID);
 }
 
-/* CLOUD SYNC (SUPABASE) - SAFE SESSION WITHOUT FORCED LOGOUT */
+/* CLOUD SYNC (SUPABASE) - PERSISTENT SESSION ACROSS RELOAD */
 async function pullFromCloud(silent = true) {
   if (!CLOUD_ENABLED || isSyncing) {
     if (!CLOUD_ENABLED) updateCloudBadge('Chế độ nội bộ', false);
@@ -922,8 +1116,19 @@ setInterval(async () => {
   }
 }, 6000);
 
-detectRealIp();
-pullFromCloud(true);
+(async function bootstrapSession() {
+  detectRealIp();
+  await pullFromCloud(true);
+  const savedUser = localStorage.getItem(SESSION_USER_KEY);
+  if (savedUser) {
+    const found = db.users.find(x => x.u.toLowerCase() === savedUser.toLowerCase() && !x.banned);
+    if (found) {
+      me = found;
+      checkVipExpiry(me);
+      startSession(true);
+    }
+  }
+})();
 
 function money(n) { return Number(n || 0).toLocaleString('vi-VN') + 'đ'; }
 function today() { return new Date().toISOString().slice(0, 10); }
@@ -1038,23 +1243,43 @@ async function submitAuth(e) {
     found.ip = clientIp;
     checkVipExpiry(found);
     me = found;
+    localStorage.setItem(SESSION_USER_KEY, me.u);
     if (me.role !== 'admin') botAnnounce(me, 'Đăng nhập');
-    save(); startSession();
+    save(); startSession(false);
   } else {
     if (db.users.some(x => x.u.toLowerCase() === u.toLowerCase())) return toast('Tài khoản đã tồn tại');
     const name = document.getElementById('regName').value.trim() || u;
     const refIn = document.getElementById('regRef').value.trim().toUpperCase();
     const inv = db.users.find(x => x.refCode === refIn);
+    const inviterReward = Number(db.refConfig?.inviterBonus ?? 5000);
+    const inviteeReward = Number(db.refConfig?.inviteeBonus ?? 2000);
+    const startBal = 2000 + (inv ? inviteeReward : 0);
     const id = 1000 + db.users.length;
-    const nu = { id, u, p, name, role: 'user', vip: 0, vipExpiry: 0, bal: 2000, earned: 2000, refEarned: 0, refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có', ip: clientIp, tickets: 1, done: 0, lastCi: '', streak: 0, banned: false, deposit50kDone: false, seenApprovedWdIds: [], hist: [{ t: 'Tặng tân thủ', a: 2000 }] };
+    const nu = {
+      id, u, p, name, role: 'user', vip: 0, vipExpiry: 0,
+      bal: startBal, earned: startBal, refEarned: inv ? inviteeReward : 0,
+      refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có',
+      ip: clientIp, tickets: 1, done: 0, lastCi: '', streak: 0, banned: false,
+      deposit50kDone: false, seenApprovedWdIds: [],
+      hist: inv
+        ? [{ t: 'Tặng tân thủ', a: 2000 }, { t: `Thưởng nhập mã Ref ${inv.refCode}`, a: inviteeReward }]
+        : [{ t: 'Tặng tân thủ', a: 2000 }]
+    };
+    if (inv && inviterReward > 0) {
+      inv.bal += inviterReward;
+      inv.earned += inviterReward;
+      inv.refEarned += inviterReward;
+      inv.hist.unshift({ t: `Thưởng tuyển Ref từ @${nu.u}`, a: inviterReward });
+    }
     db.users.push(nu); me = nu;
+    localStorage.setItem(SESSION_USER_KEY, me.u);
     botAnnounce(nu, 'Thành viên mới');
     notifyTelegram(`🆕 KHÁCH HÀNG ĐĂNG KÝ MỚI\n• Họ tên: ${nu.name}\n• Tài khoản: @${nu.u} (ID #${nu.id})\n• Mã Ref mời: ${nu.refCode}\n• Người giới thiệu: ${nu.refBy}\n• IP: ${nu.ip}`);
-    save(); startSession();
+    save(); startSession(false);
   }
 }
 
-function startSession() {
+function startSession(isRestore = false) {
   if (!me) return;
   dismissIntro();
   document.getElementById('authScreen').classList.add('hidden');
@@ -1068,12 +1293,13 @@ function startSession() {
     document.getElementById('userApp').classList.remove('hidden');
     drawWheel(); renderUser();
     checkApprovedWithdrawPopup();
-    if (me.lastCi !== today() && !pendingAlertWd) setTimeout(openCheckin, 350);
+    if (!isRestore && me.lastCi !== today() && !pendingAlertWd) setTimeout(openCheckin, 350);
   }
 }
 
 function logout() {
   me = null;
+  localStorage.removeItem(SESSION_USER_KEY);
   document.getElementById('userApp').classList.add('hidden');
   document.getElementById('adminApp').classList.add('hidden');
   document.getElementById('aiFloatBtn').classList.add('hidden');
@@ -1082,7 +1308,7 @@ function logout() {
 }
 
 function switchUserView(v) {
-  ['Home', 'Wheel', 'Vip', 'Chat', 'Wallet'].forEach(k => {
+  ['Home', 'Wheel', 'Vip', 'Ref', 'Chat', 'Wallet'].forEach(k => {
     document.getElementById('view' + k).classList.add('hidden');
     document.getElementById('nBtn' + k).classList.remove('active');
   });
@@ -1117,6 +1343,63 @@ function focusCommunityGroup() {
   toast('Đang ở Nhóm Cộng Đồng (Admin/CSKH & Khách)');
 }
 
+function redeemPromoCode() {
+  const code = (document.getElementById('redeemPromoInput')?.value || '').trim().toUpperCase();
+  if (!code) return toast('Nhập mã giảm giá');
+  const p = (db.promoCodes || []).find(x => x.code.toUpperCase() === code);
+  if (!p) return toast('Mã giảm giá không tồn tại');
+  const usedBy = Array.isArray(p.usedBy) ? p.usedBy : [];
+  if (usedBy.includes(me.u)) return toast('Bạn đã sử dụng mã này rồi');
+  if (usedBy.length >= Number(p.maxUses || 1)) return toast('Mã giảm giá đã hết lượt sử dụng');
+  usedBy.push(me.u);
+  p.usedBy = usedBy;
+  const reward = Number(p.reward || 0);
+  me.bal += reward;
+  me.earned += reward;
+  me.hist.unshift({ t: `Nhập mã ưu đãi ${p.code}`, a: reward });
+  document.getElementById('redeemPromoInput').value = '';
+  save();
+  renderUser();
+  toast(`Nhận +${money(reward)} từ mã ${p.code}!`);
+}
+
+function renderUserMinigames() {
+  const box = document.getElementById('minigameUserBox');
+  if (!box) return;
+  const list = db.minigames || [];
+  if (!list.length) {
+    box.innerHTML = '';
+    return;
+  }
+  const mg = list[0];
+  const claimed = Array.isArray(mg.claimedBy) && mg.claimedBy.includes(me.u);
+  box.innerHTML = `
+    <div style="font-size:13px;font-weight:800;color:var(--indigo);margin-bottom:4px;">🎮 Minigame: ${mg.question}</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Phần thưởng: <strong style="color:var(--primary);">${money(mg.reward)}</strong></div>
+    ${claimed
+      ? `<div style="font-size:12px;font-weight:800;color:var(--primary);">✅ Bạn đã nhận thưởng minigame này!</div>`
+      : `<div style="display:flex;gap:8px;"><input type="text" id="mgAnsInput_${mg.id}" class="form-input" placeholder="Nhập đáp án..."><button type="button" class="btn-secondary" style="background:var(--indigo-soft);color:var(--indigo);flex-shrink:0;" onclick="submitMinigameAnswer('${mg.id}')">Trả lời</button></div>`
+    }
+  `;
+}
+
+function submitMinigameAnswer(id) {
+  const mg = (db.minigames || []).find(x => x.id === id);
+  if (!mg) return;
+  const ans = (document.getElementById('mgAnsInput_' + id)?.value || '').trim().toUpperCase();
+  if (ans !== String(mg.answer || '').trim().toUpperCase()) return toast('Đáp án chưa đúng, thử lại nhé!');
+  if (!Array.isArray(mg.claimedBy)) mg.claimedBy = [];
+  if (mg.claimedBy.includes(me.u)) return toast('Bạn đã nhận thưởng minigame này');
+  mg.claimedBy.push(me.u);
+  const reward = Number(mg.reward || 0);
+  me.bal += reward;
+  me.earned += reward;
+  me.hist.unshift({ t: `Thưởng Minigame`, a: reward });
+  save();
+  renderUser();
+  toast(`Chính xác! Nhận +${money(reward)}`);
+}
+
 function renderWalletRules() {
   if (!me) return;
   const approvedCount = getApprovedWithdrawCount(me);
@@ -1139,7 +1422,12 @@ function renderWalletRules() {
 }
 
 function renderChatList(barId, boxId) {
-  document.getElementById(barId).innerHTML = db.channels.map(c => `<button type="button" class="channel-btn ${c.id === curCh ? 'active' : ''}" onclick="curCh='${c.id}';renderActiveChat()">${c.name}</button>`).join('');
+  document.getElementById(barId).innerHTML = db.channels.map(c => {
+    const chMsgCount = db.msgs.filter(m => m.ch === c.id).length;
+    const badgeHtml = chMsgCount > 0 ? `<span class="ch-count-badge">${chMsgCount}</span>` : '';
+    return `<button type="button" class="channel-btn ${c.id === curCh ? 'active' : ''}" onclick="curCh='${c.id}';renderActiveChat()">${c.name}${badgeHtml}</button>`;
+  }).join('');
+
   const box = document.getElementById(boxId);
   box.innerHTML = db.msgs.filter(m => m.ch === curCh).map(m => {
     const roleBadge = m.role === 'bot' ? '<span class="badge" style="background:#dbeafe;color:#1d4ed8;">BOT</span>' : (m.role === 'admin' ? '<span class="badge" style="background:#fee2e2;color:#b91c1c;">ADMIN</span>' : (m.role === 'cskh' ? '<span class="badge" style="background:#fef3c7;color:#b45309;">CSKH</span>' : ''));
@@ -1169,6 +1457,16 @@ function renderUser() {
   document.getElementById('uProgressBar').style.width = Math.min(100, Math.round((me.done / vip.limit) * 100)) + '%';
   document.getElementById('uShareRef').textContent = `${location.origin}/?ref=${me.refCode}`;
   document.getElementById('uTickets').textContent = me.tickets;
+
+  const invBonus = Number(db.refConfig?.inviterBonus ?? 5000);
+  const iteBonus = Number(db.refConfig?.inviteeBonus ?? 2000);
+  document.getElementById('refRewardPolicyBox').innerHTML = `• Người tuyển nhận ngay: <strong style="color:var(--primary);">${money(invBonus)}</strong><br>• Người nhập mã Ref nhận ngay: <strong style="color:var(--indigo);">${money(iteBonus)}</strong>`;
+  document.getElementById('refMyCodeBox').value = me.refCode;
+  document.getElementById('refMyLinkBox').value = `${location.origin}/?ref=${me.refCode}`;
+  document.getElementById('refTabEarned').textContent = money(me.refEarned);
+  document.getElementById('refTabInviter').textContent = me.refBy || 'Không có';
+
+  renderUserMinigames();
 
   const links = db.supportLinks || INIT.supportLinks;
   document.getElementById('btnZaloCskh').href = sanitizeUrl(links.zalo, 'https://zalo.me/');
@@ -1289,6 +1587,11 @@ function confirmVipTransferRequest() {
 function copyText(str) {
   navigator.clipboard?.writeText(str).catch(() => {});
   toast('Đã sao chép: ' + str);
+}
+
+function copyRefCodeOnly() {
+  if (!me) return;
+  copyText(me.refCode);
 }
 
 function openCheckin() {
@@ -1431,7 +1734,7 @@ function sendMsg(e, source = 'user') {
 
 function copyRef() {
   navigator.clipboard?.writeText(`${location.origin}/?ref=${me.refCode}`).catch(() => {});
-  toast('Đã sao chép link mời (Thưởng 15%)');
+  toast('Đã sao chép link mời');
 }
 
 function requestWithdraw() {
@@ -1470,11 +1773,11 @@ function requestWithdraw() {
 /* AI ASSISTANT WITH SUGGESTED QUESTIONS & CLICKABLE CSKH / GROUP LINKS */
 const AI_SUGGESTIONS = [
   'Chat với CSKH & Nhóm',
+  'Thưởng tuyển Ref bao nhiêu?',
   'Điều kiện rút lần đầu & lần sau',
   'Số dư & thời hạn VIP của tôi',
   'Cách làm nhiệm vụ nhận tiền',
-  'Vòng quay 7 ô & Rương ngày',
-  'Cách rút tiền & mời bạn bè'
+  'Vòng quay 7 ô & Rương ngày'
 ];
 
 function getNormalizedLinks() {
@@ -1501,7 +1804,6 @@ function openAi() {
   document.getElementById('aiSuggestBar').innerHTML = AI_SUGGESTIONS.map(s => `<button type="button" class="suggest-chip" onclick="quickAsk('${s}')">${s}</button>`).join('');
   const box = document.getElementById('aiMessages');
   if (!box.innerHTML) {
-    const links = getNormalizedLinks();
     pushAi('ai', `Chào ${me ? me.name : 'bạn'}! Mình là Trợ lý AI TASKFLOW PRO.\nKhi cần chat CSKH hoặc tham gia nhóm trò chuyện, bạn bấm trực tiếp vào các liên kết bên dưới là mở được ngay:`, buildSupportLinkCardsHtml());
   }
   document.getElementById('aiModal').classList.remove('hidden');
@@ -1552,6 +1854,11 @@ function buildAiAnswer(q) {
       extraHtml: buildSupportLinkCardsHtml()
     };
   }
+  if (s.includes('ref') || s.includes('tuyển') || s.includes('mời')) {
+    const invBonus = Number(db.refConfig?.inviterBonus ?? 5000);
+    const iteBonus = Number(db.refConfig?.inviteeBonus ?? 2000);
+    return { text: `🤝 Chính sách tuyển Ref:\n• Người tuyển nhận ngay: ${money(invBonus)}\n• Người được mời nhận ngay: ${money(iteBonus)}\n• Mã Ref của bạn: ${me ? me.refCode : ''}` };
+  }
   if (s.includes('điều kiện rút') || s.includes('100k') || s.includes('50k') || s.includes('lần đầu')) {
     return { text: `💳 Quy định rút tiền:\n• Lần rút đầu tiên: Phải đủ tối thiểu 100.000đ và đã nạp ít nhất 1 lệnh 50.000đ.\n• Từ lần rút thứ 2 trở đi: Không giới hạn số lần rút, tối thiểu 10.000đ/lần.` };
   }
@@ -1567,9 +1874,6 @@ function buildAiAnswer(q) {
   if (s.includes('quay') || s.includes('vé') || s.includes('rương')) {
     return { text: `🎡 Vòng quay 7 ô & Rương ngày:\n• Gồm 888đ, 1.000đ, 2.000đ, 5.000đ, 10.000đ, 30.000đ và Chúc may mắn lần sau.\n• Quay xong sẽ bật màn hình báo kết quả rõ ràng; nhận thêm vé qua Điểm danh 7 ngày hoặc Rương ngày.` };
   }
-  if (s.includes('rút') || s.includes('mời') || s.includes('ref')) {
-    return { text: `💸 Rút tiền & Mời bạn bè:\n• Rút tiền: Vào tab "Ví tiền", chọn ngân hàng, nhập STK, tên chủ TK và số tiền rồi bấm "Gửi Lệnh Rút".\n• Mời bạn bè: Dùng mã ${me ? me.refCode : ''} nhận 15% hoa hồng tự động.` };
-  }
   return {
     text: `Mình đã nắm rõ các mục trên web. Cần liên hệ CSKH hoặc vào nhóm trò chuyện, bạn bấm trực tiếp vào link bên dưới:`,
     extraHtml: buildSupportLinkCardsHtml()
@@ -1578,7 +1882,7 @@ function buildAiAnswer(q) {
 
 /* ADMIN */
 function switchAdminView(v) {
-  ['Dash', 'Users', 'Tasks', 'Wd', 'VipReq', 'Pay', 'Chat', 'Links'].forEach(k => {
+  ['Dash', 'Users', 'Tasks', 'Wd', 'VipReq', 'Pay', 'Chat', 'Promo', 'Links'].forEach(k => {
     document.getElementById('aView' + k).classList.add('hidden');
     document.getElementById('aBtn' + k).classList.remove('active');
   });
@@ -1595,12 +1899,15 @@ function renderAdmin() {
   document.getElementById('kVipReq').textContent = db.vipRequests.filter(x => x.st === 'pending').length;
 
   const links = getNormalizedLinks();
+  document.getElementById('cfgRefInviterBonus').value = Number(db.refConfig?.inviterBonus ?? 5000);
+  document.getElementById('cfgRefInviteeBonus').value = Number(db.refConfig?.inviteeBonus ?? 2000);
   document.getElementById('cfgZaloLink').value = links.zalo;
   document.getElementById('cfgTgLink').value = links.telegram;
   document.getElementById('cfgGroupLink').value = links.group;
   document.getElementById('adminBtnJoinGroup').href = links.group;
 
   renderAdminUsers();
+  renderAdminPromoAndMinigame();
   document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted);">Loại: ${t.cat || 'Vượt link'} • Mã: ${t.code} • Thưởng: ${money(t.reward)} • Đã làm: ${t.done}</div></div><button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
   document.getElementById('adminWdBody').innerHTML = db.withdraws.map(w => `
     <div class="task-item" style="flex-wrap:wrap;">
@@ -1619,7 +1926,71 @@ function renderAdmin() {
   renderChatList('adminChannelBar', 'adminChatBox');
 }
 
+function createPromoCode() {
+  const code = (document.getElementById('promoCodeInp')?.value || '').trim().toUpperCase();
+  const reward = Number(document.getElementById('promoValInp')?.value || 0);
+  const maxUses = Math.max(1, Number(document.getElementById('promoMaxInp')?.value || 50));
+  if (!code || !reward) return toast('Nhập đủ mã giảm giá và tiền thưởng');
+  db.promoCodes.unshift({ id: 'PRM' + Date.now(), code, reward, maxUses, usedBy: [] });
+  document.getElementById('promoCodeInp').value = '';
+  document.getElementById('promoValInp').value = '';
+  save();
+  renderAdminPromoAndMinigame();
+  toast('Đã tạo mã giảm giá ' + code);
+}
+
+function deletePromoCode(id) {
+  db.promoCodes = (db.promoCodes || []).filter(x => x.id !== id);
+  save();
+  renderAdminPromoAndMinigame();
+}
+
+function createMinigame() {
+  const question = (document.getElementById('mgQuestionInp')?.value || '').trim();
+  const answer = (document.getElementById('mgAnswerInp')?.value || '').trim();
+  const reward = Number(document.getElementById('mgRewardInp')?.value || 0);
+  if (!question || !answer || !reward) return toast('Nhập đủ câu hỏi, đáp án và tiền thưởng');
+  db.minigames.unshift({ id: 'MG' + Date.now(), question, answer, reward, claimedBy: [] });
+  document.getElementById('mgQuestionInp').value = '';
+  document.getElementById('mgAnswerInp').value = '';
+  document.getElementById('mgRewardInp').value = '';
+  save();
+  renderAdminPromoAndMinigame();
+  toast('Đã tạo minigame mới!');
+}
+
+function deleteMinigame(id) {
+  db.minigames = (db.minigames || []).filter(x => x.id !== id);
+  save();
+  renderAdminPromoAndMinigame();
+}
+
+function renderAdminPromoAndMinigame() {
+  const pEl = document.getElementById('adminPromoList');
+  if (pEl) {
+    pEl.innerHTML = (db.promoCodes || []).map(p => `
+      <div class="task-item">
+        <div><strong>${p.code}</strong> • Thưởng: <strong style="color:var(--primary);">${money(p.reward)}</strong> <div style="font-size:12px;color:var(--muted);">Đã dùng: ${(p.usedBy || []).length}/${p.maxUses}</div></div>
+        <button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="deletePromoCode('${p.id}')">Xóa</button>
+      </div>
+    `).join('');
+  }
+  const mEl = document.getElementById('adminMinigameList');
+  if (mEl) {
+    mEl.innerHTML = (db.minigames || []).map(m => `
+      <div class="task-item">
+        <div><strong>${m.question}</strong> <div style="font-size:12px;color:var(--muted);">Đáp án: <strong>${m.answer}</strong> • Thưởng: <strong style="color:var(--primary);">${money(m.reward)}</strong> • Đã nhận: ${(m.claimedBy || []).length}</div></div>
+        <button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="deleteMinigame('${m.id}')">Xóa</button>
+      </div>
+    `).join('');
+  }
+}
+
 function saveSupportLinks() {
+  db.refConfig = {
+    inviterBonus: Math.max(0, Number(document.getElementById('cfgRefInviterBonus')?.value ?? 5000)),
+    inviteeBonus: Math.max(0, Number(document.getElementById('cfgRefInviteeBonus')?.value ?? 2000))
+  };
   db.supportLinks = {
     zalo: sanitizeUrl(document.getElementById('cfgZaloLink').value, 'https://zalo.me/'),
     telegram: sanitizeUrl(document.getElementById('cfgTgLink').value, 'https://t.me/'),
@@ -1627,7 +1998,7 @@ function saveSupportLinks() {
   };
   save();
   renderAdmin();
-  toast('Đã lưu link Zalo CSKH, Telegram CSKH & Nhóm chat');
+  toast('Đã lưu thưởng Ref & liên kết CSKH / Nhóm chat');
 }
 
 function renderVipRequests() {
@@ -1792,6 +2163,7 @@ function openEditUser(id) {
       <div><strong>${x.name}</strong> (@${x.u}) • IP: ${x.ip}</div>
       <div>Số dư: <strong>${money(x.bal)}</strong> • ${formatVipExpiry(x)}</div>
     </div>
+    <div class="form-group"><label class="form-label">Cấp / Đổi mật khẩu khách hàng (Để trống nếu giữ nguyên)</label><input type="text" id="euNewPass" class="form-input" placeholder="Mật khẩu hiện tại: ${x.p}"></div>
     <div class="form-group"><label class="form-label">Quyền hạn</label><select id="euRole" class="form-input"><option value="user" ${x.role==='user'?'selected':''}>Thành viên</option><option value="cskh" ${x.role==='cskh'?'selected':''}>CSKH</option><option value="admin" ${x.role==='admin'?'selected':''}>Admin</option></select></div>
     <div class="form-group"><label class="form-label">Cấp VIP</label><select id="euVip" class="form-input">${VIPS.map(v => `<option value="${v.lv}" ${x.vip===v.lv?'selected':''}>${v.name} (${v.days ? v.days + ' ngày' : 'Vĩnh viễn'})</option>`).join('')}</select></div>
     <div class="form-group"><label class="form-label">Thời hạn VIP (Số ngày tính từ hôm nay)</label><input type="number" id="euVipDays" class="form-input" placeholder="VD: 7, 30, 90 (Để trống nếu giữ nguyên)"></div>
@@ -1804,6 +2176,8 @@ function openEditUser(id) {
 
 function saveEditUser(id) {
   const x = db.users.find(u => u.id === id);
+  const newPass = (document.getElementById('euNewPass')?.value || '').trim();
+  if (newPass) x.p = newPass;
   x.role = document.getElementById('euRole').value;
   x.deposit50kDone = document.getElementById('euDep50k').value === '1';
   const newVip = Number(document.getElementById('euVip').value);
@@ -1847,7 +2221,7 @@ function actWd(id, ok) {
   const u = db.users.find(x => x.id === w.uid || x.u === w.u);
   if (ok) {
     if (u) {
-      u.hist.unshift({ t: `Rút tiền thành công #${w.id} (${w.bank} - ${w.acc})`, a: 0 });
+      u.hist.unshift({ t: `Rút tiền thành công #${w.id} (${w.bank} - ${w.acc})`, a: -Number(w.amt || 0) });
     }
     db.msgs.push({
       id: Date.now(), ch: 'chung', sender: 'TASKFLOW BOT', role: 'bot',

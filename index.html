@@ -129,6 +129,8 @@
 
   .task-item { background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 12px; box-shadow: var(--shadow-sm); }
   .task-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 8px; background: var(--indigo-soft); color: var(--indigo); margin-bottom: 6px; }
+  .task-tag.cat-survey { background: #fef3c7; color: #b45309; }
+  .task-tag.cat-gg { background: #dcfce7; color: #047857; }
 
   /* VIP Card Styling */
   .vip-card { background: #fff; border-radius: 22px; padding: 18px; border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 14px; position: relative; }
@@ -235,7 +237,7 @@
     <img id="introLogoImg" src="https://i.ibb.co/BVJmNDvX/IMG-20261121-002013.png" alt="TASKFLOW PRO Logo">
   </div>
   <div style="margin-top:18px;font-size:24px;font-weight:900;color:#ffffff;letter-spacing:0.6px;">TASKFLOW PRO</div>
-  <div style="font-size:13px;color:#93c5fd;font-weight:600;margin-top:4px;">Làm nhiệm vụ • Kiếm thưởng • Rút tiền nhanh</div>
+  <div style="font-size:13px;color:#93c5fd;font-weight:600;margin-top:4px;">Vượt link • Khảo sát • Đánh giá Google</div>
   <button type="button" class="intro-skip-btn" onclick="dismissIntro()">Bỏ qua →</button>
 </div>
 
@@ -248,7 +250,7 @@
       <img id="authLogoImg" src="https://i.ibb.co/BVJmNDvX/IMG-20261121-002013.png" alt="TASKFLOW PRO Logo" class="brand-logo-img">
       <div>
         <div style="font-size:23px;font-weight:900;color:var(--text);letter-spacing:-0.3px;">TASKFLOW PRO</div>
-        <div style="font-size:13px;color:var(--muted);font-weight:600;">Làm nhiệm vụ • Kiếm thưởng • Rút tiền nhanh</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:600;">Vượt link • Khảo sát • Đánh giá Google</div>
       </div>
     </div>
     <div class="auth-tabs">
@@ -355,7 +357,7 @@
       <button class="filter-chip active" onclick="setTaskFilter('all', this)">Tất cả kèo</button>
       <button class="filter-chip" onclick="setTaskFilter('Vượt link', this)">Vượt link</button>
       <button class="filter-chip" onclick="setTaskFilter('Khảo sát', this)">Khảo sát</button>
-      <button class="filter-chip" onclick="setTaskFilter('CPA App', this)">CPA App</button>
+      <button class="filter-chip" onclick="setTaskFilter('Đánh giá Google', this)">Đánh giá Google</button>
     </div>
 
     <div id="taskList"></div>
@@ -552,14 +554,25 @@
     </div>
   </div>
 
+  <!-- ADMIN TASKS: SUPPORTS VƯỢT LINK, KHẢO SÁT, ĐÁNH GIÁ GOOGLE -->
   <div id="aViewTasks" class="section hidden">
     <div class="card">
-      <strong style="display:block;margin-bottom:10px;font-size:15px;">Thêm nhiệm vụ mới</strong>
+      <strong style="display:block;margin-bottom:10px;font-size:15px;">➕ Thêm nhiệm vụ mới (Vượt link / Khảo sát / Đánh giá Google)</strong>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <input type="text" id="tTitle" class="form-input" placeholder="Tên nhiệm vụ">
-        <input type="number" id="tReward" class="form-input" placeholder="Tiền thưởng (VD: 500)">
-        <input type="text" id="tUrl" class="form-input" placeholder="Link nhiệm vụ">
-        <input type="text" id="tCode" class="form-input" placeholder="Mã xác nhận (VD: OK88)">
+        <select id="tCat" class="form-input">
+          <option value="Vượt link">Vượt link</option>
+          <option value="Khảo sát">Khảo sát</option>
+          <option value="Đánh giá Google">Đánh giá Google</option>
+        </select>
+        <input type="number" id="tReward" class="form-input" placeholder="Tiền thưởng (VD: 2000)">
+        <input type="text" id="tTitle" class="form-input" placeholder="Tên nhiệm vụ (VD: Đánh giá Google Maps 5 sao)">
+        <input type="text" id="tCode" class="form-input" placeholder="Mã xác nhận (VD: REVIEW5SAO)">
+      </div>
+      <div style="margin-top:8px;">
+        <input type="text" id="tUrl" class="form-input" placeholder="Link nhiệm vụ (Link rút gọn / Google Forms / Google Maps)">
+      </div>
+      <div style="margin-top:8px;">
+        <input type="text" id="tGuide" class="form-input" placeholder="Hướng dẫn làm kèo (VD: Đánh giá 5 sao + bình luận trên 15 chữ, gửi ảnh qua CSKH)">
       </div>
       <button class="btn-primary" style="margin-top:10px;" onclick="createTask()">Thêm Nhiệm Vụ</button>
     </div>
@@ -781,6 +794,7 @@
       <strong id="tmTitle" style="font-size:16px;">Làm nhiệm vụ</strong>
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
+    <div id="tmGuideBox" style="background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:10px 12px;font-size:13px;color:#334155;margin-bottom:8px;"></div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">Mở link bên dưới để hoàn thành và lấy mã xác nhận (Mã mẫu: <strong id="tmHint"></strong>). Nhận ngay <strong id="tmReward" style="color:var(--primary);"></strong>.</p>
     <a id="tmLink" href="#" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-bottom:12px;color:var(--indigo);font-weight:800;font-size:13px;">Mở link nhiệm vụ ↗</a>
     <input type="text" id="tmCodeInput" class="form-input" placeholder="Nhập mã xác nhận..." style="margin-bottom:12px;">
@@ -840,10 +854,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V18';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V18';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V18';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V18';
+const KEY = 'TF_VIP_PRO_CLOUD_V19';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V19';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V19';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V19';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -893,8 +907,8 @@ const INIT = {
     {
       id: 'NTF_WELCOME_01',
       target: 'ALL',
-      title: 'Chào mừng bạn gia nhập TASKFLOW PRO!',
-      body: 'Hệ thống đã sẵn sàng để bạn làm nhiệm vụ trên Trang chủ, điểm danh nhận vé quay, mở Rương ngày và tham gia Nhóm Cộng Đồng.',
+      title: 'Chào mừng gia nhập TASKFLOW PRO!',
+      body: 'Bắt đầu làm nhiệm vụ Vượt link, Khảo sát, Đánh giá Google trên Trang chủ, điểm danh nhận vé quay và mở Rương ngày mỗi ngày nhé.',
       createdAt: Date.now()
     }
   ],
@@ -928,9 +942,9 @@ const INIT = {
     { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] }
   ],
   tasks: [
-    { id: '1', title: 'Vượt link lấy mã nhanh (Node A)', cat: 'Vượt link', reward: 600, url: 'https://google.com', code: 'TF1', done: 85 },
-    { id: '2', title: 'Khảo sát nhanh 30s (Node B)', cat: 'Khảo sát', reward: 1500, url: 'https://google.com', code: 'TF2', done: 62 },
-    { id: '3', title: 'Mở tài khoản & xác minh (Node C)', cat: 'CPA App', reward: 12000, url: 'https://google.com', code: 'TF3', done: 40 }
+    { id: '1', title: 'Vượt link lấy mã nhanh (Node A)', cat: 'Vượt link', reward: 600, url: 'https://google.com', code: 'TF1', guide: 'Mở link, vượt qua bước xác nhận để lấy mã ở cuối trang.', done: 85 },
+    { id: '2', title: 'Khảo sát trải nghiệm dịch vụ 30s', cat: 'Khảo sát', reward: 1500, url: 'https://google.com', code: 'KS2026', guide: 'Trả lời đầy đủ các câu hỏi trong biểu mẫu khảo sát, mã xác nhận hiển thị ở trang cảm ơn sau khi gửi.', done: 62 },
+    { id: '3', title: 'Đánh giá Google Maps 5 sao cửa hàng', cat: 'Đánh giá Google', reward: 5000, url: 'https://maps.google.com', code: 'REVIEW5SAO', guide: 'Bấm mở Google Maps, đánh giá 5 sao kèm bình luận tích cực trên 15 chữ, chụp ảnh gửi CSKH và nhập mã xác nhận.', done: 40 }
   ],
   withdraws: [
     { id: 'W1', uid: 1001, u: 'user1', bank: 'MB Bank', acc: '0339498650', owner: 'NGUYEN MINH', amt: 100000, st: 'pending' }
@@ -993,6 +1007,10 @@ function normalizeDb(raw) {
     if (typeof u.deposit50kDone !== 'boolean') u.deposit50kDone = false;
   });
   if (!Array.isArray(merged.tasks)) merged.tasks = JSON.parse(JSON.stringify(INIT.tasks));
+  merged.tasks.forEach(t => {
+    if (t.cat === 'CPA App') t.cat = 'Đánh giá Google';
+    if (!t.guide) t.guide = '';
+  });
   if (!Array.isArray(merged.withdraws)) merged.withdraws = [];
   if (!Array.isArray(merged.channels) || !merged.channels.length) merged.channels = JSON.parse(JSON.stringify(INIT.channels));
   if (!merged.channels.some(c => c.id === 'congdong')) {
@@ -1496,7 +1514,7 @@ function toast(m) {
   clearTimeout(el._t); el._t = setTimeout(() => el.classList.add('hidden'), 2800);
 }
 function closeModals() {
-  ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal', 'spinResultModal', 'withdrawSuccessModal', 'noticeModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal', 'spinResultModal', 'vipPayModal', 'withdrawSuccessModal', 'noticeModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
 }
 
 function getApprovedWithdrawCount(user) {
@@ -1932,6 +1950,12 @@ function renderActiveChat() {
   else renderUser();
 }
 
+function getCategoryTagClass(cat) {
+  if (cat === 'Khảo sát') return 'cat-survey';
+  if (cat === 'Đánh giá Google') return 'cat-gg';
+  return '';
+}
+
 function renderUser() {
   if (!me) return;
   checkVipExpiry(me);
@@ -1969,11 +1993,13 @@ function renderUser() {
   const filteredTasks = curTaskCat === 'all' ? db.tasks : db.tasks.filter(t => (t.cat || 'Vượt link') === curTaskCat);
   document.getElementById('taskList').innerHTML = filteredTasks.map(t => {
     const rew = Math.round(t.reward * (1 + vip.bonus / 100));
+    const catName = t.cat || 'Vượt link';
     return `
       <div class="task-item">
         <div style="min-width:0;">
-          <span class="task-tag">${t.cat || 'Vượt link'}</span>
+          <span class="task-tag ${getCategoryTagClass(catName)}">${catName}</span>
           <div style="font-weight:800;font-size:15px;color:var(--text);">${t.title}</div>
+          ${t.guide ? `<div style="font-size:12px;color:#475569;margin-top:3px;">${t.guide}</div>` : ''}
           <div style="font-size:12px;color:var(--muted);margin-top:4px;">Thưởng: <strong style="color:var(--primary);font-size:14px;">+${money(rew)}</strong> • Đã làm: ${t.done}</div>
         </div>
         <button class="btn-sm" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(5,150,105,0.24);" onclick="openTask('${t.id}')">Làm ngay</button>
@@ -2123,7 +2149,11 @@ function openTask(id) {
   if (me.done >= vip.limit) return toast('Hết lượt nhiệm vụ hôm nay! Nâng VIP để thêm lượt.');
   curTask = db.tasks.find(x => x.id === id);
   if (!curTask) return;
-  document.getElementById('tmTitle').textContent = curTask.title;
+  document.getElementById('tmTitle').textContent = `${curTask.title} (${curTask.cat || 'Vượt link'})`;
+  const guideEl = document.getElementById('tmGuideBox');
+  if (guideEl) {
+    guideEl.textContent = curTask.guide || 'Mở link nhiệm vụ bên dưới, thực hiện đúng hướng dẫn rồi nhập mã xác nhận để nhận thưởng.';
+  }
   document.getElementById('tmReward').textContent = money(Math.round(curTask.reward * (1 + vip.bonus / 100)));
   document.getElementById('tmHint').textContent = curTask.code;
   document.getElementById('tmLink').href = curTask.url;
@@ -2137,7 +2167,7 @@ function confirmTask() {
   const vip = VIPS[me.vip] || VIPS[0];
   const rew = Math.round(curTask.reward * (1 + vip.bonus / 100));
   me.bal += rew; me.earned += rew; me.done++; curTask.done++;
-  me.hist.unshift({ t: `Kèo: ${curTask.title}`, a: rew });
+  me.hist.unshift({ t: `Kèo [${curTask.cat || 'Vượt link'}]: ${curTask.title}`, a: rew });
   const inv = db.users.find(x => me.refBy && me.refBy.includes(x.refCode));
   if (inv && inv.ip !== me.ip) {
     const comm = Math.round(rew * 0.15);
@@ -2379,7 +2409,7 @@ function buildAiAnswer(q) {
     return { text: `📊 Thông tin tài khoản @${me ? me.u : 'guest'}:\n• Số dư ví: ${money(me ? me.bal : 0)} (Tổng kiếm: ${money(me ? me.earned : 0)})\n• Hạng hiện tại: ${vip.name} — ${formatVipExpiry(me)}\n• Tiến độ ngày: ${me ? me.done : 0}/${vip.limit} lượt (+${vip.bonus}% thưởng) | Vé quay: ${me ? me.tickets : 0}` };
   }
   if (s.includes('nhiệm vụ') || s.includes('làm') || s.includes('kèo')) {
-    return { text: `📌 Cách làm nhiệm vụ trên web:\n• Gói Free (VIP 0) được 10 nhiệm vụ/ngày.\n• Ở tab "Trang chủ", bấm "Làm ngay", mở link lấy mã xác nhận, nhập mã và bấm "Xác Nhận Nhận Tiền".` };
+    return { text: `📌 Cách làm nhiệm vụ trên web:\n• Gồm 3 nhóm kèo: Vượt link, Khảo sát và Đánh giá Google.\n• Ở tab "Trang chủ", bấm "Làm ngay", đọc hướng dẫn, mở link lấy mã xác nhận, nhập mã và bấm "Xác Nhận Nhận Tiền".` };
   }
   if (s.includes('vip')) {
     return { text: `👑 Bảng gói VIP & thời hạn sử dụng:\n• VIP 0 (Free): 10 lượt/ngày • Vĩnh viễn\n• VIP 1 (50.000đ / 7 ngày): 18 lượt/ngày, +5% thưởng\n• VIP 2 (150.000đ / 30 ngày): 35 lượt/ngày, +12% thưởng\n• VIP 3 (400.000đ / 90 ngày): 70 lượt/ngày, +25% thưởng\nKhi hết hạn ngày, tài khoản tự động quay về VIP 0.` };
@@ -2446,7 +2476,7 @@ function renderAdmin() {
   renderAdminUsers();
   renderAdminPromoAndMinigame();
   renderAdminSentNotices();
-  document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted);">Loại: ${t.cat || 'Vượt link'} • Mã: ${t.code} • Thưởng: ${money(t.reward)} • Đã làm: ${t.done}</div></div><button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
+  document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted);">Loại: <strong>${t.cat || 'Vượt link'}</strong> • Mã: ${t.code} • Thưởng: ${money(t.reward)} • Đã làm: ${t.done}</div>${t.guide ? `<div style="font-size:12px;color:#475569;margin-top:2px;">HD: ${t.guide}</div>` : ''}</div><button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
   document.getElementById('adminWdBody').innerHTML = db.withdraws.map(w => `
     <div class="task-item" style="flex-wrap:wrap;">
       <div>
@@ -2781,14 +2811,20 @@ function banUser(id) {
 }
 
 function createTask() {
+  const cat = document.getElementById('tCat')?.value || 'Vượt link';
   const title = document.getElementById('tTitle').value.trim();
   const reward = Number(document.getElementById('tReward').value);
   const url = document.getElementById('tUrl').value.trim() || 'https://google.com';
   const code = document.getElementById('tCode').value.trim() || 'OK';
+  const guide = (document.getElementById('tGuide')?.value || '').trim();
   if (!title || !reward) return toast('Nhập đủ tên và tiền thưởng');
-  db.tasks.unshift({ id: String(Date.now()), title, cat: 'Vượt link', reward, url, code, done: 0 });
-  document.getElementById('tTitle').value = ''; document.getElementById('tReward').value = ''; document.getElementById('tCode').value = '';
-  save(); renderAdmin(); toast('Đã thêm nhiệm vụ');
+  db.tasks.unshift({ id: String(Date.now()), title, cat, reward, url, code, guide, done: 0 });
+  document.getElementById('tTitle').value = '';
+  document.getElementById('tReward').value = '';
+  document.getElementById('tCode').value = '';
+  document.getElementById('tUrl').value = '';
+  if (document.getElementById('tGuide')) document.getElementById('tGuide').value = '';
+  save(); renderAdmin(); toast(`Đã thêm kèo [${cat}]`);
 }
 
 function delTask(id) { db.tasks = db.tasks.filter(x => x.id !== id); save(); renderAdmin(); }

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TASKFLOW PRO - Nền Tảng Nhiệm Vụ & Kiếm Thưởng</title>
-<link rel="icon" type="image/png" href="/logo.png">
+<link id="pageFavicon" rel="icon" type="image/png" href="/logo.png">
 <style>
   :root {
     --bg: #f3f6fa;
@@ -94,6 +94,7 @@
   /* Header */
   .topbar { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(12px); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 25; }
   .user-avatar-img { width: 44px; height: 44px; border-radius: 14px; object-fit: cover; flex-shrink: 0; border: 1.5px solid var(--border); background: #090d16; }
+  .ai-avatar-img { width: 38px; height: 38px; border-radius: 12px; object-fit: cover; flex-shrink: 0; border: 1.5px solid var(--border); background: #090d16; }
   .vip-pill { display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; font-size: 11px; font-weight: 900; padding: 3px 10px; border-radius: 99px; border: 1px solid #f59e0b66; }
 
   .section { padding: 15px 15px 0; }
@@ -166,7 +167,8 @@
   .nav-btn span:first-child { font-size: 18px; line-height: 1.1; }
   .nav-btn.active { color: var(--primary); background: var(--primary-soft); }
 
-  .ai-fab { position: fixed; bottom: 86px; right: 16px; z-index: 35; background: linear-gradient(135deg, #4f46e5, #059669); color: #fff; padding: 11px 16px; border-radius: 99px; font-weight: 800; font-size: 13px; box-shadow: 0 8px 22px rgba(79, 70, 229, 0.35); border: 2px solid #fff; }
+  .ai-fab { position: fixed; bottom: 86px; right: 16px; z-index: 35; background: linear-gradient(135deg, #4f46e5, #059669); color: #fff; padding: 9px 14px 9px 10px; border-radius: 99px; font-weight: 800; font-size: 13px; box-shadow: 0 8px 22px rgba(79, 70, 229, 0.35); border: 2px solid #fff; display: inline-flex; align-items: center; gap: 7px; }
+  .ai-fab-logo { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.7); background: #090d16; }
   .suggest-row { display: flex; gap: 7px; overflow-x: auto; padding: 10px 0; }
   .suggest-chip { background: var(--indigo-soft); color: var(--indigo); border: 1px solid #c7d2fe; padding: 7px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; white-space: nowrap; }
 
@@ -197,7 +199,7 @@
 <!-- INTRO LOGO SPLASH -->
 <div id="introScreen" class="intro-screen">
   <div class="intro-logo-box">
-    <img src="/logo.png" alt="TASKFLOW PRO Logo">
+    <img id="introLogoImg" src="/logo.png" alt="TASKFLOW PRO Logo">
   </div>
   <div style="margin-top:18px;font-size:24px;font-weight:900;color:#ffffff;letter-spacing:0.6px;">TASKFLOW PRO</div>
   <div style="font-size:13px;color:#93c5fd;font-weight:600;margin-top:4px;">Làm nhiệm vụ • Kiếm thưởng • Rút tiền nhanh</div>
@@ -210,7 +212,7 @@
 <div id="authScreen" class="auth-wrap">
   <div class="auth-box">
     <div class="brand-head">
-      <img src="/logo.png" alt="TASKFLOW PRO Logo" class="brand-logo-img">
+      <img id="authLogoImg" src="/logo.png" alt="TASKFLOW PRO Logo" class="brand-logo-img">
       <div>
         <div style="font-size:23px;font-weight:900;color:var(--text);letter-spacing:-0.3px;">TASKFLOW PRO</div>
         <div style="font-size:13px;color:var(--muted);font-weight:600;">Làm nhiệm vụ • Kiếm thưởng • Rút tiền nhanh</div>
@@ -246,7 +248,7 @@
 <div id="userApp" class="app-shell hidden">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:10px;min-width:0;">
-      <img src="/logo.png" alt="Avatar" class="user-avatar-img">
+      <img id="userTopLogoImg" src="/logo.png" alt="Avatar" class="user-avatar-img">
       <div style="min-width:0;">
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
           <strong id="uName" style="font-size:15px;">Thành viên</strong>
@@ -411,11 +413,12 @@
 <div id="adminApp" class="admin-shell hidden">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-      <img src="/logo.png" alt="Logo" class="user-avatar-img">
+      <img id="adminTopLogoImg" src="/logo.png" alt="Logo" class="user-avatar-img">
       <strong style="font-size:16px;">🛠️ QUẢN TRỊ TASKFLOW PRO</strong>
       <span id="cloudStatusBadge" class="sync-pill">● Đang đồng bộ</span>
     </div>
-    <div style="display:flex;gap:8px;">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn-secondary" onclick="testTelegramBot()">🔔 Test Bot Telegram</button>
       <button class="btn-secondary" onclick="manualSyncCloud()">🔄 Tải mới</button>
       <button class="btn-secondary" onclick="resetDemoData()">↻ Reset</button>
       <button class="btn-secondary" style="color:var(--red);" onclick="logout()">Thoát</button>
@@ -517,7 +520,10 @@
 </div>
 
 <!-- AI FLOAT BUTTON -->
-<button id="aiFloatBtn" class="ai-fab hidden" onclick="openAi()">✨ Trợ lý AI</button>
+<button id="aiFloatBtn" class="ai-fab hidden" onclick="openAi()">
+  <img id="aiFabLogoImg" src="/logo.png" alt="AI" class="ai-fab-logo">
+  <span>Trợ lý AI</span>
+</button>
 
 <!-- WITHDRAW SUCCESS DETAIL POPUP ON HOME -->
 <div id="withdrawSuccessModal" class="modal-bg hidden">
@@ -605,22 +611,28 @@
 <div id="aiModal" class="modal-bg hidden">
   <div class="modal-card" style="height:80vh;display:flex;flex-direction:column;">
     <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border);">
-      <div>
-        <strong style="font-size:16px;">✨ Trợ Lý AI TASKFLOW</strong>
-        <div style="font-size:11px;color:var(--primary);font-weight:700;">● Đọc dữ liệu tài khoản &amp; giải đáp mọi chức năng</div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <img id="aiHeaderLogoImg" src="/logo.png" alt="TASKFLOW AI" class="ai-avatar-img">
+        <div>
+          <strong style="font-size:16px;">Trợ Lý AI TASKFLOW</strong>
+          <div style="font-size:11px;color:var(--primary);font-weight:700;">● Hỗ trợ &amp; gửi link CSKH / Nhóm chat</div>
+        </div>
       </div>
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
     <div class="suggest-row" id="aiSuggestBar"></div>
     <div id="aiMessages" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:8px 0;"></div>
     <form onsubmit="sendAiPrompt(event)" style="display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--border);">
-      <input type="text" id="aiInput" class="form-input" placeholder="Nhập câu hỏi của bạn...">
+      <input type="text" id="aiInput" class="form-input" placeholder="Nhập câu hỏi hoặc gõ 'chat cskh'...">
       <button type="submit" class="btn-primary" style="width:auto;padding:0 16px;">Gửi</button>
     </form>
   </div>
 </div>
 
 <script>
+// Dán chuỗi Base64 (data:image/png;base64,...) của ảnh logo vào đây nếu không dùng file /logo.png trên host
+const BRAND_LOGO_SRC = '/logo.png';
+
 const SUPABASE_URL = 'https://sigudratdxuzbizuvxbq.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_mV4mYUOx11p3mMwF84GXaQ_NcPNkzmk';
 
@@ -628,7 +640,7 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V7';
+const KEY = 'TF_VIP_PRO_CLOUD_V8';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -696,6 +708,17 @@ const INIT = {
   ]
 };
 
+function applyBrandLogo() {
+  if (!BRAND_LOGO_SRC) return;
+  ['introLogoImg', 'authLogoImg', 'userTopLogoImg', 'adminTopLogoImg', 'aiFabLogoImg', 'aiHeaderLogoImg'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.src = BRAND_LOGO_SRC;
+  });
+  const fav = document.getElementById('pageFavicon');
+  if (fav) fav.href = BRAND_LOGO_SRC;
+}
+applyBrandLogo();
+
 function normalizeDb(raw) {
   const base = raw && typeof raw === 'object' ? raw : {};
   const merged = Object.assign({}, INIT, base);
@@ -744,6 +767,11 @@ function notifyTelegram(text) {
       body: payload
     }).catch(() => {});
   });
+}
+
+function testTelegramBot() {
+  notifyTelegram(`🔔 TEST BOT TASKFLOW PRO\n• Thời gian: ${new Date().toLocaleString('vi-VN')}\n• Trạng thái: Bot đang hoạt động và sẵn sàng báo đăng ký mới / lệnh rút tiền.`);
+  toast('Đã gửi tin nhắn test tới Telegram Chat ID ' + TG_CHAT_ID);
 }
 
 /* CLOUD SYNC (SUPABASE) - SAFE SESSION WITHOUT FORCED LOGOUT */
@@ -1392,12 +1420,12 @@ function requestWithdraw() {
   save(); renderUser(); toast('Đã gửi lệnh rút tiền! Đang chờ Admin duyệt.');
 }
 
-/* AI ASSISTANT WITH SUGGESTED QUESTIONS */
+/* AI ASSISTANT WITH SUGGESTED QUESTIONS & CSKH / GROUP LINKS */
 const AI_SUGGESTIONS = [
+  'Chat với CSKH & Nhóm',
   'Điều kiện rút lần đầu & lần sau',
   'Số dư & thời hạn VIP của tôi',
   'Cách làm nhiệm vụ nhận tiền',
-  'Nhắn CSKH Zalo / Telegram & Nhóm',
   'Vòng quay 7 ô & Rương ngày',
   'Cách rút tiền & mời bạn bè'
 ];
@@ -1406,7 +1434,8 @@ function openAi() {
   document.getElementById('aiSuggestBar').innerHTML = AI_SUGGESTIONS.map(s => `<button type="button" class="suggest-chip" onclick="quickAsk('${s}')">${s}</button>`).join('');
   const box = document.getElementById('aiMessages');
   if (!box.innerHTML) {
-    pushAi('ai', `Chào ${me.name}! Tài khoản @${me.u} đang ở ${VIPS[me.vip].name} (${formatVipExpiry(me)}), số dư ${money(me.bal)}. Bấm câu hỏi gợi ý bên trên hoặc gõ câu hỏi bất kỳ nhé.`);
+    const links = db.supportLinks || INIT.supportLinks;
+    pushAi('ai', `Chào ${me.name}! Mình là Trợ lý AI TASKFLOW PRO.\nKhi cần chat với CSKH hoặc vào nhóm trò chuyện, bạn có thể dùng ngay các liên kết đã cài đặt:\n• Zalo CSKH: ${links.zalo}\n• Telegram CSKH: ${links.telegram}\n• Nhóm chat cộng đồng: ${links.group}`);
   }
   document.getElementById('aiModal').classList.remove('hidden');
 }
@@ -1430,8 +1459,13 @@ function pushAi(who, txt) {
   const box = document.getElementById('aiMessages');
   const d = document.createElement('div');
   d.className = 'msg ' + (who === 'user' ? 'mine' : '');
-  d.style.maxWidth = '90%';
-  d.innerHTML = `<div style="font-size:11px;font-weight:800;margin-bottom:3px;color:${who === 'user' ? 'var(--primary)' : 'var(--indigo)'};">${who === 'user' ? 'Bạn' : '✨ Trợ lý AI'}</div><div style="white-space:pre-line;">${txt}</div>`;
+  d.style.maxWidth = '92%';
+  if (who === 'user') {
+    d.innerHTML = `<div style="font-size:11px;font-weight:800;margin-bottom:3px;color:var(--primary);">Bạn</div><div style="white-space:pre-line;">${txt}</div>`;
+  } else {
+    const safeLogo = BRAND_LOGO_SRC || '/logo.png';
+    d.innerHTML = `<div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><img src="${safeLogo}" alt="AI" style="width:22px;height:22px;border-radius:7px;object-fit:cover;background:#090d16;"><span style="font-size:11px;font-weight:800;color:var(--indigo);">Trợ lý AI TASKFLOW</span></div><div style="white-space:pre-line;">${txt}</div>`;
+  }
   box.appendChild(d);
   box.scrollTop = box.scrollHeight;
 }
@@ -1440,11 +1474,11 @@ function buildAiAnswer(q) {
   const s = q.toLowerCase();
   const vip = VIPS[me.vip] || VIPS[0];
   const links = db.supportLinks || INIT.supportLinks;
+  if (s.includes('cskh') || s.includes('zalo') || s.includes('telegram') || s.includes('nhóm') || s.includes('liên hệ') || s.includes('chat')) {
+    return `🎧 Đường link liên hệ CSKH & Nhóm trò chuyện đã cấu hình:\n• Zalo CSKH: ${links.zalo}\n• Telegram CSKH: ${links.telegram}\n• Nhóm chat cộng đồng: ${links.group}\n\nBạn cũng có thể mở tab "Cộng đồng" → chọn kênh "🎧 Nhắn CSKH" để nhắn trực tiếp.`;
+  }
   if (s.includes('điều kiện rút') || s.includes('100k') || s.includes('50k') || s.includes('lần đầu')) {
     return `💳 Quy định rút tiền:\n• Lần rút đầu tiên: Phải đủ tối thiểu 100.000đ và đã nạp ít nhất 1 lệnh 50.000đ.\n• Từ lần rút thứ 2 trở đi: Không giới hạn số lần rút, tối thiểu 10.000đ/lần.`;
-  }
-  if (s.includes('cskh') || s.includes('zalo') || s.includes('telegram') || s.includes('nhóm')) {
-    return `🎧 Liên hệ CSKH & Nhóm cộng đồng:\n• Nhắn trực tiếp trong tab "Cộng đồng" → kênh "🎧 Nhắn CSKH"\n• Zalo CSKH: ${links.zalo}\n• Telegram CSKH: ${links.telegram}\n• Nhóm chat cộng đồng: ${links.group}`;
   }
   if (s.includes('số dư') || s.includes('lượt') || s.includes('tôi') || s.includes('hạn')) {
     return `📊 Thông tin tài khoản @${me.u} (ID #${me.id}):\n• Số dư ví: ${money(me.bal)} (Tổng kiếm: ${money(me.earned)})\n• Hạng hiện tại: ${vip.name} — ${formatVipExpiry(me)}\n• Tiến độ ngày: ${me.done}/${vip.limit} lượt (+${vip.bonus}% thưởng) | Vé quay: ${me.tickets}`;
@@ -1461,7 +1495,7 @@ function buildAiAnswer(q) {
   if (s.includes('rút') || s.includes('mời') || s.includes('ref')) {
     return `💸 Rút tiền & Mời bạn bè:\n• Rút tiền: Vào tab "Ví tiền", chọn ngân hàng, nhập STK, tên chủ TK và số tiền rồi bấm "Gửi Lệnh Rút".\n• Mời bạn bè: Dùng mã ${me.refCode} nhận 15% hoa hồng tự động.`;
   }
-  return `Tôi đã nắm rõ các mục trên web (Trang chủ 10 nhiệm vụ/ngày cho Free, Vòng quay nổ màn hình kết quả & bảng trúng thưởng chạy, Gói VIP có thời hạn ngày & QR ngân hàng, Cộng đồng có CSKH Zalo/Telegram + nhóm chat + Bot IP/Ref, Ví tiền rút tiền & quy định 50k/100k và Quản trị Admin). Bạn cần hỏi phần nào?`;
+  return `Mình đã nắm rõ các mục trên web. Nếu cần chat với CSKH hoặc tham gia nhóm trò chuyện, bạn có thể bấm vào các link đã cài đặt:\n• Zalo CSKH: ${links.zalo}\n• Telegram CSKH: ${links.telegram}\n• Nhóm chat: ${links.group}`;
 }
 
 /* ADMIN */

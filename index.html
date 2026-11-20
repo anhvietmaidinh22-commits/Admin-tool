@@ -28,7 +28,7 @@
   button, input, select, textarea { font-family: inherit; font-size: 15px; outline: none; }
   button { cursor: pointer; border: none; transition: all 0.16s ease; }
   button:active:not(:disabled) { transform: scale(0.97); }
-  button:disabled { opacity: 0.65; cursor: not-allowed; }
+  button:disabled { opacity: 0.7; cursor: not-allowed; }
   .hidden { display: none !important; }
 
   /* Intro Splash Screen */
@@ -102,9 +102,10 @@
   .section { padding: 15px 15px 0; }
   .card { background: var(--card); border-radius: 22px; padding: 18px; border: 1px solid rgba(226, 232, 240, 0.9); box-shadow: var(--shadow-sm); margin-bottom: 14px; }
 
-  /* Home Notice Banner */
+  /* Home Notice Banner & Dimmed State */
   .home-notice-banner { background: linear-gradient(135deg, #fffbeb, #eff6ff); border: 1.5px solid #f59e0b; border-radius: 20px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm); }
-  .home-notice-item { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 10px 12px; margin-top: 8px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .home-notice-item { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 10px 12px; margin-top: 8px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; transition: opacity 0.25s ease, background 0.25s ease; }
+  .home-notice-item.acknowledged { opacity: 0.55; background: #f8fafc; }
 
   /* Luxury Fintech Wallet Card */
   .wallet-hero { background: linear-gradient(135deg, #0f172a 0%, #064e3b 52%, #059669 100%); color: #fff; border-radius: 24px; padding: 20px; margin-bottom: 14px; box-shadow: 0 14px 30px rgba(6, 78, 59, 0.28); position: relative; overflow: hidden; }
@@ -746,6 +747,19 @@
   </div>
 </div>
 
+<!-- VIP BANK TRANSFER MODAL -->
+<div id="vipPayModal" class="modal-bg hidden">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <strong id="vipPayTitle" style="font-size:16px;">Chuyển khoản nâng VIP</strong>
+      <button class="btn-secondary" onclick="closeModals()">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Quét mã QR hoặc chuyển khoản đúng số tiền và nội dung bên dưới để kích hoạt gói VIP:</p>
+    <div id="vipPayDetailBox"></div>
+    <button class="btn-primary" style="margin-top:14px;" onclick="confirmVipTransferRequest()">Tôi Đã Chuyển Khoản</button>
+  </div>
+</div>
+
 <!-- MODALS -->
 <div id="checkinModal" class="modal-bg hidden">
   <div class="modal-card">
@@ -826,10 +840,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V17';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V17';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V17';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V17';
+const KEY = 'TF_VIP_PRO_CLOUD_V18';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V18';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V18';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V18';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -1000,14 +1014,10 @@ let aiDraggedMoved = false;
 let reactionLockUntil = 0;
 let lastTypingPush = 0;
 
-function getUserActiveNotices() {
+function getUserNoticesForMe() {
   if (!me) return [];
   if (!Array.isArray(me.dismissedNotifyIds)) me.dismissedNotifyIds = [];
-  return (db.adminNotices || []).filter(n => {
-    const matchTarget = (n.target === 'ALL' || n.target === me.u);
-    const notDismissed = !me.dismissedNotifyIds.includes(n.id);
-    return matchTarget && notDismissed;
-  });
+  return (db.adminNotices || []).filter(n => n.target === 'ALL' || n.target === me.u);
 }
 
 function dismissUserNotice(noticeId) {
@@ -1029,53 +1039,54 @@ function adminRemoveNotice(noticeId) {
   toast('Đã gỡ thông báo khỏi hệ thống');
 }
 
+function renderNoticeItemHtml(n, isAck) {
+  return `
+    <div class="home-notice-item ${isAck ? 'acknowledged' : ''}">
+      <div style="min-width:0;">
+        <div style="font-size:13px;font-weight:800;color:var(--text);">${n.title}</div>
+        <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:2px;">${n.body}</div>
+      </div>
+      ${isAck
+        ? `<button type="button" class="btn-sm" style="background:#e2e8f0;color:#475569;flex-shrink:0;" disabled>✓ Đã hiểu</button>`
+        : `<button type="button" class="btn-sm" style="background:var(--primary-soft);color:var(--primary);flex-shrink:0;" onclick="dismissUserNotice('${n.id}')">Đã hiểu</button>`
+      }
+    </div>
+  `;
+}
+
 function renderUserNotices() {
   if (!me || me.role === 'admin') return;
-  const activeList = getUserActiveNotices();
+  const allMine = getUserNoticesForMe();
+  const unreadCount = allMine.filter(n => !me.dismissedNotifyIds.includes(n.id)).length;
+
   const badge = document.getElementById('userBellBadge');
   if (badge) {
-    badge.textContent = String(activeList.length);
-    badge.classList.toggle('hidden', activeList.length === 0);
+    badge.textContent = String(unreadCount);
+    badge.classList.toggle('hidden', unreadCount === 0);
   }
 
   const banner = document.getElementById('homeNoticeBanner');
   if (banner) {
-    if (!activeList.length) {
+    if (!allMine.length) {
       banner.classList.add('hidden');
       banner.innerHTML = '';
     } else {
       banner.classList.remove('hidden');
       banner.innerHTML = `
         <div style="display:flex;justify-content:space-between;align-items:center;">
-          <strong style="font-size:13px;color:#92400e;">📢 THÔNG BÁO MỚI (${activeList.length})</strong>
-          <span style="font-size:11px;color:var(--muted);">Hiển thị tại Trang chủ</span>
+          <strong style="font-size:13px;color:#92400e;">📢 THÔNG BÁO (${allMine.length})</strong>
+          <span style="font-size:11px;color:var(--muted);">${unreadCount > 0 ? unreadCount + ' chưa xác nhận' : 'Đã xem tất cả'}</span>
         </div>
-        ${activeList.map(n => `
-          <div class="home-notice-item">
-            <div style="min-width:0;">
-              <div style="font-size:13px;font-weight:800;color:var(--text);">${n.title}</div>
-              <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:2px;">${n.body}</div>
-            </div>
-            <button type="button" class="btn-sm" style="background:var(--primary-soft);color:var(--primary);flex-shrink:0;" onclick="dismissUserNotice('${n.id}')">Đã hiểu</button>
-          </div>
-        `).join('')}
+        ${allMine.map(n => renderNoticeItemHtml(n, me.dismissedNotifyIds.includes(n.id))).join('')}
       `;
     }
   }
 
   const modalList = document.getElementById('noticeModalList');
   if (modalList) {
-    modalList.innerHTML = activeList.length
-      ? activeList.map(n => `
-          <div class="home-notice-item">
-            <div style="min-width:0;">
-              <div style="font-size:13px;font-weight:800;color:var(--text);">${n.title}</div>
-              <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:2px;">${n.body}</div>
-            </div>
-            <button type="button" class="btn-sm" style="background:var(--primary-soft);color:var(--primary);flex-shrink:0;" onclick="dismissUserNotice('${n.id}')">Đã hiểu</button>
-          </div>
-        `).join('')
-      : '<div style="font-size:13px;color:var(--muted);padding:12px 0;text-align:center;">Không có thông báo mới nào.</div>';
+    modalList.innerHTML = allMine.length
+      ? allMine.map(n => renderNoticeItemHtml(n, me.dismissedNotifyIds.includes(n.id))).join('')
+      : '<div style="font-size:13px;color:var(--muted);padding:12px 0;text-align:center;">Không có thông báo nào.</div>';
   }
 }
 
@@ -2682,6 +2693,36 @@ function renderPaymentAccounts() {
       </div>
     </div>
   `).join('');
+}
+
+function addPaymentAccount() {
+  const bank = document.getElementById('payBank').value.trim();
+  const account = document.getElementById('payAcc').value.trim();
+  const owner = document.getElementById('payOwner').value.trim().toUpperCase();
+  const memo = document.getElementById('payMemo').value.trim().toUpperCase() || 'NAPVIP';
+  if (!bank || !account || !owner) return toast('Nhập đủ Ngân hàng, Số TK và Chủ TK');
+  db.paymentAccounts.forEach(p => { p.active = false; });
+  db.paymentAccounts.unshift({ id: 'PAY' + Date.now(), bank, account, owner, memo, qrImage: newPayQrData, active: true });
+  document.getElementById('payBank').value = '';
+  document.getElementById('payAcc').value = '';
+  document.getElementById('payOwner').value = '';
+  document.getElementById('payQrFile').value = '';
+  document.getElementById('newPayQrPreview').classList.add('hidden');
+  newPayQrData = '';
+  save(); renderAdmin(); toast('Đã thêm & kích hoạt tài khoản thanh toán');
+}
+
+function setActivePayment(id) {
+  db.paymentAccounts.forEach(p => { p.active = (p.id === id); });
+  save(); renderAdmin(); toast('Đã đổi tài khoản thanh toán đang hoạt động');
+}
+
+function deletePaymentAccount(id) {
+  if (db.paymentAccounts.length <= 1) return toast('Cần giữ ít nhất 1 tài khoản thanh toán');
+  const wasActive = db.paymentAccounts.find(p => p.id === id)?.active;
+  db.paymentAccounts = db.paymentAccounts.filter(p => p.id !== id);
+  if (wasActive && db.paymentAccounts[0]) db.paymentAccounts[0].active = true;
+  save(); renderAdmin(); toast('Đã xóa tài khoản thanh toán');
 }
 
 function renderAdminUsers() {

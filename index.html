@@ -826,10 +826,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V16';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V16';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V16';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V16';
+const KEY = 'TF_VIP_PRO_CLOUD_V17';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V17';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V17';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V17';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -1017,7 +1017,7 @@ function dismissUserNotice(noticeId) {
     me.dismissedNotifyIds.push(noticeId);
     save();
     renderUserNotices();
-    toast('Đã gỡ thông báo');
+    toast('Đã xác nhận thông báo');
   }
 }
 
@@ -1056,7 +1056,7 @@ function renderUserNotices() {
               <div style="font-size:13px;font-weight:800;color:var(--text);">${n.title}</div>
               <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:2px;">${n.body}</div>
             </div>
-            <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);flex-shrink:0;" onclick="dismissUserNotice('${n.id}')">Gỡ</button>
+            <button type="button" class="btn-sm" style="background:var(--primary-soft);color:var(--primary);flex-shrink:0;" onclick="dismissUserNotice('${n.id}')">Đã hiểu</button>
           </div>
         `).join('')}
       `;
@@ -1072,7 +1072,7 @@ function renderUserNotices() {
               <div style="font-size:13px;font-weight:800;color:var(--text);">${n.title}</div>
               <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:2px;">${n.body}</div>
             </div>
-            <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);flex-shrink:0;" onclick="dismissUserNotice('${n.id}')">Gỡ</button>
+            <button type="button" class="btn-sm" style="background:var(--primary-soft);color:var(--primary);flex-shrink:0;" onclick="dismissUserNotice('${n.id}')">Đã hiểu</button>
           </div>
         `).join('')
       : '<div style="font-size:13px;color:var(--muted);padding:12px 0;text-align:center;">Không có thông báo mới nào.</div>';
@@ -1150,7 +1150,7 @@ function getVisibleMessagesForChannel(chId) {
     return list.filter(m => m.ownerUser === me.u || m.senderUser === me.u);
   }
   if (chId === 'chung') {
-    return list.filter(m => m.targetUser === me.u);
+    return list.filter(m => m.broadcastAll === true || m.targetUser === me.u);
   }
   return list;
 }
@@ -2459,39 +2459,39 @@ function sendAdminNotification() {
   const body = (document.getElementById('notifyBodyInp')?.value || '').trim();
   if (!body) return toast('Nhập nội dung thông báo');
 
+  const noticeId = 'NTF_' + Date.now();
   if (!Array.isArray(db.adminNotices)) db.adminNotices = [];
   db.adminNotices.unshift({
-    id: 'NTF_' + Date.now() + '_' + Math.floor(Math.random() * 999),
+    id: noticeId,
     target,
     title,
     body,
     createdAt: Date.now()
   });
 
-  const recipients = target === 'ALL'
-    ? db.users.filter(u => u.role !== 'admin')
-    : db.users.filter(u => u.u === target);
-
-  recipients.forEach((u, idx) => {
-    u.hist.unshift({ t: `📢 [${title}] ${body}`, a: 0 });
-    db.msgs.push({
-      id: Date.now() + idx + Math.random(),
-      ch: 'chung',
-      targetUser: u.u,
-      sender: 'ADMIN THÔNG BÁO',
-      senderUser: 'admin',
-      role: 'admin',
-      pinned: false,
-      reactions: {},
-      text: `📢 ${title}\n${body}`
-    });
+  db.msgs.push({
+    id: Date.now(),
+    ch: 'chung',
+    targetUser: target === 'ALL' ? '' : target,
+    broadcastAll: target === 'ALL',
+    sender: 'ADMIN THÔNG BÁO',
+    senderUser: 'admin',
+    role: 'admin',
+    pinned: false,
+    reactions: {},
+    text: `📢 ${title}\n${body}`
   });
+
+  if (target !== 'ALL') {
+    const u = db.users.find(x => x.u === target);
+    if (u) u.hist.unshift({ t: `📢 [${title}] ${body}`, a: 0 });
+  }
 
   document.getElementById('notifyTitleInp').value = '';
   document.getElementById('notifyBodyInp').value = '';
   save();
   renderAdmin();
-  toast(`Đã gửi thông báo tới ${recipients.length} thành viên!`);
+  toast(target === 'ALL' ? 'Đã gửi thông báo tới tất cả thành viên!' : `Đã gửi thông báo tới @${target}!`);
 }
 
 function createPromoCode() {

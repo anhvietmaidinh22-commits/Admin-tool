@@ -103,9 +103,11 @@
   .msg.bot { max-width: 100%; width: 100%; align-self: center; background: linear-gradient(135deg, #eff6ff, #f0fdf4); border: 1.5px solid #bfdbfe; border-radius: 16px; }
   .badge { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 6px; margin-left: 5px; }
 
-  /* Payment Box */
+  /* Payment Box & QR */
   .bank-card-box { background: linear-gradient(135deg, #f8fafc, #eef2ff); border: 1.5px solid #c7d2fe; border-radius: 16px; padding: 15px; margin-top: 10px; }
   .active-bank-badge { display: inline-block; background: var(--primary-soft); color: var(--primary); font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 99px; margin-left: 6px; }
+  .qr-preview-img { width: 184px; height: 184px; object-fit: contain; border-radius: 14px; border: 2px solid #e2e8f0; background: #fff; padding: 6px; display: block; margin: 12px auto 4px; }
+  .qr-thumb-img { width: 64px; height: 64px; object-fit: cover; border-radius: 10px; border: 1.5px solid var(--border); background: #fff; flex-shrink: 0; }
 
   /* Bottom Nav & AI */
   .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(5, 1fr); padding: 8px 6px 11px; z-index: 30; box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.06); }
@@ -397,14 +399,19 @@
 
   <div id="aViewPay" class="section hidden">
     <div class="card">
-      <strong style="display:block;margin-bottom:10px;font-size:16px;">➕ Thêm tài khoản thanh toán</strong>
+      <strong style="display:block;margin-bottom:10px;font-size:16px;">➕ Thêm tài khoản thanh toán &amp; Ảnh QR</strong>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
         <input type="text" id="payBank" class="form-input" placeholder="Ngân hàng">
         <input type="text" id="payAcc" class="form-input" placeholder="Số tài khoản">
         <input type="text" id="payOwner" class="form-input" placeholder="Chủ tài khoản">
         <input type="text" id="payMemo" class="form-input" placeholder="Nội dung mẫu (VD: NAPVIP)">
       </div>
-      <button class="btn-primary" style="margin-top:10px;" onclick="addPaymentAccount()">Thêm Tài Khoản Thanh Toán</button>
+      <div class="form-group" style="margin-top:10px;">
+        <label class="form-label">Gán ảnh mã QR thanh toán (Tùy chọn)</label>
+        <input type="file" id="payQrFile" accept="image/*" class="form-input" onchange="handleNewPayQrFile(event)" style="padding:9px;">
+        <img id="newPayQrPreview" class="qr-preview-img hidden" alt="Xem trước mã QR">
+      </div>
+      <button class="btn-primary" onclick="addPaymentAccount()">Thêm Tài Khoản Thanh Toán</button>
     </div>
     <div id="adminPayList"></div>
   </div>
@@ -431,7 +438,7 @@
       <strong id="vipPayTitle" style="font-size:16px;">Chuyển khoản nâng VIP</strong>
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Vui lòng chuyển khoản đúng số tiền và nội dung bên dưới để kích hoạt gói VIP:</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Quét mã QR hoặc chuyển khoản đúng số tiền và nội dung bên dưới để kích hoạt gói VIP:</p>
     <div id="vipPayDetailBox"></div>
     <button class="btn-primary" style="margin-top:14px;" onclick="confirmVipTransferRequest()">Tôi Đã Chuyển Khoản</button>
   </div>
@@ -505,7 +512,7 @@
 </div>
 
 <script>
-const KEY = 'TF_VIP_PRO_V6';
+const KEY = 'TF_VIP_PRO_V7';
 const PRIZES = [
   { label: '888đ', val: 888, color: '#10b981', w: 28 },
   { label: '1.000đ', val: 1000, color: '#3b82f6', w: 24 },
@@ -531,6 +538,7 @@ const INIT = {
       account: '339498650',
       owner: 'DINH HOANG VIET ANH',
       memo: 'NAPVIP',
+      qrImage: '',
       active: true
     }
   ],
@@ -564,9 +572,15 @@ const INIT = {
 let db = JSON.parse(localStorage.getItem(KEY) || 'null') || JSON.parse(JSON.stringify(INIT));
 if (!db.paymentAccounts || !db.paymentAccounts.length) db.paymentAccounts = JSON.parse(JSON.stringify(INIT.paymentAccounts));
 if (!db.vipRequests) db.vipRequests = [];
-let mode = 'login', me = null, curTask = null, pendingVipPkg = null, curCh = 'chung', curTaskCat = 'all', deg = 0, spinning = false;
+let mode = 'login', me = null, curTask = null, pendingVipPkg = null, newPayQrData = '', curCh = 'chung', curTaskCat = 'all', deg = 0, spinning = false;
 
-function save() { localStorage.setItem(KEY, JSON.stringify(db)); }
+function save() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(db));
+  } catch (e) {
+    toast('Ảnh QR quá lớn cho bộ nhớ trình duyệt, hãy chọn ảnh nhẹ hơn');
+  }
+}
 function money(n) { return Number(n || 0).toLocaleString('vi-VN') + 'đ'; }
 function today() { return new Date().toISOString().slice(0, 10); }
 function toast(m) {
@@ -788,10 +802,15 @@ function openVipTransferModal(lv) {
   pendingVipPkg = pkg;
   const pay = getActivePayment();
   const memo = `${pay.memo || 'NAPVIP'} ${me.u} VIP${pkg.lv}`;
+  const qrHtml = pay.qrImage
+    ? `<img src="${pay.qrImage}" class="qr-preview-img" alt="Mã QR thanh toán"><div style="text-align:center;font-size:11px;color:var(--muted);margin-bottom:8px;">Quét mã QR bằng app ngân hàng</div>`
+    : `<div style="text-align:center;font-size:12px;color:var(--muted);background:#fff;border:1px dashed var(--border);border-radius:12px;padding:10px;margin:10px 0 6px;">Chưa gán ảnh QR cho tài khoản này — chuyển khoản thủ công theo thông tin bên dưới.</div>`;
+
   document.getElementById('vipPayTitle').textContent = `Nâng cấp ${pkg.name} (${pkg.days} ngày)`;
   document.getElementById('vipPayDetailBox').innerHTML = `
     <div class="bank-card-box">
       <div style="font-weight:900;color:var(--indigo);font-size:15px;">${pay.bank}</div>
+      ${qrHtml}
       <div style="margin-top:6px;font-size:13px;">Chủ TK: <strong>${pay.owner}</strong></div>
       <div style="font-size:13px;">Số TK: <strong style="color:var(--primary);font-size:15px;">${pay.account}</strong> <button class="btn-secondary" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="copyText('${pay.account}')">Copy STK</button></div>
       <div style="font-size:13px;margin-top:4px;">Số tiền: <strong style="color:var(--gold);font-size:15px;">${money(pkg.price)}</strong> • Thời hạn: <strong>${pkg.days} ngày</strong></div>
@@ -984,7 +1003,7 @@ const AI_SUGGESTIONS = [
   'Số dư & thời hạn VIP của tôi',
   'Cách làm nhiệm vụ nhận tiền',
   'Bảng giá & thời hạn gói VIP',
-  'Tài khoản thanh toán Admin',
+  'Tài khoản thanh toán & QR',
   'Vòng quay 7 ô & Rương ngày',
   'Cách rút tiền & mời bạn bè'
 ];
@@ -1027,8 +1046,8 @@ function buildAiAnswer(q) {
   const s = q.toLowerCase();
   const vip = VIPS[me.vip] || VIPS[0];
   const pay = getActivePayment();
-  if (s.includes('thanh toán') || s.includes('ngân hàng') || s.includes('stk') || s.includes('vikki')) {
-    return `🏦 Tài khoản thanh toán của Admin đang bật:\n• Ngân hàng: ${pay.bank}\n• Chủ tài khoản: ${pay.owner}\n• Số tài khoản: ${pay.account}\nKhi nâng VIP, bạn chuyển khoản theo thông tin này rồi bấm "Tôi Đã Chuyển Khoản" để Admin duyệt.`;
+  if (s.includes('thanh toán') || s.includes('ngân hàng') || s.includes('stk') || s.includes('qr')) {
+    return `🏦 Tài khoản thanh toán của Admin đang bật:\n• Ngân hàng: ${pay.bank}\n• Chủ tài khoản: ${pay.owner}\n• Số tài khoản: ${pay.account}\n• Trạng thái ảnh QR: ${pay.qrImage ? 'Đã gán ảnh QR' : 'Chưa gán ảnh QR'}\nAdmin có thể gán hoặc đổi ảnh QR trực tiếp trong tab "Tài khoản nhận".`;
   }
   if (s.includes('số dư') || s.includes('lượt') || s.includes('tôi') || s.includes('hạn')) {
     return `📊 Thông tin tài khoản @${me.u} (ID #${me.id}):\n• Số dư ví: ${money(me.bal)} (Tổng kiếm: ${money(me.earned)})\n• Hạng hiện tại: ${vip.name} — ${formatVipExpiry(me)}\n• Tiến độ ngày: ${me.done}/${vip.limit} lượt (+${vip.bonus}% thưởng) | Vé quay: ${me.tickets}`;
@@ -1045,7 +1064,7 @@ function buildAiAnswer(q) {
   if (s.includes('rút') || s.includes('mời') || s.includes('ref')) {
     return `💸 Rút tiền & Mời bạn bè:\n• Rút tiền: Vào tab "Ví tiền", chọn ngân hàng, nhập STK, tên chủ TK và số tiền (tối thiểu 10.000đ) rồi bấm "Gửi Lệnh Rút".\n• Mời bạn bè: Dùng mã ${me.refCode} nhận 15% hoa hồng tự động.`;
   }
-  return `Tôi đã nắm rõ các mục trên web (Trang chủ 10 nhiệm vụ/ngày cho Free, Vòng quay nổ màn hình kết quả & bảng trúng thưởng chạy, Gói VIP có thời hạn ngày & chuyển khoản ngân hàng, Cộng đồng có Bot báo IP/Ref, Ví tiền rút tiền và Quản trị Admin). Bạn cần hỏi phần nào?`;
+  return `Tôi đã nắm rõ các mục trên web (Trang chủ 10 nhiệm vụ/ngày cho Free, Vòng quay nổ màn hình kết quả & bảng trúng thưởng chạy, Gói VIP có thời hạn ngày & QR ngân hàng, Cộng đồng có Bot báo IP/Ref, Ví tiền rút tiền và Quản trị Admin). Bạn cần hỏi phần nào?`;
 }
 
 /* ADMIN */
@@ -1111,15 +1130,61 @@ function actVipReq(id, ok) {
   save(); renderAdmin(); toast(ok ? 'Đã duyệt & cộng thời hạn VIP!' : 'Đã từ chối yêu cầu VIP');
 }
 
+function readImageFile(file, cb) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => cb(String(reader.result || ''));
+  reader.readAsDataURL(file);
+}
+
+function handleNewPayQrFile(e) {
+  const file = e.target.files?.[0];
+  readImageFile(file, (dataUrl) => {
+    newPayQrData = dataUrl;
+    const img = document.getElementById('newPayQrPreview');
+    img.src = dataUrl;
+    img.classList.remove('hidden');
+  });
+}
+
+function attachQrToAccount(id, e) {
+  const file = e.target.files?.[0];
+  readImageFile(file, (dataUrl) => {
+    const acc = db.paymentAccounts.find(p => p.id === id);
+    if (!acc) return;
+    acc.qrImage = dataUrl;
+    save();
+    renderPaymentAccounts();
+    toast('Đã gán ảnh QR cho tài khoản ' + acc.bank);
+  });
+}
+
+function removeAccountQr(id) {
+  const acc = db.paymentAccounts.find(p => p.id === id);
+  if (!acc) return;
+  acc.qrImage = '';
+  save();
+  renderPaymentAccounts();
+  toast('Đã gỡ ảnh QR');
+}
+
 function renderPaymentAccounts() {
   document.getElementById('adminPayList').innerHTML = db.paymentAccounts.map(p => `
-    <div class="task-item">
-      <div>
-        <div><strong>${p.bank}</strong> ${p.active ? '<span class="active-bank-badge">Đang dùng</span>' : ''}</div>
-        <div style="font-size:13px;margin-top:2px;">STK: <strong>${p.account}</strong> • Chủ TK: <strong>${p.owner}</strong></div>
-        <div style="font-size:12px;color:var(--muted);">Nội dung: ${p.memo || 'NAPVIP'}</div>
+    <div class="task-item" style="align-items:flex-start;">
+      <div style="display:flex;gap:12px;align-items:center;min-width:0;">
+        ${p.qrImage ? `<img src="${p.qrImage}" class="qr-thumb-img" alt="QR">` : `<div class="qr-thumb-img" style="display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);">No QR</div>`}
+        <div style="min-width:0;">
+          <div><strong>${p.bank}</strong> ${p.active ? '<span class="active-bank-badge">Đang dùng</span>' : ''}</div>
+          <div style="font-size:13px;margin-top:2px;">STK: <strong>${p.account}</strong> • Chủ TK: <strong>${p.owner}</strong></div>
+          <div style="font-size:12px;color:var(--muted);">Nội dung: ${p.memo || 'NAPVIP'}</div>
+        </div>
       </div>
-      <div style="display:flex;gap:6px;flex-shrink:0;">
+      <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+        <label class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);text-align:center;">
+          ${p.qrImage ? 'Đổi ảnh QR' : 'Gán ảnh QR'}
+          <input type="file" accept="image/*" style="display:none;" onchange="attachQrToAccount('${p.id}', event)">
+        </label>
+        ${p.qrImage ? `<button class="btn-sm" style="background:#f1f5f9;color:#475569;" onclick="removeAccountQr('${p.id}')">Gỡ QR</button>` : ''}
         ${!p.active ? `<button class="btn-sm" style="background:var(--primary-soft);color:var(--primary);" onclick="setActivePayment('${p.id}')">Kích hoạt</button>` : ''}
         <button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="deletePaymentAccount('${p.id}')">Xóa</button>
       </div>
@@ -1134,10 +1199,13 @@ function addPaymentAccount() {
   const memo = document.getElementById('payMemo').value.trim().toUpperCase() || 'NAPVIP';
   if (!bank || !account || !owner) return toast('Nhập đủ Ngân hàng, Số TK và Chủ TK');
   db.paymentAccounts.forEach(p => { p.active = false; });
-  db.paymentAccounts.unshift({ id: 'PAY' + Date.now(), bank, account, owner, memo, active: true });
+  db.paymentAccounts.unshift({ id: 'PAY' + Date.now(), bank, account, owner, memo, qrImage: newPayQrData, active: true });
   document.getElementById('payBank').value = '';
   document.getElementById('payAcc').value = '';
   document.getElementById('payOwner').value = '';
+  document.getElementById('payQrFile').value = '';
+  document.getElementById('newPayQrPreview').classList.add('hidden');
+  newPayQrData = '';
   save(); renderAdmin(); toast('Đã thêm & kích hoạt tài khoản thanh toán');
 }
 

@@ -94,7 +94,7 @@
   .badge { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 6px; margin-left: 5px; }
 
   /* Payment Box */
-  .bank-card-box { background: linear-gradient(135deg, #f8fafc, #eff6ff); border: 1.5px solid #bfdbfe; border-radius: 16px; padding: 14px; margin-top: 12px; }
+  .bank-card-box { background: linear-gradient(135deg, #f8fafc, #eff6ff); border: 1.5px solid #bfdbfe; border-radius: 16px; padding: 14px; margin-top: 10px; }
   .active-bank-badge { display: inline-block; background: var(--primary-light); color: var(--primary); font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 99px; margin-left: 6px; }
 
   /* Bottom Nav & AI */
@@ -108,8 +108,9 @@
   .suggest-chip { background: var(--blue-light); color: var(--blue); border: 1px solid #bfdbfe; padding: 7px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; white-space: nowrap; }
 
   /* Modal & Admin */
-  .modal-bg { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.58); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 14px; }
-  .modal-card { background: #fff; width: 100%; max-width: 450px; border-radius: 22px; padding: 20px; max-height: 88vh; overflow-y: auto; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22); }
+  .modal-bg { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.62); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 14px; }
+  .modal-card { background: #fff; width: 100%; max-width: 450px; border-radius: 24px; padding: 20px; max-height: 88vh; overflow-y: auto; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25); animation: popIn 0.22s ease; }
+  @keyframes popIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
   .checkin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0; }
   .day-cell { border: 1.5px solid var(--border); border-radius: 12px; padding: 9px 4px; text-align: center; font-size: 12px; background: #f8fafc; }
   .day-cell.done { background: var(--primary-light); border-color: var(--primary); color: var(--primary); font-weight: 800; }
@@ -204,7 +205,7 @@
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800;">
         <span>Nhiệm vụ hôm nay (<span id="uVipBonusText" style="color:var(--amber);">+0%</span>)</span>
-        <span style="color:var(--primary);" id="uProgressLabel">0/3</span>
+        <span style="color:var(--primary);" id="uProgressLabel">0/10</span>
       </div>
       <div class="progress-bg"><div class="progress-fill" id="uProgressBar" style="width:0%"></div></div>
       <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);gap:8px;margin-top:4px;">
@@ -257,11 +258,6 @@
   <!-- VIP -->
   <div id="viewVip" class="section hidden">
     <div id="vipList"></div>
-    <div class="card">
-      <strong style="display:block;font-size:15px;margin-bottom:6px;">🏦 Tài khoản nhận thanh toán VIP / Nạp tiền</strong>
-      <div style="font-size:12px;color:var(--muted);">Quét mã QR hoặc chuyển khoản đúng nội dung để nâng cấp gói VIP nhanh:</div>
-      <div id="userPaymentInfoBox"></div>
-    </div>
   </div>
 
   <!-- CHAT -->
@@ -287,7 +283,7 @@
       <div class="form-group">
         <label class="form-label">Ngân hàng</label>
         <select id="wdBank" class="form-input">
-          <option>Vikki Digital Bank</option><option>MB Bank</option><option>Vietcombank</option><option>Techcombank</option><option>BIDV</option><option>MoMo</option>
+          <option>MB Bank</option><option>Vietcombank</option><option>Techcombank</option><option>BIDV</option><option>MoMo</option>
         </select>
       </div>
       <div class="form-group">
@@ -296,7 +292,7 @@
       </div>
       <div class="form-group">
         <label class="form-label">Chủ tài khoản</label>
-        <input type="text" id="wdOwner" class="form-input" placeholder="VD: DINH HOANG VIET ANH">
+        <input type="text" id="wdOwner" class="form-input" placeholder="VD: NGUYEN VAN A">
       </div>
       <div class="form-group">
         <label class="form-label">Số tiền rút (Tối thiểu 10.000đ)</label>
@@ -333,6 +329,7 @@
     <button class="admin-tab" id="aBtnUsers" onclick="switchAdminView('users')">👥 Thành viên &amp; Quyền</button>
     <button class="admin-tab" id="aBtnTasks" onclick="switchAdminView('tasks')">📌 Nhiệm vụ</button>
     <button class="admin-tab" id="aBtnWd" onclick="switchAdminView('wd')">💸 Rút tiền</button>
+    <button class="admin-tab" id="aBtnVipReq" onclick="switchAdminView('vipReq')">👑 Duyệt VIP</button>
     <button class="admin-tab" id="aBtnPay" onclick="switchAdminView('pay')">🏦 Tài khoản nhận</button>
   </div>
 
@@ -341,7 +338,7 @@
       <div class="card"><div style="color:var(--muted);font-size:13px;">Thành viên</div><div style="font-size:22px;font-weight:900;margin-top:4px;" id="kUsers">0</div></div>
       <div class="card"><div style="color:var(--muted);font-size:13px;">Lượt làm kèo</div><div style="font-size:22px;font-weight:900;color:var(--primary);margin-top:4px;" id="kDone">0</div></div>
       <div class="card"><div style="color:var(--muted);font-size:13px;">Chờ rút tiền</div><div style="font-size:22px;font-weight:900;color:var(--amber);margin-top:4px;" id="kWd">0</div></div>
-      <div class="card"><div style="color:var(--muted);font-size:13px;">TK nhận tiền</div><div style="font-size:14px;font-weight:800;color:var(--blue);margin-top:8px;" id="kPayBank">Vikki Bank</div></div>
+      <div class="card"><div style="color:var(--muted);font-size:13px;">Chờ duyệt VIP</div><div style="font-size:22px;font-weight:900;color:var(--blue);margin-top:4px;" id="kVipReq">0</div></div>
     </div>
   </div>
 
@@ -375,13 +372,20 @@
     <div class="card" id="adminWdBody"></div>
   </div>
 
+  <div id="aViewVipReq" class="section hidden">
+    <div class="card">
+      <strong style="display:block;margin-bottom:10px;font-size:15px;">👑 Danh sách yêu cầu nâng VIP qua chuyển khoản</strong>
+      <div id="adminVipReqBody"></div>
+    </div>
+  </div>
+
   <div id="aViewPay" class="section hidden">
     <div class="card">
       <strong style="display:block;margin-bottom:10px;font-size:16px;">➕ Thêm tài khoản thanh toán</strong>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <input type="text" id="payBank" class="form-input" placeholder="Ngân hàng (VD: Vikki Digital Bank)">
-        <input type="text" id="payAcc" class="form-input" placeholder="Số tài khoản (VD: 339498650)">
-        <input type="text" id="payOwner" class="form-input" placeholder="Chủ tài khoản (VD: DINH HOANG VIET ANH)">
+        <input type="text" id="payBank" class="form-input" placeholder="Ngân hàng">
+        <input type="text" id="payAcc" class="form-input" placeholder="Số tài khoản">
+        <input type="text" id="payOwner" class="form-input" placeholder="Chủ tài khoản">
         <input type="text" id="payMemo" class="form-input" placeholder="Nội dung mẫu (VD: NAPVIP)">
       </div>
       <button class="btn-primary" style="margin-top:10px;" onclick="addPaymentAccount()">Thêm Tài Khoản Thanh Toán</button>
@@ -392,6 +396,30 @@
 
 <!-- AI FLOAT BUTTON -->
 <button id="aiFloatBtn" class="ai-fab hidden" onclick="openAi()">✨ Trợ lý AI</button>
+
+<!-- SPIN RESULT POPUP MODAL -->
+<div id="spinResultModal" class="modal-bg hidden">
+  <div class="modal-card" style="text-align:center;">
+    <div id="spinPopupIcon" style="font-size:46px;margin-bottom:8px;">🎉</div>
+    <div id="spinPopupTitle" style="font-size:20px;font-weight:900;color:var(--primary);margin-bottom:6px;">TRÚNG THƯỞNG</div>
+    <div id="spinPopupPrize" style="font-size:26px;font-weight:900;color:var(--text);margin:8px 0;">+888đ</div>
+    <div id="spinPopupDesc" style="font-size:13px;color:var(--muted);margin-bottom:16px;">Phần thưởng đã được cộng vào số dư ví của bạn.</div>
+    <button class="btn-primary" onclick="closeModals()">Nhận &amp; Tiếp Tục</button>
+  </div>
+</div>
+
+<!-- VIP BANK TRANSFER MODAL -->
+<div id="vipPayModal" class="modal-bg hidden">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <strong id="vipPayTitle" style="font-size:16px;">Chuyển khoản nâng VIP</strong>
+      <button class="btn-secondary" onclick="closeModals()">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Vui lòng chuyển khoản đúng số tiền và nội dung bên dưới để nâng cấp gói VIP:</p>
+    <div id="vipPayDetailBox"></div>
+    <button class="btn-primary" style="margin-top:14px;" onclick="confirmVipTransferRequest()">Tôi Đã Chuyển Khoản</button>
+  </div>
+</div>
 
 <!-- MODALS -->
 <div id="checkinModal" class="modal-bg hidden">
@@ -458,7 +486,7 @@
 </div>
 
 <script>
-const KEY = 'TF_VIP_PRO_V4';
+const KEY = 'TF_VIP_PRO_V5';
 const PRIZES = [
   { label: '888đ', val: 888, color: '#10b981', w: 28 },
   { label: '1.000đ', val: 1000, color: '#3b82f6', w: 24 },
@@ -469,10 +497,10 @@ const PRIZES = [
   { label: 'Chúc may mắn lần sau', val: 0, color: '#64748b', w: 25 }
 ];
 const VIPS = [
-  { lv: 0, name: 'VIP 0', price: 0, limit: 3, bonus: 0, desc: '3 lượt/ngày • Thưởng chuẩn' },
-  { lv: 1, name: 'VIP 1', price: 50000, limit: 8, bonus: 5, desc: '8 lượt/ngày • +5% thưởng' },
-  { lv: 2, name: 'VIP 2', price: 150000, limit: 20, bonus: 12, desc: '20 lượt/ngày • +12% thưởng' },
-  { lv: 3, name: 'VIP 3', price: 400000, limit: 50, bonus: 25, desc: '50 lượt/ngày • +25% thưởng' }
+  { lv: 0, name: 'VIP 0 (Miễn phí)', price: 0, limit: 10, bonus: 0, desc: '10 nhiệm vụ/ngày • Thưởng chuẩn' },
+  { lv: 1, name: 'VIP 1', price: 50000, limit: 18, bonus: 5, desc: '18 nhiệm vụ/ngày • +5% thưởng' },
+  { lv: 2, name: 'VIP 2', price: 150000, limit: 35, bonus: 12, desc: '35 nhiệm vụ/ngày • +12% thưởng' },
+  { lv: 3, name: 'VIP 3', price: 400000, limit: 70, bonus: 25, desc: '70 nhiệm vụ/ngày • +25% thưởng' }
 ];
 const CHECKIN_VALS = [500, 800, 1000, 1200, 1500, 2000, 5000];
 
@@ -487,9 +515,10 @@ const INIT = {
       active: true
     }
   ],
+  vipRequests: [],
   users: [
     { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, hist: [] },
-    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 1, bal: 24500, earned: 54500, refEarned: 5000, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', tickets: 2, done: 1, lastCi: '', streak: 2, banned: false, hist: [{ t: 'Làm nhiệm vụ Vượt link', a: 630 }] },
+    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, bal: 5000, earned: 15000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, hist: [{ t: 'Làm nhiệm vụ Vượt link', a: 600 }] },
     { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, hist: [] }
   ],
   tasks: [
@@ -517,7 +546,8 @@ let db = JSON.parse(localStorage.getItem(KEY) || 'null') || JSON.parse(JSON.stri
 if (!db.paymentAccounts || !db.paymentAccounts.length) {
   db.paymentAccounts = JSON.parse(JSON.stringify(INIT.paymentAccounts));
 }
-let mode = 'login', me = null, curTask = null, curCh = 'chung', curTaskCat = 'all', deg = 0, spinning = false;
+if (!db.vipRequests) db.vipRequests = [];
+let mode = 'login', me = null, curTask = null, pendingVipPkg = null, curCh = 'chung', curTaskCat = 'all', deg = 0, spinning = false;
 
 function save() { localStorage.setItem(KEY, JSON.stringify(db)); }
 function money(n) { return Number(n || 0).toLocaleString('vi-VN') + 'đ'; }
@@ -528,7 +558,7 @@ function toast(m) {
   clearTimeout(el._t); el._t = setTimeout(() => el.classList.add('hidden'), 2600);
 }
 function closeModals() {
-  ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal', 'spinResultModal', 'vipPayModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
 }
 function fakeIp() {
   if (!sessionStorage.getItem('MY_IP')) {
@@ -649,7 +679,7 @@ function renderUser() {
   const vip = VIPS[me.vip] || VIPS[0];
   document.getElementById('uAvatar').textContent = (me.name || 'U').charAt(0).toUpperCase();
   document.getElementById('uName').textContent = me.name;
-  document.getElementById('uVipPill').textContent = vip.name;
+  document.getElementById('uVipPill').textContent = vip.name.split(' ')[0] + ' ' + vip.name.split(' ')[1];
   document.getElementById('uIdRef').textContent = `ID #${me.id} • Mã Ref: ${me.refCode}`;
   document.getElementById('uBal').textContent = money(me.bal);
   document.getElementById('uEarned').textContent = money(me.earned);
@@ -679,20 +709,18 @@ function renderUser() {
   document.getElementById('winnerMarquee').innerHTML = mList.map(w => `<div class="marquee-item"><span><strong>${w.u}</strong></span><span style="font-weight:800;color:${w.p === 'Chúc may mắn lần sau' ? 'var(--muted)' : 'var(--primary)'};">${w.p}</span></div>`).join('');
 
   document.getElementById('vipList').innerHTML = VIPS.filter(x => x.lv > 0).map(x => {
-    const has = me.vip >= x.lv;
-    return `<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;"><strong style="font-size:16px;">👑 ${x.name}</strong><strong style="color:var(--amber);font-size:15px;">${money(x.price)}</strong></div><div style="font-size:13px;color:var(--muted);margin:8px 0 12px;">${x.desc}</div><button class="btn-primary" style="background:${has ? '#94a3b8' : ''}" ${has ? 'disabled' : ''} onclick="buyVip(${x.lv})">${has ? 'Đã sở hữu' : 'Mua bằng số dư'}</button></div>`;
+    const owned = me.vip >= x.lv;
+    const pending = db.vipRequests.some(r => r.uid === me.id && r.lv === x.lv && r.st === 'pending');
+    return `
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;"><strong style="font-size:16px;">👑 ${x.name}</strong><strong style="color:var(--amber);font-size:15px;">${money(x.price)}</strong></div>
+        <div style="font-size:13px;color:var(--muted);margin:8px 0 12px;">${x.desc}</div>
+        <button class="btn-primary" style="background:${owned || pending ? '#94a3b8' : ''}" ${owned || pending ? 'disabled' : ''} onclick="openVipTransferModal(${x.lv})">
+          ${owned ? 'Đã sở hữu' : (pending ? 'Đang chờ Admin duyệt...' : 'Chuyển khoản nâng VIP')}
+        </button>
+      </div>
+    `;
   }).join('');
-
-  const pay = getActivePayment();
-  const memoText = `${pay.memo || 'NAPVIP'} ${me.u}`;
-  document.getElementById('userPaymentInfoBox').innerHTML = `
-    <div class="bank-card-box">
-      <div style="font-weight:900;color:var(--blue);font-size:14px;">${pay.bank}</div>
-      <div style="margin-top:6px;font-size:13px;">Chủ TK: <strong>${pay.owner}</strong></div>
-      <div style="font-size:13px;">Số TK: <strong style="color:var(--primary);font-size:15px;">${pay.account}</strong> <button class="btn-secondary" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="copyText('${pay.account}')">Copy STK</button></div>
-      <div style="font-size:13px;margin-top:4px;">Nội dung: <strong>${memoText}</strong> <button class="btn-secondary" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="copyText('${memoText}')">Copy ND</button></div>
-    </div>
-  `;
 
   document.getElementById('channelBar').innerHTML = db.channels.map(c => `<button class="channel-btn ${c.id === curCh ? 'active' : ''}" onclick="curCh='${c.id}';renderUser()">${c.name}</button>`).join('');
   const box = document.getElementById('chatBox');
@@ -703,6 +731,43 @@ function renderUser() {
   box.scrollTop = box.scrollHeight;
 
   document.getElementById('uHist').innerHTML = (me.hist || []).map(h => `<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;"><span>${h.t}</span><strong style="color:${h.a >= 0 ? 'var(--primary)' : 'var(--red)'};">${h.a >= 0 ? '+' : ''}${money(h.a)}</strong></div>`).join('');
+}
+
+function openVipTransferModal(lv) {
+  const pkg = VIPS.find(x => x.lv === lv);
+  if (!pkg) return;
+  pendingVipPkg = pkg;
+  const pay = getActivePayment();
+  const memo = `${pay.memo || 'NAPVIP'} ${me.u} VIP${pkg.lv}`;
+  document.getElementById('vipPayTitle').textContent = `Nâng cấp ${pkg.name} • ${money(pkg.price)}`;
+  document.getElementById('vipPayDetailBox').innerHTML = `
+    <div class="bank-card-box">
+      <div style="font-weight:900;color:var(--blue);font-size:15px;">${pay.bank}</div>
+      <div style="margin-top:6px;font-size:13px;">Chủ TK: <strong>${pay.owner}</strong></div>
+      <div style="font-size:13px;">Số TK: <strong style="color:var(--primary);font-size:15px;">${pay.account}</strong> <button class="btn-secondary" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="copyText('${pay.account}')">Copy STK</button></div>
+      <div style="font-size:13px;margin-top:4px;">Số tiền: <strong style="color:var(--amber);font-size:15px;">${money(pkg.price)}</strong></div>
+      <div style="font-size:13px;margin-top:4px;">Nội dung CK: <strong>${memo}</strong> <button class="btn-secondary" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="copyText('${memo}')">Copy ND</button></div>
+    </div>
+  `;
+  document.getElementById('vipPayModal').classList.remove('hidden');
+}
+
+function confirmVipTransferRequest() {
+  if (!pendingVipPkg) return;
+  db.vipRequests.unshift({
+    id: 'VIP' + Date.now().toString().slice(-4),
+    uid: me.id,
+    u: me.u,
+    name: me.name,
+    lv: pendingVipPkg.lv,
+    pkgName: pendingVipPkg.name,
+    price: pendingVipPkg.price,
+    st: 'pending'
+  });
+  save();
+  closeModals();
+  renderUser();
+  toast('Đã gửi xác nhận chuyển khoản VIP! Chờ Admin duyệt.');
 }
 
 function copyText(str) {
@@ -800,24 +865,33 @@ function spinWheel() {
     spinning = false;
     const p = PRIZES[idx];
     const msg = document.getElementById('wheelMsg');
+    const popIcon = document.getElementById('spinPopupIcon');
+    const popTitle = document.getElementById('spinPopupTitle');
+    const popPrize = document.getElementById('spinPopupPrize');
+    const popDesc = document.getElementById('spinPopupDesc');
+
     if (p.val > 0) {
       me.bal += p.val; me.earned += p.val;
       me.hist.unshift({ t: `Vòng quay: ${p.label}`, a: p.val });
       db.winners.unshift({ u: me.u.slice(0, 3) + '***', p: p.label });
       msg.textContent = `🎉 Trúng ${p.label}!`;
+      popIcon.textContent = '🎉';
+      popTitle.textContent = 'CHÚC MỪNG BẠN TRÚNG THƯỞNG!';
+      popTitle.style.color = 'var(--primary)';
+      popPrize.textContent = `+${p.label}`;
+      popDesc.textContent = 'Tiền thưởng đã được cộng trực tiếp vào số dư ví của bạn.';
     } else {
       msg.textContent = '😅 Chúc may mắn lần sau!';
+      popIcon.textContent = '🍀';
+      popTitle.textContent = 'CHÚC MAY MẮN LẦN SAU';
+      popTitle.style.color = 'var(--muted)';
+      popPrize.textContent = 'Chúc may mắn lần sau';
+      popDesc.textContent = 'Rất tiếc ô này chưa có thưởng. Hãy điểm danh hoặc làm nhiệm vụ để nhận thêm vé quay nhé!';
     }
-    save(); renderUser();
+    save();
+    renderUser();
+    document.getElementById('spinResultModal').classList.remove('hidden');
   }, 4050);
-}
-
-function buyVip(lv) {
-  const pkg = VIPS.find(x => x.lv === lv);
-  if (me.bal < pkg.price) return toast(`Cần ${money(pkg.price)} để nâng ${pkg.name}`);
-  me.bal -= pkg.price; me.vip = lv;
-  me.hist.unshift({ t: `Nâng ${pkg.name}`, a: -pkg.price });
-  save(); renderUser(); toast(`Đã lên ${pkg.name}!`);
 }
 
 function openCreateGroup() { document.getElementById('groupNameInput').value = ''; document.getElementById('groupModal').classList.remove('hidden'); }
@@ -857,7 +931,7 @@ function requestWithdraw() {
 const AI_SUGGESTIONS = [
   'Số dư & lượt làm việc của tôi',
   'Cách làm nhiệm vụ nhận tiền',
-  'Nâng gói VIP có lợi gì?',
+  'Nâng gói VIP chuyển khoản sao?',
   'Tài khoản thanh toán Admin',
   'Vòng quay 7 ô & Rương ngày',
   'Cách rút tiền & mời bạn bè'
@@ -867,7 +941,7 @@ function openAi() {
   document.getElementById('aiSuggestBar').innerHTML = AI_SUGGESTIONS.map(s => `<button type="button" class="suggest-chip" onclick="quickAsk('${s}')">${s}</button>`).join('');
   const box = document.getElementById('aiMessages');
   if (!box.innerHTML) {
-    pushAi('ai', `Chào ${me.name}! Tài khoản @${me.u} của bạn hiện đang ở ${VIPS[me.vip].name}, số dư ${money(me.bal)} và còn ${me.tickets} vé quay. Chọn câu hỏi gợi ý bên trên hoặc gõ câu hỏi bất kỳ để mình giải đáp chi tiết.`);
+    pushAi('ai', `Chào ${me.name}! Tài khoản @${me.u} của bạn hiện đang ở ${VIPS[me.vip].name} (${me.done}/${VIPS[me.vip].limit} lượt hôm nay), số dư ${money(me.bal)} và còn ${me.tickets} vé quay. Chọn câu hỏi gợi ý bên trên hoặc gõ câu hỏi bất kỳ nhé.`);
   }
   document.getElementById('aiModal').classList.remove('hidden');
 }
@@ -902,29 +976,29 @@ function buildAiAnswer(q) {
   const vip = VIPS[me.vip] || VIPS[0];
   const pay = getActivePayment();
   if (s.includes('thanh toán') || s.includes('ngân hàng') || s.includes('stk') || s.includes('vikki')) {
-    return `🏦 Tài khoản thanh toán đang kích hoạt:\n• Ngân hàng: ${pay.bank}\n• Chủ tài khoản: ${pay.owner}\n• Số tài khoản: ${pay.account}\nAdmin có thể thêm, sửa, xóa hoặc đổi tài khoản nhận tiền ngay trong tab "Tài khoản nhận" của trang Admin.`;
+    return `🏦 Tài khoản thanh toán của Admin đang bật:\n• Ngân hàng: ${pay.bank}\n• Chủ tài khoản: ${pay.owner}\n• Số tài khoản: ${pay.account}\nKhi nâng VIP, bạn chuyển khoản theo thông tin này rồi bấm "Tôi Đã Chuyển Khoản" để Admin duyệt.`;
   }
   if (s.includes('số dư') || s.includes('lượt') || s.includes('tôi')) {
     return `📊 Thông tin tài khoản @${me.u} (ID #${me.id}):\n• Số dư ví: ${money(me.bal)} (Tổng kiếm: ${money(me.earned)})\n• Hạng hiện tại: ${vip.name} (${me.done}/${vip.limit} lượt hôm nay, thưởng +${vip.bonus}%)\n• Vé quay còn lại: ${me.tickets} vé\n• Hoa hồng Ref đã nhận: ${money(me.refEarned)}`;
   }
   if (s.includes('nhiệm vụ') || s.includes('làm') || s.includes('kèo')) {
-    return `📌 Cách làm nhiệm vụ trên web:\n1. Ở tab "Trang chủ", lọc loại kèo hoặc bấm "Đổi kèo" để lấy mã mới.\n2. Bấm "Làm ngay", mở link để lấy mã xác nhận, nhập mã và bấm "Xác Nhận Nhận Tiền".\n3. Tiền cộng thẳng vào ví ngay sau khi xác nhận đúng mã.`;
+    return `📌 Cách làm nhiệm vụ trên web:\n• Gói Free (VIP 0) được 10 nhiệm vụ/ngày.\n• Ở tab "Trang chủ", bấm "Làm ngay", mở link lấy mã xác nhận, nhập mã và bấm "Xác Nhận Nhận Tiền".`;
   }
   if (s.includes('vip')) {
-    return `👑 Bảng quyền lợi gói VIP:\n• VIP 0 (Miễn phí): 3 lượt/ngày, thưởng chuẩn\n• VIP 1 (50.000đ): 8 lượt/ngày, +5% thưởng\n• VIP 2 (150.000đ): 20 lượt/ngày, +12% thưởng\n• VIP 3 (400.000đ): 50 lượt/ngày, +25% thưởng\nMua trực tiếp trong tab "Gói VIP" bằng số dư ví.`;
+    return `👑 Bảng gói VIP:\n• VIP 0 (Free): 10 lượt/ngày, thưởng chuẩn\n• VIP 1 (50.000đ): 18 lượt/ngày, +5% thưởng\n• VIP 2 (150.000đ): 35 lượt/ngày, +12% thưởng\n• VIP 3 (400.000đ): 70 lượt/ngày, +25% thưởng\nBấm "Chuyển khoản nâng VIP" trong tab Gói VIP để xem số tài khoản nhận tiền.`;
   }
   if (s.includes('quay') || s.includes('vé') || s.includes('rương')) {
-    return `🎡 Vòng quay & Rương ngày:\n• Vòng quay gồm 7 ô: 888đ, 1.000đ, 2.000đ, 5.000đ, 10.000đ, 30.000đ và Chúc may mắn lần sau.\n• Nhận thêm vé qua Điểm danh 7 ngày (+1 vé/ngày) hoặc làm đủ 3 nhiệm vụ để bấm "Rương ngày" (+1.000đ & +1 vé).`;
+    return `🎡 Vòng quay 7 ô & Rương ngày:\n• Gồm 888đ, 1.000đ, 2.000đ, 5.000đ, 10.000đ, 30.000đ và Chúc may mắn lần sau.\n• Quay xong sẽ bật màn hình báo kết quả rõ ràng; nhận thêm vé qua Điểm danh 7 ngày hoặc Rương ngày.`;
   }
   if (s.includes('rút') || s.includes('mời') || s.includes('ref')) {
-    return `💸 Rút tiền & Mời bạn bè:\n• Rút tiền: Vào tab "Ví tiền", chọn ngân hàng, nhập STK, tên chủ TK và số tiền (tối thiểu 10.000đ) rồi bấm "Gửi Lệnh Rút".\n• Mời bạn bè: Dùng mã ${me.refCode} — khi người được mời hoàn thành kèo, bạn nhận 15% hoa hồng tự động.`;
+    return `💸 Rút tiền & Mời bạn bè:\n• Rút tiền: Vào tab "Ví tiền", chọn ngân hàng, nhập STK, tên chủ TK và số tiền (tối thiểu 10.000đ) rồi bấm "Gửi Lệnh Rút".\n• Mời bạn bè: Dùng mã ${me.refCode} nhận 15% hoa hồng tự động.`;
   }
-  return `Tôi đã nắm rõ các mục trên web (Trang chủ nhiệm vụ, Vòng quay 7 ô & bảng trúng thưởng chạy, Gói VIP & Tài khoản nhận tiền, Cộng đồng có Bot báo IP/Ref, Ví tiền rút tiền và Quản trị Admin). Bạn cần hỏi chi tiết phần nào?`;
+  return `Tôi đã nắm rõ các mục trên web (Trang chủ 10 nhiệm vụ/ngày cho Free, Vòng quay nổ màn hình kết quả & bảng trúng thưởng chạy, Gói VIP chuyển khoản ngân hàng, Cộng đồng có Bot báo IP/Ref, Ví tiền rút tiền và Quản trị Admin). Bạn cần hỏi phần nào?`;
 }
 
 /* ADMIN */
 function switchAdminView(v) {
-  ['Dash', 'Users', 'Tasks', 'Wd', 'Pay'].forEach(k => {
+  ['Dash', 'Users', 'Tasks', 'Wd', 'VipReq', 'Pay'].forEach(k => {
     document.getElementById('aView' + k).classList.add('hidden');
     document.getElementById('aBtn' + k).classList.remove('active');
   });
@@ -935,15 +1009,51 @@ function switchAdminView(v) {
 }
 
 function renderAdmin() {
-  const activePay = getActivePayment();
   document.getElementById('kUsers').textContent = db.users.length;
   document.getElementById('kDone').textContent = db.tasks.reduce((s, x) => s + x.done, 0);
   document.getElementById('kWd').textContent = db.withdraws.filter(x => x.st === 'pending').length;
-  document.getElementById('kPayBank').textContent = `${activePay.bank} • ${activePay.account}`;
+  document.getElementById('kVipReq').textContent = db.vipRequests.filter(x => x.st === 'pending').length;
   renderAdminUsers();
   document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted);">Loại: ${t.cat || 'Vượt link'} • Mã: ${t.code} • Thưởng: ${money(t.reward)} • Đã làm: ${t.done}</div></div><button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
   document.getElementById('adminWdBody').innerHTML = db.withdraws.map(w => `<div class="task-item"><div><strong>@${w.u} • ${money(w.amt)}</strong><div style="font-size:12px;color:var(--muted);">${w.bank} - ${w.acc} (${w.owner})</div></div><div>${w.st === 'pending' ? `<button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actWd('${w.id}',1)">Duyệt</button> <button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="actWd('${w.id}',0)">Hủy</button>` : `<strong>${w.st === 'ok' ? 'Đã duyệt' : 'Đã hủy'}</strong>`}</div></div>`).join('');
+  renderVipRequests();
   renderPaymentAccounts();
+}
+
+function renderVipRequests() {
+  const el = document.getElementById('adminVipReqBody');
+  if (!db.vipRequests.length) {
+    el.innerHTML = '<div style="font-size:13px;color:var(--muted);">Chưa có yêu cầu nâng VIP nào.</div>';
+    return;
+  }
+  el.innerHTML = db.vipRequests.map(r => `
+    <div class="task-item">
+      <div>
+        <strong>${r.name} (@${r.u}) • ${r.pkgName}</strong>
+        <div style="font-size:12px;color:var(--muted);">Số tiền CK: <strong style="color:var(--amber);">${money(r.price)}</strong></div>
+      </div>
+      <div>
+        ${r.st === 'pending' ? `
+          <button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actVipReq('${r.id}',1)">Duyệt VIP</button>
+          <button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="actVipReq('${r.id}',0)">Từ chối</button>
+        ` : `<strong>${r.st === 'ok' ? 'Đã duyệt' : 'Đã từ chối'}</strong>`}
+      </div>
+    </div>
+  `).join('');
+}
+
+function actVipReq(id, ok) {
+  const r = db.vipRequests.find(x => x.id === id);
+  if (!r || r.st !== 'pending') return;
+  r.st = ok ? 'ok' : 'no';
+  if (ok) {
+    const u = db.users.find(x => x.id === r.uid);
+    if (u) {
+      u.vip = Math.max(u.vip, r.lv);
+      u.hist.unshift({ t: `Được duyệt nâng ${r.pkgName}`, a: 0 });
+    }
+  }
+  save(); renderAdmin(); toast(ok ? 'Đã nâng cấp VIP cho thành viên!' : 'Đã từ chối yêu cầu VIP');
 }
 
 function renderPaymentAccounts() {

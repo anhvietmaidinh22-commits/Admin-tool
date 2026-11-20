@@ -154,6 +154,7 @@
   .badge { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 6px; margin-left: 5px; }
   .msg-actions { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; padding-top: 6px; border-top: 1px dashed #e2e8f0; align-items: center; }
   .msg-act-btn { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 8px; background: #f1f5f9; color: #334155; }
+  .msg-act-btn.reacted { background: #dbeafe; color: #1d4ed8; }
   .msg-react-chip { font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 99px; background: #eef2ff; color: #3730a3; }
 
   .ai-link-cards { display: flex; flex-direction: column; gap: 7px; margin-top: 8px; }
@@ -407,10 +408,11 @@
       <div class="channel-row" id="channelBar"></div>
       <div id="userPinnedBanner"></div>
       <div class="chat-box" id="chatBox"></div>
-      <form onsubmit="sendMsg(event, 'user')" style="display:flex;gap:8px;margin-top:11px;">
+      <form id="userChatForm" onsubmit="sendMsg(event, 'user')" style="display:flex;gap:8px;margin-top:11px;">
         <input type="text" id="msgInput" class="form-input" placeholder="Nhắn tin trong nhóm hoặc cho CSKH...">
-        <button type="submit" class="btn-primary" style="width:auto;padding:0 18px;">Gửi</button>
+        <button type="submit" id="userSendBtn" class="btn-primary" style="width:auto;padding:0 18px;">Gửi</button>
       </form>
+      <div id="userBotOnlyHint" class="hidden" style="font-size:12px;color:var(--muted);margin-top:10px;text-align:center;">Kênh Bot chỉ hiển thị thông báo hệ thống &amp; thông báo riêng cho tài khoản của bạn.</div>
     </div>
   </div>
 
@@ -573,6 +575,12 @@
         </div>
       </div>
       <div class="channel-row" id="adminChannelBar"></div>
+
+      <div id="adminSupportCustomerPicker" class="hidden" style="margin-bottom:10px;background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:10px;">
+        <label class="form-label" style="margin-bottom:6px;">🎯 Khóa tài khoản khách hàng đang hỗ trợ (Trả lời không bị nhảy sang khách khác):</label>
+        <select id="adminSupportTargetSelect" class="form-input" onchange="changeAdminSupportTarget(this.value)"></select>
+      </div>
+
       <div id="adminPinnedBanner"></div>
       <div class="chat-box" id="adminChatBox"></div>
       <form onsubmit="sendMsg(event, 'admin')" style="display:flex;gap:8px;margin-top:11px;">
@@ -634,7 +642,7 @@
 
   <div id="aViewLinks" class="section hidden">
     <div class="card">
-      <strong style="display:block;margin-bottom:12px;font-size:16px;">🤝 Tùy Chỉnh Thưởng Tuyển Ref (Mặc định: 5.000đ / 2.000đ)</strong>
+      <strong style="display:block;margin-bottom:12px;font-size:16px;">🤝 Tùy Chỉnh Thưởng Tuyển Ref (Mặc định: 5.000đ / 2.000đ • Chống Trùng IP)</strong>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
         <div>
           <label class="form-label">Người tuyển nhận (VNĐ)</label>
@@ -784,10 +792,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V13';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V13';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V13';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V13';
+const KEY = 'TF_VIP_PRO_CLOUD_V14';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V14';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V14';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V14';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -920,8 +928,9 @@ function normalizeDb(raw) {
 }
 
 let db = normalizeDb(JSON.parse(localStorage.getItem(KEY) || 'null'));
-let mode = 'login', me = null, curTask = null, pendingVipPkg = null, pendingAlertWd = null, newPayQrData = '', curCh = 'congdong', curTaskCat = 'all', deg = 0, spinning = false, isSyncing = false, realClientIp = '';
+let mode = 'login', me = null, curTask = null, pendingVipPkg = null, pendingAlertWd = null, newPayQrData = '', curCh = 'congdong', activeSupportCustomer = 'user1', curTaskCat = 'all', deg = 0, spinning = false, isSyncing = false, realClientIp = '';
 let aiDraggedMoved = false;
+let reactionLockUntil = 0;
 
 function getReadCountsMap() {
   try {
@@ -957,6 +966,9 @@ function getVisibleMessagesForChannel(chId) {
   if (!me) return [];
   const list = (db.msgs || []).filter(m => m.ch === chId);
   if (me.role === 'admin' || me.role === 'cskh') {
+    if (chId === 'cskh' && activeSupportCustomer) {
+      return list.filter(m => m.ownerUser === activeSupportCustomer || m.senderUser === activeSupportCustomer);
+    }
     return list;
   }
   if (chId === 'cskh') {
@@ -966,6 +978,11 @@ function getVisibleMessagesForChannel(chId) {
     return list.filter(m => m.targetUser === me.u);
   }
   return list;
+}
+
+function changeAdminSupportTarget(username) {
+  activeSupportCustomer = username || 'user1';
+  renderAdmin();
 }
 
 /* DRAGGABLE AI BUTTON */
@@ -1088,7 +1105,7 @@ function testTelegramBot() {
 
 /* CLOUD SYNC (SUPABASE) - PERSISTENT SESSION ACROSS RELOAD */
 async function pullFromCloud(silent = true) {
-  if (!CLOUD_ENABLED || isSyncing) {
+  if (!CLOUD_ENABLED || isSyncing || Date.now() < reactionLockUntil) {
     if (!CLOUD_ENABLED) updateCloudBadge('Chế độ nội bộ', false);
     return;
   }
@@ -1185,7 +1202,7 @@ async function detectRealIp() {
 }
 
 setInterval(async () => {
-  if (!CLOUD_ENABLED || !me || spinning) return;
+  if (!CLOUD_ENABLED || !me || spinning || Date.now() < reactionLockUntil) return;
   const activeTag = document.activeElement?.tagName;
   if (activeTag === 'INPUT' || activeTag === 'SELECT' || activeTag === 'TEXTAREA') return;
   await pullFromCloud(true);
@@ -1301,7 +1318,7 @@ function setAuthMode(m) {
   document.getElementById('authSubmitBtn').textContent = m === 'login' ? 'Đăng Nhập' : 'Đăng Ký';
 }
 
-function botAnnounceToUser(user, tag) {
+function botAnnounceToUser(user, tag, refNote = '') {
   if (!user) return;
   const dup = db.users.filter(x => x.ip === user.ip).length;
   db.msgs.push({
@@ -1313,7 +1330,7 @@ function botAnnounceToUser(user, tag) {
     role: 'bot',
     pinned: false,
     reactions: {},
-    text: `🤖 [${tag}] Xin chào ${user.name} (@${user.u})\n• Người giới thiệu: ${user.refBy}\n• IP của bạn: ${user.ip} (${dup > 1 ? '⚠️ Trùng IP x' + dup : '✅ IP riêng'})`
+    text: `🤖 [${tag}] Xin chào ${user.name} (@${user.u})\n• Người giới thiệu: ${user.refBy}\n• IP của bạn: ${user.ip} (${dup > 1 ? '⚠️ Trùng IP x' + dup : '✅ IP riêng'})${refNote ? '\n' + refNote : ''}`
   });
 }
 
@@ -1341,29 +1358,44 @@ async function submitAuth(e) {
     const inv = db.users.find(x => x.refCode === refIn);
     const inviterReward = Number(db.refConfig?.inviterBonus ?? 5000);
     const inviteeReward = Number(db.refConfig?.inviteeBonus ?? 2000);
-    const startBal = 2000 + (inv ? inviteeReward : 0);
+
+    const sameIpWithRef = Boolean(inv && inv.ip && inv.ip === clientIp);
+    const grantRef = Boolean(inv && !sameIpWithRef);
+
+    const startBal = 2000 + (grantRef ? inviteeReward : 0);
     const id = 1000 + db.users.length;
     const nu = {
       id, u, p, name, role: 'user', vip: 0, vipExpiry: 0,
-      bal: startBal, earned: startBal, refEarned: inv ? inviteeReward : 0,
+      bal: startBal, earned: startBal, refEarned: grantRef ? inviteeReward : 0,
       refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có',
       ip: clientIp, tickets: 1, done: 0, lastCi: '', streak: 0, banned: false,
       deposit50kDone: false, seenApprovedWdIds: [],
-      hist: inv
+      hist: grantRef
         ? [{ t: 'Tặng tân thủ', a: 2000 }, { t: `Thưởng nhập mã Ref ${inv.refCode}`, a: inviteeReward }]
         : [{ t: 'Tặng tân thủ', a: 2000 }]
     };
-    if (inv && inviterReward > 0) {
+
+    if (grantRef && inviterReward > 0) {
       inv.bal += inviterReward;
       inv.earned += inviterReward;
       inv.refEarned += inviterReward;
       inv.hist.unshift({ t: `Thưởng tuyển Ref từ @${nu.u}`, a: inviterReward });
     }
+
+    const refNote = inv
+      ? (sameIpWithRef
+          ? '• Thưởng Ref: Không cộng thưởng do trùng địa chỉ IP với người giới thiệu'
+          : `• Thưởng Ref: Bạn nhận +${money(inviteeReward)}, người mời nhận +${money(inviterReward)}`)
+      : '';
+
     db.users.push(nu); me = nu;
     localStorage.setItem(SESSION_USER_KEY, me.u);
-    botAnnounceToUser(nu, 'Thành viên mới');
-    notifyTelegram(`🆕 KHÁCH HÀNG ĐĂNG KÝ MỚI\n• Họ tên: ${nu.name}\n• Tài khoản: @${nu.u} (ID #${nu.id})\n• Mã Ref mời: ${nu.refCode}\n• Người giới thiệu: ${nu.refBy}\n• IP: ${nu.ip}`);
+    botAnnounceToUser(nu, 'Thành viên mới', refNote);
+    notifyTelegram(`🆕 KHÁCH HÀNG ĐĂNG KÝ MỚI\n• Họ tên: ${nu.name}\n• Tài khoản: @${nu.u} (ID #${nu.id})\n• Mã Ref mời: ${nu.refCode}\n• Người giới thiệu: ${nu.refBy}\n• IP: ${nu.ip}${sameIpWithRef ? '\n• Trạng thái Ref: Trùng IP (không cộng thưởng)' : ''}`);
     save(); startSession(false);
+    if (sameIpWithRef) {
+      toast('Đăng ký thành công (Trùng IP người giới thiệu nên không cộng thưởng Ref)');
+    }
   }
 }
 
@@ -1510,10 +1542,11 @@ function renderWalletRules() {
 }
 
 function toggleMessageReaction(msgId, emoji) {
+  reactionLockUntil = Date.now() + 2500;
   const m = (db.msgs || []).find(x => String(x.id) === String(msgId));
   if (!m || !me) return;
   if (!m.reactions || typeof m.reactions !== 'object') m.reactions = {};
-  const users = Array.isArray(m.reactions[emoji]) ? m.reactions[emoji] : [];
+  const users = Array.isArray(m.reactions[emoji]) ? [...m.reactions[emoji]] : [];
   const idx = users.indexOf(me.u);
   if (idx >= 0) users.splice(idx, 1);
   else users.push(me.u);
@@ -1539,6 +1572,7 @@ function tagUserInChat(username) {
 
 function togglePinMessage(msgId) {
   if (!me || me.role !== 'admin') return;
+  reactionLockUntil = Date.now() + 2500;
   const m = (db.msgs || []).find(x => String(x.id) === String(msgId));
   if (!m) return;
   const nextPin = !m.pinned;
@@ -1553,6 +1587,7 @@ function togglePinMessage(msgId) {
 
 function deleteMessageById(msgId) {
   if (!me || me.role !== 'admin') return;
+  reactionLockUntil = Date.now() + 2500;
   db.msgs = (db.msgs || []).filter(x => String(x.id) !== String(msgId));
   save();
   renderActiveChat();
@@ -1586,6 +1621,12 @@ function renderChatList(barId, boxId, bannerId) {
     return `<button type="button" class="channel-btn ${c.id === curCh ? 'active' : ''}" onclick="selectChannel('${c.id}')">${c.name}${badgeHtml}</button>`;
   }).join('');
 
+  if (me && me.role !== 'admin') {
+    const isBotCh = curCh === 'chung';
+    document.getElementById('userChatForm')?.classList.toggle('hidden', isBotCh);
+    document.getElementById('userBotOnlyHint')?.classList.toggle('hidden', !isBotCh);
+  }
+
   const visibleMsgs = getVisibleMessagesForChannel(curCh);
   renderPinnedBanner(bannerId, visibleMsgs);
 
@@ -1598,13 +1639,13 @@ function renderChatList(barId, boxId, bannerId) {
     const ownerTag = (isAdmin && m.ownerUser) ? `<span class="badge" style="background:#e2e8f0;color:#0f172a;">Khách: @${m.ownerUser}</span>` : '';
     const isMine = me && (m.senderUser === me.u || m.sender === me.name);
     const reactObj = m.reactions || {};
-    const reactChips = Object.keys(reactObj).map(emo => {
+
+    const emojiBtns = emojis.map(emo => {
       const cnt = (reactObj[emo] || []).length;
-      if (!cnt) return '';
-      return `<button type="button" class="msg-react-chip" onclick="toggleMessageReaction('${m.id}', '${emo}')">${emo} ${cnt}</button>`;
+      const hasReacted = me && Array.isArray(reactObj[emo]) && reactObj[emo].includes(me.u);
+      return `<button type="button" class="msg-act-btn ${hasReacted ? 'reacted' : ''}" onclick="toggleMessageReaction('${m.id}', '${emo}')">${emo}${cnt > 0 ? ' ' + cnt : ''}</button>`;
     }).join('');
 
-    const emojiBtns = emojis.map(emo => `<button type="button" class="msg-act-btn" onclick="toggleMessageReaction('${m.id}', '${emo}')">${emo}</button>`).join('');
     const tagHandle = m.senderUser || m.u || m.sender;
     const tagBtn = `<button type="button" class="msg-act-btn" onclick="tagUserInChat('${tagHandle}')">@Tag</button>`;
     const adminBtns = isAdmin
@@ -1615,7 +1656,6 @@ function renderChatList(barId, boxId, bannerId) {
       <div class="msg ${m.role === 'bot' ? 'bot' : (isMine ? 'mine' : '')} ${m.pinned ? 'pinned-msg' : ''}">
         <div style="font-size:12px;font-weight:800;margin-bottom:4px;color:#1e293b;">${m.sender}${roleBadge}${ownerTag}</div>
         <div style="white-space:pre-line;">${m.text}</div>
-        ${reactChips ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">${reactChips}</div>` : ''}
         <div class="msg-actions">${emojiBtns}${tagBtn}${adminBtns}</div>
       </div>
     `;
@@ -1647,7 +1687,7 @@ function renderUser() {
 
   const invBonus = Number(db.refConfig?.inviterBonus ?? 5000);
   const iteBonus = Number(db.refConfig?.inviteeBonus ?? 2000);
-  document.getElementById('refRewardPolicyBox').innerHTML = `• Người tuyển nhận ngay: <strong style="color:var(--primary);">${money(invBonus)}</strong><br>• Người nhập mã Ref nhận ngay: <strong style="color:var(--indigo);">${money(iteBonus)}</strong>`;
+  document.getElementById('refRewardPolicyBox').innerHTML = `• Người tuyển nhận ngay: <strong style="color:var(--primary);">${money(invBonus)}</strong><br>• Người nhập mã Ref nhận ngay: <strong style="color:var(--indigo);">${money(iteBonus)}</strong><br>• Lưu ý chống spam: Trùng địa chỉ IP sẽ không được cộng thưởng Ref.`;
   document.getElementById('refMyCodeBox').value = me.refCode;
   document.getElementById('refMyLinkBox').value = `${location.origin}/?ref=${me.refCode}`;
   document.getElementById('refTabEarned').textContent = money(me.refEarned);
@@ -1833,7 +1873,7 @@ function confirmTask() {
   me.bal += rew; me.earned += rew; me.done++; curTask.done++;
   me.hist.unshift({ t: `Kèo: ${curTask.title}`, a: rew });
   const inv = db.users.find(x => me.refBy && me.refBy.includes(x.refCode));
-  if (inv) {
+  if (inv && inv.ip !== me.ip) {
     const comm = Math.round(rew * 0.15);
     inv.bal += comm; inv.refEarned += comm;
     inv.hist.unshift({ t: `Ref 15% từ @${me.u}`, a: comm });
@@ -1913,9 +1953,14 @@ function addGroup() {
 
 function sendMsg(e, source = 'user') {
   e.preventDefault();
+  if (me && me.role !== 'admin' && curCh === 'chung') {
+    return toast('Kênh Bot chỉ dành cho thông báo hệ thống của tài khoản');
+  }
   const inp = document.getElementById(source === 'admin' ? 'adminMsgInput' : 'msgInput');
   if (!inp || !inp.value.trim()) return;
-  const ownerUser = (curCh === 'cskh') ? (me.role === 'admin' ? '' : me.u) : '';
+  const ownerUser = (curCh === 'cskh')
+    ? (me.role === 'admin' ? (activeSupportCustomer || 'user1') : me.u)
+    : '';
   db.msgs.push({
     id: Date.now(),
     ch: curCh,
@@ -2058,7 +2103,7 @@ function buildAiAnswer(q) {
   if (s.includes('ref') || s.includes('tuyển') || s.includes('mời')) {
     const invBonus = Number(db.refConfig?.inviterBonus ?? 5000);
     const iteBonus = Number(db.refConfig?.inviteeBonus ?? 2000);
-    return { text: `🤝 Chính sách tuyển Ref:\n• Người tuyển nhận ngay: ${money(invBonus)}\n• Người được mời nhận ngay: ${money(iteBonus)}\n• Mã Ref của bạn: ${me ? me.refCode : ''}` };
+    return { text: `🤝 Chính sách tuyển Ref:\n• Người tuyển nhận ngay: ${money(invBonus)}\n• Người được mời nhận ngay: ${money(iteBonus)}\n• Lưu ý: Trùng địa chỉ IP sẽ không được cộng thưởng Ref.\n• Mã Ref của bạn: ${me ? me.refCode : ''}` };
   }
   if (s.includes('điều kiện rút') || s.includes('100k') || s.includes('50k') || s.includes('lần đầu')) {
     return { text: `💳 Quy định rút tiền:\n• Lần rút đầu tiên: Phải đủ tối thiểu 100.000đ và đã nạp ít nhất 1 lệnh 50.000đ.\n• Từ lần rút thứ 2 trở đi: Không giới hạn số lần rút, tối thiểu 10.000đ/lần.` };
@@ -2114,6 +2159,21 @@ function renderAdmin() {
     const memberOpts = db.users.filter(u => u.role !== 'admin').map(u => `<option value="${u.u}">@${u.u} (${u.name})</option>`).join('');
     targetSel.innerHTML = `<option value="ALL">Tất cả thành viên</option>${memberOpts}`;
     targetSel.value = prevVal;
+  }
+
+  const supportPicker = document.getElementById('adminSupportCustomerPicker');
+  const supportSel = document.getElementById('adminSupportTargetSelect');
+  if (supportPicker && supportSel) {
+    supportPicker.classList.toggle('hidden', curCh !== 'cskh');
+    const customers = db.users.filter(u => u.role !== 'admin');
+    if (customers.length && !customers.some(c => c.u === activeSupportCustomer)) {
+      activeSupportCustomer = customers[0].u;
+    }
+    supportSel.innerHTML = customers.map(c => {
+      const cnt = db.msgs.filter(m => m.ch === 'cskh' && (m.ownerUser === c.u || m.senderUser === c.u)).length;
+      return `<option value="${c.u}">@${c.u} (${c.name}) • ${cnt} tin</option>`;
+    }).join('');
+    supportSel.value = activeSupportCustomer;
   }
 
   renderAdminUsers();

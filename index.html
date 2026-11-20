@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TASKFLOW PRO - Nền Tảng Nhiệm Vụ & VIP Fintech</title>
+<title>TASKFLOW PRO - Nền Tảng Nhiệm Vụ & Kiếm Thưởng</title>
+<link rel="icon" type="image/png" href="/logo.png">
 <style>
   :root {
     --bg: #f3f6fa;
@@ -30,6 +31,47 @@
   button:disabled { opacity: 0.65; cursor: not-allowed; }
   .hidden { display: none !important; }
 
+  /* Intro Splash Screen */
+  .intro-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    background: radial-gradient(circle at center, #132247 0%, #070b14 72%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+    transition: opacity 0.45s ease, visibility 0.45s ease;
+  }
+  .intro-screen.fade-out { opacity: 0; visibility: hidden; }
+  .intro-logo-box {
+    width: 190px;
+    height: 190px;
+    border-radius: 36px;
+    overflow: hidden;
+    border: 2px solid rgba(99, 179, 237, 0.45);
+    box-shadow: 0 0 42px rgba(59, 130, 246, 0.42), 0 18px 40px rgba(0, 0, 0, 0.6);
+    animation: logoPulse 1.8s ease-in-out infinite;
+    background: #090d16;
+  }
+  .intro-logo-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  @keyframes logoPulse {
+    0%, 100% { transform: scale(0.97); }
+    50% { transform: scale(1.03); }
+  }
+  .intro-skip-btn {
+    margin-top: 22px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
   .app-shell { max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--bg); padding-bottom: 94px; box-shadow: 0 0 40px rgba(15, 23, 42, 0.12); position: relative; }
   .admin-shell { max-width: 1120px; margin: 0 auto; min-height: 100vh; background: var(--bg); padding-bottom: 48px; }
 
@@ -37,7 +79,7 @@
   .auth-wrap { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; background: radial-gradient(circle at top right, #d1fae5 0%, #f3f6fa 45%, #e0e7ff 100%); }
   .auth-box { width: 100%; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-radius: 28px; padding: 30px 24px; border: 1px solid #fff; box-shadow: 0 20px 45px rgba(15, 23, 42, 0.1); }
   .brand-head { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; margin-bottom: 22px; }
-  .brand-badge { width: 56px; height: 56px; border-radius: 18px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 22px; box-shadow: 0 10px 22px rgba(5, 150, 105, 0.32); }
+  .brand-logo-img { width: 92px; height: 92px; border-radius: 22px; object-fit: cover; box-shadow: 0 10px 24px rgba(15, 23, 42, 0.22); border: 2px solid #e2e8f0; background: #090d16; }
   .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; background: #edf2f7; padding: 5px; border-radius: 15px; margin-bottom: 20px; }
   .auth-tab { padding: 10px; border-radius: 11px; font-weight: 700; font-size: 14px; color: var(--muted); background: transparent; }
   .auth-tab.active { background: #fff; color: var(--primary); box-shadow: 0 4px 10px rgba(15, 23, 42, 0.07); }
@@ -51,7 +93,7 @@
 
   /* Header */
   .topbar { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(12px); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 25; }
-  .user-avatar { width: 44px; height: 44px; border-radius: 15px; background: linear-gradient(135deg, #0f172a, #1e293b); color: #fbbf24; font-weight: 900; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18); }
+  .user-avatar-img { width: 44px; height: 44px; border-radius: 14px; object-fit: cover; flex-shrink: 0; border: 1.5px solid var(--border); background: #090d16; }
   .vip-pill { display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; font-size: 11px; font-weight: 900; padding: 3px 10px; border-radius: 99px; border: 1px solid #f59e0b66; }
 
   .section { padding: 15px 15px 0; }
@@ -75,8 +117,9 @@
 
   /* VIP Card Styling */
   .vip-card { background: #fff; border-radius: 22px; padding: 18px; border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 14px; position: relative; }
-  .vip-card.featured { border-color: #f59e0b; background: linear-gradient(180deg, #fffbeb 0%, #ffffff 35%); }
+  .vip-card.active-tier { border-color: #10b981; background: linear-gradient(180deg, #ecfdf5 0%, #ffffff 35%); }
   .vip-duration-tag { display: inline-block; background: #0f172a; color: #fbbf24; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 99px; }
+  .vip-inuse-badge { display: inline-block; background: #059669; color: #fff; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 99px; }
 
   /* Wheel & Marquee */
   .wheel-wrap { position: relative; width: 290px; height: 290px; margin: 14px auto 16px; }
@@ -92,11 +135,13 @@
   @keyframes runMarquee { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
   .marquee-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
 
-  /* Chat */
+  /* Chat & CSKH / Group Links */
+  .cskh-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+  .cskh-link-btn { display: flex; align-items: center; justify-content: center; gap: 5px; padding: 9px 8px; border-radius: 12px; font-size: 12px; font-weight: 800; text-decoration: none; border: 1px solid var(--border); }
   .channel-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; }
   .channel-btn { padding: 8px 14px; border-radius: 99px; background: #f1f5f9; border: 1px solid var(--border); color: var(--muted); font-size: 13px; font-weight: 700; white-space: nowrap; }
   .channel-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-  .chat-box { height: 365px; overflow-y: auto; background: #e9eff6; border: 1px solid var(--border); border-radius: 18px; padding: 13px; display: flex; flex-direction: column; gap: 11px; }
+  .chat-box { height: 340px; overflow-y: auto; background: #e9eff6; border: 1px solid var(--border); border-radius: 18px; padding: 13px; display: flex; flex-direction: column; gap: 11px; }
   .msg { max-width: 86%; padding: 11px 14px; border-radius: 16px; background: #fff; font-size: 14px; line-height: 1.5; align-self: flex-start; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05); }
   .msg.mine { background: #dcfce7; align-self: flex-end; border-bottom-right-radius: 4px; }
   .msg.bot { max-width: 100%; width: 100%; align-self: center; background: linear-gradient(135deg, #eff6ff, #f0fdf4); border: 1.5px solid #bfdbfe; border-radius: 16px; }
@@ -107,6 +152,13 @@
   .active-bank-badge { display: inline-block; background: var(--primary-soft); color: var(--primary); font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 99px; margin-left: 6px; }
   .qr-preview-img { width: 184px; height: 184px; object-fit: contain; border-radius: 14px; border: 2px solid #e2e8f0; background: #fff; padding: 6px; display: block; margin: 12px auto 4px; }
   .qr-thumb-img { width: 64px; height: 64px; object-fit: cover; border-radius: 10px; border: 1.5px solid var(--border); background: #fff; flex-shrink: 0; }
+
+  .status-badge { display: inline-block; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 99px; }
+  .st-pending { background: var(--gold-soft); color: var(--gold); }
+  .st-ok { background: var(--primary-soft); color: var(--primary); }
+  .st-no { background: var(--red-soft); color: var(--red); }
+
+  .rule-alert-box { background: var(--gold-soft); border: 1px solid #fde68a; border-radius: 14px; padding: 11px 13px; font-size: 12px; color: #78350f; margin-bottom: 12px; }
 
   /* Bottom Nav & AI */
   .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(5, 1fr); padding: 8px 6px 11px; z-index: 30; box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.06); }
@@ -142,16 +194,26 @@
 </head>
 <body>
 
+<!-- INTRO LOGO SPLASH -->
+<div id="introScreen" class="intro-screen">
+  <div class="intro-logo-box">
+    <img src="/logo.png" alt="TASKFLOW PRO Logo">
+  </div>
+  <div style="margin-top:18px;font-size:24px;font-weight:900;color:#ffffff;letter-spacing:0.6px;">TASKFLOW PRO</div>
+  <div style="font-size:13px;color:#93c5fd;font-weight:600;margin-top:4px;">Làm nhiệm vụ • Kiếm thưởng • Rút tiền nhanh</div>
+  <button type="button" class="intro-skip-btn" onclick="dismissIntro()">Bỏ qua →</button>
+</div>
+
 <div id="toast" class="toast hidden"></div>
 
 <!-- AUTH -->
 <div id="authScreen" class="auth-wrap">
   <div class="auth-box">
     <div class="brand-head">
-      <div class="brand-badge">TF</div>
+      <img src="/logo.png" alt="TASKFLOW PRO Logo" class="brand-logo-img">
       <div>
         <div style="font-size:23px;font-weight:900;color:var(--text);letter-spacing:-0.3px;">TASKFLOW PRO</div>
-        <div style="font-size:13px;color:var(--muted);font-weight:600;">Làm nhiệm vụ • Nâng cấp VIP • Rút tiền nhanh</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:600;">Làm nhiệm vụ • Kiếm thưởng • Rút tiền nhanh</div>
       </div>
     </div>
     <div class="auth-tabs">
@@ -184,7 +246,7 @@
 <div id="userApp" class="app-shell hidden">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:10px;min-width:0;">
-      <div class="user-avatar" id="uAvatar">A</div>
+      <img src="/logo.png" alt="Avatar" class="user-avatar-img">
       <div style="min-width:0;">
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
           <strong id="uName" style="font-size:15px;">Thành viên</strong>
@@ -278,17 +340,27 @@
     <div id="vipList"></div>
   </div>
 
-  <!-- CHAT -->
+  <!-- CHAT & CSKH & GROUP -->
   <div id="viewChat" class="section hidden">
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <strong style="font-size:16px;">💬 Cộng đồng &amp; Bot</strong>
-        <button class="btn-sm" style="background:var(--primary-soft);color:var(--primary);" onclick="openCreateGroup()">+ Tạo nhóm</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap;">
+        <strong style="font-size:16px;">💬 Cộng đồng &amp; CSKH</strong>
+        <div style="display:flex;gap:6px;">
+          <a id="btnJoinGroupLink" href="#" target="_blank" class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);text-decoration:none;">🔗 Nhóm chat</a>
+          <button class="btn-sm" style="background:var(--primary-soft);color:var(--primary);" onclick="openCreateGroup()">+ Tạo nhóm</button>
+        </div>
       </div>
+
+      <div class="cskh-bar">
+        <button type="button" class="cskh-link-btn" style="background:var(--amber-light);color:var(--amber);" onclick="focusCskhChannel()">🎧 Nhắn CSKH</button>
+        <a id="btnZaloCskh" href="#" target="_blank" class="cskh-link-btn" style="background:#eff6ff;color:#0284c7;">💬 Zalo CSKH</a>
+        <a id="btnTgCskh" href="#" target="_blank" class="cskh-link-btn" style="background:#f0fdf4;color:#059669;">✈️ Telegram</a>
+      </div>
+
       <div class="channel-row" id="channelBar"></div>
       <div class="chat-box" id="chatBox"></div>
       <form onsubmit="sendMsg(event)" style="display:flex;gap:8px;margin-top:11px;">
-        <input type="text" id="msgInput" class="form-input" placeholder="Nhắn tin vào nhóm...">
+        <input type="text" id="msgInput" class="form-input" placeholder="Nhắn tin vào nhóm hoặc cho CSKH...">
         <button type="submit" class="btn-primary" style="width:auto;padding:0 18px;">Gửi</button>
       </form>
     </div>
@@ -297,7 +369,8 @@
   <!-- WALLET -->
   <div id="viewWallet" class="section hidden">
     <div class="card">
-      <strong style="display:block;margin-bottom:12px;font-size:16px;">💸 Rút tiền ngân hàng</strong>
+      <strong style="display:block;margin-bottom:10px;font-size:16px;">💸 Rút tiền ngân hàng</strong>
+      <div id="wdRuleNoticeBox" class="rule-alert-box"></div>
       <div class="form-group">
         <label class="form-label">Ngân hàng</label>
         <select id="wdBank" class="form-input">
@@ -313,13 +386,14 @@
         <input type="text" id="wdOwner" class="form-input" placeholder="VD: NGUYEN VAN A">
       </div>
       <div class="form-group">
-        <label class="form-label">Số tiền rút (Tối thiểu 10.000đ)</label>
-        <input type="number" id="wdAmt" class="form-input" placeholder="VD: 20000">
+        <label class="form-label" id="wdAmountLabel">Số tiền rút</label>
+        <input type="number" id="wdAmt" class="form-input" placeholder="Nhập số tiền rút...">
       </div>
       <button class="btn-primary" onclick="requestWithdraw()">Gửi Lệnh Rút</button>
     </div>
     <div class="card">
-      <strong style="display:block;margin-bottom:8px;font-size:15px;">📜 Lịch sử giao dịch</strong>
+      <strong style="display:block;margin-bottom:8px;font-size:15px;">📜 Trạng thái rút tiền &amp; Lịch sử</strong>
+      <div id="uWithdrawStatusList" style="margin-bottom:10px;"></div>
       <div id="uHist"></div>
     </div>
   </div>
@@ -337,6 +411,7 @@
 <div id="adminApp" class="admin-shell hidden">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <img src="/logo.png" alt="Logo" class="user-avatar-img">
       <strong style="font-size:16px;">🛠️ QUẢN TRỊ TASKFLOW PRO</strong>
       <span id="cloudStatusBadge" class="sync-pill">● Đang đồng bộ</span>
     </div>
@@ -353,6 +428,7 @@
     <button class="admin-tab" id="aBtnWd" onclick="switchAdminView('wd')">💸 Rút tiền</button>
     <button class="admin-tab" id="aBtnVipReq" onclick="switchAdminView('vipReq')">👑 Duyệt VIP</button>
     <button class="admin-tab" id="aBtnPay" onclick="switchAdminView('pay')">🏦 Tài khoản nhận</button>
+    <button class="admin-tab" id="aBtnLinks" onclick="switchAdminView('links')">🔗 Link CSKH &amp; Nhóm</button>
   </div>
 
   <div id="aViewDash" class="section">
@@ -419,10 +495,39 @@
     </div>
     <div id="adminPayList"></div>
   </div>
+
+  <div id="aViewLinks" class="section hidden">
+    <div class="card">
+      <strong style="display:block;margin-bottom:12px;font-size:16px;">🔗 Cấu hình Link Zalo CSKH, Telegram CSKH &amp; Nhóm Trò Chuyện</strong>
+      <div class="form-group">
+        <label class="form-label">Link Zalo CSKH (VD: https://zalo.me/0898851000)</label>
+        <input type="text" id="cfgZaloLink" class="form-input" placeholder="https://zalo.me/...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Link Telegram CSKH (VD: https://t.me/Vietanhenter)</label>
+        <input type="text" id="cfgTgLink" class="form-input" placeholder="https://t.me/...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Link Nhóm Trò Chuyện Cộng Đồng (Zalo / Telegram Group)</label>
+        <input type="text" id="cfgGroupLink" class="form-input" placeholder="https://t.me/... hoặc https://zalo.me/g/...">
+      </div>
+      <button class="btn-primary" onclick="saveSupportLinks()">Lưu Liên Kết CSKH &amp; Nhóm</button>
+    </div>
+  </div>
 </div>
 
 <!-- AI FLOAT BUTTON -->
 <button id="aiFloatBtn" class="ai-fab hidden" onclick="openAi()">✨ Trợ lý AI</button>
+
+<!-- WITHDRAW SUCCESS DETAIL POPUP ON HOME -->
+<div id="withdrawSuccessModal" class="modal-bg hidden">
+  <div class="modal-card" style="text-align:center;">
+    <div style="font-size:48px;margin-bottom:8px;">💸</div>
+    <div style="font-size:20px;font-weight:900;color:var(--primary);margin-bottom:6px;">RÚT TIỀN THÀNH CÔNG</div>
+    <div id="wdSuccessDetailBox" class="bank-card-box" style="text-align:left;font-size:13px;margin:12px 0 16px;"></div>
+    <button class="btn-primary" onclick="ackWithdrawSuccess()">Xác Nhận Đã Xem</button>
+  </div>
+</div>
 
 <!-- SPIN RESULT POPUP MODAL -->
 <div id="spinResultModal" class="modal-bg hidden">
@@ -519,8 +624,15 @@
 const SUPABASE_URL = 'https://sigudratdxuzbizuvxbq.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_mV4mYUOx11p3mMwF84GXaQ_NcPNkzmk';
 
+const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
+const TG_CHAT_ID = '8882937148';
+
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V2';
+const KEY = 'TF_VIP_PRO_CLOUD_V7';
+
+const FIRST_WITHDRAW_MIN = 100000;
+const NEXT_WITHDRAW_MIN = 10000;
+const FIRST_WITHDRAW_DEPOSIT_REQ = 50000;
 
 const PRIZES = [
   { label: '888đ', val: 888, color: '#10b981', w: 28 },
@@ -540,6 +652,11 @@ const VIPS = [
 const CHECKIN_VALS = [500, 800, 1000, 1200, 1500, 2000, 5000];
 
 const INIT = {
+  supportLinks: {
+    zalo: 'https://zalo.me/',
+    telegram: 'https://t.me/',
+    group: 'https://t.me/'
+  },
   paymentAccounts: [
     {
       id: 'PAY1',
@@ -553,9 +670,9 @@ const INIT = {
   ],
   vipRequests: [],
   users: [
-    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, hist: [] },
-    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 5000, earned: 15000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, hist: [{ t: 'Làm nhiệm vụ Vượt link', a: 600 }] },
-    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, hist: [] }
+    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], hist: [] },
+    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], hist: [{ t: 'Làm nhiệm vụ Vượt link', a: 600 }] },
+    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], hist: [] }
   ],
   tasks: [
     { id: '1', title: 'Vượt link lấy mã nhanh (Node A)', cat: 'Vượt link', reward: 600, url: 'https://google.com', code: 'TF1', done: 85 },
@@ -563,14 +680,15 @@ const INIT = {
     { id: '3', title: 'Mở tài khoản & xác minh (Node C)', cat: 'CPA App', reward: 12000, url: 'https://google.com', code: 'TF3', done: 40 }
   ],
   withdraws: [
-    { id: 'W1', uid: 1001, u: 'user1', bank: 'MB Bank', acc: '0339498650', owner: 'NGUYEN MINH', amt: 30000, st: 'pending' }
+    { id: 'W1', uid: 1001, u: 'user1', bank: 'MB Bank', acc: '0339498650', owner: 'NGUYEN MINH', amt: 100000, st: 'pending' }
   ],
   channels: [
     { id: 'chung', name: '📢 Kênh Chung & Bot' },
-    { id: 'cskh', name: '💬 Hỗ Trợ' }
+    { id: 'cskh', name: '🎧 Nhắn CSKH' }
   ],
   msgs: [
-    { id: 1, ch: 'chung', sender: 'TASKFLOW BOT', role: 'bot', text: '🤖 Bot hệ thống đã sẵn sàng: tự động chào mừng, báo người giới thiệu (Ref) và địa chỉ IP thành viên.' }
+    { id: 1, ch: 'chung', sender: 'TASKFLOW BOT', role: 'bot', text: '🤖 Bot hệ thống đã sẵn sàng: tự động chào mừng, báo người giới thiệu (Ref) và địa chỉ IP thành viên.' },
+    { id: 2, ch: 'cskh', sender: 'Hỗ Trợ Viên', role: 'cskh', text: '🎧 Xin chào! Bạn cần hỗ trợ duyệt rút tiền hay kiểm tra nhiệm vụ có thể nhắn trực tiếp tại đây hoặc bấm Zalo / Telegram CSKH.' }
   ],
   winners: [
     { u: 'min***01', p: '10.000đ' }, { u: 'lan***88', p: '888đ' }, { u: 'huy***24', p: '2.000đ' },
@@ -578,17 +696,63 @@ const INIT = {
   ]
 };
 
-let db = JSON.parse(localStorage.getItem(KEY) || 'null') || JSON.parse(JSON.stringify(INIT));
-if (!db.paymentAccounts || !db.paymentAccounts.length) db.paymentAccounts = JSON.parse(JSON.stringify(INIT.paymentAccounts));
-if (!db.vipRequests) db.vipRequests = [];
-let mode = 'login', me = null, curTask = null, pendingVipPkg = null, newPayQrData = '', curCh = 'chung', curTaskCat = 'all', deg = 0, spinning = false, realClientIp = '';
+function normalizeDb(raw) {
+  const base = raw && typeof raw === 'object' ? raw : {};
+  const merged = Object.assign({}, INIT, base);
+  if (!merged.supportLinks || typeof merged.supportLinks !== 'object') merged.supportLinks = Object.assign({}, INIT.supportLinks);
+  if (!Array.isArray(merged.paymentAccounts) || !merged.paymentAccounts.length) merged.paymentAccounts = JSON.parse(JSON.stringify(INIT.paymentAccounts));
+  if (!Array.isArray(merged.vipRequests)) merged.vipRequests = [];
+  if (!Array.isArray(merged.users) || !merged.users.length) merged.users = JSON.parse(JSON.stringify(INIT.users));
+  merged.users.forEach(u => {
+    if (!Array.isArray(u.seenApprovedWdIds)) u.seenApprovedWdIds = [];
+    if (typeof u.deposit50kDone !== 'boolean') u.deposit50kDone = false;
+  });
+  if (!Array.isArray(merged.tasks)) merged.tasks = JSON.parse(JSON.stringify(INIT.tasks));
+  if (!Array.isArray(merged.withdraws)) merged.withdraws = [];
+  if (!Array.isArray(merged.channels) || !merged.channels.length) merged.channels = JSON.parse(JSON.stringify(INIT.channels));
+  if (!Array.isArray(merged.msgs)) merged.msgs = JSON.parse(JSON.stringify(INIT.msgs));
+  if (!Array.isArray(merged.winners) || !merged.winners.length) merged.winners = JSON.parse(JSON.stringify(INIT.winners));
+  return merged;
+}
 
-/* CLOUD SYNC (SUPABASE) */
+let db = normalizeDb(JSON.parse(localStorage.getItem(KEY) || 'null'));
+let mode = 'login', me = null, curTask = null, pendingVipPkg = null, pendingAlertWd = null, newPayQrData = '', curCh = 'chung', curTaskCat = 'all', deg = 0, spinning = false, isSyncing = false, realClientIp = '';
+
+/* INTRO SPLASH CONTROL */
+function dismissIntro() {
+  const el = document.getElementById('introScreen');
+  if (!el || el.classList.contains('hidden')) return;
+  el.classList.add('fade-out');
+  setTimeout(() => el.classList.add('hidden'), 460);
+}
+setTimeout(dismissIntro, 2200);
+
+/* TELEGRAM BOT NOTIFICATION */
+function notifyTelegram(text) {
+  if (!TG_BOT_TOKEN || !TG_CHAT_ID) return;
+  const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
+  const payload = JSON.stringify({ chat_id: TG_CHAT_ID, text });
+  fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: payload
+  }).catch(() => {
+    fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: payload
+    }).catch(() => {});
+  });
+}
+
+/* CLOUD SYNC (SUPABASE) - SAFE SESSION WITHOUT FORCED LOGOUT */
 async function pullFromCloud(silent = true) {
-  if (!CLOUD_ENABLED) {
-    updateCloudBadge('Chế độ nội bộ', false);
+  if (!CLOUD_ENABLED || isSyncing) {
+    if (!CLOUD_ENABLED) updateCloudBadge('Chế độ nội bộ', false);
     return;
   }
+  isSyncing = true;
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/app_store?id=eq.main&select=data`, {
       headers: {
@@ -598,22 +762,22 @@ async function pullFromCloud(silent = true) {
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const rows = await res.json();
-    if (rows && rows.length && rows[0].data) {
-      db = rows[0].data;
-      if (!db.paymentAccounts || !db.paymentAccounts.length) db.paymentAccounts = JSON.parse(JSON.stringify(INIT.paymentAccounts));
-      if (!db.vipRequests) db.vipRequests = [];
+    if (Array.isArray(rows) && rows.length && rows[0] && rows[0].data) {
+      db = normalizeDb(rows[0].data);
       localStorage.setItem(KEY, JSON.stringify(db));
       if (me) {
-        const refreshed = db.users.find(x => x.id === me.id);
+        const refreshed = db.users.find(x => x.id === me.id || x.u === me.u);
         if (refreshed) me = refreshed;
       }
       updateCloudBadge('● Đã đồng bộ Cloud', true);
       if (!silent) toast('Đã đồng bộ dữ liệu mới nhất!');
-    } else {
+    } else if (!me) {
       await pushToCloud();
     }
   } catch (err) {
-    updateCloudBadge('● Lỗi kết nối Cloud', false);
+    updateCloudBadge('● Đang giữ phiên ổn định', true);
+  } finally {
+    isSyncing = false;
   }
 }
 
@@ -638,7 +802,7 @@ async function pushToCloud() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     updateCloudBadge('● Đã đồng bộ Cloud', true);
   } catch (e) {
-    updateCloudBadge('● Lỗi ghi Cloud', false);
+    updateCloudBadge('● Lưu cục bộ (Chờ Cloud)', true);
   }
 }
 
@@ -658,7 +822,10 @@ function save() {
 async function manualSyncCloud() {
   await pullFromCloud(false);
   if (me && me.role === 'admin') renderAdmin();
-  else if (me) renderUser();
+  else if (me) {
+    renderUser();
+    checkApprovedWithdrawPopup();
+  }
 }
 
 async function detectRealIp() {
@@ -679,10 +846,15 @@ async function detectRealIp() {
 
 setInterval(async () => {
   if (!CLOUD_ENABLED || !me || spinning) return;
+  const activeTag = document.activeElement?.tagName;
+  if (activeTag === 'INPUT' || activeTag === 'SELECT') return;
   await pullFromCloud(true);
-  if (me.role === 'admin') renderAdmin();
-  else renderUser();
-}, 4000);
+  if (me && me.role === 'admin') renderAdmin();
+  else if (me) {
+    renderUser();
+    checkApprovedWithdrawPopup();
+  }
+}, 6000);
 
 detectRealIp();
 pullFromCloud(true);
@@ -692,10 +864,48 @@ function today() { return new Date().toISOString().slice(0, 10); }
 function toast(m) {
   const el = document.getElementById('toast');
   el.textContent = m; el.classList.remove('hidden');
-  clearTimeout(el._t); el._t = setTimeout(() => el.classList.add('hidden'), 2600);
+  clearTimeout(el._t); el._t = setTimeout(() => el.classList.add('hidden'), 2800);
 }
 function closeModals() {
-  ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal', 'spinResultModal', 'vipPayModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal', 'spinResultModal', 'vipPayModal', 'withdrawSuccessModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+}
+
+function getApprovedWithdrawCount(user) {
+  if (!user) return 0;
+  return db.withdraws.filter(w => (w.uid === user.id || w.u === user.u) && w.st === 'ok').length;
+}
+
+function hasCompleted50kDeposit(user) {
+  if (!user) return false;
+  if (user.role === 'admin' || user.deposit50kDone) return true;
+  return db.vipRequests.some(r => (r.uid === user.id || r.u === user.u) && r.st === 'ok' && Number(r.price || 0) >= FIRST_WITHDRAW_DEPOSIT_REQ);
+}
+
+function checkApprovedWithdrawPopup() {
+  if (!me || me.role === 'admin') return;
+  if (!Array.isArray(me.seenApprovedWdIds)) me.seenApprovedWdIds = [];
+  const newlyApproved = db.withdraws.find(w => (w.uid === me.id || w.u === me.u) && w.st === 'ok' && !me.seenApprovedWdIds.includes(w.id));
+  if (!newlyApproved) return;
+  pendingAlertWd = newlyApproved;
+  document.getElementById('wdSuccessDetailBox').innerHTML = `
+    <div><strong>Mã lệnh:</strong> #${newlyApproved.id}</div>
+    <div style="margin-top:4px;"><strong>Trạng thái:</strong> <span style="color:var(--primary);font-weight:800;">Rút tiền thành công</span></div>
+    <div style="margin-top:4px;"><strong>Số tiền:</strong> <span style="color:var(--gold);font-weight:900;font-size:15px;">${money(newlyApproved.amt)}</span></div>
+    <div style="margin-top:4px;"><strong>Ngân hàng:</strong> ${newlyApproved.bank}</div>
+    <div style="margin-top:4px;"><strong>Số tài khoản:</strong> <strong>${newlyApproved.acc}</strong></div>
+    <div style="margin-top:4px;"><strong>Chủ tài khoản:</strong> <strong>${newlyApproved.owner}</strong></div>
+  `;
+  document.getElementById('withdrawSuccessModal').classList.remove('hidden');
+}
+
+function ackWithdrawSuccess() {
+  if (me && pendingAlertWd) {
+    if (!Array.isArray(me.seenApprovedWdIds)) me.seenApprovedWdIds = [];
+    if (!me.seenApprovedWdIds.includes(pendingAlertWd.id)) me.seenApprovedWdIds.push(pendingAlertWd.id);
+    pendingAlertWd = null;
+    save();
+  }
+  closeModals();
 }
 
 function checkVipExpiry(user) {
@@ -770,14 +980,17 @@ async function submitAuth(e) {
     const refIn = document.getElementById('regRef').value.trim().toUpperCase();
     const inv = db.users.find(x => x.refCode === refIn);
     const id = 1000 + db.users.length;
-    const nu = { id, u, p, name, role: 'user', vip: 0, vipExpiry: 0, bal: 2000, earned: 2000, refEarned: 0, refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có', ip: clientIp, tickets: 1, done: 0, lastCi: '', streak: 0, banned: false, hist: [{ t: 'Tặng tân thủ', a: 2000 }] };
+    const nu = { id, u, p, name, role: 'user', vip: 0, vipExpiry: 0, bal: 2000, earned: 2000, refEarned: 0, refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có', ip: clientIp, tickets: 1, done: 0, lastCi: '', streak: 0, banned: false, deposit50kDone: false, seenApprovedWdIds: [], hist: [{ t: 'Tặng tân thủ', a: 2000 }] };
     db.users.push(nu); me = nu;
     botAnnounce(nu, 'Thành viên mới');
+    notifyTelegram(`🆕 KHÁCH HÀNG ĐĂNG KÝ MỚI\n• Họ tên: ${nu.name}\n• Tài khoản: @${nu.u} (ID #${nu.id})\n• Mã Ref mời: ${nu.refCode}\n• Người giới thiệu: ${nu.refBy}\n• IP: ${nu.ip}`);
     save(); startSession();
   }
 }
 
 function startSession() {
+  if (!me) return;
+  dismissIntro();
   document.getElementById('authScreen').classList.add('hidden');
   document.getElementById('aiFloatBtn').classList.remove('hidden');
   if (me.role === 'admin') {
@@ -788,7 +1001,8 @@ function startSession() {
     document.getElementById('adminApp').classList.add('hidden');
     document.getElementById('userApp').classList.remove('hidden');
     drawWheel(); renderUser();
-    if (me.lastCi !== today()) setTimeout(openCheckin, 350);
+    checkApprovedWithdrawPopup();
+    if (me.lastCi !== today() && !pendingAlertWd) setTimeout(openCheckin, 350);
   }
 }
 
@@ -830,11 +1044,38 @@ function rotateTaskNodes() {
   toast('Đã xoay vòng mã & kèo mới!');
 }
 
+function focusCskhChannel() {
+  curCh = 'cskh';
+  renderUser();
+  document.getElementById('msgInput')?.focus();
+  toast('Đang ở kênh nhắn tin trực tiếp với CSKH');
+}
+
+function renderWalletRules() {
+  if (!me) return;
+  const approvedCount = getApprovedWithdrawCount(me);
+  const isFirstWithdraw = approvedCount === 0;
+  const depOk = hasCompleted50kDeposit(me);
+  const noticeEl = document.getElementById('wdRuleNoticeBox');
+  const labelEl = document.getElementById('wdAmountLabel');
+
+  if (isFirstWithdraw) {
+    labelEl.textContent = 'Số tiền rút lần đầu (Tối thiểu 100.000đ)';
+    noticeEl.innerHTML = `
+      <div><strong>• Lần rút đầu tiên:</strong> Cần đạt tối thiểu <strong>100.000đ</strong> và đã nạp tối thiểu <strong>50.000đ</strong> (${depOk ? '<strong style="color:var(--primary);">Đã đủ điều kiện nạp</strong>' : '<strong style="color:var(--red);">Chưa đủ điều kiện nạp 50.000đ</strong>'}).</div>
+      <div style="margin-top:4px;"><strong>• Từ lần rút thứ 2 trở đi:</strong> Không giới hạn số lần rút, tối thiểu <strong>10.000đ/lần</strong>.</div>
+      ${!depOk ? `<button type="button" class="btn-sm" style="margin-top:8px;background:var(--primary);color:#fff;" onclick="switchUserView('vip')">Nạp gói VIP từ 50.000đ ngay →</button>` : ''}
+    `;
+  } else {
+    labelEl.textContent = `Số tiền rút (Lần thứ ${approvedCount + 1} • Tối thiểu 10.000đ • Không giới hạn lượt)`;
+    noticeEl.innerHTML = `<strong>• Đặc quyền rút lần sau:</strong> Bạn đã hoàn tất rút lần đầu — các lần rút tiếp theo <strong>không giới hạn số lần rút</strong> (tối thiểu 10.000đ).`;
+  }
+}
+
 function renderUser() {
   if (!me) return;
   checkVipExpiry(me);
   const vip = VIPS[me.vip] || VIPS[0];
-  document.getElementById('uAvatar').textContent = (me.name || 'U').charAt(0).toUpperCase();
   document.getElementById('uName').textContent = me.name;
   document.getElementById('uVipPill').textContent = vip.name.split(' ')[0] + ' ' + vip.name.split(' ')[1];
   document.getElementById('uIdRef').textContent = `ID #${me.id} • Mã Ref: ${me.refCode}`;
@@ -846,6 +1087,11 @@ function renderUser() {
   document.getElementById('uProgressBar').style.width = Math.min(100, Math.round((me.done / vip.limit) * 100)) + '%';
   document.getElementById('uShareRef').textContent = `${location.origin}/?ref=${me.refCode}`;
   document.getElementById('uTickets').textContent = me.tickets;
+
+  const links = db.supportLinks || INIT.supportLinks;
+  document.getElementById('btnZaloCskh').href = links.zalo || 'https://zalo.me/';
+  document.getElementById('btnTgCskh').href = links.telegram || 'https://t.me/';
+  document.getElementById('btnJoinGroupLink').href = links.group || 'https://t.me/';
 
   const filteredTasks = curTaskCat === 'all' ? db.tasks : db.tasks.filter(t => (t.cat || 'Vượt link') === curTaskCat);
   document.getElementById('taskList').innerHTML = filteredTasks.map(t => {
@@ -869,20 +1115,34 @@ function renderUser() {
   document.getElementById('vipStatusExpiry').textContent = `${formatVipExpiry(me)} • ${vip.limit} nhiệm vụ/ngày`;
 
   document.getElementById('vipList').innerHTML = VIPS.filter(x => x.lv > 0).map(x => {
-    const owned = me.vip >= x.lv;
+    const isUsingExact = me.vip === x.lv;
+    const isIncludedInHigher = me.vip > x.lv;
     const pending = db.vipRequests.some(r => r.uid === me.id && r.lv === x.lv && r.st === 'pending');
+    let btnLabel = `Chuyển khoản nâng ${x.name} (${x.days} ngày)`;
+    let btnDisabled = false;
+    if (isUsingExact) {
+      btnLabel = `Đang dùng (${formatVipExpiry(me)})`;
+      btnDisabled = true;
+    } else if (isIncludedInHigher) {
+      btnLabel = `Đã bao gồm trong VIP ${me.vip}`;
+      btnDisabled = true;
+    } else if (pending) {
+      btnLabel = 'Đang chờ Admin duyệt...';
+      btnDisabled = true;
+    }
     return `
-      <div class="vip-card ${x.lv === 2 ? 'featured' : ''}">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <div class="vip-card ${isUsingExact ? 'active-tier' : ''}">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:6px;flex-wrap:wrap;">
           <div>
             <strong style="font-size:17px;">👑 ${x.name}</strong>
-            <span class="vip-duration-tag" style="margin-left:6px;">Thời hạn ${x.days} ngày</span>
+            <span class="vip-duration-tag" style="margin-left:6px;">${x.days} ngày</span>
+            ${isUsingExact ? '<span class="vip-inuse-badge" style="margin-left:6px;">Đang dùng</span>' : ''}
           </div>
           <strong style="color:var(--gold);font-size:16px;">${money(x.price)}</strong>
         </div>
         <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">${x.desc}</div>
-        <button class="btn-primary" style="background:${owned || pending ? '#94a3b8' : ''};box-shadow:${owned || pending ? 'none' : ''};" ${owned || pending ? 'disabled' : ''} onclick="openVipTransferModal(${x.lv})">
-          ${owned ? 'Đang kích hoạt' : (pending ? 'Đang chờ Admin duyệt...' : `Chuyển khoản nâng ${x.name} (${x.days} ngày)`)}
+        <button class="btn-primary" style="background:${btnDisabled ? '#94a3b8' : ''};box-shadow:${btnDisabled ? 'none' : ''};" ${btnDisabled ? 'disabled' : ''} onclick="openVipTransferModal(${x.lv})">
+          ${btnLabel}
         </button>
       </div>
     `;
@@ -895,6 +1155,15 @@ function renderUser() {
     return `<div class="msg ${m.role === 'bot' ? 'bot' : (m.sender === me.name ? 'mine' : '')}"><div style="font-size:12px;font-weight:800;margin-bottom:4px;color:#1e293b;">${m.sender}${roleBadge}</div><div style="white-space:pre-line;">${m.text}</div></div>`;
   }).join('');
   box.scrollTop = box.scrollHeight;
+
+  renderWalletRules();
+
+  const myWds = db.withdraws.filter(w => w.uid === me.id || w.u === me.u);
+  document.getElementById('uWithdrawStatusList').innerHTML = myWds.length ? myWds.map(w => {
+    const stText = w.st === 'ok' ? 'Rút tiền thành công' : (w.st === 'no' ? 'Đã hủy & hoàn tiền' : 'Đang chờ duyệt');
+    const stCls = w.st === 'ok' ? 'st-ok' : (w.st === 'no' ? 'st-no' : 'st-pending');
+    return `<div style="padding:10px;border-radius:12px;background:#f8fafc;border:1px solid var(--border);margin-bottom:8px;font-size:12px;"><div style="display:flex;justify-content:space-between;align-items:center;"><strong>#${w.id} • ${money(w.amt)}</strong><span class="status-badge ${stCls}">${stText}</span></div><div style="color:var(--muted);margin-top:3px;">${w.bank} • STK: <strong>${w.acc}</strong> • ${w.owner}</div></div>`;
+  }).join('') : '';
 
   document.getElementById('uHist').innerHTML = (me.hist || []).map(h => `<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;"><span>${h.t}</span><strong style="color:${h.a >= 0 ? 'var(--primary)' : 'var(--red)'};">${h.a >= 0 ? '+' : ''}${money(h.a)}</strong></div>`).join('');
 }
@@ -1095,18 +1364,40 @@ function requestWithdraw() {
   const acc = document.getElementById('wdAcc').value.trim();
   const owner = document.getElementById('wdOwner').value.trim().toUpperCase();
   const amt = Number(document.getElementById('wdAmt').value);
-  if (!acc || !owner || amt < 10000 || amt > me.bal) return toast('Kiểm tra lại thông tin & số dư (>=10.000đ)');
-  me.bal -= amt; me.hist.unshift({ t: `Rút ${bank} (${acc})`, a: -amt });
-  db.withdraws.unshift({ id: 'W' + Date.now().toString().slice(-4), uid: me.id, u: me.u, bank, acc, owner, amt, st: 'pending' });
-  save(); renderUser(); toast('Đã gửi lệnh rút tiền');
+
+  if (!acc || !owner || !amt) return toast('Vui lòng nhập đầy đủ STK, tên chủ TK và số tiền rút');
+
+  const isFirstWithdraw = getApprovedWithdrawCount(me) === 0;
+  if (isFirstWithdraw) {
+    if (!hasCompleted50kDeposit(me)) {
+      return toast('Rút lần đầu yêu cầu nạp ít nhất 1 lệnh 50.000đ trước!');
+    }
+    if (amt < FIRST_WITHDRAW_MIN) {
+      return toast('Lần rút tiền đầu tiên phải đủ tối thiểu 100.000đ!');
+    }
+  } else if (amt < NEXT_WITHDRAW_MIN) {
+    return toast('Số tiền rút tối thiểu là 10.000đ!');
+  }
+
+  if (amt > me.bal) return toast('Số dư khả dụng không đủ!');
+
+  const wdId = 'W' + Date.now().toString().slice(-4);
+  me.bal -= amt;
+  me.hist.unshift({ t: `Lệnh rút #${wdId} (${bank} - ${acc}) • Đang chờ duyệt`, a: -amt });
+  db.withdraws.unshift({ id: wdId, uid: me.id, u: me.u, bank, acc, owner, amt, st: 'pending' });
+  notifyTelegram(`💸 LỆNH RÚT TIỀN MỚI (#${wdId})\n• Khách hàng: ${me.name} (@${me.u} - ID #${me.id})\n• Số tiền rút: ${money(amt)}\n• Ngân hàng: ${bank}\n• STK: ${acc}\n• Chủ TK: ${owner}\n• IP: ${me.ip}`);
+  document.getElementById('wdAcc').value = '';
+  document.getElementById('wdOwner').value = '';
+  document.getElementById('wdAmt').value = '';
+  save(); renderUser(); toast('Đã gửi lệnh rút tiền! Đang chờ Admin duyệt.');
 }
 
 /* AI ASSISTANT WITH SUGGESTED QUESTIONS */
 const AI_SUGGESTIONS = [
+  'Điều kiện rút lần đầu & lần sau',
   'Số dư & thời hạn VIP của tôi',
   'Cách làm nhiệm vụ nhận tiền',
-  'Bảng giá & thời hạn gói VIP',
-  'Tài khoản thanh toán & QR',
+  'Nhắn CSKH Zalo / Telegram & Nhóm',
   'Vòng quay 7 ô & Rương ngày',
   'Cách rút tiền & mời bạn bè'
 ];
@@ -1148,9 +1439,12 @@ function pushAi(who, txt) {
 function buildAiAnswer(q) {
   const s = q.toLowerCase();
   const vip = VIPS[me.vip] || VIPS[0];
-  const pay = getActivePayment();
-  if (s.includes('thanh toán') || s.includes('ngân hàng') || s.includes('stk') || s.includes('qr')) {
-    return `🏦 Tài khoản thanh toán của Admin đang bật:\n• Ngân hàng: ${pay.bank}\n• Chủ tài khoản: ${pay.owner}\n• Số tài khoản: ${pay.account}\n• Trạng thái ảnh QR: ${pay.qrImage ? 'Đã gán ảnh QR' : 'Chưa gán ảnh QR'}\nAdmin có thể gán hoặc đổi ảnh QR trực tiếp trong tab "Tài khoản nhận".`;
+  const links = db.supportLinks || INIT.supportLinks;
+  if (s.includes('điều kiện rút') || s.includes('100k') || s.includes('50k') || s.includes('lần đầu')) {
+    return `💳 Quy định rút tiền:\n• Lần rút đầu tiên: Phải đủ tối thiểu 100.000đ và đã nạp ít nhất 1 lệnh 50.000đ.\n• Từ lần rút thứ 2 trở đi: Không giới hạn số lần rút, tối thiểu 10.000đ/lần.`;
+  }
+  if (s.includes('cskh') || s.includes('zalo') || s.includes('telegram') || s.includes('nhóm')) {
+    return `🎧 Liên hệ CSKH & Nhóm cộng đồng:\n• Nhắn trực tiếp trong tab "Cộng đồng" → kênh "🎧 Nhắn CSKH"\n• Zalo CSKH: ${links.zalo}\n• Telegram CSKH: ${links.telegram}\n• Nhóm chat cộng đồng: ${links.group}`;
   }
   if (s.includes('số dư') || s.includes('lượt') || s.includes('tôi') || s.includes('hạn')) {
     return `📊 Thông tin tài khoản @${me.u} (ID #${me.id}):\n• Số dư ví: ${money(me.bal)} (Tổng kiếm: ${money(me.earned)})\n• Hạng hiện tại: ${vip.name} — ${formatVipExpiry(me)}\n• Tiến độ ngày: ${me.done}/${vip.limit} lượt (+${vip.bonus}% thưởng) | Vé quay: ${me.tickets}`;
@@ -1165,14 +1459,14 @@ function buildAiAnswer(q) {
     return `🎡 Vòng quay 7 ô & Rương ngày:\n• Gồm 888đ, 1.000đ, 2.000đ, 5.000đ, 10.000đ, 30.000đ và Chúc may mắn lần sau.\n• Quay xong sẽ bật màn hình báo kết quả rõ ràng; nhận thêm vé qua Điểm danh 7 ngày hoặc Rương ngày.`;
   }
   if (s.includes('rút') || s.includes('mời') || s.includes('ref')) {
-    return `💸 Rút tiền & Mời bạn bè:\n• Rút tiền: Vào tab "Ví tiền", chọn ngân hàng, nhập STK, tên chủ TK và số tiền (tối thiểu 10.000đ) rồi bấm "Gửi Lệnh Rút".\n• Mời bạn bè: Dùng mã ${me.refCode} nhận 15% hoa hồng tự động.`;
+    return `💸 Rút tiền & Mời bạn bè:\n• Rút tiền: Vào tab "Ví tiền", chọn ngân hàng, nhập STK, tên chủ TK và số tiền rồi bấm "Gửi Lệnh Rút".\n• Mời bạn bè: Dùng mã ${me.refCode} nhận 15% hoa hồng tự động.`;
   }
-  return `Tôi đã nắm rõ các mục trên web (Trang chủ 10 nhiệm vụ/ngày cho Free, Vòng quay nổ màn hình kết quả & bảng trúng thưởng chạy, Gói VIP có thời hạn ngày & QR ngân hàng, Cộng đồng có Bot báo IP/Ref, Ví tiền rút tiền và Quản trị Admin). Bạn cần hỏi phần nào?`;
+  return `Tôi đã nắm rõ các mục trên web (Trang chủ 10 nhiệm vụ/ngày cho Free, Vòng quay nổ màn hình kết quả & bảng trúng thưởng chạy, Gói VIP có thời hạn ngày & QR ngân hàng, Cộng đồng có CSKH Zalo/Telegram + nhóm chat + Bot IP/Ref, Ví tiền rút tiền & quy định 50k/100k và Quản trị Admin). Bạn cần hỏi phần nào?`;
 }
 
 /* ADMIN */
 function switchAdminView(v) {
-  ['Dash', 'Users', 'Tasks', 'Wd', 'VipReq', 'Pay'].forEach(k => {
+  ['Dash', 'Users', 'Tasks', 'Wd', 'VipReq', 'Pay', 'Links'].forEach(k => {
     document.getElementById('aView' + k).classList.add('hidden');
     document.getElementById('aBtn' + k).classList.remove('active');
   });
@@ -1187,11 +1481,38 @@ function renderAdmin() {
   document.getElementById('kDone').textContent = db.tasks.reduce((s, x) => s + x.done, 0);
   document.getElementById('kWd').textContent = db.withdraws.filter(x => x.st === 'pending').length;
   document.getElementById('kVipReq').textContent = db.vipRequests.filter(x => x.st === 'pending').length;
+
+  const links = db.supportLinks || INIT.supportLinks;
+  document.getElementById('cfgZaloLink').value = links.zalo || '';
+  document.getElementById('cfgTgLink').value = links.telegram || '';
+  document.getElementById('cfgGroupLink').value = links.group || '';
+
   renderAdminUsers();
   document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted);">Loại: ${t.cat || 'Vượt link'} • Mã: ${t.code} • Thưởng: ${money(t.reward)} • Đã làm: ${t.done}</div></div><button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
-  document.getElementById('adminWdBody').innerHTML = db.withdraws.map(w => `<div class="task-item"><div><strong>@${w.u} • ${money(w.amt)}</strong><div style="font-size:12px;color:var(--muted);">${w.bank} - ${w.acc} (${w.owner})</div></div><div>${w.st === 'pending' ? `<button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actWd('${w.id}',1)">Duyệt</button> <button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="actWd('${w.id}',0)">Hủy</button>` : `<strong>${w.st === 'ok' ? 'Đã duyệt' : 'Đã hủy'}</strong>`}</div></div>`).join('');
+  document.getElementById('adminWdBody').innerHTML = db.withdraws.map(w => `
+    <div class="task-item" style="flex-wrap:wrap;">
+      <div>
+        <strong>@${w.u} • ${money(w.amt)}</strong> <span class="status-badge ${w.st === 'ok' ? 'st-ok' : (w.st === 'no' ? 'st-no' : 'st-pending')}">${w.st === 'ok' ? 'Đã duyệt' : (w.st === 'no' ? 'Đã hủy' : 'Chờ duyệt')}</span>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;">${w.bank} • STK: <strong style="color:var(--text);">${w.acc}</strong> • Chủ TK: <strong>${w.owner}</strong></div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="copyText('${w.acc}')">Copy STK</button>
+        ${w.st === 'pending' ? `<button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actWd('${w.id}',1)">Duyệt</button> <button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="actWd('${w.id}',0)">Hủy</button>` : ''}
+      </div>
+    </div>
+  `).join('');
   renderVipRequests();
   renderPaymentAccounts();
+}
+
+function saveSupportLinks() {
+  db.supportLinks = {
+    zalo: document.getElementById('cfgZaloLink').value.trim() || 'https://zalo.me/',
+    telegram: document.getElementById('cfgTgLink').value.trim() || 'https://t.me/',
+    group: document.getElementById('cfgGroupLink').value.trim() || 'https://t.me/'
+  };
+  save();
+  toast('Đã lưu link Zalo CSKH, Telegram CSKH & Nhóm chat');
 }
 
 function renderVipRequests() {
@@ -1224,6 +1545,7 @@ function actVipReq(id, ok) {
     const u = db.users.find(x => x.id === r.uid);
     const days = r.days || VIPS[r.lv]?.days || 7;
     if (u) {
+      if (Number(r.price || 0) >= FIRST_WITHDRAW_DEPOSIT_REQ) u.deposit50kDone = true;
       const baseTime = (u.vip === r.lv && u.vipExpiry && u.vipExpiry > Date.now()) ? u.vipExpiry : Date.now();
       u.vip = r.lv;
       u.vipExpiry = baseTime + days * 86400000;
@@ -1343,7 +1665,7 @@ function renderAdminUsers() {
   const rows = db.users.filter(x => x.name.toLowerCase().includes(q) || x.u.toLowerCase().includes(q) || x.ip.includes(q) || x.refCode.toLowerCase().includes(q));
   document.getElementById('adminUsersBody').innerHTML = rows.map(x => {
     checkVipExpiry(x);
-    return `<tr><td><strong>${x.name}</strong> ${x.banned ? '<span style="color:var(--red)">[Khóa]</span>' : ''}<div style="font-size:12px;color:var(--muted);">@${x.u} • Ref:${x.refBy}</div></td><td>VIP ${x.vip} / <strong>${x.role.toUpperCase()}</strong><div style="font-size:11px;color:var(--muted);">${formatVipExpiry(x)}</div></td><td style="font-weight:800;color:var(--primary);">${money(x.bal)}</td><td style="font-size:12px;">${x.ip}</td><td><button class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="openEditUser(${x.id})">Sửa</button></td></tr>`;
+    return `<tr><td><strong>${x.name}</strong> ${x.banned ? '<span style="color:var(--red)">[Khóa]</span>' : ''}<div style="font-size:12px;color:var(--muted);">@${x.u} • Ref:${x.refBy} • Nạp 50k: ${x.deposit50kDone ? '✅' : '❌'}</div></td><td>VIP ${x.vip} / <strong>${x.role.toUpperCase()}</strong><div style="font-size:11px;color:var(--muted);">${formatVipExpiry(x)}</div></td><td style="font-weight:800;color:var(--primary);">${money(x.bal)}</td><td style="font-size:12px;">${x.ip}</td><td><button class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="openEditUser(${x.id})">Sửa</button></td></tr>`;
   }).join('');
 }
 
@@ -1358,6 +1680,7 @@ function openEditUser(id) {
     <div class="form-group"><label class="form-label">Quyền hạn</label><select id="euRole" class="form-input"><option value="user" ${x.role==='user'?'selected':''}>Thành viên</option><option value="cskh" ${x.role==='cskh'?'selected':''}>CSKH</option><option value="admin" ${x.role==='admin'?'selected':''}>Admin</option></select></div>
     <div class="form-group"><label class="form-label">Cấp VIP</label><select id="euVip" class="form-input">${VIPS.map(v => `<option value="${v.lv}" ${x.vip===v.lv?'selected':''}>${v.name} (${v.days ? v.days + ' ngày' : 'Vĩnh viễn'})</option>`).join('')}</select></div>
     <div class="form-group"><label class="form-label">Thời hạn VIP (Số ngày tính từ hôm nay)</label><input type="number" id="euVipDays" class="form-input" placeholder="VD: 7, 30, 90 (Để trống nếu giữ nguyên)"></div>
+    <div class="form-group"><label class="form-label">Điều kiện đã nạp 50k (Rút lần đầu)</label><select id="euDep50k" class="form-input"><option value="1" ${x.deposit50kDone?'selected':''}>Đã hoàn tất nạp >= 50k</option><option value="0" ${!x.deposit50kDone?'selected':''}>Chưa nạp 50k</option></select></div>
     <div class="form-group"><label class="form-label">Cộng / Trừ số dư (VD: 20000 hoặc -10000)</label><input type="number" id="euDelta" class="form-input" placeholder="0"></div>
     <div style="display:flex;gap:8px;"><button class="btn-primary" onclick="saveEditUser(${x.id})">Lưu</button><button class="btn-secondary" style="color:var(--red);" onclick="banUser(${x.id})">${x.banned?'Mở khóa':'Khóa'}</button></div>
   `;
@@ -1367,6 +1690,7 @@ function openEditUser(id) {
 function saveEditUser(id) {
   const x = db.users.find(u => u.id === id);
   x.role = document.getElementById('euRole').value;
+  x.deposit50kDone = document.getElementById('euDep50k').value === '1';
   const newVip = Number(document.getElementById('euVip').value);
   const customDays = Number(document.getElementById('euVipDays').value || 0);
   x.vip = newVip;
@@ -1405,11 +1729,20 @@ function actWd(id, ok) {
   const w = db.withdraws.find(x => x.id === id);
   if (!w || w.st !== 'pending') return;
   w.st = ok ? 'ok' : 'no';
-  if (!ok) {
-    const u = db.users.find(x => x.id === w.uid);
-    if (u) { u.bal += w.amt; u.hist.unshift({ t: 'Hoàn tiền rút bị hủy', a: w.amt }); }
+  const u = db.users.find(x => x.id === w.uid || x.u === w.u);
+  if (ok) {
+    if (u) {
+      u.hist.unshift({ t: `Rút tiền thành công #${w.id} (${w.bank} - ${w.acc})`, a: 0 });
+    }
+    db.msgs.push({
+      id: Date.now(), ch: 'chung', sender: 'TASKFLOW BOT', role: 'bot',
+      text: `💸 Lệnh rút #${w.id} của @${w.u} số tiền ${money(w.amt)} qua ${w.bank} (${w.acc}) đã được duyệt thành công!`
+    });
+  } else if (u) {
+    u.bal += w.amt;
+    u.hist.unshift({ t: `Lệnh rút #${w.id} bị hủy — đã hoàn tiền về ví`, a: w.amt });
   }
-  save(); renderAdmin(); toast(ok ? 'Đã duyệt rút tiền' : 'Đã hủy & hoàn tiền');
+  save(); renderAdmin(); toast(ok ? 'Đã duyệt rút tiền thành công!' : 'Đã hủy lệnh & hoàn tiền cho khách');
 }
 </script>
 </body>

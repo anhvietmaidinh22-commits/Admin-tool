@@ -3,114 +3,127 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TASKFLOW - Nền Tảng Làm Nhiệm Vụ & Quản Trị Thông Minh</title>
+<title>TASKFLOW VIP PRO - Nền Tảng Làm Nhiệm Vụ Thông Minh</title>
 <style>
   :root {
-    --bg: #f1f5f9;
+    --bg: #eef2f6;
     --card: #ffffff;
     --text: #0f172a;
-    --muted: #64748b;
-    --border: #e2e8f0;
+    --muted: #526071;
+    --border: #dce3ec;
     --primary: #059669;
     --primary-dark: #047857;
     --primary-light: #ecfdf5;
-    --blue: #2563eb;
+    --blue: #1d4ed8;
     --blue-light: #eff6ff;
-    --amber: #d97706;
-    --amber-light: #fffbeb;
+    --amber: #b45309;
+    --amber-light: #fef3c7;
     --red: #dc2626;
     --red-light: #fef2f2;
-    --shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.06);
+    --shadow: 0 8px 24px -6px rgba(15, 23, 42, 0.08);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-  body { background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.45; }
-  button, input, select { font-family: inherit; font-size: 14px; outline: none; }
-  button { cursor: pointer; border: none; transition: transform 0.12s ease, opacity 0.15s ease; }
+  body { background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.5; }
+  button, input, select { font-family: inherit; font-size: 15px; outline: none; }
+  button { cursor: pointer; border: none; transition: transform 0.12s ease, box-shadow 0.15s ease; }
   button:active { transform: scale(0.97); }
   .hidden { display: none !important; }
 
-  .app-shell { max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--bg); padding-bottom: 80px; box-shadow: 0 0 30px rgba(0,0,0,0.05); }
-  .admin-shell { max-width: 1080px; margin: 0 auto; min-height: 100vh; background: var(--bg); padding-bottom: 40px; }
+  .app-shell { max-width: 490px; margin: 0 auto; min-height: 100vh; background: var(--bg); padding-bottom: 92px; box-shadow: 0 0 36px rgba(15, 23, 42, 0.08); }
+  .admin-shell { max-width: 1120px; margin: 0 auto; min-height: 100vh; background: var(--bg); padding-bottom: 44px; }
 
   /* Auth */
-  .auth-wrap { max-width: 430px; margin: 0 auto; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 18px; background: linear-gradient(165deg, #ecfdf5 0%, #f8fafc 50%, #eff6ff 100%); }
-  .auth-box { width: 100%; background: var(--card); border-radius: 22px; padding: 26px 22px; border: 1px solid var(--border); box-shadow: 0 12px 28px rgba(15,23,42,0.08); }
-  .brand-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; }
-  .brand-badge { width: 42px; height: 42px; border-radius: 13px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; }
-  .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; background: #f1f5f9; padding: 4px; border-radius: 12px; margin-bottom: 16px; }
-  .auth-tab { padding: 9px; border-radius: 9px; font-weight: 700; color: var(--muted); background: transparent; }
-  .auth-tab.active { background: #fff; color: var(--primary); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-  .form-group { margin-bottom: 12px; }
-  .form-label { display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px; }
-  .form-input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 11px; background: #f8fafc; }
-  .form-input:focus { border-color: var(--primary); background: #fff; }
-  .btn-primary { width: 100%; padding: 11px 14px; border-radius: 11px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; font-weight: 700; }
-  .btn-secondary { padding: 7px 12px; border-radius: 9px; background: #f1f5f9; color: var(--text); font-weight: 700; font-size: 12px; }
-  .btn-sm { padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; }
+  .auth-wrap { max-width: 440px; margin: 0 auto; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 18px; background: linear-gradient(160deg, #d1fae5 0%, #f8fafc 45%, #dbeafe 100%); }
+  .auth-box { width: 100%; background: var(--card); border-radius: 26px; padding: 28px 22px; border: 1px solid var(--border); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.1); }
+  .brand-head { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; }
+  .brand-badge { width: 48px; height: 48px; border-radius: 16px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; box-shadow: 0 8px 18px rgba(5, 150, 105, 0.28); }
+  .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; background: #e2e8f0; padding: 5px; border-radius: 14px; margin-bottom: 18px; }
+  .auth-tab { padding: 10px; border-radius: 10px; font-weight: 700; font-size: 14px; color: var(--muted); background: transparent; }
+  .auth-tab.active { background: #fff; color: var(--primary); box-shadow: 0 3px 8px rgba(15, 23, 42, 0.08); }
+  .form-group { margin-bottom: 14px; }
+  .form-label { display: block; font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
+  .form-input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 13px; background: #f8fafc; font-size: 15px; }
+  .form-input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12); }
+  .btn-primary { width: 100%; padding: 13px 16px; border-radius: 13px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; font-weight: 800; font-size: 15px; box-shadow: 0 8px 18px rgba(5, 150, 105, 0.25); }
+  .btn-secondary { padding: 8px 13px; border-radius: 11px; background: #f1f5f9; color: var(--text); font-weight: 700; font-size: 13px; border: 1px solid var(--border); }
+  .btn-sm { padding: 8px 13px; border-radius: 10px; font-size: 13px; font-weight: 700; }
 
   /* Header & Cards */
-  .topbar { background: #fff; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 25; }
-  .section { padding: 12px 14px 0; }
-  .card { background: #fff; border-radius: 16px; padding: 14px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 12px; }
-  .wallet-hero { background: linear-gradient(135deg, #064e3b 0%, #059669 60%, #10b981 100%); color: #fff; border-radius: 18px; padding: 16px; margin-bottom: 12px; box-shadow: 0 8px 20px rgba(5,150,105,0.22); }
-  .wallet-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-  .wallet-chip { background: rgba(255,255,255,0.14); border-radius: 10px; padding: 8px 10px; font-size: 12px; }
+  .topbar { background: #fff; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 25; }
+  .user-avatar { width: 42px; height: 42px; border-radius: 14px; background: linear-gradient(135deg, #059669, #0284c7); color: #fff; font-weight: 900; font-size: 17px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .vip-pill { display: inline-flex; align-items: center; gap: 3px; background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; font-size: 11px; font-weight: 900; padding: 3px 9px; border-radius: 99px; border: 1px solid #f59e0b55; }
+  .section { padding: 14px 14px 0; }
+  .card { background: #fff; border-radius: 20px; padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 14px; }
 
-  .progress-bg { width: 100%; height: 8px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin: 7px 0; }
+  .wallet-hero { background: linear-gradient(135deg, #064e3b 0%, #059669 58%, #10b981 100%); color: #fff; border-radius: 22px; padding: 18px; margin-bottom: 14px; box-shadow: 0 12px 26px rgba(5, 150, 105, 0.25); }
+  .wallet-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .wallet-chip { background: rgba(255, 255, 255, 0.16); border-radius: 13px; padding: 10px 12px; font-size: 13px; }
+
+  .progress-bg { width: 100%; height: 10px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin: 9px 0; }
   .progress-fill { height: 100%; background: linear-gradient(90deg, #059669, #34d399); border-radius: 99px; transition: width 0.25s; }
 
-  .task-item { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 9px; display: flex; justify-content: space-between; align-items: center; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+  .filter-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; }
+  .filter-chip { padding: 7px 13px; border-radius: 99px; background: #fff; border: 1px solid var(--border); font-size: 12px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+  .filter-chip.active { background: #0f172a; color: #fff; border-color: #0f172a; }
+
+  .task-item { background: #fff; border: 1px solid var(--border); border-radius: 18px; padding: 14px; margin-bottom: 11px; display: flex; justify-content: space-between; align-items: center; gap: 12px; box-shadow: var(--shadow); }
+  .task-tag { display: inline-block; font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 8px; background: var(--blue-light); color: var(--blue); margin-bottom: 5px; }
 
   /* Wheel & Marquee */
-  .wheel-wrap { position: relative; width: 278px; height: 278px; margin: 12px auto 14px; }
-  .wheel-pointer { position: absolute; top: -9px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 13px solid transparent; border-right: 13px solid transparent; border-top: 24px solid #dc2626; z-index: 10; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25)); }
-  .wheel-svg { width: 100%; height: 100%; border-radius: 50%; border: 5px solid #fff; box-shadow: 0 8px 22px rgba(15,23,42,0.16); transition: transform 4s cubic-bezier(0.15, 0.85, 0.15, 1); }
-  .wheel-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-weight: 800; font-size: 12px; border: 3px solid #fff; z-index: 6; box-shadow: 0 4px 10px rgba(0,0,0,0.22); }
+  .wheel-wrap { position: relative; width: 290px; height: 290px; margin: 14px auto 16px; }
+  .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 26px solid #dc2626; z-index: 10; filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.25)); }
+  .wheel-svg { width: 100%; height: 100%; border-radius: 50%; border: 6px solid #fff; box-shadow: 0 10px 26px rgba(15, 23, 42, 0.16); transition: transform 4s cubic-bezier(0.15, 0.85, 0.15, 1); }
+  .wheel-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 66px; height: 66px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-weight: 900; font-size: 13px; border: 4px solid #fff; z-index: 6; box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25); }
 
-  .marquee-box { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: #fff; box-shadow: var(--shadow); }
-  .marquee-head { background: #0f172a; color: #fff; padding: 9px 12px; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
-  .marquee-window { height: 162px; overflow: hidden; }
+  .marquee-box { border: 1px solid var(--border); border-radius: 18px; overflow: hidden; background: #fff; box-shadow: var(--shadow); }
+  .marquee-head { background: linear-gradient(135deg, #0f172a, #1e293b); color: #fff; padding: 11px 14px; font-size: 13px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
+  .marquee-window { height: 176px; overflow: hidden; }
   .marquee-list { display: flex; flex-direction: column; animation: runMarquee 16s linear infinite; }
   .marquee-list:hover { animation-play-state: paused; }
   @keyframes runMarquee { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
-  .marquee-item { display: flex; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
+  .marquee-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
 
   /* Chat */
-  .channel-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; }
-  .channel-btn { padding: 6px 11px; border-radius: 99px; background: #f1f5f9; color: var(--muted); font-size: 12px; font-weight: 700; white-space: nowrap; }
-  .channel-btn.active { background: var(--primary); color: #fff; }
-  .chat-box { height: 325px; overflow-y: auto; background: #e2e8f0; border-radius: 14px; padding: 11px; display: flex; flex-direction: column; gap: 9px; }
-  .msg { max-width: 85%; padding: 8px 11px; border-radius: 13px; background: #fff; font-size: 13px; align-self: flex-start; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-  .msg.mine { background: #dcfce7; align-self: flex-end; }
-  .msg.bot { max-width: 96%; width: 100%; align-self: center; background: #eff6ff; border: 1px solid #bfdbfe; }
-  .badge { font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 5px; margin-left: 4px; }
+  .channel-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; }
+  .channel-btn { padding: 8px 14px; border-radius: 99px; background: #f1f5f9; border: 1px solid var(--border); color: var(--muted); font-size: 13px; font-weight: 700; white-space: nowrap; }
+  .channel-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 10px rgba(5, 150, 105, 0.22); }
+  .chat-box { height: 365px; overflow-y: auto; background: #e8eef5; border: 1px solid var(--border); border-radius: 18px; padding: 13px; display: flex; flex-direction: column; gap: 11px; }
+  .msg { max-width: 86%; padding: 11px 13px; border-radius: 16px; background: #fff; font-size: 14px; line-height: 1.5; align-self: flex-start; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05); }
+  .msg.mine { background: #dcfce7; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .msg.bot { max-width: 100%; width: 100%; align-self: center; background: linear-gradient(135deg, #eff6ff, #f0fdf4); border: 1.5px solid #bfdbfe; border-radius: 16px; }
+  .badge { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 6px; margin-left: 5px; }
+
+  /* Payment Box */
+  .bank-card-box { background: linear-gradient(135deg, #f8fafc, #eff6ff); border: 1.5px solid #bfdbfe; border-radius: 16px; padding: 14px; margin-top: 12px; }
+  .active-bank-badge { display: inline-block; background: var(--primary-light); color: var(--primary); font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 99px; margin-left: 6px; }
 
   /* Bottom Nav & AI */
-  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: #fff; border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px 2px 8px; z-index: 30; }
-  .nav-btn { background: transparent; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10px; font-weight: 700; color: var(--muted); }
-  .nav-btn.active { color: var(--primary); }
+  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 490px; background: #fff; border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(5, 1fr); padding: 8px 4px 10px; z-index: 30; box-shadow: 0 -6px 20px rgba(15, 23, 42, 0.06); }
+  .nav-btn { background: transparent; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: var(--muted); padding: 3px 0; border-radius: 10px; }
+  .nav-btn span:first-child { font-size: 18px; line-height: 1.1; }
+  .nav-btn.active { color: var(--primary); background: var(--primary-light); }
 
-  .ai-fab { position: fixed; bottom: 76px; right: 14px; z-index: 35; background: linear-gradient(135deg, #2563eb, #059669); color: #fff; padding: 9px 14px; border-radius: 99px; font-weight: 700; font-size: 12px; box-shadow: 0 6px 18px rgba(37,99,235,0.35); border: 2px solid #fff; }
-  .suggest-row { display: flex; gap: 6px; overflow-x: auto; padding: 8px 0; }
-  .suggest-chip { background: var(--blue-light); color: var(--blue); border: 1px solid #bfdbfe; padding: 6px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .ai-fab { position: fixed; bottom: 84px; right: 16px; z-index: 35; background: linear-gradient(135deg, #2563eb, #059669); color: #fff; padding: 11px 16px; border-radius: 99px; font-weight: 800; font-size: 13px; box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35); border: 2px solid #fff; }
+  .suggest-row { display: flex; gap: 7px; overflow-x: auto; padding: 10px 0; }
+  .suggest-chip { background: var(--blue-light); color: var(--blue); border: 1px solid #bfdbfe; padding: 7px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; white-space: nowrap; }
 
   /* Modal & Admin */
-  .modal-bg { position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 14px; }
-  .modal-card { background: #fff; width: 100%; max-width: 440px; border-radius: 20px; padding: 18px; max-height: 86vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-  .checkin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin: 12px 0; }
-  .day-cell { border: 1.5px solid var(--border); border-radius: 10px; padding: 7px 4px; text-align: center; font-size: 11px; background: #f8fafc; }
-  .day-cell.done { background: var(--primary-light); border-color: var(--primary); color: var(--primary); font-weight: 700; }
-  .day-cell.today { background: var(--amber-light); border-color: var(--amber); font-weight: 700; }
+  .modal-bg { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.58); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 14px; }
+  .modal-card { background: #fff; width: 100%; max-width: 450px; border-radius: 22px; padding: 20px; max-height: 88vh; overflow-y: auto; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22); }
+  .checkin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0; }
+  .day-cell { border: 1.5px solid var(--border); border-radius: 12px; padding: 9px 4px; text-align: center; font-size: 12px; background: #f8fafc; }
+  .day-cell.done { background: var(--primary-light); border-color: var(--primary); color: var(--primary); font-weight: 800; }
+  .day-cell.today { background: var(--amber-light); border-color: var(--amber); font-weight: 800; }
 
-  .admin-tabs { display: flex; gap: 6px; overflow-x: auto; padding: 10px 14px; background: #fff; border-bottom: 1px solid var(--border); }
-  .admin-tab { padding: 7px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; background: #f1f5f9; color: #475569; white-space: nowrap; }
+  .admin-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 10px 14px; background: #fff; border-bottom: 1px solid var(--border); }
+  .admin-tab { padding: 8px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; background: #f1f5f9; color: #475569; white-space: nowrap; }
   .admin-tab.active { background: #0f172a; color: #fff; }
-  .grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  @media (min-width: 768px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } .ai-fab { bottom: 22px; right: 22px; } }
-  table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  th, td { padding: 9px 7px; text-align: left; border-bottom: 1px solid var(--border); }
+  .grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (min-width: 768px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } .ai-fab { bottom: 24px; right: 24px; } }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
   th { background: #f8fafc; color: #475569; }
-  .toast { position: fixed; top: 14px; left: 50%; transform: translateX(-50%); background: #0f172a; color: #fff; padding: 9px 15px; border-radius: 11px; font-size: 12px; font-weight: 700; z-index: 99; max-width: 90%; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+  .toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: #0f172a; color: #fff; padding: 11px 18px; border-radius: 13px; font-size: 13px; font-weight: 700; z-index: 99; max-width: 92%; text-align: center; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24); }
 </style>
 </head>
 <body>
@@ -123,8 +136,8 @@
     <div class="brand-head">
       <div class="brand-badge">TF</div>
       <div>
-        <div style="font-size:21px;font-weight:900;color:var(--text);">TASKFLOW</div>
-        <div style="font-size:11px;color:var(--muted);font-weight:600;">Làm nhiệm vụ • Nạp VIP • Rút tiền nhanh</div>
+        <div style="font-size:22px;font-weight:900;color:var(--text);">TASKFLOW VIP</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:600;">Làm nhiệm vụ • Nạp VIP • Rút tiền nhanh</div>
       </div>
     </div>
     <div class="auth-tabs">
@@ -156,12 +169,17 @@
 <!-- USER APP -->
 <div id="userApp" class="app-shell hidden">
   <div class="topbar">
-    <div>
-      <strong id="uName">Thành viên</strong>
-      <span id="uVipPill" style="background:var(--amber-light);color:var(--amber);font-size:10px;font-weight:800;padding:2px 7px;border-radius:99px;margin-left:4px;">VIP 0</span>
-      <div style="font-size:11px;color:var(--muted);" id="uIdRef">ID #1001 • Mã Ref: TF1001</div>
+    <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+      <div class="user-avatar" id="uAvatar">A</div>
+      <div style="min-width:0;">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <strong id="uName" style="font-size:15px;">Thành viên</strong>
+          <span id="uVipPill" class="vip-pill">VIP 0</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="uIdRef">ID #1001 • Mã Ref: TF1001</div>
+      </div>
     </div>
-    <div style="display:flex;gap:6px;">
+    <div style="display:flex;gap:7px;flex-shrink:0;">
       <button class="btn-secondary" onclick="openCheckin()">📅 Điểm danh</button>
       <button class="btn-secondary" style="color:var(--red);" onclick="logout()">Thoát</button>
     </div>
@@ -170,12 +188,12 @@
   <!-- HOME -->
   <div id="viewHome" class="section">
     <div class="wallet-hero">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
         <div>
-          <div style="font-size:11px;opacity:0.88;">Số dư ví</div>
-          <div style="font-size:27px;font-weight:800;" id="uBal">0đ</div>
+          <div style="font-size:12px;opacity:0.9;font-weight:600;">Số dư ví khả dụng</div>
+          <div style="font-size:29px;font-weight:900;letter-spacing:-0.4px;" id="uBal">0đ</div>
         </div>
-        <button onclick="switchUserView('wallet')" style="background:#fff;color:#065f46;font-weight:800;padding:7px 13px;border-radius:10px;font-size:12px;">Rút tiền →</button>
+        <button onclick="switchUserView('wallet')" style="background:#fff;color:#065f46;font-weight:800;padding:9px 14px;border-radius:12px;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,0.12);">Rút tiền →</button>
       </div>
       <div class="wallet-meta">
         <div class="wallet-chip">Tổng kiếm: <strong id="uEarned">0đ</strong></div>
@@ -184,21 +202,29 @@
     </div>
 
     <div class="card">
-      <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;">
-        <span>Nhiệm vụ hôm nay (<span id="uVipBonusText">+0%</span>)</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800;">
+        <span>Nhiệm vụ hôm nay (<span id="uVipBonusText" style="color:var(--amber);">+0%</span>)</span>
         <span style="color:var(--primary);" id="uProgressLabel">0/3</span>
       </div>
       <div class="progress-bg"><div class="progress-fill" id="uProgressBar" style="width:0%"></div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);gap:6px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);gap:8px;margin-top:4px;">
         <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Ref: <strong id="uShareRef" onclick="copyRef()" style="color:var(--blue);cursor:pointer;"></strong></span>
         <button class="btn-sm" style="background:var(--amber-light);color:var(--amber);flex-shrink:0;" onclick="claimChest()">🎁 Rương ngày</button>
       </div>
     </div>
 
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <strong style="font-size:15px;">Danh sách nhiệm vụ</strong>
+      <strong style="font-size:16px;">Danh sách nhiệm vụ</strong>
       <button class="btn-sm" style="background:var(--blue-light);color:var(--blue);" onclick="rotateTaskNodes()">🔄 Đổi kèo</button>
     </div>
+
+    <div class="filter-row" id="taskFilterBar">
+      <button class="filter-chip active" onclick="setTaskFilter('all', this)">Tất cả kèo</button>
+      <button class="filter-chip" onclick="setTaskFilter('Vượt link', this)">Vượt link</button>
+      <button class="filter-chip" onclick="setTaskFilter('Khảo sát', this)">Khảo sát</button>
+      <button class="filter-chip" onclick="setTaskFilter('CPA App', this)">CPA App</button>
+    </div>
+
     <div id="taskList"></div>
   </div>
 
@@ -206,15 +232,15 @@
   <div id="viewWheel" class="section hidden">
     <div class="card" style="text-align:center;">
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <strong style="font-size:15px;">🎡 Vòng Quay May Mắn</strong>
-        <span style="background:var(--amber-light);color:var(--amber);padding:3px 9px;border-radius:99px;font-size:12px;font-weight:800;">Vé: <span id="uTickets">0</span></span>
+        <strong style="font-size:16px;">🎡 Vòng Quay May Mắn</strong>
+        <span style="background:var(--amber-light);color:var(--amber);padding:4px 11px;border-radius:99px;font-size:12px;font-weight:800;">Vé: <span id="uTickets">0</span></span>
       </div>
       <div class="wheel-wrap">
         <div class="wheel-pointer"></div>
         <svg id="wheelSvg" class="wheel-svg" viewBox="0 0 300 300"></svg>
         <button class="wheel-btn" onclick="spinWheel()">QUAY</button>
       </div>
-      <div id="wheelMsg" style="padding:9px;border-radius:10px;background:#f8fafc;border:1px solid var(--border);font-weight:700;font-size:12px;color:#334155;">Bấm QUAY để nhận thưởng ngẫu nhiên</div>
+      <div id="wheelMsg" style="padding:11px;border-radius:12px;background:#f8fafc;border:1px solid var(--border);font-weight:700;font-size:13px;color:#1e293b;">Bấm QUAY để nhận thưởng ngẫu nhiên</div>
     </div>
 
     <div class="marquee-box">
@@ -231,20 +257,25 @@
   <!-- VIP -->
   <div id="viewVip" class="section hidden">
     <div id="vipList"></div>
+    <div class="card">
+      <strong style="display:block;font-size:15px;margin-bottom:6px;">🏦 Tài khoản nhận thanh toán VIP / Nạp tiền</strong>
+      <div style="font-size:12px;color:var(--muted);">Quét mã QR hoặc chuyển khoản đúng nội dung để nâng cấp gói VIP nhanh:</div>
+      <div id="userPaymentInfoBox"></div>
+    </div>
   </div>
 
   <!-- CHAT -->
   <div id="viewChat" class="section hidden">
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <strong style="font-size:15px;">💬 Cộng đồng &amp; Bot</strong>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <strong style="font-size:16px;">💬 Cộng đồng &amp; Bot</strong>
         <button class="btn-sm" style="background:var(--primary-light);color:var(--primary);" onclick="openCreateGroup()">+ Tạo nhóm</button>
       </div>
       <div class="channel-row" id="channelBar"></div>
       <div class="chat-box" id="chatBox"></div>
-      <form onsubmit="sendMsg(event)" style="display:flex;gap:7px;margin-top:9px;">
+      <form onsubmit="sendMsg(event)" style="display:flex;gap:8px;margin-top:11px;">
         <input type="text" id="msgInput" class="form-input" placeholder="Nhắn tin vào nhóm...">
-        <button type="submit" class="btn-primary" style="width:auto;padding:0 15px;">Gửi</button>
+        <button type="submit" class="btn-primary" style="width:auto;padding:0 18px;">Gửi</button>
       </form>
     </div>
   </div>
@@ -252,11 +283,11 @@
   <!-- WALLET -->
   <div id="viewWallet" class="section hidden">
     <div class="card">
-      <strong style="display:block;margin-bottom:10px;font-size:15px;">💸 Rút tiền ngân hàng</strong>
+      <strong style="display:block;margin-bottom:12px;font-size:16px;">💸 Rút tiền ngân hàng</strong>
       <div class="form-group">
         <label class="form-label">Ngân hàng</label>
         <select id="wdBank" class="form-input">
-          <option>MB Bank</option><option>Vietcombank</option><option>Techcombank</option><option>BIDV</option><option>MoMo</option>
+          <option>Vikki Digital Bank</option><option>MB Bank</option><option>Vietcombank</option><option>Techcombank</option><option>BIDV</option><option>MoMo</option>
         </select>
       </div>
       <div class="form-group">
@@ -265,7 +296,7 @@
       </div>
       <div class="form-group">
         <label class="form-label">Chủ tài khoản</label>
-        <input type="text" id="wdOwner" class="form-input" placeholder="VD: NGUYEN VAN A">
+        <input type="text" id="wdOwner" class="form-input" placeholder="VD: DINH HOANG VIET ANH">
       </div>
       <div class="form-group">
         <label class="form-label">Số tiền rút (Tối thiểu 10.000đ)</label>
@@ -274,7 +305,7 @@
       <button class="btn-primary" onclick="requestWithdraw()">Gửi Lệnh Rút</button>
     </div>
     <div class="card">
-      <strong style="display:block;margin-bottom:6px;">📜 Lịch sử giao dịch</strong>
+      <strong style="display:block;margin-bottom:8px;font-size:15px;">📜 Lịch sử giao dịch</strong>
       <div id="uHist"></div>
     </div>
   </div>
@@ -291,8 +322,8 @@
 <!-- ADMIN APP -->
 <div id="adminApp" class="admin-shell hidden">
   <div class="topbar">
-    <strong>🛠️ QUẢN TRỊ TASKFLOW</strong>
-    <div style="display:flex;gap:6px;">
+    <strong style="font-size:16px;">🛠️ QUẢN TRỊ TASKFLOW VIP</strong>
+    <div style="display:flex;gap:8px;">
       <button class="btn-secondary" onclick="resetDemoData()">↻ Reset dữ liệu</button>
       <button class="btn-secondary" style="color:var(--red);" onclick="logout()">Đăng xuất</button>
     </div>
@@ -302,20 +333,21 @@
     <button class="admin-tab" id="aBtnUsers" onclick="switchAdminView('users')">👥 Thành viên &amp; Quyền</button>
     <button class="admin-tab" id="aBtnTasks" onclick="switchAdminView('tasks')">📌 Nhiệm vụ</button>
     <button class="admin-tab" id="aBtnWd" onclick="switchAdminView('wd')">💸 Rút tiền</button>
+    <button class="admin-tab" id="aBtnPay" onclick="switchAdminView('pay')">🏦 Tài khoản nhận</button>
   </div>
 
   <div id="aViewDash" class="section">
     <div class="grid-4">
-      <div class="card"><div>Thành viên</div><div style="font-size:20px;font-weight:800;" id="kUsers">0</div></div>
-      <div class="card"><div>Lượt làm kèo</div><div style="font-size:20px;font-weight:800;color:var(--primary);" id="kDone">0</div></div>
-      <div class="card"><div>Chờ rút tiền</div><div style="font-size:20px;font-weight:800;color:var(--amber);" id="kWd">0</div></div>
-      <div class="card"><div>Bot báo IP/Ref</div><div style="font-size:14px;font-weight:800;color:var(--blue);margin-top:4px;">Đang bật</div></div>
+      <div class="card"><div style="color:var(--muted);font-size:13px;">Thành viên</div><div style="font-size:22px;font-weight:900;margin-top:4px;" id="kUsers">0</div></div>
+      <div class="card"><div style="color:var(--muted);font-size:13px;">Lượt làm kèo</div><div style="font-size:22px;font-weight:900;color:var(--primary);margin-top:4px;" id="kDone">0</div></div>
+      <div class="card"><div style="color:var(--muted);font-size:13px;">Chờ rút tiền</div><div style="font-size:22px;font-weight:900;color:var(--amber);margin-top:4px;" id="kWd">0</div></div>
+      <div class="card"><div style="color:var(--muted);font-size:13px;">TK nhận tiền</div><div style="font-size:14px;font-weight:800;color:var(--blue);margin-top:8px;" id="kPayBank">Vikki Bank</div></div>
     </div>
   </div>
 
   <div id="aViewUsers" class="section hidden">
     <div class="card">
-      <input type="text" id="userSearch" class="form-input" placeholder="Tìm tên, tài khoản, IP, mã Ref..." oninput="renderAdminUsers()" style="margin-bottom:10px;">
+      <input type="text" id="userSearch" class="form-input" placeholder="Tìm tên, tài khoản, IP, mã Ref..." oninput="renderAdminUsers()" style="margin-bottom:12px;">
       <div style="overflow-x:auto;">
         <table>
           <thead><tr><th>Thành viên</th><th>Vai trò / VIP</th><th>Số dư</th><th>IP</th><th>Sửa</th></tr></thead>
@@ -327,20 +359,34 @@
 
   <div id="aViewTasks" class="section hidden">
     <div class="card">
-      <strong style="display:block;margin-bottom:8px;">Thêm nhiệm vụ mới</strong>
+      <strong style="display:block;margin-bottom:10px;font-size:15px;">Thêm nhiệm vụ mới</strong>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
         <input type="text" id="tTitle" class="form-input" placeholder="Tên nhiệm vụ">
         <input type="number" id="tReward" class="form-input" placeholder="Tiền thưởng (VD: 500)">
         <input type="text" id="tUrl" class="form-input" placeholder="Link nhiệm vụ">
         <input type="text" id="tCode" class="form-input" placeholder="Mã xác nhận (VD: OK88)">
       </div>
-      <button class="btn-primary" style="margin-top:8px;" onclick="createTask()">Thêm Nhiệm Vụ</button>
+      <button class="btn-primary" style="margin-top:10px;" onclick="createTask()">Thêm Nhiệm Vụ</button>
     </div>
     <div id="adminTaskBody"></div>
   </div>
 
   <div id="aViewWd" class="section hidden">
     <div class="card" id="adminWdBody"></div>
+  </div>
+
+  <div id="aViewPay" class="section hidden">
+    <div class="card">
+      <strong style="display:block;margin-bottom:10px;font-size:16px;">➕ Thêm tài khoản thanh toán</strong>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <input type="text" id="payBank" class="form-input" placeholder="Ngân hàng (VD: Vikki Digital Bank)">
+        <input type="text" id="payAcc" class="form-input" placeholder="Số tài khoản (VD: 339498650)">
+        <input type="text" id="payOwner" class="form-input" placeholder="Chủ tài khoản (VD: DINH HOANG VIET ANH)">
+        <input type="text" id="payMemo" class="form-input" placeholder="Nội dung mẫu (VD: NAPVIP)">
+      </div>
+      <button class="btn-primary" style="margin-top:10px;" onclick="addPaymentAccount()">Thêm Tài Khoản Thanh Toán</button>
+    </div>
+    <div id="adminPayList"></div>
   </div>
 </div>
 
@@ -351,7 +397,7 @@
 <div id="checkinModal" class="modal-bg hidden">
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center;">
-      <strong>📅 Điểm Danh 7 Ngày</strong>
+      <strong style="font-size:16px;">📅 Điểm Danh 7 Ngày</strong>
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
     <div class="checkin-grid" id="checkinGrid"></div>
@@ -362,31 +408,31 @@
 <div id="taskModal" class="modal-bg hidden">
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <strong id="tmTitle">Làm nhiệm vụ</strong>
+      <strong id="tmTitle" style="font-size:16px;">Làm nhiệm vụ</strong>
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:8px;">Mở link bên dưới để hoàn thành và lấy mã xác nhận (Mã mẫu: <strong id="tmHint"></strong>). Nhận ngay <strong id="tmReward" style="color:var(--primary);"></strong>.</p>
-    <a id="tmLink" href="#" target="_blank" style="display:inline-block;margin-bottom:10px;color:var(--blue);font-weight:700;font-size:12px;">Mở link nhiệm vụ ↗</a>
-    <input type="text" id="tmCodeInput" class="form-input" placeholder="Nhập mã xác nhận..." style="margin-bottom:10px;">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">Mở link bên dưới để hoàn thành và lấy mã xác nhận (Mã mẫu: <strong id="tmHint"></strong>). Nhận ngay <strong id="tmReward" style="color:var(--primary);"></strong>.</p>
+    <a id="tmLink" href="#" target="_blank" style="display:inline-block;margin-bottom:12px;color:var(--blue);font-weight:800;font-size:13px;">Mở link nhiệm vụ ↗</a>
+    <input type="text" id="tmCodeInput" class="form-input" placeholder="Nhập mã xác nhận..." style="margin-bottom:12px;">
     <button class="btn-primary" onclick="confirmTask()">Xác Nhận Nhận Tiền</button>
   </div>
 </div>
 
 <div id="groupModal" class="modal-bg hidden">
   <div class="modal-card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <strong>+ Tạo nhóm mới</strong>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <strong style="font-size:16px;">+ Tạo nhóm mới</strong>
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
-    <input type="text" id="groupNameInput" class="form-input" placeholder="Tên nhóm..." style="margin-bottom:10px;">
+    <input type="text" id="groupNameInput" class="form-input" placeholder="Tên nhóm..." style="margin-bottom:12px;">
     <button class="btn-primary" onclick="addGroup()">Tạo Nhóm</button>
   </div>
 </div>
 
 <div id="editUserModal" class="modal-bg hidden">
   <div class="modal-card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <strong>Sửa thành viên &amp; Quyền</strong>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <strong style="font-size:16px;">Sửa thành viên &amp; Quyền</strong>
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
     <div id="editUserBody"></div>
@@ -394,22 +440,25 @@
 </div>
 
 <div id="aiModal" class="modal-bg hidden">
-  <div class="modal-card" style="height:76vh;display:flex;flex-direction:column;">
-    <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:1px solid var(--border);">
-      <strong>✨ Trợ Lý AI TASKFLOW</strong>
+  <div class="modal-card" style="height:80vh;display:flex;flex-direction:column;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border);">
+      <div>
+        <strong style="font-size:16px;">✨ Trợ Lý AI TASKFLOW</strong>
+        <div style="font-size:11px;color:var(--primary);font-weight:700;">● Đọc dữ liệu tài khoản &amp; giải đáp mọi chức năng</div>
+      </div>
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
     <div class="suggest-row" id="aiSuggestBar"></div>
-    <div id="aiMessages" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:6px 0;"></div>
-    <form onsubmit="sendAiPrompt(event)" style="display:flex;gap:7px;padding-top:8px;border-top:1px solid var(--border);">
+    <div id="aiMessages" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:8px 0;"></div>
+    <form onsubmit="sendAiPrompt(event)" style="display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--border);">
       <input type="text" id="aiInput" class="form-input" placeholder="Nhập câu hỏi của bạn...">
-      <button type="submit" class="btn-primary" style="width:auto;padding:0 14px;">Gửi</button>
+      <button type="submit" class="btn-primary" style="width:auto;padding:0 16px;">Gửi</button>
     </form>
   </div>
 </div>
 
 <script>
-const KEY = 'TF_FULL_STABLE_V2';
+const KEY = 'TF_VIP_PRO_V4';
 const PRIZES = [
   { label: '888đ', val: 888, color: '#10b981', w: 28 },
   { label: '1.000đ', val: 1000, color: '#3b82f6', w: 24 },
@@ -428,15 +477,25 @@ const VIPS = [
 const CHECKIN_VALS = [500, 800, 1000, 1200, 1500, 2000, 5000];
 
 const INIT = {
+  paymentAccounts: [
+    {
+      id: 'PAY1',
+      bank: 'Vikki Digital Bank',
+      account: '339498650',
+      owner: 'DINH HOANG VIET ANH',
+      memo: 'NAPVIP',
+      active: true
+    }
+  ],
   users: [
     { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, hist: [] },
     { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 1, bal: 24500, earned: 54500, refEarned: 5000, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', tickets: 2, done: 1, lastCi: '', streak: 2, banned: false, hist: [{ t: 'Làm nhiệm vụ Vượt link', a: 630 }] },
     { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, hist: [] }
   ],
   tasks: [
-    { id: '1', title: 'Vượt link lấy mã nhanh (Node A)', reward: 600, url: 'https://google.com', code: 'TF1', done: 85 },
-    { id: '2', title: 'Xem trang & lấy mã (Node B)', reward: 900, url: 'https://google.com', code: 'TF2', done: 62 },
-    { id: '3', title: 'Khảo sát nhanh 30s (Node C)', reward: 1500, url: 'https://google.com', code: 'TF3', done: 40 }
+    { id: '1', title: 'Vượt link lấy mã nhanh (Node A)', cat: 'Vượt link', reward: 600, url: 'https://google.com', code: 'TF1', done: 85 },
+    { id: '2', title: 'Khảo sát nhanh 30s (Node B)', cat: 'Khảo sát', reward: 1500, url: 'https://google.com', code: 'TF2', done: 62 },
+    { id: '3', title: 'Mở tài khoản & xác minh (Node C)', cat: 'CPA App', reward: 12000, url: 'https://google.com', code: 'TF3', done: 40 }
   ],
   withdraws: [
     { id: 'W1', uid: 1001, u: 'user1', bank: 'MB Bank', acc: '0339498650', owner: 'NGUYEN MINH', amt: 30000, st: 'pending' }
@@ -455,7 +514,10 @@ const INIT = {
 };
 
 let db = JSON.parse(localStorage.getItem(KEY) || 'null') || JSON.parse(JSON.stringify(INIT));
-let mode = 'login', me = null, curTask = null, curCh = 'chung', deg = 0, spinning = false;
+if (!db.paymentAccounts || !db.paymentAccounts.length) {
+  db.paymentAccounts = JSON.parse(JSON.stringify(INIT.paymentAccounts));
+}
+let mode = 'login', me = null, curTask = null, curCh = 'chung', curTaskCat = 'all', deg = 0, spinning = false;
 
 function save() { localStorage.setItem(KEY, JSON.stringify(db)); }
 function money(n) { return Number(n || 0).toLocaleString('vi-VN') + 'đ'; }
@@ -473,6 +535,10 @@ function fakeIp() {
     sessionStorage.setItem('MY_IP', `14.${Math.floor(160+Math.random()*80)}.${Math.floor(10+Math.random()*220)}.${Math.floor(10+Math.random()*220)}`);
   }
   return sessionStorage.getItem('MY_IP');
+}
+
+function getActivePayment() {
+  return db.paymentAccounts.find(p => p.active) || db.paymentAccounts[0] || INIT.paymentAccounts[0];
 }
 
 function resetDemoData() {
@@ -560,6 +626,13 @@ function switchUserView(v) {
   renderUser();
 }
 
+function setTaskFilter(cat, el) {
+  curTaskCat = cat;
+  document.querySelectorAll('#taskFilterBar .filter-chip').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderUser();
+}
+
 function rotateTaskNodes() {
   db.tasks.forEach((t, idx) => {
     const codeNum = Math.floor(100 + Math.random() * 899);
@@ -574,6 +647,7 @@ function rotateTaskNodes() {
 function renderUser() {
   if (!me) return;
   const vip = VIPS[me.vip] || VIPS[0];
+  document.getElementById('uAvatar').textContent = (me.name || 'U').charAt(0).toUpperCase();
   document.getElementById('uName').textContent = me.name;
   document.getElementById('uVipPill').textContent = vip.name;
   document.getElementById('uIdRef').textContent = `ID #${me.id} • Mã Ref: ${me.refCode}`;
@@ -586,9 +660,19 @@ function renderUser() {
   document.getElementById('uShareRef').textContent = `${location.origin}/?ref=${me.refCode}`;
   document.getElementById('uTickets').textContent = me.tickets;
 
-  document.getElementById('taskList').innerHTML = db.tasks.map(t => {
+  const filteredTasks = curTaskCat === 'all' ? db.tasks : db.tasks.filter(t => (t.cat || 'Vượt link') === curTaskCat);
+  document.getElementById('taskList').innerHTML = filteredTasks.map(t => {
     const rew = Math.round(t.reward * (1 + vip.bonus / 100));
-    return `<div class="task-item"><div><div style="font-weight:700;">${t.title}</div><div style="font-size:11px;color:var(--muted);">Thưởng: <strong style="color:var(--primary);">+${money(rew)}</strong> • Đã làm: ${t.done}</div></div><button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="openTask('${t.id}')">Làm</button></div>`;
+    return `
+      <div class="task-item">
+        <div style="min-width:0;">
+          <span class="task-tag">${t.cat || 'Vượt link'}</span>
+          <div style="font-weight:800;font-size:14px;color:var(--text);">${t.title}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px;">Thưởng: <strong style="color:var(--primary);font-size:13px;">+${money(rew)}</strong> • Đã làm: ${t.done}</div>
+        </div>
+        <button class="btn-sm" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;flex-shrink:0;box-shadow:0 4px 10px rgba(5,150,105,0.22);" onclick="openTask('${t.id}')">Làm ngay</button>
+      </div>
+    `;
   }).join('');
 
   const mList = [...db.winners, ...db.winners];
@@ -596,18 +680,34 @@ function renderUser() {
 
   document.getElementById('vipList').innerHTML = VIPS.filter(x => x.lv > 0).map(x => {
     const has = me.vip >= x.lv;
-    return `<div class="card"><div style="display:flex;justify-content:space-between;"><strong>👑 ${x.name}</strong><strong style="color:var(--amber);">${money(x.price)}</strong></div><div style="font-size:12px;color:var(--muted);margin:6px 0 10px;">${x.desc}</div><button class="btn-primary" style="background:${has ? '#94a3b8' : ''}" ${has ? 'disabled' : ''} onclick="buyVip(${x.lv})">${has ? 'Đã sở hữu' : 'Mua bằng số dư'}</button></div>`;
+    return `<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;"><strong style="font-size:16px;">👑 ${x.name}</strong><strong style="color:var(--amber);font-size:15px;">${money(x.price)}</strong></div><div style="font-size:13px;color:var(--muted);margin:8px 0 12px;">${x.desc}</div><button class="btn-primary" style="background:${has ? '#94a3b8' : ''}" ${has ? 'disabled' : ''} onclick="buyVip(${x.lv})">${has ? 'Đã sở hữu' : 'Mua bằng số dư'}</button></div>`;
   }).join('');
+
+  const pay = getActivePayment();
+  const memoText = `${pay.memo || 'NAPVIP'} ${me.u}`;
+  document.getElementById('userPaymentInfoBox').innerHTML = `
+    <div class="bank-card-box">
+      <div style="font-weight:900;color:var(--blue);font-size:14px;">${pay.bank}</div>
+      <div style="margin-top:6px;font-size:13px;">Chủ TK: <strong>${pay.owner}</strong></div>
+      <div style="font-size:13px;">Số TK: <strong style="color:var(--primary);font-size:15px;">${pay.account}</strong> <button class="btn-secondary" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="copyText('${pay.account}')">Copy STK</button></div>
+      <div style="font-size:13px;margin-top:4px;">Nội dung: <strong>${memoText}</strong> <button class="btn-secondary" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="copyText('${memoText}')">Copy ND</button></div>
+    </div>
+  `;
 
   document.getElementById('channelBar').innerHTML = db.channels.map(c => `<button class="channel-btn ${c.id === curCh ? 'active' : ''}" onclick="curCh='${c.id}';renderUser()">${c.name}</button>`).join('');
   const box = document.getElementById('chatBox');
   box.innerHTML = db.msgs.filter(m => m.ch === curCh).map(m => {
     const roleBadge = m.role === 'bot' ? '<span class="badge" style="background:#dbeafe;color:#1d4ed8;">BOT</span>' : (m.role === 'admin' ? '<span class="badge" style="background:#fee2e2;color:#b91c1c;">ADMIN</span>' : (m.role === 'cskh' ? '<span class="badge" style="background:#fef3c7;color:#b45309;">CSKH</span>' : ''));
-    return `<div class="msg ${m.role === 'bot' ? 'bot' : (m.sender === me.name ? 'mine' : '')}"><div style="font-size:11px;font-weight:700;margin-bottom:2px;">${m.sender}${roleBadge}</div><div style="white-space:pre-line;">${m.text}</div></div>`;
+    return `<div class="msg ${m.role === 'bot' ? 'bot' : (m.sender === me.name ? 'mine' : '')}"><div style="font-size:12px;font-weight:800;margin-bottom:4px;color:#1e293b;">${m.sender}${roleBadge}</div><div style="white-space:pre-line;">${m.text}</div></div>`;
   }).join('');
   box.scrollTop = box.scrollHeight;
 
-  document.getElementById('uHist').innerHTML = (me.hist || []).map(h => `<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;"><span>${h.t}</span><strong style="color:${h.a >= 0 ? 'var(--primary)' : 'var(--red)'};">${h.a >= 0 ? '+' : ''}${money(h.a)}</strong></div>`).join('');
+  document.getElementById('uHist').innerHTML = (me.hist || []).map(h => `<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;"><span>${h.t}</span><strong style="color:${h.a >= 0 ? 'var(--primary)' : 'var(--red)'};">${h.a >= 0 ? '+' : ''}${money(h.a)}</strong></div>`).join('');
+}
+
+function copyText(str) {
+  navigator.clipboard?.writeText(str).catch(() => {});
+  toast('Đã sao chép: ' + str);
 }
 
 function openCheckin() {
@@ -758,15 +858,16 @@ const AI_SUGGESTIONS = [
   'Số dư & lượt làm việc của tôi',
   'Cách làm nhiệm vụ nhận tiền',
   'Nâng gói VIP có lợi gì?',
-  'Cách rút tiền & mời bạn bè',
-  'Bot báo IP/Ref & quyền Admin'
+  'Tài khoản thanh toán Admin',
+  'Vòng quay 7 ô & Rương ngày',
+  'Cách rút tiền & mời bạn bè'
 ];
 
 function openAi() {
   document.getElementById('aiSuggestBar').innerHTML = AI_SUGGESTIONS.map(s => `<button type="button" class="suggest-chip" onclick="quickAsk('${s}')">${s}</button>`).join('');
   const box = document.getElementById('aiMessages');
   if (!box.innerHTML) {
-    pushAi('ai', `Chào ${me.name}! Bạn đang ở VIP ${me.vip}, số dư ${money(me.bal)}. Bấm vào câu hỏi gợi ý phía trên hoặc gõ câu hỏi bất kỳ nhé.`);
+    pushAi('ai', `Chào ${me.name}! Tài khoản @${me.u} của bạn hiện đang ở ${VIPS[me.vip].name}, số dư ${money(me.bal)} và còn ${me.tickets} vé quay. Chọn câu hỏi gợi ý bên trên hoặc gõ câu hỏi bất kỳ để mình giải đáp chi tiết.`);
   }
   document.getElementById('aiModal').classList.remove('hidden');
 }
@@ -791,7 +892,7 @@ function pushAi(who, txt) {
   const d = document.createElement('div');
   d.className = 'msg ' + (who === 'user' ? 'mine' : '');
   d.style.maxWidth = '90%';
-  d.innerHTML = `<div style="font-size:10px;font-weight:800;margin-bottom:2px;color:${who === 'user' ? 'var(--primary)' : 'var(--blue)'};">${who === 'user' ? 'Bạn' : '✨ Trợ lý AI'}</div><div style="white-space:pre-line;">${txt}</div>`;
+  d.innerHTML = `<div style="font-size:11px;font-weight:800;margin-bottom:3px;color:${who === 'user' ? 'var(--primary)' : 'var(--blue)'};">${who === 'user' ? 'Bạn' : '✨ Trợ lý AI'}</div><div style="white-space:pre-line;">${txt}</div>`;
   box.appendChild(d);
   box.scrollTop = box.scrollHeight;
 }
@@ -799,27 +900,31 @@ function pushAi(who, txt) {
 function buildAiAnswer(q) {
   const s = q.toLowerCase();
   const vip = VIPS[me.vip] || VIPS[0];
-  if (s.includes('số dư') || s.includes('lượt') || s.includes('tôi')) {
-    return `Tài khoản @${me.u} (ID #${me.id}):\n• Số dư ví: ${money(me.bal)}\n• Hạng hiện tại: ${vip.name} (${me.done}/${vip.limit} lượt hôm nay, +${vip.bonus}% thưởng)\n• Vé quay còn lại: ${me.tickets} vé\n• Hoa hồng Ref đã nhận: ${money(me.refEarned)}`;
+  const pay = getActivePayment();
+  if (s.includes('thanh toán') || s.includes('ngân hàng') || s.includes('stk') || s.includes('vikki')) {
+    return `🏦 Tài khoản thanh toán đang kích hoạt:\n• Ngân hàng: ${pay.bank}\n• Chủ tài khoản: ${pay.owner}\n• Số tài khoản: ${pay.account}\nAdmin có thể thêm, sửa, xóa hoặc đổi tài khoản nhận tiền ngay trong tab "Tài khoản nhận" của trang Admin.`;
   }
-  if (s.includes('nhiệm vụ') || s.includes('làm')) {
-    return `Cách làm nhiệm vụ trên web:\n1. Ở tab "Trang chủ", bấm "Làm" trên nhiệm vụ muốn thực hiện.\n2. Mở link để lấy mã xác nhận, nhập mã vào ô xác nhận và bấm "Xác Nhận Nhận Tiền".\n3. Tiền cộng thẳng vào ví ngay lập tức; làm đủ 3 kèo/ngày có thể bấm "Rương ngày" nhận thêm 1.000đ + 1 vé quay.`;
+  if (s.includes('số dư') || s.includes('lượt') || s.includes('tôi')) {
+    return `📊 Thông tin tài khoản @${me.u} (ID #${me.id}):\n• Số dư ví: ${money(me.bal)} (Tổng kiếm: ${money(me.earned)})\n• Hạng hiện tại: ${vip.name} (${me.done}/${vip.limit} lượt hôm nay, thưởng +${vip.bonus}%)\n• Vé quay còn lại: ${me.tickets} vé\n• Hoa hồng Ref đã nhận: ${money(me.refEarned)}`;
+  }
+  if (s.includes('nhiệm vụ') || s.includes('làm') || s.includes('kèo')) {
+    return `📌 Cách làm nhiệm vụ trên web:\n1. Ở tab "Trang chủ", lọc loại kèo hoặc bấm "Đổi kèo" để lấy mã mới.\n2. Bấm "Làm ngay", mở link để lấy mã xác nhận, nhập mã và bấm "Xác Nhận Nhận Tiền".\n3. Tiền cộng thẳng vào ví ngay sau khi xác nhận đúng mã.`;
   }
   if (s.includes('vip')) {
-    return `Gói VIP tăng số lượt làm nhiệm vụ/ngày và cộng thêm % thưởng mỗi kèo:\n• VIP 1 (50.000đ): 8 lượt/ngày, +5% thưởng\n• VIP 2 (150.000đ): 20 lượt/ngày, +12% thưởng\n• VIP 3 (400.000đ): 50 lượt/ngày, +25% thưởng\nBạn có thể mua trực tiếp trong tab "Gói VIP" bằng số dư ví.`;
+    return `👑 Bảng quyền lợi gói VIP:\n• VIP 0 (Miễn phí): 3 lượt/ngày, thưởng chuẩn\n• VIP 1 (50.000đ): 8 lượt/ngày, +5% thưởng\n• VIP 2 (150.000đ): 20 lượt/ngày, +12% thưởng\n• VIP 3 (400.000đ): 50 lượt/ngày, +25% thưởng\nMua trực tiếp trong tab "Gói VIP" bằng số dư ví.`;
+  }
+  if (s.includes('quay') || s.includes('vé') || s.includes('rương')) {
+    return `🎡 Vòng quay & Rương ngày:\n• Vòng quay gồm 7 ô: 888đ, 1.000đ, 2.000đ, 5.000đ, 10.000đ, 30.000đ và Chúc may mắn lần sau.\n• Nhận thêm vé qua Điểm danh 7 ngày (+1 vé/ngày) hoặc làm đủ 3 nhiệm vụ để bấm "Rương ngày" (+1.000đ & +1 vé).`;
   }
   if (s.includes('rút') || s.includes('mời') || s.includes('ref')) {
-    return `• Rút tiền: Vào tab "Ví tiền", chọn ngân hàng, nhập STK, tên chủ TK và số tiền (tối thiểu 10.000đ) rồi bấm "Gửi Lệnh Rút".\n• Mời bạn bè: Chia sẻ mã ${me.refCode} — khi người được mời làm nhiệm vụ, bạn nhận 15% hoa hồng tự động.`;
+    return `💸 Rút tiền & Mời bạn bè:\n• Rút tiền: Vào tab "Ví tiền", chọn ngân hàng, nhập STK, tên chủ TK và số tiền (tối thiểu 10.000đ) rồi bấm "Gửi Lệnh Rút".\n• Mời bạn bè: Dùng mã ${me.refCode} — khi người được mời hoàn thành kèo, bạn nhận 15% hoa hồng tự động.`;
   }
-  if (s.includes('bot') || s.includes('ip') || s.includes('admin')) {
-    return `• Trong tab "Cộng đồng", TASKFLOW BOT tự động nhắn chào mừng, hiển thị người giới thiệu và địa chỉ IP (cảnh báo nếu trùng IP).\n• Tài khoản Admin (admin / 1) quản lý toàn bộ thành viên, nâng/hạ quyền CSKH, cộng/trừ số dư, thêm nhiệm vụ và duyệt rút tiền.`;
-  }
-  return `Web có các mục chính: Trang chủ (làm nhiệm vụ & điểm danh), Vòng quay (7 ô giải & bảng trúng thưởng chạy), Gói VIP, Cộng đồng (có Bot báo IP/Ref & tạo nhóm), Ví tiền (rút tiền) và Quản trị Admin. Bạn đang cần hướng dẫn chi tiết phần nào?`;
+  return `Tôi đã nắm rõ các mục trên web (Trang chủ nhiệm vụ, Vòng quay 7 ô & bảng trúng thưởng chạy, Gói VIP & Tài khoản nhận tiền, Cộng đồng có Bot báo IP/Ref, Ví tiền rút tiền và Quản trị Admin). Bạn cần hỏi chi tiết phần nào?`;
 }
 
 /* ADMIN */
 function switchAdminView(v) {
-  ['Dash', 'Users', 'Tasks', 'Wd'].forEach(k => {
+  ['Dash', 'Users', 'Tasks', 'Wd', 'Pay'].forEach(k => {
     document.getElementById('aView' + k).classList.add('hidden');
     document.getElementById('aBtn' + k).classList.remove('active');
   });
@@ -830,25 +935,71 @@ function switchAdminView(v) {
 }
 
 function renderAdmin() {
+  const activePay = getActivePayment();
   document.getElementById('kUsers').textContent = db.users.length;
   document.getElementById('kDone').textContent = db.tasks.reduce((s, x) => s + x.done, 0);
   document.getElementById('kWd').textContent = db.withdraws.filter(x => x.st === 'pending').length;
+  document.getElementById('kPayBank').textContent = `${activePay.bank} • ${activePay.account}`;
   renderAdminUsers();
-  document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:11px;color:var(--muted);">Mã: ${t.code} • Thưởng: ${money(t.reward)} • Đã làm: ${t.done}</div></div><button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
-  document.getElementById('adminWdBody').innerHTML = db.withdraws.map(w => `<div class="task-item"><div><strong>@${w.u} • ${money(w.amt)}</strong><div style="font-size:11px;color:var(--muted);">${w.bank} - ${w.acc} (${w.owner})</div></div><div>${w.st === 'pending' ? `<button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actWd('${w.id}',1)">Duyệt</button> <button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="actWd('${w.id}',0)">Hủy</button>` : `<strong>${w.st === 'ok' ? 'Đã duyệt' : 'Đã hủy'}</strong>`}</div></div>`).join('');
+  document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted);">Loại: ${t.cat || 'Vượt link'} • Mã: ${t.code} • Thưởng: ${money(t.reward)} • Đã làm: ${t.done}</div></div><button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
+  document.getElementById('adminWdBody').innerHTML = db.withdraws.map(w => `<div class="task-item"><div><strong>@${w.u} • ${money(w.amt)}</strong><div style="font-size:12px;color:var(--muted);">${w.bank} - ${w.acc} (${w.owner})</div></div><div>${w.st === 'pending' ? `<button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actWd('${w.id}',1)">Duyệt</button> <button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="actWd('${w.id}',0)">Hủy</button>` : `<strong>${w.st === 'ok' ? 'Đã duyệt' : 'Đã hủy'}</strong>`}</div></div>`).join('');
+  renderPaymentAccounts();
+}
+
+function renderPaymentAccounts() {
+  document.getElementById('adminPayList').innerHTML = db.paymentAccounts.map(p => `
+    <div class="task-item">
+      <div>
+        <div><strong>${p.bank}</strong> ${p.active ? '<span class="active-bank-badge">Đang dùng</span>' : ''}</div>
+        <div style="font-size:13px;margin-top:2px;">STK: <strong>${p.account}</strong> • Chủ TK: <strong>${p.owner}</strong></div>
+        <div style="font-size:12px;color:var(--muted);">Nội dung: ${p.memo || 'NAPVIP'}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        ${!p.active ? `<button class="btn-sm" style="background:var(--primary-light);color:var(--primary);" onclick="setActivePayment('${p.id}')">Kích hoạt</button>` : ''}
+        <button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="deletePaymentAccount('${p.id}')">Xóa</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addPaymentAccount() {
+  const bank = document.getElementById('payBank').value.trim();
+  const account = document.getElementById('payAcc').value.trim();
+  const owner = document.getElementById('payOwner').value.trim().toUpperCase();
+  const memo = document.getElementById('payMemo').value.trim().toUpperCase() || 'NAPVIP';
+  if (!bank || !account || !owner) return toast('Nhập đủ Ngân hàng, Số TK và Chủ TK');
+  db.paymentAccounts.forEach(p => { p.active = false; });
+  db.paymentAccounts.unshift({ id: 'PAY' + Date.now(), bank, account, owner, memo, active: true });
+  document.getElementById('payBank').value = '';
+  document.getElementById('payAcc').value = '';
+  document.getElementById('payOwner').value = '';
+  save(); renderAdmin(); toast('Đã thêm & kích hoạt tài khoản thanh toán');
+}
+
+function setActivePayment(id) {
+  db.paymentAccounts.forEach(p => { p.active = (p.id === id); });
+  save(); renderAdmin(); toast('Đã đổi tài khoản thanh toán đang hoạt động');
+}
+
+function deletePaymentAccount(id) {
+  if (db.paymentAccounts.length <= 1) return toast('Cần giữ ít nhất 1 tài khoản thanh toán');
+  const wasActive = db.paymentAccounts.find(p => p.id === id)?.active;
+  db.paymentAccounts = db.paymentAccounts.filter(p => p.id !== id);
+  if (wasActive && db.paymentAccounts[0]) db.paymentAccounts[0].active = true;
+  save(); renderAdmin(); toast('Đã xóa tài khoản thanh toán');
 }
 
 function renderAdminUsers() {
   const q = (document.getElementById('userSearch')?.value || '').toLowerCase();
   const rows = db.users.filter(x => x.name.toLowerCase().includes(q) || x.u.toLowerCase().includes(q) || x.ip.includes(q) || x.refCode.toLowerCase().includes(q));
-  document.getElementById('adminUsersBody').innerHTML = rows.map(x => `<tr><td><strong>${x.name}</strong> ${x.banned ? '<span style="color:var(--red)">[Khóa]</span>' : ''}<div style="font-size:11px;color:var(--muted);">@${x.u} • Ref:${x.refBy}</div></td><td>VIP ${x.vip} / <strong>${x.role.toUpperCase()}</strong></td><td style="font-weight:700;color:var(--primary);">${money(x.bal)}</td><td style="font-size:11px;">${x.ip}</td><td><button class="btn-sm" style="background:var(--blue-light);color:var(--blue);" onclick="openEditUser(${x.id})">Sửa</button></td></tr>`).join('');
+  document.getElementById('adminUsersBody').innerHTML = rows.map(x => `<tr><td><strong>${x.name}</strong> ${x.banned ? '<span style="color:var(--red)">[Khóa]</span>' : ''}<div style="font-size:12px;color:var(--muted);">@${x.u} • Ref:${x.refBy}</div></td><td>VIP ${x.vip} / <strong>${x.role.toUpperCase()}</strong></td><td style="font-weight:800;color:var(--primary);">${money(x.bal)}</td><td style="font-size:12px;">${x.ip}</td><td><button class="btn-sm" style="background:var(--blue-light);color:var(--blue);" onclick="openEditUser(${x.id})">Sửa</button></td></tr>`).join('');
 }
 
 function openEditUser(id) {
   const x = db.users.find(u => u.id === id);
   if (!x) return;
   document.getElementById('editUserBody').innerHTML = `
-    <div style="font-size:12px;margin-bottom:10px;background:#f8fafc;padding:10px;border-radius:10px;">
+    <div style="font-size:13px;margin-bottom:12px;background:#f8fafc;padding:12px;border-radius:12px;border:1px solid var(--border);">
       <div><strong>${x.name}</strong> (@${x.u}) • IP: ${x.ip}</div>
       <div>Số dư: <strong>${money(x.bal)}</strong></div>
     </div>
@@ -881,7 +1032,7 @@ function createTask() {
   const url = document.getElementById('tUrl').value.trim() || 'https://google.com';
   const code = document.getElementById('tCode').value.trim() || 'OK';
   if (!title || !reward) return toast('Nhập đủ tên và tiền thưởng');
-  db.tasks.unshift({ id: String(Date.now()), title, reward, url, code, done: 0 });
+  db.tasks.unshift({ id: String(Date.now()), title, cat: 'Vượt link', reward, url, code, done: 0 });
   document.getElementById('tTitle').value = ''; document.getElementById('tReward').value = ''; document.getElementById('tCode').value = '';
   save(); renderAdmin(); toast('Đã thêm nhiệm vụ');
 }

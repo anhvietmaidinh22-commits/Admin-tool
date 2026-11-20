@@ -21,7 +21,6 @@
     --red: #e11d48;
     --red-soft: #fff1f2;
     --shadow-sm: 0 2px 10px rgba(15, 23, 42, 0.04);
-    --shadow-md: 0 10px 28px -8px rgba(15, 23, 42, 0.1);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
   body { background: #e6ecf5; color: var(--text); font-size: 15px; line-height: 1.5; }
@@ -138,6 +137,7 @@
   th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
   th { background: #f8fafc; color: #475569; }
   .toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: #0f172a; color: #fff; padding: 11px 18px; border-radius: 14px; font-size: 13px; font-weight: 700; z-index: 99; max-width: 92%; text-align: center; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24); }
+  .sync-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 99px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
 </style>
 </head>
 <body>
@@ -336,10 +336,14 @@
 <!-- ADMIN APP -->
 <div id="adminApp" class="admin-shell hidden">
   <div class="topbar">
-    <strong style="font-size:16px;">🛠️ QUẢN TRỊ TASKFLOW PRO</strong>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <strong style="font-size:16px;">🛠️ QUẢN TRỊ TASKFLOW PRO</strong>
+      <span id="cloudStatusBadge" class="sync-pill">● Đang đồng bộ</span>
+    </div>
     <div style="display:flex;gap:8px;">
-      <button class="btn-secondary" onclick="resetDemoData()">↻ Reset dữ liệu</button>
-      <button class="btn-secondary" style="color:var(--red);" onclick="logout()">Đăng xuất</button>
+      <button class="btn-secondary" onclick="manualSyncCloud()">🔄 Tải mới</button>
+      <button class="btn-secondary" onclick="resetDemoData()">↻ Reset</button>
+      <button class="btn-secondary" style="color:var(--red);" onclick="logout()">Thoát</button>
     </div>
   </div>
   <div class="admin-tabs">
@@ -512,7 +516,12 @@
 </div>
 
 <script>
-const KEY = 'TF_VIP_PRO_V7';
+const SUPABASE_URL = 'https://sigudratdxuzbizuvxbq.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_mV4mYUOx11p3mMwF84GXaQ_NcPNkzmk';
+
+const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
+const KEY = 'TF_VIP_PRO_CLOUD_V2';
+
 const PRIZES = [
   { label: '888đ', val: 888, color: '#10b981', w: 28 },
   { label: '1.000đ', val: 1000, color: '#3b82f6', w: 24 },
@@ -572,15 +581,112 @@ const INIT = {
 let db = JSON.parse(localStorage.getItem(KEY) || 'null') || JSON.parse(JSON.stringify(INIT));
 if (!db.paymentAccounts || !db.paymentAccounts.length) db.paymentAccounts = JSON.parse(JSON.stringify(INIT.paymentAccounts));
 if (!db.vipRequests) db.vipRequests = [];
-let mode = 'login', me = null, curTask = null, pendingVipPkg = null, newPayQrData = '', curCh = 'chung', curTaskCat = 'all', deg = 0, spinning = false;
+let mode = 'login', me = null, curTask = null, pendingVipPkg = null, newPayQrData = '', curCh = 'chung', curTaskCat = 'all', deg = 0, spinning = false, realClientIp = '';
 
-function save() {
+/* CLOUD SYNC (SUPABASE) */
+async function pullFromCloud(silent = true) {
+  if (!CLOUD_ENABLED) {
+    updateCloudBadge('Chế độ nội bộ', false);
+    return;
+  }
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/app_store?id=eq.main&select=data`, {
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const rows = await res.json();
+    if (rows && rows.length && rows[0].data) {
+      db = rows[0].data;
+      if (!db.paymentAccounts || !db.paymentAccounts.length) db.paymentAccounts = JSON.parse(JSON.stringify(INIT.paymentAccounts));
+      if (!db.vipRequests) db.vipRequests = [];
+      localStorage.setItem(KEY, JSON.stringify(db));
+      if (me) {
+        const refreshed = db.users.find(x => x.id === me.id);
+        if (refreshed) me = refreshed;
+      }
+      updateCloudBadge('● Đã đồng bộ Cloud', true);
+      if (!silent) toast('Đã đồng bộ dữ liệu mới nhất!');
+    } else {
+      await pushToCloud();
+    }
+  } catch (err) {
+    updateCloudBadge('● Lỗi kết nối Cloud', false);
+  }
+}
+
+async function pushToCloud() {
   try {
     localStorage.setItem(KEY, JSON.stringify(db));
   } catch (e) {
     toast('Ảnh QR quá lớn cho bộ nhớ trình duyệt, hãy chọn ảnh nhẹ hơn');
   }
+  if (!CLOUD_ENABLED) return;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/app_store`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        Prefer: 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({ id: 'main', data: db, updated_at: new Date().toISOString() })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    updateCloudBadge('● Đã đồng bộ Cloud', true);
+  } catch (e) {
+    updateCloudBadge('● Lỗi ghi Cloud', false);
+  }
 }
+
+function updateCloudBadge(text, ok) {
+  const b = document.getElementById('cloudStatusBadge');
+  if (!b) return;
+  b.textContent = text;
+  b.style.background = ok ? '#ecfdf5' : '#fef2f2';
+  b.style.color = ok ? '#059669' : '#dc2626';
+  b.style.borderColor = ok ? '#a7f3d0' : '#fecaca';
+}
+
+function save() {
+  pushToCloud();
+}
+
+async function manualSyncCloud() {
+  await pullFromCloud(false);
+  if (me && me.role === 'admin') renderAdmin();
+  else if (me) renderUser();
+}
+
+async function detectRealIp() {
+  try {
+    const r = await fetch('https://api.ipify.org?format=json');
+    const j = await r.json();
+    if (j && j.ip) {
+      realClientIp = j.ip;
+      sessionStorage.setItem('MY_IP', j.ip);
+      return j.ip;
+    }
+  } catch (e) {}
+  if (!sessionStorage.getItem('MY_IP')) {
+    sessionStorage.setItem('MY_IP', `14.${Math.floor(160+Math.random()*80)}.${Math.floor(10+Math.random()*220)}.${Math.floor(10+Math.random()*220)}`);
+  }
+  return sessionStorage.getItem('MY_IP');
+}
+
+setInterval(async () => {
+  if (!CLOUD_ENABLED || !me || spinning) return;
+  await pullFromCloud(true);
+  if (me.role === 'admin') renderAdmin();
+  else renderUser();
+}, 4000);
+
+detectRealIp();
+pullFromCloud(true);
+
 function money(n) { return Number(n || 0).toLocaleString('vi-VN') + 'đ'; }
 function today() { return new Date().toISOString().slice(0, 10); }
 function toast(m) {
@@ -590,12 +696,6 @@ function toast(m) {
 }
 function closeModals() {
   ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal', 'spinResultModal', 'vipPayModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
-}
-function fakeIp() {
-  if (!sessionStorage.getItem('MY_IP')) {
-    sessionStorage.setItem('MY_IP', `14.${Math.floor(160+Math.random()*80)}.${Math.floor(10+Math.random()*220)}.${Math.floor(10+Math.random()*220)}`);
-  }
-  return sessionStorage.getItem('MY_IP');
 }
 
 function checkVipExpiry(user) {
@@ -648,15 +748,18 @@ function botAnnounce(user, tag) {
   });
 }
 
-function submitAuth(e) {
+async function submitAuth(e) {
   e.preventDefault();
   const u = document.getElementById('authUser').value.trim();
   const p = document.getElementById('authPass').value.trim();
+  await pullFromCloud(true);
+  const clientIp = await detectRealIp();
+
   if (mode === 'login') {
     const found = db.users.find(x => x.u.toLowerCase() === u.toLowerCase() && x.p === p);
     if (!found) return toast('Sai tài khoản hoặc mật khẩu');
     if (found.banned) return toast('Tài khoản đã bị khóa');
-    found.ip = fakeIp();
+    found.ip = clientIp;
     checkVipExpiry(found);
     me = found;
     if (me.role !== 'admin') botAnnounce(me, 'Đăng nhập');
@@ -667,7 +770,7 @@ function submitAuth(e) {
     const refIn = document.getElementById('regRef').value.trim().toUpperCase();
     const inv = db.users.find(x => x.refCode === refIn);
     const id = 1000 + db.users.length;
-    const nu = { id, u, p, name, role: 'user', vip: 0, vipExpiry: 0, bal: 2000, earned: 2000, refEarned: 0, refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có', ip: fakeIp(), tickets: 1, done: 0, lastCi: '', streak: 0, banned: false, hist: [{ t: 'Tặng tân thủ', a: 2000 }] };
+    const nu = { id, u, p, name, role: 'user', vip: 0, vipExpiry: 0, bal: 2000, earned: 2000, refEarned: 0, refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có', ip: clientIp, tickets: 1, done: 0, lastCi: '', streak: 0, banned: false, hist: [{ t: 'Tặng tân thủ', a: 2000 }] };
     db.users.push(nu); me = nu;
     botAnnounce(nu, 'Thành viên mới');
     save(); startSession();
@@ -1130,16 +1233,29 @@ function actVipReq(id, ok) {
   save(); renderAdmin(); toast(ok ? 'Đã duyệt & cộng thời hạn VIP!' : 'Đã từ chối yêu cầu VIP');
 }
 
-function readImageFile(file, cb) {
+function compressImageFile(file, cb) {
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = () => cb(String(reader.result || ''));
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxW = 360;
+      const scale = Math.min(1, maxW / img.width);
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      cb(canvas.toDataURL('image/jpeg', 0.8));
+    };
+    img.src = String(reader.result || '');
+  };
   reader.readAsDataURL(file);
 }
 
 function handleNewPayQrFile(e) {
   const file = e.target.files?.[0];
-  readImageFile(file, (dataUrl) => {
+  compressImageFile(file, (dataUrl) => {
     newPayQrData = dataUrl;
     const img = document.getElementById('newPayQrPreview');
     img.src = dataUrl;
@@ -1149,7 +1265,7 @@ function handleNewPayQrFile(e) {
 
 function attachQrToAccount(id, e) {
   const file = e.target.files?.[0];
-  readImageFile(file, (dataUrl) => {
+  compressImageFile(file, (dataUrl) => {
     const acc = db.paymentAccounts.find(p => p.id === id);
     if (!acc) return;
     acc.qrImage = dataUrl;

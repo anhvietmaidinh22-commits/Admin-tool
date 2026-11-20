@@ -25,7 +25,7 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
   body { background: #e6ecf5; color: var(--text); font-size: 15px; line-height: 1.5; }
-  button, input, select { font-family: inherit; font-size: 15px; outline: none; }
+  button, input, select, textarea { font-family: inherit; font-size: 15px; outline: none; }
   button { cursor: pointer; border: none; transition: all 0.16s ease; }
   button:active:not(:disabled) { transform: scale(0.97); }
   button:disabled { opacity: 0.65; cursor: not-allowed; }
@@ -144,11 +144,17 @@
   .channel-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
   .ch-count-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: #e11d48; color: #fff; font-size: 10px; font-weight: 900; line-height: 1; }
   .channel-btn.active .ch-count-badge { background: #fbbf24; color: #0f172a; }
-  .chat-box { height: 340px; overflow-y: auto; background: #e9eff6; border: 1px solid var(--border); border-radius: 18px; padding: 13px; display: flex; flex-direction: column; gap: 11px; }
-  .msg { max-width: 86%; padding: 11px 14px; border-radius: 16px; background: #fff; font-size: 14px; line-height: 1.5; align-self: flex-start; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05); }
+
+  .pinned-banner { background: #fffbeb; border: 1.5px solid #f59e0b; border-radius: 14px; padding: 9px 12px; margin-bottom: 10px; font-size: 12px; color: #78350f; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .chat-box { height: 325px; overflow-y: auto; background: #e9eff6; border: 1px solid var(--border); border-radius: 18px; padding: 13px; display: flex; flex-direction: column; gap: 11px; }
+  .msg { max-width: 88%; padding: 11px 14px; border-radius: 16px; background: #fff; font-size: 14px; line-height: 1.5; align-self: flex-start; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05); }
   .msg.mine { background: #dcfce7; align-self: flex-end; border-bottom-right-radius: 4px; }
   .msg.bot { max-width: 100%; width: 100%; align-self: center; background: linear-gradient(135deg, #eff6ff, #f0fdf4); border: 1.5px solid #bfdbfe; border-radius: 16px; }
+  .msg.pinned-msg { border: 1.5px solid #f59e0b; }
   .badge { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 6px; margin-left: 5px; }
+  .msg-actions { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; padding-top: 6px; border-top: 1px dashed #e2e8f0; align-items: center; }
+  .msg-act-btn { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 8px; background: #f1f5f9; color: #334155; }
+  .msg-react-chip { font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 99px; background: #eef2ff; color: #3730a3; }
 
   .ai-link-cards { display: flex; flex-direction: column; gap: 7px; margin-top: 8px; }
   .ai-direct-link { display: inline-flex; align-items: center; justify-content: space-between; gap: 8px; background: #ffffff; border: 1px solid #c7d2fe; color: var(--indigo); padding: 8px 12px; border-radius: 11px; font-size: 12px; font-weight: 800; text-decoration: none; }
@@ -393,15 +399,16 @@
       </div>
 
       <div class="cskh-bar">
-        <button type="button" class="cskh-link-btn" style="background:var(--primary-soft);color:var(--primary);" onclick="focusCommunityGroup()">🌐 Nhóm chung</button>
+        <button type="button" class="cskh-link-btn" style="background:var(--primary-soft);color:var(--primary);" onclick="selectChannel('congdong')">🌐 Nhóm chung</button>
         <a id="btnZaloCskh" href="#" target="_blank" rel="noopener noreferrer" class="cskh-link-btn" style="background:#eff6ff;color:#0284c7;">💬 Zalo CSKH</a>
         <a id="btnTgCskh" href="#" target="_blank" rel="noopener noreferrer" class="cskh-link-btn" style="background:#fef3c7;color:#b45309;">✈️ Telegram</a>
       </div>
 
       <div class="channel-row" id="channelBar"></div>
+      <div id="userPinnedBanner"></div>
       <div class="chat-box" id="chatBox"></div>
       <form onsubmit="sendMsg(event, 'user')" style="display:flex;gap:8px;margin-top:11px;">
-        <input type="text" id="msgInput" class="form-input" placeholder="Nhắn tin trong nhóm cộng đồng hoặc CSKH...">
+        <input type="text" id="msgInput" class="form-input" placeholder="Nhắn tin trong nhóm hoặc cho CSKH...">
         <button type="submit" class="btn-primary" style="width:auto;padding:0 18px;">Gửi</button>
       </form>
     </div>
@@ -486,6 +493,7 @@
     <button class="admin-tab" id="aBtnPay" onclick="switchAdminView('pay')">🏦 Tài khoản nhận</button>
     <button class="admin-tab" id="aBtnChat" onclick="switchAdminView('chat')">💬 Nhóm &amp; Chat</button>
     <button class="admin-tab" id="aBtnPromo" onclick="switchAdminView('promo')">🎟️ Mã &amp; Minigame</button>
+    <button class="admin-tab" id="aBtnNotify" onclick="switchAdminView('notify')">📢 Set Thông Báo</button>
     <button class="admin-tab" id="aBtnLinks" onclick="switchAdminView('links')">🔗 Link &amp; Thưởng Ref</button>
   </div>
 
@@ -565,6 +573,7 @@
         </div>
       </div>
       <div class="channel-row" id="adminChannelBar"></div>
+      <div id="adminPinnedBanner"></div>
       <div class="chat-box" id="adminChatBox"></div>
       <form onsubmit="sendMsg(event, 'admin')" style="display:flex;gap:8px;margin-top:11px;">
         <input type="text" id="adminMsgInput" class="form-input" placeholder="Gửi tin nhắn vào nhóm cộng đồng / CSKH với tư cách Admin...">
@@ -598,6 +607,28 @@
       </div>
       <button class="btn-primary" style="margin-top:10px;" onclick="createMinigame()">Lưu &amp; Kích Hoạt Minigame</button>
       <div id="adminMinigameList" style="margin-top:12px;"></div>
+    </div>
+  </div>
+
+  <!-- ADMIN SET NOTIFICATION -->
+  <div id="aViewNotify" class="section hidden">
+    <div class="card">
+      <strong style="display:block;margin-bottom:12px;font-size:16px;">📢 Set Thông Báo Cho Thành Viên</strong>
+      <div class="form-group">
+        <label class="form-label">Đối tượng nhận thông báo</label>
+        <select id="notifyTargetSelect" class="form-input">
+          <option value="ALL">Tất cả thành viên</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tiêu đề thông báo</label>
+        <input type="text" id="notifyTitleInp" class="form-input" placeholder="VD: Thông báo cập nhật hệ thống">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nội dung thông báo</label>
+        <textarea id="notifyBodyInp" rows="3" class="form-input" placeholder="Nhập nội dung muốn thông báo..."></textarea>
+      </div>
+      <button class="btn-primary" onclick="sendAdminNotification()">Gửi Thông Báo Ngay</button>
     </div>
   </div>
 
@@ -753,9 +784,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V12';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V12';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V12';
+const KEY = 'TF_VIP_PRO_CLOUD_V13';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V13';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V13';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V13';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -825,9 +857,8 @@ const INIT = {
     { id: 'chung', name: '🤖 Bot Hệ Thống' }
   ],
   msgs: [
-    { id: 1, ch: 'congdong', sender: 'Admin', role: 'admin', text: '👋 Chào mừng toàn thể thành viên vào Nhóm Cộng Đồng TASKFLOW PRO! Admin & CSKH trực tiếp hỗ trợ và trao đổi tại đây.' },
-    { id: 2, ch: 'cskh', sender: 'Hỗ Trợ Viên', role: 'cskh', text: '🎧 Xin chào! Bạn cần hỗ trợ duyệt rút tiền hay kiểm tra nhiệm vụ có thể nhắn trực tiếp tại đây hoặc bấm Zalo / Telegram CSKH.' },
-    { id: 3, ch: 'chung', sender: 'TASKFLOW BOT', role: 'bot', text: '🤖 Bot hệ thống đã sẵn sàng: tự động chào mừng, báo người giới thiệu (Ref) và địa chỉ IP thành viên.' }
+    { id: 1, ch: 'congdong', sender: 'Admin', senderUser: 'admin', role: 'admin', pinned: false, reactions: {}, text: '👋 Chào mừng toàn thể thành viên vào Nhóm Cộng Đồng TASKFLOW PRO! Admin & CSKH trực tiếp hỗ trợ và trao đổi tại đây.' },
+    { id: 2, ch: 'cskh', sender: 'Hỗ Trợ Viên', senderUser: 'cskh1', ownerUser: 'user1', role: 'cskh', pinned: false, reactions: {}, text: '🎧 Xin chào! Bạn cần hỗ trợ duyệt rút tiền hay kiểm tra nhiệm vụ có thể nhắn trực tiếp tại đây hoặc bấm Zalo / Telegram CSKH.' }
   ],
   winners: [
     { u: 'min***01', p: '10.000đ' }, { u: 'lan***88', p: '888đ' }, { u: 'huy***24', p: '2.000đ' },
@@ -880,6 +911,10 @@ function normalizeDb(raw) {
     merged.channels.unshift({ id: 'congdong', name: '🌐 Nhóm Cộng Đồng' });
   }
   if (!Array.isArray(merged.msgs)) merged.msgs = JSON.parse(JSON.stringify(INIT.msgs));
+  merged.msgs.forEach(m => {
+    if (!m.reactions || typeof m.reactions !== 'object') m.reactions = {};
+    if (typeof m.pinned !== 'boolean') m.pinned = false;
+  });
   if (!Array.isArray(merged.winners) || !merged.winners.length) merged.winners = JSON.parse(JSON.stringify(INIT.winners));
   return merged;
 }
@@ -887,6 +922,51 @@ function normalizeDb(raw) {
 let db = normalizeDb(JSON.parse(localStorage.getItem(KEY) || 'null'));
 let mode = 'login', me = null, curTask = null, pendingVipPkg = null, pendingAlertWd = null, newPayQrData = '', curCh = 'congdong', curTaskCat = 'all', deg = 0, spinning = false, isSyncing = false, realClientIp = '';
 let aiDraggedMoved = false;
+
+function getReadCountsMap() {
+  try {
+    return JSON.parse(localStorage.getItem(READ_COUNTS_KEY) || '{}') || {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function markChannelRead(chId) {
+  if (!me) return;
+  const allMaps = getReadCountsMap();
+  const userMap = allMaps[me.u] || {};
+  const visibleMsgs = getVisibleMessagesForChannel(chId);
+  userMap[chId] = visibleMsgs.length;
+  allMaps[me.u] = userMap;
+  localStorage.setItem(READ_COUNTS_KEY, JSON.stringify(allMaps));
+}
+
+function getUnreadCountForChannel(chId) {
+  if (!me) return 0;
+  const visibleMsgs = getVisibleMessagesForChannel(chId);
+  if (chId === curCh) {
+    markChannelRead(chId);
+    return 0;
+  }
+  const allMaps = getReadCountsMap();
+  const seenCount = Number((allMaps[me.u] || {})[chId] || 0);
+  return Math.max(0, visibleMsgs.length - seenCount);
+}
+
+function getVisibleMessagesForChannel(chId) {
+  if (!me) return [];
+  const list = (db.msgs || []).filter(m => m.ch === chId);
+  if (me.role === 'admin' || me.role === 'cskh') {
+    return list;
+  }
+  if (chId === 'cskh') {
+    return list.filter(m => m.ownerUser === me.u || m.senderUser === me.u);
+  }
+  if (chId === 'chung') {
+    return list.filter(m => m.targetUser === me.u);
+  }
+  return list;
+}
 
 /* DRAGGABLE AI BUTTON */
 (function initDraggableAiFab() {
@@ -1107,7 +1187,7 @@ async function detectRealIp() {
 setInterval(async () => {
   if (!CLOUD_ENABLED || !me || spinning) return;
   const activeTag = document.activeElement?.tagName;
-  if (activeTag === 'INPUT' || activeTag === 'SELECT') return;
+  if (activeTag === 'INPUT' || activeTag === 'SELECT' || activeTag === 'TEXTAREA') return;
   await pullFromCloud(true);
   if (me && me.role === 'admin') renderAdmin();
   else if (me) {
@@ -1221,11 +1301,19 @@ function setAuthMode(m) {
   document.getElementById('authSubmitBtn').textContent = m === 'login' ? 'Đăng Nhập' : 'Đăng Ký';
 }
 
-function botAnnounce(user, tag) {
+function botAnnounceToUser(user, tag) {
+  if (!user) return;
   const dup = db.users.filter(x => x.ip === user.ip).length;
   db.msgs.push({
-    id: Date.now() + Math.random(), ch: 'chung', sender: 'TASKFLOW BOT', role: 'bot',
-    text: `🤖 [${tag}] ${user.name} (@${user.u})\n• Người giới thiệu: ${user.refBy}\n• IP: ${user.ip} (${dup > 1 ? '⚠️ Trùng IP x' + dup : '✅ IP riêng'})`
+    id: Date.now() + Math.random(),
+    ch: 'chung',
+    targetUser: user.u,
+    sender: 'TASKFLOW BOT',
+    senderUser: 'bot',
+    role: 'bot',
+    pinned: false,
+    reactions: {},
+    text: `🤖 [${tag}] Xin chào ${user.name} (@${user.u})\n• Người giới thiệu: ${user.refBy}\n• IP của bạn: ${user.ip} (${dup > 1 ? '⚠️ Trùng IP x' + dup : '✅ IP riêng'})`
   });
 }
 
@@ -1244,7 +1332,7 @@ async function submitAuth(e) {
     checkVipExpiry(found);
     me = found;
     localStorage.setItem(SESSION_USER_KEY, me.u);
-    if (me.role !== 'admin') botAnnounce(me, 'Đăng nhập');
+    if (me.role !== 'admin') botAnnounceToUser(me, 'Đăng nhập');
     save(); startSession(false);
   } else {
     if (db.users.some(x => x.u.toLowerCase() === u.toLowerCase())) return toast('Tài khoản đã tồn tại');
@@ -1273,7 +1361,7 @@ async function submitAuth(e) {
     }
     db.users.push(nu); me = nu;
     localStorage.setItem(SESSION_USER_KEY, me.u);
-    botAnnounce(nu, 'Thành viên mới');
+    botAnnounceToUser(nu, 'Thành viên mới');
     notifyTelegram(`🆕 KHÁCH HÀNG ĐĂNG KÝ MỚI\n• Họ tên: ${nu.name}\n• Tài khoản: @${nu.u} (ID #${nu.id})\n• Mã Ref mời: ${nu.refCode}\n• Người giới thiệu: ${nu.refBy}\n• IP: ${nu.ip}`);
     save(); startSession(false);
   }
@@ -1315,7 +1403,14 @@ function switchUserView(v) {
   const c = v[0].toUpperCase() + v.slice(1);
   document.getElementById('view' + c).classList.remove('hidden');
   document.getElementById('nBtn' + c).classList.add('active');
+  if (v === 'chat') markChannelRead(curCh);
   renderUser();
+}
+
+function selectChannel(chId) {
+  curCh = chId;
+  markChannelRead(chId);
+  renderActiveChat();
 }
 
 function setTaskFilter(cat, el) {
@@ -1334,13 +1429,6 @@ function rotateTaskNodes() {
   save();
   renderUser();
   toast('Đã xoay vòng mã & kèo mới!');
-}
-
-function focusCommunityGroup() {
-  curCh = 'congdong';
-  renderUser();
-  document.getElementById('msgInput')?.focus();
-  toast('Đang ở Nhóm Cộng Đồng (Admin/CSKH & Khách)');
 }
 
 function redeemPromoCode() {
@@ -1421,20 +1509,119 @@ function renderWalletRules() {
   }
 }
 
-function renderChatList(barId, boxId) {
+function toggleMessageReaction(msgId, emoji) {
+  const m = (db.msgs || []).find(x => String(x.id) === String(msgId));
+  if (!m || !me) return;
+  if (!m.reactions || typeof m.reactions !== 'object') m.reactions = {};
+  const users = Array.isArray(m.reactions[emoji]) ? m.reactions[emoji] : [];
+  const idx = users.indexOf(me.u);
+  if (idx >= 0) users.splice(idx, 1);
+  else users.push(me.u);
+  if (users.length) m.reactions[emoji] = users;
+  else delete m.reactions[emoji];
+  save();
+  renderActiveChat();
+}
+
+function tagUserInChat(username) {
+  if (!username) return;
+  const targetInput = (me && me.role === 'admin')
+    ? document.getElementById('adminMsgInput')
+    : document.getElementById('msgInput');
+  if (!targetInput) return;
+  const tagStr = '@' + username + ' ';
+  if (!targetInput.value.includes('@' + username)) {
+    targetInput.value = tagStr + targetInput.value;
+  }
+  targetInput.focus();
+  toast('Đã tag @' + username);
+}
+
+function togglePinMessage(msgId) {
+  if (!me || me.role !== 'admin') return;
+  const m = (db.msgs || []).find(x => String(x.id) === String(msgId));
+  if (!m) return;
+  const nextPin = !m.pinned;
+  (db.msgs || []).forEach(x => {
+    if (x.ch === m.ch && (!m.ownerUser || x.ownerUser === m.ownerUser)) x.pinned = false;
+  });
+  m.pinned = nextPin;
+  save();
+  renderActiveChat();
+  toast(nextPin ? 'Đã ghim tin nhắn lên đầu nhóm' : 'Đã bỏ ghim tin nhắn');
+}
+
+function deleteMessageById(msgId) {
+  if (!me || me.role !== 'admin') return;
+  db.msgs = (db.msgs || []).filter(x => String(x.id) !== String(msgId));
+  save();
+  renderActiveChat();
+  toast('Đã xóa tin nhắn');
+}
+
+function renderPinnedBanner(bannerId, visibleMsgs) {
+  const el = document.getElementById(bannerId);
+  if (!el) return;
+  const pinnedMsg = visibleMsgs.find(m => m.pinned);
+  if (!pinnedMsg) {
+    el.innerHTML = '';
+    return;
+  }
+  const unpinBtn = (me && me.role === 'admin')
+    ? `<button type="button" class="msg-act-btn" onclick="togglePinMessage('${pinnedMsg.id}')">Bỏ ghim</button>`
+    : '';
+  el.innerHTML = `
+    <div class="pinned-banner">
+      <div><strong>📌 Ghim:</strong> ${pinnedMsg.sender}: ${pinnedMsg.text}</div>
+      ${unpinBtn}
+    </div>
+  `;
+}
+
+function renderChatList(barId, boxId, bannerId) {
+  markChannelRead(curCh);
   document.getElementById(barId).innerHTML = db.channels.map(c => {
-    const chMsgCount = db.msgs.filter(m => m.ch === c.id).length;
-    const badgeHtml = chMsgCount > 0 ? `<span class="ch-count-badge">${chMsgCount}</span>` : '';
-    return `<button type="button" class="channel-btn ${c.id === curCh ? 'active' : ''}" onclick="curCh='${c.id}';renderActiveChat()">${c.name}${badgeHtml}</button>`;
+    const unread = getUnreadCountForChannel(c.id);
+    const badgeHtml = unread > 0 ? `<span class="ch-count-badge">${unread}</span>` : '';
+    return `<button type="button" class="channel-btn ${c.id === curCh ? 'active' : ''}" onclick="selectChannel('${c.id}')">${c.name}${badgeHtml}</button>`;
   }).join('');
 
+  const visibleMsgs = getVisibleMessagesForChannel(curCh);
+  renderPinnedBanner(bannerId, visibleMsgs);
+
   const box = document.getElementById(boxId);
-  box.innerHTML = db.msgs.filter(m => m.ch === curCh).map(m => {
+  const isAdmin = me && me.role === 'admin';
+  const emojis = ['👍', '❤️', '😂', '🔥'];
+
+  box.innerHTML = visibleMsgs.map(m => {
     const roleBadge = m.role === 'bot' ? '<span class="badge" style="background:#dbeafe;color:#1d4ed8;">BOT</span>' : (m.role === 'admin' ? '<span class="badge" style="background:#fee2e2;color:#b91c1c;">ADMIN</span>' : (m.role === 'cskh' ? '<span class="badge" style="background:#fef3c7;color:#b45309;">CSKH</span>' : ''));
-    const isMine = me && m.sender === me.name;
-    return `<div class="msg ${m.role === 'bot' ? 'bot' : (isMine ? 'mine' : '')}"><div style="font-size:12px;font-weight:800;margin-bottom:4px;color:#1e293b;">${m.sender}${roleBadge}</div><div style="white-space:pre-line;">${m.text}</div></div>`;
+    const ownerTag = (isAdmin && m.ownerUser) ? `<span class="badge" style="background:#e2e8f0;color:#0f172a;">Khách: @${m.ownerUser}</span>` : '';
+    const isMine = me && (m.senderUser === me.u || m.sender === me.name);
+    const reactObj = m.reactions || {};
+    const reactChips = Object.keys(reactObj).map(emo => {
+      const cnt = (reactObj[emo] || []).length;
+      if (!cnt) return '';
+      return `<button type="button" class="msg-react-chip" onclick="toggleMessageReaction('${m.id}', '${emo}')">${emo} ${cnt}</button>`;
+    }).join('');
+
+    const emojiBtns = emojis.map(emo => `<button type="button" class="msg-act-btn" onclick="toggleMessageReaction('${m.id}', '${emo}')">${emo}</button>`).join('');
+    const tagHandle = m.senderUser || m.u || m.sender;
+    const tagBtn = `<button type="button" class="msg-act-btn" onclick="tagUserInChat('${tagHandle}')">@Tag</button>`;
+    const adminBtns = isAdmin
+      ? `<button type="button" class="msg-act-btn" onclick="togglePinMessage('${m.id}')">${m.pinned ? 'Bỏ ghim' : '📌 Ghim'}</button><button type="button" class="msg-act-btn" style="background:#fee2e2;color:#b91c1c;" onclick="deleteMessageById('${m.id}')">Xóa</button>`
+      : '';
+
+    return `
+      <div class="msg ${m.role === 'bot' ? 'bot' : (isMine ? 'mine' : '')} ${m.pinned ? 'pinned-msg' : ''}">
+        <div style="font-size:12px;font-weight:800;margin-bottom:4px;color:#1e293b;">${m.sender}${roleBadge}${ownerTag}</div>
+        <div style="white-space:pre-line;">${m.text}</div>
+        ${reactChips ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">${reactChips}</div>` : ''}
+        <div class="msg-actions">${emojiBtns}${tagBtn}${adminBtns}</div>
+      </div>
+    `;
   }).join('');
   box.scrollTop = box.scrollHeight;
+  markChannelRead(curCh);
 }
 
 function renderActiveChat() {
@@ -1528,7 +1715,7 @@ function renderUser() {
     `;
   }).join('');
 
-  renderChatList('channelBar', 'chatBox');
+  renderChatList('channelBar', 'chatBox', 'userPinnedBanner');
   renderWalletRules();
 
   const myWds = db.withdraws.filter(w => w.uid === me.id || w.u === me.u);
@@ -1728,8 +1915,22 @@ function sendMsg(e, source = 'user') {
   e.preventDefault();
   const inp = document.getElementById(source === 'admin' ? 'adminMsgInput' : 'msgInput');
   if (!inp || !inp.value.trim()) return;
-  db.msgs.push({ id: Date.now(), ch: curCh, sender: me.name, role: me.role, text: inp.value.trim() });
-  inp.value = ''; save(); renderActiveChat();
+  const ownerUser = (curCh === 'cskh') ? (me.role === 'admin' ? '' : me.u) : '';
+  db.msgs.push({
+    id: Date.now(),
+    ch: curCh,
+    sender: me.name,
+    senderUser: me.u,
+    ownerUser,
+    role: me.role,
+    pinned: false,
+    reactions: {},
+    text: inp.value.trim()
+  });
+  inp.value = '';
+  save();
+  markChannelRead(curCh);
+  renderActiveChat();
 }
 
 function copyRef() {
@@ -1882,13 +2083,14 @@ function buildAiAnswer(q) {
 
 /* ADMIN */
 function switchAdminView(v) {
-  ['Dash', 'Users', 'Tasks', 'Wd', 'VipReq', 'Pay', 'Chat', 'Promo', 'Links'].forEach(k => {
+  ['Dash', 'Users', 'Tasks', 'Wd', 'VipReq', 'Pay', 'Chat', 'Promo', 'Notify', 'Links'].forEach(k => {
     document.getElementById('aView' + k).classList.add('hidden');
     document.getElementById('aBtn' + k).classList.remove('active');
   });
   const c = v[0].toUpperCase() + v.slice(1);
   document.getElementById('aView' + c).classList.remove('hidden');
   document.getElementById('aBtn' + c).classList.add('active');
+  if (v === 'chat') markChannelRead(curCh);
   renderAdmin();
 }
 
@@ -1905,6 +2107,14 @@ function renderAdmin() {
   document.getElementById('cfgTgLink').value = links.telegram;
   document.getElementById('cfgGroupLink').value = links.group;
   document.getElementById('adminBtnJoinGroup').href = links.group;
+
+  const targetSel = document.getElementById('notifyTargetSelect');
+  if (targetSel) {
+    const prevVal = targetSel.value || 'ALL';
+    const memberOpts = db.users.filter(u => u.role !== 'admin').map(u => `<option value="${u.u}">@${u.u} (${u.name})</option>`).join('');
+    targetSel.innerHTML = `<option value="ALL">Tất cả thành viên</option>${memberOpts}`;
+    targetSel.value = prevVal;
+  }
 
   renderAdminUsers();
   renderAdminPromoAndMinigame();
@@ -1923,7 +2133,38 @@ function renderAdmin() {
   `).join('');
   renderVipRequests();
   renderPaymentAccounts();
-  renderChatList('adminChannelBar', 'adminChatBox');
+  renderChatList('adminChannelBar', 'adminChatBox', 'adminPinnedBanner');
+}
+
+function sendAdminNotification() {
+  const target = document.getElementById('notifyTargetSelect')?.value || 'ALL';
+  const title = (document.getElementById('notifyTitleInp')?.value || '').trim() || 'Thông báo hệ thống';
+  const body = (document.getElementById('notifyBodyInp')?.value || '').trim();
+  if (!body) return toast('Nhập nội dung thông báo');
+
+  const recipients = target === 'ALL'
+    ? db.users.filter(u => u.role !== 'admin')
+    : db.users.filter(u => u.u === target);
+
+  recipients.forEach((u, idx) => {
+    u.hist.unshift({ t: `📢 [${title}] ${body}`, a: 0 });
+    db.msgs.push({
+      id: Date.now() + idx + Math.random(),
+      ch: 'chung',
+      targetUser: u.u,
+      sender: 'ADMIN THÔNG BÁO',
+      senderUser: 'admin',
+      role: 'admin',
+      pinned: false,
+      reactions: {},
+      text: `📢 ${title}\n${body}`
+    });
+  });
+
+  document.getElementById('notifyTitleInp').value = '';
+  document.getElementById('notifyBodyInp').value = '';
+  save();
+  toast(`Đã gửi thông báo tới ${recipients.length} thành viên!`);
 }
 
 function createPromoCode() {
@@ -2116,36 +2357,6 @@ function renderPaymentAccounts() {
   `).join('');
 }
 
-function addPaymentAccount() {
-  const bank = document.getElementById('payBank').value.trim();
-  const account = document.getElementById('payAcc').value.trim();
-  const owner = document.getElementById('payOwner').value.trim().toUpperCase();
-  const memo = document.getElementById('payMemo').value.trim().toUpperCase() || 'NAPVIP';
-  if (!bank || !account || !owner) return toast('Nhập đủ Ngân hàng, Số TK và Chủ TK');
-  db.paymentAccounts.forEach(p => { p.active = false; });
-  db.paymentAccounts.unshift({ id: 'PAY' + Date.now(), bank, account, owner, memo, qrImage: newPayQrData, active: true });
-  document.getElementById('payBank').value = '';
-  document.getElementById('payAcc').value = '';
-  document.getElementById('payOwner').value = '';
-  document.getElementById('payQrFile').value = '';
-  document.getElementById('newPayQrPreview').classList.add('hidden');
-  newPayQrData = '';
-  save(); renderAdmin(); toast('Đã thêm & kích hoạt tài khoản thanh toán');
-}
-
-function setActivePayment(id) {
-  db.paymentAccounts.forEach(p => { p.active = (p.id === id); });
-  save(); renderAdmin(); toast('Đã đổi tài khoản thanh toán đang hoạt động');
-}
-
-function deletePaymentAccount(id) {
-  if (db.paymentAccounts.length <= 1) return toast('Cần giữ ít nhất 1 tài khoản thanh toán');
-  const wasActive = db.paymentAccounts.find(p => p.id === id)?.active;
-  db.paymentAccounts = db.paymentAccounts.filter(p => p.id !== id);
-  if (wasActive && db.paymentAccounts[0]) db.paymentAccounts[0].active = true;
-  save(); renderAdmin(); toast('Đã xóa tài khoản thanh toán');
-}
-
 function renderAdminUsers() {
   const q = (document.getElementById('userSearch')?.value || '').toLowerCase();
   const rows = db.users.filter(x => x.name.toLowerCase().includes(q) || x.u.toLowerCase().includes(q) || x.ip.includes(q) || x.refCode.toLowerCase().includes(q));
@@ -2224,7 +2435,14 @@ function actWd(id, ok) {
       u.hist.unshift({ t: `Rút tiền thành công #${w.id} (${w.bank} - ${w.acc})`, a: -Number(w.amt || 0) });
     }
     db.msgs.push({
-      id: Date.now(), ch: 'chung', sender: 'TASKFLOW BOT', role: 'bot',
+      id: Date.now(),
+      ch: 'chung',
+      targetUser: w.u,
+      sender: 'TASKFLOW BOT',
+      senderUser: 'bot',
+      role: 'bot',
+      pinned: false,
+      reactions: {},
       text: `💸 Lệnh rút #${w.id} của @${w.u} số tiền ${money(w.amt)} qua ${w.bank} (${w.acc}) đã được duyệt thành công!`
     });
   } else if (u) {

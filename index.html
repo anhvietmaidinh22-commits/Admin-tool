@@ -24,1479 +24,879 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
   body { background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.45; }
-  button, input, select, textarea { font-family: inherit; font-size: 14px; outline: none; }
-  button { cursor: pointer; border: none; transition: all 0.15s ease; }
+  button, input, select { font-family: inherit; font-size: 14px; outline: none; }
+  button { cursor: pointer; border: none; transition: transform 0.12s ease, opacity 0.15s ease; }
   button:active { transform: scale(0.97); }
   .hidden { display: none !important; }
 
-  /* Layout */
-  .app-shell { max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--bg); position: relative; padding-bottom: 78px; box-shadow: 0 0 30px rgba(0,0,0,0.06); }
-  .admin-shell { max-width: 1100px; margin: 0 auto; min-height: 100vh; background: var(--bg); padding-bottom: 40px; }
+  .app-shell { max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--bg); padding-bottom: 80px; box-shadow: 0 0 30px rgba(0,0,0,0.05); }
+  .admin-shell { max-width: 1080px; margin: 0 auto; min-height: 100vh; background: var(--bg); padding-bottom: 40px; }
 
-  /* Auth Screen */
-  .auth-wrap { max-width: 440px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 20px; background: linear-gradient(165deg, #ecfdf5 0%, #f8fafc 45%, #eff6ff 100%); }
-  .auth-box { background: #fff; border-radius: 24px; padding: 28px 22px; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08); border: 1px solid #e2e8f0; }
-  .brand-logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; }
-  .brand-icon { width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; box-shadow: 0 6px 16px rgba(5,150,105,0.3); }
-  .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; background: #f1f5f9; padding: 4px; border-radius: 12px; margin-bottom: 18px; }
-  .auth-tab { padding: 9px; border-radius: 9px; font-weight: 600; color: var(--muted); background: transparent; }
-  .auth-tab.active { background: #fff; color: var(--primary); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
-  .form-group { margin-bottom: 13px; }
-  .form-label { display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 5px; }
-  .form-input { width: 100%; padding: 11px 13px; border: 1.5px solid var(--border); border-radius: 12px; background: #f8fafc; transition: border-color 0.2s; }
+  /* Auth */
+  .auth-wrap { max-width: 430px; margin: 0 auto; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 18px; background: linear-gradient(165deg, #ecfdf5 0%, #f8fafc 50%, #eff6ff 100%); }
+  .auth-box { width: 100%; background: var(--card); border-radius: 22px; padding: 26px 22px; border: 1px solid var(--border); box-shadow: 0 12px 28px rgba(15,23,42,0.08); }
+  .brand-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; }
+  .brand-badge { width: 42px; height: 42px; border-radius: 13px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; }
+  .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; background: #f1f5f9; padding: 4px; border-radius: 12px; margin-bottom: 16px; }
+  .auth-tab { padding: 9px; border-radius: 9px; font-weight: 700; color: var(--muted); background: transparent; }
+  .auth-tab.active { background: #fff; color: var(--primary); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+  .form-group { margin-bottom: 12px; }
+  .form-label { display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px; }
+  .form-input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 11px; background: #f8fafc; }
   .form-input:focus { border-color: var(--primary); background: #fff; }
-  .btn-primary { width: 100%; padding: 12px; border-radius: 12px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; font-weight: 700; font-size: 15px; box-shadow: 0 6px 16px rgba(5,150,105,0.25); }
-  .btn-secondary { padding: 9px 14px; border-radius: 10px; background: #f1f5f9; color: var(--text); font-weight: 600; }
-  .btn-sm { padding: 6px 11px; border-radius: 8px; font-size: 12px; font-weight: 600; }
+  .btn-primary { width: 100%; padding: 11px 14px; border-radius: 11px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; font-weight: 700; }
+  .btn-secondary { padding: 7px 12px; border-radius: 9px; background: #f1f5f9; color: var(--text); font-weight: 700; font-size: 12px; }
+  .btn-sm { padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; }
 
-  /* Header */
-  .top-header { background: #fff; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 30; }
-  .user-pill { display: flex; align-items: center; gap: 10px; }
-  .avatar { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(135deg, #059669, #0284c7); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
-  .vip-tag { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 99px; font-size: 10px; font-weight: 800; background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+  /* Header & Cards */
+  .topbar { background: #fff; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 25; }
+  .section { padding: 12px 14px 0; }
+  .card { background: #fff; border-radius: 16px; padding: 14px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 12px; }
+  .wallet-hero { background: linear-gradient(135deg, #064e3b 0%, #059669 60%, #10b981 100%); color: #fff; border-radius: 18px; padding: 16px; margin-bottom: 12px; box-shadow: 0 8px 20px rgba(5,150,105,0.22); }
+  .wallet-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .wallet-chip { background: rgba(255,255,255,0.14); border-radius: 10px; padding: 8px 10px; font-size: 12px; }
 
-  /* Cards & Grids */
-  .section { padding: 14px 14px 0; }
-  .card { background: #fff; border-radius: 16px; padding: 15px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 12px; }
-  .wallet-hero { background: linear-gradient(135deg, #064e3b 0%, #059669 55%, #10b981 100%); color: #fff; border-radius: 20px; padding: 18px; position: relative; overflow: hidden; box-shadow: 0 10px 24px rgba(5,150,105,0.28); margin-bottom: 12px; }
-  .wallet-hero::after { content: ""; position: absolute; right: -25px; top: -25px; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.08); }
-  .stats-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
-  .stat-mini { background: rgba(255,255,255,0.13); backdrop-filter: blur(4px); border-radius: 12px; padding: 9px 11px; }
-  .quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
-  .qa-btn { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #334155; box-shadow: var(--shadow); }
-  .qa-icon { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-
-  /* Ticker */
-  .ticker-bar { background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; overflow: hidden; }
-  .ticker-track { white-space: nowrap; overflow: hidden; flex: 1; font-size: 12px; color: #92400e; font-weight: 500; }
-
-  /* Progress Bar */
   .progress-bg { width: 100%; height: 8px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin: 7px 0; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, #059669, #34d399); border-radius: 99px; transition: width 0.3s ease; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #059669, #34d399); border-radius: 99px; transition: width 0.25s; }
 
-  /* Task Item */
-  .task-card { background: #fff; border: 1px solid var(--border); border-radius: 15px; padding: 13px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-  .task-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 6px; display: inline-block; margin-bottom: 4px; }
+  .task-item { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 9px; display: flex; justify-content: space-between; align-items: center; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
 
-  /* Lucky Wheel */
-  .wheel-stage { position: relative; width: 280px; height: 280px; margin: 12px auto 16px; }
-  .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 26px solid #dc2626; z-index: 10; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.25)); }
-  .wheel-svg { width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 8px 25px rgba(15,23,42,0.18); border: 6px solid #fff; transition: transform 4s cubic-bezier(0.15, 0.85, 0.15, 1); }
-  .spin-center-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-weight: 800; font-size: 13px; border: 4px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.25); z-index: 5; }
+  /* Wheel & Marquee */
+  .wheel-wrap { position: relative; width: 278px; height: 278px; margin: 12px auto 14px; }
+  .wheel-pointer { position: absolute; top: -9px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 13px solid transparent; border-right: 13px solid transparent; border-top: 24px solid #dc2626; z-index: 10; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25)); }
+  .wheel-svg { width: 100%; height: 100%; border-radius: 50%; border: 5px solid #fff; box-shadow: 0 8px 22px rgba(15,23,42,0.16); transition: transform 4s cubic-bezier(0.15, 0.85, 0.15, 1); }
+  .wheel-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-weight: 800; font-size: 12px; border: 3px solid #fff; z-index: 6; box-shadow: 0 4px 10px rgba(0,0,0,0.22); }
 
-  /* Auto-scrolling Winner Marquee */
-  .winner-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
-  .winner-header { background: #0f172a; color: #fff; padding: 9px 13px; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
-  .winner-viewport { height: 168px; overflow: hidden; position: relative; }
-  .winner-scroll-list { display: flex; flex-direction: column; animation: scrollWinners 18s linear infinite; }
-  .winner-scroll-list:hover { animation-play-state: paused; }
-  @keyframes scrollWinners {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-50%); }
-  }
-  .winner-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 13px; border-bottom: 1px solid #e2e8f0; font-size: 12px; background: #fff; }
+  .marquee-box { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: #fff; box-shadow: var(--shadow); }
+  .marquee-head { background: #0f172a; color: #fff; padding: 9px 12px; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+  .marquee-window { height: 162px; overflow: hidden; }
+  .marquee-list { display: flex; flex-direction: column; animation: runMarquee 16s linear infinite; }
+  .marquee-list:hover { animation-play-state: paused; }
+  @keyframes runMarquee { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
+  .marquee-item { display: flex; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
 
-  /* Community Chat */
-  .chat-channels { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 8px; }
-  .channel-pill { padding: 6px 12px; border-radius: 99px; background: #fff; border: 1px solid var(--border); font-size: 12px; font-weight: 600; white-space: nowrap; color: var(--muted); }
-  .channel-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-  .chat-feed { height: 340px; overflow-y: auto; background: #e2e8f0; border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
-  .msg-bubble { max-width: 85%; padding: 9px 12px; border-radius: 14px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.06); font-size: 13px; align-self: flex-start; }
-  .msg-bubble.mine { background: #dcfce7; align-self: flex-end; border-bottom-right-radius: 4px; }
-  .msg-bubble.bot { max-width: 96%; align-self: center; background: linear-gradient(135deg, #eff6ff, #f0fdf4); border: 1px solid #bfdbfe; width: 100%; }
-  .role-tag { font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 5px; margin-left: 4px; }
-  .role-admin { background: #fee2e2; color: #b91c1c; }
-  .role-cskh { background: #dbeafe; color: #1d4ed8; }
-  .role-bot { background: #0f172a; color: #38bdf8; }
+  /* Chat */
+  .channel-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; }
+  .channel-btn { padding: 6px 11px; border-radius: 99px; background: #f1f5f9; color: var(--muted); font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .channel-btn.active { background: var(--primary); color: #fff; }
+  .chat-box { height: 325px; overflow-y: auto; background: #e2e8f0; border-radius: 14px; padding: 11px; display: flex; flex-direction: column; gap: 9px; }
+  .msg { max-width: 85%; padding: 8px 11px; border-radius: 13px; background: #fff; font-size: 13px; align-self: flex-start; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+  .msg.mine { background: #dcfce7; align-self: flex-end; }
+  .msg.bot { max-width: 96%; width: 100%; align-self: center; background: #eff6ff; border: 1px solid #bfdbfe; }
+  .badge { font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 5px; margin-left: 4px; }
 
-  /* Bottom Nav */
-  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: #fff; border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px 2px 8px; z-index: 40; }
-  .nav-item { background: transparent; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; font-weight: 600; color: var(--muted); }
-  .nav-item.active { color: var(--primary); }
+  /* Bottom Nav & AI */
+  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: #fff; border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px 2px 8px; z-index: 30; }
+  .nav-btn { background: transparent; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10px; font-weight: 700; color: var(--muted); }
+  .nav-btn.active { color: var(--primary); }
 
-  /* Floating AI Button & Drawer */
-  .ai-fab { position: fixed; bottom: 78px; right: 16px; z-index: 45; background: linear-gradient(135deg, #2563eb, #059669); color: #fff; border-radius: 99px; padding: 10px 15px; display: flex; align-items: center; gap: 7px; font-weight: 700; font-size: 12px; box-shadow: 0 8px 20px rgba(37,99,235,0.35); border: 2px solid #fff; }
-  .modal-backdrop { position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 60; display: flex; align-items: flex-end; justify-content: center; padding: 12px; }
-  .modal-backdrop.center { align-items: center; }
-  .modal-sheet { background: #fff; width: 100%; max-width: 460px; border-radius: 22px; padding: 18px; max-height: 88vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+  .ai-fab { position: fixed; bottom: 76px; right: 14px; z-index: 35; background: linear-gradient(135deg, #2563eb, #059669); color: #fff; padding: 9px 14px; border-radius: 99px; font-weight: 700; font-size: 12px; box-shadow: 0 6px 18px rgba(37,99,235,0.35); border: 2px solid #fff; }
+  .suggest-row { display: flex; gap: 6px; overflow-x: auto; padding: 8px 0; }
+  .suggest-chip { background: var(--blue-light); color: var(--blue); border: 1px solid #bfdbfe; padding: 6px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; white-space: nowrap; }
 
-  /* Check-in Grid */
-  .checkin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0; }
-  .day-box { border: 1.5px solid var(--border); border-radius: 12px; padding: 8px 4px; text-align: center; background: #f8fafc; }
-  .day-box.done { background: #ecfdf5; border-color: #10b981; color: #047857; }
-  .day-box.today { background: #fffbeb; border-color: #f59e0b; box-shadow: 0 0 0 2px rgba(245,158,11,0.2); }
+  /* Modal & Admin */
+  .modal-bg { position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 14px; }
+  .modal-card { background: #fff; width: 100%; max-width: 440px; border-radius: 20px; padding: 18px; max-height: 86vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+  .checkin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin: 12px 0; }
+  .day-cell { border: 1.5px solid var(--border); border-radius: 10px; padding: 7px 4px; text-align: center; font-size: 11px; background: #f8fafc; }
+  .day-cell.done { background: var(--primary-light); border-color: var(--primary); color: var(--primary); font-weight: 700; }
+  .day-cell.today { background: var(--amber-light); border-color: var(--amber); font-weight: 700; }
 
-  /* Admin Specific */
-  .admin-nav { display: flex; gap: 6px; overflow-x: auto; padding: 10px 14px; background: #fff; border-bottom: 1px solid var(--border); }
-  .admin-tab { padding: 8px 13px; border-radius: 10px; font-weight: 600; font-size: 12px; background: #f1f5f9; color: #475569; white-space: nowrap; }
+  .admin-tabs { display: flex; gap: 6px; overflow-x: auto; padding: 10px 14px; background: #fff; border-bottom: 1px solid var(--border); }
+  .admin-tab { padding: 7px 12px; border-radius: 9px; font-size: 12px; font-weight: 700; background: #f1f5f9; color: #475569; white-space: nowrap; }
   .admin-tab.active { background: #0f172a; color: #fff; }
-  .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  @media (min-width: 768px) {
-    .kpi-grid { grid-template-columns: repeat(4, 1fr); }
-    .ai-fab { bottom: 24px; right: 24px; }
-  }
-  .table-wrap { overflow-x: auto; }
+  .grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (min-width: 768px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } .ai-fab { bottom: 22px; right: 22px; } }
   table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
-  th { background: #f8fafc; font-weight: 700; color: #475569; }
-  .toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: #0f172a; color: #fff; padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; z-index: 99; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-width: 90%; text-align: center; }
+  th, td { padding: 9px 7px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: #f8fafc; color: #475569; }
+  .toast { position: fixed; top: 14px; left: 50%; transform: translateX(-50%); background: #0f172a; color: #fff; padding: 9px 15px; border-radius: 11px; font-size: 12px; font-weight: 700; z-index: 99; max-width: 90%; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
 </style>
 </head>
 <body>
 
 <div id="toast" class="toast hidden"></div>
 
-<!-- AUTH SCREEN -->
+<!-- AUTH -->
 <div id="authScreen" class="auth-wrap">
   <div class="auth-box">
-    <div class="brand-logo">
-      <div class="brand-icon">TF</div>
+    <div class="brand-head">
+      <div class="brand-badge">TF</div>
       <div>
-        <div style="font-size:20px;font-weight:800;letter-spacing:-0.3px;">TASKFLOW</div>
-        <div style="font-size:11px;color:var(--muted);font-weight:600;">Nền tảng nhiệm vụ &amp; kiếm tiền trực tuyến</div>
+        <div style="font-size:21px;font-weight:900;color:var(--text);">TASKFLOW</div>
+        <div style="font-size:11px;color:var(--muted);font-weight:600;">Làm nhiệm vụ • Nạp VIP • Rút tiền nhanh</div>
       </div>
     </div>
-
     <div class="auth-tabs">
-      <button id="tabLoginBtn" class="auth-tab active" onclick="switchAuthMode('login')">Đăng nhập</button>
-      <button id="tabRegBtn" class="auth-tab" onclick="switchAuthMode('register')">Đăng ký</button>
+      <button id="loginTabBtn" class="auth-tab active" onclick="setAuthMode('login')">Đăng nhập</button>
+      <button id="regTabBtn" class="auth-tab" onclick="setAuthMode('register')">Đăng ký</button>
     </div>
-
-    <form id="authForm" onsubmit="handleAuthSubmit(event)">
-      <div id="regNameGroup" class="form-group hidden">
-        <label class="form-label">Họ và tên hiển thị</label>
-        <input type="text" id="authFullName" class="form-input" placeholder="Ví dụ: Nguyễn Văn Nam">
+    <form onsubmit="submitAuth(event)">
+      <div id="regNameField" class="form-group hidden">
+        <label class="form-label">Họ và tên</label>
+        <input type="text" id="regName" class="form-input" placeholder="Nhập họ tên của bạn...">
       </div>
       <div class="form-group">
-        <label class="form-label">Tên tài khoản</label>
-        <input type="text" id="authUsername" class="form-input" placeholder="Nhập tên đăng nhập..." required>
+        <label class="form-label">Tài khoản</label>
+        <input type="text" id="authUser" class="form-input" placeholder="Nhập tên tài khoản..." required>
       </div>
       <div class="form-group">
         <label class="form-label">Mật khẩu</label>
-        <input type="password" id="authPassword" class="form-input" placeholder="Nhập mật khẩu..." required>
+        <input type="password" id="authPass" class="form-input" placeholder="Nhập mật khẩu..." required>
       </div>
-      <div id="regRefGroup" class="form-group hidden">
-        <label class="form-label">Mã người giới thiệu (Tùy chọn)</label>
-        <input type="text" id="authRefCode" class="form-input" placeholder="Nhập mã Ref nếu có (VD: TF8888)">
+      <div id="regRefField" class="form-group hidden">
+        <label class="form-label">Mã người giới thiệu (Không bắt buộc)</label>
+        <input type="text" id="regRef" class="form-input" placeholder="VD: TF1001">
       </div>
-      <button type="submit" id="authSubmitBtn" class="btn-primary">Đăng Nhập Ngay</button>
+      <button type="submit" id="authSubmitBtn" class="btn-primary">Đăng Nhập</button>
     </form>
   </div>
 </div>
 
-<!-- USER APP SHELL -->
+<!-- USER APP -->
 <div id="userApp" class="app-shell hidden">
-  <header class="top-header">
-    <div class="user-pill">
-      <div class="avatar" id="uAvatar">U</div>
-      <div>
-        <div style="display:flex;align-items:center;gap:5px;">
-          <strong id="uDisplayName" style="font-size:14px;">Thành viên</strong>
-          <span class="vip-tag" id="uVipBadge">VIP 0</span>
-        </div>
-        <div style="font-size:11px;color:var(--muted);" id="uSubInfo">ID: #1001 • Mã mời: TF1001</div>
-      </div>
+  <div class="topbar">
+    <div>
+      <strong id="uName">Thành viên</strong>
+      <span id="uVipPill" style="background:var(--amber-light);color:var(--amber);font-size:10px;font-weight:800;padding:2px 7px;border-radius:99px;margin-left:4px;">VIP 0</span>
+      <div style="font-size:11px;color:var(--muted);" id="uIdRef">ID #1001 • Mã Ref: TF1001</div>
     </div>
     <div style="display:flex;gap:6px;">
-      <button class="btn-secondary btn-sm" onclick="openCheckinModal()">📅 Điểm danh</button>
-      <button class="btn-secondary btn-sm" style="color:var(--red);" onclick="logout()">Thoát</button>
+      <button class="btn-secondary" onclick="openCheckin()">📅 Điểm danh</button>
+      <button class="btn-secondary" style="color:var(--red);" onclick="logout()">Thoát</button>
     </div>
-  </header>
+  </div>
 
-  <!-- TAB 1: HOME & TASKS -->
-  <div id="uTabHome" class="section">
+  <!-- HOME -->
+  <div id="viewHome" class="section">
     <div class="wallet-hero">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
         <div>
-          <div style="font-size:12px;opacity:0.88;">Số dư khả dụng</div>
-          <div style="font-size:28px;font-weight:800;margin:2px 0;" id="uBalance">0đ</div>
+          <div style="font-size:11px;opacity:0.88;">Số dư ví</div>
+          <div style="font-size:27px;font-weight:800;" id="uBal">0đ</div>
         </div>
-        <button onclick="switchUserTab('wallet')" style="background:#fff;color:#065f46;font-weight:700;padding:7px 13px;border-radius:10px;font-size:12px;">Rút tiền →</button>
+        <button onclick="switchUserView('wallet')" style="background:#fff;color:#065f46;font-weight:800;padding:7px 13px;border-radius:10px;font-size:12px;">Rút tiền →</button>
       </div>
-      <div class="stats-grid-2">
-        <div class="stat-mini">
-          <div style="font-size:11px;opacity:0.85;">Tổng đã kiếm</div>
-          <div style="font-weight:700;font-size:14px;" id="uTotalEarned">0đ</div>
-        </div>
-        <div class="stat-mini">
-          <div style="font-size:11px;opacity:0.85;">Hoa hồng giới thiệu</div>
-          <div style="font-weight:700;font-size:14px;" id="uRefEarned">0đ</div>
-        </div>
+      <div class="wallet-meta">
+        <div class="wallet-chip">Tổng kiếm: <strong id="uEarned">0đ</strong></div>
+        <div class="wallet-chip">Hoa hồng Ref: <strong id="uRefEarned">0đ</strong></div>
       </div>
-    </div>
-
-    <div class="ticker-bar">
-      <span>🔔</span>
-      <div class="ticker-track" id="livePayoutTicker">minh***92 vừa rút thành công 150.000đ qua Vietcombank • tuan***88 vừa nhận +10.000đ Vòng quay may mắn</div>
-    </div>
-
-    <div class="quick-actions">
-      <button class="qa-btn" onclick="openCheckinModal()">
-        <div class="qa-icon" style="background:#ecfdf5;color:#059669;">📅</div>
-        <span>Điểm danh</span>
-      </button>
-      <button class="qa-btn" onclick="switchUserTab('wheel')">
-        <div class="qa-icon" style="background:#fffbeb;color:#d97706;">🎡</div>
-        <span>Vòng quay</span>
-      </button>
-      <button class="qa-btn" onclick="switchUserTab('vip')">
-        <div class="qa-icon" style="background:#eff6ff;color:#2563eb;">👑</div>
-        <span>Nạp VIP</span>
-      </button>
-      <button class="qa-btn" onclick="copyRefLink()">
-        <div class="qa-icon" style="background:#fef2f2;color:#dc2626;">🎁</div>
-        <span>Mời bạn 15%</span>
-      </button>
     </div>
 
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <strong style="font-size:13px;">Tiến độ nhiệm vụ hôm nay</strong>
-        <span style="font-size:12px;font-weight:700;color:var(--primary);" id="uDailyProgressText">0 / 3 lượt</span>
+      <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;">
+        <span>Nhiệm vụ hôm nay (<span id="uVipBonusText">+0%</span>)</span>
+        <span style="color:var(--primary);" id="uProgressLabel">0/3</span>
       </div>
-      <div class="progress-bg"><div class="progress-fill" id="uDailyProgressBar" style="width:0%"></div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);">
-        <span>Hoàn thành đủ 3 nhiệm vụ nhận +1 Vé quay</span>
-        <button class="btn-sm" style="background:var(--amber-light);color:var(--amber);" onclick="claimDailyChest()" id="dailyChestBtn">🎁 Nhận rương ngày</button>
+      <div class="progress-bg"><div class="progress-fill" id="uProgressBar" style="width:0%"></div></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);gap:6px;">
+        <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Ref: <strong id="uShareRef" onclick="copyRef()" style="color:var(--blue);cursor:pointer;"></strong></span>
+        <button class="btn-sm" style="background:var(--amber-light);color:var(--amber);flex-shrink:0;" onclick="claimChest()">🎁 Rương ngày</button>
       </div>
     </div>
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 8px;">
-      <strong style="font-size:15px;">Danh sách nhiệm vụ khả dụng</strong>
-      <span style="font-size:11px;color:var(--primary);font-weight:700;" id="vipBonusLabel">Thưởng VIP: +0%</span>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <strong style="font-size:15px;">Danh sách nhiệm vụ</strong>
+      <button class="btn-sm" style="background:var(--blue-light);color:var(--blue);" onclick="rotateTaskNodes()">🔄 Đổi kèo</button>
     </div>
-    <div id="taskListContainer"></div>
+    <div id="taskList"></div>
   </div>
 
-  <!-- TAB 2: LUCKY WHEEL -->
-  <div id="uTabWheel" class="section hidden">
+  <!-- WHEEL -->
+  <div id="viewWheel" class="section hidden">
     <div class="card" style="text-align:center;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-        <strong style="font-size:16px;">🎡 Vòng Quay May Mắn</strong>
-        <span style="background:var(--amber-light);color:var(--amber);padding:4px 10px;border-radius:99px;font-weight:700;font-size:12px;">Vé quay: <span id="uSpinTickets">1</span></span>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <strong style="font-size:15px;">🎡 Vòng Quay May Mắn</strong>
+        <span style="background:var(--amber-light);color:var(--amber);padding:3px 9px;border-radius:99px;font-size:12px;font-weight:800;">Vé: <span id="uTickets">0</span></span>
       </div>
-      <p style="font-size:12px;color:var(--muted);">Điểm danh mỗi ngày hoặc làm nhiệm vụ để nhận thêm lượt quay miễn phí</p>
-
-      <div class="wheel-stage">
+      <div class="wheel-wrap">
         <div class="wheel-pointer"></div>
         <svg id="wheelSvg" class="wheel-svg" viewBox="0 0 300 300"></svg>
-        <button class="spin-center-btn" id="spinBtn" onclick="spinWheel()">QUAY</button>
+        <button class="wheel-btn" onclick="spinWheel()">QUAY</button>
       </div>
-
-      <div id="spinResultBanner" style="padding:10px;border-radius:12px;background:#f8fafc;border:1px solid var(--border);font-weight:700;font-size:13px;color:#334155;">
-        Bấm nút QUAY ở giữa để thử vận may ngay!
-      </div>
+      <div id="wheelMsg" style="padding:9px;border-radius:10px;background:#f8fafc;border:1px solid var(--border);font-weight:700;font-size:12px;color:#334155;">Bấm QUAY để nhận thưởng ngẫu nhiên</div>
     </div>
 
-    <div class="winner-box">
-      <div class="winner-header">
+    <div class="marquee-box">
+      <div class="marquee-head">
         <span>🏆 BẢNG NGƯỜI QUAY TRÚNG THƯỞNG</span>
-        <span style="font-size:10px;color:#34d399;">● Đang chạy trực tiếp</span>
+        <span style="color:#34d399;font-size:11px;">● Đang chạy liên tục</span>
       </div>
-      <div class="winner-viewport">
-        <div class="winner-scroll-list" id="winnerMarqueeList"></div>
+      <div class="marquee-window">
+        <div class="marquee-list" id="winnerMarquee"></div>
       </div>
     </div>
   </div>
 
-  <!-- TAB 3: VIP PACKAGES -->
-  <div id="uTabVip" class="section hidden">
-    <div class="card" style="background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;">
-      <div style="font-size:12px;color:#94a3b8;">Hạng thành viên hiện tại</div>
-      <div style="font-size:22px;font-weight:800;color:#fbbf24;margin:3px 0;" id="vipCurrentTitle">VIP 0 (Miễn phí)</div>
-      <div style="font-size:12px;color:#cbd5e1;" id="vipCurrentDesc">Giới hạn 3 nhiệm vụ/ngày • Thưởng cơ bản 100%</div>
-    </div>
-    <div id="vipPackagesContainer"></div>
+  <!-- VIP -->
+  <div id="viewVip" class="section hidden">
+    <div id="vipList"></div>
   </div>
 
-  <!-- TAB 4: COMMUNITY CHAT & BOT -->
-  <div id="uTabChat" class="section hidden">
-    <div class="card" style="padding:12px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <strong style="font-size:15px;">💬 Cộng Đồng &amp; Thông Báo Bot</strong>
-        <button class="btn-sm" style="background:var(--primary-light);color:var(--primary);" onclick="openCreateGroupModal()">+ Tạo nhóm</button>
+  <!-- CHAT -->
+  <div id="viewChat" class="section hidden">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <strong style="font-size:15px;">💬 Cộng đồng &amp; Bot</strong>
+        <button class="btn-sm" style="background:var(--primary-light);color:var(--primary);" onclick="openCreateGroup()">+ Tạo nhóm</button>
       </div>
-      <div class="chat-channels" id="chatChannelBar"></div>
-      <div class="chat-feed" id="chatFeedBox"></div>
-      <form onsubmit="sendChatMessage(event)" style="display:flex;gap:8px;margin-top:10px;">
-        <input type="text" id="chatInput" class="form-input" placeholder="Nhập tin nhắn thảo luận..." style="padding:10px 12px;">
-        <button type="submit" class="btn-primary" style="width:auto;padding:0 16px;">Gửi</button>
+      <div class="channel-row" id="channelBar"></div>
+      <div class="chat-box" id="chatBox"></div>
+      <form onsubmit="sendMsg(event)" style="display:flex;gap:7px;margin-top:9px;">
+        <input type="text" id="msgInput" class="form-input" placeholder="Nhắn tin vào nhóm...">
+        <button type="submit" class="btn-primary" style="width:auto;padding:0 15px;">Gửi</button>
       </form>
     </div>
   </div>
 
-  <!-- TAB 5: WALLET & PROFILE -->
-  <div id="uTabWallet" class="section hidden">
+  <!-- WALLET -->
+  <div id="viewWallet" class="section hidden">
     <div class="card">
-      <strong style="font-size:15px;display:block;margin-bottom:10px;">💸 Rút tiền về Ngân hàng (VietQR)</strong>
+      <strong style="display:block;margin-bottom:10px;font-size:15px;">💸 Rút tiền ngân hàng</strong>
       <div class="form-group">
-        <label class="form-label">Ngân hàng nhận</label>
+        <label class="form-label">Ngân hàng</label>
         <select id="wdBank" class="form-input">
-          <option value="MB Bank">MB Bank (Quân Đội)</option>
-          <option value="Vietcombank">Vietcombank</option>
-          <option value="Techcombank">Techcombank</option>
-          <option value="BIDV">BIDV</option>
-          <option value="ACB">ACB</option>
-          <option value="Momo">Ví MoMo</option>
+          <option>MB Bank</option><option>Vietcombank</option><option>Techcombank</option><option>BIDV</option><option>MoMo</option>
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Số tài khoản / SĐT</label>
-        <input type="text" id="wdAccount" class="form-input" placeholder="Nhập số tài khoản ngân hàng...">
+        <label class="form-label">Số tài khoản</label>
+        <input type="text" id="wdAcc" class="form-input" placeholder="Nhập STK...">
       </div>
       <div class="form-group">
-        <label class="form-label">Tên chủ tài khoản (Không dấu)</label>
+        <label class="form-label">Chủ tài khoản</label>
         <input type="text" id="wdOwner" class="form-input" placeholder="VD: NGUYEN VAN A">
       </div>
       <div class="form-group">
-        <label class="form-label">Số tiền muốn rút (Tối thiểu 10.000đ)</label>
-        <input type="number" id="wdAmount" class="form-input" placeholder="Nhập số tiền (VD: 50000)">
+        <label class="form-label">Số tiền rút (Tối thiểu 10.000đ)</label>
+        <input type="number" id="wdAmt" class="form-input" placeholder="VD: 20000">
       </div>
-      <button class="btn-primary" onclick="submitWithdraw()">Tạo Lệnh Rút Tiền</button>
+      <button class="btn-primary" onclick="requestWithdraw()">Gửi Lệnh Rút</button>
     </div>
-
     <div class="card">
-      <strong style="font-size:14px;display:block;margin-bottom:8px;">📜 Lịch sử biến động &amp; Rút tiền</strong>
-      <div id="userHistoryList"></div>
+      <strong style="display:block;margin-bottom:6px;">📜 Lịch sử giao dịch</strong>
+      <div id="uHist"></div>
     </div>
   </div>
 
-  <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
-    <button class="nav-item active" id="navHome" onclick="switchUserTab('home')"><span>🏠</span><span>Nhiệm vụ</span></button>
-    <button class="nav-item" id="navWheel" onclick="switchUserTab('wheel')"><span>🎡</span><span>Vòng quay</span></button>
-    <button class="nav-item" id="navVip" onclick="switchUserTab('vip')"><span>👑</span><span>Gói VIP</span></button>
-    <button class="nav-item" id="navChat" onclick="switchUserTab('chat')"><span>💬</span><span>Cộng đồng</span></button>
-    <button class="nav-item" id="navWallet" onclick="switchUserTab('wallet')"><span>💳</span><span>Ví tiền</span></button>
+    <button class="nav-btn active" id="nBtnHome" onclick="switchUserView('home')"><span>🏠</span><span>Trang chủ</span></button>
+    <button class="nav-btn" id="nBtnWheel" onclick="switchUserView('wheel')"><span>🎡</span><span>Vòng quay</span></button>
+    <button class="nav-btn" id="nBtnVip" onclick="switchUserView('vip')"><span>👑</span><span>Gói VIP</span></button>
+    <button class="nav-btn" id="nBtnChat" onclick="switchUserView('chat')"><span>💬</span><span>Cộng đồng</span></button>
+    <button class="nav-btn" id="nBtnWallet" onclick="switchUserView('wallet')"><span>💳</span><span>Ví tiền</span></button>
   </nav>
 </div>
 
-<!-- ADMIN COMMAND CENTER -->
+<!-- ADMIN APP -->
 <div id="adminApp" class="admin-shell hidden">
-  <header class="top-header">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div class="brand-icon" style="width:36px;height:36px;font-size:16px;">AD</div>
-      <div>
-        <strong style="font-size:15px;">TASKFLOW ADMIN CENTER</strong>
-        <div style="font-size:11px;color:var(--muted);" id="adminRoleSubtitle">Quản trị viên cấp cao • Toàn quyền hệ thống</div>
-      </div>
+  <div class="topbar">
+    <strong>🛠️ QUẢN TRỊ TASKFLOW</strong>
+    <div style="display:flex;gap:6px;">
+      <button class="btn-secondary" onclick="resetDemoData()">↻ Reset dữ liệu</button>
+      <button class="btn-secondary" style="color:var(--red);" onclick="logout()">Đăng xuất</button>
     </div>
-    <button class="btn-secondary btn-sm" style="color:var(--red);" onclick="logout()">Đăng xuất</button>
-  </header>
-
-  <div class="admin-nav">
-    <button class="admin-tab active" id="aTabBtnOverview" onclick="switchAdminTab('overview')">📊 Tổng quan</button>
-    <button class="admin-tab" id="aTabBtnMembers" onclick="switchAdminTab('members')">👥 Thành viên &amp; Quyền</button>
-    <button class="admin-tab" id="aTabBtnTasks" onclick="switchAdminTab('tasks')">🔗 Kho kèo &amp; Link</button>
-    <button class="admin-tab" id="aTabBtnWithdraws" onclick="switchAdminTab('withdraws')">💸 Duyệt rút tiền</button>
-    <button class="admin-tab" id="aTabBtnBot" onclick="switchAdminTab('bot')">🤖 Cấu hình Bot &amp; VIP</button>
+  </div>
+  <div class="admin-tabs">
+    <button class="admin-tab active" id="aBtnDash" onclick="switchAdminView('dash')">📊 Tổng quan</button>
+    <button class="admin-tab" id="aBtnUsers" onclick="switchAdminView('users')">👥 Thành viên &amp; Quyền</button>
+    <button class="admin-tab" id="aBtnTasks" onclick="switchAdminView('tasks')">📌 Nhiệm vụ</button>
+    <button class="admin-tab" id="aBtnWd" onclick="switchAdminView('wd')">💸 Rút tiền</button>
   </div>
 
-  <div id="aTabOverview" class="section">
-    <div class="kpi-grid">
-      <div class="card">
-        <div style="font-size:11px;color:var(--muted);">Tổng thành viên</div>
-        <div style="font-size:22px;font-weight:800;margin-top:4px;" id="kpiUsers">0</div>
-      </div>
-      <div class="card">
-        <div style="font-size:11px;color:var(--muted);">Lượt hoàn thành kèo</div>
-        <div style="font-size:22px;font-weight:800;color:var(--primary);margin-top:4px;" id="kpiTasks">0</div>
-      </div>
-      <div class="card">
-        <div style="font-size:11px;color:var(--muted);">Doanh thu ước tính</div>
-        <div style="font-size:22px;font-weight:800;color:var(--blue);margin-top:4px;" id="kpiRev">0đ</div>
-      </div>
-      <div class="card">
-        <div style="font-size:11px;color:var(--muted);">Lệnh rút chờ duyệt</div>
-        <div style="font-size:22px;font-weight:800;color:var(--amber);margin-top:4px;" id="kpiPendingWd">0</div>
-      </div>
-    </div>
-    <div class="card">
-      <strong style="font-size:14px;display:block;margin-bottom:8px;">📋 Nhật ký hoạt động hệ thống mới nhất</strong>
-      <div id="adminActivityLog"></div>
+  <div id="aViewDash" class="section">
+    <div class="grid-4">
+      <div class="card"><div>Thành viên</div><div style="font-size:20px;font-weight:800;" id="kUsers">0</div></div>
+      <div class="card"><div>Lượt làm kèo</div><div style="font-size:20px;font-weight:800;color:var(--primary);" id="kDone">0</div></div>
+      <div class="card"><div>Chờ rút tiền</div><div style="font-size:20px;font-weight:800;color:var(--amber);" id="kWd">0</div></div>
+      <div class="card"><div>Bot báo IP/Ref</div><div style="font-size:14px;font-weight:800;color:var(--blue);margin-top:4px;">Đang bật</div></div>
     </div>
   </div>
 
-  <div id="aTabMembers" class="section hidden">
+  <div id="aViewUsers" class="section hidden">
     <div class="card">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
-        <input type="text" id="memberSearchInput" class="form-input" placeholder="Tìm theo tên, username, IP, mã mời..." oninput="renderAdminMembers()" style="flex:1;min-width:200px;">
-        <select id="memberRoleFilter" class="form-input" onchange="renderAdminMembers()" style="width:auto;">
-          <option value="all">Tất cả vai trò</option>
-          <option value="admin">Super Admin</option>
-          <option value="cskh">CSKH Hỗ trợ</option>
-          <option value="user">Thành viên</option>
-        </select>
-      </div>
-      <div class="table-wrap">
+      <input type="text" id="userSearch" class="form-input" placeholder="Tìm tên, tài khoản, IP, mã Ref..." oninput="renderAdminUsers()" style="margin-bottom:10px;">
+      <div style="overflow-x:auto;">
         <table>
-          <thead>
-            <tr>
-              <th>Thành viên</th>
-              <th>Vai trò / VIP</th>
-              <th>Số dư</th>
-              <th>IP &amp; Thiết bị</th>
-              <th>Thao tác</th>
-            </tr>
-          </thead>
-          <tbody id="adminMembersTable"></tbody>
+          <thead><tr><th>Thành viên</th><th>Vai trò / VIP</th><th>Số dư</th><th>IP</th><th>Sửa</th></tr></thead>
+          <tbody id="adminUsersBody"></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <div id="aTabTasks" class="section hidden">
+  <div id="aViewTasks" class="section hidden">
     <div class="card">
-      <strong style="font-size:14px;display:block;margin-bottom:10px;">➕ Thêm kèo nhiệm vụ mới</strong>
+      <strong style="display:block;margin-bottom:8px;">Thêm nhiệm vụ mới</strong>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <input type="text" id="newTaskTitle" class="form-input" placeholder="Tên nhiệm vụ (VD: Vượt link 1s)">
-        <input type="number" id="newTaskReward" class="form-input" placeholder="Tiền thưởng user (VD: 500)">
-        <input type="text" id="newTaskUrl" class="form-input" placeholder="Link đích / Link rút gọn">
-        <input type="text" id="newTaskCode" class="form-input" placeholder="Mã xác nhận (VD: VIP888)">
+        <input type="text" id="tTitle" class="form-input" placeholder="Tên nhiệm vụ">
+        <input type="number" id="tReward" class="form-input" placeholder="Tiền thưởng (VD: 500)">
+        <input type="text" id="tUrl" class="form-input" placeholder="Link nhiệm vụ">
+        <input type="text" id="tCode" class="form-input" placeholder="Mã xác nhận (VD: OK88)">
       </div>
-      <button class="btn-primary" style="margin-top:10px;" onclick="addNewTask()">Thêm Vào Kho Nhiệm Vụ</button>
+      <button class="btn-primary" style="margin-top:8px;" onclick="createTask()">Thêm Nhiệm Vụ</button>
     </div>
-    <div id="adminTaskList"></div>
+    <div id="adminTaskBody"></div>
   </div>
 
-  <div id="aTabWithdraws" class="section hidden">
-    <div class="card">
-      <strong style="font-size:14px;display:block;margin-bottom:10px;">💸 Danh sách yêu cầu rút tiền</strong>
-      <div id="adminWithdrawList"></div>
-    </div>
-  </div>
-
-  <div id="aTabBot" class="section hidden">
-    <div class="card">
-      <strong style="font-size:14px;display:block;margin-bottom:8px;">🤖 Cấu hình TASKFLOW BOT trong Cộng đồng</strong>
-      <label style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-weight:600;">
-        <input type="checkbox" id="botAutoWelcomeChk" checked onchange="toggleBotSetting()">
-        Tự động gửi lời chào + báo IP &amp; Người giới thiệu khi có thành viên đăng ký / đăng nhập
-      </label>
-      <div style="font-size:12px;color:var(--muted);">Khi bật, mỗi khi thành viên mới tham gia hoặc đăng nhập, Bot sẽ tự động nhắn vào kênh Cộng đồng để tăng độ uy tín và giúp CSKH kiểm tra IP trùng.</div>
-    </div>
+  <div id="aViewWd" class="section hidden">
+    <div class="card" id="adminWdBody"></div>
   </div>
 </div>
 
-<!-- FLOATING AI ASSISTANT BUTTON -->
-<button id="aiFabBtn" class="ai-fab hidden" onclick="openAiModal()">
-  <span>✨</span>
-  <span>Trợ lý AI</span>
-</button>
+<!-- AI FLOAT BUTTON -->
+<button id="aiFloatBtn" class="ai-fab hidden" onclick="openAi()">✨ Trợ lý AI</button>
 
-<!-- CHECK-IN MODAL -->
-<div id="checkinModal" class="modal-backdrop center hidden">
-  <div class="modal-sheet">
+<!-- MODALS -->
+<div id="checkinModal" class="modal-bg hidden">
+  <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center;">
-      <strong style="font-size:17px;">📅 Điểm Danh Nhận Thưởng 7 Ngày</strong>
-      <button class="btn-secondary btn-sm" onclick="closeModal('checkinModal')">✕</button>
+      <strong>📅 Điểm Danh 7 Ngày</strong>
+      <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
-    <p style="font-size:12px;color:var(--muted);margin-top:4px;">Điểm danh mỗi ngày để nhận tiền mặt &amp; vé quay may mắn miễn phí!</p>
     <div class="checkin-grid" id="checkinGrid"></div>
-    <button class="btn-primary" id="claimCheckinBtn" onclick="claimDailyCheckin()">Điểm Danh Nhận Quà Hôm Nay</button>
+    <button class="btn-primary" id="checkinBtn" onclick="doCheckin()">Điểm Danh Ngay</button>
   </div>
 </div>
 
-<!-- TASK EXECUTION MODAL -->
-<div id="taskModal" class="modal-backdrop center hidden">
-  <div class="modal-sheet">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-      <strong id="mTaskTitle" style="font-size:16px;">Thực hiện nhiệm vụ</strong>
-      <button class="btn-secondary btn-sm" onclick="closeModal('taskModal')">✕</button>
+<div id="taskModal" class="modal-bg hidden">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <strong id="tmTitle">Làm nhiệm vụ</strong>
+      <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
-    <div style="background:#f8fafc;padding:12px;border-radius:12px;border:1px solid var(--border);margin-bottom:12px;font-size:12px;">
-      <div><strong>Bước 1:</strong> Bấm nút mở liên kết nhiệm vụ bên dưới và làm theo hướng dẫn để lấy mã xác nhận.</div>
-      <div style="margin-top:6px;"><strong>Bước 2:</strong> Nhập mã xác nhận vào ô bên dưới để nhận <strong style="color:var(--primary);" id="mTaskReward">0đ</strong> ngay lập tức.</div>
-      <div style="margin-top:8px;padding-top:8px;border-top:1px dashed #cbd5e1;color:var(--blue);">
-        Link nhiệm vụ: <a href="#" id="mTaskLink" target="_blank" style="font-weight:700;text-decoration:underline;">Mở trang lấy mã ↗</a>
-        <span style="margin-left:8px;color:var(--muted);">(Mã mẫu: <strong id="mTaskHintCode"></strong>)</span>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Nhập mã xác nhận hoàn thành</label>
-      <input type="text" id="mTaskCodeInput" class="form-input" placeholder="Dán mã xác nhận vào đây...">
-    </div>
-    <button class="btn-primary" onclick="verifyTaskCode()">Xác Nhận &amp; Nhận Tiền</button>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:8px;">Mở link bên dưới để hoàn thành và lấy mã xác nhận (Mã mẫu: <strong id="tmHint"></strong>). Nhận ngay <strong id="tmReward" style="color:var(--primary);"></strong>.</p>
+    <a id="tmLink" href="#" target="_blank" style="display:inline-block;margin-bottom:10px;color:var(--blue);font-weight:700;font-size:12px;">Mở link nhiệm vụ ↗</a>
+    <input type="text" id="tmCodeInput" class="form-input" placeholder="Nhập mã xác nhận..." style="margin-bottom:10px;">
+    <button class="btn-primary" onclick="confirmTask()">Xác Nhận Nhận Tiền</button>
   </div>
 </div>
 
-<!-- CREATE GROUP MODAL -->
-<div id="createGroupModal" class="modal-backdrop center hidden">
-  <div class="modal-sheet">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-      <strong style="font-size:16px;">➕ Tạo Nhóm Trò Chuyện Mới</strong>
-      <button class="btn-secondary btn-sm" onclick="closeModal('createGroupModal')">✕</button>
+<div id="groupModal" class="modal-bg hidden">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <strong>+ Tạo nhóm mới</strong>
+      <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
-    <div class="form-group">
-      <label class="form-label">Tên nhóm trò chuyện</label>
-      <input type="text" id="newGroupName" class="form-input" placeholder="VD: Nhóm Kéo Ref Kiếm Tiền">
-    </div>
-    <button class="btn-primary" onclick="createNewGroup()">Tạo Nhóm Ngay</button>
+    <input type="text" id="groupNameInput" class="form-input" placeholder="Tên nhóm..." style="margin-bottom:10px;">
+    <button class="btn-primary" onclick="addGroup()">Tạo Nhóm</button>
   </div>
 </div>
 
-<!-- ADMIN MEMBER DETAIL & PERMISSION MODAL -->
-<div id="memberDetailModal" class="modal-backdrop center hidden">
-  <div class="modal-sheet">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-      <strong style="font-size:16px;">👤 Hồ Sơ &amp; Phân Quyền Thành Viên</strong>
-      <button class="btn-secondary btn-sm" onclick="closeModal('memberDetailModal')">✕</button>
+<div id="editUserModal" class="modal-bg hidden">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <strong>Sửa thành viên &amp; Quyền</strong>
+      <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
-    <div id="memberDetailContent"></div>
+    <div id="editUserBody"></div>
   </div>
 </div>
 
-<!-- AI ASSISTANT MODAL -->
-<div id="aiModal" class="modal-backdrop hidden">
-  <div class="modal-sheet" style="height:78vh;display:flex;flex-direction:column;">
-    <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border);">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#2563eb,#059669);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;">AI</div>
-        <div>
-          <strong style="font-size:14px;">Trợ Lý AI TASKFLOW</strong>
-          <div style="font-size:11px;color:var(--primary);">● Sẵn sàng giải đáp mọi chức năng &amp; số liệu</div>
-        </div>
-      </div>
-      <button class="btn-secondary btn-sm" onclick="closeModal('aiModal')">✕</button>
+<div id="aiModal" class="modal-bg hidden">
+  <div class="modal-card" style="height:76vh;display:flex;flex-direction:column;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:1px solid var(--border);">
+      <strong>✨ Trợ Lý AI TASKFLOW</strong>
+      <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
-    <div id="aiChatHistory" style="flex:1;overflow-y:auto;padding:12px 0;display:flex;flex-direction:column;gap:10px;"></div>
-    <form onsubmit="askAiAssistant(event)" style="display:flex;gap:8px;padding-top:8px;border-top:1px solid var(--border);">
-      <input type="text" id="aiPromptInput" class="form-input" placeholder="Hỏi bất cứ điều gì về nhiệm vụ, VIP, rút tiền, admin...">
-      <button type="submit" class="btn-primary" style="width:auto;padding:0 16px;">Hỏi</button>
+    <div class="suggest-row" id="aiSuggestBar"></div>
+    <div id="aiMessages" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:6px 0;"></div>
+    <form onsubmit="sendAiPrompt(event)" style="display:flex;gap:7px;padding-top:8px;border-top:1px solid var(--border);">
+      <input type="text" id="aiInput" class="form-input" placeholder="Nhập câu hỏi của bạn...">
+      <button type="submit" class="btn-primary" style="width:auto;padding:0 14px;">Gửi</button>
     </form>
   </div>
 </div>
 
 <script>
-const STORAGE_KEY = 'TASKFLOW_PRO_STATE_V1';
-
-const WHEEL_PRIZES = [
-  { label: '888đ', value: 888, color: '#10b981', weight: 28 },
-  { label: '1.000đ', value: 1000, color: '#3b82f6', weight: 24 },
-  { label: '2.000đ', value: 2000, color: '#8b5cf6', weight: 14 },
-  { label: '5.000đ', value: 5000, color: '#f59e0b', weight: 6 },
-  { label: '10.000đ', value: 10000, color: '#ec4899', weight: 2.5 },
-  { label: '30.000đ', value: 30000, color: '#ef4444', weight: 0.5 },
-  { label: 'Chúc may mắn lần sau', value: 0, color: '#64748b', weight: 25 }
+const KEY = 'TF_FULL_STABLE_V2';
+const PRIZES = [
+  { label: '888đ', val: 888, color: '#10b981', w: 28 },
+  { label: '1.000đ', val: 1000, color: '#3b82f6', w: 24 },
+  { label: '2.000đ', val: 2000, color: '#8b5cf6', w: 14 },
+  { label: '5.000đ', val: 5000, color: '#f59e0b', w: 6 },
+  { label: '10.000đ', val: 10000, color: '#ec4899', w: 2.5 },
+  { label: '30.000đ', val: 30000, color: '#ef4444', w: 0.5 },
+  { label: 'Chúc may mắn lần sau', val: 0, color: '#64748b', w: 25 }
 ];
-
-const VIP_TIERS = [
-  { level: 0, name: 'VIP 0 (Miễn phí)', price: 0, dailyLimit: 3, bonusPct: 0, desc: '3 nhiệm vụ/ngày • Hoa hồng chuẩn 100%' },
-  { level: 1, name: 'VIP 1 (Bạc)', price: 50000, dailyLimit: 8, bonusPct: 5, desc: '8 nhiệm vụ/ngày • Thưởng thêm +5% mỗi kèo' },
-  { level: 2, name: 'VIP 2 (Vàng)', price: 150000, dailyLimit: 20, bonusPct: 12, desc: '20 nhiệm vụ/ngày • Thưởng thêm +12% mỗi kèo' },
-  { level: 3, name: 'VIP 3 (Kim Cương)', price: 400000, dailyLimit: 50, bonusPct: 25, desc: '50 nhiệm vụ/ngày • Thưởng thêm +25% & ưu tiên rút' }
+const VIPS = [
+  { lv: 0, name: 'VIP 0', price: 0, limit: 3, bonus: 0, desc: '3 lượt/ngày • Thưởng chuẩn' },
+  { lv: 1, name: 'VIP 1', price: 50000, limit: 8, bonus: 5, desc: '8 lượt/ngày • +5% thưởng' },
+  { lv: 2, name: 'VIP 2', price: 150000, limit: 20, bonus: 12, desc: '20 lượt/ngày • +12% thưởng' },
+  { lv: 3, name: 'VIP 3', price: 400000, limit: 50, bonus: 25, desc: '50 lượt/ngày • +25% thưởng' }
 ];
+const CHECKIN_VALS = [500, 800, 1000, 1200, 1500, 2000, 5000];
 
-const CHECKIN_REWARDS = [500, 800, 1000, 1200, 1500, 2000, 5000];
-
-const DEFAULT_STATE = {
-  botAutoWelcome: true,
+const INIT = {
   users: [
-    {
-      id: 1000, username: 'admin', password: '1', fullName: 'Quản Trị Viên',
-      role: 'admin', vip: 3, balance: 5000000, totalEarned: 5000000, refEarned: 0,
-      refCode: 'ADMIN01', referredBy: 'Hệ thống', ip: '113.190.42.18', device: 'Chrome / Android',
-      banned: false, spinTickets: 10, dailyDone: 0, lastCheckin: '', checkinStreak: 1,
-      history: [{ text: 'Khởi tạo tài khoản Quản trị viên', amount: 0, time: 'Hôm nay' }]
-    },
-    {
-      id: 1001, username: 'nguyenvana', password: '123456', fullName: 'Nguyễn Văn A',
-      role: 'user', vip: 1, balance: 38500, totalEarned: 88500, refEarned: 12000,
-      refCode: 'TF1001', referredBy: 'ADMIN01', ip: '14.232.118.94', device: 'Redmi Note 11 / Kiwi',
-      banned: false, spinTickets: 2, dailyDone: 1, lastCheckin: '', checkinStreak: 2,
-      history: [
-        { text: 'Hoàn thành nhiệm vụ Vượt link 1s', amount: 630, time: '10:15' },
-        { text: 'Hoa hồng giới thiệu từ tranthib', amount: 1500, time: '09:40' }
-      ]
-    },
-    {
-      id: 1002, username: 'cskh01', password: '123456', fullName: 'Lê Minh CSKH',
-      role: 'cskh', vip: 2, balance: 120000, totalEarned: 120000, refEarned: 0,
-      refCode: 'CSKH01', referredBy: 'ADMIN01', ip: '27.72.98.11', device: 'iPhone / Safari',
-      banned: false, spinTickets: 3, dailyDone: 0, lastCheckin: '2026-11-20', checkinStreak: 4,
-      history: [{ text: 'Phụ cấp trực hỗ trợ CSKH', amount: 120000, time: 'Hôm qua' }]
-    }
+    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, hist: [] },
+    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 1, bal: 24500, earned: 54500, refEarned: 5000, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', tickets: 2, done: 1, lastCi: '', streak: 2, banned: false, hist: [{ t: 'Làm nhiệm vụ Vượt link', a: 630 }] },
+    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, hist: [] }
   ],
   tasks: [
-    { id: 'T1', title: 'Vượt link tìm từ khóa Google (Node 1)', category: 'Vượt link', reward: 600, url: 'https://google.com', code: 'TF600', doneCount: 142 },
-    { id: 'T2', title: 'Xác minh truy cập trang tin công nghệ', category: 'Traffic', reward: 800, url: 'https://google.com', code: 'TECH88', doneCount: 98 },
-    { id: 'T3', title: 'Khảo sát nhanh người tiêu dùng 30 giây', category: 'Khảo sát', reward: 1500, url: 'https://google.com', code: 'KS1500', doneCount: 64 },
-    { id: 'T4', title: 'Mở tài khoản ngân hàng số nhận thưởng', category: 'CPA App', reward: 25000, url: 'https://google.com', code: 'BANK25K', doneCount: 29 }
+    { id: '1', title: 'Vượt link lấy mã nhanh (Node A)', reward: 600, url: 'https://google.com', code: 'TF1', done: 85 },
+    { id: '2', title: 'Xem trang & lấy mã (Node B)', reward: 900, url: 'https://google.com', code: 'TF2', done: 62 },
+    { id: '3', title: 'Khảo sát nhanh 30s (Node C)', reward: 1500, url: 'https://google.com', code: 'TF3', done: 40 }
   ],
   withdraws: [
-    { id: 'WD01', userId: 1001, username: 'nguyenvana', bank: 'MB Bank', account: '0339498650', owner: 'NGUYEN VAN A', amount: 50000, status: 'pending', time: '21:10 Hôm nay' }
+    { id: 'W1', uid: 1001, u: 'user1', bank: 'MB Bank', acc: '0339498650', owner: 'NGUYEN MINH', amt: 30000, st: 'pending' }
   ],
   channels: [
-    { id: 'general', name: '📢 Kênh Chung & Bot' },
-    { id: 'support', name: '🛠️ Hỗ Trợ CSKH' },
-    { id: 'keongon', name: '🔥 Chia Sẻ Kèo Ngon' }
+    { id: 'chung', name: '📢 Kênh Chung & Bot' },
+    { id: 'cskh', name: '💬 Hỗ Trợ' }
   ],
-  messages: [
-    { id: 1, channel: 'general', sender: 'TASKFLOW BOT', role: 'bot', time: '20:00', text: '🤖 Chào mừng các thành viên đến với cộng đồng TASKFLOW! Mọi thông báo chào mừng thành viên mới, người giới thiệu và kiểm tra IP sẽ được cập nhật tự động tại đây.' },
-    { id: 2, channel: 'general', sender: 'Nguyễn Văn A', role: 'user', time: '20:15', text: 'Mình vừa rút 50k về MB Bank xong, duyệt nhanh thật anh em ạ!' },
-    { id: 3, channel: 'support', sender: 'Lê Minh CSKH', role: 'cskh', time: '20:30', text: 'Anh em cần hỗ trợ duyệt kèo hoặc nâng cấp VIP nhắn trực tiếp tại đây nhé.' }
+  msgs: [
+    { id: 1, ch: 'chung', sender: 'TASKFLOW BOT', role: 'bot', text: '🤖 Bot hệ thống đã sẵn sàng: tự động chào mừng, báo người giới thiệu (Ref) và địa chỉ IP thành viên.' }
   ],
   winners: [
-    { user: 'hoang***89', prize: '10.000đ', time: 'Vừa xong' },
-    { user: 'linh***02', prize: '888đ', time: '1 phút trước' },
-    { user: 'tuan***77', prize: '2.000đ', time: '2 phút trước' },
-    { user: 'minh***15', prize: '5.000đ', time: '3 phút trước' },
-    { user: 'ngoc***94', prize: '1.000đ', time: '5 phút trước' },
-    { user: 'hung***61', prize: '30.000đ', time: '7 phút trước' }
-  ],
-  logs: [
-    'Hệ thống TASKFLOW khởi chạy thành công.',
-    'Thành viên nguyenvana tạo lệnh rút 50.000đ qua MB Bank.'
+    { u: 'min***01', p: '10.000đ' }, { u: 'lan***88', p: '888đ' }, { u: 'huy***24', p: '2.000đ' },
+    { u: 'nam***55', p: '5.000đ' }, { u: 'thu***19', p: '1.000đ' }, { u: 'phc***09', p: '30.000đ' }
   ]
 };
 
-let state = loadState();
-let authMode = 'login';
-let currentUser = null;
-let activeTask = null;
-let activeChannel = 'general';
-let currentWheelDeg = 0;
-let isSpinning = false;
+let db = JSON.parse(localStorage.getItem(KEY) || 'null') || JSON.parse(JSON.stringify(INIT));
+let mode = 'login', me = null, curTask = null, curCh = 'chung', deg = 0, spinning = false;
 
-function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch (e) {}
-  return JSON.parse(JSON.stringify(DEFAULT_STATE));
-}
-
-function saveState() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
-}
-
-function fmtMoney(n) {
-  return Number(n || 0).toLocaleString('vi-VN') + 'đ';
-}
-
-function showToast(msg) {
+function save() { localStorage.setItem(KEY, JSON.stringify(db)); }
+function money(n) { return Number(n || 0).toLocaleString('vi-VN') + 'đ'; }
+function today() { return new Date().toISOString().slice(0, 10); }
+function toast(m) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.remove('hidden');
-  clearTimeout(el._timer);
-  el._timer = setTimeout(() => el.classList.add('hidden'), 2800);
+  el.textContent = m; el.classList.remove('hidden');
+  clearTimeout(el._t); el._t = setTimeout(() => el.classList.add('hidden'), 2600);
+}
+function closeModals() {
+  ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+}
+function fakeIp() {
+  if (!sessionStorage.getItem('MY_IP')) {
+    sessionStorage.setItem('MY_IP', `14.${Math.floor(160+Math.random()*80)}.${Math.floor(10+Math.random()*220)}.${Math.floor(10+Math.random()*220)}`);
+  }
+  return sessionStorage.getItem('MY_IP');
 }
 
-function closeModal(id) {
-  document.getElementById(id).classList.add('hidden');
+function resetDemoData() {
+  localStorage.removeItem(KEY);
+  db = JSON.parse(JSON.stringify(INIT));
+  save();
+  renderAdmin();
+  toast('Đã reset dữ liệu về trạng thái gốc');
 }
 
-function detectDeviceInfo() {
-  const ua = navigator.userAgent || '';
-  if (/Redmi|Xiaomi/i.test(ua)) return 'Xiaomi Android / Browser';
-  if (/Android/i.test(ua)) return 'Android Mobile';
-  if (/iPhone|iPad/i.test(ua)) return 'iOS Safari';
-  return 'Desktop Web';
+function setAuthMode(m) {
+  mode = m;
+  document.getElementById('loginTabBtn').classList.toggle('active', m === 'login');
+  document.getElementById('regTabBtn').classList.toggle('active', m === 'register');
+  document.getElementById('regNameField').classList.toggle('hidden', m === 'login');
+  document.getElementById('regRefField').classList.toggle('hidden', m === 'login');
+  document.getElementById('authSubmitBtn').textContent = m === 'login' ? 'Đăng Nhập' : 'Đăng Ký';
 }
 
-function generateClientIp() {
-  const savedIp = sessionStorage.getItem('TF_CLIENT_IP');
-  if (savedIp) return savedIp;
-  const ip = `14.${Math.floor(160 + Math.random() * 80)}.${Math.floor(10 + Math.random() * 230)}.${Math.floor(10 + Math.random() * 230)}`;
-  sessionStorage.setItem('TF_CLIENT_IP', ip);
-  return ip;
+function botAnnounce(user, tag) {
+  const dup = db.users.filter(x => x.ip === user.ip).length;
+  db.msgs.push({
+    id: Date.now() + Math.random(), ch: 'chung', sender: 'TASKFLOW BOT', role: 'bot',
+    text: `🤖 [${tag}] ${user.name} (@${user.u})\n• Người giới thiệu: ${user.refBy}\n• IP: ${user.ip} (${dup > 1 ? '⚠️ Trùng IP x' + dup : '✅ IP riêng'})`
+  });
 }
 
-function nowTime() {
-  const d = new Date();
-  return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
-}
-
-function todayStr() {
-  return new Date().toISOString().slice(0, 10);
-}
-
-/* AUTH LOGIC */
-function switchAuthMode(mode) {
-  authMode = mode;
-  document.getElementById('tabLoginBtn').classList.toggle('active', mode === 'login');
-  document.getElementById('tabRegBtn').classList.toggle('active', mode === 'register');
-  document.getElementById('regNameGroup').classList.toggle('hidden', mode === 'login');
-  document.getElementById('regRefGroup').classList.toggle('hidden', mode === 'login');
-  document.getElementById('authSubmitBtn').textContent = mode === 'login' ? 'Đăng Nhập Ngay' : 'Tạo Tài Khoản Mới';
-}
-
-function postBotWelcome(user, actionType) {
-  if (!state.botAutoWelcome) return;
-  const sameIpCount = state.users.filter(u => u.ip === user.ip).length;
-  const ipAlert = sameIpCount > 1 ? `⚠️ Cảnh báo: Trùng IP (${sameIpCount} tài khoản)` : '✅ IP sạch (Duy nhất)';
-  const msg = {
-    id: Date.now() + Math.random(),
-    channel: 'general',
-    sender: 'TASKFLOW BOT',
-    role: 'bot',
-    time: nowTime(),
-    text: `🤖 [THÔNG BÁO ${actionType.toUpperCase()}]\n• Thành viên: ${user.fullName} (@${user.username} - ID #${user.id})\n• Người giới thiệu: ${user.referredBy || 'Trực tiếp (Không có)'}\n• Địa chỉ IP: ${user.ip} (${ipAlert})\n• Thiết bị: ${user.device}`
-  };
-  state.messages.push(msg);
-  state.logs.unshift(`${nowTime()} - Bot báo ${actionType}: @${user.username} (IP: ${user.ip})`);
-}
-
-function handleAuthSubmit(e) {
+function submitAuth(e) {
   e.preventDefault();
-  const username = document.getElementById('authUsername').value.trim();
-  const password = document.getElementById('authPassword').value.trim();
-  if (!username || !password) return;
-
-  if (authMode === 'login') {
-    const user = state.users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
-    if (!user) {
-      showToast('Sai tài khoản hoặc mật khẩu!');
-      return;
-    }
-    if (user.banned) {
-      showToast('Tài khoản của bạn đã bị khóa bởi Quản trị viên!');
-      return;
-    }
-    user.ip = generateClientIp();
-    user.device = detectDeviceInfo();
-    currentUser = user;
-    if (user.role !== 'admin') {
-      postBotWelcome(user, 'Đăng nhập');
-    }
-    saveState();
-    enterApp();
+  const u = document.getElementById('authUser').value.trim();
+  const p = document.getElementById('authPass').value.trim();
+  if (mode === 'login') {
+    const found = db.users.find(x => x.u.toLowerCase() === u.toLowerCase() && x.p === p);
+    if (!found) return toast('Sai tài khoản hoặc mật khẩu');
+    if (found.banned) return toast('Tài khoản đã bị khóa');
+    found.ip = fakeIp();
+    me = found;
+    if (me.role !== 'admin') botAnnounce(me, 'Đăng nhập');
+    save(); startSession();
   } else {
-    const fullName = document.getElementById('authFullName').value.trim() || username;
-    const refInput = document.getElementById('authRefCode').value.trim().toUpperCase();
-    if (state.users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
-      showToast('Tên tài khoản đã tồn tại!');
-      return;
-    }
-    const inviter = state.users.find(u => u.refCode === refInput);
-    const newId = 1000 + state.users.length;
-    const newUser = {
-      id: newId,
-      username,
-      password,
-      fullName,
-      role: 'user',
-      vip: 0,
-      balance: 2000,
-      totalEarned: 2000,
-      refEarned: 0,
-      refCode: 'TF' + newId,
-      referredBy: inviter ? `${inviter.fullName} (${inviter.refCode})` : 'Trực tiếp',
-      ip: generateClientIp(),
-      device: detectDeviceInfo(),
-      banned: false,
-      spinTickets: 1,
-      dailyDone: 0,
-      lastCheckin: '',
-      checkinStreak: 0,
-      history: [{ text: 'Thưởng chào mừng thành viên mới', amount: 2000, time: nowTime() }]
-    };
-    state.users.push(newUser);
-    currentUser = newUser;
-    postBotWelcome(newUser, 'Thành viên mới');
-    saveState();
-    showToast('Đăng ký thành công! Tặng 2.000đ + 1 vé quay.');
-    enterApp();
+    if (db.users.some(x => x.u.toLowerCase() === u.toLowerCase())) return toast('Tài khoản đã tồn tại');
+    const name = document.getElementById('regName').value.trim() || u;
+    const refIn = document.getElementById('regRef').value.trim().toUpperCase();
+    const inv = db.users.find(x => x.refCode === refIn);
+    const id = 1000 + db.users.length;
+    const nu = { id, u, p, name, role: 'user', vip: 0, bal: 2000, earned: 2000, refEarned: 0, refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có', ip: fakeIp(), tickets: 1, done: 0, lastCi: '', streak: 0, banned: false, hist: [{ t: 'Tặng tân thủ', a: 2000 }] };
+    db.users.push(nu); me = nu;
+    botAnnounce(nu, 'Thành viên mới');
+    save(); startSession();
   }
 }
 
-function enterApp() {
+function startSession() {
   document.getElementById('authScreen').classList.add('hidden');
-  document.getElementById('aiFabBtn').classList.remove('hidden');
-
-  if (currentUser.role === 'admin') {
+  document.getElementById('aiFloatBtn').classList.remove('hidden');
+  if (me.role === 'admin') {
     document.getElementById('userApp').classList.add('hidden');
     document.getElementById('adminApp').classList.remove('hidden');
-    renderAdminDashboard();
+    renderAdmin();
   } else {
     document.getElementById('adminApp').classList.add('hidden');
     document.getElementById('userApp').classList.remove('hidden');
-    buildWheelSvg();
-    renderUserApp();
-    if (currentUser.lastCheckin !== todayStr()) {
-      setTimeout(() => openCheckinModal(), 450);
-    }
+    drawWheel(); renderUser();
+    if (me.lastCi !== today()) setTimeout(openCheckin, 350);
   }
 }
 
 function logout() {
-  currentUser = null;
+  me = null;
   document.getElementById('userApp').classList.add('hidden');
   document.getElementById('adminApp').classList.add('hidden');
-  document.getElementById('aiFabBtn').classList.add('hidden');
+  document.getElementById('aiFloatBtn').classList.add('hidden');
   document.getElementById('authScreen').classList.remove('hidden');
-  document.getElementById('authPassword').value = '';
+  document.getElementById('authPass').value = '';
 }
 
-/* USER APP RENDERING */
-function switchUserTab(tab) {
-  ['Home', 'Wheel', 'Vip', 'Chat', 'Wallet'].forEach(t => {
-    document.getElementById('uTab' + t).classList.add('hidden');
-    document.getElementById('nav' + t).classList.remove('active');
+function switchUserView(v) {
+  ['Home', 'Wheel', 'Vip', 'Chat', 'Wallet'].forEach(k => {
+    document.getElementById('view' + k).classList.add('hidden');
+    document.getElementById('nBtn' + k).classList.remove('active');
   });
-  const cap = tab.charAt(0).toUpperCase() + tab.slice(1);
-  document.getElementById('uTab' + cap).classList.remove('hidden');
-  document.getElementById('nav' + cap).classList.add('active');
-  renderUserApp();
+  const c = v[0].toUpperCase() + v.slice(1);
+  document.getElementById('view' + c).classList.remove('hidden');
+  document.getElementById('nBtn' + c).classList.add('active');
+  renderUser();
 }
 
-function renderUserApp() {
-  if (!currentUser) return;
-  const vipInfo = VIP_TIERS[currentUser.vip] || VIP_TIERS[0];
-
-  document.getElementById('uAvatar').textContent = currentUser.fullName.charAt(0).toUpperCase();
-  document.getElementById('uDisplayName').textContent = currentUser.fullName;
-  document.getElementById('uVipBadge').textContent = `VIP ${currentUser.vip}`;
-  document.getElementById('uSubInfo').textContent = `ID: #${currentUser.id} • Mã mời: ${currentUser.refCode}`;
-  document.getElementById('uBalance').textContent = fmtMoney(currentUser.balance);
-  document.getElementById('uTotalEarned').textContent = fmtMoney(currentUser.totalEarned);
-  document.getElementById('uRefEarned').textContent = fmtMoney(currentUser.refEarned);
-  document.getElementById('uSpinTickets').textContent = currentUser.spinTickets;
-
-  const limit = vipInfo.dailyLimit;
-  const pct = Math.min(100, Math.round((currentUser.dailyDone / limit) * 100));
-  document.getElementById('uDailyProgressText').textContent = `${currentUser.dailyDone} / ${limit} lượt`;
-  document.getElementById('uDailyProgressBar').style.width = pct + '%';
-  document.getElementById('vipBonusLabel').textContent = `Thưởng VIP: +${vipInfo.bonusPct}%`;
-
-  // Tasks
-  const taskHtml = state.tasks.map(t => {
-    const finalReward = Math.round(t.reward * (1 + vipInfo.bonusPct / 100));
-    return `
-      <div class="task-card">
-        <div style="flex:1;">
-          <span class="task-badge" style="background:var(--blue-light);color:var(--blue);">${t.category}</span>
-          <div style="font-weight:700;font-size:13px;margin-bottom:2px;">${t.title}</div>
-          <div style="font-size:11px;color:var(--muted);">Đã duyệt: ${t.doneCount} lượt • Cộng tiền tức thì</div>
-        </div>
-        <div style="text-align:right;">
-          <div style="font-weight:800;color:var(--primary);font-size:14px;margin-bottom:5px;">+${fmtMoney(finalReward)}</div>
-          <button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="openTaskModal('${t.id}')">Làm ngay</button>
-        </div>
-      </div>
-    `;
-  }).join('');
-  document.getElementById('taskListContainer').innerHTML = taskHtml;
-
-  // Winners Marquee
-  const doubleWinners = [...state.winners, ...state.winners];
-  document.getElementById('winnerMarqueeList').innerHTML = doubleWinners.map(w => `
-    <div class="winner-row">
-      <div><strong>${w.user}</strong> <span style="color:var(--muted);font-size:11px;">• ${w.time}</span></div>
-      <span style="font-weight:800;color:${w.prize === 'Chúc may mắn lần sau' ? '#64748b' : '#059669'};">${w.prize}</span>
-    </div>
-  `).join('');
-
-  // VIP Packages
-  document.getElementById('vipCurrentTitle').textContent = vipInfo.name;
-  document.getElementById('vipCurrentDesc').textContent = vipInfo.desc;
-  document.getElementById('vipPackagesContainer').innerHTML = VIP_TIERS.filter(v => v.level > 0).map(v => {
-    const owned = currentUser.vip >= v.level;
-    return `
-      <div class="card" style="border-color:${owned ? '#10b981' : 'var(--border)'};">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-          <strong style="font-size:15px;">👑 ${v.name}</strong>
-          <span style="font-weight:800;color:var(--amber);font-size:15px;">${fmtMoney(v.price)}</span>
-        </div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">${v.desc}</div>
-        <button class="btn-primary" style="background:${owned ? '#94a3b8' : ''};" ${owned ? 'disabled' : ''} onclick="buyVipPackage(${v.level})">
-          ${owned ? 'Đã Kích Hoạt' : 'Nâng Cấp Bằng Số Dư Ví'}
-        </button>
-      </div>
-    `;
-  }).join('');
-
-  // Community Chat
-  document.getElementById('chatChannelBar').innerHTML = state.channels.map(c => `
-    <button class="channel-pill ${c.id === activeChannel ? 'active' : ''}" onclick="selectChannel('${c.id}')">${c.name}</button>
-  `).join('');
-
-  const msgs = state.messages.filter(m => m.channel === activeChannel);
-  const feedEl = document.getElementById('chatFeedBox');
-  feedEl.innerHTML = msgs.map(m => {
-    const isMine = m.sender === currentUser.fullName;
-    const isBot = m.role === 'bot';
-    let badge = '';
-    if (m.role === 'admin') badge = '<span class="role-tag role-admin">ADMIN</span>';
-    if (m.role === 'cskh') badge = '<span class="role-tag role-cskh">CSKH</span>';
-    if (m.role === 'bot') badge = '<span class="role-tag role-bot">BOT HỆ THỐNG</span>';
-    return `
-      <div class="msg-bubble ${isBot ? 'bot' : (isMine ? 'mine' : '')}">
-        <div style="font-size:11px;font-weight:700;margin-bottom:3px;color:#334155;">
-          ${m.sender} ${badge} <span style="font-weight:400;color:var(--muted);float:right;">${m.time}</span>
-        </div>
-        <div style="white-space:pre-line;">${m.text}</div>
-      </div>
-    `;
-  }).join('');
-  feedEl.scrollTop = feedEl.scrollHeight;
-
-  // User History
-  document.getElementById('userHistoryList').innerHTML = (currentUser.history || []).map(h => `
-    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;">
-      <div>
-        <div style="font-weight:600;">${h.text}</div>
-        <div style="font-size:10px;color:var(--muted);">${h.time}</div>
-      </div>
-      <div style="font-weight:700;color:${h.amount >= 0 ? 'var(--primary)' : 'var(--red)'};">
-        ${h.amount >= 0 ? '+' : ''}${fmtMoney(h.amount)}
-      </div>
-    </div>
-  `).join('');
+function rotateTaskNodes() {
+  db.tasks.forEach((t, idx) => {
+    const codeNum = Math.floor(100 + Math.random() * 899);
+    t.code = 'TF' + codeNum;
+    t.title = t.title.replace(/\(Node .*\)/, `(Node #${idx + 1}-${codeNum.toString().slice(-2)})`);
+  });
+  save();
+  renderUser();
+  toast('Đã xoay vòng mã & kèo mới!');
 }
 
-/* CHECK-IN */
-function openCheckinModal() {
-  const grid = document.getElementById('checkinGrid');
-  const checkedToday = currentUser.lastCheckin === todayStr();
-  grid.innerHTML = CHECKIN_REWARDS.map((rew, idx) => {
-    const dayNum = idx + 1;
-    const isDone = idx < currentUser.checkinStreak;
-    const isToday = !checkedToday && idx === (currentUser.checkinStreak % 7);
-    return `
-      <div class="day-box ${isDone ? 'done' : ''} ${isToday ? 'today' : ''}">
-        <div style="font-size:10px;font-weight:700;">Ngày ${dayNum}</div>
-        <div style="font-weight:800;font-size:12px;margin:3px 0;color:var(--primary);">+${rew}đ</div>
-        <div style="font-size:10px;">${isDone ? '✅ Đã nhận' : (isToday ? '🎁 Hôm nay' : '🔒')}</div>
-      </div>
-    `;
+function renderUser() {
+  if (!me) return;
+  const vip = VIPS[me.vip] || VIPS[0];
+  document.getElementById('uName').textContent = me.name;
+  document.getElementById('uVipPill').textContent = vip.name;
+  document.getElementById('uIdRef').textContent = `ID #${me.id} • Mã Ref: ${me.refCode}`;
+  document.getElementById('uBal').textContent = money(me.bal);
+  document.getElementById('uEarned').textContent = money(me.earned);
+  document.getElementById('uRefEarned').textContent = money(me.refEarned);
+  document.getElementById('uVipBonusText').textContent = `+${vip.bonus}% VIP`;
+  document.getElementById('uProgressLabel').textContent = `${me.done}/${vip.limit}`;
+  document.getElementById('uProgressBar').style.width = Math.min(100, Math.round((me.done / vip.limit) * 100)) + '%';
+  document.getElementById('uShareRef').textContent = `${location.origin}/?ref=${me.refCode}`;
+  document.getElementById('uTickets').textContent = me.tickets;
+
+  document.getElementById('taskList').innerHTML = db.tasks.map(t => {
+    const rew = Math.round(t.reward * (1 + vip.bonus / 100));
+    return `<div class="task-item"><div><div style="font-weight:700;">${t.title}</div><div style="font-size:11px;color:var(--muted);">Thưởng: <strong style="color:var(--primary);">+${money(rew)}</strong> • Đã làm: ${t.done}</div></div><button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="openTask('${t.id}')">Làm</button></div>`;
   }).join('');
-  const btn = document.getElementById('claimCheckinBtn');
-  btn.disabled = checkedToday;
-  btn.textContent = checkedToday ? 'Bạn đã điểm danh hôm nay rồi' : 'Điểm Danh Nhận Quà Hôm Nay';
+
+  const mList = [...db.winners, ...db.winners];
+  document.getElementById('winnerMarquee').innerHTML = mList.map(w => `<div class="marquee-item"><span><strong>${w.u}</strong></span><span style="font-weight:800;color:${w.p === 'Chúc may mắn lần sau' ? 'var(--muted)' : 'var(--primary)'};">${w.p}</span></div>`).join('');
+
+  document.getElementById('vipList').innerHTML = VIPS.filter(x => x.lv > 0).map(x => {
+    const has = me.vip >= x.lv;
+    return `<div class="card"><div style="display:flex;justify-content:space-between;"><strong>👑 ${x.name}</strong><strong style="color:var(--amber);">${money(x.price)}</strong></div><div style="font-size:12px;color:var(--muted);margin:6px 0 10px;">${x.desc}</div><button class="btn-primary" style="background:${has ? '#94a3b8' : ''}" ${has ? 'disabled' : ''} onclick="buyVip(${x.lv})">${has ? 'Đã sở hữu' : 'Mua bằng số dư'}</button></div>`;
+  }).join('');
+
+  document.getElementById('channelBar').innerHTML = db.channels.map(c => `<button class="channel-btn ${c.id === curCh ? 'active' : ''}" onclick="curCh='${c.id}';renderUser()">${c.name}</button>`).join('');
+  const box = document.getElementById('chatBox');
+  box.innerHTML = db.msgs.filter(m => m.ch === curCh).map(m => {
+    const roleBadge = m.role === 'bot' ? '<span class="badge" style="background:#dbeafe;color:#1d4ed8;">BOT</span>' : (m.role === 'admin' ? '<span class="badge" style="background:#fee2e2;color:#b91c1c;">ADMIN</span>' : (m.role === 'cskh' ? '<span class="badge" style="background:#fef3c7;color:#b45309;">CSKH</span>' : ''));
+    return `<div class="msg ${m.role === 'bot' ? 'bot' : (m.sender === me.name ? 'mine' : '')}"><div style="font-size:11px;font-weight:700;margin-bottom:2px;">${m.sender}${roleBadge}</div><div style="white-space:pre-line;">${m.text}</div></div>`;
+  }).join('');
+  box.scrollTop = box.scrollHeight;
+
+  document.getElementById('uHist').innerHTML = (me.hist || []).map(h => `<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;"><span>${h.t}</span><strong style="color:${h.a >= 0 ? 'var(--primary)' : 'var(--red)'};">${h.a >= 0 ? '+' : ''}${money(h.a)}</strong></div>`).join('');
+}
+
+function openCheckin() {
+  const doneToday = me.lastCi === today();
+  document.getElementById('checkinGrid').innerHTML = CHECKIN_VALS.map((v, i) => {
+    const isDone = i < me.streak;
+    const isCur = !doneToday && i === (me.streak % 7);
+    return `<div class="day-cell ${isDone ? 'done' : ''} ${isCur ? 'today' : ''}"><div>Ngày ${i + 1}</div><div>+${v}đ</div><div>${isDone ? '✓' : (isCur ? 'Hôm nay' : '')}</div></div>`;
+  }).join('');
+  const b = document.getElementById('checkinBtn');
+  b.disabled = doneToday;
+  b.textContent = doneToday ? 'Hôm nay đã điểm danh' : 'Điểm Danh Nhận Quà';
   document.getElementById('checkinModal').classList.remove('hidden');
 }
 
-function claimDailyCheckin() {
-  if (currentUser.lastCheckin === todayStr()) return;
-  const idx = currentUser.checkinStreak % 7;
-  const reward = CHECKIN_REWARDS[idx];
-  currentUser.lastCheckin = todayStr();
-  currentUser.checkinStreak += 1;
-  currentUser.balance += reward;
-  currentUser.totalEarned += reward;
-  currentUser.spinTickets += 1;
-  currentUser.history.unshift({ text: `Điểm danh ngày ${idx + 1} (+1 vé quay)`, amount: reward, time: nowTime() });
-  saveState();
-  closeModal('checkinModal');
-  renderUserApp();
-  showToast(`Điểm danh thành công! +${fmtMoney(reward)} & +1 Vé quay.`);
+function doCheckin() {
+  if (me.lastCi === today()) return;
+  const amt = CHECKIN_VALS[me.streak % 7];
+  me.lastCi = today(); me.streak++; me.bal += amt; me.earned += amt; me.tickets++;
+  me.hist.unshift({ t: 'Điểm danh +1 vé', a: amt });
+  save(); closeModals(); renderUser(); toast(`+${money(amt)} & +1 vé quay!`);
 }
 
-/* TASK EXECUTION */
-function openTaskModal(taskId) {
-  const vipInfo = VIP_TIERS[currentUser.vip] || VIP_TIERS[0];
-  if (currentUser.dailyDone >= vipInfo.dailyLimit) {
-    showToast('Bạn đã hết lượt nhiệm vụ hôm nay! Nâng VIP để mở thêm lượt.');
-    switchUserTab('vip');
-    return;
-  }
-  const task = state.tasks.find(t => t.id === taskId);
-  if (!task) return;
-  activeTask = task;
-  const finalReward = Math.round(task.reward * (1 + vipInfo.bonusPct / 100));
-  document.getElementById('mTaskTitle').textContent = task.title;
-  document.getElementById('mTaskReward').textContent = fmtMoney(finalReward);
-  document.getElementById('mTaskLink').href = task.url;
-  document.getElementById('mTaskHintCode').textContent = task.code;
-  document.getElementById('mTaskCodeInput').value = '';
+function claimChest() {
+  if (me.done < 3) return toast(`Cần làm đủ 3 nhiệm vụ (${me.done}/3)`);
+  if (me.chestDay === today()) return toast('Hôm nay đã nhận rương');
+  me.chestDay = today(); me.tickets++; me.bal += 1000;
+  me.hist.unshift({ t: 'Rương ngày +1 vé', a: 1000 });
+  save(); renderUser(); toast('Nhận +1.000đ & +1 vé quay!');
+}
+
+function openTask(id) {
+  const vip = VIPS[me.vip] || VIPS[0];
+  if (me.done >= vip.limit) return toast('Hết lượt nhiệm vụ hôm nay! Nâng VIP để thêm lượt.');
+  curTask = db.tasks.find(x => x.id === id);
+  if (!curTask) return;
+  document.getElementById('tmTitle').textContent = curTask.title;
+  document.getElementById('tmReward').textContent = money(Math.round(curTask.reward * (1 + vip.bonus / 100)));
+  document.getElementById('tmHint').textContent = curTask.code;
+  document.getElementById('tmLink').href = curTask.url;
+  document.getElementById('tmCodeInput').value = '';
   document.getElementById('taskModal').classList.remove('hidden');
 }
 
-function verifyTaskCode() {
-  if (!activeTask) return;
-  const input = document.getElementById('mTaskCodeInput').value.trim().toUpperCase();
-  if (input !== activeTask.code.toUpperCase()) {
-    showToast('Mã xác nhận chưa chính xác! Vui lòng kiểm tra lại.');
-    return;
+function confirmTask() {
+  const code = document.getElementById('tmCodeInput').value.trim().toUpperCase();
+  if (code !== curTask.code.toUpperCase()) return toast('Mã xác nhận chưa đúng');
+  const vip = VIPS[me.vip] || VIPS[0];
+  const rew = Math.round(curTask.reward * (1 + vip.bonus / 100));
+  me.bal += rew; me.earned += rew; me.done++; curTask.done++;
+  me.hist.unshift({ t: `Kèo: ${curTask.title}`, a: rew });
+  const inv = db.users.find(x => me.refBy && me.refBy.includes(x.refCode));
+  if (inv) {
+    const comm = Math.round(rew * 0.15);
+    inv.bal += comm; inv.refEarned += comm;
+    inv.hist.unshift({ t: `Ref 15% từ @${me.u}`, a: comm });
   }
-  const vipInfo = VIP_TIERS[currentUser.vip] || VIP_TIERS[0];
-  const finalReward = Math.round(activeTask.reward * (1 + vipInfo.bonusPct / 100));
-  currentUser.balance += finalReward;
-  currentUser.totalEarned += finalReward;
-  currentUser.dailyDone += 1;
-  activeTask.doneCount += 1;
-  currentUser.history.unshift({ text: `Hoàn thành: ${activeTask.title}`, amount: finalReward, time: nowTime() });
-
-  // Ref 15% bonus
-  const refMatch = state.users.find(u => currentUser.referredBy && currentUser.referredBy.includes(u.refCode));
-  if (refMatch) {
-    const comm = Math.round(finalReward * 0.15);
-    refMatch.balance += comm;
-    refMatch.refEarned += comm;
-    refMatch.history.unshift({ text: `Hoa hồng 15% từ @${currentUser.username}`, amount: comm, time: nowTime() });
-  }
-
-  state.logs.unshift(`${nowTime()} - @${currentUser.username} hoàn thành ${activeTask.title} (+${fmtMoney(finalReward)})`);
-  saveState();
-  closeModal('taskModal');
-  renderUserApp();
-  showToast(`Chúc mừng! Bạn nhận được +${fmtMoney(finalReward)}`);
+  save(); closeModals(); renderUser(); toast(`Nhận +${money(rew)}!`);
 }
 
-function claimDailyChest() {
-  if (currentUser.dailyDone < 3) {
-    showToast(`Bạn cần làm đủ 3 nhiệm vụ hôm nay (Hiện tại: ${currentUser.dailyDone}/3)`);
-    return;
-  }
-  if (currentUser.chestClaimedDate === todayStr()) {
-    showToast('Bạn đã mở rương ngày hôm nay rồi!');
-    return;
-  }
-  currentUser.chestClaimedDate = todayStr();
-  currentUser.spinTickets += 1;
-  currentUser.balance += 1000;
-  currentUser.history.unshift({ text: 'Mở rương nhiệm vụ ngày (+1 vé quay)', amount: 1000, time: nowTime() });
-  saveState();
-  renderUserApp();
-  showToast('Mở rương thành công! +1.000đ & +1 Vé quay may mắn.');
-}
-
-/* LUCKY WHEEL (7 SLICES) */
-function buildWheelSvg() {
+function drawWheel() {
   const svg = document.getElementById('wheelSvg');
-  if (!svg || svg.innerHTML.trim() !== '') return;
-  const n = WHEEL_PRIZES.length;
-  const sliceAngle = 360 / n;
-  const cx = 150, cy = 150, r = 146;
-  let html = '';
-
-  WHEEL_PRIZES.forEach((p, i) => {
-    const startDeg = i * sliceAngle - 90;
-    const endDeg = startDeg + sliceAngle;
-    const startRad = (Math.PI / 180) * startDeg;
-    const endRad = (Math.PI / 180) * endDeg;
-    const x1 = cx + r * Math.cos(startRad);
-    const y1 = cy + r * Math.sin(startRad);
-    const x2 = cx + r * Math.cos(endRad);
-    const y2 = cy + r * Math.sin(endRad);
-
-    html += `<path d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2} Z" fill="${p.color}" stroke="#ffffff" stroke-width="2"/>`;
-
-    const midDeg = startDeg + sliceAngle / 2;
-    const midRad = (Math.PI / 180) * midDeg;
-    const tx = cx + 92 * Math.cos(midRad);
-    const ty = cy + 92 * Math.sin(midRad);
-
-    if (p.label === 'Chúc may mắn lần sau') {
-      html += `<text x="${tx}" y="${ty - 5}" fill="#ffffff" font-size="9.5" font-weight="800" text-anchor="middle" transform="rotate(${midDeg + 90}, ${tx}, ${ty})">Chúc may mắn</text>`;
-      html += `<text x="${tx}" y="${ty + 7}" fill="#ffffff" font-size="9.5" font-weight="800" text-anchor="middle" transform="rotate(${midDeg + 90}, ${tx}, ${ty})">lần sau</text>`;
+  if (svg.innerHTML) return;
+  const n = PRIZES.length, step = 360 / n, cx = 150, cy = 150, r = 146;
+  let out = '';
+  PRIZES.forEach((p, i) => {
+    const a1 = (i * step - 90) * Math.PI / 180, a2 = ((i + 1) * step - 90) * Math.PI / 180;
+    const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1), x2 = cx + r * Math.cos(a2), y2 = cy + r * Math.sin(a2);
+    out += `<path d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2} Z" fill="${p.color}" stroke="#fff" stroke-width="2"/>`;
+    const mid = i * step - 90 + step / 2, rad = mid * Math.PI / 180, tx = cx + 92 * Math.cos(rad), ty = cy + 92 * Math.sin(rad);
+    if (p.val === 0) {
+      out += `<text x="${tx}" y="${ty - 4}" fill="#fff" font-size="9" font-weight="800" text-anchor="middle" transform="rotate(${mid + 90},${tx},${ty})">Chúc may mắn</text><text x="${tx}" y="${ty + 7}" fill="#fff" font-size="9" font-weight="800" text-anchor="middle" transform="rotate(${mid + 90},${tx},${ty})">lần sau</text>`;
     } else {
-      html += `<text x="${tx}" y="${ty + 4}" fill="#ffffff" font-size="13" font-weight="800" text-anchor="middle" transform="rotate(${midDeg + 90}, ${tx}, ${ty})">${p.label}</text>`;
+      out += `<text x="${tx}" y="${ty + 4}" fill="#fff" font-size="12.5" font-weight="800" text-anchor="middle" transform="rotate(${mid + 90},${tx},${ty})">${p.label}</text>`;
     }
   });
-  svg.innerHTML = html;
+  svg.innerHTML = out;
 }
 
 function spinWheel() {
-  if (isSpinning) return;
-  if (currentUser.spinTickets <= 0) {
-    showToast('Bạn đã hết vé quay! Hãy điểm danh hoặc làm nhiệm vụ để nhận thêm.');
-    return;
-  }
-  isSpinning = true;
-  currentUser.spinTickets -= 1;
-  document.getElementById('uSpinTickets').textContent = currentUser.spinTickets;
-
-  // Weighted random selection
-  const totalW = WHEEL_PRIZES.reduce((s, p) => s + p.weight, 0);
-  let rnd = Math.random() * totalW;
-  let chosenIdx = 0;
-  for (let i = 0; i < WHEEL_PRIZES.length; i++) {
-    rnd -= WHEEL_PRIZES[i].weight;
-    if (rnd <= 0) { chosenIdx = i; break; }
-  }
-
-  const sliceAngle = 360 / WHEEL_PRIZES.length;
-  const targetCenter = chosenIdx * sliceAngle + sliceAngle / 2;
-  const stopAngle = (360 - targetCenter) % 360;
-  const extraSpins = 360 * 6;
-  const delta = (stopAngle - (currentWheelDeg % 360) + 360) % 360;
-  currentWheelDeg += extraSpins + delta;
-
-  document.getElementById('wheelSvg').style.transform = `rotate(${currentWheelDeg}deg)`;
-
+  if (spinning) return;
+  if (me.tickets <= 0) return toast('Hết vé quay! Điểm danh để nhận thêm.');
+  spinning = true; me.tickets--; document.getElementById('uTickets').textContent = me.tickets;
+  let rnd = Math.random() * PRIZES.reduce((s, x) => s + x.w, 0), idx = 0;
+  for (let i = 0; i < PRIZES.length; i++) { rnd -= PRIZES[i].w; if (rnd <= 0) { idx = i; break; } }
+  const step = 360 / PRIZES.length, target = (360 - (idx * step + step / 2)) % 360;
+  deg += 360 * 5 + ((target - (deg % 360) + 360) % 360);
+  document.getElementById('wheelSvg').style.transform = `rotate(${deg}deg)`;
   setTimeout(() => {
-    isSpinning = false;
-    const prize = WHEEL_PRIZES[chosenIdx];
-    const banner = document.getElementById('spinResultBanner');
-    if (prize.value > 0) {
-      currentUser.balance += prize.value;
-      currentUser.totalEarned += prize.value;
-      currentUser.history.unshift({ text: `Trúng Vòng quay may mắn: ${prize.label}`, amount: prize.value, time: nowTime() });
-      const masked = currentUser.username.slice(0, 3) + '***' + currentUser.username.slice(-2);
-      state.winners.unshift({ user: masked, prize: prize.label, time: 'Vừa xong' });
-      banner.style.background = '#ecfdf5';
-      banner.style.color = '#047857';
-      banner.textContent = `🎉 Chúc mừng! Bạn vừa quay trúng ${prize.label}!`;
+    spinning = false;
+    const p = PRIZES[idx];
+    const msg = document.getElementById('wheelMsg');
+    if (p.val > 0) {
+      me.bal += p.val; me.earned += p.val;
+      me.hist.unshift({ t: `Vòng quay: ${p.label}`, a: p.val });
+      db.winners.unshift({ u: me.u.slice(0, 3) + '***', p: p.label });
+      msg.textContent = `🎉 Trúng ${p.label}!`;
     } else {
-      banner.style.background = '#f1f5f9';
-      banner.style.color = '#475569';
-      banner.textContent = '😅 Chúc may mắn lần sau! Hãy thử lại ở lượt tiếp theo nhé.';
+      msg.textContent = '😅 Chúc may mắn lần sau!';
     }
-    saveState();
-    renderUserApp();
-  }, 4100);
+    save(); renderUser();
+  }, 4050);
 }
 
-/* VIP & CHAT & WITHDRAW */
-function buyVipPackage(level) {
-  const pkg = VIP_TIERS.find(v => v.level === level);
-  if (!pkg) return;
-  if (currentUser.balance < pkg.price) {
-    showToast(`Số dư không đủ (${fmtMoney(pkg.price)}). Hãy làm thêm nhiệm vụ!`);
-    return;
-  }
-  currentUser.balance -= pkg.price;
-  currentUser.vip = level;
-  currentUser.history.unshift({ text: `Nâng cấp gói ${pkg.name}`, amount: -pkg.price, time: nowTime() });
-  state.messages.push({
-    id: Date.now(),
-    channel: 'general',
-    sender: 'TASKFLOW BOT',
-    role: 'bot',
-    time: nowTime(),
-    text: `👑 Chúc mừng thành viên ${currentUser.fullName} (@${currentUser.username}) vừa nâng cấp thành công lên ${pkg.name}!`
-  });
-  saveState();
-  renderUserApp();
-  showToast(`Nâng cấp ${pkg.name} thành công!`);
+function buyVip(lv) {
+  const pkg = VIPS.find(x => x.lv === lv);
+  if (me.bal < pkg.price) return toast(`Cần ${money(pkg.price)} để nâng ${pkg.name}`);
+  me.bal -= pkg.price; me.vip = lv;
+  me.hist.unshift({ t: `Nâng ${pkg.name}`, a: -pkg.price });
+  save(); renderUser(); toast(`Đã lên ${pkg.name}!`);
 }
 
-function selectChannel(id) {
-  activeChannel = id;
-  renderUserApp();
+function openCreateGroup() { document.getElementById('groupNameInput').value = ''; document.getElementById('groupModal').classList.remove('hidden'); }
+function addGroup() {
+  const n = document.getElementById('groupNameInput').value.trim();
+  if (!n) return;
+  const id = 'g_' + Date.now();
+  db.channels.push({ id, name: '💬 ' + n }); curCh = id;
+  save(); closeModals(); renderUser();
 }
 
-function openCreateGroupModal() {
-  document.getElementById('newGroupName').value = '';
-  document.getElementById('createGroupModal').classList.remove('hidden');
-}
-
-function createNewGroup() {
-  const name = document.getElementById('newGroupName').value.trim();
-  if (!name) return;
-  const id = 'grp_' + Date.now();
-  state.channels.push({ id, name: '💬 ' + name });
-  activeChannel = id;
-  state.messages.push({
-    id: Date.now() + 1,
-    channel: id,
-    sender: 'TASKFLOW BOT',
-    role: 'bot',
-    time: nowTime(),
-    text: `🤖 Nhóm "${name}" đã được tạo bởi ${currentUser.fullName}. Chúc mọi người trao đổi hiệu quả!`
-  });
-  saveState();
-  closeModal('createGroupModal');
-  renderUserApp();
-}
-
-function sendChatMessage(e) {
+function sendMsg(e) {
   e.preventDefault();
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text) return;
-  state.messages.push({
-    id: Date.now(),
-    channel: activeChannel,
-    sender: currentUser.fullName,
-    role: currentUser.role,
-    time: nowTime(),
-    text
-  });
-  input.value = '';
-  saveState();
-  renderUserApp();
+  const inp = document.getElementById('msgInput');
+  if (!inp.value.trim()) return;
+  db.msgs.push({ id: Date.now(), ch: curCh, sender: me.name, role: me.role, text: inp.value.trim() });
+  inp.value = ''; save(); renderUser();
 }
 
-function copyRefLink() {
-  const link = `${window.location.origin}/?ref=${currentUser.refCode}`;
-  if (navigator.clipboard) navigator.clipboard.writeText(link).catch(() => {});
-  showToast(`Đã sao chép mã mời ${currentUser.refCode} (Hưởng 15% trọn đời)!`);
+function copyRef() {
+  navigator.clipboard?.writeText(`${location.origin}/?ref=${me.refCode}`).catch(() => {});
+  toast('Đã sao chép link mời (Thưởng 15%)');
 }
 
-function submitWithdraw() {
+function requestWithdraw() {
   const bank = document.getElementById('wdBank').value;
-  const account = document.getElementById('wdAccount').value.trim();
+  const acc = document.getElementById('wdAcc').value.trim();
   const owner = document.getElementById('wdOwner').value.trim().toUpperCase();
-  const amount = Number(document.getElementById('wdAmount').value);
-
-  if (!account || !owner || amount < 10000) {
-    showToast('Vui lòng nhập đủ thông tin và số tiền tối thiểu 10.000đ!');
-    return;
-  }
-  if (amount > currentUser.balance) {
-    showToast('Số dư khả dụng không đủ!');
-    return;
-  }
-  currentUser.balance -= amount;
-  currentUser.history.unshift({ text: `Rút tiền về ${bank} (${account})`, amount: -amount, time: nowTime() });
-  state.withdraws.unshift({
-    id: 'WD' + Date.now().toString().slice(-4),
-    userId: currentUser.id,
-    username: currentUser.username,
-    bank, account, owner, amount,
-    status: 'pending',
-    time: nowTime() + ' Hôm nay'
-  });
-  state.logs.unshift(`${nowTime()} - @${currentUser.username} yêu cầu rút ${fmtMoney(amount)} qua ${bank}`);
-  saveState();
-  renderUserApp();
-  showToast('Đã gửi lệnh rút tiền! Admin sẽ duyệt ngay.');
+  const amt = Number(document.getElementById('wdAmt').value);
+  if (!acc || !owner || amt < 10000 || amt > me.bal) return toast('Kiểm tra lại thông tin & số dư (>=10.000đ)');
+  me.bal -= amt; me.hist.unshift({ t: `Rút ${bank} (${acc})`, a: -amt });
+  db.withdraws.unshift({ id: 'W' + Date.now().toString().slice(-4), uid: me.id, u: me.u, bank, acc, owner, amt, st: 'pending' });
+  save(); renderUser(); toast('Đã gửi lệnh rút tiền');
 }
 
-/* AI ASSISTANT */
-function openAiModal() {
-  const box = document.getElementById('aiChatHistory');
-  if (box.innerHTML.trim() === '') {
-    const greeting = currentUser.role === 'admin'
-      ? `Xin chào Admin! Hệ thống hiện có ${state.users.length} thành viên và ${state.withdraws.filter(w => w.status === 'pending').length} lệnh rút chờ duyệt. Bạn cần hỗ trợ quản trị phần nào?`
-      : `Xin chào ${currentUser.fullName}! Bạn đang ở hạng VIP ${currentUser.vip} với số dư ${fmtMoney(currentUser.balance)}. Bạn muốn hỏi gì về cách làm nhiệm vụ, nâng VIP, vòng quay hay rút tiền?`;
-    appendAiBubble('ai', greeting);
+/* AI ASSISTANT WITH SUGGESTED QUESTIONS */
+const AI_SUGGESTIONS = [
+  'Số dư & lượt làm việc của tôi',
+  'Cách làm nhiệm vụ nhận tiền',
+  'Nâng gói VIP có lợi gì?',
+  'Cách rút tiền & mời bạn bè',
+  'Bot báo IP/Ref & quyền Admin'
+];
+
+function openAi() {
+  document.getElementById('aiSuggestBar').innerHTML = AI_SUGGESTIONS.map(s => `<button type="button" class="suggest-chip" onclick="quickAsk('${s}')">${s}</button>`).join('');
+  const box = document.getElementById('aiMessages');
+  if (!box.innerHTML) {
+    pushAi('ai', `Chào ${me.name}! Bạn đang ở VIP ${me.vip}, số dư ${money(me.bal)}. Bấm vào câu hỏi gợi ý phía trên hoặc gõ câu hỏi bất kỳ nhé.`);
   }
   document.getElementById('aiModal').classList.remove('hidden');
 }
 
-function appendAiBubble(who, text) {
-  const box = document.getElementById('aiChatHistory');
-  const div = document.createElement('div');
-  div.className = 'msg-bubble ' + (who === 'user' ? 'mine' : '');
-  div.style.maxWidth = '90%';
-  div.innerHTML = `<div style="font-size:11px;font-weight:700;margin-bottom:2px;color:${who === 'user' ? '#047857' : '#2563eb'};">${who === 'user' ? 'Bạn' : '✨ Trợ lý AI TASKFLOW'}</div><div style="white-space:pre-line;">${text}</div>`;
-  box.appendChild(div);
+function quickAsk(q) {
+  pushAi('user', q);
+  setTimeout(() => pushAi('ai', buildAiAnswer(q)), 200);
+}
+
+function sendAiPrompt(e) {
+  e.preventDefault();
+  const inp = document.getElementById('aiInput');
+  const q = inp.value.trim();
+  if (!q) return;
+  inp.value = '';
+  pushAi('user', q);
+  setTimeout(() => pushAi('ai', buildAiAnswer(q)), 200);
+}
+
+function pushAi(who, txt) {
+  const box = document.getElementById('aiMessages');
+  const d = document.createElement('div');
+  d.className = 'msg ' + (who === 'user' ? 'mine' : '');
+  d.style.maxWidth = '90%';
+  d.innerHTML = `<div style="font-size:10px;font-weight:800;margin-bottom:2px;color:${who === 'user' ? 'var(--primary)' : 'var(--blue)'};">${who === 'user' ? 'Bạn' : '✨ Trợ lý AI'}</div><div style="white-space:pre-line;">${txt}</div>`;
+  box.appendChild(d);
   box.scrollTop = box.scrollHeight;
 }
 
-function askAiAssistant(e) {
-  e.preventDefault();
-  const input = document.getElementById('aiPromptInput');
-  const q = input.value.trim();
-  if (!q) return;
-  appendAiBubble('user', q);
-  input.value = '';
-
-  const low = q.toLowerCase();
-  const vipInfo = VIP_TIERS[currentUser.vip] || VIP_TIERS[0];
-  let reply = '';
-
-  if (low.includes('rút') || low.includes('tiền') || low.includes('số dư')) {
-    reply = `Số dư khả dụng hiện tại của bạn là ${fmtMoney(currentUser.balance)}.\n• Hạn mức rút tối thiểu: 10.000đ.\n• Cách rút: Vào tab "Ví tiền" ở góc dưới bên phải → Chọn ngân hàng, nhập số tài khoản và số tiền → Bấm "Tạo Lệnh Rút Tiền". Admin sẽ đối soát và chuyển khoản qua VietQR cho bạn.`;
-  } else if (low.includes('vip') || low.includes('nâng cấp') || low.includes('lượt')) {
-    reply = `Bạn đang ở ${vipInfo.name} (${vipInfo.dailyLimit} lượt nhiệm vụ/ngày, thưởng +${vipInfo.bonusPct}%).\nHôm nay bạn đã làm ${currentUser.dailyDone}/${vipInfo.dailyLimit} lượt.\n• VIP 1 (50k): 8 lượt/ngày (+5% thưởng)\n• VIP 2 (150k): 20 lượt/ngày (+12% thưởng)\n• VIP 3 (400k): 50 lượt/ngày (+25% thưởng).`;
-  } else if (low.includes('quay') || low.includes('vé')) {
-    reply = `Bạn đang có ${currentUser.spinTickets} vé quay may mắn.\nVòng quay gồm 7 ô giải: 888đ, 1.000đ, 2.000đ, 5.000đ, 10.000đ, 30.000đ và Chúc may mắn lần sau.\nMẹo kiếm thêm vé: Điểm danh mỗi ngày (+1 vé) hoặc hoàn thành đủ 3 nhiệm vụ trong ngày để mở Rương ngày (+1 vé).`;
-  } else if (low.includes('mời') || low.includes('ref') || low.includes('hoa hồng')) {
-    reply = `Mã giới thiệu của bạn là ${currentUser.refCode}. Khi bạn bè đăng ký bằng mã này và hoàn thành nhiệm vụ, bạn tự động nhận 15% hoa hồng trọn đời cộng thẳng vào ví! Hiện bạn đã kiếm được ${fmtMoney(currentUser.refEarned)} từ hoa hồng giới thiệu.`;
-  } else if (low.includes('admin') || low.includes('quyền') || low.includes('ip') || low.includes('bot')) {
-    reply = `Trong giao diện Quản trị (đăng nhập bằng admin / 1):\n• Tab "Thành viên & Quyền": Xem toàn bộ danh sách thành viên, địa chỉ IP, thiết bị, cộng/trừ số dư và nâng/hạ quyền CSKH hoặc khóa tài khoản.\n• Tab "Cấu hình Bot & VIP": Bật/tắt tự động gửi thông báo chào mừng & kiểm tra IP của TASKFLOW BOT trong kênh Cộng đồng.`;
-  } else {
-    reply = `Tôi đã kiểm tra tài khoản @${currentUser.username} của bạn:\n• Số dư: ${fmtMoney(currentUser.balance)} | Hạng: ${vipInfo.name}\n• Tiến độ ngày: ${currentUser.dailyDone}/${vipInfo.dailyLimit} nhiệm vụ | Vé quay: ${currentUser.spinTickets}\nBạn có thể hỏi cụ thể hơn về: Cách làm nhiệm vụ lấy mã, Nâng gói VIP, Rút tiền ngân hàng, Mời bạn nhận 15% hoặc Cách quản lý Admin nhé!`;
+function buildAiAnswer(q) {
+  const s = q.toLowerCase();
+  const vip = VIPS[me.vip] || VIPS[0];
+  if (s.includes('số dư') || s.includes('lượt') || s.includes('tôi')) {
+    return `Tài khoản @${me.u} (ID #${me.id}):\n• Số dư ví: ${money(me.bal)}\n• Hạng hiện tại: ${vip.name} (${me.done}/${vip.limit} lượt hôm nay, +${vip.bonus}% thưởng)\n• Vé quay còn lại: ${me.tickets} vé\n• Hoa hồng Ref đã nhận: ${money(me.refEarned)}`;
   }
-
-  setTimeout(() => appendAiBubble('ai', reply), 350);
+  if (s.includes('nhiệm vụ') || s.includes('làm')) {
+    return `Cách làm nhiệm vụ trên web:\n1. Ở tab "Trang chủ", bấm "Làm" trên nhiệm vụ muốn thực hiện.\n2. Mở link để lấy mã xác nhận, nhập mã vào ô xác nhận và bấm "Xác Nhận Nhận Tiền".\n3. Tiền cộng thẳng vào ví ngay lập tức; làm đủ 3 kèo/ngày có thể bấm "Rương ngày" nhận thêm 1.000đ + 1 vé quay.`;
+  }
+  if (s.includes('vip')) {
+    return `Gói VIP tăng số lượt làm nhiệm vụ/ngày và cộng thêm % thưởng mỗi kèo:\n• VIP 1 (50.000đ): 8 lượt/ngày, +5% thưởng\n• VIP 2 (150.000đ): 20 lượt/ngày, +12% thưởng\n• VIP 3 (400.000đ): 50 lượt/ngày, +25% thưởng\nBạn có thể mua trực tiếp trong tab "Gói VIP" bằng số dư ví.`;
+  }
+  if (s.includes('rút') || s.includes('mời') || s.includes('ref')) {
+    return `• Rút tiền: Vào tab "Ví tiền", chọn ngân hàng, nhập STK, tên chủ TK và số tiền (tối thiểu 10.000đ) rồi bấm "Gửi Lệnh Rút".\n• Mời bạn bè: Chia sẻ mã ${me.refCode} — khi người được mời làm nhiệm vụ, bạn nhận 15% hoa hồng tự động.`;
+  }
+  if (s.includes('bot') || s.includes('ip') || s.includes('admin')) {
+    return `• Trong tab "Cộng đồng", TASKFLOW BOT tự động nhắn chào mừng, hiển thị người giới thiệu và địa chỉ IP (cảnh báo nếu trùng IP).\n• Tài khoản Admin (admin / 1) quản lý toàn bộ thành viên, nâng/hạ quyền CSKH, cộng/trừ số dư, thêm nhiệm vụ và duyệt rút tiền.`;
+  }
+  return `Web có các mục chính: Trang chủ (làm nhiệm vụ & điểm danh), Vòng quay (7 ô giải & bảng trúng thưởng chạy), Gói VIP, Cộng đồng (có Bot báo IP/Ref & tạo nhóm), Ví tiền (rút tiền) và Quản trị Admin. Bạn đang cần hướng dẫn chi tiết phần nào?`;
 }
 
-/* ADMIN DASHBOARD */
-function switchAdminTab(tab) {
-  ['Overview', 'Members', 'Tasks', 'Withdraws', 'Bot'].forEach(t => {
-    document.getElementById('aTab' + t).classList.add('hidden');
-    document.getElementById('aTabBtn' + t).classList.remove('active');
+/* ADMIN */
+function switchAdminView(v) {
+  ['Dash', 'Users', 'Tasks', 'Wd'].forEach(k => {
+    document.getElementById('aView' + k).classList.add('hidden');
+    document.getElementById('aBtn' + k).classList.remove('active');
   });
-  const cap = tab.charAt(0).toUpperCase() + tab.slice(1);
-  document.getElementById('aTab' + cap).classList.remove('hidden');
-  document.getElementById('aTabBtn' + cap).classList.add('active');
-  renderAdminDashboard();
+  const c = v[0].toUpperCase() + v.slice(1);
+  document.getElementById('aView' + c).classList.remove('hidden');
+  document.getElementById('aBtn' + c).classList.add('active');
+  renderAdmin();
 }
 
-function renderAdminDashboard() {
-  const totalDone = state.tasks.reduce((s, t) => s + t.doneCount, 0);
-  const pendingWd = state.withdraws.filter(w => w.status === 'pending').length;
-
-  document.getElementById('kpiUsers').textContent = state.users.length;
-  document.getElementById('kpiTasks').textContent = totalDone.toLocaleString('vi-VN');
-  document.getElementById('kpiRev').textContent = fmtMoney(totalDone * 950);
-  document.getElementById('kpiPendingWd').textContent = pendingWd;
-  document.getElementById('botAutoWelcomeChk').checked = state.botAutoWelcome;
-
-  document.getElementById('adminActivityLog').innerHTML = state.logs.slice(0, 8).map(l => `
-    <div style="padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;">• ${l}</div>
-  `).join('');
-
-  renderAdminMembers();
-
-  document.getElementById('adminTaskList').innerHTML = state.tasks.map(t => `
-    <div class="task-card">
-      <div>
-        <strong>${t.title}</strong>
-        <div style="font-size:11px;color:var(--muted);">Mã: <b>${t.code}</b> • Thưởng: <b>${fmtMoney(t.reward)}</b> • Đã làm: ${t.doneCount}</div>
-      </div>
-      <button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="deleteTask('${t.id}')">Xóa</button>
-    </div>
-  `).join('');
-
-  document.getElementById('adminWithdrawList').innerHTML = state.withdraws.map(w => `
-    <div class="task-card">
-      <div>
-        <strong>@${w.username} • ${fmtMoney(w.amount)}</strong>
-        <div style="font-size:11px;color:var(--muted);">${w.bank} - ${w.account} (${w.owner}) • ${w.time}</div>
-      </div>
-      <div>
-        ${w.status === 'pending' ? `
-          <button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="approveWithdraw('${w.id}', true)">Duyệt</button>
-          <button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="approveWithdraw('${w.id}', false)">Từ chối</button>
-        ` : `<span style="font-weight:700;font-size:12px;color:${w.status === 'approved' ? 'var(--primary)' : 'var(--red)'};">${w.status === 'approved' ? '✅ Đã chuyển' : '❌ Đã hủy'}</span>`}
-      </div>
-    </div>
-  `).join('');
+function renderAdmin() {
+  document.getElementById('kUsers').textContent = db.users.length;
+  document.getElementById('kDone').textContent = db.tasks.reduce((s, x) => s + x.done, 0);
+  document.getElementById('kWd').textContent = db.withdraws.filter(x => x.st === 'pending').length;
+  renderAdminUsers();
+  document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:11px;color:var(--muted);">Mã: ${t.code} • Thưởng: ${money(t.reward)} • Đã làm: ${t.done}</div></div><button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
+  document.getElementById('adminWdBody').innerHTML = db.withdraws.map(w => `<div class="task-item"><div><strong>@${w.u} • ${money(w.amt)}</strong><div style="font-size:11px;color:var(--muted);">${w.bank} - ${w.acc} (${w.owner})</div></div><div>${w.st === 'pending' ? `<button class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actWd('${w.id}',1)">Duyệt</button> <button class="btn-sm" style="background:var(--red-light);color:var(--red);" onclick="actWd('${w.id}',0)">Hủy</button>` : `<strong>${w.st === 'ok' ? 'Đã duyệt' : 'Đã hủy'}</strong>`}</div></div>`).join('');
 }
 
-function renderAdminMembers() {
-  const q = (document.getElementById('memberSearchInput').value || '').toLowerCase();
-  const roleFilter = document.getElementById('memberRoleFilter').value;
-
-  const list = state.users.filter(u => {
-    const matchRole = roleFilter === 'all' || u.role === roleFilter;
-    const matchQ = u.fullName.toLowerCase().includes(q) || u.username.toLowerCase().includes(q) || u.ip.includes(q) || u.refCode.toLowerCase().includes(q);
-    return matchRole && matchQ;
-  });
-
-  document.getElementById('adminMembersTable').innerHTML = list.map(u => {
-    const roleLabel = u.role === 'admin' ? 'Super Admin' : (u.role === 'cskh' ? 'CSKH Hỗ trợ' : 'Thành viên');
-    return `
-      <tr>
-        <td>
-          <strong>${u.fullName}</strong> ${u.banned ? '<span style="color:var(--red);font-size:10px;">(Bị khóa)</span>' : ''}
-          <div style="font-size:11px;color:var(--muted);">@${u.username} • ID #${u.id}</div>
-        </td>
-        <td>
-          <span class="vip-tag">VIP ${u.vip}</span>
-          <div style="font-size:11px;font-weight:600;margin-top:2px;">${roleLabel}</div>
-        </td>
-        <td style="font-weight:700;color:var(--primary);">${fmtMoney(u.balance)}</td>
-        <td>
-          <div style="font-size:11px;font-weight:600;">${u.ip}</div>
-          <div style="font-size:10px;color:var(--muted);">${u.device}</div>
-        </td>
-        <td>
-          <button class="btn-sm" style="background:var(--blue-light);color:var(--blue);" onclick="openMemberDetail(${u.id})">Quản lý</button>
-        </td>
-      </tr>
-    `;
-  }).join('');
+function renderAdminUsers() {
+  const q = (document.getElementById('userSearch')?.value || '').toLowerCase();
+  const rows = db.users.filter(x => x.name.toLowerCase().includes(q) || x.u.toLowerCase().includes(q) || x.ip.includes(q) || x.refCode.toLowerCase().includes(q));
+  document.getElementById('adminUsersBody').innerHTML = rows.map(x => `<tr><td><strong>${x.name}</strong> ${x.banned ? '<span style="color:var(--red)">[Khóa]</span>' : ''}<div style="font-size:11px;color:var(--muted);">@${x.u} • Ref:${x.refBy}</div></td><td>VIP ${x.vip} / <strong>${x.role.toUpperCase()}</strong></td><td style="font-weight:700;color:var(--primary);">${money(x.bal)}</td><td style="font-size:11px;">${x.ip}</td><td><button class="btn-sm" style="background:var(--blue-light);color:var(--blue);" onclick="openEditUser(${x.id})">Sửa</button></td></tr>`).join('');
 }
 
-function openMemberDetail(userId) {
-  const u = state.users.find(x => x.id === userId);
-  if (!u) return;
-  document.getElementById('memberDetailContent').innerHTML = `
-    <div style="background:#f8fafc;padding:12px;border-radius:12px;border:1px solid var(--border);margin-bottom:12px;font-size:12px;">
-      <div><strong>Họ tên:</strong> ${u.fullName} (@${u.username})</div>
-      <div><strong>IP &amp; Thiết bị:</strong> ${u.ip} • ${u.device}</div>
-      <div><strong>Người giới thiệu:</strong> ${u.referredBy} | <strong>Mã Ref:</strong> ${u.refCode}</div>
-      <div><strong>Số dư hiện tại:</strong> <span style="color:var(--primary);font-weight:800;">${fmtMoney(u.balance)}</span></div>
+function openEditUser(id) {
+  const x = db.users.find(u => u.id === id);
+  if (!x) return;
+  document.getElementById('editUserBody').innerHTML = `
+    <div style="font-size:12px;margin-bottom:10px;background:#f8fafc;padding:10px;border-radius:10px;">
+      <div><strong>${x.name}</strong> (@${x.u}) • IP: ${x.ip}</div>
+      <div>Số dư: <strong>${money(x.bal)}</strong></div>
     </div>
-
-    <div class="form-group">
-      <label class="form-label">Nâng / Hạ quyền hạn tài khoản</label>
-      <select id="editUserRole" class="form-input">
-        <option value="user" ${u.role === 'user' ? 'selected' : ''}>Thành viên thường</option>
-        <option value="cskh" ${u.role === 'cskh' ? 'selected' : ''}>Nhân viên CSKH Hỗ trợ</option>
-        <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Quản trị viên (Admin)</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Cấp bậc VIP (0 - 3)</label>
-      <select id="editUserVip" class="form-input">
-        ${VIP_TIERS.map(v => `<option value="${v.level}" ${u.vip === v.level ? 'selected' : ''}>${v.name}</option>`).join('')}
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Cộng / Trừ số dư trực tiếp (Nhập số âm để trừ)</label>
-      <input type="number" id="editUserBalanceDelta" class="form-input" placeholder="VD: 50000 hoặc -20000">
-    </div>
-
-    <div style="display:flex;gap:8px;">
-      <button class="btn-primary" style="flex:1;" onclick="saveMemberChanges(${u.id})">Lưu Thay Đổi</button>
-      <button class="btn-secondary" style="color:var(--red);" onclick="toggleBanUser(${u.id})">${u.banned ? 'Mở Khóa' : 'Khóa Nick'}</button>
-    </div>
+    <div class="form-group"><label class="form-label">Quyền hạn</label><select id="euRole" class="form-input"><option value="user" ${x.role==='user'?'selected':''}>Thành viên</option><option value="cskh" ${x.role==='cskh'?'selected':''}>CSKH</option><option value="admin" ${x.role==='admin'?'selected':''}>Admin</option></select></div>
+    <div class="form-group"><label class="form-label">Cấp VIP</label><select id="euVip" class="form-input">${VIPS.map(v => `<option value="${v.lv}" ${x.vip===v.lv?'selected':''}>${v.name}</option>`).join('')}</select></div>
+    <div class="form-group"><label class="form-label">Cộng / Trừ số dư (VD: 20000 hoặc -10000)</label><input type="number" id="euDelta" class="form-input" placeholder="0"></div>
+    <div style="display:flex;gap:8px;"><button class="btn-primary" onclick="saveEditUser(${x.id})">Lưu</button><button class="btn-secondary" style="color:var(--red);" onclick="banUser(${x.id})">${x.banned?'Mở khóa':'Khóa'}</button></div>
   `;
-  document.getElementById('memberDetailModal').classList.remove('hidden');
+  document.getElementById('editUserModal').classList.remove('hidden');
 }
 
-function saveMemberChanges(userId) {
-  const u = state.users.find(x => x.id === userId);
-  if (!u) return;
-  u.role = document.getElementById('editUserRole').value;
-  u.vip = Number(document.getElementById('editUserVip').value);
-  const delta = Number(document.getElementById('editUserBalanceDelta').value || 0);
-  if (delta !== 0) {
-    u.balance = Math.max(0, u.balance + delta);
-    u.history.unshift({ text: 'Admin điều chỉnh số dư', amount: delta, time: nowTime() });
+function saveEditUser(id) {
+  const x = db.users.find(u => u.id === id);
+  x.role = document.getElementById('euRole').value;
+  x.vip = Number(document.getElementById('euVip').value);
+  const d = Number(document.getElementById('euDelta').value || 0);
+  if (d) { x.bal = Math.max(0, x.bal + d); x.hist.unshift({ t: 'Admin sửa số dư', a: d }); }
+  save(); closeModals(); renderAdmin(); toast('Đã lưu thay đổi');
+}
+
+function banUser(id) {
+  const x = db.users.find(u => u.id === id);
+  if (!x || x.u === 'admin') return;
+  x.banned = !x.banned; save(); closeModals(); renderAdmin(); toast(x.banned ? 'Đã khóa' : 'Đã mở khóa');
+}
+
+function createTask() {
+  const title = document.getElementById('tTitle').value.trim();
+  const reward = Number(document.getElementById('tReward').value);
+  const url = document.getElementById('tUrl').value.trim() || 'https://google.com';
+  const code = document.getElementById('tCode').value.trim() || 'OK';
+  if (!title || !reward) return toast('Nhập đủ tên và tiền thưởng');
+  db.tasks.unshift({ id: String(Date.now()), title, reward, url, code, done: 0 });
+  document.getElementById('tTitle').value = ''; document.getElementById('tReward').value = ''; document.getElementById('tCode').value = '';
+  save(); renderAdmin(); toast('Đã thêm nhiệm vụ');
+}
+
+function delTask(id) { db.tasks = db.tasks.filter(x => x.id !== id); save(); renderAdmin(); }
+
+function actWd(id, ok) {
+  const w = db.withdraws.find(x => x.id === id);
+  if (!w || w.st !== 'pending') return;
+  w.st = ok ? 'ok' : 'no';
+  if (!ok) {
+    const u = db.users.find(x => x.id === w.uid);
+    if (u) { u.bal += w.amt; u.hist.unshift({ t: 'Hoàn tiền rút bị hủy', a: w.amt }); }
   }
-  state.logs.unshift(`${nowTime()} - Admin cập nhật quyền/số dư cho @${u.username}`);
-  saveState();
-  closeModal('memberDetailModal');
-  renderAdminDashboard();
-  showToast(`Đã cập nhật thông tin cho @${u.username}`);
-}
-
-function toggleBanUser(userId) {
-  const u = state.users.find(x => x.id === userId);
-  if (!u || u.username === 'admin') return;
-  u.banned = !u.banned;
-  saveState();
-  closeModal('memberDetailModal');
-  renderAdminDashboard();
-  showToast(u.banned ? `Đã khóa tài khoản @${u.username}` : `Đã mở khóa @${u.username}`);
-}
-
-function addNewTask() {
-  const title = document.getElementById('newTaskTitle').value.trim();
-  const reward = Number(document.getElementById('newTaskReward').value);
-  const url = document.getElementById('newTaskUrl').value.trim() || 'https://google.com';
-  const code = document.getElementById('newTaskCode').value.trim() || 'OK123';
-  if (!title || reward <= 0) {
-    showToast('Nhập tên kèo và tiền thưởng hợp lệ!');
-    return;
-  }
-  state.tasks.unshift({ id: 'T' + Date.now(), title, category: 'Vượt link', reward, url, code, doneCount: 0 });
-  document.getElementById('newTaskTitle').value = '';
-  document.getElementById('newTaskReward').value = '';
-  document.getElementById('newTaskCode').value = '';
-  saveState();
-  renderAdminDashboard();
-  showToast('Đã thêm nhiệm vụ mới!');
-}
-
-function deleteTask(id) {
-  state.tasks = state.tasks.filter(t => t.id !== id);
-  saveState();
-  renderAdminDashboard();
-}
-
-function approveWithdraw(id, isApprove) {
-  const w = state.withdraws.find(x => x.id === id);
-  if (!w || w.status !== 'pending') return;
-  w.status = isApprove ? 'approved' : 'rejected';
-  if (!isApprove) {
-    const u = state.users.find(x => x.id === w.userId);
-    if (u) {
-      u.balance += w.amount;
-      u.history.unshift({ text: `Hoàn tiền lệnh rút bị từ chối (${w.id})`, amount: w.amount, time: nowTime() });
-    }
-  }
-  saveState();
-  renderAdminDashboard();
-  showToast(isApprove ? 'Đã duyệt thanh toán lệnh rút!' : 'Đã từ chối và hoàn tiền cho thành viên.');
-}
-
-function toggleBotSetting() {
-  state.botAutoWelcome = document.getElementById('botAutoWelcomeChk').checked;
-  saveState();
-  showToast('Đã lưu cấu hình TASKFLOW BOT!');
+  save(); renderAdmin(); toast(ok ? 'Đã duyệt rút tiền' : 'Đã hủy & hoàn tiền');
 }
 </script>
 </body>

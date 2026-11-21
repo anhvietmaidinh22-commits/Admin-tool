@@ -106,9 +106,8 @@
 
   .ref-child-item { background: #f8fafc; border: 1px solid var(--border); border-radius: 14px; padding: 11px 12px; margin-bottom: 8px; font-size: 12px; }
 
-  /* Popup Notice Card with Bottom-Right "Đã hiểu" */
+  /* Popup Notice Card */
   .popup-notice-card { background: #fffbeb; border: 1.5px solid #f59e0b; border-radius: 16px; padding: 12px 14px; margin-bottom: 10px; }
-  .popup-notice-footer { display: flex; justify-content: flex-end; margin-top: 10px; }
 
   /* Luxury Fintech Wallet Card */
   .wallet-hero { background: linear-gradient(135deg, #0f172a 0%, #064e3b 52%, #059669 100%); color: #fff; border-radius: 24px; padding: 20px; margin-bottom: 14px; box-shadow: 0 14px 30px rgba(6, 78, 59, 0.28); position: relative; overflow: hidden; }
@@ -786,7 +785,7 @@
   <span>Trợ lý AI</span>
 </button>
 
-<!-- LOGIN POPUP NOTIFICATION MODAL -->
+<!-- LOGIN POPUP NOTIFICATION MODAL (SINGLE "ĐÃ HIỂU" AT BOTTOM RIGHT) -->
 <div id="loginNoticePopupModal" class="modal-bg hidden">
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
@@ -794,6 +793,9 @@
       <button type="button" class="btn-secondary" onclick="closeLoginNoticePopup()">✕</button>
     </div>
     <div id="loginPopupNoticeList"></div>
+    <div style="display:flex;justify-content:flex-end;margin-top:14px;padding-top:10px;border-top:1px solid var(--border);">
+      <button type="button" class="btn-sm" style="background:var(--primary);color:#fff;padding:9px 18px;" onclick="ackAllPopupNotices()">Đã hiểu</button>
+    </div>
   </div>
 </div>
 
@@ -923,10 +925,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V26';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V26';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V26';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V26';
+const KEY = 'TF_VIP_PRO_CLOUD_V27';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V27';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V27';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V27';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -1187,9 +1189,23 @@ function dismissUserNotice(noticeId) {
     me.dismissedNotifyIds.push(noticeId);
     save();
     renderUserNotices();
-    renderLoginNoticePopup(false);
     toast('Đã xác nhận thông báo');
   }
+}
+
+function ackAllPopupNotices() {
+  if (!me) return;
+  if (!Array.isArray(me.dismissedNotifyIds)) me.dismissedNotifyIds = [];
+  const allMine = getUserNoticesForMe();
+  allMine.forEach(n => {
+    if (!me.dismissedNotifyIds.includes(n.id)) {
+      me.dismissedNotifyIds.push(n.id);
+    }
+  });
+  save();
+  renderUserNotices();
+  closeLoginNoticePopup();
+  toast('Đã xác nhận thông báo');
 }
 
 function adminRemoveNotice(noticeId) {
@@ -1205,9 +1221,6 @@ function renderPopupNoticeItemHtml(n) {
     <div class="popup-notice-card">
       <div style="font-size:14px;font-weight:900;color:var(--text);">${n.title}</div>
       <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:4px;">${n.body}</div>
-      <div class="popup-notice-footer">
-        <button type="button" class="btn-sm" style="background:var(--primary);color:#fff;" onclick="dismissUserNotice('${n.id}')">Đã hiểu</button>
-      </div>
     </div>
   `;
 }
@@ -1220,7 +1233,7 @@ function renderBellHistoryItemHtml(n, isAck) {
         <span class="status-badge ${isAck ? 'st-ok' : 'st-pending'}">${isAck ? 'Đã hiểu' : 'Chưa xác nhận'}</span>
       </div>
       <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:4px;">${n.body}</div>
-      ${!isAck ? `<div class="popup-notice-footer"><button type="button" class="btn-sm" style="background:var(--primary);color:#fff;" onclick="dismissUserNotice('${n.id}')">Đã hiểu</button></div>` : ''}
+      ${!isAck ? `<div style="display:flex;justify-content:flex-end;margin-top:8px;"><button type="button" class="btn-sm" style="background:var(--primary);color:#fff;" onclick="dismissUserNotice('${n.id}')">Đã hiểu</button></div>` : ''}
     </div>
   `;
 }
@@ -1710,7 +1723,7 @@ document.addEventListener('visibilitychange', async () => {
       me = found;
       checkVipExpiry(me);
       save();
-      startSession(true);
+      startSession(true, false);
     }
   }
 })();

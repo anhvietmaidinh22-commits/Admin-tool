@@ -104,6 +104,8 @@
   .account-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; font-size: 12px; }
   .account-info-cell { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 8px 10px; }
 
+  .ref-child-item { background: #f8fafc; border: 1px solid var(--border); border-radius: 14px; padding: 11px 12px; margin-bottom: 8px; font-size: 12px; }
+
   /* Home Notice Banner & Dimmed State */
   .home-notice-banner { background: linear-gradient(135deg, #fffbeb, #eff6ff); border: 1.5px solid #f59e0b; border-radius: 20px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm); }
   .home-notice-item { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 10px 12px; margin-top: 8px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; transition: opacity 0.25s ease, background 0.25s ease; }
@@ -432,7 +434,12 @@
     <div class="card">
       <strong style="font-size:15px;display:block;margin-bottom:8px;">📊 Thống kê tuyển Ref</strong>
       <div style="font-size:13px;">Tổng tiền hoa hồng Ref đã nhận: <strong id="refTabEarned" style="color:var(--primary);">0đ</strong></div>
+      <div style="font-size:13px;margin-top:4px;">Số cấp dưới đã đăng ký: <strong id="refTabCount" style="color:var(--indigo);">0</strong></div>
       <div style="font-size:13px;margin-top:4px;">Người giới thiệu của bạn: <strong id="refTabInviter">Không có</strong></div>
+    </div>
+    <div class="card">
+      <strong style="font-size:15px;display:block;margin-bottom:10px;">👥 Danh sách cấp dưới đã đăng ký theo link Ref</strong>
+      <div id="refDownlineList"></div>
     </div>
   </div>
 
@@ -449,8 +456,8 @@
 
       <div class="cskh-bar">
         <button type="button" class="cskh-link-btn" style="background:var(--primary-soft);color:var(--primary);" onclick="selectChannel('congdong')">🌐 Nhóm chung</button>
+        <button type="button" class="cskh-link-btn" style="background:#eef2ff;color:#4f46e5;" onclick="selectChannel('cskh')">🎧 Chat CSKH</button>
         <a id="btnZaloCskh" href="#" target="_blank" rel="noopener noreferrer" class="cskh-link-btn" style="background:#eff6ff;color:#0284c7;">💬 Zalo CSKH</a>
-        <a id="btnTgCskh" href="#" target="_blank" rel="noopener noreferrer" class="cskh-link-btn" style="background:#fef3c7;color:#b45309;">✈️ Telegram</a>
       </div>
 
       <div class="channel-row" id="channelBar"></div>
@@ -612,7 +619,6 @@
     </div>
   </div>
 
-  <!-- ADMIN TASKS: SUPPORTS VƯỢT LINK, KHẢO SÁT, ĐÁNH GIÁ GOOGLE -->
   <div id="aViewTasks" class="section hidden">
     <div class="card">
       <strong style="display:block;margin-bottom:10px;font-size:15px;">➕ Thêm nhiệm vụ mới</strong>
@@ -667,7 +673,6 @@
     <div id="adminPayList"></div>
   </div>
 
-  <!-- ADMIN COMMUNITY GROUP & CSKH CHAT -->
   <div id="aViewChat" class="section hidden">
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
@@ -693,7 +698,6 @@
     </div>
   </div>
 
-  <!-- ADMIN PROMO CODES & MINIGAME -->
   <div id="aViewPromo" class="section hidden">
     <div class="card">
       <strong style="display:block;margin-bottom:10px;font-size:16px;">🎟️ Tạo Mã Giảm Giá / Mã Quà Tặng</strong>
@@ -721,7 +725,6 @@
     </div>
   </div>
 
-  <!-- ADMIN SET NOTIFICATION + REMOVE -->
   <div id="aViewNotify" class="section hidden">
     <div class="card">
       <strong style="display:block;margin-bottom:12px;font-size:16px;">📢 Set Thông Báo Cho Thành Viên</strong>
@@ -912,10 +915,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V24';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V24';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V24';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V24';
+const KEY = 'TF_VIP_PRO_CLOUD_V25';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V25';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V25';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V25';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -1017,9 +1020,9 @@ const INIT = {
   ],
   vipRequests: [],
   users: [
-    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', joinedAt: Date.now() - 86400000 * 15, tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] },
-    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', joinedAt: Date.now() - 86400000 * 5, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] },
-    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] }
+    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', joinedAt: Date.now() - 86400000 * 15, tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
+    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', joinedAt: Date.now() - 86400000 * 5, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
+    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] }
   ],
   tasks: [],
   withdraws: [],
@@ -1075,6 +1078,7 @@ function normalizeDb(raw) {
     if (!u.joinedAt) u.joinedAt = Date.now() - 86400000 * (idx + 1);
     if (!Array.isArray(u.seenApprovedWdIds)) u.seenApprovedWdIds = [];
     if (!Array.isArray(u.dismissedNotifyIds)) u.dismissedNotifyIds = [];
+    if (!Array.isArray(u.downlines)) u.downlines = [];
     if (typeof u.deposit50kDone !== 'boolean') u.deposit50kDone = false;
   });
   if (!Array.isArray(merged.tasks)) merged.tasks = [];
@@ -1105,6 +1109,62 @@ let mode = 'login', me = null, curTask = null, pendingVipPkg = null, pendingAler
 let aiDraggedMoved = false;
 let reactionLockUntil = 0;
 let lastTypingPush = 0;
+
+function getDownlinesForUser(user) {
+  if (!user) return [];
+  const recorded = Array.isArray(user.downlines) ? [...user.downlines] : [];
+  const code = String(user.refCode || '').trim().toUpperCase();
+  const matchedUsers = (db.users || []).filter(x =>
+    x.u !== user.u &&
+    code &&
+    String(x.refBy || '').toUpperCase().includes(code)
+  );
+  matchedUsers.forEach(mUser => {
+    const exists = recorded.some(d => String(d.u || '').toLowerCase() === String(mUser.u || '').toLowerCase());
+    if (!exists) {
+      const sameIp = Boolean(user.ip && mUser.ip && user.ip === mUser.ip);
+      const bonus = Number(db.refConfig?.inviterBonus ?? 0);
+      const granted = !sameIp && bonus > 0;
+      recorded.push({
+        u: mUser.u,
+        name: mUser.name,
+        joinedAt: mUser.joinedAt || Date.now(),
+        bonus: granted ? bonus : 0,
+        status: granted ? 'Đã cộng hoa hồng' : (sameIp ? 'Không cộng (Trùng IP)' : 'Chưa có hoa hồng')
+      });
+    }
+  });
+  return recorded;
+}
+
+function renderRefDownlines() {
+  if (!me) return;
+  const rows = getDownlinesForUser(me);
+  const countEl = document.getElementById('refTabCount');
+  if (countEl) countEl.textContent = String(rows.length);
+
+  const listEl = document.getElementById('refDownlineList');
+  if (!listEl) return;
+  if (!rows.length) {
+    listEl.innerHTML = '<div style="font-size:13px;color:var(--muted);">Chưa có cấp dưới nào đăng ký theo mã/link giới thiệu của bạn.</div>';
+    return;
+  }
+  listEl.innerHTML = rows.map(r => {
+    const isGranted = Number(r.bonus || 0) > 0 || String(r.status || '').includes('Đã cộng');
+    const badgeCls = isGranted ? 'st-ok' : 'st-no';
+    return `
+      <div class="ref-child-item">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+          <strong>${r.name || r.u} (@${r.u})</strong>
+          <span class="status-badge ${badgeCls}">${r.status || (isGranted ? 'Đã cộng hoa hồng' : 'Không cộng hoa hồng')}</span>
+        </div>
+        <div style="color:var(--muted);margin-top:4px;">
+          Đăng ký: ${formatDateOnly(r.joinedAt)} • Hoa hồng: <strong style="color:${isGranted ? 'var(--primary)' : 'var(--red)'};">+${money(r.bonus || 0)}</strong>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
 
 function getUserNoticesForMe() {
   if (!me) return [];
@@ -1490,6 +1550,9 @@ async function pullFromCloud(silent = true) {
         if (loc) {
           if (!cu.ip && loc.ip) cu.ip = loc.ip;
           if (!cu.joinedAt && loc.joinedAt) cu.joinedAt = loc.joinedAt;
+          if (Array.isArray(loc.downlines) && loc.downlines.length && (!Array.isArray(cu.downlines) || !cu.downlines.length)) {
+            cu.downlines = loc.downlines;
+          }
         }
       });
       db = cloudDb;
@@ -1497,7 +1560,9 @@ async function pullFromCloud(silent = true) {
       if (me) {
         const refreshed = db.users.find(x => x.id === me.id || x.u.toLowerCase() === me.u.toLowerCase());
         if (refreshed) {
-          if (!refreshed.ip && realClientIp) refreshed.ip = realClientIp;
+          if (realClientIp && refreshed.ip !== realClientIp) {
+            refreshed.ip = realClientIp;
+          }
           if (!refreshed.joinedAt) refreshed.joinedAt = Date.now();
           me = refreshed;
         }
@@ -1758,7 +1823,7 @@ async function submitAuth(e) {
     if (db.users.some(x => x.u.toLowerCase() === u.toLowerCase())) return toast('Tài khoản đã tồn tại');
     const name = document.getElementById('regName').value.trim() || u;
     const refIn = document.getElementById('regRef').value.trim().toUpperCase();
-    const inv = db.users.find(x => x.refCode === refIn);
+    const inv = db.users.find(x => x.refCode && x.refCode.toUpperCase() === refIn);
     const inviterReward = Number(db.refConfig?.inviterBonus ?? 0);
     const inviteeReward = Number(db.refConfig?.inviteeBonus ?? 0);
 
@@ -1767,22 +1832,36 @@ async function submitAuth(e) {
 
     const startBal = (grantRef ? inviteeReward : 0);
     const id = 1000 + db.users.length;
+    const joinedAt = Date.now();
     const nu = {
       id, u, p, name, role: 'user', vip: 0, vipExpiry: 0,
       bal: startBal, earned: startBal, refEarned: grantRef ? inviteeReward : 0,
       refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có',
-      ip: clientIp, joinedAt: Date.now(), tickets: 1, done: 0, lastCi: '', streak: 0, banned: false,
-      deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [],
+      ip: clientIp, joinedAt, tickets: 1, done: 0, lastCi: '', streak: 0, banned: false,
+      deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [],
       hist: grantRef && inviteeReward > 0
         ? [{ t: `Thưởng nhập mã Ref ${inv.refCode}`, a: inviteeReward }]
         : []
     };
 
-    if (grantRef && inviterReward > 0) {
-      inv.bal += inviterReward;
-      inv.earned += inviterReward;
-      inv.refEarned += inviterReward;
-      inv.hist.unshift({ t: `Thưởng tuyển Ref từ @${nu.u}`, a: inviterReward });
+    if (inv) {
+      if (!Array.isArray(inv.downlines)) inv.downlines = [];
+      const inviterGranted = grantRef && inviterReward > 0;
+      if (inviterGranted) {
+        inv.bal += inviterReward;
+        inv.earned += inviterReward;
+        inv.refEarned += inviterReward;
+        inv.hist.unshift({ t: `Thưởng tuyển Ref từ @${nu.u}`, a: inviterReward });
+      }
+      inv.downlines.unshift({
+        u: nu.u,
+        name: nu.name,
+        joinedAt,
+        bonus: inviterGranted ? inviterReward : 0,
+        status: inviterGranted
+          ? 'Đã cộng hoa hồng'
+          : (sameIpWithRef ? 'Không cộng (Trùng IP)' : 'Chưa cộng (Thưởng 0đ)')
+      });
     }
 
     const refNote = inv
@@ -2241,15 +2320,14 @@ function renderUser() {
   document.getElementById('refMyLinkBox').value = `${location.origin}/?ref=${me.refCode}`;
   document.getElementById('refTabEarned').textContent = money(me.refEarned);
   document.getElementById('refTabInviter').textContent = me.refBy || 'Không có';
+  renderRefDownlines();
 
   renderUserMinigames();
 
   const links = db.supportLinks || { zalo: '', telegram: '', group: '' };
   const zaloBtn = document.getElementById('btnZaloCskh');
-  const tgBtn = document.getElementById('btnTgCskh');
   const grpBtn = document.getElementById('btnJoinGroupLink');
   if (zaloBtn) zaloBtn.href = links.zalo ? cleanOptionalUrl(links.zalo) : '#';
-  if (tgBtn) tgBtn.href = links.telegram ? cleanOptionalUrl(links.telegram) : '#';
   if (grpBtn) grpBtn.href = links.group ? cleanOptionalUrl(links.group) : '#';
 
   const filteredTasks = curTaskCat === 'all' ? db.tasks : db.tasks.filter(t => (t.cat || 'Vượt link') === curTaskCat);

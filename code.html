@@ -102,14 +102,13 @@
   .section { padding: 15px 15px 0; }
   .card { background: var(--card); border-radius: 22px; padding: 18px; border: 1px solid rgba(226, 232, 240, 0.9); box-shadow: var(--shadow-sm); margin-bottom: 14px; }
   .account-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; font-size: 12px; }
-  .account-info-cell { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 8px 10px; }
+  .account-info-cell { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 8px 10px; word-break: break-word; }
 
   .ref-child-item { background: #f8fafc; border: 1px solid var(--border); border-radius: 14px; padding: 11px 12px; margin-bottom: 8px; font-size: 12px; }
 
-  /* Home Notice Banner & Dimmed State */
-  .home-notice-banner { background: linear-gradient(135deg, #fffbeb, #eff6ff); border: 1.5px solid #f59e0b; border-radius: 20px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm); }
-  .home-notice-item { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 10px 12px; margin-top: 8px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; transition: opacity 0.25s ease, background 0.25s ease; }
-  .home-notice-item.acknowledged { opacity: 0.55; background: #f8fafc; }
+  /* Popup Notice Card with Bottom-Right "Đã hiểu" */
+  .popup-notice-card { background: #fffbeb; border: 1.5px solid #f59e0b; border-radius: 16px; padding: 12px 14px; margin-bottom: 10px; }
+  .popup-notice-footer { display: flex; justify-content: flex-end; margin-top: 10px; }
 
   /* Luxury Fintech Wallet Card */
   .wallet-hero { background: linear-gradient(135deg, #0f172a 0%, #064e3b 52%, #059669 100%); color: #fff; border-radius: 24px; padding: 20px; margin-bottom: 14px; box-shadow: 0 14px 30px rgba(6, 78, 59, 0.28); position: relative; overflow: hidden; }
@@ -295,7 +294,7 @@
           <strong id="uName" style="font-size:15px;">Thành viên</strong>
           <span id="uVipPill" class="vip-pill">VIP 0</span>
         </div>
-        <div style="font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="uIdRef">ID #1001 • Ngày tham gia: -- • IP: --</div>
+        <div style="font-size:11px;color:var(--muted);" id="uIdRef">ID #1001</div>
       </div>
     </div>
     <div style="display:flex;gap:6px;flex-shrink:0;">
@@ -307,7 +306,15 @@
 
   <!-- HOME -->
   <div id="viewHome" class="section">
-    <div id="homeNoticeBanner" class="home-notice-banner hidden"></div>
+    <div class="card">
+      <strong style="font-size:14px;display:block;">🪪 Thông tin tài khoản của bạn</strong>
+      <div class="account-info-grid">
+        <div class="account-info-cell">Tên: <strong id="uProfileName">--</strong></div>
+        <div class="account-info-cell">ID: <strong id="uProfileId">--</strong></div>
+        <div class="account-info-cell">Ngày tham gia: <strong id="uProfileJoined">--</strong></div>
+        <div class="account-info-cell">Địa chỉ IP: <strong id="uProfileIp">--</strong></div>
+      </div>
+    </div>
 
     <div class="wallet-hero">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
@@ -320,16 +327,6 @@
       <div class="wallet-meta">
         <div class="wallet-chip">Tổng kiếm: <strong id="uEarned" style="color:#a7f3d0;">0đ</strong></div>
         <div class="wallet-chip">Hoa hồng Ref: <strong id="uRefEarned" style="color:#fde68a;">0đ</strong></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <strong style="font-size:14px;display:block;">🪪 Hồ sơ tài khoản của bạn</strong>
-      <div class="account-info-grid">
-        <div class="account-info-cell">Tên: <strong id="uProfileName">--</strong></div>
-        <div class="account-info-cell">ID tài khoản: <strong id="uProfileId">--</strong></div>
-        <div class="account-info-cell">Ngày tham gia: <strong id="uProfileJoined">--</strong></div>
-        <div class="account-info-cell">Địa chỉ IP: <strong id="uProfileIp">--</strong></div>
       </div>
     </div>
 
@@ -789,11 +786,22 @@
   <span>Trợ lý AI</span>
 </button>
 
-<!-- USER NOTICE MODAL (BELL) -->
+<!-- LOGIN POPUP NOTIFICATION MODAL -->
+<div id="loginNoticePopupModal" class="modal-bg hidden">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <strong style="font-size:16px;color:#92400e;">📢 Thông Báo Hệ Thống</strong>
+      <button type="button" class="btn-secondary" onclick="closeLoginNoticePopup()">✕</button>
+    </div>
+    <div id="loginPopupNoticeList"></div>
+  </div>
+</div>
+
+<!-- USER NOTICE MODAL (BELL - ALL NOTICES HISTORY) -->
 <div id="noticeModal" class="modal-bg hidden">
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-      <strong style="font-size:16px;">🔔 Thông Báo Của Bạn</strong>
+      <strong style="font-size:16px;">🔔 Danh Sách Thông Báo</strong>
       <button type="button" class="btn-secondary" onclick="closeNoticeModal()">✕</button>
     </div>
     <div id="noticeModalList"></div>
@@ -915,10 +923,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V25';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V25';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V25';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V25';
+const KEY = 'TF_VIP_PRO_CLOUD_V26';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V26';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V26';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V26';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -1179,6 +1187,7 @@ function dismissUserNotice(noticeId) {
     me.dismissedNotifyIds.push(noticeId);
     save();
     renderUserNotices();
+    renderLoginNoticePopup(false);
     toast('Đã xác nhận thông báo');
   }
 }
@@ -1191,19 +1200,49 @@ function adminRemoveNotice(noticeId) {
   toast('Đã gỡ thông báo khỏi hệ thống');
 }
 
-function renderNoticeItemHtml(n, isAck) {
+function renderPopupNoticeItemHtml(n) {
   return `
-    <div class="home-notice-item ${isAck ? 'acknowledged' : ''}">
-      <div style="min-width:0;">
-        <div style="font-size:13px;font-weight:800;color:var(--text);">${n.title}</div>
-        <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:2px;">${n.body}</div>
+    <div class="popup-notice-card">
+      <div style="font-size:14px;font-weight:900;color:var(--text);">${n.title}</div>
+      <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:4px;">${n.body}</div>
+      <div class="popup-notice-footer">
+        <button type="button" class="btn-sm" style="background:var(--primary);color:#fff;" onclick="dismissUserNotice('${n.id}')">Đã hiểu</button>
       </div>
-      ${isAck
-        ? `<button type="button" class="btn-sm" style="background:#e2e8f0;color:#475569;flex-shrink:0;" disabled>✓ Đã hiểu</button>`
-        : `<button type="button" class="btn-sm" style="background:var(--primary-soft);color:var(--primary);flex-shrink:0;" onclick="dismissUserNotice('${n.id}')">Đã hiểu</button>`
-      }
     </div>
   `;
+}
+
+function renderBellHistoryItemHtml(n, isAck) {
+  return `
+    <div class="popup-notice-card" style="background:${isAck ? '#f8fafc' : '#fffbeb'};border-color:${isAck ? '#e2e8f0' : '#f59e0b'};">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <strong style="font-size:13px;color:var(--text);">${n.title}</strong>
+        <span class="status-badge ${isAck ? 'st-ok' : 'st-pending'}">${isAck ? 'Đã hiểu' : 'Chưa xác nhận'}</span>
+      </div>
+      <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:4px;">${n.body}</div>
+      ${!isAck ? `<div class="popup-notice-footer"><button type="button" class="btn-sm" style="background:var(--primary);color:#fff;" onclick="dismissUserNotice('${n.id}')">Đã hiểu</button></div>` : ''}
+    </div>
+  `;
+}
+
+function renderLoginNoticePopup(autoOpenIfUnread = false) {
+  if (!me || me.role === 'admin' || me.role === 'cskh') return;
+  const allMine = getUserNoticesForMe();
+  const unread = allMine.filter(n => !me.dismissedNotifyIds.includes(n.id));
+  const listEl = document.getElementById('loginPopupNoticeList');
+  const modalEl = document.getElementById('loginNoticePopupModal');
+  if (!listEl || !modalEl) return;
+
+  listEl.innerHTML = unread.map(n => renderPopupNoticeItemHtml(n)).join('');
+  if (unread.length > 0 && autoOpenIfUnread) {
+    modalEl.classList.remove('hidden');
+  } else if (unread.length === 0) {
+    modalEl.classList.add('hidden');
+  }
+}
+
+function closeLoginNoticePopup() {
+  document.getElementById('loginNoticePopupModal')?.classList.add('hidden');
 }
 
 function renderUserNotices() {
@@ -1217,27 +1256,10 @@ function renderUserNotices() {
     badge.classList.toggle('hidden', unreadCount === 0);
   }
 
-  const banner = document.getElementById('homeNoticeBanner');
-  if (banner) {
-    if (!allMine.length) {
-      banner.classList.add('hidden');
-      banner.innerHTML = '';
-    } else {
-      banner.classList.remove('hidden');
-      banner.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <strong style="font-size:13px;color:#92400e;">📢 THÔNG BÁO (${allMine.length})</strong>
-          <span style="font-size:11px;color:var(--muted);">${unreadCount > 0 ? unreadCount + ' chưa xác nhận' : 'Đã xem tất cả'}</span>
-        </div>
-        ${allMine.map(n => renderNoticeItemHtml(n, me.dismissedNotifyIds.includes(n.id))).join('')}
-      `;
-    }
-  }
-
   const modalList = document.getElementById('noticeModalList');
   if (modalList) {
     modalList.innerHTML = allMine.length
-      ? allMine.map(n => renderNoticeItemHtml(n, me.dismissedNotifyIds.includes(n.id))).join('')
+      ? allMine.map(n => renderBellHistoryItemHtml(n, me.dismissedNotifyIds.includes(n.id))).join('')
       : '<div style="font-size:13px;color:var(--muted);padding:12px 0;text-align:center;">Không có thông báo nào.</div>';
   }
 }
@@ -1701,7 +1723,7 @@ function toast(m) {
   clearTimeout(el._t); el._t = setTimeout(() => el.classList.add('hidden'), 2800);
 }
 function closeModals() {
-  ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal', 'spinResultModal', 'vipPayModal', 'withdrawSuccessModal', 'noticeModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal', 'spinResultModal', 'vipPayModal', 'withdrawSuccessModal', 'noticeModal', 'loginNoticePopupModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
 }
 
 function getApprovedWithdrawCount(user) {
@@ -1818,7 +1840,7 @@ async function submitAuth(e) {
     me = found;
     localStorage.setItem(SESSION_USER_KEY, me.u);
     if (me.role === 'user') botAnnounceToUser(me, 'Đăng nhập');
-    save(); startSession(false);
+    save(); startSession(false, true);
   } else {
     if (db.users.some(x => x.u.toLowerCase() === u.toLowerCase())) return toast('Tài khoản đã tồn tại');
     const name = document.getElementById('regName').value.trim() || u;
@@ -1874,14 +1896,14 @@ async function submitAuth(e) {
     localStorage.setItem(SESSION_USER_KEY, me.u);
     botAnnounceToUser(nu, 'Thành viên mới', refNote);
     notifyTelegram(`🆕 KHÁCH HÀNG ĐĂNG KÝ MỚI\n• Họ tên: ${nu.name}\n• Tài khoản: @${nu.u} (ID #${nu.id})\n• Mã Ref mời: ${nu.refCode}\n• Người giới thiệu: ${nu.refBy}\n• IP: ${nu.ip}${sameIpWithRef ? '\n• Trạng thái Ref: Trùng IP (không cộng thưởng)' : ''}`);
-    save(); startSession(false);
+    save(); startSession(false, true);
     if (sameIpWithRef) {
       toast('Đăng ký thành công (Trùng IP người giới thiệu nên không cộng thưởng Ref)');
     }
   }
 }
 
-function startSession(isRestore = false) {
+function startSession(isRestore = false, openLoginNotice = false) {
   if (!me) return;
   dismissIntro();
   document.getElementById('authScreen').classList.add('hidden');
@@ -1902,7 +1924,10 @@ function startSession(isRestore = false) {
     document.getElementById('userApp').classList.remove('hidden');
     drawWheel(); renderUser();
     checkApprovedWithdrawPopup();
-    if (!isRestore && me.lastCi !== today() && !pendingAlertWd) setTimeout(openCheckin, 350);
+    if (!pendingAlertWd) {
+      if (openLoginNotice) renderLoginNoticePopup(true);
+      else if (!isRestore && me.lastCi !== today()) setTimeout(openCheckin, 350);
+    }
   }
 }
 
@@ -2290,7 +2315,7 @@ function renderUser() {
 
   document.getElementById('uName').textContent = me.name;
   document.getElementById('uVipPill').textContent = vip.name.split(' ')[0] + ' ' + vip.name.split(' ')[1];
-  document.getElementById('uIdRef').textContent = `ID #${me.id} • Tham gia: ${joinedStr} • IP: ${ipStr}`;
+  document.getElementById('uIdRef').textContent = `ID #${me.id}`;
 
   document.getElementById('uProfileName').textContent = me.name;
   document.getElementById('uProfileId').textContent = `#${me.id}`;

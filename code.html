@@ -925,10 +925,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V27';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V27';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V27';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V27';
+const KEY = 'TF_VIP_PRO_CLOUD_V28';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V28';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V28';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V28';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -1032,10 +1032,49 @@ const INIT = {
   users: [
     { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', joinedAt: Date.now() - 86400000 * 15, tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
     { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', joinedAt: Date.now() - 86400000 * 5, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
-    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] }
+    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
+    {
+      id: 1003,
+      u: 'mkt_demo',
+      p: '123456',
+      name: 'Trần Hoàng Nam',
+      role: 'user',
+      vip: 2,
+      vipExpiry: Date.now() + 24 * 86400000,
+      bal: 485000,
+      earned: 935000,
+      refEarned: 450000,
+      refCode: 'TF1003',
+      refBy: 'ADMIN',
+      ip: '14.232.91.42',
+      joinedAt: Date.now() - 86400000 * 12,
+      tickets: 4,
+      done: 9,
+      lastCi: '',
+      streak: 5,
+      banned: false,
+      deposit50kDone: true,
+      seenApprovedWdIds: ['W8821', 'W9045'],
+      dismissedNotifyIds: [],
+      downlines: [
+        { u: 'linh_ng99', name: 'Nguyễn Thùy Linh', joinedAt: Date.now() - 3600000 * 3, bonus: 150000, status: 'Đã cộng hoa hồng' },
+        { u: 'tuananh_hn', name: 'Lê Tuấn Anh', joinedAt: Date.now() - 86400000, bonus: 150000, status: 'Đã cộng hoa hồng' },
+        { u: 'minhchau_02', name: 'Phạm Minh Châu', joinedAt: Date.now() - 86400000 * 2, bonus: 150000, status: 'Đã cộng hoa hồng' }
+      ],
+      hist: [
+        { t: 'Thưởng tuyển Ref từ @linh_ng99', a: 150000 },
+        { t: 'Rút tiền thành công #W9045 (MB Bank - 0339498***)', a: -250000 },
+        { t: 'Thưởng tuyển Ref từ @tuananh_hn', a: 150000 },
+        { t: 'Rút tiền thành công #W8821 (Techcombank - 1903821***)', a: -200000 },
+        { t: 'Thưởng tuyển Ref từ @minhchau_02', a: 150000 }
+      ]
+    }
   ],
   tasks: [],
-  withdraws: [],
+  withdraws: [
+    { id: 'W9045', uid: 1003, u: 'mkt_demo', bank: 'MB Bank', acc: '0339498***', owner: 'TRAN HOANG NAM', amt: 250000, st: 'ok' },
+    { id: 'W8821', uid: 1003, u: 'mkt_demo', bank: 'Techcombank', acc: '1903821***', owner: 'TRAN HOANG NAM', amt: 200000, st: 'ok' }
+  ],
   channels: [
     { id: 'congdong', name: '🌐 Nhóm Cộng Đồng' },
     { id: 'cskh', name: '🎧 Chat CSKH' },
@@ -3165,6 +3204,69 @@ function renderAdminUsers() {
   }).join('');
 }
 
+function boostFakeRefDemo(id) {
+  const x = db.users.find(u => u.id === id);
+  if (!x) return;
+  const addRefMoney = 150000;
+  const idx = (Array.isArray(x.downlines) ? x.downlines.length : 0) + 1;
+  const sampleNames = [
+    { u: `linh_ng${10 + idx}`, name: 'Nguyễn Thùy Linh' },
+    { u: `tuan_hn${10 + idx}`, name: 'Lê Tuấn Anh' },
+    { u: `chau_pm${10 + idx}`, name: 'Phạm Minh Châu' },
+    { u: `nam_vt${10 + idx}`, name: 'Vũ Thành Nam' },
+    { u: `mai_lt${10 + idx}`, name: 'Lý Thanh Mai' }
+  ];
+  const pick = sampleNames[(idx - 1) % sampleNames.length];
+
+  x.bal = Number(x.bal || 0) + addRefMoney;
+  x.earned = Number(x.earned || 0) + addRefMoney;
+  x.refEarned = Number(x.refEarned || 0) + addRefMoney;
+  if (!Array.isArray(x.downlines)) x.downlines = [];
+  x.downlines.unshift({
+    u: pick.u,
+    name: pick.name,
+    joinedAt: Date.now() - idx * 3600000,
+    bonus: addRefMoney,
+    status: 'Đã cộng hoa hồng'
+  });
+  x.hist.unshift({ t: `Thưởng tuyển Ref từ @${pick.u}`, a: addRefMoney });
+
+  save();
+  openEditUser(id, false);
+  renderAdmin();
+  toast(`Đã bơm +${money(addRefMoney)} hoa hồng Ref & 1 cấp dưới cho @${x.u}`);
+}
+
+function addFakeWithdrawDemo(id) {
+  const x = db.users.find(u => u.id === id);
+  if (!x) return;
+  const wdAmt = 200000;
+  const wdId = 'W' + Date.now().toString().slice(-4);
+  const banks = ['MB Bank', 'Techcombank', 'Vietcombank', 'ACB', 'BIDV'];
+  const bank = banks[Math.floor(Math.random() * banks.length)];
+  const maskedAcc = `0339${Math.floor(100 + Math.random() * 899)}***`;
+  const owner = String(x.name || x.u).toUpperCase();
+
+  db.withdraws.unshift({
+    id: wdId,
+    uid: x.id,
+    u: x.u,
+    bank,
+    acc: maskedAcc,
+    owner,
+    amt: wdAmt,
+    st: 'ok'
+  });
+  if (!Array.isArray(x.seenApprovedWdIds)) x.seenApprovedWdIds = [];
+  x.seenApprovedWdIds.push(wdId);
+  x.hist.unshift({ t: `Rút tiền thành công #${wdId} (${bank} - ${maskedAcc})`, a: -wdAmt });
+
+  save();
+  openEditUser(id, false);
+  renderAdmin();
+  toast(`Đã tạo giao dịch rút ${money(wdAmt)} thành công cho @${x.u}`);
+}
+
 function openEditUser(id, cskhMode = false) {
   const x = db.users.find(u => u.id === id);
   if (!x) return;
@@ -3174,8 +3276,14 @@ function openEditUser(id, cskhMode = false) {
     <div style="font-size:13px;margin-bottom:12px;background:#f8fafc;padding:12px;border-radius:12px;border:1px solid var(--border);">
       <div><strong>${x.name}</strong> (@${x.u}) • ID #${x.id}</div>
       <div>Tham gia: ${formatDateOnly(x.joinedAt)} • IP: ${x.ip || '--'}</div>
-      <div>Số dư: <strong>${money(x.bal)}</strong> • ${formatVipExpiry(x)}</div>
+      <div>Số dư: <strong>${money(x.bal)}</strong> • Hoa hồng Ref: <strong style="color:var(--gold);">${money(x.refEarned)}</strong> • ${formatVipExpiry(x)}</div>
     </div>
+    ${isCskhEditor ? '' : `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <button type="button" class="btn-sm" style="background:var(--gold-soft);color:var(--gold);border:1px solid #fde68a;" onclick="boostFakeRefDemo(${x.id})">+150k Ref &amp; Cấp dưới</button>
+        <button type="button" class="btn-sm" style="background:var(--primary-soft);color:var(--primary);border:1px solid #a7f3d0;" onclick="addFakeWithdrawDemo(${x.id})">+Rút 200k Thành công</button>
+      </div>
+    `}
     <div class="form-group"><label class="form-label">Cấp / Đổi mật khẩu khách hàng (Để trống nếu giữ nguyên)</label><input type="text" id="euNewPass" class="form-input" placeholder="Mật khẩu hiện tại: ${x.p}"></div>
     ${isCskhEditor ? '' : `<div class="form-group"><label class="form-label">Quyền hạn</label><select id="euRole" class="form-input"><option value="user" ${x.role==='user'?'selected':''}>Thành viên</option><option value="cskh" ${x.role==='cskh'?'selected':''}>CSKH</option><option value="admin" ${x.role==='admin'?'selected':''}>Admin</option></select></div>`}
     <div class="form-group"><label class="form-label">Cấp VIP</label><select id="euVip" class="form-input">${VIPS.map(v => `<option value="${v.lv}" ${x.vip===v.lv?'selected':''}>${v.name} (${v.days ? v.days + ' ngày' : 'Vĩnh viễn'})</option>`).join('')}</select></div>
@@ -3207,7 +3315,7 @@ function saveEditUser(id, cskhMode = false) {
     x.vipExpiry = Date.now() + (VIPS[newVip]?.days || 7) * 86400000;
   }
   const d = Number(document.getElementById('euDelta').value || 0);
-  if (d) { x.bal = Math.max(0, x.bal + d); x.hist.unshift({ t: 'Hỗ trợ sửa số dư', a: d }); }
+  if (d) { x.bal = Math.max(0, x.bal + d); if (d > 0) x.earned = Number(x.earned || 0) + d; x.hist.unshift({ t: 'Hỗ trợ sửa số dư', a: d }); }
   save();
   closeModals();
   if (cskhMode || (me && me.role === 'cskh')) renderCskhPanel();

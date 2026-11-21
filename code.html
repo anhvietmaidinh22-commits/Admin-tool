@@ -101,6 +101,8 @@
 
   .section { padding: 15px 15px 0; }
   .card { background: var(--card); border-radius: 22px; padding: 18px; border: 1px solid rgba(226, 232, 240, 0.9); box-shadow: var(--shadow-sm); margin-bottom: 14px; }
+  .account-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; font-size: 12px; }
+  .account-info-cell { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 8px 10px; }
 
   /* Home Notice Banner & Dimmed State */
   .home-notice-banner { background: linear-gradient(135deg, #fffbeb, #eff6ff); border: 1.5px solid #f59e0b; border-radius: 20px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm); }
@@ -289,7 +291,7 @@
           <strong id="uName" style="font-size:15px;">Thành viên</strong>
           <span id="uVipPill" class="vip-pill">VIP 0</span>
         </div>
-        <div style="font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="uIdRef">ID #1001 • Mã Ref: TF1001</div>
+        <div style="font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="uIdRef">ID #1001 • Ngày tham gia: -- • IP: --</div>
       </div>
     </div>
     <div style="display:flex;gap:6px;flex-shrink:0;">
@@ -314,6 +316,16 @@
       <div class="wallet-meta">
         <div class="wallet-chip">Tổng kiếm: <strong id="uEarned" style="color:#a7f3d0;">0đ</strong></div>
         <div class="wallet-chip">Hoa hồng Ref: <strong id="uRefEarned" style="color:#fde68a;">0đ</strong></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <strong style="font-size:14px;display:block;">🪪 Hồ sơ tài khoản của bạn</strong>
+      <div class="account-info-grid">
+        <div class="account-info-cell">Tên: <strong id="uProfileName">--</strong></div>
+        <div class="account-info-cell">ID tài khoản: <strong id="uProfileId">--</strong></div>
+        <div class="account-info-cell">Ngày tham gia: <strong id="uProfileJoined">--</strong></div>
+        <div class="account-info-cell">Địa chỉ IP: <strong id="uProfileIp">--</strong></div>
       </div>
     </div>
 
@@ -453,6 +465,16 @@
   <!-- WALLET -->
   <div id="viewWallet" class="section hidden">
     <div class="card">
+      <strong style="display:block;margin-bottom:8px;font-size:15px;">🪪 Thông tin tài khoản &amp; Ví</strong>
+      <div class="account-info-grid">
+        <div class="account-info-cell">Tên: <strong id="wInfoName">--</strong></div>
+        <div class="account-info-cell">ID: <strong id="wInfoId">--</strong></div>
+        <div class="account-info-cell">Ngày tham gia: <strong id="wInfoJoined">--</strong></div>
+        <div class="account-info-cell">Địa chỉ IP: <strong id="wInfoIp">--</strong></div>
+      </div>
+    </div>
+
+    <div class="card">
       <strong style="display:block;margin-bottom:10px;font-size:16px;">💸 Rút tiền ngân hàng</strong>
       <div id="wdRuleNoticeBox" class="rule-alert-box"></div>
       <div class="form-group">
@@ -521,7 +543,7 @@
   <div class="section">
     <div class="card">
       <strong style="display:block;margin-bottom:10px;font-size:15px;">🔎 Kiểm tra &amp; quản lý tài khoản khách hàng</strong>
-      <input type="text" id="cskhUserSearch" class="form-input" placeholder="Tìm tên, tài khoản, mã Ref hoặc IP..." oninput="renderCskhPanel()" style="margin-bottom:10px;">
+      <input type="text" id="cskhUserSearch" class="form-input" placeholder="Tìm tên, tài khoản, ID, mã Ref hoặc IP..." oninput="renderCskhPanel()" style="margin-bottom:10px;">
       <div id="cskhUserList"></div>
     </div>
     <div class="card">
@@ -850,7 +872,7 @@
 <div id="editUserModal" class="modal-bg hidden">
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-      <strong style="font-size:16px;">Sửa thành viên &amp; Quyền</strong>
+      <strong id="editUserModalTitle" style="font-size:16px;">Sửa thành viên &amp; Quyền</strong>
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
     <div id="editUserBody"></div>
@@ -888,10 +910,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V21';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V21';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V21';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V21';
+const KEY = 'TF_VIP_PRO_CLOUD_V22';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V22';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V22';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V22';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -940,6 +962,11 @@ function cleanOptionalUrl(raw) {
   return 'https://' + s;
 }
 
+function formatDateOnly(ts) {
+  const d = new Date(Number(ts) || Date.now());
+  return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+}
+
 const INIT = {
   refConfig: {
     inviterBonus: 5000,
@@ -979,9 +1006,9 @@ const INIT = {
   ],
   vipRequests: [],
   users: [
-    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] },
-    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] },
-    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] }
+    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', joinedAt: Date.now() - 86400000 * 15, tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] },
+    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', joinedAt: Date.now() - 86400000 * 5, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] },
+    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] }
   ],
   tasks: [],
   withdraws: [],
@@ -1034,7 +1061,8 @@ function normalizeDb(raw) {
   if (!Array.isArray(merged.paymentAccounts) || !merged.paymentAccounts.length) merged.paymentAccounts = JSON.parse(JSON.stringify(INIT.paymentAccounts));
   if (!Array.isArray(merged.vipRequests)) merged.vipRequests = [];
   if (!Array.isArray(merged.users) || !merged.users.length) merged.users = JSON.parse(JSON.stringify(INIT.users));
-  merged.users.forEach(u => {
+  merged.users.forEach((u, idx) => {
+    if (!u.joinedAt) u.joinedAt = Date.now() - 86400000 * (idx + 1);
     if (!Array.isArray(u.seenApprovedWdIds)) u.seenApprovedWdIds = [];
     if (!Array.isArray(u.dismissedNotifyIds)) u.dismissedNotifyIds = [];
     if (typeof u.deposit50kDone !== 'boolean') u.deposit50kDone = false;
@@ -1052,6 +1080,7 @@ function normalizeDb(raw) {
   }
   if (!Array.isArray(merged.msgs)) merged.msgs = JSON.parse(JSON.stringify(INIT.msgs));
   merged.msgs.forEach(m => {
+    if (!m.ch) m.ch = 'congdong';
     if (!m.reactions || typeof m.reactions !== 'object') m.reactions = {};
     if (typeof m.pinned !== 'boolean') m.pinned = false;
   });
@@ -1202,19 +1231,36 @@ function getUnreadCountForChannel(chId) {
 
 function getVisibleMessagesForChannel(chId) {
   if (!me) return [];
-  const list = (db.msgs || []).filter(m => m.ch === chId);
+  const normCh = (c) => (!c || c === 'chung_bot') ? 'chung' : c;
+  const targetCh = normCh(chId);
+  const list = (db.msgs || []).filter(m => normCh(m.ch) === targetCh);
+
   if (me.role === 'admin' || me.role === 'cskh') {
-    if (chId === 'cskh' && activeSupportCustomer) {
-      return list.filter(m => m.ownerUser === activeSupportCustomer || m.senderUser === activeSupportCustomer);
+    if (targetCh === 'cskh' && activeSupportCustomer) {
+      const target = String(activeSupportCustomer).toLowerCase();
+      const matched = list.filter(m =>
+        !m.ownerUser ||
+        String(m.ownerUser || '').toLowerCase() === target ||
+        String(m.senderUser || '').toLowerCase() === target
+      );
+      return matched.length ? matched : list;
     }
     return list;
   }
-  if (chId === 'cskh') {
-    return list.filter(m => m.ownerUser === me.u || m.senderUser === me.u);
+
+  if (targetCh === 'cskh') {
+    const myU = String(me.u || '').toLowerCase();
+    return list.filter(m =>
+      !m.ownerUser ||
+      String(m.ownerUser || '').toLowerCase() === myU ||
+      String(m.senderUser || '').toLowerCase() === myU
+    );
   }
-  if (chId === 'chung') {
-    return list.filter(m => m.broadcastAll === true || m.targetUser === me.u);
+
+  if (targetCh === 'chung') {
+    return list.filter(m => m.broadcastAll === true || !m.targetUser || String(m.targetUser).toLowerCase() === String(me.u).toLowerCase());
   }
+
   return list;
 }
 
@@ -1667,6 +1713,7 @@ async function submitAuth(e) {
     if (!found) return toast('Sai tài khoản hoặc mật khẩu');
     if (found.banned) return toast('Tài khoản đã bị khóa');
     found.ip = clientIp;
+    if (!found.joinedAt) found.joinedAt = Date.now();
     checkVipExpiry(found);
     me = found;
     localStorage.setItem(SESSION_USER_KEY, me.u);
@@ -1689,7 +1736,7 @@ async function submitAuth(e) {
       id, u, p, name, role: 'user', vip: 0, vipExpiry: 0,
       bal: startBal, earned: startBal, refEarned: grantRef ? inviteeReward : 0,
       refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có',
-      ip: clientIp, tickets: 1, done: 0, lastCi: '', streak: 0, banned: false,
+      ip: clientIp, joinedAt: Date.now(), tickets: 1, done: 0, lastCi: '', streak: 0, banned: false,
       deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [],
       hist: grantRef && inviteeReward > 0
         ? [{ t: `Thưởng nhập mã Ref ${inv.refCode}`, a: inviteeReward }]
@@ -1760,15 +1807,21 @@ function renderCskhPanel() {
   if (!me || me.role !== 'cskh') return;
   const q = (document.getElementById('cskhUserSearch')?.value || '').trim().toLowerCase();
   const customers = db.users.filter(u => u.role === 'user');
-  const filtered = customers.filter(u => !q || u.name.toLowerCase().includes(q) || u.u.toLowerCase().includes(q) || u.refCode.toLowerCase().includes(q) || String(u.ip || '').includes(q));
+  const filtered = customers.filter(u => !q || u.name.toLowerCase().includes(q) || u.u.toLowerCase().includes(q) || String(u.id).includes(q) || u.refCode.toLowerCase().includes(q) || String(u.ip || '').includes(q));
 
   document.getElementById('cskhUserList').innerHTML = filtered.length ? filtered.map(u => `
-    <div class="task-item">
-      <div>
-        <strong>${u.name}</strong> (@${u.u}) • <span class="vip-pill">VIP ${u.vip}</span>
-        <div style="font-size:12px;color:var(--muted);">Số dư: <strong style="color:var(--primary);">${money(u.bal)}</strong> • Đã làm: ${u.done} kèo • IP: ${u.ip || 'Chưa rõ'}</div>
+    <div class="task-item" style="flex-wrap:wrap;">
+      <div style="min-width:0;">
+        <strong>${u.name}</strong> (@${u.u}) • <span class="vip-pill">VIP ${u.vip}</span> ${u.banned ? '<span class="status-badge st-no">Đã khóa</span>' : '<span class="status-badge st-ok">Hoạt động</span>'}
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">ID #${u.id} • Tham gia: ${formatDateOnly(u.joinedAt)} • IP: ${u.ip || '--'}</div>
+        <div style="font-size:12px;color:var(--muted);">Số dư: <strong style="color:var(--primary);">${money(u.bal)}</strong> • Đã làm: ${u.done} kèo • Vé: ${u.tickets}</div>
       </div>
-      <button type="button" class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="selectCskhCustomer('${u.u}')">Chat KH</button>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button type="button" class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="selectCskhCustomer('${u.u}')">Chat KH</button>
+        <button type="button" class="btn-sm" style="background:var(--primary-soft);color:var(--primary);" onclick="cskhAdjustBalance(${u.id}, 5000)">+5k</button>
+        <button type="button" class="btn-sm" style="background:var(--gold-soft);color:var(--gold);" onclick="openEditUser(${u.id}, true)">Sửa KH</button>
+        <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="cskhToggleBan(${u.id})">${u.banned ? 'Mở khóa' : 'Khóa'}</button>
+      </div>
     </div>
   `).join('') : '<div style="font-size:13px;color:var(--muted);">Không tìm thấy tài khoản khách hàng phù hợp.</div>';
 
@@ -1776,16 +1829,17 @@ function renderCskhPanel() {
   const pendingVips = db.vipRequests.filter(r => r.st === 'pending');
   document.getElementById('cskhOrderList').innerHTML = `
     ${pendingWds.map(w => `
-      <div class="task-item">
+      <div class="task-item" style="flex-wrap:wrap;">
         <div><strong>Rút #${w.id} • @${w.u} • ${money(w.amt)}</strong><div style="font-size:12px;color:var(--muted);">${w.bank} - ${w.acc} (${w.owner})</div></div>
         <div style="display:flex;gap:6px;">
+          <button type="button" class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="copyText('${w.acc}')">Copy STK</button>
           <button type="button" class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actWd('${w.id}',1);renderCskhPanel();">Duyệt</button>
           <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="actWd('${w.id}',0);renderCskhPanel();">Hủy</button>
         </div>
       </div>
     `).join('')}
     ${pendingVips.map(r => `
-      <div class="task-item">
+      <div class="task-item" style="flex-wrap:wrap;">
         <div><strong>VIP #${r.id} • @${r.u} • ${r.pkgName}</strong><div style="font-size:12px;color:var(--muted);">Số tiền: ${money(r.price)}</div></div>
         <div style="display:flex;gap:6px;">
           <button type="button" class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actVipReq('${r.id}',1);renderCskhPanel();">Duyệt</button>
@@ -1798,10 +1852,32 @@ function renderCskhPanel() {
 
   const box = document.getElementById('cskhChatBox');
   if (box) {
-    const msgs = (db.msgs || []).filter(m => m.ch === 'cskh' && (!activeSupportCustomer || m.ownerUser === activeSupportCustomer || m.senderUser === activeSupportCustomer));
+    const msgs = (db.msgs || []).filter(m => m.ch === 'cskh' && (!activeSupportCustomer || !m.ownerUser || m.ownerUser === activeSupportCustomer || m.senderUser === activeSupportCustomer));
     box.innerHTML = msgs.map(m => `<div class="msg ${m.senderUser === me.u ? 'mine' : ''}"><div style="font-size:12px;font-weight:800;">${m.sender}</div><div>${m.text}</div></div>`).join('');
     box.scrollTop = box.scrollHeight;
   }
+}
+
+function cskhAdjustBalance(userId, delta) {
+  if (!me || (me.role !== 'cskh' && me.role !== 'admin')) return;
+  const x = db.users.find(u => u.id === userId);
+  if (!x) return;
+  x.bal = Math.max(0, Number(x.bal || 0) + Number(delta || 0));
+  if (delta > 0) x.earned = Number(x.earned || 0) + Number(delta || 0);
+  x.hist.unshift({ t: `Hỗ trợ cộng thưởng từ ${me.name}`, a: delta });
+  save();
+  renderCskhPanel();
+  toast(`Đã cộng ${money(delta)} cho @${x.u}`);
+}
+
+function cskhToggleBan(userId) {
+  if (!me || (me.role !== 'cskh' && me.role !== 'admin')) return;
+  const x = db.users.find(u => u.id === userId);
+  if (!x || x.role === 'admin') return;
+  x.banned = !x.banned;
+  save();
+  renderCskhPanel();
+  toast(x.banned ? `Đã khóa tài khoản @${x.u}` : `Đã mở khóa tài khoản @${x.u}`);
 }
 
 function selectCskhCustomer(username) {
@@ -2077,9 +2153,23 @@ function renderUser() {
   checkVipExpiry(me);
   renderUserNotices();
   const vip = VIPS[me.vip] || VIPS[0];
+  const joinedStr = formatDateOnly(me.joinedAt);
+  const ipStr = me.ip || realClientIp || 'Chưa cập nhật';
+
   document.getElementById('uName').textContent = me.name;
   document.getElementById('uVipPill').textContent = vip.name.split(' ')[0] + ' ' + vip.name.split(' ')[1];
-  document.getElementById('uIdRef').textContent = `ID #${me.id} • Mã Ref: ${me.refCode}`;
+  document.getElementById('uIdRef').textContent = `ID #${me.id} • Tham gia: ${joinedStr} • IP: ${ipStr}`;
+
+  document.getElementById('uProfileName').textContent = me.name;
+  document.getElementById('uProfileId').textContent = `#${me.id}`;
+  document.getElementById('uProfileJoined').textContent = joinedStr;
+  document.getElementById('uProfileIp').textContent = ipStr;
+
+  document.getElementById('wInfoName').textContent = me.name;
+  document.getElementById('wInfoId').textContent = `#${me.id}`;
+  document.getElementById('wInfoJoined').textContent = joinedStr;
+  document.getElementById('wInfoIp').textContent = ipStr;
+
   document.getElementById('uBal').textContent = money(me.bal);
   document.getElementById('uEarned').textContent = money(me.earned);
   document.getElementById('uRefEarned').textContent = money(me.refEarned);
@@ -2896,37 +2986,43 @@ function deletePaymentAccount(id) {
 
 function renderAdminUsers() {
   const q = (document.getElementById('userSearch')?.value || '').toLowerCase();
-  const rows = db.users.filter(x => x.name.toLowerCase().includes(q) || x.u.toLowerCase().includes(q) || x.ip.includes(q) || x.refCode.toLowerCase().includes(q));
+  const rows = db.users.filter(x => x.name.toLowerCase().includes(q) || x.u.toLowerCase().includes(q) || String(x.id).includes(q) || x.ip.includes(q) || x.refCode.toLowerCase().includes(q));
   document.getElementById('adminUsersBody').innerHTML = rows.map(x => {
     checkVipExpiry(x);
-    return `<tr><td><strong>${x.name}</strong> ${x.banned ? '<span style="color:var(--red)">[Khóa]</span>' : ''}<div style="font-size:12px;color:var(--muted);">@${x.u} • Ref:${x.refBy} • Nạp 50k: ${x.deposit50kDone ? '✅' : '❌'}</div></td><td>VIP ${x.vip} / <strong>${x.role.toUpperCase()}</strong><div style="font-size:11px;color:var(--muted);">${formatVipExpiry(x)}</div></td><td style="font-weight:800;color:var(--primary);">${money(x.bal)}</td><td style="font-size:12px;">${x.ip}</td><td><button class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="openEditUser(${x.id})">Sửa</button></td></tr>`;
+    return `<tr><td><strong>${x.name}</strong> ${x.banned ? '<span style="color:var(--red)">[Khóa]</span>' : ''}<div style="font-size:12px;color:var(--muted);">ID #${x.id} • @${x.u} • Tham gia: ${formatDateOnly(x.joinedAt)} • Nạp 50k: ${x.deposit50kDone ? '✅' : '❌'}</div></td><td>VIP ${x.vip} / <strong>${x.role.toUpperCase()}</strong><div style="font-size:11px;color:var(--muted);">${formatVipExpiry(x)}</div></td><td style="font-weight:800;color:var(--primary);">${money(x.bal)}</td><td style="font-size:12px;">${x.ip}</td><td><button class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="openEditUser(${x.id}, false)">Sửa</button></td></tr>`;
   }).join('');
 }
 
-function openEditUser(id) {
+function openEditUser(id, cskhMode = false) {
   const x = db.users.find(u => u.id === id);
   if (!x) return;
+  const isCskhEditor = cskhMode || (me && me.role === 'cskh');
+  document.getElementById('editUserModalTitle').textContent = isCskhEditor ? 'Hỗ trợ & chỉnh thông tin khách' : 'Sửa thành viên & Quyền';
   document.getElementById('editUserBody').innerHTML = `
     <div style="font-size:13px;margin-bottom:12px;background:#f8fafc;padding:12px;border-radius:12px;border:1px solid var(--border);">
-      <div><strong>${x.name}</strong> (@${x.u}) • IP: ${x.ip}</div>
+      <div><strong>${x.name}</strong> (@${x.u}) • ID #${x.id}</div>
+      <div>Tham gia: ${formatDateOnly(x.joinedAt)} • IP: ${x.ip || '--'}</div>
       <div>Số dư: <strong>${money(x.bal)}</strong> • ${formatVipExpiry(x)}</div>
     </div>
     <div class="form-group"><label class="form-label">Cấp / Đổi mật khẩu khách hàng (Để trống nếu giữ nguyên)</label><input type="text" id="euNewPass" class="form-input" placeholder="Mật khẩu hiện tại: ${x.p}"></div>
-    <div class="form-group"><label class="form-label">Quyền hạn</label><select id="euRole" class="form-input"><option value="user" ${x.role==='user'?'selected':''}>Thành viên</option><option value="cskh" ${x.role==='cskh'?'selected':''}>CSKH</option><option value="admin" ${x.role==='admin'?'selected':''}>Admin</option></select></div>
+    ${isCskhEditor ? '' : `<div class="form-group"><label class="form-label">Quyền hạn</label><select id="euRole" class="form-input"><option value="user" ${x.role==='user'?'selected':''}>Thành viên</option><option value="cskh" ${x.role==='cskh'?'selected':''}>CSKH</option><option value="admin" ${x.role==='admin'?'selected':''}>Admin</option></select></div>`}
     <div class="form-group"><label class="form-label">Cấp VIP</label><select id="euVip" class="form-input">${VIPS.map(v => `<option value="${v.lv}" ${x.vip===v.lv?'selected':''}>${v.name} (${v.days ? v.days + ' ngày' : 'Vĩnh viễn'})</option>`).join('')}</select></div>
     <div class="form-group"><label class="form-label">Thời hạn VIP (Số ngày tính từ hôm nay)</label><input type="number" id="euVipDays" class="form-input" placeholder="Nhập số ngày (Để trống nếu giữ nguyên)"></div>
     <div class="form-group"><label class="form-label">Điều kiện đã nạp 50k (Rút lần đầu)</label><select id="euDep50k" class="form-input"><option value="1" ${x.deposit50kDone?'selected':''}>Đã hoàn tất nạp >= 50k</option><option value="0" ${!x.deposit50kDone?'selected':''}>Chưa nạp 50k</option></select></div>
     <div class="form-group"><label class="form-label">Cộng / Trừ số dư (VD: 20000 hoặc -10000)</label><input type="number" id="euDelta" class="form-input" placeholder="0"></div>
-    <div style="display:flex;gap:8px;"><button class="btn-primary" onclick="saveEditUser(${x.id})">Lưu</button><button class="btn-secondary" style="color:var(--red);" onclick="banUser(${x.id})">${x.banned?'Mở khóa':'Khóa'}</button></div>
+    <div style="display:flex;gap:8px;"><button class="btn-primary" onclick="saveEditUser(${x.id}, ${isCskhEditor ? 'true' : 'false'})">Lưu</button><button class="btn-secondary" style="color:var(--red);" onclick="banUser(${x.id})">${x.banned?'Mở khóa':'Khóa'}</button></div>
   `;
   document.getElementById('editUserModal').classList.remove('hidden');
 }
 
-function saveEditUser(id) {
+function saveEditUser(id, cskhMode = false) {
   const x = db.users.find(u => u.id === id);
+  if (!x) return;
   const newPass = (document.getElementById('euNewPass')?.value || '').trim();
   if (newPass) x.p = newPass;
-  x.role = document.getElementById('euRole').value;
+  if (!cskhMode && me && me.role === 'admin' && document.getElementById('euRole')) {
+    x.role = document.getElementById('euRole').value;
+  }
   x.deposit50kDone = document.getElementById('euDep50k').value === '1';
   const newVip = Number(document.getElementById('euVip').value);
   const customDays = Number(document.getElementById('euVipDays').value || 0);
@@ -2939,14 +3035,23 @@ function saveEditUser(id) {
     x.vipExpiry = Date.now() + (VIPS[newVip]?.days || 7) * 86400000;
   }
   const d = Number(document.getElementById('euDelta').value || 0);
-  if (d) { x.bal = Math.max(0, x.bal + d); x.hist.unshift({ t: 'Admin sửa số dư', a: d }); }
-  save(); closeModals(); renderAdmin(); toast('Đã lưu thay đổi');
+  if (d) { x.bal = Math.max(0, x.bal + d); x.hist.unshift({ t: 'Hỗ trợ sửa số dư', a: d }); }
+  save();
+  closeModals();
+  if (cskhMode || (me && me.role === 'cskh')) renderCskhPanel();
+  else renderAdmin();
+  toast('Đã lưu thay đổi');
 }
 
 function banUser(id) {
   const x = db.users.find(u => u.id === id);
-  if (!x || x.u === 'admin') return;
-  x.banned = !x.banned; save(); closeModals(); renderAdmin(); toast(x.banned ? 'Đã khóa' : 'Đã mở khóa');
+  if (!x || x.role === 'admin') return;
+  x.banned = !x.banned;
+  save();
+  closeModals();
+  if (me && me.role === 'cskh') renderCskhPanel();
+  else renderAdmin();
+  toast(x.banned ? 'Đã khóa' : 'Đã mở khóa');
 }
 
 function createTask() {
@@ -2992,7 +3097,10 @@ function actWd(id, ok) {
     u.bal += w.amt;
     u.hist.unshift({ t: `Lệnh rút #${w.id} bị hủy — đã hoàn tiền về ví`, a: w.amt });
   }
-  save(); renderAdmin(); toast(ok ? 'Đã duyệt rút tiền thành công!' : 'Đã hủy lệnh & hoàn tiền cho khách');
+  save();
+  if (me && me.role === 'cskh') renderCskhPanel();
+  else renderAdmin();
+  toast(ok ? 'Đã duyệt rút tiền thành công!' : 'Đã hủy lệnh & hoàn tiền cho khách');
 }
 </script>
 </body>

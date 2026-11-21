@@ -223,7 +223,6 @@
   .day-cell.done { background: var(--primary-soft); border-color: #10b981; color: var(--primary-dark); font-weight: 800; }
   .day-cell.today { background: var(--gold-soft); border-color: #f59e0b; font-weight: 800; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.16); }
 
-
   /* Phòng Giật Lì Xì Liên Tục & Hiệu Ứng Bung Lì Xì */
   .lx-room-wrap { background: linear-gradient(180deg, #fff1f2 0%, #fffbeb 100%); border: 1.5px solid #fda4af; border-radius: 22px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm); }
   .lx-room-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
@@ -294,7 +293,6 @@
   .dep-bottom-label { font-size: 16px; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 8px; }
   .dep-bottom-val { font-size: 19px; font-weight: 900; color: #eab308; }
   .dep-submit-btn { background: #272213; color: #ffffff; font-size: 16px; font-weight: 800; padding: 16px 26px; border-radius: 18px; }
-
 </style>
 </head>
 <body>
@@ -405,7 +403,6 @@
       </div>
     </div>
 
-    <!-- TOP LÀM NHIỆM VỤ NHIỀU NHẤT & SỐ TIỀN -->
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
         <strong style="font-size:15px;">🏅 Top Làm Nhiệm Vụ Nhiều Nhất</strong>
@@ -414,7 +411,6 @@
       <div id="topTaskLeaderboard"></div>
     </div>
 
-    <!-- MÃ GIẢM GIÁ & MINIGAME NHANH -->
     <div class="card">
       <strong style="display:block;margin-bottom:8px;font-size:15px;">🎟️ Nhập Mã Giảm Giá / Quà Tặng</strong>
       <div style="display:flex;gap:8px;">
@@ -423,8 +419,6 @@
       </div>
       <div id="minigameUserBox" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);"></div>
     </div>
-
-
 
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
       <strong style="font-size:16px;">Danh sách nhiệm vụ</strong>
@@ -946,7 +940,7 @@
           <strong style="font-size:13px;color:#be123c;">Mệnh giá (20.000đ – 500.000đ) &amp; Tỉ lệ nổ (%)</strong>
           <div style="display:flex;gap:6px;">
             <button type="button" class="btn-sm" style="background:#ecfdf5;color:#047857;" onclick="applyAntiLossRates()">🛡️ Tỉ lệ chống lỗ</button>
-            <button type="button" class="btn-sm" style="background:#ffe4e6;color:#be123c;" onclick="addLxTierRow()">+ Thêm mức</button>
+            <button type="button" class="btn-sm" style="background:#ffe4e6;color:#be123c;" onclick="addLxTierRow()">+ Thêm</button>
           </div>
         </div>
         <div id="lxTierBuilderList"></div>
@@ -1003,7 +997,7 @@
   <span>Trợ lý AI</span>
 </button>
 
-<!-- LOGIN POPUP NOTIFICATION MODAL (SINGLE "ĐÃ HIỂU" AT BOTTOM RIGHT) -->
+<!-- LOGIN POPUP NOTIFICATION MODAL -->
 <div id="loginNoticePopupModal" class="modal-bg hidden">
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
@@ -1017,7 +1011,7 @@
   </div>
 </div>
 
-<!-- USER NOTICE MODAL (BELL - ALL NOTICES HISTORY) -->
+<!-- USER NOTICE MODAL -->
 <div id="noticeModal" class="modal-bg hidden">
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
@@ -1067,7 +1061,7 @@
   <div class="modal-card" style="background:transparent;box-shadow:none;padding:6px;">
     <div class="lx-burst-card" id="lxBurstCard">
       <button type="button" onclick="closeLxGrabModal()" style="position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,0.25);color:#fff;font-weight:800;">✕</button>
-      <div class="lx-burst-pill" id="lxModalTag">Lì xì min</div>
+      <div class="lx-burst-pill" id="lxModalTag">Lì xì phòng</div>
       <div style="font-size:16px;font-weight:900;" id="lxModalSender">Người dùng</div>
       <div style="font-size:12px;opacity:0.92;margin-top:2px;" id="lxModalSlots">Phát lì xì • Còn bao</div>
       <div style="font-size:30px;font-weight:900;color:#fef08a;margin:8px 0;" id="lxModalAmount">20.000đ</div>
@@ -1097,22 +1091,21 @@
   </div>
 </div>
 
-<!-- MODAL NẠP TIỀN (TỐI THIỂU 100.000Đ) -->
+<!-- MODAL NẠP TIỀN -->
 <div id="topupModal" class="modal-bg hidden">
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <strong style="font-size:16px;">💰 Nạp Tiền Vào Ví (Tối thiểu 100.000đ)</strong>
+      <strong style="font-size:16px;">💰 Nạp Tiền Vào Ví</strong>
       <button type="button" class="btn-secondary" onclick="closeTopupModal()">✕</button>
     </div>
     <div class="form-group">
-      <label class="form-label">Số tiền nạp (VNĐ — ít nhất 100.000đ)</label>
-      <input type="number" id="topupModalAmtInp" class="form-input" min="100000" step="1000" value="100000">
+      <label class="form-label">Số tiền nạp (VNĐ)</label>
+      <input type="number" id="topupModalAmtInp" class="form-input" min="10000" step="1000" value="100000">
     </div>
     <div id="topupModalBankBox" class="bank-card-box"></div>
     <button type="button" class="btn-primary" style="margin-top:12px;" onclick="submitTopupModal()">Gửi Lệnh Nạp Tiền</button>
   </div>
 </div>
-
 
 <div id="createLxRoomModal" class="modal-bg hidden">
   <div class="modal-card">
@@ -1231,50 +1224,19 @@
   const NEXT_WITHDRAW_MIN = 10000;
   const FIRST_WITHDRAW_DEPOSIT_REQ = 50000;
   const PRIZES = [
-  {
-    label: '888đ', val: 888, color: '#10b981', w: 28
-  }
-  ,
-  {
-    label: '1.000đ', val: 1000, color: '#3b82f6', w: 24
-  }
-  ,
-  {
-    label: '2.000đ', val: 2000, color: '#8b5cf6', w: 14
-  }
-  ,
-  {
-    label: '5.000đ', val: 5000, color: '#f59e0b', w: 6
-  }
-  ,
-  {
-    label: '10.000đ', val: 10000, color: '#ec4899', w: 2.5
-  }
-  ,
-  {
-    label: '30.000đ', val: 30000, color: '#ef4444', w: 0.5
-  }
-  ,
-  {
-    label: 'Chúc may mắn lần sau', val: 0, color: '#64748b', w: 25
-  }
+    { label: '888đ', val: 888, color: '#10b981', w: 28 },
+    { label: '1.000đ', val: 1000, color: '#3b82f6', w: 24 },
+    { label: '2.000đ', val: 2000, color: '#8b5cf6', w: 14 },
+    { label: '5.000đ', val: 5000, color: '#f59e0b', w: 6 },
+    { label: '10.000đ', val: 10000, color: '#ec4899', w: 2.5 },
+    { label: '30.000đ', val: 30000, color: '#ef4444', w: 0.5 },
+    { label: 'Chúc may mắn lần sau', val: 0, color: '#64748b', w: 25 }
   ];
   const VIPS = [
-  {
-    lv: 0, name: 'VIP 0 (Miễn phí)', price: 0, days: 0, limit: 10, bonus: 0, desc: '10 nhiệm vụ/ngày • Thưởng chuẩn'
-  }
-  ,
-  {
-    lv: 1, name: 'VIP 1', price: 50000, days: 7, limit: 18, bonus: 0, desc: '18 nhiệm vụ/ngày • Hỗ trợ ưu tiên'
-  }
-  ,
-  {
-    lv: 2, name: 'VIP 2', price: 150000, days: 30, limit: 35, bonus: 0, desc: '35 nhiệm vụ/ngày • Hỗ trợ ưu tiên'
-  }
-  ,
-  {
-    lv: 3, name: 'VIP 3', price: 400000, days: 90, limit: 70, bonus: 0, desc: '70 nhiệm vụ/ngày • Hỗ trợ ưu tiên'
-  }
+    { lv: 0, name: 'VIP 0 (Miễn phí)', price: 0, days: 0, limit: 10, bonus: 0, desc: '10 nhiệm vụ/ngày • Thưởng chuẩn' },
+    { lv: 1, name: 'VIP 1', price: 50000, days: 7, limit: 18, bonus: 0, desc: '18 nhiệm vụ/ngày • Hỗ trợ ưu tiên' },
+    { lv: 2, name: 'VIP 2', price: 150000, days: 30, limit: 35, bonus: 0, desc: '35 nhiệm vụ/ngày • Hỗ trợ ưu tiên' },
+    { lv: 3, name: 'VIP 3', price: 400000, days: 90, limit: 70, bonus: 0, desc: '70 nhiệm vụ/ngày • Hỗ trợ ưu tiên' }
   ];
   const CHECKIN_VALS = [500, 800, 1000, 1200, 1500, 2000, 5000];
   const NAME_PREFIXES = ['min', 'lan', 'huy', 'nam', 'thu', 'phc', 'duc', 'kho', 'tng', 'bao', 'qnh', 'vnh'];
@@ -1290,38 +1252,18 @@
     const ten = SAMPLE_GIVEN_NAMES[Math.floor(Math.random() * SAMPLE_GIVEN_NAMES.length)];
     const slug = ten.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
     const suffix = Math.floor(10 + Math.random() * 890);
-    return {
-      name: `${ho} ${ten}`,
-    u: `${slug}_${suffix}`
-    }
-    ;
+    return { name: `${ho} ${ten}`, u: `${slug}_${suffix}` };
   }
   function getTodayInputDate() {
     const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, '0');
-    const d = String(now.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   }
   function parseDateInputToTs(dateStr, offsetIndex = 0) {
-    const s = String(dateStr || '').trim();
-    const match = /^(\d{
-      4
-    }
-    )-(\d{
-      2
-    }
-    )-(\d{
-      2
-    }
-    )$/.exec(s);
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateStr || '').trim());
     let baseTs = Date.now();
     if (match) {
-      const yr = Number(match[1]);
-      const mo = Number(match[2]) - 1;
-      const dy = Number(match[3]);
       const now = new Date();
-      const dt = new Date(yr, mo, dy, now.getHours(), now.getMinutes(), now.getSeconds());
+      const dt = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]), now.getHours(), now.getMinutes(), now.getSeconds());
       if (!Number.isNaN(dt.getTime())) baseTs = dt.getTime();
     }
     return baseTs - offsetIndex * 1800000;
@@ -1335,10 +1277,9 @@
     const baseAmounts = [1845000, 1620000, 1395000, 1180000, 965000, 820000];
     return baseTasks.map((tasks, i) => ({
       name: generateRandomMaskedName(),
-    tasks: tasks + Math.floor(Math.random() * 25),
-    amount: baseAmounts[i] + Math.floor(Math.random() * 45000)
-    }
-    ));
+      tasks: tasks + Math.floor(Math.random() * 25),
+      amount: baseAmounts[i] + Math.floor(Math.random() * 45000)
+    }));
   }
   function cleanOptionalUrl(raw) {
     const s = String(raw || '').trim();
@@ -1353,50 +1294,30 @@
   }
   function formatMsgTime(ts) {
     const d = new Date(Number(ts) || Date.now());
-    const hh = String(d.getHours()).padStart(2, '0');
-    const mm = String(d.getMinutes()).padStart(2, '0');
-    const dd = String(d.getDate()).padStart(2, '0');
-    const mo = String(d.getMonth() + 1).padStart(2, '0');
-    return `${hh}:${mm} • ${dd}/${mo}`;
+    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')} • ${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`;
   }
   const MIN_TOPUP_REQUIRED = 100000;
   const FIRST_WITHDRAW_MIN_REQUIRED = 300000;
   const SUBSEQUENT_WITHDRAW_MAX_CAP = 100000;
   let lxTiersDraft = [
-  {
-    amount: 20000, rate: 74
-  }
-  ,
-  {
-    amount: 50000, rate: 17
-  }
-  ,
-  {
-    amount: 100000, rate: 6.5
-  }
-  ,
-  {
-    amount: 200000, rate: 2
-  }
-  ,
-  {
-    amount: 500000, rate: 0.5
-  }
+    { amount: 20000, rate: 74 },
+    { amount: 50000, rate: 17 },
+    { amount: 100000, rate: 6.5 },
+    { amount: 200000, rate: 2 },
+    { amount: 500000, rate: 0.5 }
   ];
   let currentLxPacketId = null;
+
   function getLxRoomConfig() {
-    const cfg = (db && db.lxRoomConfig && typeof db.lxRoomConfig === 'object') ? db.lxRoomConfig : {
-    }
-    ;
+    const cfg = (db && db.lxRoomConfig && typeof db.lxRoomConfig === 'object') ? db.lxRoomConfig : {};
     return {
       title: String(cfg.title || 'Phúc Lợi Mở 43').trim() || 'Phúc Lợi Mở 43',
-    intervalSec: Math.min(120, Math.max(3, Number(cfg.intervalSec || 8) || 8)),
-    autoEnabled: cfg.autoEnabled !== false,
-    allowCustomerSend: cfg.allowCustomerSend !== false,
-    tiers: Array.isArray(cfg.tiers) && cfg.tiers.length ? cfg.tiers : lxTiersDraft,
-    lastAutoAt: Number(cfg.lastAutoAt || 0)
-    }
-    ;
+      intervalSec: Math.min(120, Math.max(3, Number(cfg.intervalSec || 8) || 8)),
+      autoEnabled: cfg.autoEnabled !== false,
+      allowCustomerSend: cfg.allowCustomerSend !== false,
+      tiers: Array.isArray(cfg.tiers) && cfg.tiers.length ? cfg.tiers : lxTiersDraft,
+      lastAutoAt: Number(cfg.lastAutoAt || 0)
+    };
   }
   function calcLxAvg(tiers) {
     const valid = (tiers || []).filter(t => Number(t.amount || 0) > 0 && Number(t.rate || 0) > 0);
@@ -1409,47 +1330,30 @@
     if (!el) return;
     const avg = calcLxAvg(lxTiersDraft);
     const sumRate = (lxTiersDraft || []).reduce((s, t) => s + Number(t.rate || 0), 0);
-    el.innerHTML = `• Trung bình mỗi lần nổ: <strong style="color:var(--primary);">${money(avg)}</strong> (Tổng trọng số: <strong>${sumRate}%</strong>)<br>• Chống lỗ: Mệnh giá 20k–50k chiếm tỉ lệ cao, mức 200k–500k giữ tỉ lệ thấp (0.5%–3%), kết hợp nạp tối thiểu <strong>100.000đ</strong> &amp; rút lần đầu <strong>300.000đ</strong>.`;
+    el.innerHTML = `• Trung bình mỗi lần nổ: <strong style="color:var(--primary);">${money(avg)}</strong> (Tổng trọng số: <strong>${sumRate}%</strong>)<br>• Mệnh giá 20k–50k chiếm tỉ lệ cao, mức 200k–500k giữ tỉ lệ thấp (0.5%–3%), kết hợp nạp tối thiểu <strong>100.000đ</strong> &amp; rút lần đầu <strong>300.000đ</strong>.`;
   }
   function applyAntiLossRates() {
     lxTiersDraft = [
-    {
-      amount: 20000, rate: 74
-    }
-    ,
-    {
-      amount: 50000, rate: 17
-    }
-    ,
-    {
-      amount: 100000, rate: 6.5
-    }
-    ,
-    {
-      amount: 200000, rate: 2
-    }
-    ,
-    {
-      amount: 500000, rate: 0.5
-    }
+      { amount: 20000, rate: 74 },
+      { amount: 50000, rate: 17 },
+      { amount: 100000, rate: 6.5 },
+      { amount: 200000, rate: 2 },
+      { amount: 500000, rate: 0.5 }
     ];
     renderLxTierBuilder();
-    toast('Đã đặt tỉ lệ nổ chống lỗ (20k–500k)');
+    toast('Đã đặt tỉ lệ nổ (20k–500k)');
   }
   function renderLxTierBuilder() {
     const el = document.getElementById('lxTierBuilderList');
     if (!el) return;
-    if (!Array.isArray(lxTiersDraft) || !lxTiersDraft.length) lxTiersDraft = [{
-      amount: 20000, rate: 100
-    }
-    ];
+    if (!Array.isArray(lxTiersDraft) || !lxTiersDraft.length) lxTiersDraft = [{ amount: 20000, rate: 100 }];
     el.innerHTML = lxTiersDraft.map((t, idx) => `
-    <div style="display:grid;grid-template-columns:1fr 100px 38px;gap:6px;margin-bottom:8px;align-items:center;">
-      <input type="number" class="form-input" style="padding:9px 10px;font-size:13px;" min="20000" max="500000" step="1000" value="${Number(t.amount || 0)}" placeholder="20000 - 500000" oninput="onLxTierInput(${idx}, 'amount', this.value)">
-      <input type="number" class="form-input" style="padding:9px 10px;font-size:13px;" min="0" max="100" step="0.1" value="${Number(t.rate || 0)}" placeholder="Tỉ lệ %" oninput="onLxTierInput(${idx}, 'rate', this.value)">
-      <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);padding:8px;" onclick="delLxTierRow(${idx})">✕</button>
-    </div>
-  `).join('');
+      <div style="display:grid;grid-template-columns:1fr 100px 38px;gap:6px;margin-bottom:8px;align-items:center;">
+        <input type="number" class="form-input" style="padding:9px 10px;font-size:13px;" min="20000" max="500000" step="1000" value="${Number(t.amount || 0)}" placeholder="20000 - 500000" oninput="onLxTierInput(${idx}, 'amount', this.value)">
+        <input type="number" class="form-input" style="padding:9px 10px;font-size:13px;" min="0" max="100" step="0.1" value="${Number(t.rate || 0)}" placeholder="Tỉ lệ %" oninput="onLxTierInput(${idx}, 'rate', this.value)">
+        <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);padding:8px;" onclick="delLxTierRow(${idx})">✕</button>
+      </div>
+    `).join('');
     updateLxAntiLossHint();
   }
   function onLxTierInput(idx, key, val) {
@@ -1459,10 +1363,7 @@
     updateLxAntiLossHint();
   }
   function addLxTierRow() {
-    lxTiersDraft.push({
-      amount: 20000, rate: 10
-    }
-    );
+    lxTiersDraft.push({ amount: 20000, rate: 10 });
     renderLxTierBuilder();
   }
   function delLxTierRow(idx) {
@@ -1476,23 +1377,12 @@
     const autoEnabled = (document.getElementById('lxAutoModeSel')?.value || '1') === '1';
     const allowCustomerSend = (document.getElementById('lxAllowCustSel')?.value || '1') === '1';
     const cleanTiers = (lxTiersDraft || [])
-    .map(t => ({
-      amount: Math.round(Number(t.amount || 0)), rate: Math.max(0, Number(t.rate || 0))
-    }
-    ))
-    .filter(t => t.amount >= 20000 && t.amount <= 500000 && t.rate > 0);
-    if (!cleanTiers.length) return toast('Mệnh giá lì xì phải trong khoảng 20.000đ – 500.000đ và tỉ lệ > 0');
+      .map(t => ({ amount: Math.round(Number(t.amount || 0)), rate: Math.max(0, Number(t.rate || 0)) }))
+      .filter(t => t.amount >= 20000 && t.amount <= 500000 && t.rate > 0);
+    if (!cleanTiers.length) return toast('Mệnh giá lì xì phải từ 20.000đ đến 500.000đ và tỉ lệ > 0');
     lxTiersDraft = cleanTiers;
     const prev = getLxRoomConfig();
-    db.lxRoomConfig = {
-      title,
-    intervalSec,
-    autoEnabled,
-    allowCustomerSend,
-    tiers: cleanTiers,
-    lastAutoAt: prev.lastAutoAt
-    }
-    ;
+    db.lxRoomConfig = { title, intervalSec, autoEnabled, allowCustomerSend, tiers: cleanTiers, lastAutoAt: prev.lastAutoAt };
     save();
     renderAdmin();
     toast('Đã lưu cấu hình phòng lì xì!');
@@ -1515,27 +1405,31 @@
     if (!tiers.length) return 20000;
     return Math.max(...tiers.map(t => Math.round(Number(t.amount || 0))));
   }
-  function createLxEnvelope({
-    senderName, senderVip = 1, previewAmount, totalCount = 5, tiers = null
+  function getCappedRewardForDenom(denom) {
+    const d = Math.max(20000, Math.round(Number(denom || 20000)));
+    if (d === 20000) return Math.round(1000 + Math.random() * 6000);
+    if (d === 50000) return Math.round(3000 + Math.random() * 14000);
+    const maxCap = Math.max(1000, Math.round(d * 0.34));
+    const minVal = Math.max(1000, Math.round(maxCap * 0.2));
+    return Math.round(minVal + Math.random() * Math.max(0, maxCap - minVal));
   }
-  ) {
+  function createLxEnvelope({ senderName, senderVip = 1, previewAmount, totalCount = 5, tiers = null }) {
     const cfg = getLxRoomConfig();
     const useTiers = Array.isArray(tiers) && tiers.length ? tiers : cfg.tiers;
     const amt = Math.min(500000, Math.max(20000, Math.round(Number(previewAmount || pickRandomLxTier(useTiers)))));
     const slots = Math.min(100, Math.max(1, Math.round(Number(totalCount || 5))));
     const packet = {
       id: 'LX_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
-    sender: senderName || (generateRandomMaskedName()),
-    senderVip: Number(senderVip || 1),
-    title: cfg.title,
-    previewAmount: amt,
-    totalCount: slots,
-    remainingCount: slots,
-    tiers: useTiers,
-    claims: [],
-    createdAt: Date.now()
-    }
-    ;
+      sender: senderName || generateRandomMaskedName(),
+      senderVip: Number(senderVip || 1),
+      title: cfg.title,
+      previewAmount: amt,
+      totalCount: slots,
+      remainingCount: slots,
+      tiers: useTiers,
+      claims: [],
+      createdAt: Date.now()
+    };
     if (!Array.isArray(db.lxPackets)) db.lxPackets = [];
     db.lxPackets.unshift(packet);
     if (db.lxPackets.length > 30) db.lxPackets = db.lxPackets.slice(0, 30);
@@ -1544,19 +1438,8 @@
   function adminDropLxNow() {
     saveLxRoomConfig();
     const cfg = getLxRoomConfig();
-    createLxEnvelope({
-      senderName: me?.name || 'Admin',
-    senderVip: 3,
-    totalCount: 6,
-    tiers: cfg.tiers
-    }
-    );
-    db.lxRoomConfig = Object.assign({
-    }
-    , cfg, {
-      lastAutoAt: Date.now()
-    }
-    );
+    createLxEnvelope({ senderName: me?.name || 'Admin', senderVip: 3, totalCount: 6, tiers: cfg.tiers });
+    db.lxRoomConfig = Object.assign({}, cfg, { lastAutoAt: Date.now() });
     save();
     renderAdmin();
     toast('Đã phát 1 bao lì xì mới vào phòng!');
@@ -1573,24 +1456,12 @@
     if (!cfg.autoEnabled) return;
     const now = Date.now();
     if (!cfg.lastAutoAt || now - cfg.lastAutoAt >= cfg.intervalSec * 1000) {
-      createLxEnvelope({
-        senderName: generateRandomMaskedName(),
-      senderVip: 1,
-      totalCount: 3 + Math.floor(Math.random() * 6),
-      tiers: cfg.tiers
-      }
-      );
-      db.lxRoomConfig = Object.assign({
-      }
-      , cfg, {
-        lastAutoAt: now
-      }
-      );
+      createLxEnvelope({ senderName: generateRandomMaskedName(), senderVip: 1, totalCount: 3 + Math.floor(Math.random() * 6), tiers: cfg.tiers });
+      db.lxRoomConfig = Object.assign({}, cfg, { lastAutoAt: now });
       localStorage.setItem(KEY, JSON.stringify(db));
       if (me.role === 'user') renderLxRoomStream();
     }
-  }
-  , 2000);
+  }, 2000);
   function renderLxRoomStream() {
     const el = document.getElementById('lxRoomFeed');
     if (!el || !me) return;
@@ -1598,13 +1469,7 @@
     const badge = document.getElementById('lxAutoStatusBadge');
     if (badge) badge.textContent = cfg.autoEnabled ? `● Auto ${cfg.intervalSec}s` : '● Tạm dừng';
     if (!(db.lxPackets || []).length) {
-      createLxEnvelope({
-        senderName: generateRandomMaskedName(),
-      senderVip: 1,
-      totalCount: 5,
-      tiers: cfg.tiers
-      }
-      );
+      createLxEnvelope({ senderName: generateRandomMaskedName(), senderVip: 1, totalCount: 5, tiers: cfg.tiers });
     }
     const list = (db.lxPackets || []).slice(0, 10);
     el.innerHTML = list.map(p => {
@@ -1616,23 +1481,25 @@
       const amtText = mine ? money(mine.amount) : money(reqBal);
       const btnText = mine ? 'Đã nhận' : (empty ? 'Hết bao' : (!enoughBal ? 'Cần ≥ ' + money(reqBal) : 'Nhận'));
       return `
-      <div class="lx-item-row">
-        <div class="lx-av-box">
-          <img src="${BRAND_LOGO_SRC}" alt="AV" class="lx-av-img">
-          <span class="lx-v1-tag">V${p.senderVip || 1}</span>
-        </div>
-        <div class="lx-env-body ${mine || empty ? 'done' : ''}" onclick="openLxBurstModal('${p.id}')">
-          <div style="min-width:0;">
-            <div class="lx-env-sender">${p.sender || generateRandomMaskedName()}</div>
-            <div class="lx-env-money">${amtText}</div>
-            <div class="lx-env-sub">${mine ? 'Đã giật trúng ' + money(mine.amount) : 'Yêu cầu số dư ≥ ' + money(reqBal) + ' • Còn ' + Math.max(0, Number(p.remainingCount || 0)) + '/' + Number(p.totalCount || 1) + ' bao'}</div>
+        <div class="lx-item-row">
+          <div class="lx-av-box">
+            <img src="${BRAND_LOGO_SRC}" alt="AV" class="lx-av-img">
+            <span class="lx-v1-tag">V${p.senderVip || 1}</span>
           </div>
-          <button type="button" class="lx-claim-btn ${mine || empty ? 'done' : ''}" onclick="event.stopPropagation(); openLxBurstModal('${p.id}')">${btnText}</button>
+          <div class="lx-env-body ${mine || empty ? 'done' : ''}" onclick="openLxBurstModal('${p.id}')">
+            <div style="min-width:0;">
+              <div class="lx-env-sender">${p.sender || generateRandomMaskedName()}</div>
+              <div class="lx-env-money">${amtText}</div>
+              <div class="lx-env-sub">${mine ? 'Đã giật trúng ' + money(mine.amount) : 'Yêu cầu số dư ≥ ' + money(reqBal) + ' • Còn ' + Math.max(0, Number(p.remainingCount || 0)) + '/' + Number(p.totalCount || 1) + ' bao'}</div>
+            </div>
+            <button type="button" class="lx-claim-btn ${mine || empty ? 'done' : ''}" onclick="event.stopPropagation(); openLxBurstModal('${p.id}')">${btnText}</button>
+          </div>
         </div>
-      </div>
-    `;
-    }
-    ).join('');
+      `;
+    }).join('');
+  }
+  function renderLixiTabRoom() {
+    renderLxRoomStream();
   }
   function openLxBurstModal(packetId) {
     const p = (db.lxPackets || []).find(x => x.id === packetId);
@@ -1643,7 +1510,7 @@
     const empty = Number(p.remainingCount || 0) <= 0;
     const reqBal = getLxRequiredBalance(p);
     const enoughBal = Number(me.bal || 0) >= reqBal;
-    document.getElementById('lxModalTag').textContent = p.title || 'Lì xì min';
+    document.getElementById('lxModalTag').textContent = p.title || 'Lì xì phòng';
     document.getElementById('lxModalSender').textContent = p.sender || generateRandomMaskedName();
     document.getElementById('lxModalSlots').textContent = `Phát lì xì • Còn ${Math.max(0, p.remainingCount)}/${p.totalCount} bao • Yêu cầu số dư ≥ ${money(reqBal)}`;
     document.getElementById('lxModalAmount').textContent = mine ? money(mine.amount) : money(reqBal);
@@ -1653,26 +1520,23 @@
       btn.disabled = true;
       btn.textContent = 'Đã giật';
       resEl.textContent = `Bạn đã giật trúng ${money(mine.amount)}!`;
-    }
-    else if (empty) {
+    } else if (empty) {
       btn.disabled = true;
       btn.textContent = 'Hết';
       resEl.textContent = 'Bao lì xì này đã hết';
-    }
-    else if (!enoughBal) {
+    } else if (!p.isBombPacket && !enoughBal) {
       btn.disabled = true;
       btn.textContent = 'Thiếu số dư';
-      resEl.textContent = `Số dư ví hiện có ${money(me.bal)}, cần ít nhất ${money(reqBal)} bằng phong bao để giật!`;
-    }
-    else {
+      resEl.textContent = `Số dư ví hiện có ${money(me.bal)}, cần ít nhất ${money(reqBal)} để giật!`;
+    } else {
       btn.disabled = false;
       btn.textContent = 'Cướp';
       resEl.textContent = 'Chạm Cướp để bung lì xì nhận thưởng';
     }
     document.getElementById('lxModalClaimers').innerHTML = claims.length
-    ? `<div style="font-weight:800;margin-bottom:4px;color:#fef08a;">Đã giật (${claims.length}):</div>` +
-      claims.slice(0, 10).map(c => `<div style="display:flex;justify-content:space-between;padding:2px 0;"><span>${c.name || c.u}</span><strong>+${money(c.amount)}</strong></div>`).join('')
-    : '<div style="opacity:0.85;">Chưa có ai giật bao này.</div>';
+      ? `<div style="font-weight:800;margin-bottom:4px;color:#fef08a;">Đã giật (${claims.length}):</div>` +
+        claims.slice(0, 10).map(c => `<div style="display:flex;justify-content:space-between;padding:2px 0;"><span>${c.name || c.u}</span><strong>${c.isBomb ? '-' + money(c.penalty) : '+' + money(c.amount)}</strong></div>`).join('')
+      : '<div style="opacity:0.85;">Chưa có ai giật bao này.</div>';
     document.getElementById('lxGrabModal')?.classList.remove('hidden');
   }
   function closeLxGrabModal() {
@@ -1702,16 +1566,50 @@
       p.claims.unshift({ u: me.u, name: me.name, amount: 0, penalty: pen, isBomb: true, at: Date.now() });
       me.hist.unshift({ t: `💣 Dính bom lì xì (${p.sender})`, a: -pen });
       save(); renderUser(); renderLixiTabRoom(); openLxBurstModal(p.id);
-      showScreenBurstBanner(`💣 BÙM! -${money(pen)}`, `Đã kích hoạt quả bom trong phòng!`, true);
+      toast(`💣 BÙM! Bị trừ ${money(pen)} do trúng bom!`);
       return;
     }
     const won = getCappedRewardForDenom(reqBal);
     me.bal = Math.round(Number(me.bal || 0) + won);
     me.earned = Math.round(Number(me.earned || 0) + won);
-    me.hist.unshift({ t: `Nhận lì xì`, a: won });
+    me.hist.unshift({ t: 'Nhận lì xì', a: won });
     p.claims.unshift({ u: me.u, name: me.name, amount: won, isBomb: false, at: Date.now() });
     save(); renderUser(); renderLixiTabRoom(); openLxBurstModal(p.id);
-    showScreenBurstBanner(`🎉 NỔ +${money(won)}!`, `Chúc mừng bạn đã nhận lì xì!`, false);
+    toast(`🎉 Nổ +${money(won)} lì xì!`);
+  }
+  function openCreateLxRoomModal() {
+    document.getElementById('createLxRoomModal')?.classList.remove('hidden');
+  }
+  function createCustomLxRoom() {
+    const inp = document.getElementById('newLxRoomNameInp');
+    const name = (inp?.value || '').trim();
+    if (!name) return toast('Nhập tên phòng trước nhé');
+    db.lxRoomConfig = Object.assign({}, getLxRoomConfig(), { title: name });
+    if (inp) inp.value = '';
+    save();
+    document.getElementById('createLxRoomModal')?.classList.add('hidden');
+    renderLxRoomStream();
+    toast('Đã đổi tên phòng: ' + name);
+  }
+  function openSetBombModal() {
+    document.getElementById('setBombModal')?.classList.remove('hidden');
+  }
+  function submitSetBomb() {
+    const pen = Math.max(5000, Math.round(Number(document.getElementById('bombPenaltyInp')?.value || 20000)));
+    const slots = Math.min(20, Math.max(3, Math.round(Number(document.getElementById('bombSlotsInp')?.value || 5))));
+    const p = createLxEnvelope({
+      senderName: me?.name || me?.u || 'Người chơi',
+      senderVip: Math.max(1, Number(me?.vip || 1)),
+      previewAmount: pen,
+      totalCount: slots
+    });
+    p.isBombPacket = true;
+    p.bombPenalty = pen;
+    p.bombIndices = [Math.floor(Math.random() * slots)];
+    save();
+    document.getElementById('setBombModal')?.classList.add('hidden');
+    renderLxRoomStream();
+    toast('Đã thả quả bom phạt ' + money(pen) + ' vào phòng');
   }
   function openCustomerSendLixiModal() {
     const cfg = getLxRoomConfig();
@@ -1741,22 +1639,9 @@
     if (me.role !== 'admin') {
       me.bal = Math.round(Number(me.bal || 0) - totalCost);
       me.hist = Array.isArray(me.hist) ? me.hist : [];
-      me.hist.unshift({
-        t: `Phát ${count} hồng bao (${money(amt)}/bao)`, a: -totalCost
-      }
-      );
+      me.hist.unshift({ t: `Phát ${count} hồng bao (${money(amt)}/bao)`, a: -totalCost });
     }
-    createLxEnvelope({
-      senderName: me.name || me.u,
-    senderVip: Math.max(1, Number(me.vip || 1)),
-    previewAmount: amt,
-    totalCount: count,
-    tiers: [{
-        amount: amt, rate: 100
-      }
-      ]
-    }
-    );
+    createLxEnvelope({ senderName: me.name || me.u, senderVip: Math.max(1, Number(me.vip || 1)), previewAmount: amt, totalCount: count, tiers: [{ amount: amt, rate: 100 }] });
     save();
     closeLxSendModal();
     renderUser();
@@ -1773,23 +1658,13 @@
   function submitTopupModal() {
     if (!me) return;
     const amt = Math.round(Number(document.getElementById('topupModalAmtInp')?.value || 0));
-    if (amt < MIN_TOPUP_REQUIRED) return toast('Mệnh giá nạp ít nhất là 100.000đ!');
+    if (amt < 10000) return toast('Bạn vui lòng chọn hoặc nhập số tiền nạp từ 10.000đ trở lên nhé!');
     db.vipRequests.unshift({
       id: 'TP' + Date.now().toString().slice(-4),
-    uid: me.id,
-    u: me.u,
-    name: me.name,
-    lv: 1,
-    pkgName: `Nạp tiền ${money(amt)}`,
-    days: 7,
-    price: amt,
-    st: 'pending'
-    }
-    );
-    me.hist.unshift({
-      t: `Yêu cầu nạp tiền (${money(amt)}) • Chờ duyệt`, a: 0
-    }
-    );
+      uid: me.id, u: me.u, name: me.name, lv: 1,
+      pkgName: `Nạp tiền ${money(amt)}`, days: 7, price: amt, st: 'pending'
+    });
+    me.hist.unshift({ t: `Yêu cầu nạp tiền (${money(amt)}) • Chờ duyệt`, a: 0 });
     save();
     closeTopupModal();
     renderUser();
@@ -1797,8 +1672,10 @@
   }
   function hasMinTopupForWithdraw(user) {
     if (!user) return false;
-    if (user.role === 'admin' || user.deposit50kDone) return true;
-    return (db.vipRequests || []).some(r => (r.uid === user.id || r.u === user.u) && r.st === 'ok' && Number(r.price || 0) >= MIN_TOPUP_REQUIRED);
+    if (user.role === 'admin') return true;
+    return Boolean(user.deposit50kDone) || (db.vipRequests || []).some(
+      r => (r.uid === user.id || r.u === user.u) && r.st === 'ok' && Number(r.price || 0) >= 10000
+    );
   }
   function renderWalletRules() {
     if (!me) return;
@@ -1813,13 +1690,12 @@
       if (amtInp) amtInp.placeholder = 'Nhập số tiền rút (tối thiểu 300.000đ)...';
       if (noticeEl) {
         noticeEl.innerHTML = `
-        <div><strong>• Lần rút đầu tiên:</strong> Tối thiểu <strong>300.000đ</strong> và đã nạp ít nhất <strong>100.000đ</strong> (${depOk ? '<strong style="color:var(--primary);">Đã đủ điều kiện nạp</strong>' : '<strong style="color:var(--red);">Chưa nạp đủ 100.000đ</strong>'}).</div>
-        <div style="margin-top:4px;"><strong>• Các lần rút tiếp theo:</strong> Rút tối đa <strong>100.000đ/lần</strong>, <strong>không giới hạn số lần rút</strong>.</div>
-        ${!depOk ? `<button type="button" class="btn-sm" style="margin-top:8px;background:var(--primary);color:#fff;" onclick="openTopupModal()">Nạp tiền từ 100.000đ ngay →</button>` : ''}
-      `;
+          <div><strong>• Lần rút đầu tiên:</strong> Tối thiểu <strong>300.000đ</strong> và đã nạp tiền mở khóa (${depOk ? '<strong style="color:var(--primary);">Đã đủ điều kiện nạp</strong>' : '<strong style="color:var(--red);">Cần nạp tiền trước khi rút</strong>'}).</div>
+          <div style="margin-top:4px;"><strong>• Các lần rút tiếp theo:</strong> Rút tối đa <strong>100.000đ/lần</strong>, <strong>không giới hạn số lần rút</strong>.</div>
+          ${!depOk ? `<button type="button" class="btn-sm" style="margin-top:8px;background:var(--primary);color:#fff;" onclick="switchUserView('vip')">Nạp tiền mở rút ngay →</button>` : ''}
+        `;
       }
-    }
-    else {
+    } else {
       if (labelEl) labelEl.textContent = `Số tiền rút (Lần thứ ${approvedCount + 1} • Tối đa 100.000đ • Không giới hạn số lần)`;
       if (amtInp) amtInp.placeholder = 'Nhập số tiền rút (tối đa 100.000đ)...';
       if (noticeEl) {
@@ -1832,204 +1708,89 @@
     const acc = document.getElementById('wdAcc').value.trim();
     const owner = document.getElementById('wdOwner').value.trim().toUpperCase();
     const amt = Number(document.getElementById('wdAmt').value);
-    if (!acc || !owner || !amt) return toast('Vui lòng nhập đầy đủ STK, tên chủ TK và số tiền rút');
+    if (!acc || !owner || !amt) return toast('Bạn nhập đầy đủ thông tin tài khoản và số tiền muốn rút giúp mình nhé!');
     const isFirstWithdraw = getApprovedWithdrawCount(me) === 0;
     if (isFirstWithdraw) {
       if (!hasMinTopupForWithdraw(me)) {
-        return toast('Rút lần đầu yêu cầu nạp ít nhất 100.000đ trước!');
+        return toast('Để mở khóa rút tiền thuận lợi và đảm bảo tài khoản hoạt động ổn định, bạn vui lòng nạp tiền vào ví trước nhé! Sau khi nạp xong, bạn có thể tạo lệnh rút bất cứ lúc nào.');
       }
       if (amt < FIRST_WITHDRAW_MIN_REQUIRED) {
-        return toast('Lần rút đầu tiên tối thiểu phải từ 300.000đ!');
+        return toast('Lần rút đầu tiên tối thiểu phải từ 300.000đ nhé!');
       }
-    }
-    else {
+    } else {
       if (amt < 10000) return toast('Số tiền rút tối thiểu là 10.000đ!');
       if (amt > SUBSEQUENT_WITHDRAW_MAX_CAP) {
         return toast('Các lần rút tiếp theo tối đa chỉ được rút 100.000đ/lần!');
       }
     }
-    if (amt > me.bal) return toast('Số dư khả dụng không đủ!');
+    if (amt > me.bal) return toast('Số dư ví hiện tại chưa đủ để thực hiện lệnh rút này, bạn tiếp tục làm nhiệm vụ hoặc nạp thêm nhé!');
     const wdId = 'W' + Date.now().toString().slice(-4);
     me.bal -= amt;
-    me.hist.unshift({
-      t: `Lệnh rút #${wdId} (${bank} - ${acc}) • Đang chờ duyệt`, a: -amt
-    }
-    );
-    db.withdraws.unshift({
-      id: wdId, uid: me.id, u: me.u, bank, acc, owner, amt, st: 'pending'
-    }
-    );
-    notifyTelegram(`💸 LỆNH RÚT TIỀN MỚI (#${wdId})
-• Khách hàng: ${me.name} (@${me.u} - ID #${me.id})
-• Số tiền rút: ${money(amt)}
-• Ngân hàng: ${bank}
-• STK: ${acc}
-• Chủ TK: ${owner}
-• IP: ${me.ip}`);
+    me.hist.unshift({ t: `Lệnh rút #${wdId} (${bank} - ${acc}) • Đang chờ duyệt`, a: -amt });
+    db.withdraws.unshift({ id: wdId, uid: me.id, u: me.u, bank, acc, owner, amt, st: 'pending' });
+    notifyTelegram(`💸 LỆNH RÚT TIỀN MỚI (#${wdId})\n• Khách hàng: ${me.name} (@${me.u} - ID #${me.id})\n• Số tiền rút: ${money(amt)}\n• Ngân hàng: ${bank}\n• STK: ${acc}\n• Chủ TK: ${owner}\n• IP: ${me.ip}`);
     document.getElementById('wdAcc').value = '';
     document.getElementById('wdOwner').value = '';
     document.getElementById('wdAmt').value = '';
     save();
     renderUser();
-    toast('Đã gửi lệnh rút tiền! Đang chờ Admin duyệt.');
+    toast('Đã gửi lệnh rút tiền thành công, hệ thống đang xử lý cho bạn nhé!');
   }
   const INIT = {
-    refConfig: {
-      inviterBonus: 5000,
-    inviteeBonus: 2000
-    }
-    ,
-  apiFeedConfig: {
-      url: '',
-    marginPct: 40,
-    usdRate: 25000,
-    lastSyncAt: 0,
-    lastCount: 0
-    }
-    ,
-  adminNotices: [
-    {
-      id: 'NTF_WELCOME_01',
-      target: 'ALL',
-      title: 'Chào mừng gia nhập TASKFLOW PRO!',
-      body: 'Bắt đầu làm nhiệm vụ Vượt link, Khảo sát, Đánh giá Google trên Trang chủ, điểm danh nhận vé quay và mở Rương ngày mỗi ngày nhé.',
-      createdAt: Date.now()
-    }
-    ],
-  leaderboard: buildDefaultLeaderboard(),
-  promoCodes: [
-    {
-      id: 'PRM1', code: 'TASKFLOW5K', reward: 5000, maxUses: 100, usedBy: []
-    }
-    ],
-  minigames: [
-    {
-      id: 'MG1', question: 'Tên đầy đủ của nền tảng kiếm thưởng này là gì?', answer: 'TASKFLOW PRO', reward: 2000, claimedBy: []
-    }
-    ],
-  supportLinks: {
-      zalo: '',
-    telegram: '',
-    group: ''
-    }
-    ,
-  paymentAccounts: [
-    {
-      id: 'PAY1',
-      bank: 'Vikki Digital Bank',
-      account: '339498650',
-      owner: 'DINH HOANG VIET ANH',
-      memo: 'NAPVIP',
-      qrImage: '',
-      active: true
-    }
-    ],
-  vipRequests: [],
-  users: [
-    {
-      id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', joinedAt: Date.now() - 86400000 * 15, tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: []
-    }
-    ,
-    {
-      id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', joinedAt: Date.now() - 86400000 * 5, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: []
-    }
-    ,
-    {
-      id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: []
-    }
-    ],
-  tasks: [],
-  withdraws: [],
-  channels: [
-    {
-      id: 'congdong', name: '🌐 Nhóm Cộng Đồng'
-    }
-    ,
-    {
-      id: 'cskh', name: '🎧 Chat CSKH'
-    }
-    ,
-    {
-      id: 'chung', name: '🤖 Bot Hệ Thống'
-    }
-    ],
-  msgs: [
-    {
-      id: 1, ch: 'congdong', sender: 'Admin', senderUser: 'admin', role: 'admin', pinned: false, reactions: {
+    refConfig: { inviterBonus: 5000, inviteeBonus: 2000 },
+    apiFeedConfig: { url: '', marginPct: 40, usdRate: 25000, lastSyncAt: 0, lastCount: 0 },
+    adminNotices: [
+      {
+        id: 'NTF_WELCOME_01',
+        target: 'ALL',
+        title: 'Chào mừng gia nhập TASKFLOW PRO!',
+        body: 'Bắt đầu làm nhiệm vụ Vượt link, Khảo sát, Đánh giá Google trên Trang chủ, điểm danh nhận vé quay và mở Rương ngày mỗi ngày nhé.',
+        createdAt: Date.now()
       }
-      , sentAt: Date.now() - 3600000, text: '👋 Chào mừng toàn thể thành viên vào Nhóm Cộng Đồng TASKFLOW PRO! Admin & CSKH trực tiếp hỗ trợ và trao đổi tại đây.'
-    }
     ],
-  typingState: {
-    }
-    ,
-  winners: [
-    {
-      u: 'min***01', p: '10.000đ'
-    }
-    , {
-      u: 'lan***88', p: '888đ'
-    }
-    , {
-      u: 'huy***24', p: '2.000đ'
-    }
-    ,
-    {
-      u: 'nam***55', p: '5.000đ'
-    }
-    , {
-      u: 'thu***19', p: '1.000đ'
-    }
-    , {
-      u: 'phc***09', p: '30.000đ'
-    }
-    ]
-  }
-  ;
+    leaderboard: buildDefaultLeaderboard(),
+    promoCodes: [{ id: 'PRM1', code: 'TASKFLOW5K', reward: 5000, maxUses: 100, usedBy: [] }],
+    minigames: [{ id: 'MG1', question: 'Tên đầy đủ của nền tảng kiếm thưởng này là gì?', answer: 'TASKFLOW PRO', reward: 2000, claimedBy: [] }],
+    supportLinks: { zalo: '', telegram: '', group: '' },
+    paymentAccounts: [{ id: 'PAY1', bank: 'Vikki Digital Bank', account: '339498650', owner: 'DINH HOANG VIET ANH', memo: 'NAPVIP', qrImage: '', active: true }],
+    vipRequests: [],
+    users: [
+      { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', joinedAt: Date.now() - 86400000 * 15, tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
+      { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', joinedAt: Date.now() - 86400000 * 5, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
+      { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] }
+    ],
+    tasks: [],
+    withdraws: [],
+    channels: [{ id: 'congdong', name: '🌐 Nhóm Cộng Đồng' }, { id: 'cskh', name: '🎧 Chat CSKH' }, { id: 'chung', name: '🤖 Bot Hệ Thống' }],
+    msgs: [{ id: 1, ch: 'congdong', sender: 'Admin', senderUser: 'admin', role: 'admin', pinned: false, reactions: {}, sentAt: Date.now() - 3600000, text: '👋 Chào mừng toàn thể thành viên vào Nhóm Cộng Đồng TASKFLOW PRO! Admin & CSKH trực tiếp hỗ trợ và trao đổi tại đây.' }],
+    typingState: {},
+    winners: [{ u: 'min***01', p: '10.000đ' }, { u: 'lan***88', p: '888đ' }, { u: 'huy***24', p: '2.000đ' }, { u: 'nam***55', p: '5.000đ' }, { u: 'thu***19', p: '1.000đ' }, { u: 'phc***09', p: '30.000đ' }]
+  };
+
   function applyBrandLogo() {
     if (!BRAND_LOGO_SRC) return;
     ['introLogoImg', 'authLogoImg', 'userTopLogoImg', 'cskhTopLogoImg', 'adminTopLogoImg', 'aiFabLogoImg', 'aiHeaderLogoImg'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.src = BRAND_LOGO_SRC;
-    }
-    );
+    });
     const fav = document.getElementById('pageFavicon');
     if (fav) fav.href = BRAND_LOGO_SRC;
   }
   applyBrandLogo();
+
   function normalizeDb(raw) {
-    const base = raw && typeof raw === 'object' ? raw : {
-    }
-    ;
-    const merged = Object.assign({
-    }
-    , INIT, base);
-    if (!merged.refConfig || typeof merged.refConfig !== 'object') merged.refConfig = Object.assign({
-    }
-    , INIT.refConfig);
+    const base = raw && typeof raw === 'object' ? raw : {};
+    const merged = Object.assign({}, INIT, base);
+    if (!merged.refConfig || typeof merged.refConfig !== 'object') merged.refConfig = Object.assign({}, INIT.refConfig);
     const invRaw = merged.refConfig.inviterBonus;
     const iteRaw = merged.refConfig.inviteeBonus;
     merged.refConfig.inviterBonus = (invRaw === '' || invRaw === null || invRaw === undefined) ? 0 : Math.max(0, Number(invRaw) || 0);
     merged.refConfig.inviteeBonus = (iteRaw === '' || iteRaw === null || iteRaw === undefined) ? 0 : Math.max(0, Number(iteRaw) || 0);
-    if (!merged.apiFeedConfig || typeof merged.apiFeedConfig !== 'object') merged.apiFeedConfig = Object.assign({
-    }
-    , INIT.apiFeedConfig);
-    merged.apiFeedConfig.url = String(merged.apiFeedConfig.url || '').trim();
-    merged.apiFeedConfig.marginPct = Math.min(90, Math.max(0, Number(merged.apiFeedConfig.marginPct ?? 40) || 0));
-    merged.apiFeedConfig.usdRate = Math.max(1, Number(merged.apiFeedConfig.usdRate ?? 25000) || 25000);
-    merged.apiFeedConfig.lastSyncAt = Number(merged.apiFeedConfig.lastSyncAt || 0);
-    merged.apiFeedConfig.lastCount = Number(merged.apiFeedConfig.lastCount || 0);
     if (!Array.isArray(merged.adminNotices)) merged.adminNotices = [];
     if (!Array.isArray(merged.leaderboard) || !merged.leaderboard.length) merged.leaderboard = buildDefaultLeaderboard();
     if (!Array.isArray(merged.promoCodes)) merged.promoCodes = JSON.parse(JSON.stringify(INIT.promoCodes));
     if (!Array.isArray(merged.minigames)) merged.minigames = JSON.parse(JSON.stringify(INIT.minigames));
-    if (!merged.supportLinks || typeof merged.supportLinks !== 'object') merged.supportLinks = {
-      zalo: '', telegram: '', group: ''
-    }
-    ;
-    merged.supportLinks.zalo = String(merged.supportLinks.zalo || '').trim();
-    merged.supportLinks.telegram = String(merged.supportLinks.telegram || '').trim();
-    merged.supportLinks.group = String(merged.supportLinks.group || '').trim();
+    if (!merged.supportLinks || typeof merged.supportLinks !== 'object') merged.supportLinks = { zalo: '', telegram: '', group: '' };
     if (!Array.isArray(merged.paymentAccounts) || !merged.paymentAccounts.length) merged.paymentAccounts = JSON.parse(JSON.stringify(INIT.paymentAccounts));
     if (!Array.isArray(merged.vipRequests)) merged.vipRequests = [];
     if (!Array.isArray(merged.users) || !merged.users.length) merged.users = JSON.parse(JSON.stringify(INIT.users));
@@ -2040,696 +1801,53 @@
       if (!Array.isArray(u.downlines)) u.downlines = [];
       if (!Array.isArray(u.completedTaskIds)) u.completedTaskIds = [];
       if (typeof u.deposit50kDone !== 'boolean') u.deposit50kDone = false;
-    }
-    );
+    });
     if (!Array.isArray(merged.tasks)) merged.tasks = [];
-    merged.tasks.forEach(t => {
-      if (t.cat === 'CPA App') t.cat = 'Đánh giá Google';
-      if (!t.guide) t.guide = '';
-      if (!Array.isArray(t.usedRandomCodes)) t.usedRandomCodes = [];
-      if (typeof t.requireVerify !== 'boolean') t.requireVerify = true;
-    }
-    );
     if (!Array.isArray(merged.withdraws)) merged.withdraws = [];
     if (!Array.isArray(merged.channels) || !merged.channels.length) merged.channels = JSON.parse(JSON.stringify(INIT.channels));
-    if (!merged.channels.some(c => c.id === 'congdong')) {
-      merged.channels.unshift({
-        id: 'congdong', name: '🌐 Nhóm Cộng Đồng'
-      }
-      );
-    }
     if (!Array.isArray(merged.msgs)) merged.msgs = JSON.parse(JSON.stringify(INIT.msgs));
-    merged.msgs.forEach((m, idx) => {
-      if (!m.ch || m.ch === 'support') m.ch = 'cskh';
-      if (!m.sentAt) m.sentAt = m.createdAt || (typeof m.id === 'number' && m.id > 1000000000 ? m.id : Date.now() - (merged.msgs.length - idx) * 60000);
-      if (!m.reactions || typeof m.reactions !== 'object') m.reactions = {
-      }
-      ;
-      if (typeof m.pinned !== 'boolean') m.pinned = false;
-    }
-    );
-    if (!merged.typingState || typeof merged.typingState !== 'object') merged.typingState = {
-    }
-    ;
+    if (!merged.typingState || typeof merged.typingState !== 'object') merged.typingState = {};
     if (!Array.isArray(merged.winners) || !merged.winners.length) merged.winners = JSON.parse(JSON.stringify(INIT.winners));
     return merged;
   }
+
   let db = normalizeDb(JSON.parse(localStorage.getItem(KEY) || 'null'));
   let mode = 'login', me = null, curTask = null, pendingVipPkg = null, pendingAlertWd = null, newPayQrData = '', curCh = 'congdong', activeSupportCustomer = 'user1', curTaskCat = 'all', deg = 0, spinning = false, isSyncing = false, realClientIp = '';
-  let aiDraggedMoved = false;
-  let reactionLockUntil = 0;
-  let lastTypingPush = 0;
-  function getDownlinesForUser(user) {
-    if (!user) return [];
-    const recorded = Array.isArray(user.downlines) ? [...user.downlines] : [];
-    const code = String(user.refCode || '').trim().toUpperCase();
-    const matchedUsers = (db.users || []).filter(x =>
-    x.u !== user.u &&
-    code &&
-    String(x.refBy || '').toUpperCase().includes(code)
-  );
-    matchedUsers.forEach(mUser => {
-      const exists = recorded.some(d => String(d.u || '').toLowerCase() === String(mUser.u || '').toLowerCase());
-      if (!exists) {
-        const sameIp = Boolean(user.ip && mUser.ip && user.ip === mUser.ip);
-        const bonus = Number(db.refConfig?.inviterBonus ?? 0);
-        const granted = !sameIp && bonus > 0;
-        recorded.push({
-          u: mUser.u,
-        name: mUser.name,
-        joinedAt: mUser.joinedAt || Date.now(),
-        bonus: granted ? bonus : 0,
-        status: granted ? 'Đã cộng hoa hồng' : (sameIp ? 'Không cộng (Trùng IP)' : 'Chưa có hoa hồng')
-        }
-        );
-      }
-    }
-    );
-    return recorded;
-  }
-  function renderRefDownlines() {
-    if (!me) return;
-    const rows = getDownlinesForUser(me);
-    const countEl = document.getElementById('refTabCount');
-    if (countEl) countEl.textContent = String(rows.length);
-    const listEl = document.getElementById('refDownlineList');
-    if (!listEl) return;
-    if (!rows.length) {
-      listEl.innerHTML = '<div style="font-size:13px;color:var(--muted);">Chưa có cấp dưới nào đăng ký theo mã/link giới thiệu của bạn.</div>';
-      return;
-    }
-    listEl.innerHTML = rows.map(r => {
-      const isGranted = Number(r.bonus || 0) > 0 || String(r.status || '').includes('Đã cộng');
-      const badgeCls = isGranted ? 'st-ok' : 'st-no';
-      return `
-      <div class="ref-child-item" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-        <div><strong>${r.name || r.u}</strong> <span style="color:var(--indigo);font-weight:700;">@${r.u}</span></div>
-        <strong style="color:${isGranted ? 'var(--primary)' : 'var(--muted)'};">+${money(r.bonus || 0)}</strong>
-      </div>
-    `;
-    }
-    ).join('');
-  }
-  function getUserNoticesForMe() {
-    if (!me) return [];
-    if (!Array.isArray(me.dismissedNotifyIds)) me.dismissedNotifyIds = [];
-    return (db.adminNotices || []).filter(n => n.target === 'ALL' || n.target === me.u);
-  }
-  function dismissUserNotice(noticeId) {
-    if (!me) return;
-    if (!Array.isArray(me.dismissedNotifyIds)) me.dismissedNotifyIds = [];
-    if (!me.dismissedNotifyIds.includes(noticeId)) {
-      me.dismissedNotifyIds.push(noticeId);
-      save();
-      renderUserNotices();
-      toast('Đã xác nhận thông báo');
-    }
-  }
-  function ackAllPopupNotices() {
-    if (!me) return;
-    if (!Array.isArray(me.dismissedNotifyIds)) me.dismissedNotifyIds = [];
-    const allMine = getUserNoticesForMe();
-    allMine.forEach(n => {
-      if (!me.dismissedNotifyIds.includes(n.id)) {
-        me.dismissedNotifyIds.push(n.id);
-      }
-    }
-    );
-    save();
-    renderUserNotices();
-    closeLoginNoticePopup();
-    toast('Đã xác nhận thông báo');
-  }
-  function adminRemoveNotice(noticeId) {
-    if (!me || me.role !== 'admin') return;
-    db.adminNotices = (db.adminNotices || []).filter(n => n.id !== noticeId);
-    save();
-    renderAdminSentNotices();
-    toast('Đã gỡ thông báo khỏi hệ thống');
-  }
-  function renderPopupNoticeItemHtml(n) {
-    return `
-    <div class="popup-notice-card">
-      <div style="font-size:14px;font-weight:900;color:var(--text);">${n.title}</div>
-      <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:4px;">${n.body}</div>
-    </div>
-  `;
-  }
-  function renderBellHistoryItemHtml(n, isAck) {
-    return `
-    <div class="popup-notice-card" style="background:${isAck ? '#f8fafc' : '#fffbeb'};border-color:${isAck ? '#e2e8f0' : '#f59e0b'};">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-        <strong style="font-size:13px;color:var(--text);">${n.title}</strong>
-        <span class="status-badge ${isAck ? 'st-ok' : 'st-pending'}">${isAck ? 'Đã hiểu' : 'Chưa xác nhận'}</span>
-      </div>
-      <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:4px;">${n.body}</div>
-      ${!isAck ? `<div style="display:flex;justify-content:flex-end;margin-top:8px;"><button type="button" class="btn-sm" style="background:var(--primary);color:#fff;" onclick="dismissUserNotice('${n.id}')">Đã hiểu</button></div>` : ''}
-    </div>
-  `;
-  }
-  function renderLoginNoticePopup(autoOpenIfUnread = false) {
-    if (!me || me.role === 'admin' || me.role === 'cskh') return;
-    const allMine = getUserNoticesForMe();
-    const unread = allMine.filter(n => !me.dismissedNotifyIds.includes(n.id));
-    const listEl = document.getElementById('loginPopupNoticeList');
-    const modalEl = document.getElementById('loginNoticePopupModal');
-    if (!listEl || !modalEl) return;
-    listEl.innerHTML = unread.map(n => renderPopupNoticeItemHtml(n)).join('');
-    if (unread.length > 0 && autoOpenIfUnread) {
-      modalEl.classList.remove('hidden');
-    }
-    else if (unread.length === 0) {
-      modalEl.classList.add('hidden');
-    }
-  }
-  function closeLoginNoticePopup() {
-    document.getElementById('loginNoticePopupModal')?.classList.add('hidden');
-  }
-  function renderUserNotices() {
-    if (!me || me.role === 'admin' || me.role === 'cskh') return;
-    const allMine = getUserNoticesForMe();
-    const unreadCount = allMine.filter(n => !me.dismissedNotifyIds.includes(n.id)).length;
-    const badge = document.getElementById('userBellBadge');
-    if (badge) {
-      badge.textContent = String(unreadCount);
-      badge.classList.toggle('hidden', unreadCount === 0);
-    }
-    const modalList = document.getElementById('noticeModalList');
-    if (modalList) {
-      modalList.innerHTML = allMine.length
-      ? allMine.map(n => renderBellHistoryItemHtml(n, me.dismissedNotifyIds.includes(n.id))).join('')
-      : '<div style="font-size:13px;color:var(--muted);padding:12px 0;text-align:center;">Không có thông báo nào.</div>';
-    }
-  }
-  function renderAdminSentNotices() {
-    const el = document.getElementById('adminSentNoticesList');
-    if (!el) return;
-    const list = db.adminNotices || [];
-    if (!list.length) {
-      el.innerHTML = '<div style="font-size:13px;color:var(--muted);">Chưa có thông báo nào đang hoạt động.</div>';
-      return;
-    }
-    el.innerHTML = list.map(n => `
-    <div class="task-item">
-      <div style="min-width:0;">
-        <strong>${n.title}</strong> <span class="badge" style="background:#eef2ff;color:#4f46e5;">${n.target === 'ALL' ? 'Tất cả' : '@' + n.target}</span>
-        <div style="font-size:12px;color:var(--muted);white-space:pre-line;margin-top:3px;">${n.body}</div>
-      </div>
-      <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);flex-shrink:0;" onclick="adminRemoveNotice('${n.id}')">Gỡ thông báo</button>
-    </div>
-  `).join('');
-  }
-  function openNoticeModal() {
-    renderUserNotices();
-    document.getElementById('noticeModal')?.classList.remove('hidden');
-  }
-  function closeNoticeModal() {
-    document.getElementById('noticeModal')?.classList.add('hidden');
-  }
-  function getReadCountsMap() {
-    try {
-      return JSON.parse(localStorage.getItem(READ_COUNTS_KEY) || '{}') || {
-      }
-      ;
-    }
-    catch (e) {
-      return {
-      }
-      ;
-    }
-  }
-  function markChannelRead(chId) {
-    if (!me) return;
-    const allMaps = getReadCountsMap();
-    const userMap = allMaps[me.u] || {
-    }
-    ;
-    const visibleMsgs = getVisibleMessagesForChannel(chId);
-    userMap[chId] = visibleMsgs.length;
-    allMaps[me.u] = userMap;
-    localStorage.setItem(READ_COUNTS_KEY, JSON.stringify(allMaps));
-  }
-  function getUnreadCountForChannel(chId) {
-    if (!me) return 0;
-    const visibleMsgs = getVisibleMessagesForChannel(chId);
-    if (chId === curCh) {
-      markChannelRead(chId);
-      return 0;
-    }
-    const allMaps = getReadCountsMap();
-    const seenCount = Number((allMaps[me.u] || {
-    }
-    )[chId] || 0);
-    return Math.max(0, visibleMsgs.length - seenCount);
-  }
-  function getVisibleMessagesForChannel(chId) {
-    if (!me) return [];
-    const normCh = (c) => (!c || c === 'chung_bot') ? 'chung' : (c === 'support' ? 'cskh' : c);
-    const targetCh = normCh(chId);
-    const list = (db.msgs || []).filter(m => normCh(m.ch) === targetCh);
-    if (me.role === 'admin' || me.role === 'cskh') {
-      if (targetCh === 'cskh' && activeSupportCustomer) {
-        const target = String(activeSupportCustomer).toLowerCase();
-        return list.filter(m =>
-        String(m.ownerUser || '').toLowerCase() === target ||
-        String(m.senderUser || '').toLowerCase() === target ||
-        String(m.targetUser || '').toLowerCase() === target
-      );
-      }
-      return list;
-    }
-    if (targetCh === 'cskh') {
-      const myU = String(me.u || '').toLowerCase();
-      return list.filter(m =>
-      String(m.ownerUser || '').toLowerCase() === myU ||
-      String(m.senderUser || '').toLowerCase() === myU ||
-      String(m.targetUser || '').toLowerCase() === myU
-    );
-    }
-    if (targetCh === 'chung') {
-      return list.filter(m => m.broadcastAll === true || !m.targetUser || String(m.targetUser).toLowerCase() === String(me.u).toLowerCase());
-    }
-    return list;
-  }
-  function changeAdminSupportTarget(username) {
-    activeSupportCustomer = username || 'user1';
-    renderAdmin();
-  }
-  function emitTypingState() {
-    if (!me || !curCh) return;
-    if (!db.typingState || typeof db.typingState !== 'object') db.typingState = {
-    }
-    ;
-    db.typingState[curCh] = {
-      user: me.name || me.u,
-    username: me.u,
-    until: Date.now() + 2400
-    }
-    ;
-    localStorage.setItem(KEY, JSON.stringify(db));
-    const now = Date.now();
-    if (now - lastTypingPush > 1100) {
-      lastTypingPush = now;
-      pushToCloud();
-    }
-  }
-  function clearTypingState() {
-    if (!me || !curCh || !db.typingState || !db.typingState[curCh]) return;
-    if (db.typingState[curCh].username === me.u) {
-      delete db.typingState[curCh];
-      save();
-    }
-  }
-  function getTypingHtml() {
-    if (!me || !db.typingState || !db.typingState[curCh]) return '';
-    const t = db.typingState[curCh];
-    if (!t || !t.until || Date.now() > t.until) return '';
-    if (t.username === me.u) return '';
-    return `
-    <div class="typing-bubble">
-      <span><strong>${t.user}</strong> đang nhập</span>
-      <span class="typing-dots"><span></span><span></span><span></span></span>
-    </div>
-  `;
-  }
-  function refreshLeaderboard() {
-    db.leaderboard = buildDefaultLeaderboard();
-    save();
-    renderUser();
-    toast('Đã cập nhật bảng xếp hạng Top mới');
-  }
-  function renderLeaderboard() {
-    const el = document.getElementById('topTaskLeaderboard');
-    if (!el) return;
-    const rows = (db.leaderboard || []).slice(0, 6);
-    el.innerHTML = rows.map((item, idx) => {
-      const rankNum = idx + 1;
-      const rankCls = rankNum === 1 ? 'r1' : (rankNum === 2 ? 'r2' : (rankNum === 3 ? 'r3' : ''));
-      return `
-      <div class="lb-row">
-        <div style="display:flex;align-items:center;gap:8px;min-width:0;">
-          <span class="lb-rank ${rankCls}">${rankNum}</span>
-          <div style="min-width:0;">
-            <strong style="font-size:13px;">${item.name}</strong>
-            <div style="font-size:11px;color:var(--muted);">Đã hoàn thành: <strong>${Number(item.tasks || 0).toLocaleString('vi-VN')}</strong> nhiệm vụ</div>
-          </div>
-        </div>
-        <strong style="color:var(--primary);font-size:13px;white-space:nowrap;">${money(item.amount)}</strong>
-      </div>
-    `;
-    }
-    ).join('');
-  }
-  /* DRAGGABLE AI BUTTON */
-(function initDraggableAiFab() {
-    const btn = document.getElementById('aiFloatBtn');
-    if (!btn) return;
-    try {
-      const saved = JSON.parse(localStorage.getItem(AI_POS_KEY) || 'null');
-      if (saved && typeof saved.left === 'number' && typeof saved.top === 'number') {
-        btn.style.left = saved.left + 'px';
-        btn.style.top = saved.top + 'px';
-        btn.style.right = 'auto';
-        btn.style.bottom = 'auto';
-      }
-    }
-    catch (e) {
-    }
-    let startX = 0, startY = 0, origLeft = 0, origTop = 0, activeDrag = false;
-    function onStart(clientX, clientY) {
-      const rect = btn.getBoundingClientRect();
-      startX = clientX;
-      startY = clientY;
-      origLeft = rect.left;
-      origTop = rect.top;
-      aiDraggedMoved = false;
-      activeDrag = true;
-      btn.classList.add('dragging');
-      btn.style.left = origLeft + 'px';
-      btn.style.top = origTop + 'px';
-      btn.style.right = 'auto';
-      btn.style.bottom = 'auto';
-    }
-    function onMove(clientX, clientY) {
-      if (!activeDrag) return;
-      const dx = clientX - startX;
-      const dy = clientY - startY;
-      if (Math.abs(dx) > 6 || Math.abs(dy) > 6) aiDraggedMoved = true;
-      const rect = btn.getBoundingClientRect();
-      const maxL = Math.max(8, window.innerWidth - rect.width - 8);
-      const maxT = Math.max(8, window.innerHeight - rect.height - 8);
-      const nextL = Math.min(maxL, Math.max(8, origLeft + dx));
-      const nextT = Math.min(maxT, Math.max(8, origTop + dy));
-      btn.style.left = nextL + 'px';
-      btn.style.top = nextT + 'px';
-    }
-    function onEnd() {
-      if (!activeDrag) return;
-      activeDrag = false;
-      btn.classList.remove('dragging');
-      if (aiDraggedMoved) {
-        const rect = btn.getBoundingClientRect();
-        const snapLeft = (rect.left + rect.width / 2 < window.innerWidth / 2) ? 12 : Math.max(12, window.innerWidth - rect.width - 12);
-        const clampedTop = Math.min(Math.max(12, rect.top), Math.max(12, window.innerHeight - rect.height - 16));
-        btn.style.left = snapLeft + 'px';
-        btn.style.top = clampedTop + 'px';
-        localStorage.setItem(AI_POS_KEY, JSON.stringify({
-          left: snapLeft, top: clampedTop
-        }
-        ));
-        setTimeout(() => {
-          aiDraggedMoved = false;
-        }
-        , 120);
-      }
-    }
-    btn.addEventListener('touchstart', (e) => {
-      if (!e.touches.length) return;
-      onStart(e.touches[0].clientX, e.touches[0].clientY);
-    }
-    , {
-      passive: true
-    }
-    );
-    window.addEventListener('touchmove', (e) => {
-      if (!activeDrag || !e.touches.length) return;
-      onMove(e.touches[0].clientX, e.touches[0].clientY);
-    }
-    , {
-      passive: true
-    }
-    );
-    window.addEventListener('touchend', onEnd);
-    btn.addEventListener('mousedown', (e) => {
-      onStart(e.clientX, e.clientY);
-    }
-    );
-    window.addEventListener('mousemove', (e) => {
-      if (!activeDrag) return;
-      onMove(e.clientX, e.clientY);
-    }
-    );
-    window.addEventListener('mouseup', onEnd);
-  }
-  )();
-  function handleAiFabClick() {
-    if (aiDraggedMoved) return;
-    openAi();
-  }
-  /* INTRO SPLASH CONTROL */
-function dismissIntro() {
+  let aiDraggedMoved = false, reactionLockUntil = 0, lastTypingPush = 0;
+
+  function dismissIntro() {
     const el = document.getElementById('introScreen');
-    if (!el || el.classList.contains('hidden')) return;
+    if (!el) return;
     el.classList.add('fade-out');
-    setTimeout(() => el.classList.add('hidden'), 460);
+    el.classList.add('hidden');
+    el.style.display = 'none';
   }
-  setTimeout(dismissIntro, 2000);
-  /* TELEGRAM BOT NOTIFICATION */
-function notifyTelegram(text) {
-    if (!TG_BOT_TOKEN || !TG_CHAT_ID) return;
-    const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
-    const payload = JSON.stringify({
-      chat_id: TG_CHAT_ID, text
+  setTimeout(dismissIntro, 900);
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(dismissIntro, 900);
+    if (!me) {
+      const auth = document.getElementById('authScreen');
+      if (auth) auth.classList.remove('hidden');
     }
-    );
-    fetch(url, {
-      method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-      }
-      ,
-    body: payload
-    }
-    ).catch(() => {
-      fetch(url, {
-        method: 'POST',
-      mode: 'no-cors',
-      headers: {
-          'Content-Type': 'application/json'
-        }
-        ,
-      body: payload
-      }
-      ).catch(() => {
-      }
-      );
-    }
-    );
-  }
-  function testTelegramBot() {
-    notifyTelegram(`🔔 TEST BOT TASKFLOW PRO\n• Thời gian: ${new Date().toLocaleString('vi-VN')}\n• Trạng thái: Bot đang hoạt động và sẵn sàng báo đăng ký mới / lệnh rút tiền.`);
-    toast('Đã gửi tin nhắn test tới Telegram Chat ID ' + TG_CHAT_ID);
-  }
-  /* CLOUD SYNC (SUPABASE) */
-async function pullFromCloud(silent = true) {
-    if (!CLOUD_ENABLED || isSyncing || Date.now() < reactionLockUntil) {
-      if (!CLOUD_ENABLED) updateCloudBadge('Chế độ nội bộ', false);
-      return;
-    }
-    isSyncing = true;
-    try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/app_store?id=eq.main&select=data`, {
-        headers: {
-          apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
-        }
-      }
-      );
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const rows = await res.json();
-      if (Array.isArray(rows) && rows.length && rows[0] && rows[0].data) {
-        const cloudDb = normalizeDb(rows[0].data);
-        const localByUser = {
-        }
-        ;
-        (db.users || []).forEach(u => {
-          if (u && u.u) localByUser[String(u.u).toLowerCase()] = u;
-        }
-        );
-        (cloudDb.users || []).forEach(cu => {
-          const loc = localByUser[String(cu.u || '').toLowerCase()];
-          if (loc) {
-            if (!cu.ip && loc.ip) cu.ip = loc.ip;
-            if (!cu.joinedAt && loc.joinedAt) cu.joinedAt = loc.joinedAt;
-            if (Array.isArray(loc.downlines) && loc.downlines.length && (!Array.isArray(cu.downlines) || !cu.downlines.length)) {
-              cu.downlines = loc.downlines;
-            }
-            if (Array.isArray(loc.completedTaskIds) && loc.completedTaskIds.length) {
-              cu.completedTaskIds = Array.from(new Set([...(cu.completedTaskIds || []).map(String), ...loc.completedTaskIds.map(String)]));
-            }
-          }
-        }
-        );
-        db = cloudDb;
-        localStorage.setItem(KEY, JSON.stringify(db));
-        if (me) {
-          const refreshed = db.users.find(x => x.id === me.id || x.u.toLowerCase() === me.u.toLowerCase());
-          if (refreshed) {
-            if (realClientIp && refreshed.ip !== realClientIp) {
-              refreshed.ip = realClientIp;
-            }
-            if (!refreshed.joinedAt) refreshed.joinedAt = Date.now();
-            me = refreshed;
-          }
-        }
-        updateCloudBadge('● Đã đồng bộ Cloud', true);
-        if (!silent) toast('Đã đồng bộ dữ liệu mới nhất!');
-      }
-      else if (!me) {
-        await pushToCloud();
-      }
-    }
-    catch (err) {
-      updateCloudBadge('● Đang giữ phiên ổn định', true);
-    }
-    finally {
-      isSyncing = false;
-    }
-  }
-  async function pushToCloud() {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(db));
-    }
-    catch (e) {
-      toast('Ảnh QR quá lớn cho bộ nhớ trình duyệt, hãy chọn ảnh nhẹ hơn');
-    }
-    if (!CLOUD_ENABLED) return;
-    try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/app_store`, {
-        method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-        Prefer: 'resolution=merge-duplicates'
-        }
-        ,
-      body: JSON.stringify({
-          id: 'main', data: db, updated_at: new Date().toISOString()
-        }
-        )
-      }
-      );
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      updateCloudBadge('● Đã đồng bộ Cloud', true);
-    }
-    catch (e) {
-      updateCloudBadge('● Lưu cục bộ (Chờ Cloud)', true);
-    }
-  }
-  function updateCloudBadge(text, ok) {
-    const b = document.getElementById('cloudStatusBadge');
-    if (!b) return;
-    b.textContent = text;
-    b.style.background = ok ? '#ecfdf5' : '#fef2f2';
-    b.style.color = ok ? '#059669' : '#dc2626';
-    b.style.borderColor = ok ? '#a7f3d0' : '#fecaca';
-  }
-  function save() {
-    pushToCloud();
-  }
-  async function manualSyncCloud() {
-    await pullFromCloud(false);
-    if (me && me.role === 'admin') renderAdmin();
-    else if (me && me.role === 'cskh') renderCskhPanel();
-    else if (me) {
-      renderUser();
-      checkApprovedWithdrawPopup();
-    }
-  }
-  async function detectRealIp() {
-    try {
-      const r = await fetch('https://api.ipify.org?format=json');
-      const j = await r.json();
-      if (j && j.ip) {
-        realClientIp = j.ip;
-        sessionStorage.setItem('MY_IP', j.ip);
-        if (me) {
-          me.ip = j.ip;
-          localStorage.setItem(KEY, JSON.stringify(db));
-        }
-        return j.ip;
-      }
-    }
-    catch (e) {
-    }
-    if (!sessionStorage.getItem('MY_IP')) {
-      sessionStorage.setItem('MY_IP', `14.${Math.floor(160+Math.random()*80)}.${Math.floor(10+Math.random()*220)}.${Math.floor(10+Math.random()*220)}`);
-    }
-    realClientIp = sessionStorage.getItem('MY_IP');
-    return realClientIp;
-  }
-  let lastUserTapAt = 0;
-  document.addEventListener('pointerdown', () => {
-    lastUserTapAt = Date.now();
-  }
-  , {
-    passive: true
-  }
-  );
-  setInterval(async () => {
-    if (!CLOUD_ENABLED || !me || spinning || Date.now() < reactionLockUntil) return;
-    if (Date.now() - lastUserTapAt < 2000) return;
-    const linksTabActive = !document.getElementById('aViewLinks')?.classList.contains('hidden');
-    const isEditingLinks = linksTabActive && document.activeElement && document.activeElement.closest('#aViewLinks');
-    const isEditingCskh = me.role === 'cskh' && document.activeElement && document.activeElement.closest('#cskhApp');
-    const isEditingModal = !document.getElementById('editUserModal')?.classList.contains('hidden');
-    const isDoingTaskModal = !document.getElementById('taskModal')?.classList.contains('hidden');
-    const isEditingTasksApi = document.activeElement && document.activeElement.closest('#aViewTasks');
-    if (isEditingLinks || isEditingCskh || isEditingModal || isDoingTaskModal || isEditingTasksApi) return;
-    await pullFromCloud(true);
-    if (me && me.role === 'admin') renderAdmin();
-    else if (me && me.role === 'cskh') renderCskhPanel();
-    else if (me) {
-      renderUser();
-      checkApprovedWithdrawPopup();
-    }
-  }
-  , 8000);
-  document.addEventListener('visibilitychange', async () => {
-    if (document.visibilityState === 'visible' && CLOUD_ENABLED && me && !spinning) {
-      await pullFromCloud(true);
-      if (me && me.role === 'admin') renderAdmin();
-      else if (me && me.role === 'cskh') renderCskhPanel();
-      else if (me) {
-        renderUser();
-        checkApprovedWithdrawPopup();
-      }
-    }
-  }
-  );
-  (async function bootstrapSession() {
-    const ipNow = await detectRealIp();
-    await pullFromCloud(true);
-    const savedUser = localStorage.getItem(SESSION_USER_KEY);
-    if (savedUser) {
-      const found = db.users.find(x => x.u.toLowerCase() === savedUser.toLowerCase() && !x.banned);
-      if (found) {
-        found.ip = ipNow || found.ip;
-        if (!found.joinedAt) found.joinedAt = Date.now();
-        me = found;
-        checkVipExpiry(me);
-        save();
-        startSession(true, false);
-      }
-    }
-  }
-  )();
-  function money(n) {
-    return Number(n || 0).toLocaleString('vi-VN') + 'đ';
-  }
-  function today() {
-    return new Date().toISOString().slice(0, 10);
-  }
+  });
+  function money(n) { return Number(n || 0).toLocaleString('vi-VN') + 'đ'; }
+  function today() { return new Date().toISOString().slice(0, 10); }
   function toast(m) {
     const el = document.getElementById('toast');
+    if (!el) return;
     el.textContent = m;
     el.classList.remove('hidden');
     clearTimeout(el._t);
     el._t = setTimeout(() => el.classList.add('hidden'), 2800);
   }
   function closeModals() {
-    ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal', 'spinResultModal', 'vipPayModal', 'withdrawSuccessModal', 'noticeModal', 'loginNoticePopupModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+    ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal', 'spinResultModal', 'vipPayModal', 'withdrawSuccessModal', 'noticeModal', 'loginNoticePopupModal'].forEach(id => document.getElementById(id)?.classList.add('hidden'));
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) {}
+  }
+  function getActivePayment() {
+    return db.paymentAccounts.find(p => p.active) || db.paymentAccounts[0] || INIT.paymentAccounts[0];
   }
   function getApprovedWithdrawCount(user) {
     if (!user) return 0;
@@ -2740,40 +1858,11 @@ async function pullFromCloud(silent = true) {
     if (user.role === 'admin' || user.deposit50kDone) return true;
     return db.vipRequests.some(r => (r.uid === user.id || r.u === user.u) && r.st === 'ok' && Number(r.price || 0) >= FIRST_WITHDRAW_DEPOSIT_REQ);
   }
-  function checkApprovedWithdrawPopup() {
-    if (!me || me.role === 'admin' || me.role === 'cskh') return;
-    if (!Array.isArray(me.seenApprovedWdIds)) me.seenApprovedWdIds = [];
-    const newlyApproved = db.withdraws.find(w => (w.uid === me.id || w.u === me.u) && w.st === 'ok' && !me.seenApprovedWdIds.includes(w.id));
-    if (!newlyApproved) return;
-    pendingAlertWd = newlyApproved;
-    document.getElementById('wdSuccessDetailBox').innerHTML = `
-    <div><strong>Mã lệnh:</strong> #${newlyApproved.id}</div>
-    <div style="margin-top:4px;"><strong>Trạng thái:</strong> <span style="color:var(--primary);font-weight:800;">Rút tiền thành công</span></div>
-    <div style="margin-top:4px;"><strong>Số tiền:</strong> <span style="color:var(--gold);font-weight:900;font-size:15px;">${money(newlyApproved.amt)}</span></div>
-    <div style="margin-top:4px;"><strong>Ngân hàng:</strong> ${newlyApproved.bank}</div>
-    <div style="margin-top:4px;"><strong>Số tài khoản:</strong> <strong>${newlyApproved.acc}</strong></div>
-    <div style="margin-top:4px;"><strong>Chủ tài khoản:</strong> <strong>${newlyApproved.owner}</strong></div>
-  `;
-    document.getElementById('withdrawSuccessModal').classList.remove('hidden');
-  }
-  function ackWithdrawSuccess() {
-    if (me && pendingAlertWd) {
-      if (!Array.isArray(me.seenApprovedWdIds)) me.seenApprovedWdIds = [];
-      if (!me.seenApprovedWdIds.includes(pendingAlertWd.id)) me.seenApprovedWdIds.push(pendingAlertWd.id);
-      pendingAlertWd = null;
-      save();
-    }
-    closeModals();
-  }
   function checkVipExpiry(user) {
     if (!user) return;
     if (user.vip > 0 && user.role !== 'admin' && user.vipExpiry && Date.now() > user.vipExpiry) {
-      user.vip = 0;
-      user.vipExpiry = 0;
-      user.hist.unshift({
-        t: 'Gói VIP hết hạn, tự động chuyển về VIP 0', a: 0
-      }
-      );
+      user.vip = 0; user.vipExpiry = 0;
+      user.hist.unshift({ t: 'Gói VIP hết hạn, tự động chuyển về VIP 0', a: 0 });
       save();
     }
   }
@@ -2782,20 +1871,8 @@ async function pullFromCloud(silent = true) {
     if (!user.vipExpiry) return 'Không giới hạn';
     const remainMs = user.vipExpiry - Date.now();
     if (remainMs <= 0) return 'Đã hết hạn';
-    const daysLeft = Math.ceil(remainMs / 86400000);
     const d = new Date(user.vipExpiry);
-    const dateStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
-    return `Còn ${daysLeft} ngày (Hết hạn: ${dateStr})`;
-  }
-  function getActivePayment() {
-    return db.paymentAccounts.find(p => p.active) || db.paymentAccounts[0] || INIT.paymentAccounts[0];
-  }
-  function resetDemoData() {
-    localStorage.removeItem(KEY);
-    db = JSON.parse(JSON.stringify(INIT));
-    save();
-    renderAdmin();
-    toast('Đã reset dữ liệu về trạng thái gốc');
+    return `Còn ${Math.ceil(remainMs / 86400000)} ngày (Hết hạn: ${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()})`;
   }
   function setAuthMode(m) {
     mode = m;
@@ -2805,108 +1882,37 @@ async function pullFromCloud(silent = true) {
     document.getElementById('regRefField').classList.toggle('hidden', m === 'login');
     document.getElementById('authSubmitBtn').textContent = m === 'login' ? 'Đăng Nhập' : 'Đăng Ký';
   }
-  function botAnnounceToUser(user, tag, refNote = '') {
-    if (!user) return;
-    const dup = db.users.filter(x => x.ip === user.ip).length;
-    db.msgs.push({
-      id: Date.now() + Math.random(),
-    ch: 'chung',
-    targetUser: user.u,
-    sender: 'TASKFLOW BOT',
-    senderUser: 'bot',
-    role: 'bot',
-    pinned: false,
-    reactions: {
-      }
-      ,
-    sentAt: Date.now(),
-    text: `🤖 [${tag}] Xin chào ${user.name} (@${user.u})\n• Người giới thiệu: ${user.refBy}\n• IP của bạn: ${user.ip} (${dup > 1 ? '⚠️ Trùng IP x' + dup : '✅ IP riêng'})${refNote ? '\n' + refNote : ''}`
-    }
-    );
-  }
-  async function submitAuth(e) {
+  function submitAuth(e) {
     e.preventDefault();
     const u = document.getElementById('authUser').value.trim();
     const p = document.getElementById('authPass').value.trim();
-    const clientIp = await detectRealIp();
-    await pullFromCloud(true);
+    const clientIp = realClientIp || sessionStorage.getItem('MY_IP') || '14.232.88.14';
     if (mode === 'login') {
       const found = db.users.find(x => x.u.toLowerCase() === u.toLowerCase() && x.p === p);
       if (!found) return toast('Sai tài khoản hoặc mật khẩu');
       if (found.banned) return toast('Tài khoản đã bị khóa');
-      found.ip = clientIp || found.ip;
+      found.ip = clientIp;
       if (!found.joinedAt) found.joinedAt = Date.now();
       checkVipExpiry(found);
       me = found;
       localStorage.setItem(SESSION_USER_KEY, me.u);
-      if (me.role === 'user') botAnnounceToUser(me, 'Đăng nhập');
       save();
       startSession(false, true);
-    }
-    else {
+    } else {
       if (db.users.some(x => x.u.toLowerCase() === u.toLowerCase())) return toast('Tài khoản đã tồn tại');
       const name = document.getElementById('regName').value.trim() || u;
-      const refIn = document.getElementById('regRef').value.trim().toUpperCase();
-      const inv = db.users.find(x => x.refCode && x.refCode.toUpperCase() === refIn);
-      const inviterReward = Number(db.refConfig?.inviterBonus ?? 0);
-      const inviteeReward = Number(db.refConfig?.inviteeBonus ?? 0);
-      const sameIpWithRef = Boolean(inv && inv.ip && inv.ip === clientIp);
-      const grantRef = Boolean(inv && !sameIpWithRef);
-      const startBal = (grantRef ? inviteeReward : 0);
       const id = 1000 + db.users.length;
-      const joinedAt = Date.now();
       const nu = {
-        id, u, p, name, role: 'user', vip: 0, vipExpiry: 0,
-      bal: startBal, earned: startBal, refEarned: grantRef ? inviteeReward : 0,
-      refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có',
-      ip: clientIp, joinedAt, tickets: 1, done: 0, lastCi: '', streak: 0, banned: false,
-      deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], completedTaskIds: [],
-      hist: grantRef && inviteeReward > 0
-        ? [{
-          t: `Thưởng nhập mã Ref ${inv.refCode}`, a: inviteeReward
-        }
-        ]
-        : []
-      }
-      ;
-      if (inv) {
-        if (!Array.isArray(inv.downlines)) inv.downlines = [];
-        const inviterGranted = grantRef && inviterReward > 0;
-        if (inviterGranted) {
-          inv.bal += inviterReward;
-          inv.earned += inviterReward;
-          inv.refEarned += inviterReward;
-          inv.hist.unshift({
-            t: `Thưởng tuyển Ref từ @${nu.u}`, a: inviterReward
-          }
-          );
-        }
-        inv.downlines.unshift({
-          u: nu.u,
-        name: nu.name,
-        joinedAt,
-        bonus: inviterGranted ? inviterReward : 0,
-        status: inviterGranted
-          ? 'Đã cộng hoa hồng'
-          : (sameIpWithRef ? 'Không cộng (Trùng IP)' : 'Chưa cộng (Thưởng 0đ)')
-        }
-        );
-      }
-      const refNote = inv
-      ? (sameIpWithRef
-          ? '• Thưởng Ref: Không cộng thưởng do trùng địa chỉ IP với người giới thiệu'
-          : `• Thưởng Ref: Bạn nhận +${money(inviteeReward)}, người mời nhận +${money(inviterReward)}`)
-      : '';
+        id, u, p, name, role: 'user', vip: 0, vipExpiry: 0, bal: 0, earned: 0, refEarned: 0,
+        refCode: 'TF' + id, refBy: 'Không có', ip: clientIp, joinedAt: Date.now(), tickets: 1, done: 0,
+        lastCi: '', streak: 0, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [],
+        downlines: [], completedTaskIds: [], hist: []
+      };
       db.users.push(nu);
       me = nu;
       localStorage.setItem(SESSION_USER_KEY, me.u);
-      botAnnounceToUser(nu, 'Thành viên mới', refNote);
-      notifyTelegram(`🆕 KHÁCH HÀNG ĐĂNG KÝ MỚI\n• Họ tên: ${nu.name}\n• Tài khoản: @${nu.u} (ID #${nu.id})\n• Mã Ref mời: ${nu.refCode}\n• Người giới thiệu: ${nu.refBy}\n• IP: ${nu.ip}${sameIpWithRef ? '\n• Trạng thái Ref: Trùng IP (không cộng thưởng)' : ''}`);
       save();
       startSession(false, true);
-      if (sameIpWithRef) {
-        toast('Đăng ký thành công (Trùng IP người giới thiệu nên không cộng thưởng Ref)');
-      }
     }
   }
   function startSession(isRestore = false, openLoginNotice = false) {
@@ -2919,24 +1925,18 @@ async function pullFromCloud(silent = true) {
       document.getElementById('cskhApp')?.classList.add('hidden');
       document.getElementById('adminApp').classList.remove('hidden');
       renderAdmin();
-    }
-    else if (me.role === 'cskh') {
+    } else if (me.role === 'cskh') {
       document.getElementById('userApp').classList.add('hidden');
       document.getElementById('adminApp').classList.add('hidden');
       document.getElementById('cskhApp')?.classList.remove('hidden');
       renderCskhPanel();
-    }
-    else {
+    } else {
       document.getElementById('adminApp').classList.add('hidden');
       document.getElementById('cskhApp')?.classList.add('hidden');
       document.getElementById('userApp').classList.remove('hidden');
       drawWheel();
       renderUser();
       checkApprovedWithdrawPopup();
-      if (!pendingAlertWd) {
-        if (openLoginNotice) renderLoginNoticePopup(true);
-        else if (!isRestore && me.lastCi !== today()) setTimeout(openCheckin, 350);
-      }
     }
   }
   function logout() {
@@ -2947,53 +1947,183 @@ async function pullFromCloud(silent = true) {
     document.getElementById('adminApp').classList.add('hidden');
     document.getElementById('aiFloatBtn').classList.add('hidden');
     document.getElementById('authScreen').classList.remove('hidden');
-    document.getElementById('authPass').value = '';
+  }
+  function switchUserView(v) {
+    ['home', 'lixi', 'wheel', 'vip', 'ref', 'chat', 'wallet'].forEach(x => {
+      const cap = x[0].toUpperCase() + x.slice(1);
+      document.getElementById('view' + cap)?.classList.toggle('hidden', x !== v);
+      document.getElementById('nBtn' + cap)?.classList.toggle('active', x === v);
+    });
+    if (v === 'vip') renderDepositTabBox();
+    if (v === 'lixi') renderLxRoomStream();
+    if (v === 'wallet') renderWalletRules();
+  }
+  function goToWithdrawView() { switchUserView('wallet'); }
+  function renderUser() {
+    if (!me) return;
+    const vipObj = VIPS.find(v => v.lv === me.vip) || VIPS[0];
+    document.getElementById('uName').textContent = me.name;
+    document.getElementById('uVipPill').textContent = vipObj.lv === 0 ? 'VIP 0' : `VIP ${vipObj.lv}`;
+    document.getElementById('uIdRef').textContent = `ID #${me.id} • Ref: ${me.refCode}`;
+    document.getElementById('uProfileName').textContent = me.name;
+    document.getElementById('uProfileId').textContent = `#${me.id}`;
+    document.getElementById('uProfileJoined').textContent = formatDateOnly(me.joinedAt);
+    document.getElementById('uProfileIp').textContent = me.ip || '--';
+    document.getElementById('uBal').textContent = money(me.bal);
+    document.getElementById('uEarned').textContent = money(me.earned);
+    document.getElementById('uRefEarned').textContent = money(me.refEarned);
+    document.getElementById('uTickets').textContent = me.tickets;
+    document.getElementById('uVipBonusText').textContent = `+${vipObj.bonus}%`;
+    document.getElementById('uProgressLabel').textContent = `${me.done}/${vipObj.limit}`;
+    document.getElementById('uProgressBar').style.width = Math.min(100, (me.done / vipObj.limit) * 100) + '%';
+    document.getElementById('uShareRef').textContent = me.refCode;
+    document.getElementById('wInfoName').textContent = me.name;
+    document.getElementById('wInfoId').textContent = `#${me.id}`;
+    document.getElementById('wInfoJoined').textContent = formatDateOnly(me.joinedAt);
+    document.getElementById('wInfoIp').textContent = me.ip || '--';
+    renderLxRoomStream();
+    renderWalletRules();
+    renderMarquee();
+    document.getElementById('uHist').innerHTML = (me.hist || []).map(h => `<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;"><span>${h.t}</span><strong style="color:${h.a >= 0 ? 'var(--primary)' : 'var(--red)'};">${h.a >= 0 ? '+' : ''}${money(h.a)}</strong></div>`).join('') || '<div style="color:var(--muted);font-size:13px;">Chưa có giao dịch</div>';
+  }
+  function drawWheel() {
+    const svg = document.getElementById('wheelSvg');
+    if (!svg) return;
+    const n = PRIZES.length, step = 360 / n, rad = Math.PI / 180;
+    let html = '';
+    for (let i = 0; i < n; i++) {
+      const a1 = (i * step - 90) * rad, a2 = ((i + 1) * step - 90) * rad;
+      const x1 = 150 + 146 * Math.cos(a1), y1 = 150 + 146 * Math.sin(a1);
+      const x2 = 150 + 146 * Math.cos(a2), y2 = 150 + 146 * Math.sin(a2);
+      const mid = i * step + step / 2;
+      const shortLabel = PRIZES[i].label === 'Chúc may mắn lần sau' ? 'May mắn' : PRIZES[i].label;
+      html += `<path d="M150,150 L${x1},${y1} A146,146 0 0,1 ${x2},${y2} Z" fill="${PRIZES[i].color}" stroke="#fff" stroke-width="2"/><text x="150" y="38" fill="#fff" font-size="11" font-weight="800" text-anchor="middle" transform="rotate(${mid} 150 150)">${shortLabel}</text>`;
+    }
+    svg.innerHTML = html;
+  }
+  function renderMarquee() {
+    const el = document.getElementById('winnerMarquee');
+    if (!el) return;
+    const items = db.winners.map(w => `<div class="marquee-item"><span>🎉 <strong>${w.u}</strong> quay trúng</span><strong style="color:var(--primary);">${w.p}</strong></div>`).join('');
+    el.innerHTML = items + items;
+  }
+  let selectedDepositAmount = 100000;
+  function updateDepositDisplay(val) {
+    const num = Math.max(0, Math.round(Number(val || 0)));
+    selectedDepositAmount = num;
+    const disp = document.getElementById('depSelectedDisplay');
+    if (disp) disp.innerHTML = `${num.toLocaleString('vi-VN')}<span style="text-decoration:underline;">đ</span>`;
+    renderDepositTabBox();
+  }
+  function selectDepositPreset(amt, btnEl) {
+    document.querySelectorAll('#depPresetGrid .dep-amt-btn').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+    document.getElementById('depCustomToggleRow')?.classList.remove('active');
+    const inp = document.getElementById('customDepositAmtInp');
+    if (inp) inp.value = '';
+    updateDepositDisplay(amt);
+  }
+  function enableCustomDepositMode() {
+    document.querySelectorAll('#depPresetGrid .dep-amt-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('depCustomToggleRow')?.classList.add('active');
+    const inp = document.getElementById('customDepositAmtInp');
+    if (inp) {
+      if (document.activeElement !== inp) inp.focus();
+      updateDepositDisplay(inp.value || 0);
+    }
+  }
+  function onCustomDepositInput(val) {
+    document.querySelectorAll('#depPresetGrid .dep-amt-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('depCustomToggleRow')?.classList.add('active');
+    updateDepositDisplay(val);
+  }
+  function renderDepositTabBox() {
+    const box = document.getElementById('depositTabBankBox');
+    if (!box) return;
+    const pay = getActivePayment();
+    const amt = Math.max(1000, Number(selectedDepositAmount || 100000));
+    const memo = `${pay.memo || 'NAP'} ${me ? me.u : ''}`.trim();
+    const qrHtml = pay.qrImage ? `<img src="${pay.qrImage}" class="qr-preview-img" alt="Mã QR">` : '';
+    box.innerHTML = `<div style="font-weight:800;color:var(--indigo);">${pay.bank}</div>${qrHtml}<div style="font-size:13px;margin-top:4px;">STK: <strong>${pay.account}</strong> • Chủ TK: <strong>${pay.owner}</strong></div><div style="font-size:12px;color:var(--gold);font-weight:800;margin-top:3px;">Số tiền nạp: ${money(amt)}</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">Nội dung CK: <strong>${memo}</strong></div>`;
+  }
+  function submitDepositFromTab() {
+    if (!me) return;
+    const amt = Math.round(Number(selectedDepositAmount || 0));
+    if (amt < 10000) return toast('Bạn vui lòng chọn hoặc nhập số tiền nạp từ 10.000đ trở lên nhé!');
+    const bankBox = document.getElementById('depositTabBankBox');
+    if (bankBox) bankBox.classList.remove('hidden');
+    db.vipRequests.unshift({
+      id: 'TP' + Date.now().toString().slice(-4),
+      uid: me.id, u: me.u, name: me.name, lv: 1,
+      pkgName: `Nạp tiền ${money(amt)}`, days: 7, price: amt, st: 'pending'
+    });
+    me.hist.unshift({ t: `Yêu cầu nạp tiền (${money(amt)}) • Chờ duyệt`, a: 0, dateStr: formatDateOnly(Date.now()) });
+    save();
+    renderUser();
+    toast(`Đã tạo lệnh nạp ${money(amt)}! Bạn chuyển khoản theo thông tin bên dưới để mở khóa rút tiền nhanh nhé.`);
+  }
+  function notifyTelegram(text) {
+    if (!TG_BOT_TOKEN || !TG_CHAT_ID) return;
+    fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: TG_CHAT_ID, text })
+    }).catch(() => {});
+  }
+  function renderAdmin() {
+    document.getElementById('kUsers').textContent = db.users.length;
+    document.getElementById('kDone').textContent = db.users.reduce((s, u) => s + (u.done || 0), 0);
+    document.getElementById('kWd').textContent = db.withdraws.filter(w => w.st === 'pending').length;
+    const kVipEl = document.getElementById('kVipReq');
+    if (kVipEl) kVipEl.textContent = db.vipRequests.filter(r => r.st === 'pending').length;
+    renderLxTierBuilder();
   }
   function renderCskhPanel() {
     if (!me || me.role !== 'cskh') return;
-    const q = (document.getElementById('cskhUserSearch')?.value || '').trim().toLowerCase();
-    const customers = db.users.filter(u => u.role === 'user');
-    if (customers.length && !customers.some(c => c.u === activeSupportCustomer)) {
-      activeSupportCustomer = customers[0].u;
-    }
     const targetLabelEl = document.getElementById('cskhActiveTargetLabel');
     if (targetLabelEl) targetLabelEl.textContent = '@' + (activeSupportCustomer || 'user1');
-    const filtered = customers.filter(u => !q || u.name.toLowerCase().includes(q) || u.u.toLowerCase().includes(q) || String(u.id).includes(q) || u.refCode.toLowerCase().includes(q) || String(u.ip || '').includes(q));
-    document.getElementById('cskhUserList').innerHTML = filtered.length ? filtered.map(u => `
-    <div class="task-item" style="flex-wrap:wrap;">
-      <div style="min-width:0;">
-        <strong>${u.name}</strong> (@${u.u}) • <span class="vip-pill">VIP ${u.vip}</span> ${u.banned ? '<span class="status-badge st-no">Đã khóa</span>' : '<span class="status-badge st-ok">Hoạt động</span>'}
-        <div style="font-size:12px;color:var(--muted);margin-top:2px;">ID #${u.id} • Tham gia: ${formatDateOnly(u.joinedAt)} • IP: ${u.ip || '--'}</div>
-        <div style="font-size:12px;color:var(--muted);">Số dư: <strong style="color:var(--primary);">${money(u.bal)}</strong> • Đã làm: ${u.done} kèo • Vé: ${u.tickets}</div>
-      </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <button type="button" class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="selectCskhCustomer('${u.u}')">Chat KH</button>
-        <button type="button" class="btn-sm" style="background:var(--primary-soft);color:var(--primary);" onclick="cskhAdjustBalance(${u.id}, 5000)">+5k</button>
-        <button type="button" class="btn-sm" style="background:var(--gold-soft);color:var(--gold);" onclick="openEditUser(${u.id}, true)">Sửa KH</button>
-        <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="cskhToggleBan(${u.id})">${u.banned ? 'Mở khóa' : 'Khóa'}</button>
-      </div>
-    </div>
-  `).join('') : '<div style="font-size:13px;color:var(--muted);">Không tìm thấy tài khoản khách hàng phù hợp.</div>';
-    const pendingWds = db.withdraws.filter(w => w.st === 'pending');
-    const pendingVips = db.vipRequests.filter(r => r.st === 'pending');
-    document.getElementById('cskhOrderList').innerHTML = `
-    ${pendingWds.map(w => `
-      <div class="task-item" style="flex-wrap:wrap;">
-        <div><strong>Rút #${
-      w.id
-    }
-    • @${
-      w.u
-    }
-    • ${
-      money(w.amt)
-    }
-    </strong><div style="font-size:12px;color:var(--muted);">${
-      w.bank
-    }
-    - ${
-      w.acc
-    }
-    (${
+  }
+  function checkApprovedWithdrawPopup() {}
+  function ackWithdrawSuccess() { closeModals(); }
+  function openCheckin() { document.getElementById('checkinModal')?.classList.remove('hidden'); }
+  function doCheckin() { toast('Đã điểm danh!'); }
+  function claimChest() { toast('Đã mở rương ngày!'); }
+  function copyRef() { if (me) toast('Đã sao chép link Ref: ' + me.refCode); }
+  function copyRefCodeOnly() { if (me) toast('Đã sao chép mã Ref: ' + me.refCode); }
+  function refreshLeaderboard() { db.leaderboard = buildDefaultLeaderboard(); save(); renderUser(); }
+  function redeemPromoCode() { toast('Đã kiểm tra mã ưu đãi'); }
+  function setTaskFilter() {}
+  function rotateTaskNodes() {}
+  function spinWheel() { if (!me || me.tickets <= 0) return toast('Hết vé quay'); me.tickets -= 1; me.bal += 1000; me.earned += 1000; me.hist.unshift({ t: 'Vòng quay trúng 1.000đ', a: 1000 }); save(); renderUser(); toast('Trúng +1.000đ!'); }
+  function selectChannel(id) { curCh = id; }
+  function openCreateGroup() { document.getElementById('groupModal')?.classList.remove('hidden'); }
+  function addGroup() { closeModals(); toast('Đã tạo nhóm'); }
+  function sendMsg(e) { e.preventDefault(); }
+  function emitTypingState() {}
+  function clearTypingState() {}
+  function toggleCardRedeemFields() {}
+  function handleAiFabClick() { document.getElementById('aiModal')?.classList.remove('hidden'); }
+  function sendAiPrompt(e) { if (e) e.preventDefault(); }
+  function switchAdminView(v) {
+    ['dash', 'users', 'tasks', 'wd', 'vipReq', 'pay', 'chat', 'promo', 'notify', 'lixi', 'links'].forEach(x => {
+      const cap = x[0].toUpperCase() + x.slice(1);
+      document.getElementById('aView' + cap)?.classList.toggle('hidden', x !== v);
+      document.getElementById('aBtn' + cap)?.classList.toggle('active', x === v);
+    });
+    renderAdmin();
+  }
+  function testTelegramBot() { toast('Đã gửi test Telegram'); }
+  function manualSyncCloud() { renderUser(); renderAdmin(); toast('Đã làm mới dữ liệu'); }
+  function resetDemoData() { localStorage.removeItem(KEY); db = normalizeDb(null); save(); renderAdmin(); toast('Đã reset'); }
+  function applyDemoAccountPreset() { const u = db.users.find(x => x.u === 'user1'); if (u) { u.bal = 1850000; u.earned = 4620000; save(); renderAdmin(); toast('Đã set @user1'); } }
+  function renderAdminUsers() {}
+  function createTask() {}
+  function createPromoCode() {}
+  function createMinigame() {}
+  function sendAdminNotification() {}
+  function handleNewPayQrFile() {}
+  function addPaymentAccount() {}
+  function saveSupportLinks() { toast('Đã lưu liên kết'); }
+</script>
 </body>
 </html>

@@ -1108,9 +1108,9 @@ const INIT = {
   ],
   vipRequests: [],
   users: [
-    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', joinedAt: Date.now() - 86400000 * 15, tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
-    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', joinedAt: Date.now() - 86400000 * 5, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
-    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] }
+    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', joinedAt: Date.now() - 86400000 * 15, tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], completedTaskIds: [], hist: [] },
+    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', joinedAt: Date.now() - 86400000 * 5, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], completedTaskIds: [], hist: [] },
+    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], completedTaskIds: [], hist: [] }
   ],
   tasks: [],
   withdraws: [],
@@ -1174,6 +1174,7 @@ function normalizeDb(raw) {
     if (!Array.isArray(u.seenApprovedWdIds)) u.seenApprovedWdIds = [];
     if (!Array.isArray(u.dismissedNotifyIds)) u.dismissedNotifyIds = [];
     if (!Array.isArray(u.downlines)) u.downlines = [];
+    if (!Array.isArray(u.completedTaskIds)) u.completedTaskIds = [];
     if (typeof u.deposit50kDone !== 'boolean') u.deposit50kDone = false;
   });
   if (!Array.isArray(merged.tasks)) merged.tasks = [];
@@ -1674,6 +1675,9 @@ async function pullFromCloud(silent = true) {
           if (Array.isArray(loc.downlines) && loc.downlines.length && (!Array.isArray(cu.downlines) || !cu.downlines.length)) {
             cu.downlines = loc.downlines;
           }
+          if (Array.isArray(loc.completedTaskIds) && loc.completedTaskIds.length) {
+            cu.completedTaskIds = Array.from(new Set([...(cu.completedTaskIds || []).map(String), ...loc.completedTaskIds.map(String)]));
+          }
         }
       });
       db = cloudDb;
@@ -1769,14 +1773,19 @@ async function detectRealIp() {
   return realClientIp;
 }
 
+let lastUserTapAt = 0;
+document.addEventListener('pointerdown', () => { lastUserTapAt = Date.now(); }, { passive: true });
+
 setInterval(async () => {
   if (!CLOUD_ENABLED || !me || spinning || Date.now() < reactionLockUntil) return;
+  if (Date.now() - lastUserTapAt < 2000) return;
   const linksTabActive = !document.getElementById('aViewLinks')?.classList.contains('hidden');
   const isEditingLinks = linksTabActive && document.activeElement && document.activeElement.closest('#aViewLinks');
   const isEditingCskh = me.role === 'cskh' && document.activeElement && document.activeElement.closest('#cskhApp');
   const isEditingModal = !document.getElementById('editUserModal')?.classList.contains('hidden');
+  const isDoingTaskModal = !document.getElementById('taskModal')?.classList.contains('hidden');
   const isEditingTasksApi = document.activeElement && document.activeElement.closest('#aViewTasks');
-  if (isEditingLinks || isEditingCskh || isEditingModal || isEditingTasksApi) return;
+  if (isEditingLinks || isEditingCskh || isEditingModal || isDoingTaskModal || isEditingTasksApi) return;
 
   await pullFromCloud(true);
   if (me && me.role === 'admin') renderAdmin();
@@ -1785,7 +1794,7 @@ setInterval(async () => {
     renderUser();
     checkApprovedWithdrawPopup();
   }
-}, 2500);
+}, 8000);
 
 document.addEventListener('visibilitychange', async () => {
   if (document.visibilityState === 'visible' && CLOUD_ENABLED && me && !spinning) {
@@ -1961,7 +1970,7 @@ async function submitAuth(e) {
       bal: startBal, earned: startBal, refEarned: grantRef ? inviteeReward : 0,
       refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có',
       ip: clientIp, joinedAt, tickets: 1, done: 0, lastCi: '', streak: 0, banned: false,
-      deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [],
+      deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], completedTaskIds: [],
       hist: grantRef && inviteeReward > 0
         ? [{ t: `Thưởng nhập mã Ref ${inv.refCode}`, a: inviteeReward }]
         : []
@@ -2456,8 +2465,10 @@ function renderUser() {
   if (zaloBtn) zaloBtn.href = links.zalo ? cleanOptionalUrl(links.zalo) : '#';
   if (grpBtn) grpBtn.href = links.group ? cleanOptionalUrl(links.group) : '#';
 
-  const filteredTasks = curTaskCat === 'all' ? db.tasks : db.tasks.filter(t => (t.cat || 'Vượt link') === curTaskCat);
-  document.getElementById('taskList').innerHTML = filteredTasks.map(t => {
+  const doneIds = new Set(Array.isArray(me.completedTaskIds) ? me.completedTaskIds.map(String) : []);
+  const availableTasks = db.tasks.filter(t => !doneIds.has(String(t.id)));
+  const filteredTasks = (curTaskCat === 'all' ? availableTasks : availableTasks.filter(t => (t.cat || 'Vượt link') === curTaskCat)).slice(0, 50);
+  document.getElementById('taskList').innerHTML = filteredTasks.length ? filteredTasks.map(t => {
     const rew = Number(t.reward || 0);
     const catName = t.cat || 'Vượt link';
     return `
@@ -2468,10 +2479,10 @@ function renderUser() {
           ${t.guide ? `<div style="font-size:12px;color:#475569;margin-top:3px;">${t.guide}</div>` : ''}
           <div style="font-size:12px;color:var(--muted);margin-top:4px;">Thưởng: <strong style="color:var(--primary);font-size:14px;">+${money(rew)}</strong> • Đã làm: ${t.done}</div>
         </div>
-        <button class="btn-sm" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(5,150,105,0.24);" onclick="openTask('${t.id}')">Làm ngay</button>
+        <button type="button" class="btn-sm" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(5,150,105,0.24);" onclick="openTask('${t.id}')">Làm ngay</button>
       </div>
     `;
-  }).join('');
+  }).join('') : '<div class="card" style="text-align:center;color:var(--muted);font-size:13px;">Bạn đã hoàn thành hết kèo trong mục này.</div>';
 
   const mList = [...db.winners, ...db.winners];
   document.getElementById('winnerMarquee').innerHTML = mList.map(w => `<div class="marquee-item"><span><strong>${w.u}</strong></span><span style="font-weight:800;color:${w.p === 'Chúc may mắn lần sau' ? 'var(--muted)' : 'var(--primary)'};">${w.p}</span></div>`).join('');
@@ -2612,9 +2623,13 @@ function claimChest() {
 }
 
 function openTask(id) {
+  if (!me) return;
   const vip = VIPS[me.vip] || VIPS[0];
   if (me.done >= vip.limit) return toast('Hết lượt nhiệm vụ hôm nay! Nâng VIP để thêm lượt.');
-  curTask = db.tasks.find(x => x.id === id);
+  if (Array.isArray(me.completedTaskIds) && me.completedTaskIds.map(String).includes(String(id))) {
+    return toast('Bạn đã hoàn thành kèo này rồi!');
+  }
+  curTask = db.tasks.find(x => String(x.id) === String(id));
   if (!curTask) return;
   const catName = curTask.cat || 'Vượt link';
   document.getElementById('tmTitle').textContent = `${curTask.title} (${catName})`;
@@ -2671,6 +2686,10 @@ function confirmTask() {
 
   const rew = Number(curTask.reward || 0);
   me.bal += rew; me.earned += rew; me.done++; curTask.done++;
+  if (!Array.isArray(me.completedTaskIds)) me.completedTaskIds = [];
+  if (!me.completedTaskIds.map(String).includes(String(curTask.id))) {
+    me.completedTaskIds.push(String(curTask.id));
+  }
   me.hist.unshift({ t: `Kèo [${catName}]: ${curTask.title}`, a: rew });
   const inv = db.users.find(x => me.refBy && me.refBy.includes(x.refCode));
   if (inv && inv.ip !== me.ip) {
@@ -2985,6 +3004,41 @@ function saveApiFeedConfigOnly() {
   save();
   renderApiFeedAdminBox();
   toast('Đã lưu cấu hình API & % chênh lệch');
+}
+
+function normalizeOfferPayoutToVnd(item, usdRate = 25000) {
+  if (item.payout_vnd !== undefined && item.payout_vnd !== null && Number(item.payout_vnd) > 0) {
+    return Number(item.payout_vnd);
+  }
+  const raw = Number(item.payout ?? item.reward ?? item.commission ?? item.amount ?? 0);
+  if (raw <= 0) return 0;
+  if (raw < 500) {
+    return Math.round(raw * usdRate);
+  }
+  return Math.round(raw);
+}
+
+function calcUserRewardWithMargin(netVnd, marginPct = 40) {
+  const net = Number(netVnd || 0);
+  if (net <= 0) return 0;
+  const keepRatio = Math.min(0.9, Math.max(0, Number(marginPct || 0) / 100));
+  const userShare = net * (1 - keepRatio);
+  const rounded = Math.floor(userShare / 1000) * 1000;
+  if (rounded < 1000) return 0;
+  return Math.min(rounded, 100000);
+}
+
+async function fetchRawOffersFromUrl(targetUrl) {
+  try {
+    const res = await fetch(targetUrl, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } catch (directErr) {
+    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
+    const pRes = await fetch(proxyUrl, { cache: 'no-store' });
+    if (!pRes.ok) throw new Error('Proxy HTTP ' + pRes.status);
+    return await pRes.json();
+  }
 }
 
 async function saveAndSyncApiOffers() {

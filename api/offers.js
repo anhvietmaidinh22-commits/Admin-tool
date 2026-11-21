@@ -16,8 +16,19 @@ function extractNumber(val) {
   return Number(cleaned || 0);
 }
 
+function buildMasofferUrl(pubId, token) {
+  const cleanPub = String(pubId || '').trim();
+  const cleanToken = String(token || '').trim();
+  if (!cleanPub || !cleanToken) return '';
+  const encodedToken = cleanToken.includes('%') ? cleanToken : encodeURIComponent(cleanToken);
+  return `https://publisher-api.masoffer.net/offer/all?pub_id=${encodeURIComponent(cleanPub)}&token=${encodedToken}`;
+}
+
 function parseSourceUrls(req) {
   const rawList = [];
+
+  const directMasoffer = buildMasofferUrl(req.query?.pub_id, req.query?.token);
+  if (directMasoffer) rawList.push(directMasoffer);
 
   if (typeof req.query?.urls === 'string' && req.query.urls.trim()) {
     rawList.push(...req.query.urls.split(/[\n,]+/));
@@ -41,7 +52,10 @@ function parseSourceUrls(req) {
 async function fetchSingleSource(sourceUrl) {
   const upstream = await fetch(sourceUrl, {
     method: 'GET',
-    headers: { Accept: 'application/json, text/plain, */*' },
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'User-Agent': 'Mozilla/5.0'
+    },
     cache: 'no-store'
   });
 
@@ -55,6 +69,7 @@ async function fetchSingleSource(sourceUrl) {
       ok: false,
       status: upstream.status,
       error: 'Phản hồi không phải JSON',
+      preview: rawText.slice(0, 200),
       offers: []
     };
   }
@@ -64,7 +79,7 @@ async function fetchSingleSource(sourceUrl) {
       sourceUrl,
       ok: false,
       status: upstream.status,
-      error: 'Lỗi HTTP ' + upstream.status,
+      error: parsed?.message || parsed?.error || ('Lỗi HTTP ' + upstream.status),
       offers: []
     };
   }
@@ -116,7 +131,7 @@ export default async function handler(req, res) {
         ok: true,
         sourcesCount: 0,
         offers: [],
-        message: 'Chưa truyền ?url=, ?urls= hoặc cấu hình biến môi trường nguồn API'
+        message: 'Truyền ?pub_id=...&token=... hoặc ?url=... hoặc ?urls=...'
       });
     }
 
@@ -138,12 +153,13 @@ export default async function handler(req, res) {
       ok: true,
       sourcesCount: sources.length,
       totalOffers: mergedOffers.length,
-      sources: results.map(({ sourceUrl, ok, status, rawCount, error }) => ({
+      sources: results.map(({ sourceUrl, ok, status, rawCount, error, preview }) => ({
         sourceUrl,
         ok,
         status,
         rawCount: rawCount ?? 0,
-        error: error || null
+        error: error || null,
+        preview: preview || null
       })),
       offers: mergedOffers
     });

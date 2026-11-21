@@ -616,6 +616,29 @@
   </div>
 
   <div id="aViewTasks" class="section hidden">
+    <div class="card" style="background:linear-gradient(135deg,#f8fafc,#eef2ff);border:1.5px solid #c7d2fe;">
+      <strong style="display:block;margin-bottom:8px;font-size:15px;color:var(--indigo);">🔗 Kết Nối API Web Kèo &amp; Set Chênh Lệch</strong>
+      <div class="form-group" style="margin-bottom:10px;">
+        <label class="form-label">Link API / Feed các web kèo</label>
+        <input type="text" id="apiFeedUrlInp" class="form-input" placeholder="Dán link API JSON/Offer của web kèo...">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div>
+          <label class="form-label">% Chênh lệch giữ lại (VD: 40)</label>
+          <input type="number" id="apiMarginPctInp" class="form-input" min="0" max="90" value="40" placeholder="40">
+        </div>
+        <div>
+          <label class="form-label">Tỷ giá USD → VNĐ (Nếu payout là USD)</label>
+          <input type="number" id="apiUsdRateInp" class="form-input" min="1" value="25000" placeholder="25000">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button type="button" class="btn-secondary" style="background:#fff;color:var(--indigo);font-weight:800;" onclick="saveApiFeedConfigOnly()">💾 Lưu Cấu Hình</button>
+        <button type="button" class="btn-primary" onclick="saveAndSyncApiOffers()">🔄 Lưu &amp; Kéo Kèo API</button>
+      </div>
+      <div id="apiSyncSummaryText" style="font-size:12px;color:var(--muted);margin-top:8px;">Chưa đồng bộ lần nào.</div>
+    </div>
+
     <div class="card">
       <strong style="display:block;margin-bottom:10px;font-size:15px;">➕ Thêm nhiệm vụ mới</strong>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
@@ -626,13 +649,20 @@
         </select>
         <input type="number" id="tReward" class="form-input" placeholder="Tiền thưởng (VNĐ)">
         <input type="text" id="tTitle" class="form-input" placeholder="Tên nhiệm vụ">
-        <input type="text" id="tCode" class="form-input" placeholder="Mã xác nhận">
+        <input type="text" id="tCode" class="form-input" placeholder="Mã xác nhận (Bắt buộc nếu có xác minh)">
       </div>
       <div style="margin-top:8px;">
         <input type="text" id="tUrl" class="form-input" placeholder="Link nhiệm vụ">
       </div>
       <div style="margin-top:8px;">
-        <input type="text" id="tGuide" class="form-input" placeholder="Hướng dẫn làm nhiệm vụ">
+        <input type="text" id="tGuide" class="form-input" placeholder="Hướng dẫn làm nhiệm vụ & yêu cầu xác minh">
+      </div>
+      <div style="margin-top:8px;">
+        <label class="form-label" style="margin-bottom:4px;">Chế độ xác minh trước khi cộng tiền</label>
+        <select id="tRequireVerify" class="form-input">
+          <option value="1">Bắt buộc xác minh (Rút link đúng mã / Xác minh hợp lệ mới cộng tiền)</option>
+          <option value="0">Xác minh cơ bản (Vẫn yêu cầu nhập mã/xác nhận tối thiểu 3 ký tự)</option>
+        </select>
       </div>
       <button class="btn-primary" style="margin-top:10px;" onclick="createTask()">Thêm Nhiệm Vụ</button>
     </div>
@@ -866,7 +896,7 @@
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
     <div id="tmGuideBox" style="background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:10px 12px;font-size:13px;color:#334155;margin-bottom:8px;"></div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">Mở link bên dưới để hoàn thành và lấy mã xác nhận. Nhận ngay <strong id="tmReward" style="color:var(--primary);"></strong>.</p>
+    <p id="tmVerifyHint" style="font-size:13px;color:var(--muted);margin-bottom:8px;">Mở link bên dưới để hoàn thành và lấy mã xác nhận. Nhận ngay <strong id="tmReward" style="color:var(--primary);"></strong>.</p>
     <a id="tmLink" href="#" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-bottom:12px;color:var(--indigo);font-weight:800;font-size:13px;">Mở link nhiệm vụ ↗</a>
     <input type="text" id="tmCodeInput" class="form-input" placeholder="Nhập mã xác nhận..." style="margin-bottom:12px;">
     <button class="btn-primary" onclick="confirmTask()">Xác Nhận Nhận Tiền</button>
@@ -925,10 +955,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V31';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V31';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V31';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V31';
+const KEY = 'TF_VIP_PRO_CLOUD_V32';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V32';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V32';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V32';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -1037,6 +1067,13 @@ const INIT = {
     inviterBonus: 5000,
     inviteeBonus: 2000
   },
+  apiFeedConfig: {
+    url: '',
+    marginPct: 40,
+    usdRate: 25000,
+    lastSyncAt: 0,
+    lastCount: 0
+  },
   adminNotices: [
     {
       id: 'NTF_WELCOME_01',
@@ -1112,6 +1149,13 @@ function normalizeDb(raw) {
   merged.refConfig.inviterBonus = (invRaw === '' || invRaw === null || invRaw === undefined) ? 0 : Math.max(0, Number(invRaw) || 0);
   merged.refConfig.inviteeBonus = (iteRaw === '' || iteRaw === null || iteRaw === undefined) ? 0 : Math.max(0, Number(iteRaw) || 0);
 
+  if (!merged.apiFeedConfig || typeof merged.apiFeedConfig !== 'object') merged.apiFeedConfig = Object.assign({}, INIT.apiFeedConfig);
+  merged.apiFeedConfig.url = String(merged.apiFeedConfig.url || '').trim();
+  merged.apiFeedConfig.marginPct = Math.min(90, Math.max(0, Number(merged.apiFeedConfig.marginPct ?? 40) || 0));
+  merged.apiFeedConfig.usdRate = Math.max(1, Number(merged.apiFeedConfig.usdRate ?? 25000) || 25000);
+  merged.apiFeedConfig.lastSyncAt = Number(merged.apiFeedConfig.lastSyncAt || 0);
+  merged.apiFeedConfig.lastCount = Number(merged.apiFeedConfig.lastCount || 0);
+
   if (!Array.isArray(merged.adminNotices)) merged.adminNotices = [];
   if (!Array.isArray(merged.leaderboard) || !merged.leaderboard.length) merged.leaderboard = buildDefaultLeaderboard();
   if (!Array.isArray(merged.promoCodes)) merged.promoCodes = JSON.parse(JSON.stringify(INIT.promoCodes));
@@ -1137,6 +1181,7 @@ function normalizeDb(raw) {
     if (t.cat === 'CPA App') t.cat = 'Đánh giá Google';
     if (!t.guide) t.guide = '';
     if (!Array.isArray(t.usedRandomCodes)) t.usedRandomCodes = [];
+    if (typeof t.requireVerify !== 'boolean') t.requireVerify = true;
   });
   if (!Array.isArray(merged.withdraws)) merged.withdraws = [];
   if (!Array.isArray(merged.channels) || !merged.channels.length) merged.channels = JSON.parse(JSON.stringify(INIT.channels));
@@ -1730,7 +1775,8 @@ setInterval(async () => {
   const isEditingLinks = linksTabActive && document.activeElement && document.activeElement.closest('#aViewLinks');
   const isEditingCskh = me.role === 'cskh' && document.activeElement && document.activeElement.closest('#cskhApp');
   const isEditingModal = !document.getElementById('editUserModal')?.classList.contains('hidden');
-  if (isEditingLinks || isEditingCskh || isEditingModal) return;
+  const isEditingTasksApi = document.activeElement && document.activeElement.closest('#aViewTasks');
+  if (isEditingLinks || isEditingCskh || isEditingModal || isEditingTasksApi) return;
 
   await pullFromCloud(true);
   if (me && me.role === 'admin') renderAdmin();
@@ -2570,48 +2616,69 @@ function openTask(id) {
   if (me.done >= vip.limit) return toast('Hết lượt nhiệm vụ hôm nay! Nâng VIP để thêm lượt.');
   curTask = db.tasks.find(x => x.id === id);
   if (!curTask) return;
-  document.getElementById('tmTitle').textContent = `${curTask.title} (${curTask.cat || 'Vượt link'})`;
+  const catName = curTask.cat || 'Vượt link';
+  document.getElementById('tmTitle').textContent = `${curTask.title} (${catName})`;
   const guideEl = document.getElementById('tmGuideBox');
   if (guideEl) {
-    guideEl.textContent = curTask.guide || 'Mở link nhiệm vụ bên dưới, thực hiện đúng hướng dẫn rồi nhập mã xác nhận để nhận thưởng.';
+    guideEl.textContent = curTask.guide || 'Mở link nhiệm vụ bên dưới, hoàn thành yêu cầu và nhập mã xác nhận để nhận thưởng.';
+  }
+  const hintEl = document.getElementById('tmVerifyHint');
+  const codeInp = document.getElementById('tmCodeInput');
+  if (catName === 'Vượt link' && curTask.code) {
+    if (hintEl) hintEl.innerHTML = `Kèo rút gọn link: mở link bên dưới, vượt link lấy mã xác nhận và nhập đúng mã mới được cộng <strong style="color:var(--primary);">${money(Number(curTask.reward || 0))}</strong>.`;
+    if (codeInp) codeInp.placeholder = 'Nhập đúng mã xác nhận vượt link...';
+  } else {
+    if (hintEl) hintEl.innerHTML = `Kèo cần xác minh: hoàn thành nhiệm vụ và nhập xác nhận hợp lệ mới được cộng <strong style="color:var(--primary);">${money(Number(curTask.reward || 0))}</strong>.`;
+    if (codeInp) codeInp.placeholder = 'Nhập mã hoặc nội dung xác minh (tối thiểu 3 ký tự)...';
   }
   document.getElementById('tmReward').textContent = money(Number(curTask.reward || 0));
   document.getElementById('tmLink').href = curTask.url;
-  document.getElementById('tmCodeInput').value = '';
+  if (codeInp) codeInp.value = '';
   document.getElementById('taskModal').classList.remove('hidden');
 }
 
 function confirmTask() {
-  const inputCode = document.getElementById('tmCodeInput').value.trim().toUpperCase();
-  if (!inputCode) return toast('Vui lòng nhập mã xác nhận');
+  if (!curTask || !me) return;
+  const inputCode = (document.getElementById('tmCodeInput')?.value || '').trim();
+  const upperCode = inputCode.toUpperCase();
+  if (!upperCode) return toast('Vui lòng nhập xác nhận trước khi nhận tiền');
 
+  const catName = curTask.cat || 'Vượt link';
   const expectedBase = String(curTask.code || '').trim().toUpperCase();
-  const basePrefix = expectedBase.split('-')[0];
-  const isExactMatch = inputCode === expectedBase;
-  const isRandomMatch = Boolean(basePrefix) && inputCode.startsWith(basePrefix + '-') && /^([A-Z0-9_-]+)-([A-Z0-9]{4})$/.test(inputCode);
+  const requiresExactCode = Boolean(expectedBase) && (catName === 'Vượt link' || curTask.requireVerify !== false);
 
-  if (!isExactMatch && !isRandomMatch) {
-    return toast('Mã xác nhận chưa đúng');
-  }
+  if (requiresExactCode) {
+    const basePrefix = expectedBase.split('-')[0];
+    const isExactMatch = upperCode === expectedBase;
+    const isRandomMatch = Boolean(basePrefix) && upperCode.startsWith(basePrefix + '-') && /^([A-Z0-9_-]+)-([A-Z0-9]{4})$/.test(upperCode);
 
-  if (!Array.isArray(curTask.usedRandomCodes)) curTask.usedRandomCodes = [];
-  if (isRandomMatch && curTask.usedRandomCodes.includes(inputCode)) {
-    return toast('Mã ngẫu nhiên này đã được sử dụng, hãy lấy mã mới');
-  }
-  if (isRandomMatch) {
-    curTask.usedRandomCodes.push(inputCode);
+    if (!isExactMatch && !isRandomMatch) {
+      return toast('Mã rút gọn link chưa đúng, vui lòng nhập đúng mã xác nhận');
+    }
+
+    if (!Array.isArray(curTask.usedRandomCodes)) curTask.usedRandomCodes = [];
+    if (isRandomMatch && curTask.usedRandomCodes.includes(upperCode)) {
+      return toast('Mã ngẫu nhiên này đã được sử dụng, hãy lấy mã mới');
+    }
+    if (isRandomMatch) {
+      curTask.usedRandomCodes.push(upperCode);
+    }
+  } else {
+    if (inputCode.length < 3 || /^(test|abc|123|ok|xong)$/i.test(inputCode)) {
+      return toast('Vui lòng nhập thông tin xác minh hoàn thành hợp lệ (ít nhất 3 ký tự)');
+    }
   }
 
   const rew = Number(curTask.reward || 0);
   me.bal += rew; me.earned += rew; me.done++; curTask.done++;
-  me.hist.unshift({ t: `Kèo [${curTask.cat || 'Vượt link'}]: ${curTask.title}`, a: rew });
+  me.hist.unshift({ t: `Kèo [${catName}]: ${curTask.title}`, a: rew });
   const inv = db.users.find(x => me.refBy && me.refBy.includes(x.refCode));
   if (inv && inv.ip !== me.ip) {
     const comm = Math.round(rew * 0.15);
     inv.bal += comm; inv.refEarned += comm;
     inv.hist.unshift({ t: `Ref 15% từ @${me.u}`, a: comm });
   }
-  save(); closeModals(); renderUser(); toast(`Nhận +${money(rew)}!`);
+  save(); closeModals(); renderUser(); toast(`Đã xác minh & nhận +${money(rew)}!`);
 }
 
 function drawWheel() {
@@ -2863,6 +2930,163 @@ function buildAiAnswer(q) {
   };
 }
 
+/* API FEED & MARGIN LOGIC */
+function getApiFeedConfig() {
+  const cfg = (db && db.apiFeedConfig && typeof db.apiFeedConfig === 'object') ? db.apiFeedConfig : {};
+  const marginPct = Math.min(90, Math.max(0, Number(cfg.marginPct ?? 40) || 0));
+  const usdRate = Math.max(1, Number(cfg.usdRate ?? 25000) || 25000);
+  return {
+    url: String(cfg.url || '').trim(),
+    marginPct,
+    usdRate,
+    lastSyncAt: Number(cfg.lastSyncAt || 0),
+    lastCount: Number(cfg.lastCount || 0)
+  };
+}
+
+function renderApiFeedAdminBox() {
+  const urlEl = document.getElementById('apiFeedUrlInp');
+  const mEl = document.getElementById('apiMarginPctInp');
+  const rEl = document.getElementById('apiUsdRateInp');
+  const sumEl = document.getElementById('apiSyncSummaryText');
+  if (!urlEl || !mEl || !rEl) return;
+
+  const isEditing = document.activeElement && [urlEl, mEl, rEl].includes(document.activeElement);
+  const cfg = getApiFeedConfig();
+  if (!isEditing) {
+    urlEl.value = cfg.url;
+    mEl.value = String(cfg.marginPct);
+    rEl.value = String(cfg.usdRate);
+  }
+  if (sumEl) {
+    sumEl.textContent = cfg.lastSyncAt
+      ? `Lần kéo gần nhất: ${formatMsgTime(cfg.lastSyncAt)} • Đã nạp ${cfg.lastCount} kèo • Giữ chênh lệch ${cfg.marginPct}%`
+      : `Đang đặt giữ chênh lệch ${cfg.marginPct}% • Dán link API rồi bấm "Lưu & Kéo Kèo API".`;
+  }
+}
+
+function readConfigFromAdminInputs() {
+  const url = String(document.getElementById('apiFeedUrlInp')?.value || '').trim();
+  const marginPct = Math.min(90, Math.max(0, Number(document.getElementById('apiMarginPctInp')?.value ?? 40) || 0));
+  const usdRate = Math.max(1, Number(document.getElementById('apiUsdRateInp')?.value ?? 25000) || 25000);
+  const prev = getApiFeedConfig();
+  db.apiFeedConfig = {
+    url,
+    marginPct,
+    usdRate,
+    lastSyncAt: prev.lastSyncAt,
+    lastCount: prev.lastCount
+  };
+  return db.apiFeedConfig;
+}
+
+function saveApiFeedConfigOnly() {
+  readConfigFromAdminInputs();
+  save();
+  renderApiFeedAdminBox();
+  toast('Đã lưu cấu hình API & % chênh lệch');
+}
+
+function normalizeOfferPayoutToVnd(item, usdRate = 25000) {
+  if (item.payout_vnd !== undefined && item.payout_vnd !== null && Number(item.payout_vnd) > 0) {
+    return Number(item.payout_vnd);
+  }
+  const raw = Number(item.payout ?? item.reward ?? item.commission ?? item.amount ?? 0);
+  if (raw <= 0) return 0;
+  if (raw < 500) {
+    return Math.round(raw * usdRate);
+  }
+  return Math.round(raw);
+}
+
+function calcUserRewardWithMargin(netVnd, marginPct = 40) {
+  const net = Number(netVnd || 0);
+  if (net <= 0) return 0;
+  const keepRatio = Math.min(0.9, Math.max(0, Number(marginPct || 0) / 100));
+  const userShare = net * (1 - keepRatio);
+  const rounded = Math.floor(userShare / 1000) * 1000;
+  if (rounded < 1000) return 0;
+  return Math.min(rounded, 100000);
+}
+
+async function fetchRawOffersFromUrl(targetUrl) {
+  try {
+    const res = await fetch(targetUrl, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } catch (directErr) {
+    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
+    const pRes = await fetch(proxyUrl, { cache: 'no-store' });
+    if (!pRes.ok) throw new Error('Proxy HTTP ' + pRes.status);
+    return await pRes.json();
+  }
+}
+
+async function saveAndSyncApiOffers() {
+  const cfg = readConfigFromAdminInputs();
+  if (!cfg.url) {
+    save();
+    return toast('Vui lòng dán link API của web kèo trước');
+  }
+
+  try {
+    const payload = await fetchRawOffersFromUrl(cfg.url);
+    const rawList = Array.isArray(payload)
+      ? payload
+      : (payload.offers || payload.data || payload.campaigns || payload.items || []);
+
+    if (!Array.isArray(rawList) || !rawList.length) {
+      save();
+      renderApiFeedAdminBox();
+      return toast('API không trả về danh sách kèo nào');
+    }
+
+    const existingMap = new Map(
+      (db.tasks || []).filter(t => t.extId).map(t => [String(t.extId), t])
+    );
+
+    const syncedTasks = [];
+    rawList.forEach((item, idx) => {
+      const netVnd = normalizeOfferPayoutToVnd(item, cfg.usdRate);
+      const reward = calcUserRewardWithMargin(netVnd, cfg.marginPct);
+      const url = String(item.tracking_url || item.click_url || item.offer_url || item.url || item.link || '').trim();
+      if (reward <= 0 || !url) return;
+
+      const extId = String(item.id || item.offer_id || item.campaign_id || item.code || `${idx + 1}`).trim();
+      const prev = existingMap.get(extId);
+      const rawCat = String(item.cat || item.category || item.type || '').trim();
+      const cat = ['Vượt link', 'Khảo sát', 'Đánh giá Google'].includes(rawCat) ? rawCat : 'Khảo sát';
+
+      syncedTasks.push({
+        id: prev ? prev.id : `API_${extId}_${Date.now()}_${idx}`,
+        extId,
+        cat,
+        title: String(item.name || item.title || item.offer_name || `Chiến dịch #${extId}`).trim(),
+        reward,
+        url,
+        code: prev && prev.code ? prev.code : '',
+        requireVerify: true,
+        guide: String(item.guide || item.description || item.requirements || 'Mở link chiến dịch, hoàn thành yêu cầu và nhập mã/xác nhận hợp lệ để nhận thưởng.').trim(),
+        done: prev ? Number(prev.done || 0) : 0,
+        usedRandomCodes: prev && Array.isArray(prev.usedRandomCodes) ? prev.usedRandomCodes : [],
+        autoSynced: true
+      });
+    });
+
+    const manualTasks = (db.tasks || []).filter(t => !t.autoSynced);
+    db.tasks = [...syncedTasks, ...manualTasks];
+    db.apiFeedConfig.lastSyncAt = Date.now();
+    db.apiFeedConfig.lastCount = syncedTasks.length;
+
+    save();
+    renderAdmin();
+    toast(`Đã kéo ${syncedTasks.length} kèo (giữ ${cfg.marginPct}% chênh lệch)`);
+  } catch (err) {
+    save();
+    toast('Không thể gọi API này, kiểm tra lại link API');
+  }
+}
+
 /* ADMIN */
 function switchAdminView(v) {
   ['Dash', 'Users', 'Tasks', 'Wd', 'VipReq', 'Pay', 'Chat', 'Promo', 'Notify', 'Links'].forEach(k => {
@@ -2881,6 +3105,8 @@ function renderAdmin() {
   document.getElementById('kDone').textContent = db.tasks.reduce((s, x) => s + x.done, 0);
   document.getElementById('kWd').textContent = db.withdraws.filter(x => x.st === 'pending').length;
   document.getElementById('kVipReq').textContent = db.vipRequests.filter(x => x.st === 'pending').length;
+
+  renderApiFeedAdminBox();
 
   const linksTabActive = !document.getElementById('aViewLinks')?.classList.contains('hidden');
   const isEditingLinksInput = linksTabActive && document.activeElement && document.activeElement.closest('#aViewLinks');
@@ -2921,7 +3147,7 @@ function renderAdmin() {
   renderAdminUsers();
   renderAdminPromoAndMinigame();
   renderAdminSentNotices();
-  document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted);">Loại: <strong>${t.cat || 'Vượt link'}</strong> • Thưởng: ${money(t.reward)} • Đã làm: ${t.done}</div>${t.guide ? `<div style="font-size:12px;color:#475569;margin-top:2px;">HD: ${t.guide}</div>` : ''}</div><button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
+  document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted);">Loại: <strong>${t.cat || 'Vượt link'}</strong> • Thưởng: ${money(t.reward)} • Mã: <strong>${t.code || 'Xác minh'}</strong> • Đã làm: ${t.done}</div>${t.guide ? `<div style="font-size:12px;color:#475569;margin-top:2px;">HD: ${t.guide}</div>` : ''}</div><button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
   document.getElementById('adminWdBody').innerHTML = db.withdraws.map(w => `
     <div class="task-item" style="flex-wrap:wrap;">
       <div>
@@ -3423,8 +3649,10 @@ function createTask() {
   const url = document.getElementById('tUrl').value.trim();
   const code = document.getElementById('tCode').value.trim();
   const guide = (document.getElementById('tGuide')?.value || '').trim();
+  const requireVerify = document.getElementById('tRequireVerify')?.value !== '0';
   if (!title || !reward) return toast('Nhập đủ tên và tiền thưởng');
-  db.tasks.unshift({ id: String(Date.now()), title, cat, reward, url, code, guide, done: 0, usedRandomCodes: [] });
+  if (cat === 'Vượt link' && !code) return toast('Kèo Vượt link cần nhập mã xác nhận để khách đối chiếu');
+  db.tasks.unshift({ id: String(Date.now()), title, cat, reward, url, code, guide, requireVerify, done: 0, usedRandomCodes: [] });
   document.getElementById('tTitle').value = '';
   document.getElementById('tReward').value = '';
   document.getElementById('tCode').value = '';

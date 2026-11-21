@@ -1,6 +1,6 @@
 const DEFAULT_MARGIN_RATE = 0.4; // Giữ lại 40% phần chênh lệch an toàn
-const MIN_VALID_REWARD = 1000; // Mức thưởng tối thiểu sau khi giữ 40% chênh lệch
-const MAX_VALID_REWARD = 100000;
+const MIN_REWARD = 1000;
+const MAX_REWARD = 100000;
 
 function parseMarginRate(req) {
   const raw = req.query?.margin ?? req.query?.margin_rate;
@@ -17,7 +17,7 @@ function calcSafeReward(rawValue, marginRate = DEFAULT_MARGIN_RATE) {
   const num = Number(plain.replace(/[^\d.]/g, '') || 0);
 
   if (!Number.isFinite(num) || num <= 0) {
-    return MIN_VALID_REWARD;
+    return MIN_REWARD;
   }
 
   let baseAmount = num;
@@ -25,13 +25,13 @@ function calcSafeReward(rawValue, marginRate = DEFAULT_MARGIN_RATE) {
     baseAmount = num * 1000;
   }
 
-  const afterMargin = baseAmount * (1 - Number(marginRate ?? DEFAULT_MARGIN_RATE));
-  const rounded = Math.floor(afterMargin / 1000) * 1000;
+  const netReward = baseAmount * (1 - Number(marginRate ?? DEFAULT_MARGIN_RATE));
+  const rounded = Math.floor(netReward / 1000) * 1000;
 
-  if (!Number.isFinite(rounded) || rounded < MIN_VALID_REWARD) {
-    return MIN_VALID_REWARD;
+  if (!Number.isFinite(rounded) || rounded < MIN_REWARD) {
+    return MIN_REWARD;
   }
-  return Math.min(rounded, MAX_VALID_REWARD);
+  return Math.min(rounded, MAX_REWARD);
 }
 
 function buildMasofferUrl(pubId, token) {
@@ -43,25 +43,25 @@ function buildMasofferUrl(pubId, token) {
 }
 
 function parseSourceUrls(req) {
-  const rawList = [];
+  const list = [];
 
   const directMasoffer = buildMasofferUrl(req.query?.pub_id, req.query?.token);
-  if (directMasoffer) rawList.push(directMasoffer);
+  if (directMasoffer) list.push(directMasoffer);
 
   if (typeof req.query?.urls === 'string' && req.query.urls.trim()) {
-    rawList.push(...req.query.urls.split(/[\n,]+/));
+    list.push(...req.query.urls.split(/[\n,]+/));
   }
 
   if (typeof req.query?.url === 'string' && req.query.url.trim()) {
-    rawList.push(req.query.url.trim());
+    list.push(req.query.url.trim());
   }
 
   const envMulti = process.env.MASOFFER_API_URLS || process.env.OFFER_API_URLS || '';
   const envSingle = process.env.MASOFFER_API_URL || process.env.SOURCE_OFFER_API_URL || '';
-  if (envMulti) rawList.push(...envMulti.split(/[\n,]+/));
-  if (envSingle) rawList.push(envSingle);
+  if (envMulti) list.push(...envMulti.split(/[\n,]+/));
+  if (envSingle) list.push(envSingle);
 
-  const cleaned = rawList
+  const cleaned = list
     .map((u) => String(u || '').trim())
     .filter((u) => /^https?:\/\//i.test(u));
 
@@ -87,7 +87,7 @@ function normalizeOffer(item, idx, sourceIndex, marginRate) {
     item.commission ??
     item.commission_rate ??
     item.reward ??
-    MIN_VALID_REWARD;
+    MIN_REWARD;
 
   const reward = calcSafeReward(rawCommission, marginRate);
 

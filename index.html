@@ -1108,9 +1108,9 @@ const INIT = {
   ],
   vipRequests: [],
   users: [
-    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', joinedAt: Date.now() - 86400000 * 15, tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
-    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', joinedAt: Date.now() - 86400000 * 5, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
-    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] }
+    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', joinedAt: Date.now() - 86400000 * 15, tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], completedTaskIds: [], hist: [] },
+    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', joinedAt: Date.now() - 86400000 * 5, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], completedTaskIds: [], hist: [] },
+    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], completedTaskIds: [], hist: [] }
   ],
   tasks: [],
   withdraws: [],
@@ -1674,6 +1674,9 @@ async function pullFromCloud(silent = true) {
           if (!cu.joinedAt && loc.joinedAt) cu.joinedAt = loc.joinedAt;
           if (Array.isArray(loc.downlines) && loc.downlines.length && (!Array.isArray(cu.downlines) || !cu.downlines.length)) {
             cu.downlines = loc.downlines;
+          }
+          if (Array.isArray(loc.completedTaskIds) && loc.completedTaskIds.length) {
+            cu.completedTaskIds = Array.from(new Set([...(cu.completedTaskIds || []).map(String), ...loc.completedTaskIds.map(String)]));
           }
         }
       });
@@ -2468,6 +2471,7 @@ function renderUser() {
   document.getElementById('taskList').innerHTML = filteredTasks.length ? filteredTasks.map(t => {
     const rew = Number(t.reward || 0);
     const catName = t.cat || 'Vượt link';
+    const encodedId = encodeURIComponent(String(t.id));
     return `
       <div class="task-item">
         <div style="min-width:0;">
@@ -2476,7 +2480,7 @@ function renderUser() {
           ${t.guide ? `<div style="font-size:12px;color:#475569;margin-top:3px;">${t.guide}</div>` : ''}
           <div style="font-size:12px;color:var(--muted);margin-top:4px;">Thưởng: <strong style="color:var(--primary);font-size:14px;">+${money(rew)}</strong> • Đã làm: ${t.done}</div>
         </div>
-        <button type="button" class="btn-sm" data-tid="${String(t.id).replace(/"/g, '&quot;')}" onclick="openTask(this.getAttribute('data-tid'))" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(5,150,105,0.24);">Làm ngay</button>
+        <button type="button" class="btn-sm" onclick="openTask('${encodedId}')" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(5,150,105,0.24);">Làm ngay</button>
       </div>
     `;
   }).join('') : '<div class="card" style="text-align:center;color:var(--muted);font-size:13px;">Bạn đã hoàn thành hết kèo trong mục này.</div>';

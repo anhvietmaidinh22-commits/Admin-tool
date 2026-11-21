@@ -101,11 +101,13 @@
 
   .section { padding: 15px 15px 0; }
   .card { background: var(--card); border-radius: 22px; padding: 18px; border: 1px solid rgba(226, 232, 240, 0.9); box-shadow: var(--shadow-sm); margin-bottom: 14px; }
+  .account-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; font-size: 12px; }
+  .account-info-cell { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 8px 10px; word-break: break-word; }
 
-  /* Home Notice Banner & Dimmed State */
-  .home-notice-banner { background: linear-gradient(135deg, #fffbeb, #eff6ff); border: 1.5px solid #f59e0b; border-radius: 20px; padding: 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm); }
-  .home-notice-item { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 10px 12px; margin-top: 8px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; transition: opacity 0.25s ease, background 0.25s ease; }
-  .home-notice-item.acknowledged { opacity: 0.55; background: #f8fafc; }
+  .ref-child-item { background: #f8fafc; border: 1px solid var(--border); border-radius: 14px; padding: 11px 12px; margin-bottom: 8px; font-size: 12px; }
+
+  /* Popup Notice Card */
+  .popup-notice-card { background: #fffbeb; border: 1.5px solid #f59e0b; border-radius: 16px; padding: 12px 14px; margin-bottom: 10px; }
 
   /* Luxury Fintech Wallet Card */
   .wallet-hero { background: linear-gradient(135deg, #0f172a 0%, #064e3b 52%, #059669 100%); color: #fff; border-radius: 24px; padding: 20px; margin-bottom: 14px; box-shadow: 0 14px 30px rgba(6, 78, 59, 0.28); position: relative; overflow: hidden; }
@@ -167,6 +169,8 @@
   .msg.mine { background: #dcfce7; align-self: flex-end; border-bottom-right-radius: 4px; }
   .msg.bot { max-width: 100%; width: 100%; align-self: center; background: linear-gradient(135deg, #eff6ff, #f0fdf4); border: 1.5px solid #bfdbfe; border-radius: 16px; }
   .msg.pinned-msg { border: 1.5px solid #f59e0b; }
+  .msg-meta { font-size: 12px; font-weight: 800; margin-bottom: 4px; color: #1e293b; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .msg-time { font-size: 10px; font-weight: 600; color: var(--muted); }
   .badge { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 6px; margin-left: 5px; }
   .msg-actions { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; padding-top: 6px; border-top: 1px dashed #e2e8f0; align-items: center; }
   .msg-act-btn { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 8px; background: #f1f5f9; color: #334155; }
@@ -272,7 +276,7 @@
       </div>
       <div id="regRefField" class="form-group hidden">
         <label class="form-label">Mã người giới thiệu (Không bắt buộc)</label>
-        <input type="text" id="regRef" class="form-input" placeholder="VD: TF1001">
+        <input type="text" id="regRef" class="form-input" placeholder="Nhập mã giới thiệu...">
       </div>
       <button type="submit" id="authSubmitBtn" class="btn-primary">Đăng Nhập</button>
     </form>
@@ -289,7 +293,7 @@
           <strong id="uName" style="font-size:15px;">Thành viên</strong>
           <span id="uVipPill" class="vip-pill">VIP 0</span>
         </div>
-        <div style="font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="uIdRef">ID #1001 • Mã Ref: TF1001</div>
+        <div style="font-size:11px;color:var(--muted);" id="uIdRef">ID #1001</div>
       </div>
     </div>
     <div style="display:flex;gap:6px;flex-shrink:0;">
@@ -301,7 +305,15 @@
 
   <!-- HOME -->
   <div id="viewHome" class="section">
-    <div id="homeNoticeBanner" class="home-notice-banner hidden"></div>
+    <div class="card">
+      <strong style="font-size:14px;display:block;">🪪 Thông tin tài khoản của bạn</strong>
+      <div class="account-info-grid">
+        <div class="account-info-cell">Tên: <strong id="uProfileName">--</strong></div>
+        <div class="account-info-cell">ID: <strong id="uProfileId">--</strong></div>
+        <div class="account-info-cell">Ngày tham gia: <strong id="uProfileJoined">--</strong></div>
+        <div class="account-info-cell">Địa chỉ IP: <strong id="uProfileIp">--</strong></div>
+      </div>
+    </div>
 
     <div class="wallet-hero">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
@@ -418,7 +430,12 @@
     <div class="card">
       <strong style="font-size:15px;display:block;margin-bottom:8px;">📊 Thống kê tuyển Ref</strong>
       <div style="font-size:13px;">Tổng tiền hoa hồng Ref đã nhận: <strong id="refTabEarned" style="color:var(--primary);">0đ</strong></div>
+      <div style="font-size:13px;margin-top:4px;">Số cấp dưới đã đăng ký: <strong id="refTabCount" style="color:var(--indigo);">0</strong></div>
       <div style="font-size:13px;margin-top:4px;">Người giới thiệu của bạn: <strong id="refTabInviter">Không có</strong></div>
+    </div>
+    <div class="card">
+      <strong style="font-size:15px;display:block;margin-bottom:10px;">👥 Danh sách cấp dưới đã đăng ký theo link Ref</strong>
+      <div id="refDownlineList"></div>
     </div>
   </div>
 
@@ -435,8 +452,8 @@
 
       <div class="cskh-bar">
         <button type="button" class="cskh-link-btn" style="background:var(--primary-soft);color:var(--primary);" onclick="selectChannel('congdong')">🌐 Nhóm chung</button>
+        <button type="button" class="cskh-link-btn" style="background:#eef2ff;color:#4f46e5;" onclick="selectChannel('cskh')">🎧 Chat CSKH</button>
         <a id="btnZaloCskh" href="#" target="_blank" rel="noopener noreferrer" class="cskh-link-btn" style="background:#eff6ff;color:#0284c7;">💬 Zalo CSKH</a>
-        <a id="btnTgCskh" href="#" target="_blank" rel="noopener noreferrer" class="cskh-link-btn" style="background:#fef3c7;color:#b45309;">✈️ Telegram</a>
       </div>
 
       <div class="channel-row" id="channelBar"></div>
@@ -452,6 +469,16 @@
 
   <!-- WALLET -->
   <div id="viewWallet" class="section hidden">
+    <div class="card">
+      <strong style="display:block;margin-bottom:8px;font-size:15px;">🪪 Thông tin tài khoản &amp; Ví</strong>
+      <div class="account-info-grid">
+        <div class="account-info-cell">Tên: <strong id="wInfoName">--</strong></div>
+        <div class="account-info-cell">ID: <strong id="wInfoId">--</strong></div>
+        <div class="account-info-cell">Ngày tham gia: <strong id="wInfoJoined">--</strong></div>
+        <div class="account-info-cell">Địa chỉ IP: <strong id="wInfoIp">--</strong></div>
+      </div>
+    </div>
+
     <div class="card">
       <strong style="display:block;margin-bottom:10px;font-size:16px;">💸 Rút tiền ngân hàng</strong>
       <div id="wdRuleNoticeBox" class="rule-alert-box"></div>
@@ -480,7 +507,7 @@
       </div>
       <div class="form-group">
         <label class="form-label">Chủ tài khoản</label>
-        <input type="text" id="wdOwner" class="form-input" placeholder="VD: NGUYEN VAN A">
+        <input type="text" id="wdOwner" class="form-input" placeholder="Nhập tên chủ tài khoản...">
       </div>
       <div class="form-group">
         <label class="form-label" id="wdAmountLabel">Số tiền rút</label>
@@ -503,6 +530,40 @@
     <button class="nav-btn" id="nBtnChat" onclick="switchUserView('chat')"><span>💬</span><span>Cộng đồng</span></button>
     <button class="nav-btn" id="nBtnWallet" onclick="switchUserView('wallet')"><span>💳</span><span>Ví tiền</span></button>
   </nav>
+</div>
+
+<!-- CSKH WORKSPACE -->
+<div id="cskhApp" class="admin-shell hidden">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <img id="cskhTopLogoImg" src="https://i.ibb.co/BVJmNDvX/IMG-20261121-002013.png" alt="Logo" class="user-avatar-img">
+      <strong style="font-size:16px;">🎧 BÀN LÀM VIỆC CSKH</strong>
+      <span class="sync-pill">● Quyền CSKH</span>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-secondary" onclick="manualSyncCloud()">🔄 Tải mới</button>
+      <button class="btn-secondary" style="color:var(--red);" onclick="logout()">Thoát</button>
+    </div>
+  </div>
+  <div class="section">
+    <div class="card">
+      <strong style="display:block;margin-bottom:10px;font-size:15px;">🔎 Kiểm tra &amp; quản lý tài khoản khách hàng</strong>
+      <input type="text" id="cskhUserSearch" class="form-input" placeholder="Tìm tên, tài khoản, ID, mã Ref hoặc IP..." oninput="renderCskhPanel()" style="margin-bottom:10px;">
+      <div id="cskhUserList"></div>
+    </div>
+    <div class="card">
+      <strong style="display:block;margin-bottom:10px;font-size:15px;">💸 Duyệt lệnh rút tiền &amp; nâng VIP</strong>
+      <div id="cskhOrderList"></div>
+    </div>
+    <div class="card">
+      <strong style="display:block;margin-bottom:10px;font-size:15px;">💬 Chat hỗ trợ khách hàng (<span id="cskhActiveTargetLabel">@user1</span>)</strong>
+      <div class="chat-box" id="cskhChatBox"></div>
+      <form onsubmit="sendCskhMsg(event)" style="display:flex;gap:8px;margin-top:10px;">
+        <input type="text" id="cskhMsgInput" class="form-input" placeholder="Trả lời khách hàng...">
+        <button type="submit" class="btn-primary" style="width:auto;padding:0 18px;">Gửi</button>
+      </form>
+    </div>
+  </div>
 </div>
 
 <!-- ADMIN APP -->
@@ -554,25 +615,24 @@
     </div>
   </div>
 
-  <!-- ADMIN TASKS: SUPPORTS VƯỢT LINK, KHẢO SÁT, ĐÁNH GIÁ GOOGLE -->
   <div id="aViewTasks" class="section hidden">
     <div class="card">
-      <strong style="display:block;margin-bottom:10px;font-size:15px;">➕ Thêm nhiệm vụ mới (Vượt link / Khảo sát / Đánh giá Google)</strong>
+      <strong style="display:block;margin-bottom:10px;font-size:15px;">➕ Thêm nhiệm vụ mới</strong>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
         <select id="tCat" class="form-input">
           <option value="Vượt link">Vượt link</option>
           <option value="Khảo sát">Khảo sát</option>
           <option value="Đánh giá Google">Đánh giá Google</option>
         </select>
-        <input type="number" id="tReward" class="form-input" placeholder="Tiền thưởng (VD: 2000)">
-        <input type="text" id="tTitle" class="form-input" placeholder="Tên nhiệm vụ (VD: Đánh giá Google Maps 5 sao)">
-        <input type="text" id="tCode" class="form-input" placeholder="Mã xác nhận (VD: REVIEW5SAO)">
+        <input type="number" id="tReward" class="form-input" placeholder="Tiền thưởng (VNĐ)">
+        <input type="text" id="tTitle" class="form-input" placeholder="Tên nhiệm vụ">
+        <input type="text" id="tCode" class="form-input" placeholder="Mã xác nhận">
       </div>
       <div style="margin-top:8px;">
-        <input type="text" id="tUrl" class="form-input" placeholder="Link nhiệm vụ (Link rút gọn / Google Forms / Google Maps)">
+        <input type="text" id="tUrl" class="form-input" placeholder="Link nhiệm vụ">
       </div>
       <div style="margin-top:8px;">
-        <input type="text" id="tGuide" class="form-input" placeholder="Hướng dẫn làm kèo (VD: Đánh giá 5 sao + bình luận trên 15 chữ, gửi ảnh qua CSKH)">
+        <input type="text" id="tGuide" class="form-input" placeholder="Hướng dẫn làm nhiệm vụ">
       </div>
       <button class="btn-primary" style="margin-top:10px;" onclick="createTask()">Thêm Nhiệm Vụ</button>
     </div>
@@ -597,7 +657,7 @@
         <input type="text" id="payBank" class="form-input" placeholder="Ngân hàng">
         <input type="text" id="payAcc" class="form-input" placeholder="Số tài khoản">
         <input type="text" id="payOwner" class="form-input" placeholder="Chủ tài khoản">
-        <input type="text" id="payMemo" class="form-input" placeholder="Nội dung mẫu (VD: NAPVIP)">
+        <input type="text" id="payMemo" class="form-input" placeholder="Nội dung chuyển khoản">
       </div>
       <div class="form-group" style="margin-top:10px;">
         <label class="form-label">Gán ảnh mã QR thanh toán (Tùy chọn)</label>
@@ -609,7 +669,6 @@
     <div id="adminPayList"></div>
   </div>
 
-  <!-- ADMIN COMMUNITY GROUP & CSKH CHAT -->
   <div id="aViewChat" class="section hidden">
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
@@ -622,27 +681,26 @@
       <div class="channel-row" id="adminChannelBar"></div>
 
       <div id="adminSupportCustomerPicker" class="hidden" style="margin-bottom:10px;background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:10px;">
-        <label class="form-label" style="margin-bottom:6px;">🎯 Khóa tài khoản khách hàng đang hỗ trợ (Trả lời không bị nhảy sang khách khác):</label>
+        <label class="form-label" style="margin-bottom:6px;">🎯 Khóa tài khoản khách hàng đang hỗ trợ:</label>
         <select id="adminSupportTargetSelect" class="form-input" onchange="changeAdminSupportTarget(this.value)"></select>
       </div>
 
       <div id="adminPinnedBanner"></div>
       <div class="chat-box" id="adminChatBox"></div>
       <form onsubmit="sendMsg(event, 'admin')" style="display:flex;gap:8px;margin-top:11px;">
-        <input type="text" id="adminMsgInput" class="form-input" placeholder="Gửi tin nhắn vào nhóm cộng đồng / CSKH với tư cách Admin..." oninput="emitTypingState()" onblur="clearTypingState()">
+        <input type="text" id="adminMsgInput" class="form-input" placeholder="Gửi tin nhắn với tư cách Admin..." oninput="emitTypingState()" onblur="clearTypingState()">
         <button type="submit" class="btn-primary" style="width:auto;padding:0 20px;">Gửi</button>
       </form>
     </div>
   </div>
 
-  <!-- ADMIN PROMO CODES & MINIGAME -->
   <div id="aViewPromo" class="section hidden">
     <div class="card">
       <strong style="display:block;margin-bottom:10px;font-size:16px;">🎟️ Tạo Mã Giảm Giá / Mã Quà Tặng</strong>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-        <input type="text" id="promoCodeInp" class="form-input" placeholder="Mã (VD: TF5000)">
-        <input type="number" id="promoValInp" class="form-input" placeholder="Tiền thưởng (VD: 5000)">
-        <input type="number" id="promoMaxInp" class="form-input" placeholder="Số lượt dùng (VD: 50)">
+        <input type="text" id="promoCodeInp" class="form-input" placeholder="Mã ưu đãi">
+        <input type="number" id="promoValInp" class="form-input" placeholder="Tiền thưởng (VNĐ)">
+        <input type="number" id="promoMaxInp" class="form-input" placeholder="Số lượt dùng">
       </div>
       <button class="btn-primary" style="margin-top:10px;" onclick="createPromoCode()">Tạo Mã Giảm Giá</button>
       <div id="adminPromoList" style="margin-top:12px;"></div>
@@ -652,18 +710,17 @@
       <strong style="display:block;margin-bottom:10px;font-size:16px;">🎮 Tạo Minigame Đố Vui Nhận Thưởng</strong>
       <div class="form-group">
         <label class="form-label">Câu hỏi minigame</label>
-        <input type="text" id="mgQuestionInp" class="form-input" placeholder="VD: 2 + 2 bằng mấy?">
+        <input type="text" id="mgQuestionInp" class="form-input" placeholder="Nhập câu hỏi minigame...">
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <input type="text" id="mgAnswerInp" class="form-input" placeholder="Đáp án đúng (VD: 4)">
-        <input type="number" id="mgRewardInp" class="form-input" placeholder="Tiền thưởng (VD: 2000)">
+        <input type="text" id="mgAnswerInp" class="form-input" placeholder="Đáp án đúng">
+        <input type="number" id="mgRewardInp" class="form-input" placeholder="Tiền thưởng (VNĐ)">
       </div>
       <button class="btn-primary" style="margin-top:10px;" onclick="createMinigame()">Lưu &amp; Kích Hoạt Minigame</button>
       <div id="adminMinigameList" style="margin-top:12px;"></div>
     </div>
   </div>
 
-  <!-- ADMIN SET NOTIFICATION + REMOVE -->
   <div id="aViewNotify" class="section hidden">
     <div class="card">
       <strong style="display:block;margin-bottom:12px;font-size:16px;">📢 Set Thông Báo Cho Thành Viên</strong>
@@ -675,11 +732,11 @@
       </div>
       <div class="form-group">
         <label class="form-label">Tiêu đề thông báo</label>
-        <input type="text" id="notifyTitleInp" class="form-input" placeholder="VD: Thông báo cập nhật hệ thống">
+        <input type="text" id="notifyTitleInp" class="form-input" placeholder="Nhập tiêu đề thông báo...">
       </div>
       <div class="form-group">
         <label class="form-label">Nội dung thông báo</label>
-        <textarea id="notifyBodyInp" rows="3" class="form-input" placeholder="Nhập nội dung muốn thông báo..."></textarea>
+        <textarea id="notifyBodyInp" rows="3" class="form-input" placeholder="Nhập nội dung thông báo..."></textarea>
       </div>
       <button class="btn-primary" onclick="sendAdminNotification()">Gửi Thông Báo Ngay</button>
 
@@ -692,30 +749,30 @@
 
   <div id="aViewLinks" class="section hidden">
     <div class="card">
-      <strong style="display:block;margin-bottom:12px;font-size:16px;">🤝 Tùy Chỉnh Thưởng Tuyển Ref (Mặc định: 5.000đ / 2.000đ • Chống Trùng IP)</strong>
+      <strong style="display:block;margin-bottom:12px;font-size:16px;">🤝 Tùy Chỉnh Thưởng Tuyển Ref (Chống Trùng IP)</strong>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
         <div>
           <label class="form-label">Người tuyển nhận (VNĐ)</label>
-          <input type="number" id="cfgRefInviterBonus" class="form-input" placeholder="5000">
+          <input type="number" id="cfgRefInviterBonus" class="form-input" placeholder="0">
         </div>
         <div>
           <label class="form-label">Người được mời nhận (VNĐ)</label>
-          <input type="number" id="cfgRefInviteeBonus" class="form-input" placeholder="2000">
+          <input type="number" id="cfgRefInviteeBonus" class="form-input" placeholder="0">
         </div>
       </div>
 
       <strong style="display:block;margin-bottom:12px;font-size:16px;">🔗 Cấu hình Link Zalo CSKH, Telegram CSKH &amp; Nhóm Trò Chuyện</strong>
       <div class="form-group">
         <label class="form-label">Link Zalo CSKH</label>
-        <input type="text" id="cfgZaloLink" class="form-input" placeholder="https://zalo.me/...">
+        <input type="text" id="cfgZaloLink" class="form-input" placeholder="Nhập link Zalo CSKH...">
       </div>
       <div class="form-group">
         <label class="form-label">Link Telegram CSKH</label>
-        <input type="text" id="cfgTgLink" class="form-input" placeholder="https://t.me/...">
+        <input type="text" id="cfgTgLink" class="form-input" placeholder="Nhập link Telegram CSKH...">
       </div>
       <div class="form-group">
         <label class="form-label">Link Nhóm Trò Chuyện Cộng Đồng</label>
-        <input type="text" id="cfgGroupLink" class="form-input" placeholder="https://t.me/...">
+        <input type="text" id="cfgGroupLink" class="form-input" placeholder="Nhập link nhóm cộng đồng...">
       </div>
       <button class="btn-primary" onclick="saveSupportLinks()">Lưu Thưởng Ref &amp; Liên Kết</button>
     </div>
@@ -728,11 +785,25 @@
   <span>Trợ lý AI</span>
 </button>
 
-<!-- USER NOTICE MODAL (BELL) -->
+<!-- LOGIN POPUP NOTIFICATION MODAL (SINGLE "ĐÃ HIỂU" AT BOTTOM RIGHT) -->
+<div id="loginNoticePopupModal" class="modal-bg hidden">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <strong style="font-size:16px;color:#92400e;">📢 Thông Báo Hệ Thống</strong>
+      <button type="button" class="btn-secondary" onclick="closeLoginNoticePopup()">✕</button>
+    </div>
+    <div id="loginPopupNoticeList"></div>
+    <div style="display:flex;justify-content:flex-end;margin-top:14px;padding-top:10px;border-top:1px solid var(--border);">
+      <button type="button" class="btn-sm" style="background:var(--primary);color:#fff;padding:9px 18px;" onclick="ackAllPopupNotices()">Đã hiểu</button>
+    </div>
+  </div>
+</div>
+
+<!-- USER NOTICE MODAL (BELL - ALL NOTICES HISTORY) -->
 <div id="noticeModal" class="modal-bg hidden">
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-      <strong style="font-size:16px;">🔔 Thông Báo Của Bạn</strong>
+      <strong style="font-size:16px;">🔔 Danh Sách Thông Báo</strong>
       <button type="button" class="btn-secondary" onclick="closeNoticeModal()">✕</button>
     </div>
     <div id="noticeModalList"></div>
@@ -795,7 +866,7 @@
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
     <div id="tmGuideBox" style="background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:10px 12px;font-size:13px;color:#334155;margin-bottom:8px;"></div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">Mở link bên dưới để hoàn thành và lấy mã xác nhận (Mã mẫu: <strong id="tmHint"></strong>). Nhận ngay <strong id="tmReward" style="color:var(--primary);"></strong>.</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">Mở link bên dưới để hoàn thành và lấy mã xác nhận. Nhận ngay <strong id="tmReward" style="color:var(--primary);"></strong>.</p>
     <a id="tmLink" href="#" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-bottom:12px;color:var(--indigo);font-weight:800;font-size:13px;">Mở link nhiệm vụ ↗</a>
     <input type="text" id="tmCodeInput" class="form-input" placeholder="Nhập mã xác nhận..." style="margin-bottom:12px;">
     <button class="btn-primary" onclick="confirmTask()">Xác Nhận Nhận Tiền</button>
@@ -816,7 +887,7 @@
 <div id="editUserModal" class="modal-bg hidden">
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-      <strong style="font-size:16px;">Sửa thành viên &amp; Quyền</strong>
+      <strong id="editUserModalTitle" style="font-size:16px;">Sửa thành viên &amp; Quyền</strong>
       <button class="btn-secondary" onclick="closeModals()">✕</button>
     </div>
     <div id="editUserBody"></div>
@@ -854,10 +925,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V19';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V19';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V19';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V19';
+const KEY = 'TF_VIP_PRO_CLOUD_V30';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V30';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V30';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V30';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -874,18 +945,54 @@ const PRIZES = [
 ];
 const VIPS = [
   { lv: 0, name: 'VIP 0 (Miễn phí)', price: 0, days: 0, limit: 10, bonus: 0, desc: '10 nhiệm vụ/ngày • Thưởng chuẩn' },
-  { lv: 1, name: 'VIP 1', price: 50000, days: 7, limit: 18, bonus: 5, desc: '18 nhiệm vụ/ngày • +5% thưởng mỗi kèo' },
-  { lv: 2, name: 'VIP 2', price: 150000, days: 30, limit: 35, bonus: 12, desc: '35 nhiệm vụ/ngày • +12% thưởng mỗi kèo' },
-  { lv: 3, name: 'VIP 3', price: 400000, days: 90, limit: 70, bonus: 25, desc: '70 nhiệm vụ/ngày • +25% thưởng mỗi kèo' }
+  { lv: 1, name: 'VIP 1', price: 50000, days: 7, limit: 18, bonus: 0, desc: '18 nhiệm vụ/ngày • Hỗ trợ ưu tiên' },
+  { lv: 2, name: 'VIP 2', price: 150000, days: 30, limit: 35, bonus: 0, desc: '35 nhiệm vụ/ngày • Hỗ trợ ưu tiên' },
+  { lv: 3, name: 'VIP 3', price: 400000, days: 90, limit: 70, bonus: 0, desc: '70 nhiệm vụ/ngày • Hỗ trợ ưu tiên' }
 ];
 const CHECKIN_VALS = [500, 800, 1000, 1200, 1500, 2000, 5000];
 
 const NAME_PREFIXES = ['min', 'lan', 'huy', 'nam', 'thu', 'phc', 'duc', 'kho', 'tng', 'bao', 'qnh', 'vnh'];
+const SAMPLE_FIRST_NAMES = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Vũ', 'Đặng', 'Bùi', 'Đỗ', 'Ngô'];
+const SAMPLE_GIVEN_NAMES = ['Minh Anh', 'Thùy Linh', 'Tuấn Anh', 'Minh Châu', 'Thành Nam', 'Thanh Mai', 'Gia Huy', 'Bảo Ngọc', 'Khánh Vy', 'Quốc Bảo'];
 
 function generateRandomMaskedName() {
   const pre = NAME_PREFIXES[Math.floor(Math.random() * NAME_PREFIXES.length)];
   const num = String(Math.floor(10 + Math.random() * 89));
   return `${pre}***${num}`;
+}
+
+function generateRandomVietnameseAccount() {
+  const ho = SAMPLE_FIRST_NAMES[Math.floor(Math.random() * SAMPLE_FIRST_NAMES.length)];
+  const ten = SAMPLE_GIVEN_NAMES[Math.floor(Math.random() * SAMPLE_GIVEN_NAMES.length)];
+  const slug = ten.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+  const suffix = Math.floor(10 + Math.random() * 890);
+  return {
+    name: `${ho} ${ten}`,
+    u: `${slug}_${suffix}`
+  };
+}
+
+function getTodayInputDate() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function parseDateInputToTs(dateStr, offsetIndex = 0) {
+  const s = String(dateStr || '').trim();
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+  let baseTs = Date.now();
+  if (match) {
+    const yr = Number(match[1]);
+    const mo = Number(match[2]) - 1;
+    const dy = Number(match[3]);
+    const now = new Date();
+    const dt = new Date(yr, mo, dy, now.getHours(), now.getMinutes(), now.getSeconds());
+    if (!Number.isNaN(dt.getTime())) baseTs = dt.getTime();
+  }
+  return baseTs - offsetIndex * 1800000;
 }
 
 function buildDefaultLeaderboard() {
@@ -896,6 +1003,28 @@ function buildDefaultLeaderboard() {
     tasks: tasks + Math.floor(Math.random() * 25),
     amount: baseAmounts[i] + Math.floor(Math.random() * 45000)
   }));
+}
+
+function cleanOptionalUrl(raw) {
+  const s = String(raw || '').trim();
+  if (!s) return '';
+  if (s.startsWith('@')) return 'https://t.me/' + s.slice(1);
+  if (/^https?:\/\//i.test(s)) return s;
+  return 'https://' + s;
+}
+
+function formatDateOnly(ts) {
+  const d = new Date(Number(ts) || Date.now());
+  return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+}
+
+function formatMsgTime(ts) {
+  const d = new Date(Number(ts) || Date.now());
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mo = String(d.getMonth() + 1).padStart(2, '0');
+  return `${hh}:${mm} • ${dd}/${mo}`;
 }
 
 const INIT = {
@@ -920,9 +1049,9 @@ const INIT = {
     { id: 'MG1', question: 'Nền tảng này tên là gì? (Gõ: TASKFLOW PRO)', answer: 'TASKFLOW PRO', reward: 2000, claimedBy: [] }
   ],
   supportLinks: {
-    zalo: 'https://zalo.me/',
-    telegram: 'https://t.me/',
-    group: 'https://t.me/'
+    zalo: '',
+    telegram: '',
+    group: ''
   },
   paymentAccounts: [
     {
@@ -937,26 +1066,19 @@ const INIT = {
   ],
   vipRequests: [],
   users: [
-    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] },
-    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [{ t: 'Làm nhiệm vụ Vượt link', a: 600 }] },
-    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] }
+    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', joinedAt: Date.now() - 86400000 * 15, tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
+    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', joinedAt: Date.now() - 86400000 * 5, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
+    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] }
   ],
-  tasks: [
-    { id: '1', title: 'Vượt link lấy mã nhanh (Node A)', cat: 'Vượt link', reward: 600, url: 'https://google.com', code: 'TF1', guide: 'Mở link, vượt qua bước xác nhận để lấy mã ở cuối trang.', done: 85 },
-    { id: '2', title: 'Khảo sát trải nghiệm dịch vụ 30s', cat: 'Khảo sát', reward: 1500, url: 'https://google.com', code: 'KS2026', guide: 'Trả lời đầy đủ các câu hỏi trong biểu mẫu khảo sát, mã xác nhận hiển thị ở trang cảm ơn sau khi gửi.', done: 62 },
-    { id: '3', title: 'Đánh giá Google Maps 5 sao cửa hàng', cat: 'Đánh giá Google', reward: 5000, url: 'https://maps.google.com', code: 'REVIEW5SAO', guide: 'Bấm mở Google Maps, đánh giá 5 sao kèm bình luận tích cực trên 15 chữ, chụp ảnh gửi CSKH và nhập mã xác nhận.', done: 40 }
-  ],
-  withdraws: [
-    { id: 'W1', uid: 1001, u: 'user1', bank: 'MB Bank', acc: '0339498650', owner: 'NGUYEN MINH', amt: 100000, st: 'pending' }
-  ],
+  tasks: [],
+  withdraws: [],
   channels: [
     { id: 'congdong', name: '🌐 Nhóm Cộng Đồng' },
     { id: 'cskh', name: '🎧 Chat CSKH' },
     { id: 'chung', name: '🤖 Bot Hệ Thống' }
   ],
   msgs: [
-    { id: 1, ch: 'congdong', sender: 'Admin', senderUser: 'admin', role: 'admin', pinned: false, reactions: {}, text: '👋 Chào mừng toàn thể thành viên vào Nhóm Cộng Đồng TASKFLOW PRO! Admin & CSKH trực tiếp hỗ trợ và trao đổi tại đây.' },
-    { id: 2, ch: 'cskh', sender: 'Hỗ Trợ Viên', senderUser: 'cskh1', ownerUser: 'user1', role: 'cskh', pinned: false, reactions: {}, text: '🎧 Xin chào! Bạn cần hỗ trợ duyệt rút tiền hay kiểm tra nhiệm vụ có thể nhắn trực tiếp tại đây hoặc bấm Zalo / Telegram CSKH.' }
+    { id: 1, ch: 'congdong', sender: 'Admin', senderUser: 'admin', role: 'admin', pinned: false, reactions: {}, sentAt: Date.now() - 3600000, text: '👋 Chào mừng toàn thể thành viên vào Nhóm Cộng Đồng TASKFLOW PRO! Admin & CSKH trực tiếp hỗ trợ và trao đổi tại đây.' }
   ],
   typingState: {},
   winners: [
@@ -965,17 +1087,9 @@ const INIT = {
   ]
 };
 
-function sanitizeUrl(raw, fallback = 'https://t.me/') {
-  const val = String(raw || '').trim();
-  if (!val) return fallback;
-  if (val.startsWith('@')) return 'https://t.me/' + val.slice(1);
-  if (/^https?:\/\//i.test(val)) return val;
-  return 'https://' + val;
-}
-
 function applyBrandLogo() {
   if (!BRAND_LOGO_SRC) return;
-  ['introLogoImg', 'authLogoImg', 'userTopLogoImg', 'adminTopLogoImg', 'aiFabLogoImg', 'aiHeaderLogoImg'].forEach(id => {
+  ['introLogoImg', 'authLogoImg', 'userTopLogoImg', 'cskhTopLogoImg', 'adminTopLogoImg', 'aiFabLogoImg', 'aiHeaderLogoImg'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.src = BRAND_LOGO_SRC;
   });
@@ -988,28 +1102,36 @@ function normalizeDb(raw) {
   const base = raw && typeof raw === 'object' ? raw : {};
   const merged = Object.assign({}, INIT, base);
   if (!merged.refConfig || typeof merged.refConfig !== 'object') merged.refConfig = Object.assign({}, INIT.refConfig);
-  merged.refConfig.inviterBonus = Number(merged.refConfig.inviterBonus ?? 5000);
-  merged.refConfig.inviteeBonus = Number(merged.refConfig.inviteeBonus ?? 2000);
+  const invRaw = merged.refConfig.inviterBonus;
+  const iteRaw = merged.refConfig.inviteeBonus;
+  merged.refConfig.inviterBonus = (invRaw === '' || invRaw === null || invRaw === undefined) ? 0 : Math.max(0, Number(invRaw) || 0);
+  merged.refConfig.inviteeBonus = (iteRaw === '' || iteRaw === null || iteRaw === undefined) ? 0 : Math.max(0, Number(iteRaw) || 0);
+
   if (!Array.isArray(merged.adminNotices)) merged.adminNotices = [];
   if (!Array.isArray(merged.leaderboard) || !merged.leaderboard.length) merged.leaderboard = buildDefaultLeaderboard();
   if (!Array.isArray(merged.promoCodes)) merged.promoCodes = JSON.parse(JSON.stringify(INIT.promoCodes));
   if (!Array.isArray(merged.minigames)) merged.minigames = JSON.parse(JSON.stringify(INIT.minigames));
-  if (!merged.supportLinks || typeof merged.supportLinks !== 'object') merged.supportLinks = Object.assign({}, INIT.supportLinks);
-  merged.supportLinks.zalo = sanitizeUrl(merged.supportLinks.zalo, 'https://zalo.me/');
-  merged.supportLinks.telegram = sanitizeUrl(merged.supportLinks.telegram, 'https://t.me/');
-  merged.supportLinks.group = sanitizeUrl(merged.supportLinks.group, 'https://t.me/');
+
+  if (!merged.supportLinks || typeof merged.supportLinks !== 'object') merged.supportLinks = { zalo: '', telegram: '', group: '' };
+  merged.supportLinks.zalo = String(merged.supportLinks.zalo || '').trim();
+  merged.supportLinks.telegram = String(merged.supportLinks.telegram || '').trim();
+  merged.supportLinks.group = String(merged.supportLinks.group || '').trim();
+
   if (!Array.isArray(merged.paymentAccounts) || !merged.paymentAccounts.length) merged.paymentAccounts = JSON.parse(JSON.stringify(INIT.paymentAccounts));
   if (!Array.isArray(merged.vipRequests)) merged.vipRequests = [];
   if (!Array.isArray(merged.users) || !merged.users.length) merged.users = JSON.parse(JSON.stringify(INIT.users));
-  merged.users.forEach(u => {
+  merged.users.forEach((u, idx) => {
+    if (!u.joinedAt) u.joinedAt = Date.now() - 86400000 * (idx + 1);
     if (!Array.isArray(u.seenApprovedWdIds)) u.seenApprovedWdIds = [];
     if (!Array.isArray(u.dismissedNotifyIds)) u.dismissedNotifyIds = [];
+    if (!Array.isArray(u.downlines)) u.downlines = [];
     if (typeof u.deposit50kDone !== 'boolean') u.deposit50kDone = false;
   });
-  if (!Array.isArray(merged.tasks)) merged.tasks = JSON.parse(JSON.stringify(INIT.tasks));
+  if (!Array.isArray(merged.tasks)) merged.tasks = [];
   merged.tasks.forEach(t => {
     if (t.cat === 'CPA App') t.cat = 'Đánh giá Google';
     if (!t.guide) t.guide = '';
+    if (!Array.isArray(t.usedRandomCodes)) t.usedRandomCodes = [];
   });
   if (!Array.isArray(merged.withdraws)) merged.withdraws = [];
   if (!Array.isArray(merged.channels) || !merged.channels.length) merged.channels = JSON.parse(JSON.stringify(INIT.channels));
@@ -1017,7 +1139,9 @@ function normalizeDb(raw) {
     merged.channels.unshift({ id: 'congdong', name: '🌐 Nhóm Cộng Đồng' });
   }
   if (!Array.isArray(merged.msgs)) merged.msgs = JSON.parse(JSON.stringify(INIT.msgs));
-  merged.msgs.forEach(m => {
+  merged.msgs.forEach((m, idx) => {
+    if (!m.ch || m.ch === 'support') m.ch = 'cskh';
+    if (!m.sentAt) m.sentAt = m.createdAt || (typeof m.id === 'number' && m.id > 1000000000 ? m.id : Date.now() - (merged.msgs.length - idx) * 60000);
     if (!m.reactions || typeof m.reactions !== 'object') m.reactions = {};
     if (typeof m.pinned !== 'boolean') m.pinned = false;
   });
@@ -1031,6 +1155,62 @@ let mode = 'login', me = null, curTask = null, pendingVipPkg = null, pendingAler
 let aiDraggedMoved = false;
 let reactionLockUntil = 0;
 let lastTypingPush = 0;
+
+function getDownlinesForUser(user) {
+  if (!user) return [];
+  const recorded = Array.isArray(user.downlines) ? [...user.downlines] : [];
+  const code = String(user.refCode || '').trim().toUpperCase();
+  const matchedUsers = (db.users || []).filter(x =>
+    x.u !== user.u &&
+    code &&
+    String(x.refBy || '').toUpperCase().includes(code)
+  );
+  matchedUsers.forEach(mUser => {
+    const exists = recorded.some(d => String(d.u || '').toLowerCase() === String(mUser.u || '').toLowerCase());
+    if (!exists) {
+      const sameIp = Boolean(user.ip && mUser.ip && user.ip === mUser.ip);
+      const bonus = Number(db.refConfig?.inviterBonus ?? 0);
+      const granted = !sameIp && bonus > 0;
+      recorded.push({
+        u: mUser.u,
+        name: mUser.name,
+        joinedAt: mUser.joinedAt || Date.now(),
+        bonus: granted ? bonus : 0,
+        status: granted ? 'Đã cộng hoa hồng' : (sameIp ? 'Không cộng (Trùng IP)' : 'Chưa có hoa hồng')
+      });
+    }
+  });
+  return recorded;
+}
+
+function renderRefDownlines() {
+  if (!me) return;
+  const rows = getDownlinesForUser(me);
+  const countEl = document.getElementById('refTabCount');
+  if (countEl) countEl.textContent = String(rows.length);
+
+  const listEl = document.getElementById('refDownlineList');
+  if (!listEl) return;
+  if (!rows.length) {
+    listEl.innerHTML = '<div style="font-size:13px;color:var(--muted);">Chưa có cấp dưới nào đăng ký theo mã/link giới thiệu của bạn.</div>';
+    return;
+  }
+  listEl.innerHTML = rows.map(r => {
+    const isGranted = Number(r.bonus || 0) > 0 || String(r.status || '').includes('Đã cộng');
+    const badgeCls = isGranted ? 'st-ok' : 'st-no';
+    return `
+      <div class="ref-child-item">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+          <strong>${r.name || r.u} (@${r.u})</strong>
+          <span class="status-badge ${badgeCls}">${r.status || (isGranted ? 'Đã cộng hoa hồng' : 'Không cộng hoa hồng')}</span>
+        </div>
+        <div style="color:var(--muted);margin-top:4px;">
+          Ngày: ${formatDateOnly(r.joinedAt)} • Hoa hồng: <strong style="color:${isGranted ? 'var(--primary)' : 'var(--red)'};">+${money(r.bonus || 0)}</strong>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
 
 function getUserNoticesForMe() {
   if (!me) return [];
@@ -1049,6 +1229,21 @@ function dismissUserNotice(noticeId) {
   }
 }
 
+function ackAllPopupNotices() {
+  if (!me) return;
+  if (!Array.isArray(me.dismissedNotifyIds)) me.dismissedNotifyIds = [];
+  const allMine = getUserNoticesForMe();
+  allMine.forEach(n => {
+    if (!me.dismissedNotifyIds.includes(n.id)) {
+      me.dismissedNotifyIds.push(n.id);
+    }
+  });
+  save();
+  renderUserNotices();
+  closeLoginNoticePopup();
+  toast('Đã xác nhận thông báo');
+}
+
 function adminRemoveNotice(noticeId) {
   if (!me || me.role !== 'admin') return;
   db.adminNotices = (db.adminNotices || []).filter(n => n.id !== noticeId);
@@ -1057,23 +1252,50 @@ function adminRemoveNotice(noticeId) {
   toast('Đã gỡ thông báo khỏi hệ thống');
 }
 
-function renderNoticeItemHtml(n, isAck) {
+function renderPopupNoticeItemHtml(n) {
   return `
-    <div class="home-notice-item ${isAck ? 'acknowledged' : ''}">
-      <div style="min-width:0;">
-        <div style="font-size:13px;font-weight:800;color:var(--text);">${n.title}</div>
-        <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:2px;">${n.body}</div>
-      </div>
-      ${isAck
-        ? `<button type="button" class="btn-sm" style="background:#e2e8f0;color:#475569;flex-shrink:0;" disabled>✓ Đã hiểu</button>`
-        : `<button type="button" class="btn-sm" style="background:var(--primary-soft);color:var(--primary);flex-shrink:0;" onclick="dismissUserNotice('${n.id}')">Đã hiểu</button>`
-      }
+    <div class="popup-notice-card">
+      <div style="font-size:14px;font-weight:900;color:var(--text);">${n.title}</div>
+      <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:4px;">${n.body}</div>
     </div>
   `;
 }
 
+function renderBellHistoryItemHtml(n, isAck) {
+  return `
+    <div class="popup-notice-card" style="background:${isAck ? '#f8fafc' : '#fffbeb'};border-color:${isAck ? '#e2e8f0' : '#f59e0b'};">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <strong style="font-size:13px;color:var(--text);">${n.title}</strong>
+        <span class="status-badge ${isAck ? 'st-ok' : 'st-pending'}">${isAck ? 'Đã hiểu' : 'Chưa xác nhận'}</span>
+      </div>
+      <div style="font-size:12px;color:#334155;white-space:pre-line;margin-top:4px;">${n.body}</div>
+      ${!isAck ? `<div style="display:flex;justify-content:flex-end;margin-top:8px;"><button type="button" class="btn-sm" style="background:var(--primary);color:#fff;" onclick="dismissUserNotice('${n.id}')">Đã hiểu</button></div>` : ''}
+    </div>
+  `;
+}
+
+function renderLoginNoticePopup(autoOpenIfUnread = false) {
+  if (!me || me.role === 'admin' || me.role === 'cskh') return;
+  const allMine = getUserNoticesForMe();
+  const unread = allMine.filter(n => !me.dismissedNotifyIds.includes(n.id));
+  const listEl = document.getElementById('loginPopupNoticeList');
+  const modalEl = document.getElementById('loginNoticePopupModal');
+  if (!listEl || !modalEl) return;
+
+  listEl.innerHTML = unread.map(n => renderPopupNoticeItemHtml(n)).join('');
+  if (unread.length > 0 && autoOpenIfUnread) {
+    modalEl.classList.remove('hidden');
+  } else if (unread.length === 0) {
+    modalEl.classList.add('hidden');
+  }
+}
+
+function closeLoginNoticePopup() {
+  document.getElementById('loginNoticePopupModal')?.classList.add('hidden');
+}
+
 function renderUserNotices() {
-  if (!me || me.role === 'admin') return;
+  if (!me || me.role === 'admin' || me.role === 'cskh') return;
   const allMine = getUserNoticesForMe();
   const unreadCount = allMine.filter(n => !me.dismissedNotifyIds.includes(n.id)).length;
 
@@ -1083,27 +1305,10 @@ function renderUserNotices() {
     badge.classList.toggle('hidden', unreadCount === 0);
   }
 
-  const banner = document.getElementById('homeNoticeBanner');
-  if (banner) {
-    if (!allMine.length) {
-      banner.classList.add('hidden');
-      banner.innerHTML = '';
-    } else {
-      banner.classList.remove('hidden');
-      banner.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <strong style="font-size:13px;color:#92400e;">📢 THÔNG BÁO (${allMine.length})</strong>
-          <span style="font-size:11px;color:var(--muted);">${unreadCount > 0 ? unreadCount + ' chưa xác nhận' : 'Đã xem tất cả'}</span>
-        </div>
-        ${allMine.map(n => renderNoticeItemHtml(n, me.dismissedNotifyIds.includes(n.id))).join('')}
-      `;
-    }
-  }
-
   const modalList = document.getElementById('noticeModalList');
   if (modalList) {
     modalList.innerHTML = allMine.length
-      ? allMine.map(n => renderNoticeItemHtml(n, me.dismissedNotifyIds.includes(n.id))).join('')
+      ? allMine.map(n => renderBellHistoryItemHtml(n, me.dismissedNotifyIds.includes(n.id))).join('')
       : '<div style="font-size:13px;color:var(--muted);padding:12px 0;text-align:center;">Không có thông báo nào.</div>';
   }
 }
@@ -1168,19 +1373,35 @@ function getUnreadCountForChannel(chId) {
 
 function getVisibleMessagesForChannel(chId) {
   if (!me) return [];
-  const list = (db.msgs || []).filter(m => m.ch === chId);
+  const normCh = (c) => (!c || c === 'chung_bot') ? 'chung' : (c === 'support' ? 'cskh' : c);
+  const targetCh = normCh(chId);
+  const list = (db.msgs || []).filter(m => normCh(m.ch) === targetCh);
+
   if (me.role === 'admin' || me.role === 'cskh') {
-    if (chId === 'cskh' && activeSupportCustomer) {
-      return list.filter(m => m.ownerUser === activeSupportCustomer || m.senderUser === activeSupportCustomer);
+    if (targetCh === 'cskh' && activeSupportCustomer) {
+      const target = String(activeSupportCustomer).toLowerCase();
+      return list.filter(m =>
+        String(m.ownerUser || '').toLowerCase() === target ||
+        String(m.senderUser || '').toLowerCase() === target ||
+        String(m.targetUser || '').toLowerCase() === target
+      );
     }
     return list;
   }
-  if (chId === 'cskh') {
-    return list.filter(m => m.ownerUser === me.u || m.senderUser === me.u);
+
+  if (targetCh === 'cskh') {
+    const myU = String(me.u || '').toLowerCase();
+    return list.filter(m =>
+      String(m.ownerUser || '').toLowerCase() === myU ||
+      String(m.senderUser || '').toLowerCase() === myU ||
+      String(m.targetUser || '').toLowerCase() === myU
+    );
   }
-  if (chId === 'chung') {
-    return list.filter(m => m.broadcastAll === true || m.targetUser === me.u);
+
+  if (targetCh === 'chung') {
+    return list.filter(m => m.broadcastAll === true || !m.targetUser || String(m.targetUser).toLowerCase() === String(me.u).toLowerCase());
   }
+
   return list;
 }
 
@@ -1373,7 +1594,7 @@ function testTelegramBot() {
   toast('Đã gửi tin nhắn test tới Telegram Chat ID ' + TG_CHAT_ID);
 }
 
-/* CLOUD SYNC (SUPABASE) - FAST SYNC + PERSISTENT SESSION */
+/* CLOUD SYNC (SUPABASE) */
 async function pullFromCloud(silent = true) {
   if (!CLOUD_ENABLED || isSyncing || Date.now() < reactionLockUntil) {
     if (!CLOUD_ENABLED) updateCloudBadge('Chế độ nội bộ', false);
@@ -1390,11 +1611,32 @@ async function pullFromCloud(silent = true) {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const rows = await res.json();
     if (Array.isArray(rows) && rows.length && rows[0] && rows[0].data) {
-      db = normalizeDb(rows[0].data);
+      const cloudDb = normalizeDb(rows[0].data);
+      const localByUser = {};
+      (db.users || []).forEach(u => {
+        if (u && u.u) localByUser[String(u.u).toLowerCase()] = u;
+      });
+      (cloudDb.users || []).forEach(cu => {
+        const loc = localByUser[String(cu.u || '').toLowerCase()];
+        if (loc) {
+          if (!cu.ip && loc.ip) cu.ip = loc.ip;
+          if (!cu.joinedAt && loc.joinedAt) cu.joinedAt = loc.joinedAt;
+          if (Array.isArray(loc.downlines) && loc.downlines.length && (!Array.isArray(cu.downlines) || !cu.downlines.length)) {
+            cu.downlines = loc.downlines;
+          }
+        }
+      });
+      db = cloudDb;
       localStorage.setItem(KEY, JSON.stringify(db));
       if (me) {
-        const refreshed = db.users.find(x => x.id === me.id || x.u === me.u);
-        if (refreshed) me = refreshed;
+        const refreshed = db.users.find(x => x.id === me.id || x.u.toLowerCase() === me.u.toLowerCase());
+        if (refreshed) {
+          if (realClientIp && refreshed.ip !== realClientIp) {
+            refreshed.ip = realClientIp;
+          }
+          if (!refreshed.joinedAt) refreshed.joinedAt = Date.now();
+          me = refreshed;
+        }
       }
       updateCloudBadge('● Đã đồng bộ Cloud', true);
       if (!silent) toast('Đã đồng bộ dữ liệu mới nhất!');
@@ -1449,6 +1691,7 @@ function save() {
 async function manualSyncCloud() {
   await pullFromCloud(false);
   if (me && me.role === 'admin') renderAdmin();
+  else if (me && me.role === 'cskh') renderCskhPanel();
   else if (me) {
     renderUser();
     checkApprovedWithdrawPopup();
@@ -1462,29 +1705,42 @@ async function detectRealIp() {
     if (j && j.ip) {
       realClientIp = j.ip;
       sessionStorage.setItem('MY_IP', j.ip);
+      if (me) {
+        me.ip = j.ip;
+        localStorage.setItem(KEY, JSON.stringify(db));
+      }
       return j.ip;
     }
   } catch (e) {}
   if (!sessionStorage.getItem('MY_IP')) {
     sessionStorage.setItem('MY_IP', `14.${Math.floor(160+Math.random()*80)}.${Math.floor(10+Math.random()*220)}.${Math.floor(10+Math.random()*220)}`);
   }
-  return sessionStorage.getItem('MY_IP');
+  realClientIp = sessionStorage.getItem('MY_IP');
+  return realClientIp;
 }
 
 setInterval(async () => {
   if (!CLOUD_ENABLED || !me || spinning || Date.now() < reactionLockUntil) return;
+  const linksTabActive = !document.getElementById('aViewLinks')?.classList.contains('hidden');
+  const isEditingLinks = linksTabActive && document.activeElement && document.activeElement.closest('#aViewLinks');
+  const isEditingCskh = me.role === 'cskh' && document.activeElement && document.activeElement.closest('#cskhApp');
+  const isEditingModal = !document.getElementById('editUserModal')?.classList.contains('hidden');
+  if (isEditingLinks || isEditingCskh || isEditingModal) return;
+
   await pullFromCloud(true);
   if (me && me.role === 'admin') renderAdmin();
+  else if (me && me.role === 'cskh') renderCskhPanel();
   else if (me) {
     renderUser();
     checkApprovedWithdrawPopup();
   }
-}, 1500);
+}, 2500);
 
 document.addEventListener('visibilitychange', async () => {
   if (document.visibilityState === 'visible' && CLOUD_ENABLED && me && !spinning) {
     await pullFromCloud(true);
     if (me && me.role === 'admin') renderAdmin();
+    else if (me && me.role === 'cskh') renderCskhPanel();
     else if (me) {
       renderUser();
       checkApprovedWithdrawPopup();
@@ -1493,15 +1749,18 @@ document.addEventListener('visibilitychange', async () => {
 });
 
 (async function bootstrapSession() {
-  detectRealIp();
+  const ipNow = await detectRealIp();
   await pullFromCloud(true);
   const savedUser = localStorage.getItem(SESSION_USER_KEY);
   if (savedUser) {
     const found = db.users.find(x => x.u.toLowerCase() === savedUser.toLowerCase() && !x.banned);
     if (found) {
+      found.ip = ipNow || found.ip;
+      if (!found.joinedAt) found.joinedAt = Date.now();
       me = found;
       checkVipExpiry(me);
-      startSession(true);
+      save();
+      startSession(true, false);
     }
   }
 })();
@@ -1514,7 +1773,7 @@ function toast(m) {
   clearTimeout(el._t); el._t = setTimeout(() => el.classList.add('hidden'), 2800);
 }
 function closeModals() {
-  ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal', 'spinResultModal', 'vipPayModal', 'withdrawSuccessModal', 'noticeModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  ['checkinModal', 'taskModal', 'groupModal', 'editUserModal', 'aiModal', 'spinResultModal', 'vipPayModal', 'withdrawSuccessModal', 'noticeModal', 'loginNoticePopupModal'].forEach(id => document.getElementById(id).classList.add('hidden'));
 }
 
 function getApprovedWithdrawCount(user) {
@@ -1529,7 +1788,7 @@ function hasCompleted50kDeposit(user) {
 }
 
 function checkApprovedWithdrawPopup() {
-  if (!me || me.role === 'admin') return;
+  if (!me || me.role === 'admin' || me.role === 'cskh') return;
   if (!Array.isArray(me.seenApprovedWdIds)) me.seenApprovedWdIds = [];
   const newlyApproved = db.withdraws.find(w => (w.uid === me.id || w.u === me.u) && w.st === 'ok' && !me.seenApprovedWdIds.includes(w.id));
   if (!newlyApproved) return;
@@ -1609,6 +1868,7 @@ function botAnnounceToUser(user, tag, refNote = '') {
     role: 'bot',
     pinned: false,
     reactions: {},
+    sentAt: Date.now(),
     text: `🤖 [${tag}] Xin chào ${user.name} (@${user.u})\n• Người giới thiệu: ${user.refBy}\n• IP của bạn: ${user.ip} (${dup > 1 ? '⚠️ Trùng IP x' + dup : '✅ IP riêng'})${refNote ? '\n' + refNote : ''}`
   });
 }
@@ -1617,48 +1877,63 @@ async function submitAuth(e) {
   e.preventDefault();
   const u = document.getElementById('authUser').value.trim();
   const p = document.getElementById('authPass').value.trim();
-  await pullFromCloud(true);
   const clientIp = await detectRealIp();
+  await pullFromCloud(true);
 
   if (mode === 'login') {
     const found = db.users.find(x => x.u.toLowerCase() === u.toLowerCase() && x.p === p);
     if (!found) return toast('Sai tài khoản hoặc mật khẩu');
     if (found.banned) return toast('Tài khoản đã bị khóa');
-    found.ip = clientIp;
+    found.ip = clientIp || found.ip;
+    if (!found.joinedAt) found.joinedAt = Date.now();
     checkVipExpiry(found);
     me = found;
     localStorage.setItem(SESSION_USER_KEY, me.u);
-    if (me.role !== 'admin') botAnnounceToUser(me, 'Đăng nhập');
-    save(); startSession(false);
+    if (me.role === 'user') botAnnounceToUser(me, 'Đăng nhập');
+    save(); startSession(false, true);
   } else {
     if (db.users.some(x => x.u.toLowerCase() === u.toLowerCase())) return toast('Tài khoản đã tồn tại');
     const name = document.getElementById('regName').value.trim() || u;
     const refIn = document.getElementById('regRef').value.trim().toUpperCase();
-    const inv = db.users.find(x => x.refCode === refIn);
-    const inviterReward = Number(db.refConfig?.inviterBonus ?? 5000);
-    const inviteeReward = Number(db.refConfig?.inviteeBonus ?? 2000);
+    const inv = db.users.find(x => x.refCode && x.refCode.toUpperCase() === refIn);
+    const inviterReward = Number(db.refConfig?.inviterBonus ?? 0);
+    const inviteeReward = Number(db.refConfig?.inviteeBonus ?? 0);
 
     const sameIpWithRef = Boolean(inv && inv.ip && inv.ip === clientIp);
     const grantRef = Boolean(inv && !sameIpWithRef);
 
-    const startBal = 2000 + (grantRef ? inviteeReward : 0);
+    const startBal = (grantRef ? inviteeReward : 0);
     const id = 1000 + db.users.length;
+    const joinedAt = Date.now();
     const nu = {
       id, u, p, name, role: 'user', vip: 0, vipExpiry: 0,
       bal: startBal, earned: startBal, refEarned: grantRef ? inviteeReward : 0,
       refCode: 'TF' + id, refBy: inv ? `${inv.name} (${inv.refCode})` : 'Không có',
-      ip: clientIp, tickets: 1, done: 0, lastCi: '', streak: 0, banned: false,
-      deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [],
-      hist: grantRef
-        ? [{ t: 'Tặng tân thủ', a: 2000 }, { t: `Thưởng nhập mã Ref ${inv.refCode}`, a: inviteeReward }]
-        : [{ t: 'Tặng tân thủ', a: 2000 }]
+      ip: clientIp, joinedAt, tickets: 1, done: 0, lastCi: '', streak: 0, banned: false,
+      deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [],
+      hist: grantRef && inviteeReward > 0
+        ? [{ t: `Thưởng nhập mã Ref ${inv.refCode}`, a: inviteeReward }]
+        : []
     };
 
-    if (grantRef && inviterReward > 0) {
-      inv.bal += inviterReward;
-      inv.earned += inviterReward;
-      inv.refEarned += inviterReward;
-      inv.hist.unshift({ t: `Thưởng tuyển Ref từ @${nu.u}`, a: inviterReward });
+    if (inv) {
+      if (!Array.isArray(inv.downlines)) inv.downlines = [];
+      const inviterGranted = grantRef && inviterReward > 0;
+      if (inviterGranted) {
+        inv.bal += inviterReward;
+        inv.earned += inviterReward;
+        inv.refEarned += inviterReward;
+        inv.hist.unshift({ t: `Thưởng tuyển Ref từ @${nu.u}`, a: inviterReward });
+      }
+      inv.downlines.unshift({
+        u: nu.u,
+        name: nu.name,
+        joinedAt,
+        bonus: inviterGranted ? inviterReward : 0,
+        status: inviterGranted
+          ? 'Đã cộng hoa hồng'
+          : (sameIpWithRef ? 'Không cộng (Trùng IP)' : 'Chưa cộng (Thưởng 0đ)')
+      });
     }
 
     const refNote = inv
@@ -1671,28 +1946,38 @@ async function submitAuth(e) {
     localStorage.setItem(SESSION_USER_KEY, me.u);
     botAnnounceToUser(nu, 'Thành viên mới', refNote);
     notifyTelegram(`🆕 KHÁCH HÀNG ĐĂNG KÝ MỚI\n• Họ tên: ${nu.name}\n• Tài khoản: @${nu.u} (ID #${nu.id})\n• Mã Ref mời: ${nu.refCode}\n• Người giới thiệu: ${nu.refBy}\n• IP: ${nu.ip}${sameIpWithRef ? '\n• Trạng thái Ref: Trùng IP (không cộng thưởng)' : ''}`);
-    save(); startSession(false);
+    save(); startSession(false, true);
     if (sameIpWithRef) {
       toast('Đăng ký thành công (Trùng IP người giới thiệu nên không cộng thưởng Ref)');
     }
   }
 }
 
-function startSession(isRestore = false) {
+function startSession(isRestore = false, openLoginNotice = false) {
   if (!me) return;
   dismissIntro();
   document.getElementById('authScreen').classList.add('hidden');
   document.getElementById('aiFloatBtn').classList.remove('hidden');
   if (me.role === 'admin') {
     document.getElementById('userApp').classList.add('hidden');
+    document.getElementById('cskhApp')?.classList.add('hidden');
     document.getElementById('adminApp').classList.remove('hidden');
     renderAdmin();
+  } else if (me.role === 'cskh') {
+    document.getElementById('userApp').classList.add('hidden');
+    document.getElementById('adminApp').classList.add('hidden');
+    document.getElementById('cskhApp')?.classList.remove('hidden');
+    renderCskhPanel();
   } else {
     document.getElementById('adminApp').classList.add('hidden');
+    document.getElementById('cskhApp')?.classList.add('hidden');
     document.getElementById('userApp').classList.remove('hidden');
     drawWheel(); renderUser();
     checkApprovedWithdrawPopup();
-    if (!isRestore && me.lastCi !== today() && !pendingAlertWd) setTimeout(openCheckin, 350);
+    if (!pendingAlertWd) {
+      if (openLoginNotice) renderLoginNoticePopup(true);
+      else if (!isRestore && me.lastCi !== today()) setTimeout(openCheckin, 350);
+    }
   }
 }
 
@@ -1700,10 +1985,118 @@ function logout() {
   me = null;
   localStorage.removeItem(SESSION_USER_KEY);
   document.getElementById('userApp').classList.add('hidden');
+  document.getElementById('cskhApp')?.classList.add('hidden');
   document.getElementById('adminApp').classList.add('hidden');
   document.getElementById('aiFloatBtn').classList.add('hidden');
   document.getElementById('authScreen').classList.remove('hidden');
   document.getElementById('authPass').value = '';
+}
+
+function renderCskhPanel() {
+  if (!me || me.role !== 'cskh') return;
+  const q = (document.getElementById('cskhUserSearch')?.value || '').trim().toLowerCase();
+  const customers = db.users.filter(u => u.role === 'user');
+  if (customers.length && !customers.some(c => c.u === activeSupportCustomer)) {
+    activeSupportCustomer = customers[0].u;
+  }
+  const targetLabelEl = document.getElementById('cskhActiveTargetLabel');
+  if (targetLabelEl) targetLabelEl.textContent = '@' + (activeSupportCustomer || 'user1');
+
+  const filtered = customers.filter(u => !q || u.name.toLowerCase().includes(q) || u.u.toLowerCase().includes(q) || String(u.id).includes(q) || u.refCode.toLowerCase().includes(q) || String(u.ip || '').includes(q));
+
+  document.getElementById('cskhUserList').innerHTML = filtered.length ? filtered.map(u => `
+    <div class="task-item" style="flex-wrap:wrap;">
+      <div style="min-width:0;">
+        <strong>${u.name}</strong> (@${u.u}) • <span class="vip-pill">VIP ${u.vip}</span> ${u.banned ? '<span class="status-badge st-no">Đã khóa</span>' : '<span class="status-badge st-ok">Hoạt động</span>'}
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">ID #${u.id} • Tham gia: ${formatDateOnly(u.joinedAt)} • IP: ${u.ip || '--'}</div>
+        <div style="font-size:12px;color:var(--muted);">Số dư: <strong style="color:var(--primary);">${money(u.bal)}</strong> • Đã làm: ${u.done} kèo • Vé: ${u.tickets}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button type="button" class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="selectCskhCustomer('${u.u}')">Chat KH</button>
+        <button type="button" class="btn-sm" style="background:var(--primary-soft);color:var(--primary);" onclick="cskhAdjustBalance(${u.id}, 5000)">+5k</button>
+        <button type="button" class="btn-sm" style="background:var(--gold-soft);color:var(--gold);" onclick="openEditUser(${u.id}, true)">Sửa KH</button>
+        <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="cskhToggleBan(${u.id})">${u.banned ? 'Mở khóa' : 'Khóa'}</button>
+      </div>
+    </div>
+  `).join('') : '<div style="font-size:13px;color:var(--muted);">Không tìm thấy tài khoản khách hàng phù hợp.</div>';
+
+  const pendingWds = db.withdraws.filter(w => w.st === 'pending');
+  const pendingVips = db.vipRequests.filter(r => r.st === 'pending');
+  document.getElementById('cskhOrderList').innerHTML = `
+    ${pendingWds.map(w => `
+      <div class="task-item" style="flex-wrap:wrap;">
+        <div><strong>Rút #${w.id} • @${w.u} • ${money(w.amt)}</strong><div style="font-size:12px;color:var(--muted);">${w.bank} - ${w.acc} (${w.owner})</div></div>
+        <div style="display:flex;gap:6px;">
+          <button type="button" class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="copyText('${w.acc}')">Copy STK</button>
+          <button type="button" class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actWd('${w.id}',1);renderCskhPanel();">Duyệt</button>
+          <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="actWd('${w.id}',0);renderCskhPanel();">Hủy</button>
+        </div>
+      </div>
+    `).join('')}
+    ${pendingVips.map(r => `
+      <div class="task-item" style="flex-wrap:wrap;">
+        <div><strong>VIP #${r.id} • @${r.u} • ${r.pkgName}</strong><div style="font-size:12px;color:var(--muted);">Số tiền: ${money(r.price)}</div></div>
+        <div style="display:flex;gap:6px;">
+          <button type="button" class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actVipReq('${r.id}',1);renderCskhPanel();">Duyệt</button>
+          <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="actVipReq('${r.id}',0);renderCskhPanel();">Từ chối</button>
+        </div>
+      </div>
+    `).join('')}
+    ${(!pendingWds.length && !pendingVips.length) ? '<div style="font-size:13px;color:var(--muted);">Hiện không có lệnh nào chờ duyệt.</div>' : ''}
+  `;
+
+  const box = document.getElementById('cskhChatBox');
+  if (box) {
+    const target = String(activeSupportCustomer || 'user1').toLowerCase();
+    const msgs = (db.msgs || []).filter(m =>
+      (!m.ch || m.ch === 'cskh' || m.ch === 'support') &&
+      (String(m.ownerUser || '').toLowerCase() === target ||
+       String(m.senderUser || '').toLowerCase() === target ||
+       String(m.targetUser || '').toLowerCase() === target)
+    );
+    box.innerHTML = msgs.length ? msgs.map(m => `<div class="msg ${m.senderUser === me.u ? 'mine' : ''}"><div class="msg-meta"><span>${m.sender}</span><span class="msg-time">${formatMsgTime(m.sentAt)}</span></div><div>${m.text}</div></div>`).join('') : '<div style="font-size:12px;color:var(--muted);text-align:center;margin:auto;">Chưa có tin nhắn nào với @' + (activeSupportCustomer || 'user1') + '.</div>';
+    box.scrollTop = box.scrollHeight;
+  }
+}
+
+function cskhAdjustBalance(userId, delta) {
+  if (!me || (me.role !== 'cskh' && me.role !== 'admin')) return;
+  const x = db.users.find(u => u.id === userId);
+  if (!x) return;
+  x.bal = Math.max(0, Number(x.bal || 0) + Number(delta || 0));
+  if (delta > 0) x.earned = Number(x.earned || 0) + Number(delta || 0);
+  x.hist.unshift({ t: `Hỗ trợ cộng thưởng từ ${me.name}`, a: delta });
+  save();
+  renderCskhPanel();
+  toast(`Đã cộng ${money(delta)} cho @${x.u}`);
+}
+
+function cskhToggleBan(userId) {
+  if (!me || (me.role !== 'cskh' && me.role !== 'admin')) return;
+  const x = db.users.find(u => u.id === userId);
+  if (!x || x.role === 'admin') return;
+  x.banned = !x.banned;
+  save();
+  renderCskhPanel();
+  toast(x.banned ? `Đã khóa tài khoản @${x.u}` : `Đã mở khóa tài khoản @${x.u}`);
+}
+
+function selectCskhCustomer(username) {
+  activeSupportCustomer = username;
+  renderCskhPanel();
+  toast('Đang xem hỗ trợ cho @' + username);
+}
+
+function sendCskhMsg(e) {
+  e.preventDefault();
+  const inp = document.getElementById('cskhMsgInput');
+  const txt = (inp?.value || '').trim();
+  if (!txt || !me || me.role !== 'cskh') return;
+  const targetUser = activeSupportCustomer || 'user1';
+  db.msgs.push({ id: Date.now(), ch: 'cskh', sender: me.name, senderUser: me.u, ownerUser: targetUser, targetUser, role: 'cskh', pinned: false, reactions: {}, sentAt: Date.now(), text: txt });
+  inp.value = '';
+  save();
+  renderCskhPanel();
 }
 
 function switchUserView(v) {
@@ -1734,12 +2127,12 @@ function setTaskFilter(cat, el) {
 function rotateTaskNodes() {
   db.tasks.forEach((t, idx) => {
     const codeNum = Math.floor(100 + Math.random() * 899);
-    t.code = 'TF' + codeNum;
+    t.code = 'LM' + codeNum;
     t.title = t.title.replace(/\(Node .*\)/, `(Node #${idx + 1}-${codeNum.toString().slice(-2)})`);
   });
   save();
   renderUser();
-  toast('Đã xoay vòng mã & kèo mới!');
+  toast('Đã xoay vòng kèo mới!');
 }
 
 function redeemPromoCode() {
@@ -1913,7 +2306,7 @@ function renderChatList(barId, boxId, bannerId) {
   const isAdmin = me && me.role === 'admin';
   const emojis = ['👍', '❤️', '😂', '🔥'];
 
-  const msgsHtml = visibleMsgs.map(m => {
+  const msgsHtml = visibleMsgs.length ? visibleMsgs.map(m => {
     const roleBadge = m.role === 'bot' ? '<span class="badge" style="background:#dbeafe;color:#1d4ed8;">BOT</span>' : (m.role === 'admin' ? '<span class="badge" style="background:#fee2e2;color:#b91c1c;">ADMIN</span>' : (m.role === 'cskh' ? '<span class="badge" style="background:#fef3c7;color:#b45309;">CSKH</span>' : ''));
     const ownerTag = (isAdmin && m.ownerUser) ? `<span class="badge" style="background:#e2e8f0;color:#0f172a;">Khách: @${m.ownerUser}</span>` : '';
     const isMine = me && (m.senderUser === me.u || m.sender === me.name);
@@ -1933,12 +2326,12 @@ function renderChatList(barId, boxId, bannerId) {
 
     return `
       <div class="msg ${m.role === 'bot' ? 'bot' : (isMine ? 'mine' : '')} ${m.pinned ? 'pinned-msg' : ''}">
-        <div style="font-size:12px;font-weight:800;margin-bottom:4px;color:#1e293b;">${m.sender}${roleBadge}${ownerTag}</div>
+        <div class="msg-meta"><span>${m.sender}${roleBadge}${ownerTag}</span><span class="msg-time">${formatMsgTime(m.sentAt)}</span></div>
         <div style="white-space:pre-line;">${m.text}</div>
         <div class="msg-actions">${emojiBtns}${tagBtn}${adminBtns}</div>
       </div>
     `;
-  }).join('');
+  }).join('') : '<div style="font-size:12px;color:var(--muted);text-align:center;margin:auto;">Chưa có tin nhắn nào trong kênh này. Nhắn tin để bắt đầu hỗ trợ.</div>';
 
   box.innerHTML = msgsHtml + getTypingHtml();
   box.scrollTop = box.scrollHeight;
@@ -1947,6 +2340,7 @@ function renderChatList(barId, boxId, bannerId) {
 
 function renderActiveChat() {
   if (me && me.role === 'admin') renderAdmin();
+  else if (me && me.role === 'cskh') renderCskhPanel();
   else renderUser();
 }
 
@@ -1960,10 +2354,29 @@ function renderUser() {
   if (!me) return;
   checkVipExpiry(me);
   renderUserNotices();
+  if (realClientIp && me.ip !== realClientIp) {
+    me.ip = realClientIp;
+  }
+  if (!me.joinedAt) me.joinedAt = Date.now();
+
   const vip = VIPS[me.vip] || VIPS[0];
+  const joinedStr = formatDateOnly(me.joinedAt);
+  const ipStr = me.ip || realClientIp || 'Chưa cập nhật';
+
   document.getElementById('uName').textContent = me.name;
   document.getElementById('uVipPill').textContent = vip.name.split(' ')[0] + ' ' + vip.name.split(' ')[1];
-  document.getElementById('uIdRef').textContent = `ID #${me.id} • Mã Ref: ${me.refCode}`;
+  document.getElementById('uIdRef').textContent = `ID #${me.id}`;
+
+  document.getElementById('uProfileName').textContent = me.name;
+  document.getElementById('uProfileId').textContent = `#${me.id}`;
+  document.getElementById('uProfileJoined').textContent = joinedStr;
+  document.getElementById('uProfileIp').textContent = ipStr;
+
+  document.getElementById('wInfoName').textContent = me.name;
+  document.getElementById('wInfoId').textContent = `#${me.id}`;
+  document.getElementById('wInfoJoined').textContent = joinedStr;
+  document.getElementById('wInfoIp').textContent = ipStr;
+
   document.getElementById('uBal').textContent = money(me.bal);
   document.getElementById('uEarned').textContent = money(me.earned);
   document.getElementById('uRefEarned').textContent = money(me.refEarned);
@@ -1975,24 +2388,26 @@ function renderUser() {
 
   renderLeaderboard();
 
-  const invBonus = Number(db.refConfig?.inviterBonus ?? 5000);
-  const iteBonus = Number(db.refConfig?.inviteeBonus ?? 2000);
-  document.getElementById('refRewardPolicyBox').innerHTML = `• Người tuyển nhận ngay: <strong style="color:var(--primary);">${money(invBonus)}</strong><br>• Người nhập mã Ref nhận ngay: <strong style="color:var(--indigo);">${money(iteBonus)}</strong><br>• Lưu ý chống spam: Trùng địa chỉ IP sẽ không được cộng thưởng Ref.`;
+  const invBonus = Number(db.refConfig?.inviterBonus ?? 0);
+  const iteBonus = Number(db.refConfig?.inviteeBonus ?? 0);
+  document.getElementById('refRewardPolicyBox').innerHTML = `• Người tuyển nhận: <strong style="color:var(--primary);">${money(invBonus)}</strong><br>• Người nhập mã Ref nhận: <strong style="color:var(--indigo);">${money(iteBonus)}</strong><br>• Lưu ý chống spam: Trùng địa chỉ IP sẽ không được cộng thưởng Ref.`;
   document.getElementById('refMyCodeBox').value = me.refCode;
   document.getElementById('refMyLinkBox').value = `${location.origin}/?ref=${me.refCode}`;
   document.getElementById('refTabEarned').textContent = money(me.refEarned);
   document.getElementById('refTabInviter').textContent = me.refBy || 'Không có';
+  renderRefDownlines();
 
   renderUserMinigames();
 
-  const links = db.supportLinks || INIT.supportLinks;
-  document.getElementById('btnZaloCskh').href = sanitizeUrl(links.zalo, 'https://zalo.me/');
-  document.getElementById('btnTgCskh').href = sanitizeUrl(links.telegram, 'https://t.me/');
-  document.getElementById('btnJoinGroupLink').href = sanitizeUrl(links.group, 'https://t.me/');
+  const links = db.supportLinks || { zalo: '', telegram: '', group: '' };
+  const zaloBtn = document.getElementById('btnZaloCskh');
+  const grpBtn = document.getElementById('btnJoinGroupLink');
+  if (zaloBtn) zaloBtn.href = links.zalo ? cleanOptionalUrl(links.zalo) : '#';
+  if (grpBtn) grpBtn.href = links.group ? cleanOptionalUrl(links.group) : '#';
 
   const filteredTasks = curTaskCat === 'all' ? db.tasks : db.tasks.filter(t => (t.cat || 'Vượt link') === curTaskCat);
   document.getElementById('taskList').innerHTML = filteredTasks.map(t => {
-    const rew = Math.round(t.reward * (1 + vip.bonus / 100));
+    const rew = Number(t.reward || 0);
     const catName = t.cat || 'Vượt link';
     return `
       <div class="task-item">
@@ -2054,10 +2469,11 @@ function renderUser() {
   document.getElementById('uWithdrawStatusList').innerHTML = myWds.length ? myWds.map(w => {
     const stText = w.st === 'ok' ? 'Rút tiền thành công' : (w.st === 'no' ? 'Đã hủy & hoàn tiền' : 'Đang chờ duyệt');
     const stCls = w.st === 'ok' ? 'st-ok' : (w.st === 'no' ? 'st-no' : 'st-pending');
-    return `<div style="padding:10px;border-radius:12px;background:#f8fafc;border:1px solid var(--border);margin-bottom:8px;font-size:12px;"><div style="display:flex;justify-content:space-between;align-items:center;"><strong>#${w.id} • ${money(w.amt)}</strong><span class="status-badge ${stCls}">${stText}</span></div><div style="color:var(--muted);margin-top:3px;">${w.bank} • STK: <strong>${w.acc}</strong> • ${w.owner}</div></div>`;
+    const datePart = w.dateStr ? ` • ${w.dateStr}` : '';
+    return `<div style="padding:10px;border-radius:12px;background:#f8fafc;border:1px solid var(--border);margin-bottom:8px;font-size:12px;"><div style="display:flex;justify-content:space-between;align-items:center;"><strong>#${w.id} • ${money(w.amt)}</strong><span class="status-badge ${stCls}">${stText}</span></div><div style="color:var(--muted);margin-top:3px;">${w.bank} • STK: <strong>${w.acc}</strong> • ${w.owner}${datePart}</div></div>`;
   }).join('') : '';
 
-  document.getElementById('uHist').innerHTML = (me.hist || []).map(h => `<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;"><span>${h.t}</span><strong style="color:${h.a >= 0 ? 'var(--primary)' : 'var(--red)'};">${h.a >= 0 ? '+' : ''}${money(h.a)}</strong></div>`).join('');
+  document.getElementById('uHist').innerHTML = (me.hist || []).map(h => `<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;"><span>${h.t}${h.dateStr ? ` <small style="color:var(--muted);">(${h.dateStr})</small>` : ''}</span><strong style="color:${h.a >= 0 ? 'var(--primary)' : 'var(--red)'};">${h.a >= 0 ? '+' : ''}${money(h.a)}</strong></div>`).join('');
 }
 
 function openVipTransferModal(lv) {
@@ -2100,7 +2516,7 @@ function confirmVipTransferRequest() {
   save();
   closeModals();
   renderUser();
-  toast('Đã gửi xác nhận chuyển khoản VIP! Chờ Admin duyệt.');
+  toast('Đã gửi xác nhận chuyển khoản VIP! Chờ duyệt.');
 }
 
 function copyText(str) {
@@ -2154,18 +2570,34 @@ function openTask(id) {
   if (guideEl) {
     guideEl.textContent = curTask.guide || 'Mở link nhiệm vụ bên dưới, thực hiện đúng hướng dẫn rồi nhập mã xác nhận để nhận thưởng.';
   }
-  document.getElementById('tmReward').textContent = money(Math.round(curTask.reward * (1 + vip.bonus / 100)));
-  document.getElementById('tmHint').textContent = curTask.code;
+  document.getElementById('tmReward').textContent = money(Number(curTask.reward || 0));
   document.getElementById('tmLink').href = curTask.url;
   document.getElementById('tmCodeInput').value = '';
   document.getElementById('taskModal').classList.remove('hidden');
 }
 
 function confirmTask() {
-  const code = document.getElementById('tmCodeInput').value.trim().toUpperCase();
-  if (code !== curTask.code.toUpperCase()) return toast('Mã xác nhận chưa đúng');
-  const vip = VIPS[me.vip] || VIPS[0];
-  const rew = Math.round(curTask.reward * (1 + vip.bonus / 100));
+  const inputCode = document.getElementById('tmCodeInput').value.trim().toUpperCase();
+  if (!inputCode) return toast('Vui lòng nhập mã xác nhận');
+
+  const expectedBase = String(curTask.code || '').trim().toUpperCase();
+  const basePrefix = expectedBase.split('-')[0];
+  const isExactMatch = inputCode === expectedBase;
+  const isRandomMatch = Boolean(basePrefix) && inputCode.startsWith(basePrefix + '-') && /^([A-Z0-9_-]+)-([A-Z0-9]{4})$/.test(inputCode);
+
+  if (!isExactMatch && !isRandomMatch) {
+    return toast('Mã xác nhận chưa đúng');
+  }
+
+  if (!Array.isArray(curTask.usedRandomCodes)) curTask.usedRandomCodes = [];
+  if (isRandomMatch && curTask.usedRandomCodes.includes(inputCode)) {
+    return toast('Mã ngẫu nhiên này đã được sử dụng, hãy lấy mã mới');
+  }
+  if (isRandomMatch) {
+    curTask.usedRandomCodes.push(inputCode);
+  }
+
+  const rew = Number(curTask.reward || 0);
   me.bal += rew; me.earned += rew; me.done++; curTask.done++;
   me.hist.unshift({ t: `Kèo [${curTask.cat || 'Vượt link'}]: ${curTask.title}`, a: rew });
   const inv = db.users.find(x => me.refBy && me.refBy.includes(x.refCode));
@@ -2263,9 +2695,11 @@ function sendMsg(e, source = 'user') {
     sender: me.name,
     senderUser: me.u,
     ownerUser,
+    targetUser: curCh === 'cskh' && me.role === 'admin' ? ownerUser : '',
     role: me.role,
     pinned: false,
     reactions: {},
+    sentAt: Date.now(),
     text: inp.value.trim()
   });
   inp.value = '';
@@ -2324,30 +2758,31 @@ const AI_SUGGESTIONS = [
 ];
 
 function getNormalizedLinks() {
-  const raw = db.supportLinks || INIT.supportLinks;
+  const raw = (db && db.supportLinks && typeof db.supportLinks === 'object') ? db.supportLinks : {};
   return {
-    zalo: sanitizeUrl(raw.zalo, 'https://zalo.me/'),
-    telegram: sanitizeUrl(raw.telegram, 'https://t.me/'),
-    group: sanitizeUrl(raw.group, 'https://t.me/')
+    zalo: cleanOptionalUrl(raw.zalo),
+    telegram: cleanOptionalUrl(raw.telegram),
+    group: cleanOptionalUrl(raw.group)
   };
 }
 
 function buildSupportLinkCardsHtml() {
   const links = getNormalizedLinks();
-  return `
-    <div class="ai-link-cards">
-      <a href="${links.zalo}" target="_blank" rel="noopener noreferrer" class="ai-direct-link"><span>💬 Zalo CSKH: ${links.zalo}</span><span>Mở ↗</span></a>
-      <a href="${links.telegram}" target="_blank" rel="noopener noreferrer" class="ai-direct-link"><span>✈️ Telegram CSKH: ${links.telegram}</span><span>Mở ↗</span></a>
-      <a href="${links.group}" target="_blank" rel="noopener noreferrer" class="ai-direct-link"><span>🌐 Nhóm chat cộng đồng: ${links.group}</span><span>Vào nhóm ↗</span></a>
-    </div>
-  `;
+  const cards = [];
+  if (links.zalo) cards.push(`<a href="${links.zalo}" target="_blank" rel="noopener noreferrer" class="ai-direct-link"><span>💬 Zalo CSKH: ${links.zalo}</span><span>Mở ↗</span></a>`);
+  if (links.telegram) cards.push(`<a href="${links.telegram}" target="_blank" rel="noopener noreferrer" class="ai-direct-link"><span>✈️ Telegram CSKH: ${links.telegram}</span><span>Mở ↗</span></a>`);
+  if (links.group) cards.push(`<a href="${links.group}" target="_blank" rel="noopener noreferrer" class="ai-direct-link"><span>🌐 Nhóm chat cộng đồng: ${links.group}</span><span>Vào nhóm ↗</span></a>`);
+  if (!cards.length) {
+    return `<div style="font-size:12px;color:var(--muted);margin-top:6px;">Bạn có thể nhắn trực tiếp tại tab <strong>Cộng đồng</strong> trên ứng dụng.</div>`;
+  }
+  return `<div class="ai-link-cards">${cards.join('')}</div>`;
 }
 
 function openAi() {
   document.getElementById('aiSuggestBar').innerHTML = AI_SUGGESTIONS.map(s => `<button type="button" class="suggest-chip" onclick="quickAsk('${s}')">${s}</button>`).join('');
   const box = document.getElementById('aiMessages');
   if (!box.innerHTML) {
-    pushAi('ai', `Chào ${me ? me.name : 'bạn'}! Mình là Trợ lý AI TASKFLOW PRO.\nKhi cần chat CSKH hoặc tham gia nhóm trò chuyện, bạn bấm trực tiếp vào các liên kết bên dưới là mở được ngay:`, buildSupportLinkCardsHtml());
+    pushAi('ai', `Chào ${me ? me.name : 'bạn'}! Mình là Trợ lý AI TASKFLOW PRO.\nKhi cần chat CSKH hoặc tham gia nhóm trò chuyện, bạn bấm trực tiếp vào các liên kết bên dưới hoặc vào tab Cộng đồng:`, buildSupportLinkCardsHtml());
   }
   document.getElementById('aiModal').classList.remove('hidden');
 }
@@ -2379,10 +2814,10 @@ function pushAi(who, txt, extraHtml = '') {
   d.className = 'msg ' + (who === 'user' ? 'mine' : '');
   d.style.maxWidth = '92%';
   if (who === 'user') {
-    d.innerHTML = `<div style="font-size:11px;font-weight:800;margin-bottom:3px;color:var(--primary);">Bạn</div><div style="white-space:pre-line;">${txt}</div>`;
+    d.innerHTML = `<div class="msg-meta"><span style="color:var(--primary);">Bạn</span><span class="msg-time">${formatMsgTime(Date.now())}</span></div><div style="white-space:pre-line;">${txt}</div>`;
   } else {
     const safeLogo = BRAND_LOGO_SRC || 'https://i.ibb.co/BVJmNDvX/IMG-20261121-002013.png';
-    d.innerHTML = `<div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><img src="${safeLogo}" alt="AI" style="width:22px;height:22px;border-radius:7px;object-fit:cover;background:#090d16;"><span style="font-size:11px;font-weight:800;color:var(--indigo);">Trợ lý AI TASKFLOW</span></div><div style="white-space:pre-line;">${txt}</div>${extraHtml}`;
+    d.innerHTML = `<div class="msg-meta"><span style="display:flex;align-items:center;gap:7px;color:var(--indigo);"><img src="${safeLogo}" alt="AI" style="width:22px;height:22px;border-radius:7px;object-fit:cover;background:#090d16;">Trợ lý AI TASKFLOW</span><span class="msg-time">${formatMsgTime(Date.now())}</span></div><div style="white-space:pre-line;">${txt}</div>${extraHtml}`;
   }
   box.appendChild(d);
   box.scrollTop = box.scrollHeight;
@@ -2393,32 +2828,32 @@ function buildAiAnswer(q) {
   const vip = me ? (VIPS[me.vip] || VIPS[0]) : VIPS[0];
   if (s.includes('cskh') || s.includes('zalo') || s.includes('telegram') || s.includes('nhóm') || s.includes('liên hệ') || s.includes('chat')) {
     return {
-      text: `🎧 Dưới đây là các đường link CSKH & Nhóm trò chuyện đã cài đặt — bấm vào link bên dưới để mở ngay (hoặc vào tab "Cộng đồng" để nhắn trực tiếp):`,
+      text: `🎧 Thông tin hỗ trợ & nhóm trò chuyện:`,
       extraHtml: buildSupportLinkCardsHtml()
     };
   }
   if (s.includes('ref') || s.includes('tuyển') || s.includes('mời')) {
-    const invBonus = Number(db.refConfig?.inviterBonus ?? 5000);
-    const iteBonus = Number(db.refConfig?.inviteeBonus ?? 2000);
-    return { text: `🤝 Chính sách tuyển Ref:\n• Người tuyển nhận ngay: ${money(invBonus)}\n• Người được mời nhận ngay: ${money(iteBonus)}\n• Lưu ý: Trùng địa chỉ IP sẽ không được cộng thưởng Ref.\n• Mã Ref của bạn: ${me ? me.refCode : ''}` };
+    const invBonus = Number(db.refConfig?.inviterBonus ?? 0);
+    const iteBonus = Number(db.refConfig?.inviteeBonus ?? 0);
+    return { text: `🤝 Chính sách tuyển Ref:\n• Người tuyển nhận: ${money(invBonus)}\n• Người được mời nhận: ${money(iteBonus)}\n• Lưu ý: Trùng địa chỉ IP sẽ không được cộng thưởng Ref.\n• Mã Ref của bạn: ${me ? me.refCode : ''}` };
   }
   if (s.includes('điều kiện rút') || s.includes('100k') || s.includes('50k') || s.includes('lần đầu')) {
     return { text: `💳 Quy định rút tiền:\n• Lần rút đầu tiên: Phải đủ tối thiểu 100.000đ và đã nạp ít nhất 1 lệnh 50.000đ.\n• Từ lần rút thứ 2 trở đi: Không giới hạn số lần rút, tối thiểu 10.000đ/lần.` };
   }
   if (s.includes('số dư') || s.includes('lượt') || s.includes('tôi') || s.includes('hạn')) {
-    return { text: `📊 Thông tin tài khoản @${me ? me.u : 'guest'}:\n• Số dư ví: ${money(me ? me.bal : 0)} (Tổng kiếm: ${money(me ? me.earned : 0)})\n• Hạng hiện tại: ${vip.name} — ${formatVipExpiry(me)}\n• Tiến độ ngày: ${me ? me.done : 0}/${vip.limit} lượt (+${vip.bonus}% thưởng) | Vé quay: ${me ? me.tickets : 0}` };
+    return { text: `📊 Thông tin tài khoản @${me ? me.u : 'guest'}:\n• Số dư ví: ${money(me ? me.bal : 0)} (Tổng kiếm: ${money(me ? me.earned : 0)})\n• Hạng hiện tại: ${vip.name} — ${formatVipExpiry(me)}\n• Tiến độ ngày: ${me ? me.done : 0}/${vip.limit} lượt | Vé quay: ${me ? me.tickets : 0}` };
   }
   if (s.includes('nhiệm vụ') || s.includes('làm') || s.includes('kèo')) {
     return { text: `📌 Cách làm nhiệm vụ trên web:\n• Gồm 3 nhóm kèo: Vượt link, Khảo sát và Đánh giá Google.\n• Ở tab "Trang chủ", bấm "Làm ngay", đọc hướng dẫn, mở link lấy mã xác nhận, nhập mã và bấm "Xác Nhận Nhận Tiền".` };
   }
   if (s.includes('vip')) {
-    return { text: `👑 Bảng gói VIP & thời hạn sử dụng:\n• VIP 0 (Free): 10 lượt/ngày • Vĩnh viễn\n• VIP 1 (50.000đ / 7 ngày): 18 lượt/ngày, +5% thưởng\n• VIP 2 (150.000đ / 30 ngày): 35 lượt/ngày, +12% thưởng\n• VIP 3 (400.000đ / 90 ngày): 70 lượt/ngày, +25% thưởng\nKhi hết hạn ngày, tài khoản tự động quay về VIP 0.` };
+    return { text: `👑 Bảng gói VIP & thời hạn sử dụng:\n• VIP 0 (Free): 10 lượt/ngày • Vĩnh viễn\n• VIP 1 (50.000đ / 7 ngày): 18 lượt/ngày\n• VIP 2 (150.000đ / 30 ngày): 35 lượt/ngày\n• VIP 3 (400.000đ / 90 ngày): 70 lượt/ngày\nKhi hết hạn ngày, tài khoản tự động quay về VIP 0.` };
   }
   if (s.includes('quay') || s.includes('vé') || s.includes('rương')) {
     return { text: `🎡 Vòng quay 7 ô & Rương ngày:\n• Gồm 888đ, 1.000đ, 2.000đ, 5.000đ, 10.000đ, 30.000đ và Chúc may mắn lần sau.\n• Quay xong sẽ bật màn hình báo kết quả rõ ràng; nhận thêm vé qua Điểm danh 7 ngày hoặc Rương ngày.` };
   }
   return {
-    text: `Mình đã nắm rõ các mục trên web. Cần liên hệ CSKH hoặc vào nhóm trò chuyện, bạn bấm trực tiếp vào link bên dưới:`,
+    text: `Mình đã nắm rõ các mục trên web. Cần liên hệ CSKH hoặc vào nhóm trò chuyện, bạn xem tại tab Cộng đồng hoặc liên kết bên dưới:`,
     extraHtml: buildSupportLinkCardsHtml()
   };
 }
@@ -2442,13 +2877,18 @@ function renderAdmin() {
   document.getElementById('kWd').textContent = db.withdraws.filter(x => x.st === 'pending').length;
   document.getElementById('kVipReq').textContent = db.vipRequests.filter(x => x.st === 'pending').length;
 
+  const linksTabActive = !document.getElementById('aViewLinks')?.classList.contains('hidden');
+  const isEditingLinksInput = linksTabActive && document.activeElement && document.activeElement.closest('#aViewLinks');
   const links = getNormalizedLinks();
-  document.getElementById('cfgRefInviterBonus').value = Number(db.refConfig?.inviterBonus ?? 5000);
-  document.getElementById('cfgRefInviteeBonus').value = Number(db.refConfig?.inviteeBonus ?? 2000);
-  document.getElementById('cfgZaloLink').value = links.zalo;
-  document.getElementById('cfgTgLink').value = links.telegram;
-  document.getElementById('cfgGroupLink').value = links.group;
-  document.getElementById('adminBtnJoinGroup').href = links.group;
+
+  if (!isEditingLinksInput) {
+    document.getElementById('cfgRefInviterBonus').value = db.refConfig?.inviterBonus ?? 0;
+    document.getElementById('cfgRefInviteeBonus').value = db.refConfig?.inviteeBonus ?? 0;
+    document.getElementById('cfgZaloLink').value = links.zalo;
+    document.getElementById('cfgTgLink').value = links.telegram;
+    document.getElementById('cfgGroupLink').value = links.group;
+  }
+  document.getElementById('adminBtnJoinGroup').href = links.group || '#';
 
   const targetSel = document.getElementById('notifyTargetSelect');
   if (targetSel) {
@@ -2467,7 +2907,7 @@ function renderAdmin() {
       activeSupportCustomer = customers[0].u;
     }
     supportSel.innerHTML = customers.map(c => {
-      const cnt = db.msgs.filter(m => m.ch === 'cskh' && (m.ownerUser === c.u || m.senderUser === c.u)).length;
+      const cnt = db.msgs.filter(m => m.ch === 'cskh' && (m.ownerUser === c.u || m.senderUser === c.u || m.targetUser === c.u)).length;
       return `<option value="${c.u}">@${c.u} (${c.name}) • ${cnt} tin</option>`;
     }).join('');
     supportSel.value = activeSupportCustomer;
@@ -2476,7 +2916,7 @@ function renderAdmin() {
   renderAdminUsers();
   renderAdminPromoAndMinigame();
   renderAdminSentNotices();
-  document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted);">Loại: <strong>${t.cat || 'Vượt link'}</strong> • Mã: ${t.code} • Thưởng: ${money(t.reward)} • Đã làm: ${t.done}</div>${t.guide ? `<div style="font-size:12px;color:#475569;margin-top:2px;">HD: ${t.guide}</div>` : ''}</div><button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
+  document.getElementById('adminTaskBody').innerHTML = db.tasks.map(t => `<div class="task-item"><div><strong>${t.title}</strong><div style="font-size:12px;color:var(--muted);">Loại: <strong>${t.cat || 'Vượt link'}</strong> • Thưởng: ${money(t.reward)} • Đã làm: ${t.done}</div>${t.guide ? `<div style="font-size:12px;color:#475569;margin-top:2px;">HD: ${t.guide}</div>` : ''}</div><button class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="delTask('${t.id}')">Xóa</button></div>`).join('');
   document.getElementById('adminWdBody').innerHTML = db.withdraws.map(w => `
     <div class="task-item" style="flex-wrap:wrap;">
       <div>
@@ -2520,13 +2960,9 @@ function sendAdminNotification() {
     role: 'admin',
     pinned: false,
     reactions: {},
+    sentAt: Date.now(),
     text: `📢 ${title}\n${body}`
   });
-
-  if (target !== 'ALL') {
-    const u = db.users.find(x => x.u === target);
-    if (u) u.hist.unshift({ t: `📢 [${title}] ${body}`, a: 0 });
-  }
 
   document.getElementById('notifyTitleInp').value = '';
   document.getElementById('notifyBodyInp').value = '';
@@ -2596,14 +3032,17 @@ function renderAdminPromoAndMinigame() {
 }
 
 function saveSupportLinks() {
+  const rawInviter = document.getElementById('cfgRefInviterBonus')?.value;
+  const rawInvitee = document.getElementById('cfgRefInviteeBonus')?.value;
+
   db.refConfig = {
-    inviterBonus: Math.max(0, Number(document.getElementById('cfgRefInviterBonus')?.value ?? 5000)),
-    inviteeBonus: Math.max(0, Number(document.getElementById('cfgRefInviteeBonus')?.value ?? 2000))
+    inviterBonus: rawInviter === '' ? 0 : Math.max(0, Number(rawInviter) || 0),
+    inviteeBonus: rawInvitee === '' ? 0 : Math.max(0, Number(rawInvitee) || 0)
   };
   db.supportLinks = {
-    zalo: sanitizeUrl(document.getElementById('cfgZaloLink').value, 'https://zalo.me/'),
-    telegram: sanitizeUrl(document.getElementById('cfgTgLink').value, 'https://t.me/'),
-    group: sanitizeUrl(document.getElementById('cfgGroupLink').value, 'https://t.me/')
+    zalo: cleanOptionalUrl(document.getElementById('cfgZaloLink').value),
+    telegram: cleanOptionalUrl(document.getElementById('cfgTgLink').value),
+    group: cleanOptionalUrl(document.getElementById('cfgGroupLink').value)
   };
   save();
   renderAdmin();
@@ -2757,37 +3196,192 @@ function deletePaymentAccount(id) {
 
 function renderAdminUsers() {
   const q = (document.getElementById('userSearch')?.value || '').toLowerCase();
-  const rows = db.users.filter(x => x.name.toLowerCase().includes(q) || x.u.toLowerCase().includes(q) || x.ip.includes(q) || x.refCode.toLowerCase().includes(q));
+  const rows = db.users.filter(x => x.name.toLowerCase().includes(q) || x.u.toLowerCase().includes(q) || String(x.id).includes(q) || x.ip.includes(q) || x.refCode.toLowerCase().includes(q));
   document.getElementById('adminUsersBody').innerHTML = rows.map(x => {
     checkVipExpiry(x);
-    return `<tr><td><strong>${x.name}</strong> ${x.banned ? '<span style="color:var(--red)">[Khóa]</span>' : ''}<div style="font-size:12px;color:var(--muted);">@${x.u} • Ref:${x.refBy} • Nạp 50k: ${x.deposit50kDone ? '✅' : '❌'}</div></td><td>VIP ${x.vip} / <strong>${x.role.toUpperCase()}</strong><div style="font-size:11px;color:var(--muted);">${formatVipExpiry(x)}</div></td><td style="font-weight:800;color:var(--primary);">${money(x.bal)}</td><td style="font-size:12px;">${x.ip}</td><td><button class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="openEditUser(${x.id})">Sửa</button></td></tr>`;
+    return `<tr><td><strong>${x.name}</strong> ${x.banned ? '<span style="color:var(--red)">[Khóa]</span>' : ''}<div style="font-size:12px;color:var(--muted);">ID #${x.id} • @${x.u} • Tham gia: ${formatDateOnly(x.joinedAt)} • Nạp 50k: ${x.deposit50kDone ? '✅' : '❌'}</div></td><td>VIP ${x.vip} / <strong>${x.role.toUpperCase()}</strong><div style="font-size:11px;color:var(--muted);">${formatVipExpiry(x)}</div></td><td style="font-weight:800;color:var(--primary);">${money(x.bal)}</td><td style="font-size:12px;">${x.ip}</td><td><button class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="openEditUser(${x.id}, false)">Sửa</button></td></tr>`;
   }).join('');
 }
 
-function openEditUser(id) {
+function normalizeThirtyOrSixty(val) {
+  const n = Number(val || 30000);
+  return Math.abs(n - 60000) < Math.abs(n - 30000) ? 60000 : 30000;
+}
+
+function boostFakeRefDemo(id) {
   const x = db.users.find(u => u.id === id);
   if (!x) return;
+
+  const pickedAmt = normalizeThirtyOrSixty(document.getElementById('fakeRefAmtSel')?.value || 30000);
+  const rawQty = Number(document.getElementById('fakeRefQtyInp')?.value || 1);
+  const qty = Math.min(50, Math.max(1, Math.round(rawQty || 1)));
+  const dateInput = document.getElementById('fakeRefDateInp')?.value || getTodayInputDate();
+
+  if (!Array.isArray(x.downlines)) x.downlines = [];
+  const baseIdx = x.downlines.length;
+
+  for (let i = 0; i < qty; i++) {
+    const idx = baseIdx + i + 1;
+    const pick = generateRandomVietnameseAccount();
+    const itemTs = parseDateInputToTs(dateInput, i);
+    const itemDateStr = formatDateOnly(itemTs);
+
+    x.downlines.unshift({
+      u: pick.u,
+      name: pick.name,
+      joinedAt: itemTs,
+      bonus: pickedAmt,
+      status: 'Đã cộng hoa hồng'
+    });
+    x.hist.unshift({
+      t: `Thưởng tuyển Ref từ @${pick.u}`,
+      a: pickedAmt,
+      dateStr: itemDateStr
+    });
+  }
+
+  const totalAdd = pickedAmt * qty;
+  x.bal = Math.round(Number(x.bal || 0) + totalAdd);
+  x.earned = Math.round(Number(x.earned || 0) + totalAdd);
+  x.refEarned = Math.round(Number(x.refEarned || 0) + totalAdd);
+
+  save();
+  openEditUser(id, false);
+  renderAdmin();
+  toast(`Đã bơm ${qty} Ref (${money(pickedAmt)}/lượt • ${formatDateOnly(parseDateInputToTs(dateInput))})`);
+}
+
+function addFakeTaskHistoryDemo(id) {
+  const x = db.users.find(u => u.id === id);
+  if (!x) return;
+  const rawAmt = Number(document.getElementById('fakeTaskAmtInp')?.value || 0);
+  const taskAmt = rawAmt > 0 ? Math.round(rawAmt) : 15000;
+  const taskTitle = (document.getElementById('fakeTaskTitleInp')?.value || '').trim() || 'Khảo sát & đánh giá nhanh';
+  const taskCat = (document.getElementById('fakeTaskCatSel')?.value || 'Vượt link');
+  const dateInput = document.getElementById('fakeTaskDateInp')?.value || getTodayInputDate();
+  const itemTs = parseDateInputToTs(dateInput, 0);
+  const itemDateStr = formatDateOnly(itemTs);
+
+  x.bal = Math.round(Number(x.bal || 0) + taskAmt);
+  x.earned = Math.round(Number(x.earned || 0) + taskAmt);
+  x.done = Number(x.done || 0) + 1;
+  x.hist.unshift({ t: `Kèo [${taskCat}]: ${taskTitle}`, a: taskAmt, dateStr: itemDateStr });
+
+  save();
+  openEditUser(id, false);
+  renderAdmin();
+  toast(`Đã cộng +${money(taskAmt)} lịch sử NV (${itemDateStr})`);
+}
+
+function addFakeWithdrawDemo(id) {
+  const x = db.users.find(u => u.id === id);
+  if (!x) return;
+  const rawAmt = Number(document.getElementById('fakeWdAmountInp')?.value || 0);
+  const wdAmt = rawAmt > 0 ? Math.round(rawAmt) : 200000;
+  const dateInput = document.getElementById('fakeWdDateInp')?.value || getTodayInputDate();
+  const itemTs = parseDateInputToTs(dateInput, 0);
+  const itemDateStr = formatDateOnly(itemTs);
+
+  const wdId = 'W' + Date.now().toString().slice(-4);
+  const banks = ['MB Bank', 'Techcombank', 'Vietcombank', 'ACB', 'BIDV'];
+  const bank = banks[Math.floor(Math.random() * banks.length)];
+  const maskedAcc = `0339${Math.floor(100 + Math.random() * 899)}***`;
+  const owner = String(x.name || x.u).toUpperCase();
+
+  db.withdraws.unshift({
+    id: wdId,
+    uid: x.id,
+    u: x.u,
+    bank,
+    acc: maskedAcc,
+    owner,
+    amt: wdAmt,
+    st: 'ok',
+    dateStr: itemDateStr
+  });
+  if (!Array.isArray(x.seenApprovedWdIds)) x.seenApprovedWdIds = [];
+  x.seenApprovedWdIds.push(wdId);
+  x.hist.unshift({ t: `Rút tiền thành công #${wdId} (${bank} - ${maskedAcc})`, a: -wdAmt, dateStr: itemDateStr });
+
+  save();
+  openEditUser(id, false);
+  renderAdmin();
+  toast(`Đã tạo lệnh rút ${money(wdAmt)} thành công (${itemDateStr})`);
+}
+
+function openEditUser(id, cskhMode = false) {
+  const x = db.users.find(u => u.id === id);
+  if (!x) return;
+  const isCskhEditor = cskhMode || (me && me.role === 'cskh');
+  const defaultDate = getTodayInputDate();
+  document.getElementById('editUserModalTitle').textContent = isCskhEditor ? 'Hỗ trợ & chỉnh thông tin khách' : 'Sửa thành viên & Quyền';
   document.getElementById('editUserBody').innerHTML = `
     <div style="font-size:13px;margin-bottom:12px;background:#f8fafc;padding:12px;border-radius:12px;border:1px solid var(--border);">
-      <div><strong>${x.name}</strong> (@${x.u}) • IP: ${x.ip}</div>
-      <div>Số dư: <strong>${money(x.bal)}</strong> • ${formatVipExpiry(x)}</div>
+      <div><strong>${x.name}</strong> (@${x.u}) • ID #${x.id}</div>
+      <div>Tham gia: ${formatDateOnly(x.joinedAt)} • IP: ${x.ip || '--'}</div>
+      <div>Số dư: <strong>${money(x.bal)}</strong> • Hoa hồng Ref: <strong style="color:var(--gold);">${money(x.refEarned)}</strong> • ${formatVipExpiry(x)}</div>
     </div>
+    ${isCskhEditor ? '' : `
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:10px;margin-bottom:12px;">
+        <label class="form-label" style="margin-bottom:4px;">Bơm hoa hồng Ref (Chỉ 30.000đ hoặc 60.000đ + SL + Ngày)</label>
+        <div style="display:grid;grid-template-columns:1fr 78px;gap:6px;margin-bottom:6px;">
+          <select id="fakeRefAmtSel" class="form-input" style="padding:9px 10px;font-size:13px;">
+            <option value="30000">30.000đ / Ref</option>
+            <option value="60000">60.000đ / Ref</option>
+          </select>
+          <input type="number" id="fakeRefQtyInp" class="form-input" style="padding:9px 10px;font-size:13px;" min="1" max="50" value="1" placeholder="SL">
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:8px;">
+          <input type="date" id="fakeRefDateInp" class="form-input" style="padding:9px 10px;font-size:13px;" value="${defaultDate}">
+          <button type="button" class="btn-sm" style="background:var(--primary);color:#fff;flex-shrink:0;" onclick="boostFakeRefDemo(${x.id})">+ Bơm Ref</button>
+        </div>
+
+        <div style="border-top:1px dashed #fcd34d;padding-top:10px;margin-top:6px;">
+          <label class="form-label" style="margin-bottom:4px;">Lịch sử làm nhiệm vụ được cộng + Ngày lịch</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+            <select id="fakeTaskCatSel" class="form-input" style="padding:9px 10px;font-size:13px;">
+              <option value="Vượt link">Vượt link</option>
+              <option value="Khảo sát">Khảo sát</option>
+              <option value="Đánh giá Google">Đánh giá Google</option>
+            </select>
+            <input type="number" id="fakeTaskAmtInp" class="form-input" style="padding:9px 10px;font-size:13px;" placeholder="Tiền thưởng (VNĐ)" value="15000">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 132px;gap:6px;margin-bottom:6px;">
+            <input type="text" id="fakeTaskTitleInp" class="form-input" style="padding:9px 10px;font-size:13px;" placeholder="Tên nhiệm vụ...">
+            <input type="date" id="fakeTaskDateInp" class="form-input" style="padding:9px 10px;font-size:13px;" value="${defaultDate}">
+          </div>
+          <button type="button" class="btn-sm" style="width:100%;background:var(--indigo);color:#fff;" onclick="addFakeTaskHistoryDemo(${x.id})">+ Lịch sử NV</button>
+        </div>
+
+        <div style="border-top:1px dashed #fcd34d;padding-top:10px;margin-top:10px;">
+          <label class="form-label" style="margin-bottom:4px;">Lệnh rút thành công (Số tiền + Ngày lịch)</label>
+          <div style="display:grid;grid-template-columns:1fr 132px;gap:6px;margin-bottom:6px;">
+            <input type="number" id="fakeWdAmountInp" class="form-input" style="padding:9px 10px;font-size:13px;" placeholder="Số tiền rút..." value="200000">
+            <input type="date" id="fakeWdDateInp" class="form-input" style="padding:9px 10px;font-size:13px;" value="${defaultDate}">
+          </div>
+          <button type="button" class="btn-sm" style="width:100%;background:#0f172a;color:#fff;" onclick="addFakeWithdrawDemo(${x.id})">+ Tạo Rút</button>
+        </div>
+      </div>
+    `}
     <div class="form-group"><label class="form-label">Cấp / Đổi mật khẩu khách hàng (Để trống nếu giữ nguyên)</label><input type="text" id="euNewPass" class="form-input" placeholder="Mật khẩu hiện tại: ${x.p}"></div>
-    <div class="form-group"><label class="form-label">Quyền hạn</label><select id="euRole" class="form-input"><option value="user" ${x.role==='user'?'selected':''}>Thành viên</option><option value="cskh" ${x.role==='cskh'?'selected':''}>CSKH</option><option value="admin" ${x.role==='admin'?'selected':''}>Admin</option></select></div>
+    ${isCskhEditor ? '' : `<div class="form-group"><label class="form-label">Quyền hạn</label><select id="euRole" class="form-input"><option value="user" ${x.role==='user'?'selected':''}>Thành viên</option><option value="cskh" ${x.role==='cskh'?'selected':''}>CSKH</option><option value="admin" ${x.role==='admin'?'selected':''}>Admin</option></select></div>`}
     <div class="form-group"><label class="form-label">Cấp VIP</label><select id="euVip" class="form-input">${VIPS.map(v => `<option value="${v.lv}" ${x.vip===v.lv?'selected':''}>${v.name} (${v.days ? v.days + ' ngày' : 'Vĩnh viễn'})</option>`).join('')}</select></div>
-    <div class="form-group"><label class="form-label">Thời hạn VIP (Số ngày tính từ hôm nay)</label><input type="number" id="euVipDays" class="form-input" placeholder="VD: 7, 30, 90 (Để trống nếu giữ nguyên)"></div>
+    <div class="form-group"><label class="form-label">Thời hạn VIP (Số ngày tính từ hôm nay)</label><input type="number" id="euVipDays" class="form-input" placeholder="Nhập số ngày (Để trống nếu giữ nguyên)"></div>
     <div class="form-group"><label class="form-label">Điều kiện đã nạp 50k (Rút lần đầu)</label><select id="euDep50k" class="form-input"><option value="1" ${x.deposit50kDone?'selected':''}>Đã hoàn tất nạp >= 50k</option><option value="0" ${!x.deposit50kDone?'selected':''}>Chưa nạp 50k</option></select></div>
     <div class="form-group"><label class="form-label">Cộng / Trừ số dư (VD: 20000 hoặc -10000)</label><input type="number" id="euDelta" class="form-input" placeholder="0"></div>
-    <div style="display:flex;gap:8px;"><button class="btn-primary" onclick="saveEditUser(${x.id})">Lưu</button><button class="btn-secondary" style="color:var(--red);" onclick="banUser(${x.id})">${x.banned?'Mở khóa':'Khóa'}</button></div>
+    <div style="display:flex;gap:8px;"><button class="btn-primary" onclick="saveEditUser(${x.id}, ${isCskhEditor ? 'true' : 'false'})">Lưu</button><button class="btn-secondary" style="color:var(--red);" onclick="banUser(${x.id})">${x.banned?'Mở khóa':'Khóa'}</button></div>
   `;
   document.getElementById('editUserModal').classList.remove('hidden');
 }
 
-function saveEditUser(id) {
+function saveEditUser(id, cskhMode = false) {
   const x = db.users.find(u => u.id === id);
+  if (!x) return;
   const newPass = (document.getElementById('euNewPass')?.value || '').trim();
   if (newPass) x.p = newPass;
-  x.role = document.getElementById('euRole').value;
+  if (!cskhMode && me && me.role === 'admin' && document.getElementById('euRole')) {
+    x.role = document.getElementById('euRole').value;
+  }
   x.deposit50kDone = document.getElementById('euDep50k').value === '1';
   const newVip = Number(document.getElementById('euVip').value);
   const customDays = Number(document.getElementById('euVipDays').value || 0);
@@ -2800,25 +3394,34 @@ function saveEditUser(id) {
     x.vipExpiry = Date.now() + (VIPS[newVip]?.days || 7) * 86400000;
   }
   const d = Number(document.getElementById('euDelta').value || 0);
-  if (d) { x.bal = Math.max(0, x.bal + d); x.hist.unshift({ t: 'Admin sửa số dư', a: d }); }
-  save(); closeModals(); renderAdmin(); toast('Đã lưu thay đổi');
+  if (d) { x.bal = Math.max(0, x.bal + d); if (d > 0) x.earned = Number(x.earned || 0) + d; x.hist.unshift({ t: 'Hỗ trợ sửa số dư', a: d }); }
+  save();
+  closeModals();
+  if (cskhMode || (me && me.role === 'cskh')) renderCskhPanel();
+  else renderAdmin();
+  toast('Đã lưu thay đổi');
 }
 
 function banUser(id) {
   const x = db.users.find(u => u.id === id);
-  if (!x || x.u === 'admin') return;
-  x.banned = !x.banned; save(); closeModals(); renderAdmin(); toast(x.banned ? 'Đã khóa' : 'Đã mở khóa');
+  if (!x || x.role === 'admin') return;
+  x.banned = !x.banned;
+  save();
+  closeModals();
+  if (me && me.role === 'cskh') renderCskhPanel();
+  else renderAdmin();
+  toast(x.banned ? 'Đã khóa' : 'Đã mở khóa');
 }
 
 function createTask() {
   const cat = document.getElementById('tCat')?.value || 'Vượt link';
   const title = document.getElementById('tTitle').value.trim();
   const reward = Number(document.getElementById('tReward').value);
-  const url = document.getElementById('tUrl').value.trim() || 'https://google.com';
-  const code = document.getElementById('tCode').value.trim() || 'OK';
+  const url = document.getElementById('tUrl').value.trim();
+  const code = document.getElementById('tCode').value.trim();
   const guide = (document.getElementById('tGuide')?.value || '').trim();
   if (!title || !reward) return toast('Nhập đủ tên và tiền thưởng');
-  db.tasks.unshift({ id: String(Date.now()), title, cat, reward, url, code, guide, done: 0 });
+  db.tasks.unshift({ id: String(Date.now()), title, cat, reward, url, code, guide, done: 0, usedRandomCodes: [] });
   document.getElementById('tTitle').value = '';
   document.getElementById('tReward').value = '';
   document.getElementById('tCode').value = '';
@@ -2847,13 +3450,17 @@ function actWd(id, ok) {
       role: 'bot',
       pinned: false,
       reactions: {},
+      sentAt: Date.now(),
       text: `💸 Lệnh rút #${w.id} của @${w.u} số tiền ${money(w.amt)} qua ${w.bank} (${w.acc}) đã được duyệt thành công!`
     });
   } else if (u) {
     u.bal += w.amt;
     u.hist.unshift({ t: `Lệnh rút #${w.id} bị hủy — đã hoàn tiền về ví`, a: w.amt });
   }
-  save(); renderAdmin(); toast(ok ? 'Đã duyệt rút tiền thành công!' : 'Đã hủy lệnh & hoàn tiền cho khách');
+  save();
+  if (me && me.role === 'cskh') renderCskhPanel();
+  else renderAdmin();
+  toast(ok ? 'Đã duyệt rút tiền thành công!' : 'Đã hủy lệnh & hoàn tiền cho khách');
 }
 </script>
 </body>

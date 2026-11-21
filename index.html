@@ -3694,5 +3694,119 @@ function actWd(id, ok) {
   toast(ok ? 'Đã duyệt rút tiền thành công!' : 'Đã hủy lệnh & hoàn tiền cho khách');
 }
 </script>
+  <script>
+(function () {
+  function getApiUrlsFromPage() {
+    const inputs = Array.from(document.querySelectorAll('textarea, input[type="text"], input[type="url"], input:not([type])'));
+    for (const el of inputs) {
+      const val = String(el.value || '').trim();
+      if (val.includes('http')) {
+        return val
+          .split(/[\n,]+/)
+          .map((s) => s.trim())
+          .filter((s) => /^https?:\/\//i.test(s));
+      }
+    }
+    return [];
+  }
+
+  function getMarginFromPage() {
+    const inputs = Array.from(document.querySelectorAll('input[type="number"], input[type="text"], input:not([type])'));
+    for (const el of inputs) {
+      const labelText = (el.closest('div, label')?.innerText || '').toLowerCase();
+      if (labelText.includes('chênh lệch') || labelText.includes('%')) {
+        const n = Number(String(el.value || '').replace('%', '').trim());
+        if (Number.isFinite(n) && n >= 0 && n < 100) return n;
+      }
+    }
+    return 40;
+  }
+
+  function mergeOffersIntoStorage(newOffers) {
+    if (!Array.isArray(newOffers) || !newOffers.length) return 0;
+
+    const candidateKeys = ['taskflow_tasks', 'tasks', 'offers', 'missions', 'nhiem_vu'];
+    let targetKey = null;
+    let existing = [];
+
+    for (const k of candidateKeys) {
+      try {
+        const raw = localStorage.getItem(k);
+        if (!raw) continue;
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          targetKey = k;
+          existing = parsed;
+          break;
+        }
+        if (parsed && Array.isArray(parsed.tasks)) {
+          targetKey = k;
+          existing = parsed.tasks;
+          break;
+        }
+      } catch (e) {}
+    }
+
+    const seen = new Set(
+      existing.map((item) => String(item?.url || item?.link || item?.title || '').toLowerCase().trim())
+    );
+
+    let added = 0;
+    const merged = [...existing];
+    for (const offer of newOffers) {
+      const dedupe = String(offer?.url || offer?.title || '').toLowerCase().trim();
+      if (!dedupe || seen.has(dedupe)) continue;
+      seen.add(dedupe);
+      merged.push(offer);
+      added++;
+    }
+
+    const saveKey = targetKey || 'taskflow_offers';
+    localStorage.setItem(saveKey, JSON.stringify(merged));
+    return added;
+  }
+
+  async function handlePullOffersClick(event) {
+    const btn = event.target.closest('button');
+    if (!btn) return;
+    const text = (btn.innerText || btn.textContent || '').toLowerCase();
+    if (!text.includes('kéo kèo')) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const oldText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = 'Đang kéo kèo...';
+
+    try {
+      const urls = getApiUrlsFromPage();
+      const margin = getMarginFromPage();
+      const params = new URLSearchParams();
+      if (urls.length > 0) params.set('urls', urls.join(','));
+      params.set('margin', String(margin));
+
+      const res = await fetch(`/api/offers?${params.toString()}`, { cache: 'no-store' });
+      const data = await res.json();
+
+      if (!res.ok || data.ok === false) {
+        alert(data.error || 'Không thể kết nối API');
+        return;
+      }
+
+      const list = Array.isArray(data.offers) ? data.offers : [];
+      const addedCount = mergeOffersIntoStorage(list);
+      alert(`Đã kéo ${list.length} kèo (thêm mới ${addedCount} kèo, giữ ${margin}% chênh lệch).`);
+    } catch (err) {
+      alert('Không thể kết nối API: ' + (err?.message || 'Lỗi mạng'));
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = oldText;
+    }
+  }
+
+  document.addEventListener('click', handlePullOffersClick, true);
+})();
+</script>
 </body>
 </html>

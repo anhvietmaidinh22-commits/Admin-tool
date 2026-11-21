@@ -2987,58 +2987,33 @@ function saveApiFeedConfigOnly() {
   toast('Đã lưu cấu hình API & % chênh lệch');
 }
 
-function normalizeOfferPayoutToVnd(item, usdRate = 25000) {
-  if (item.payout_vnd !== undefined && item.payout_vnd !== null && Number(item.payout_vnd) > 0) {
-    return Number(item.payout_vnd);
-  }
-  const raw = Number(item.payout ?? item.reward ?? item.commission ?? item.amount ?? 0);
-  if (raw <= 0) return 0;
-  if (raw < 500) {
-    return Math.round(raw * usdRate);
-  }
-  return Math.round(raw);
-}
-
-function calcUserRewardWithMargin(netVnd, marginPct = 40) {
-  const net = Number(netVnd || 0);
-  if (net <= 0) return 0;
-  const keepRatio = Math.min(0.9, Math.max(0, Number(marginPct || 0) / 100));
-  const userShare = net * (1 - keepRatio);
-  const rounded = Math.floor(userShare / 1000) * 1000;
-  if (rounded < 1000) return 0;
-  return Math.min(rounded, 100000);
-}
-
-async function fetchRawOffersFromUrl(targetUrl) {
-  try {
-    const res = await fetch(targetUrl, { cache: 'no-store' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
-  } catch (directErr) {
-    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
-    const pRes = await fetch(proxyUrl, { cache: 'no-store' });
-    if (!pRes.ok) throw new Error('Proxy HTTP ' + pRes.status);
-    return await pRes.json();
-  }
-}
-
 async function saveAndSyncApiOffers() {
   const cfg = readConfigFromAdminInputs();
-  if (!cfg.url) {
+  const rawInput = String(document.getElementById('apiFeedUrlInp')?.value || cfg.url || '').trim();
+  const urls = rawInput
+    .split(/[\n,]+/)
+    .map(s => s.trim())
+    .filter(s => /^https?:\/\//i.test(s));
+
+  if (!urls.length) {
     save();
+    renderApiFeedAdminBox();
     return toast('Vui lòng dán link API của web kèo trước');
   }
 
   try {
-    const payload = await fetchRawOffersFromUrl(cfg.url);
-    const rawList = Array.isArray(payload)
-      ? payload
-      : (payload.offers || payload.data || payload.campaigns || payload.items || []);
+    const params = new URLSearchParams();
+    params.set('urls', urls.join(','));
+    params.set('margin', String(cfg.marginPct));
 
-    if (!Array.isArray(rawList) || !rawList.length) {
+    const res = await fetch(`/api/offers?${params.toString()}`, { cache: 'no-store' });
+    const data = await res.json();
+    const rawList = Array.isArray(data?.offers) ? data.offers : [];
+
+    if (!res.ok || data?.ok === false || !rawList.length) {
       save();
       renderApiFeedAdminBox();
-      return toast('API không trả về danh sách kèo nào');
+      return toast(data?.error || 'API không trả về danh sách kèo nào');
     }
 
     const existingMap = new Map(
@@ -3047,26 +3022,25 @@ async function saveAndSyncApiOffers() {
 
     const syncedTasks = [];
     rawList.forEach((item, idx) => {
-      const netVnd = normalizeOfferPayoutToVnd(item, cfg.usdRate);
-      const reward = calcUserRewardWithMargin(netVnd, cfg.marginPct);
-      const url = String(item.tracking_url || item.click_url || item.offer_url || item.url || item.link || '').trim();
+      const reward = Number(item.reward || 0);
+      const url = String(item.url || '').trim();
       if (reward <= 0 || !url) return;
 
-      const extId = String(item.id || item.offer_id || item.campaign_id || item.code || `${idx + 1}`).trim();
+      const extId = String(item.id || `OFFER_${idx + 1}`).trim();
       const prev = existingMap.get(extId);
-      const rawCat = String(item.cat || item.category || item.type || '').trim();
+      const rawCat = String(item.cat || '').trim();
       const cat = ['Vượt link', 'Khảo sát', 'Đánh giá Google'].includes(rawCat) ? rawCat : 'Khảo sát';
 
       syncedTasks.push({
         id: prev ? prev.id : `API_${extId}_${Date.now()}_${idx}`,
         extId,
         cat,
-        title: String(item.name || item.title || item.offer_name || `Chiến dịch #${extId}`).trim(),
+        title: String(item.title || `Chiến dịch #${extId}`).trim(),
         reward,
         url,
         code: prev && prev.code ? prev.code : '',
         requireVerify: true,
-        guide: String(item.guide || item.description || item.requirements || 'Mở link chiến dịch, hoàn thành yêu cầu và nhập mã/xác nhận hợp lệ để nhận thưởng.').trim(),
+        guide: String(item.guide || 'Mở link chiến dịch, hoàn thành yêu cầu và nhập mã/xác nhận hợp lệ để nhận thưởng.').trim(),
         done: prev ? Number(prev.done || 0) : 0,
         usedRandomCodes: prev && Array.isArray(prev.usedRandomCodes) ? prev.usedRandomCodes : [],
         autoSynced: true
@@ -3080,6 +3054,7 @@ async function saveAndSyncApiOffers() {
 
     save();
     renderAdmin();
+    if (typeof renderUser === 'function' && me && me.role === 'user') renderUser();
     toast(`Đã kéo ${syncedTasks.length} kèo (giữ ${cfg.marginPct}% chênh lệch)`);
   } catch (err) {
     save();
@@ -3693,260 +3668,6 @@ function actWd(id, ok) {
   else renderAdmin();
   toast(ok ? 'Đã duyệt rút tiền thành công!' : 'Đã hủy lệnh & hoàn tiền cho khách');
 }
-</script>
-  <script>
-(function () {
-  function getApiUrlsFromPage() {
-    const inputs = Array.from(document.querySelectorAll('textarea, input[type="text"], input[type="url"], input:not([type])'));
-    for (const el of inputs) {
-      const val = String(el.value || '').trim();
-      if (val.includes('http')) {
-        return val
-          .split(/[\n,]+/)
-          .map((s) => s.trim())
-          .filter((s) => /^https?:\/\//i.test(s));
-      }
-    }
-    return [];
-  }
-
-  function getMarginFromPage() {
-    const inputs = Array.from(document.querySelectorAll('input[type="number"], input[type="text"], input:not([type])'));
-    for (const el of inputs) {
-      const labelText = (el.closest('div, label')?.innerText || '').toLowerCase();
-      if (labelText.includes('chênh lệch') || labelText.includes('%')) {
-        const n = Number(String(el.value || '').replace('%', '').trim());
-        if (Number.isFinite(n) && n >= 0 && n < 100) return n;
-      }
-    }
-    return 40;
-  }
-
-  function mergeOffersIntoStorage(newOffers) {
-    if (!Array.isArray(newOffers) || !newOffers.length) return 0;
-
-    const candidateKeys = ['taskflow_tasks', 'tasks', 'offers', 'missions', 'nhiem_vu'];
-    let targetKey = null;
-    let existing = [];
-
-    for (const k of candidateKeys) {
-      try {
-        const raw = localStorage.getItem(k);
-        if (!raw) continue;
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) {
-          targetKey = k;
-          existing = parsed;
-          break;
-        }
-        if (parsed && Array.isArray(parsed.tasks)) {
-          targetKey = k;
-          existing = parsed.tasks;
-          break;
-        }
-      } catch (e) {}
-    }
-
-    const seen = new Set(
-      existing.map((item) => String(item?.url || item?.link || item?.title || '').toLowerCase().trim())
-    );
-
-    let added = 0;
-    const merged = [...existing];
-    for (const offer of newOffers) {
-      const dedupe = String(offer?.url || offer?.title || '').toLowerCase().trim();
-      if (!dedupe || seen.has(dedupe)) continue;
-      seen.add(dedupe);
-      merged.push(offer);
-      added++;
-    }
-
-    const saveKey = targetKey || 'taskflow_offers';
-    localStorage.setItem(saveKey, JSON.stringify(merged));
-    return added;
-  }
-
-  async function handlePullOffersClick(event) {
-    const btn = event.target.closest('button');
-    if (!btn) return;
-    const text = (btn.innerText || btn.textContent || '').toLowerCase();
-    if (!text.includes('kéo kèo')) return;
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-
-    const oldText = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = 'Đang kéo kèo...';
-
-    try {
-      const urls = getApiUrlsFromPage();
-      const margin = getMarginFromPage();
-      const params = new URLSearchParams();
-      if (urls.length > 0) params.set('urls', urls.join(','));
-      params.set('margin', String(margin));
-
-      const res = await fetch(`/api/offers?${params.toString()}`, { cache: 'no-store' });
-<script>
-(function () {
-  function getApiUrlsFromPage() {
-    const inputs = Array.from(document.querySelectorAll('textarea, input[type="text"], input[type="url"], input:not([type])'));
-    for (const el of inputs) {
-      const val = String(el.value || '').trim();
-      if (val.includes('http')) {
-        return val
-          .split(/[\n,]+/)
-          .map((s) => s.trim())
-          .filter((s) => /^https?:\/\//i.test(s));
-      }
-    }
-    return [];
-  }
-
-  function getMarginFromPage() {
-    const inputs = Array.from(document.querySelectorAll('input[type="number"], input[type="text"], input:not([type])'));
-    for (const el of inputs) {
-      const labelText = (el.closest('div, label')?.innerText || '').toLowerCase();
-      if (labelText.includes('chênh lệch') || labelText.includes('%')) {
-        const n = Number(String(el.value || '').replace('%', '').trim());
-        if (Number.isFinite(n) && n >= 0 && n < 100) return n;
-      }
-    }
-    return 40;
-  }
-
-  function injectOffersIntoApp(newOffers) {
-    if (!Array.isArray(newOffers) || !newOffers.length) return 0;
-
-    let added = 0;
-    const seen = new Set();
-
-    // 1. Thử đẩy vào các cấu trúc mảng nhiệm vụ phổ biến nếu tồn tại ở window/biến toàn cục
-    const possibleArrays = [];
-    if (window.db && Array.isArray(window.db.tasks)) possibleArrays.push(window.db.tasks);
-    if (window.db && Array.isArray(window.db.offers)) possibleArrays.push(window.db.offers);
-    if (Array.isArray(window.tasks)) possibleArrays.push(window.tasks);
-    if (Array.isArray(window.offers)) possibleArrays.push(window.offers);
-
-    for (const arr of possibleArrays) {
-      for (const item of arr) {
-        seen.add(String(item?.url || item?.link || item?.title || '').toLowerCase().trim());
-      }
-      for (const offer of newOffers) {
-        const key = String(offer?.url || offer?.title || '').toLowerCase().trim();
-        if (!key || seen.has(key)) continue;
-        seen.add(key);
-        arr.push({
-          id: offer.id,
-<script>
-(function () {
-  function getApiUrlsFromPage() {
-    const inputs = Array.from(document.querySelectorAll('textarea, input[type="text"], input[type="url"], input:not([type])'));
-    for (const el of inputs) {
-      const val = String(el.value || '').trim();
-      if (val.includes('http')) {
-        return val
-          .split(/[\n,]+/)
-          .map((s) => s.trim())
-          .filter((s) => /^https?:\/\//i.test(s));
-      }
-    }
-    return [];
-  }
-
-  function getMarginFromPage() {
-    const inputs = Array.from(document.querySelectorAll('input[type="number"], input[type="text"], input:not([type])'));
-    for (const el of inputs) {
-      const labelText = (el.closest('div, label')?.innerText || '').toLowerCase();
-      if (labelText.includes('chênh lệch') || labelText.includes('%')) {
-        const n = Number(String(el.value || '').replace('%', '').trim());
-        if (Number.isFinite(n) && n >= 0 && n < 100) return n;
-      }
-    }
-    return 40;
-  }
-
-  function pushOffersToState(newOffers) {
-    if (!Array.isArray(newOffers) || !newOffers.length) return 0;
-
-    let targetList = null;
-    if (window.db && Array.isArray(window.db.tasks)) targetList = window.db.tasks;
-    else if (typeof db !== 'undefined' && db && Array.isArray(db.tasks)) targetList = db.tasks;
-    else if (Array.isArray(window.tasks)) targetList = window.tasks;
-
-    if (!targetList) {
-      localStorage.setItem('taskflow_offers', JSON.stringify(newOffers));
-      return newOffers.length;
-    }
-
-    const existingKeys = new Set(
-      targetList.map((item) => String(item?.url || item?.link || item?.title || '').toLowerCase().trim())
-    );
-
-    let added = 0;
-    for (const offer of newOffers) {
-      const key = String(offer?.url || offer?.title || '').toLowerCase().trim();
-      if (!key || existingKeys.has(key)) continue;
-      existingKeys.add(key);
-      targetList.push({
-        id: offer.id,
-        type: 'survey',
-        cat: offer.cat || 'Khảo sát',
-        title: offer.title,
-        reward: offer.reward,
-        url: offer.url,
-        link: offer.url,
-        guide: offer.guide || 'Mở link chiến dịch, hoàn thành yêu cầu và nhập mã xác nhận để nhận thưởng.'
-      });
-      added++;
-    }
-
-    try { if (typeof save === 'function') save(); } catch (e) {}
-    try { if (typeof renderAdmin === 'function') renderAdmin(); } catch (e) {}
-    return added;
-  }
-
-  async function handlePullOffersClick(event) {
-    const btn = event.target.closest('button');
-    if (!btn) return;
-    const text = (btn.innerText || btn.textContent || '').toLowerCase();
-    if (!text.includes('kéo kèo')) return;
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-
-    const oldText = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = 'Đang kéo kèo...';
-
-    try {
-      const urls = getApiUrlsFromPage();
-      const margin = getMarginFromPage();
-      const params = new URLSearchParams();
-      if (urls.length > 0) params.set('urls', urls.join(','));
-      params.set('margin', String(margin));
-
-      const res = await fetch(`/api/offers?${params.toString()}`, { cache: 'no-store' });
-      const data = await res.json();
-
-      if (!res.ok || data.ok === false) {
-        alert(data.error || 'Không thể kết nối API');
-        return;
-      }
-
-      const list = Array.isArray(data.offers) ? data.offers : [];
-      const addedCount = pushOffersToState(list);
-      alert(`Đã kéo ${list.length} kèo (thêm mới ${addedCount} kèo, giữ ${margin}% chênh lệch).`);
-    } catch (err) {
-      alert('Không thể kết nối API: ' + (err?.message || 'Lỗi mạng'));
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = oldText;
-    }
-  }
-
-  document.addEventListener('click', handlePullOffersClick, true);
-})();
 </script>
 </body>
 </html>

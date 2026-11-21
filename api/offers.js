@@ -1,29 +1,37 @@
-const OFFER_MARGIN_RATE = 0.4; // Giữ lại 40% phần chênh lệch an toàn
-const DEFAULT_FALLBACK_REWARD = 1000; // Mức thưởng tối thiểu khi nguồn chỉ có % hoa hồng
+const DEFAULT_MARGIN_RATE = 0.4; // Giữ lại 40% phần chênh lệch an toàn
+const MIN_VALID_REWARD = 1000; // Mức thưởng tối thiểu sau khi giữ 40% chênh lệch
+const MAX_VALID_REWARD = 100000;
 
-function calcSafeUserReward(rawValue, marginRate = OFFER_MARGIN_RATE) {
+function parseMarginRate(req) {
+  const raw = req.query?.margin ?? req.query?.margin_rate;
+  if (raw === undefined || raw === null || raw === '') return DEFAULT_MARGIN_RATE;
+  const num = Number(String(raw).replace('%', '').trim());
+  if (!Number.isFinite(num) || num < 0) return DEFAULT_MARGIN_RATE;
+  return num > 1 ? Math.min(num / 100, 0.95) : Math.min(num, 0.95);
+}
+
+function calcSafeReward(rawValue, marginRate = DEFAULT_MARGIN_RATE) {
   const str = String(rawValue ?? '').trim();
   const hasPercent = str.includes('%');
-  const plainText = str.replace(/<[^>]*>/g, ' ');
-  const num = Number(plainText.replace(/[^\d.]/g, '') || 0);
+  const plain = str.replace(/<[^>]*>/g, ' ');
+  const num = Number(plain.replace(/[^\d.]/g, '') || 0);
 
   if (!Number.isFinite(num) || num <= 0) {
-    return 0;
+    return MIN_VALID_REWARD;
   }
 
-  // Nếu là % hoa hồng (vd: 5% hoặc 12.5%), quy đổi an toàn sau khi trừ 40% chênh lệch
-  if (hasPercent || (num > 0 && num <= 100 && !/vnd|đ|₫/i.test(str))) {
-    const scaled = num * 1000 * (1 - Number(marginRate || 0.4));
-    const roundedPct = Math.floor(scaled / 1000) * 1000;
-    return Math.max(DEFAULT_FALLBACK_REWARD, Math.min(roundedPct, 100000));
+  let baseAmount = num;
+  if (hasPercent || (num > 0 && num <= 100 && !/vnd|đ|₫|usd|\$/i.test(str))) {
+    baseAmount = num * 1000;
   }
 
-  const safeReward = num * (1 - Number(marginRate || 0.4));
-  const rounded = Math.floor(safeReward / 1000) * 1000;
-  if (rounded < 1000) {
-    return DEFAULT_FALLBACK_REWARD;
+  const afterMargin = baseAmount * (1 - Number(marginRate ?? DEFAULT_MARGIN_RATE));
+  const rounded = Math.floor(afterMargin / 1000) * 1000;
+
+  if (!Number.isFinite(rounded) || rounded < MIN_VALID_REWARD) {
+    return MIN_VALID_REWARD;
   }
-  return Math.min(rounded, 100000);
+  return Math.min(rounded, MAX_VALID_REWARD);
 }
 
 function buildMasofferUrl(pubId, token) {
@@ -43,6 +51,7 @@ function parseSourceUrls(req) {
   if (typeof req.query?.urls === 'string' && req.query.urls.trim()) {
     rawList.push(...req.query.urls.split(/[\n,]+/));
   }
+
   if (typeof req.query?.url === 'string' && req.query.url.trim()) {
     rawList.push(req.query.url.trim());
   }
@@ -59,116 +68,168 @@ function parseSourceUrls(req) {
   return [...new Set(cleaned)];
 }
 
-async function fetchSingleSource(sourceUrl) {
-  const upstream = await fetch(sourceUrl, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'User-Agent': 'Mozilla/5.0'
-    },
-    cache: 'no-store'
-  });
+function extractRawArray(parsed) {
+  if (Array.isArray(parsed)) return parsed;
+  if (Array.isArray(parsed?.data)) return parsed.data;
+  if (Array.isArray(parsed?.offers)) return parsed.offers;
+  if (Array.isArray(parsed?.items)) return parsed.items;
+  if (Array.isArray(parsed?.result)) return parsed.result;
+  return [];
+}
 
-  const rawText = await upstream.text();
-  let parsed = {};
-  try {
-    parsed = JSON.parse(rawText);
-  } catch (e) {
-    return {
-      sourceUrl,
-      ok: false,
-      status: upstream.status,
-      error: 'Phản hồi không phải JSON',
-      offers: []
-    };
-  }
+function normalizeOffer(item, idx, sourceIndex, marginRate) {
+  if (!item || typeof item !== 'object') return null;
 
-  if (!upstream.ok) {
-    return {
-      sourceUrl,
-      ok: false,
-      status: upstream.status,
-      error: parsed?.message || parsed?.error || ('Lỗi HTTP ' + upstream.status),
-      offers: []
-    };
-  }
+  const rawCommission =
+    item.payout_vnd ??
+    item.payout ??
+    item.commission_vnd ??
+    item.commission ??
+    item.commission_rate ??
+    item.reward ??
+    MIN_VALID_REWARD;
 
-  const rawList = Array.isArray(parsed)
-    ? parsed
-    : (Array.isArray(parsed.data) ? parsed.data : (parsed.offers || parsed.items || []));
+  const reward = calcSafeReward(rawCommission, marginRate);
 
-  const offers = rawList
-    .map((item, idx) => {
-      const rawCommission =
-        item.payout_vnd ??
-        item.payout ??
-        item.commission ??
-        item.commission_vnd ??
-        item.commission_rate ??
-        DEFAULT_FALLBACK_REWARD;
+  const domainClean = item.domain
+    ? String(item.domain).replace(/^https?:\/\//i, '').trim()
+    : '';
+  const domainUrl = domainClean ? `https://${domainClean}` : '';
 
-      const reward = calcSafeUserReward(rawCommission, OFFER_MARGIN_RATE);
-      const domainClean = item.domain
-        ? String(item.domain).replace(/^https?:\/\//, '').trim()
-        : '';
-      const domainUrl = domainClean ? `https://${domainClean}` : '';
-      const url = String(
-        item.tracking_url ||
-        item.click_url ||
-        item.offer_url ||
-        item.url ||
-        item.link ||
-        domainUrl ||
-        `https://ecom.masoffer.com/offer/${item.offer_id || item.id || idx + 1}`
-      ).trim();
+  const rawId = String(item.offer_id || item.id || item.campaign_id || '').trim();
+  const id = rawId ? `SRC${sourceIndex + 1}_${rawId}` : `SRC${sourceIndex + 1}_${idx + 1}`;
 
-      const title = String(
-        item.name || item.title || item.offer_name || `Chiến dịch #${idx + 1}`
-      ).trim();
+  const url = String(
+    item.tracking_url ||
+      item.click_url ||
+      item.offer_url ||
+      item.url ||
+      item.link ||
+      domainUrl ||
+      `https://ecom.masoffer.com/offer/${rawId || idx + 1}`
+  ).trim();
 
-      if (!title || !url) return null;
+  const title = String(
+    item.name || item.title || item.offer_name || item.campaign_name || `Chiến dịch #${idx + 1}`
+  ).trim();
 
-      return {
-        id: String(item.offer_id || item.id || `MAS_${idx + 1}`),
-        cat: 'Khảo sát',
-        title,
-        reward,
-        url,
-        guide: 'Mở link chiến dịch, hoàn thành yêu cầu và nhập mã xác nhận để nhận thưởng.'
-      };
-    })
-    .filter(Boolean);
+  if (!title || !url) return null;
 
   return {
-    sourceUrl,
-    ok: true,
-    status: upstream.status,
-    rawCount: rawList.length,
-    offers
+    id,
+    cat: 'Khảo sát',
+    title,
+    reward,
+    url,
+    guide: 'Mở link chiến dịch, hoàn thành yêu cầu và nhập mã xác nhận để nhận thưởng.'
   };
 }
 
-export default async function handler(req, res) {
+async function fetchSingleSource(sourceUrl, sourceIndex, marginRate) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 12000);
+
   try {
+    const upstream = await fetch(sourceUrl, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'User-Agent': 'Mozilla/5.0'
+      },
+      cache: 'no-store',
+      signal: controller.signal
+    });
+
+    const rawText = await upstream.text();
+    let parsed = {};
+    try {
+      parsed = JSON.parse(rawText);
+    } catch (e) {
+      return {
+        sourceUrl,
+        ok: false,
+        status: upstream.status,
+        rawCount: 0,
+        error: 'Phản hồi từ nguồn không phải JSON hợp lệ',
+        offers: []
+      };
+    }
+
+    if (!upstream.ok) {
+      return {
+        sourceUrl,
+        ok: false,
+        status: upstream.status,
+        rawCount: 0,
+        error: parsed?.message || parsed?.error || `Lỗi HTTP ${upstream.status}`,
+        offers: []
+      };
+    }
+
+    const rawList = extractRawArray(parsed);
+    const offers = rawList
+      .map((item, idx) => normalizeOffer(item, idx, sourceIndex, marginRate))
+      .filter(Boolean);
+
+    return {
+      sourceUrl,
+      ok: true,
+      status: upstream.status,
+      rawCount: rawList.length,
+      error: null,
+      offers
+    };
+  } catch (err) {
+    return {
+      sourceUrl,
+      ok: false,
+      status: 500,
+      rawCount: 0,
+      error: err?.name === 'AbortError' ? 'Nguồn API phản hồi quá lâu (timeout)' : (err?.message || 'Lỗi kết nối nguồn'),
+      offers: []
+    };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  try {
+    const marginRate = parseMarginRate(req);
     const sources = parseSourceUrls(req);
+
     if (!sources.length) {
       return res.status(200).json({
         ok: true,
         sourcesCount: 0,
+        totalOffers: 0,
+        marginRate,
+        sources: [],
         offers: [],
-        message: 'Truyền ?pub_id=...&token=... hoặc ?url=... hoặc ?urls=...'
+        message: 'Truyền ?urls=link1,link2 hoặc ?url=link1 hoặc ?pub_id=...&token=...'
       });
     }
 
-    const results = await Promise.all(sources.map((s) => fetchSingleSource(s)));
+    const results = await Promise.all(
+      sources.map((src, idx) => fetchSingleSource(src, idx, marginRate))
+    );
 
-    const seen = new Set();
+    const seenKeys = new Set();
     const mergedOffers = [];
+
     for (const r of results) {
       for (const offer of r.offers) {
-        const key = `${offer.url}|${offer.id}`;
-        if (!seen.has(key)) {
-          seen.add(key);
+        const dedupeKey = `${offer.url.toLowerCase()}|${offer.title.toLowerCase()}`;
+        if (!seenKeys.has(dedupeKey)) {
+          seenKeys.add(dedupeKey);
           mergedOffers.push(offer);
         }
       }
@@ -178,16 +239,20 @@ export default async function handler(req, res) {
       ok: true,
       sourcesCount: sources.length,
       totalOffers: mergedOffers.length,
+      marginRate,
       sources: results.map(({ sourceUrl, ok, status, rawCount, error }) => ({
         sourceUrl,
         ok,
         status,
-        rawCount: rawCount ?? 0,
-        error: error || null
+        rawCount,
+        error
       })),
       offers: mergedOffers
     });
   } catch (err) {
-    return res.status(500).json({ ok: false, error: err?.message || 'Lỗi xử lý danh sách API' });
+    return res.status(500).json({
+      ok: false,
+      error: err?.message || 'Lỗi xử lý danh sách API'
+    });
   }
 }

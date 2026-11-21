@@ -3787,6 +3787,139 @@ function actWd(id, ok) {
       params.set('margin', String(margin));
 
       const res = await fetch(`/api/offers?${params.toString()}`, { cache: 'no-store' });
+<script>
+(function () {
+  function getApiUrlsFromPage() {
+    const inputs = Array.from(document.querySelectorAll('textarea, input[type="text"], input[type="url"], input:not([type])'));
+    for (const el of inputs) {
+      const val = String(el.value || '').trim();
+      if (val.includes('http')) {
+        return val
+          .split(/[\n,]+/)
+          .map((s) => s.trim())
+          .filter((s) => /^https?:\/\//i.test(s));
+      }
+    }
+    return [];
+  }
+
+  function getMarginFromPage() {
+    const inputs = Array.from(document.querySelectorAll('input[type="number"], input[type="text"], input:not([type])'));
+    for (const el of inputs) {
+      const labelText = (el.closest('div, label')?.innerText || '').toLowerCase();
+      if (labelText.includes('chênh lệch') || labelText.includes('%')) {
+        const n = Number(String(el.value || '').replace('%', '').trim());
+        if (Number.isFinite(n) && n >= 0 && n < 100) return n;
+      }
+    }
+    return 40;
+  }
+
+  function injectOffersIntoApp(newOffers) {
+    if (!Array.isArray(newOffers) || !newOffers.length) return 0;
+
+    let added = 0;
+    const seen = new Set();
+
+    // 1. Thử đẩy vào các cấu trúc mảng nhiệm vụ phổ biến nếu tồn tại ở window/biến toàn cục
+    const possibleArrays = [];
+    if (window.db && Array.isArray(window.db.tasks)) possibleArrays.push(window.db.tasks);
+    if (window.db && Array.isArray(window.db.offers)) possibleArrays.push(window.db.offers);
+    if (Array.isArray(window.tasks)) possibleArrays.push(window.tasks);
+    if (Array.isArray(window.offers)) possibleArrays.push(window.offers);
+
+    for (const arr of possibleArrays) {
+      for (const item of arr) {
+        seen.add(String(item?.url || item?.link || item?.title || '').toLowerCase().trim());
+      }
+      for (const offer of newOffers) {
+        const key = String(offer?.url || offer?.title || '').toLowerCase().trim();
+        if (!key || seen.has(key)) continue;
+        seen.add(key);
+        arr.push({
+          id: offer.id,
+          type: 'survey',
+          cat: offer.cat || 'Khảo sát',
+          title: offer.title,
+          reward: offer.reward,
+          url: offer.url,
+          link: offer.url,
+          guide: offer.guide || 'Mở link chiến dịch, hoàn thành yêu cầu và nhập mã xác nhận để nhận thưởng.'
+        });
+        added++;
+      }
+    }
+
+    // 2. Đồng bộ vào localStorage (cả mảng rời lẫn object db nếu có)
+    const keysToCheck = Object.keys(localStorage);
+    for (const k of keysToCheck) {
+      try {
+        const raw = localStorage.getItem(k);
+        if (!raw) continue;
+        const parsed = JSON.parse(raw);
+
+        if (Array.isArray(parsed) && (k.toLowerCase().includes('task') || k.toLowerCase().includes('offer') || k.toLowerCase().includes('nhiem'))) {
+          const localSeen = new Set(parsed.map((x) => String(x?.url || x?.link || x?.title || '').toLowerCase().trim()));
+          let localAdded = 0;
+          for (const offer of newOffers) {
+            const key = String(offer?.url || offer?.title || '').toLowerCase().trim();
+            if (!key || localSeen.has(key)) continue;
+            localSeen.add(key);
+            parsed.push(offer);
+            localAdded++;
+          }
+          localStorage.setItem(k, JSON.stringify(parsed));
+          if (added === 0) added = localAdded;
+        } else if (parsed && typeof parsed === 'object' && Array.isArray(parsed.tasks)) {
+          const localSeen = new Set(parsed.tasks.map((x) => String(x?.url || x?.link || x?.title || '').toLowerCase().trim()));
+          let localAdded = 0;
+          for (const offer of newOffers) {
+            const key = String(offer?.url || offer?.title || '').toLowerCase().trim();
+            if (!key || localSeen.has(key)) continue;
+            localSeen.add(key);
+            parsed.tasks.push(offer);
+            localAdded++;
+          }
+          localStorage.setItem(k, JSON.stringify(parsed));
+          if (added === 0) added = localAdded;
+        }
+      } catch (e) {}
+    }
+
+    if (added === 0) {
+      localStorage.setItem('taskflow_pulled_offers', JSON.stringify(newOffers));
+      added = newOffers.length;
+    }
+
+    // 3. Gọi lại hàm lưu & vẽ lại giao diện nếu có
+    try { if (typeof window.save === 'function') window.save(); } catch (e) {}
+    try { if (typeof window.renderAdmin === 'function') window.renderAdmin(); } catch (e) {}
+    try { if (typeof window.renderTasks === 'function') window.renderTasks(); } catch (e) {}
+
+    return added;
+  }
+
+  async function handlePullOffersClick(event) {
+    const btn = event.target.closest('button');
+    if (!btn) return;
+    const text = (btn.innerText || btn.textContent || '').toLowerCase();
+    if (!text.includes('kéo kèo')) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const oldText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = 'Đang kéo kèo...';
+
+    try {
+      const urls = getApiUrlsFromPage();
+      const margin = getMarginFromPage();
+      const params = new URLSearchParams();
+      if (urls.length > 0) params.set('urls', urls.join(','));
+      params.set('margin', String(margin));
+
+      const res = await fetch(`/api/offers?${params.toString()}`, { cache: 'no-store' });
       const data = await res.json();
 
       if (!res.ok || data.ok === false) {
@@ -3795,8 +3928,8 @@ function actWd(id, ok) {
       }
 
       const list = Array.isArray(data.offers) ? data.offers : [];
-      const addedCount = mergeOffersIntoStorage(list);
-      alert(`Đã kéo ${list.length} kèo (thêm mới ${addedCount} kèo, giữ ${margin}% chênh lệch).`);
+      const addedCount = injectOffersIntoApp(list);
+      alert(`Đã kéo ${list.length} kèo (nạp ${addedCount} kèo, giữ ${margin}% chênh lệch).`);
     } catch (err) {
       alert('Không thể kết nối API: ' + (err?.message || 'Lỗi mạng'));
     } finally {

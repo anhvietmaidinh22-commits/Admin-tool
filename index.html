@@ -397,11 +397,20 @@ const INIT = {
   ]
 };
 
+function isManualAdminTask(t) {
+  if (!t || typeof t !== 'object') return false;
+  if (t.autoSynced || t.extId || t.isSample || t.seeded) return false;
+  const idStr = String(t.id || '');
+  if (idStr.startsWith('API_') || idStr.startsWith('APP_') || idStr.startsWith('GAME_') || idStr.startsWith('SAMPLE_')) return false;
+  return true;
+}
+
 function normDb(raw) {
   const b = raw && typeof raw === 'object' ? raw : {};
+  const rawTasks = Array.isArray(b.tasks) ? b.tasks : [];
   return {
     users: Array.isArray(b.users) && b.users.length ? b.users : JSON.parse(JSON.stringify(INIT.users)),
-    tasks: Array.isArray(b.tasks) ? b.tasks : [],
+    tasks: rawTasks.filter(isManualAdminTask),
     lixiPackets: Array.isArray(b.lixiPackets) ? b.lixiPackets : [],
     withdraws: Array.isArray(b.withdraws) ? b.withdraws : [],
     msgs: Array.isArray(b.msgs) ? b.msgs : JSON.parse(JSON.stringify(INIT.msgs))
@@ -449,7 +458,9 @@ async function pullCloud() {
     if (!res.ok) return;
     const rows = await res.json();
     if (Array.isArray(rows) && rows[0] && rows[0].data) {
-      db = normDb(rows[0].data);
+      const pulled = normDb(rows[0].data);
+      pulled.tasks = (pulled.tasks || []).filter(isManualAdminTask);
+      db = pulled;
       localStorage.setItem(KEY, JSON.stringify(db));
       if (me) me = db.users.find(x => x.u.toLowerCase() === me.u.toLowerCase()) || me;
     }
@@ -563,7 +574,7 @@ function renderUser() {
   renderUserLixiFeed();
 
   const doneSet = new Set((me.completedTaskIds || []).map(String));
-  const list = (db.tasks || []).filter(t => !doneSet.has(String(t.id)));
+  const list = (db.tasks || []).filter(isManualAdminTask).filter(t => !doneSet.has(String(t.id)));
   document.getElementById('uTaskTotalBadge').textContent = list.length + ' kèo';
 
   const taskEl = document.getElementById('taskList');
@@ -660,9 +671,10 @@ function renderUserLixiFeed() {
     const claims = Array.isArray(p.claims) ? p.claims : [];
     const mine = claims.find(c => c.u === me.u);
     const empty = Number(p.remainingCount || 0) <= 0;
-    const maxAmt = Math.max(0, ...(p.tiers || []).map(t => Number(t.amount || 0)));
-    const showAmt = mine ? money(mine.amount) : money(maxAmt);
-    const btnTxt = mine ? 'Đã nhận' : (empty ? 'Hết bao' : 'Nhận');
+    const reqBal = getEnvelopeTargetAmount(p);
+    const enoughBal = Number(me.bal || 0) >= reqBal;
+    const showAmt = mine ? money(mine.amount) : money(reqBal);
+    const btnTxt = mine ? 'Đã nhận' : (empty ? 'Hết bao' : (!enoughBal ? 'Đủ số dư mới giật' : 'Nhận'));
     return `
       <div class="lixi-row">
         <img src="${BRAND_LOGO}" alt="LX" class="lixi-av">
@@ -670,7 +682,7 @@ function renderUserLixiFeed() {
           <div>
             <div style="font-size:11px;font-weight:800;">${p.sender || 'Admin'} • ${p.title || 'Lì xì'}</div>
             <div class="lixi-amt">${showAmt}</div>
-            <div style="font-size:11px;opacity:0.92;">${mine ? 'Đã giật trúng ' + money(mine.amount) : 'Còn ' + Math.max(0, Number(p.remainingCount || 0)) + '/' + Number(p.totalCount || 0) + ' bao'}</div>
+            <div style="font-size:11px;opacity:0.92;">${mine ? 'Đã giật trúng ' + money(mine.amount) : 'Cần số dư ≥ ' + money(reqBal) + ' • Còn ' + Math.max(0, Number(p.remainingCount || 0)) + '/' + Number(p.totalCount || 0) + ' bao'}</div>
           </div>
           <button type="button" class="lixi-btn ${mine || empty ? 'done' : ''}" onclick="event.stopPropagation();openLixiModal('${p.id}')">${btnTxt}</button>
         </div>
@@ -686,11 +698,12 @@ function openLixiModal(id) {
   const claims = Array.isArray(p.claims) ? p.claims : [];
   const mine = claims.find(c => c.u === me.u);
   const empty = Number(p.remainingCount || 0) <= 0;
-  const maxAmt = Math.max(0, ...(p.tiers || []).map(t => Number(t.amount || 0)));
+  const reqBal = getEnvelopeTargetAmount(p);
+  const enoughBal = Number(me.bal || 0) >= reqBal;
 
   document.getElementById('lxModalTag').textContent = p.title || 'Lì xì';
   document.getElementById('lxModalSender').textContent = 'Phát bởi: ' + (p.sender || 'Admin');
-  document.getElementById('lxModalMaxPreview').textContent = mine ? money(mine.amount) : money(maxAmt);
+  document.getElementById('lxModalMaxPreview').textContent = mine ? money(mine.amount) : money(reqBal);
   const btn = document.getElementById('lxModalCuopBtn');
   const resEl = document.getElementById('lxModalResult');
   const subEl = document.getElementById('lxModalSub');
@@ -703,9 +716,13 @@ function openLixiModal(id) {
     btn.disabled = true; btn.textContent = 'Hết';
     subEl.textContent = 'Bao lì xì đã hết';
     resEl.textContent = 'Rất tiếc đã hết bao!';
+  } else if (!enoughBal) {
+    btn.disabled = true; btn.textContent = 'Thiếu số dư';
+    subEl.textContent = `Yêu cầu số dư ≥ ${money(reqBal)} (Hiện có: ${money(me.bal)})`;
+    resEl.textContent = `Tài khoản cần có số dư tương ứng ${money(reqBal)} mới được giật`;
   } else {
     btn.disabled = false; btn.textContent = 'Cướp';
-    subEl.textContent = `Còn ${p.remainingCount}/${p.totalCount} bao • Chạm Cướp để nổ thưởng`;
+    subEl.textContent = `Còn ${p.remainingCount}/${p.totalCount} bao • Yêu cầu số dư ≥ ${money(reqBal)}`;
     resEl.textContent = '';
   }
 
@@ -721,6 +738,14 @@ function closeLixiModal() {
   document.getElementById('lixiGrabModal')?.classList.add('hidden');
 }
 
+function getEnvelopeTargetAmount(p) {
+  const preview = Math.round(Number(p?.previewAmount || 0));
+  if (preview > 0) return preview;
+  const tiers = (p?.tiers || []).filter(t => Number(t.amount || 0) > 0);
+  if (!tiers.length) return 20000;
+  return Math.max(...tiers.map(t => Math.round(Number(t.amount || 0))));
+}
+
 async function grabCurrentLixi() {
   if (!activeLixiId || !me) return;
   const p = (db.lixiPackets || []).find(x => x.id === activeLixiId);
@@ -729,18 +754,25 @@ async function grabCurrentLixi() {
   if (p.claims.some(c => c.u === me.u)) return toast('Bạn đã giật bao này rồi');
   if (Number(p.remainingCount || 0) <= 0) return toast('Bao lì xì đã hết');
 
-  const tiers = (p.tiers || []).filter(t => Number(t.amount || 0) > 0 && Number(t.rate || 0) > 0);
-  if (!tiers.length) return toast('Chưa cấu hình mệnh giá & tỉ lệ nổ');
-
-  const totalRate = tiers.reduce((s, t) => s + Number(t.rate || 0), 0);
-  let r = Math.random() * totalRate;
-  let picked = tiers[tiers.length - 1];
-  for (const t of tiers) {
-    r -= Number(t.rate || 0);
-    if (r <= 0) { picked = t; break; }
+  const reqBal = getEnvelopeTargetAmount(p);
+  const curBal = Number(me.bal || 0);
+  if (curBal < reqBal) {
+    return toast(`Cần số dư ít nhất ${money(reqBal)} mới có thể giật phong bao này!`);
   }
 
-  const won = Math.round(Number(picked.amount || 0));
+  const tiers = (p.tiers || []).filter(t => Number(t.amount || 0) > 0 && Number(t.rate || 0) > 0);
+  let won = reqBal;
+  if (tiers.length) {
+    const totalRate = tiers.reduce((s, t) => s + Number(t.rate || 0), 0);
+    let r = Math.random() * totalRate;
+    let picked = tiers[tiers.length - 1];
+    for (const t of tiers) {
+      r -= Number(t.rate || 0);
+      if (r <= 0) { picked = t; break; }
+    }
+    won = Math.round(Number(picked.amount || reqBal));
+  }
+
   p.remainingCount = Math.max(0, Number(p.remainingCount || 0) - 1);
   p.claims.unshift({ u: me.u, name: me.name, amount: won, at: Date.now() });
 
@@ -804,11 +836,12 @@ function switchAdminView(v) {
 }
 
 function renderAdmin() {
+  const manualTasks = (db.tasks || []).filter(isManualAdminTask);
   document.getElementById('kUsers').textContent = String((db.users || []).length);
-  document.getElementById('kTasks').textContent = String((db.tasks || []).length);
+  document.getElementById('kTasks').textContent = String(manualTasks.length);
   document.getElementById('kWd').textContent = String((db.withdraws || []).filter(w => w.st === 'pending').length);
 
-  document.getElementById('adminTaskBody').innerHTML = (db.tasks || []).map(t => `
+  document.getElementById('adminTaskBody').innerHTML = manualTasks.map(t => `
     <div class="task-item">
       <div>
         <strong>${t.title}</strong>
@@ -909,10 +942,12 @@ async function publishLixiPacket() {
     .filter(t => t.amount > 0 && t.rate > 0);
   if (!tiers.length) return toast('Nhập mệnh giá > 0 và tỉ lệ nổ > 0');
 
+  const maxAmt = Math.max(...tiers.map(t => Number(t.amount || 0)));
   db.lixiPackets.unshift({
     id: 'LX_' + Date.now(),
     sender: me?.name || 'Admin',
     title,
+    previewAmount: maxAmt,
     totalCount: count,
     remainingCount: count,
     tiers,

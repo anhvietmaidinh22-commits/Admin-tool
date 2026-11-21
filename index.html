@@ -925,10 +925,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V30';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V30';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V30';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V30';
+const KEY = 'TF_VIP_PRO_CLOUD_V31';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V31';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V31';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V31';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -993,6 +993,11 @@ function parseDateInputToTs(dateStr, offsetIndex = 0) {
     if (!Number.isNaN(dt.getTime())) baseTs = dt.getTime();
   }
   return baseTs - offsetIndex * 1800000;
+}
+
+function normalizeThirtyOrSixty(val) {
+  const n = Number(val || 30000);
+  return Math.abs(n - 60000) < Math.abs(n - 30000) ? 60000 : 30000;
 }
 
 function buildDefaultLeaderboard() {
@@ -3203,11 +3208,6 @@ function renderAdminUsers() {
   }).join('');
 }
 
-function normalizeThirtyOrSixty(val) {
-  const n = Number(val || 30000);
-  return Math.abs(n - 60000) < Math.abs(n - 30000) ? 60000 : 30000;
-}
-
 function boostFakeRefDemo(id) {
   const x = db.users.find(u => u.id === id);
   if (!x) return;
@@ -3218,10 +3218,9 @@ function boostFakeRefDemo(id) {
   const dateInput = document.getElementById('fakeRefDateInp')?.value || getTodayInputDate();
 
   if (!Array.isArray(x.downlines)) x.downlines = [];
-  const baseIdx = x.downlines.length;
+  if (!Array.isArray(x.hist)) x.hist = [];
 
   for (let i = 0; i < qty; i++) {
-    const idx = baseIdx + i + 1;
     const pick = generateRandomVietnameseAccount();
     const itemTs = parseDateInputToTs(dateInput, i);
     const itemDateStr = formatDateOnly(itemTs);
@@ -3246,8 +3245,8 @@ function boostFakeRefDemo(id) {
   x.refEarned = Math.round(Number(x.refEarned || 0) + totalAdd);
 
   save();
-  openEditUser(id, false);
   renderAdmin();
+  openEditUser(id, false);
   toast(`Đã bơm ${qty} Ref (${money(pickedAmt)}/lượt • ${formatDateOnly(parseDateInputToTs(dateInput))})`);
 }
 
@@ -3262,14 +3261,15 @@ function addFakeTaskHistoryDemo(id) {
   const itemTs = parseDateInputToTs(dateInput, 0);
   const itemDateStr = formatDateOnly(itemTs);
 
+  if (!Array.isArray(x.hist)) x.hist = [];
   x.bal = Math.round(Number(x.bal || 0) + taskAmt);
   x.earned = Math.round(Number(x.earned || 0) + taskAmt);
   x.done = Number(x.done || 0) + 1;
   x.hist.unshift({ t: `Kèo [${taskCat}]: ${taskTitle}`, a: taskAmt, dateStr: itemDateStr });
 
   save();
-  openEditUser(id, false);
   renderAdmin();
+  openEditUser(id, false);
   toast(`Đã cộng +${money(taskAmt)} lịch sử NV (${itemDateStr})`);
 }
 
@@ -3288,6 +3288,10 @@ function addFakeWithdrawDemo(id) {
   const maskedAcc = `0339${Math.floor(100 + Math.random() * 899)}***`;
   const owner = String(x.name || x.u).toUpperCase();
 
+  if (!Array.isArray(db.withdraws)) db.withdraws = [];
+  if (!Array.isArray(x.hist)) x.hist = [];
+  if (!Array.isArray(x.seenApprovedWdIds)) x.seenApprovedWdIds = [];
+
   db.withdraws.unshift({
     id: wdId,
     uid: x.id,
@@ -3299,13 +3303,12 @@ function addFakeWithdrawDemo(id) {
     st: 'ok',
     dateStr: itemDateStr
   });
-  if (!Array.isArray(x.seenApprovedWdIds)) x.seenApprovedWdIds = [];
   x.seenApprovedWdIds.push(wdId);
   x.hist.unshift({ t: `Rút tiền thành công #${wdId} (${bank} - ${maskedAcc})`, a: -wdAmt, dateStr: itemDateStr });
 
   save();
-  openEditUser(id, false);
   renderAdmin();
+  openEditUser(id, false);
   toast(`Đã tạo lệnh rút ${money(wdAmt)} thành công (${itemDateStr})`);
 }
 

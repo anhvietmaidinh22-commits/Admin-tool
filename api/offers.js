@@ -1,21 +1,29 @@
 const OFFER_MARGIN_RATE = 0.4; // Giữ lại 40% phần chênh lệch an toàn
+const DEFAULT_FALLBACK_REWARD = 1000; // Mức thưởng tối thiểu khi nguồn chỉ có % hoa hồng
 
-function calcSafeUserReward(netPayoutVnd, marginRate = OFFER_MARGIN_RATE) {
-  const net = Number(netPayoutVnd || 0);
-  if (net <= 0) return 0;
-  const safeReward = net * (1 - Number(marginRate || 0.4));
+function calcSafeUserReward(rawValue, marginRate = OFFER_MARGIN_RATE) {
+  const str = String(rawValue ?? '').trim();
+  const hasPercent = str.includes('%');
+  const plainText = str.replace(/<[^>]*>/g, ' ');
+  const num = Number(plainText.replace(/[^\d.]/g, '') || 0);
+
+  if (!Number.isFinite(num) || num <= 0) {
+    return 0;
+  }
+
+  // Nếu là % hoa hồng (vd: 5% hoặc 12.5%), quy đổi an toàn sau khi trừ 40% chênh lệch
+  if (hasPercent || (num > 0 && num <= 100 && !/vnd|đ|₫/i.test(str))) {
+    const scaled = num * 1000 * (1 - Number(marginRate || 0.4));
+    const roundedPct = Math.floor(scaled / 1000) * 1000;
+    return Math.max(DEFAULT_FALLBACK_REWARD, Math.min(roundedPct, 100000));
+  }
+
+  const safeReward = num * (1 - Number(marginRate || 0.4));
   const rounded = Math.floor(safeReward / 1000) * 1000;
-  if (rounded < 1000) return 0;
+  if (rounded < 1000) {
+    return DEFAULT_FALLBACK_REWARD;
+  }
   return Math.min(rounded, 100000);
-}
-
-function extractNumber(val) {
-  if (typeof val === 'number') return Number.isFinite(val) ? val : 0;
-  if (!val) return 0;
-  const plainText = String(val).replace(/<[^>]*>/g, ' ');
-  const cleaned = plainText.replace(/[^\d.]/g, '');
-  const num = Number(cleaned || 0);
-  return Number.isFinite(num) ? num : 0;
 }
 
 function buildMasofferUrl(pubId, token) {
@@ -71,7 +79,6 @@ async function fetchSingleSource(sourceUrl) {
       ok: false,
       status: upstream.status,
       error: 'Phản hồi không phải JSON',
-      preview: rawText.slice(0, 200),
       offers: []
     };
   }
@@ -90,46 +97,53 @@ async function fetchSingleSource(sourceUrl) {
     ? parsed
     : (Array.isArray(parsed.data) ? parsed.data : (parsed.offers || parsed.items || []));
 
-  const sampleRaw = rawList[0]
-    ? Object.fromEntries(
-        Object.entries(rawList[0]).map(([k, v]) => [
-          k,
-          typeof v === 'string' ? v.slice(0, 120) : v
-        ])
-      )
-    : null;
-
   const offers = rawList
     .map((item, idx) => {
-      const rawPayout = extractNumber(
-        item.payout_vnd ?? item.payout ?? item.commission ?? item.commission_vnd ?? item.commission_rate ?? 0
-      );
-      const reward = calcSafeUserReward(rawPayout, OFFER_MARGIN_RATE);
-      const domainUrl = item.domain
-        ? `https://${String(item.domain).replace(/^https?:\/\//, '').trim()}`
+      const rawCommission =
+        item.payout_vnd ??
+        item.payout ??
+        item.commission ??
+        item.commission_vnd ??
+        item.commission_rate ??
+        DEFAULT_FALLBACK_REWARD;
+
+      const reward = calcSafeUserReward(rawCommission, OFFER_MARGIN_RATE);
+      const domainClean = item.domain
+        ? String(item.domain).replace(/^https?:\/\//, '').trim()
         : '';
+      const domainUrl = domainClean ? `https://${domainClean}` : '';
       const url = String(
-        item.tracking_url || item.click_url || item.offer_url || item.url || item.link || domainUrl || ''
+        item.tracking_url ||
+        item.click_url ||
+        item.offer_url ||
+        item.url ||
+        item.link ||
+        domainUrl ||
+        `https://ecom.masoffer.com/offer/${item.offer_id || item.id || idx + 1}`
       ).trim();
 
+      const title = String(
+        item.name || item.title || item.offer_name || `Chiến dịch #${idx + 1}`
+      ).trim();
+
+      if (!title || !url) return null;
+
       return {
-        id: String(item.offer_id || item.id || `OFFER_${idx + 1}`),
+        id: String(item.offer_id || item.id || `MAS_${idx + 1}`),
         cat: 'Khảo sát',
-        title: String(item.name || item.title || item.offer_name || `Chiến dịch #${idx + 1}`).trim(),
-        rawPayout,
+        title,
         reward,
         url,
         guide: 'Mở link chiến dịch, hoàn thành yêu cầu và nhập mã xác nhận để nhận thưởng.'
       };
     })
-    .filter((o) => Boolean(o.url));
+    .filter(Boolean);
 
   return {
     sourceUrl,
     ok: true,
     status: upstream.status,
     rawCount: rawList.length,
-    sampleRaw,
     offers
   };
 }
@@ -164,14 +178,12 @@ export default async function handler(req, res) {
       ok: true,
       sourcesCount: sources.length,
       totalOffers: mergedOffers.length,
-      sources: results.map(({ sourceUrl, ok, status, rawCount, sampleRaw, error, preview }) => ({
+      sources: results.map(({ sourceUrl, ok, status, rawCount, error }) => ({
         sourceUrl,
         ok,
         status,
         rawCount: rawCount ?? 0,
-        sampleRaw: sampleRaw || null,
-        error: error || null,
-        preview: preview || null
+        error: error || null
       })),
       offers: mergedOffers
     });

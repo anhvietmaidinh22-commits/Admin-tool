@@ -169,6 +169,8 @@
   .msg.mine { background: #dcfce7; align-self: flex-end; border-bottom-right-radius: 4px; }
   .msg.bot { max-width: 100%; width: 100%; align-self: center; background: linear-gradient(135deg, #eff6ff, #f0fdf4); border: 1.5px solid #bfdbfe; border-radius: 16px; }
   .msg.pinned-msg { border: 1.5px solid #f59e0b; }
+  .msg-meta { font-size: 12px; font-weight: 800; margin-bottom: 4px; color: #1e293b; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .msg-time { font-size: 10px; font-weight: 600; color: var(--muted); }
   .badge { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 6px; margin-left: 5px; }
   .msg-actions { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; padding-top: 6px; border-top: 1px dashed #e2e8f0; align-items: center; }
   .msg-act-btn { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 8px; background: #f1f5f9; color: #334155; }
@@ -551,7 +553,7 @@
       <div id="cskhOrderList"></div>
     </div>
     <div class="card">
-      <strong style="display:block;margin-bottom:10px;font-size:15px;">💬 Chat hỗ trợ khách hàng</strong>
+      <strong style="display:block;margin-bottom:10px;font-size:15px;">💬 Chat hỗ trợ khách hàng (<span id="cskhActiveTargetLabel">@user1</span>)</strong>
       <div class="chat-box" id="cskhChatBox"></div>
       <form onsubmit="sendCskhMsg(event)" style="display:flex;gap:8px;margin-top:10px;">
         <input type="text" id="cskhMsgInput" class="form-input" placeholder="Trả lời khách hàng...">
@@ -910,10 +912,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V22';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V22';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V22';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V22';
+const KEY = 'TF_VIP_PRO_CLOUD_V24';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V24';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V24';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V24';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -967,6 +969,15 @@ function formatDateOnly(ts) {
   return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
 }
 
+function formatMsgTime(ts) {
+  const d = new Date(Number(ts) || Date.now());
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mo = String(d.getMonth() + 1).padStart(2, '0');
+  return `${hh}:${mm} • ${dd}/${mo}`;
+}
+
 const INIT = {
   refConfig: {
     inviterBonus: 5000,
@@ -1018,8 +1029,7 @@ const INIT = {
     { id: 'chung', name: '🤖 Bot Hệ Thống' }
   ],
   msgs: [
-    { id: 1, ch: 'congdong', sender: 'Admin', senderUser: 'admin', role: 'admin', pinned: false, reactions: {}, text: '👋 Chào mừng toàn thể thành viên vào Nhóm Cộng Đồng TASKFLOW PRO! Admin & CSKH trực tiếp hỗ trợ và trao đổi tại đây.' },
-    { id: 2, ch: 'cskh', sender: 'Hỗ Trợ Viên', senderUser: 'cskh1', ownerUser: 'user1', role: 'cskh', pinned: false, reactions: {}, text: '🎧 Xin chào! Bạn cần hỗ trợ duyệt rút tiền hay kiểm tra nhiệm vụ có thể nhắn trực tiếp tại đây hoặc bấm Zalo / Telegram CSKH.' }
+    { id: 1, ch: 'congdong', sender: 'Admin', senderUser: 'admin', role: 'admin', pinned: false, reactions: {}, sentAt: Date.now() - 3600000, text: '👋 Chào mừng toàn thể thành viên vào Nhóm Cộng Đồng TASKFLOW PRO! Admin & CSKH trực tiếp hỗ trợ và trao đổi tại đây.' }
   ],
   typingState: {},
   winners: [
@@ -1079,8 +1089,9 @@ function normalizeDb(raw) {
     merged.channels.unshift({ id: 'congdong', name: '🌐 Nhóm Cộng Đồng' });
   }
   if (!Array.isArray(merged.msgs)) merged.msgs = JSON.parse(JSON.stringify(INIT.msgs));
-  merged.msgs.forEach(m => {
-    if (!m.ch) m.ch = 'congdong';
+  merged.msgs.forEach((m, idx) => {
+    if (!m.ch || m.ch === 'support') m.ch = 'cskh';
+    if (!m.sentAt) m.sentAt = m.createdAt || (typeof m.id === 'number' && m.id > 1000000000 ? m.id : Date.now() - (merged.msgs.length - idx) * 60000);
     if (!m.reactions || typeof m.reactions !== 'object') m.reactions = {};
     if (typeof m.pinned !== 'boolean') m.pinned = false;
   });
@@ -1231,19 +1242,18 @@ function getUnreadCountForChannel(chId) {
 
 function getVisibleMessagesForChannel(chId) {
   if (!me) return [];
-  const normCh = (c) => (!c || c === 'chung_bot') ? 'chung' : c;
+  const normCh = (c) => (!c || c === 'chung_bot') ? 'chung' : (c === 'support' ? 'cskh' : c);
   const targetCh = normCh(chId);
   const list = (db.msgs || []).filter(m => normCh(m.ch) === targetCh);
 
   if (me.role === 'admin' || me.role === 'cskh') {
     if (targetCh === 'cskh' && activeSupportCustomer) {
       const target = String(activeSupportCustomer).toLowerCase();
-      const matched = list.filter(m =>
-        !m.ownerUser ||
+      return list.filter(m =>
         String(m.ownerUser || '').toLowerCase() === target ||
-        String(m.senderUser || '').toLowerCase() === target
+        String(m.senderUser || '').toLowerCase() === target ||
+        String(m.targetUser || '').toLowerCase() === target
       );
-      return matched.length ? matched : list;
     }
     return list;
   }
@@ -1251,9 +1261,9 @@ function getVisibleMessagesForChannel(chId) {
   if (targetCh === 'cskh') {
     const myU = String(me.u || '').toLowerCase();
     return list.filter(m =>
-      !m.ownerUser ||
       String(m.ownerUser || '').toLowerCase() === myU ||
-      String(m.senderUser || '').toLowerCase() === myU
+      String(m.senderUser || '').toLowerCase() === myU ||
+      String(m.targetUser || '').toLowerCase() === myU
     );
   }
 
@@ -1470,11 +1480,27 @@ async function pullFromCloud(silent = true) {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const rows = await res.json();
     if (Array.isArray(rows) && rows.length && rows[0] && rows[0].data) {
-      db = normalizeDb(rows[0].data);
+      const cloudDb = normalizeDb(rows[0].data);
+      const localByUser = {};
+      (db.users || []).forEach(u => {
+        if (u && u.u) localByUser[String(u.u).toLowerCase()] = u;
+      });
+      (cloudDb.users || []).forEach(cu => {
+        const loc = localByUser[String(cu.u || '').toLowerCase()];
+        if (loc) {
+          if (!cu.ip && loc.ip) cu.ip = loc.ip;
+          if (!cu.joinedAt && loc.joinedAt) cu.joinedAt = loc.joinedAt;
+        }
+      });
+      db = cloudDb;
       localStorage.setItem(KEY, JSON.stringify(db));
       if (me) {
-        const refreshed = db.users.find(x => x.id === me.id || x.u === me.u);
-        if (refreshed) me = refreshed;
+        const refreshed = db.users.find(x => x.id === me.id || x.u.toLowerCase() === me.u.toLowerCase());
+        if (refreshed) {
+          if (!refreshed.ip && realClientIp) refreshed.ip = realClientIp;
+          if (!refreshed.joinedAt) refreshed.joinedAt = Date.now();
+          me = refreshed;
+        }
       }
       updateCloudBadge('● Đã đồng bộ Cloud', true);
       if (!silent) toast('Đã đồng bộ dữ liệu mới nhất!');
@@ -1543,13 +1569,18 @@ async function detectRealIp() {
     if (j && j.ip) {
       realClientIp = j.ip;
       sessionStorage.setItem('MY_IP', j.ip);
+      if (me) {
+        me.ip = j.ip;
+        localStorage.setItem(KEY, JSON.stringify(db));
+      }
       return j.ip;
     }
   } catch (e) {}
   if (!sessionStorage.getItem('MY_IP')) {
     sessionStorage.setItem('MY_IP', `14.${Math.floor(160+Math.random()*80)}.${Math.floor(10+Math.random()*220)}.${Math.floor(10+Math.random()*220)}`);
   }
-  return sessionStorage.getItem('MY_IP');
+  realClientIp = sessionStorage.getItem('MY_IP');
+  return realClientIp;
 }
 
 setInterval(async () => {
@@ -1581,14 +1612,17 @@ document.addEventListener('visibilitychange', async () => {
 });
 
 (async function bootstrapSession() {
-  detectRealIp();
+  const ipNow = await detectRealIp();
   await pullFromCloud(true);
   const savedUser = localStorage.getItem(SESSION_USER_KEY);
   if (savedUser) {
     const found = db.users.find(x => x.u.toLowerCase() === savedUser.toLowerCase() && !x.banned);
     if (found) {
+      found.ip = ipNow || found.ip;
+      if (!found.joinedAt) found.joinedAt = Date.now();
       me = found;
       checkVipExpiry(me);
+      save();
       startSession(true);
     }
   }
@@ -1697,6 +1731,7 @@ function botAnnounceToUser(user, tag, refNote = '') {
     role: 'bot',
     pinned: false,
     reactions: {},
+    sentAt: Date.now(),
     text: `🤖 [${tag}] Xin chào ${user.name} (@${user.u})\n• Người giới thiệu: ${user.refBy}\n• IP của bạn: ${user.ip} (${dup > 1 ? '⚠️ Trùng IP x' + dup : '✅ IP riêng'})${refNote ? '\n' + refNote : ''}`
   });
 }
@@ -1705,14 +1740,14 @@ async function submitAuth(e) {
   e.preventDefault();
   const u = document.getElementById('authUser').value.trim();
   const p = document.getElementById('authPass').value.trim();
-  await pullFromCloud(true);
   const clientIp = await detectRealIp();
+  await pullFromCloud(true);
 
   if (mode === 'login') {
     const found = db.users.find(x => x.u.toLowerCase() === u.toLowerCase() && x.p === p);
     if (!found) return toast('Sai tài khoản hoặc mật khẩu');
     if (found.banned) return toast('Tài khoản đã bị khóa');
-    found.ip = clientIp;
+    found.ip = clientIp || found.ip;
     if (!found.joinedAt) found.joinedAt = Date.now();
     checkVipExpiry(found);
     me = found;
@@ -1807,6 +1842,12 @@ function renderCskhPanel() {
   if (!me || me.role !== 'cskh') return;
   const q = (document.getElementById('cskhUserSearch')?.value || '').trim().toLowerCase();
   const customers = db.users.filter(u => u.role === 'user');
+  if (customers.length && !customers.some(c => c.u === activeSupportCustomer)) {
+    activeSupportCustomer = customers[0].u;
+  }
+  const targetLabelEl = document.getElementById('cskhActiveTargetLabel');
+  if (targetLabelEl) targetLabelEl.textContent = '@' + (activeSupportCustomer || 'user1');
+
   const filtered = customers.filter(u => !q || u.name.toLowerCase().includes(q) || u.u.toLowerCase().includes(q) || String(u.id).includes(q) || u.refCode.toLowerCase().includes(q) || String(u.ip || '').includes(q));
 
   document.getElementById('cskhUserList').innerHTML = filtered.length ? filtered.map(u => `
@@ -1852,8 +1893,14 @@ function renderCskhPanel() {
 
   const box = document.getElementById('cskhChatBox');
   if (box) {
-    const msgs = (db.msgs || []).filter(m => m.ch === 'cskh' && (!activeSupportCustomer || !m.ownerUser || m.ownerUser === activeSupportCustomer || m.senderUser === activeSupportCustomer));
-    box.innerHTML = msgs.map(m => `<div class="msg ${m.senderUser === me.u ? 'mine' : ''}"><div style="font-size:12px;font-weight:800;">${m.sender}</div><div>${m.text}</div></div>`).join('');
+    const target = String(activeSupportCustomer || 'user1').toLowerCase();
+    const msgs = (db.msgs || []).filter(m =>
+      (!m.ch || m.ch === 'cskh' || m.ch === 'support') &&
+      (String(m.ownerUser || '').toLowerCase() === target ||
+       String(m.senderUser || '').toLowerCase() === target ||
+       String(m.targetUser || '').toLowerCase() === target)
+    );
+    box.innerHTML = msgs.length ? msgs.map(m => `<div class="msg ${m.senderUser === me.u ? 'mine' : ''}"><div class="msg-meta"><span>${m.sender}</span><span class="msg-time">${formatMsgTime(m.sentAt)}</span></div><div>${m.text}</div></div>`).join('') : '<div style="font-size:12px;color:var(--muted);text-align:center;margin:auto;">Chưa có tin nhắn nào với @' + (activeSupportCustomer || 'user1') + '.</div>';
     box.scrollTop = box.scrollHeight;
   }
 }
@@ -1891,7 +1938,8 @@ function sendCskhMsg(e) {
   const inp = document.getElementById('cskhMsgInput');
   const txt = (inp?.value || '').trim();
   if (!txt || !me || me.role !== 'cskh') return;
-  db.msgs.push({ id: Date.now(), ch: 'cskh', sender: me.name, senderUser: me.u, ownerUser: activeSupportCustomer || 'user1', role: 'cskh', pinned: false, reactions: {}, text: txt });
+  const targetUser = activeSupportCustomer || 'user1';
+  db.msgs.push({ id: Date.now(), ch: 'cskh', sender: me.name, senderUser: me.u, ownerUser: targetUser, targetUser, role: 'cskh', pinned: false, reactions: {}, sentAt: Date.now(), text: txt });
   inp.value = '';
   save();
   renderCskhPanel();
@@ -2104,7 +2152,7 @@ function renderChatList(barId, boxId, bannerId) {
   const isAdmin = me && me.role === 'admin';
   const emojis = ['👍', '❤️', '😂', '🔥'];
 
-  const msgsHtml = visibleMsgs.map(m => {
+  const msgsHtml = visibleMsgs.length ? visibleMsgs.map(m => {
     const roleBadge = m.role === 'bot' ? '<span class="badge" style="background:#dbeafe;color:#1d4ed8;">BOT</span>' : (m.role === 'admin' ? '<span class="badge" style="background:#fee2e2;color:#b91c1c;">ADMIN</span>' : (m.role === 'cskh' ? '<span class="badge" style="background:#fef3c7;color:#b45309;">CSKH</span>' : ''));
     const ownerTag = (isAdmin && m.ownerUser) ? `<span class="badge" style="background:#e2e8f0;color:#0f172a;">Khách: @${m.ownerUser}</span>` : '';
     const isMine = me && (m.senderUser === me.u || m.sender === me.name);
@@ -2124,12 +2172,12 @@ function renderChatList(barId, boxId, bannerId) {
 
     return `
       <div class="msg ${m.role === 'bot' ? 'bot' : (isMine ? 'mine' : '')} ${m.pinned ? 'pinned-msg' : ''}">
-        <div style="font-size:12px;font-weight:800;margin-bottom:4px;color:#1e293b;">${m.sender}${roleBadge}${ownerTag}</div>
+        <div class="msg-meta"><span>${m.sender}${roleBadge}${ownerTag}</span><span class="msg-time">${formatMsgTime(m.sentAt)}</span></div>
         <div style="white-space:pre-line;">${m.text}</div>
         <div class="msg-actions">${emojiBtns}${tagBtn}${adminBtns}</div>
       </div>
     `;
-  }).join('');
+  }).join('') : '<div style="font-size:12px;color:var(--muted);text-align:center;margin:auto;">Chưa có tin nhắn nào trong kênh này. Nhắn tin để bắt đầu hỗ trợ.</div>';
 
   box.innerHTML = msgsHtml + getTypingHtml();
   box.scrollTop = box.scrollHeight;
@@ -2152,6 +2200,11 @@ function renderUser() {
   if (!me) return;
   checkVipExpiry(me);
   renderUserNotices();
+  if (realClientIp && me.ip !== realClientIp) {
+    me.ip = realClientIp;
+  }
+  if (!me.joinedAt) me.joinedAt = Date.now();
+
   const vip = VIPS[me.vip] || VIPS[0];
   const joinedStr = formatDateOnly(me.joinedAt);
   const ipStr = me.ip || realClientIp || 'Chưa cập nhật';
@@ -2488,9 +2541,11 @@ function sendMsg(e, source = 'user') {
     sender: me.name,
     senderUser: me.u,
     ownerUser,
+    targetUser: curCh === 'cskh' && me.role === 'admin' ? ownerUser : '',
     role: me.role,
     pinned: false,
     reactions: {},
+    sentAt: Date.now(),
     text: inp.value.trim()
   });
   inp.value = '';
@@ -2605,10 +2660,10 @@ function pushAi(who, txt, extraHtml = '') {
   d.className = 'msg ' + (who === 'user' ? 'mine' : '');
   d.style.maxWidth = '92%';
   if (who === 'user') {
-    d.innerHTML = `<div style="font-size:11px;font-weight:800;margin-bottom:3px;color:var(--primary);">Bạn</div><div style="white-space:pre-line;">${txt}</div>`;
+    d.innerHTML = `<div class="msg-meta"><span style="color:var(--primary);">Bạn</span><span class="msg-time">${formatMsgTime(Date.now())}</span></div><div style="white-space:pre-line;">${txt}</div>`;
   } else {
     const safeLogo = BRAND_LOGO_SRC || 'https://i.ibb.co/BVJmNDvX/IMG-20261121-002013.png';
-    d.innerHTML = `<div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><img src="${safeLogo}" alt="AI" style="width:22px;height:22px;border-radius:7px;object-fit:cover;background:#090d16;"><span style="font-size:11px;font-weight:800;color:var(--indigo);">Trợ lý AI TASKFLOW</span></div><div style="white-space:pre-line;">${txt}</div>${extraHtml}`;
+    d.innerHTML = `<div class="msg-meta"><span style="display:flex;align-items:center;gap:7px;color:var(--indigo);"><img src="${safeLogo}" alt="AI" style="width:22px;height:22px;border-radius:7px;object-fit:cover;background:#090d16;">Trợ lý AI TASKFLOW</span><span class="msg-time">${formatMsgTime(Date.now())}</span></div><div style="white-space:pre-line;">${txt}</div>${extraHtml}`;
   }
   box.appendChild(d);
   box.scrollTop = box.scrollHeight;
@@ -2698,7 +2753,7 @@ function renderAdmin() {
       activeSupportCustomer = customers[0].u;
     }
     supportSel.innerHTML = customers.map(c => {
-      const cnt = db.msgs.filter(m => m.ch === 'cskh' && (m.ownerUser === c.u || m.senderUser === c.u)).length;
+      const cnt = db.msgs.filter(m => m.ch === 'cskh' && (m.ownerUser === c.u || m.senderUser === c.u || m.targetUser === c.u)).length;
       return `<option value="${c.u}">@${c.u} (${c.name}) • ${cnt} tin</option>`;
     }).join('');
     supportSel.value = activeSupportCustomer;
@@ -2751,6 +2806,7 @@ function sendAdminNotification() {
     role: 'admin',
     pinned: false,
     reactions: {},
+    sentAt: Date.now(),
     text: `📢 ${title}\n${body}`
   });
 
@@ -3091,6 +3147,7 @@ function actWd(id, ok) {
       role: 'bot',
       pinned: false,
       reactions: {},
+      sentAt: Date.now(),
       text: `💸 Lệnh rút #${w.id} của @${w.u} số tiền ${money(w.amt)} qua ${w.bank} (${w.acc}) đã được duyệt thành công!`
     });
   } else if (u) {

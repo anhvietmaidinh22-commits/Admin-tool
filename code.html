@@ -505,6 +505,40 @@
   </nav>
 </div>
 
+<!-- CSKH WORKSPACE -->
+<div id="cskhApp" class="admin-shell hidden">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <img id="cskhTopLogoImg" src="https://i.ibb.co/BVJmNDvX/IMG-20261121-002013.png" alt="Logo" class="user-avatar-img">
+      <strong style="font-size:16px;">🎧 BÀN LÀM VIỆC CSKH</strong>
+      <span class="sync-pill">● Quyền CSKH</span>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-secondary" onclick="manualSyncCloud()">🔄 Tải mới</button>
+      <button class="btn-secondary" style="color:var(--red);" onclick="logout()">Thoát</button>
+    </div>
+  </div>
+  <div class="section">
+    <div class="card">
+      <strong style="display:block;margin-bottom:10px;font-size:15px;">🔎 Kiểm tra &amp; quản lý tài khoản khách hàng</strong>
+      <input type="text" id="cskhUserSearch" class="form-input" placeholder="Tìm tên, tài khoản, mã Ref hoặc IP..." oninput="renderCskhPanel()" style="margin-bottom:10px;">
+      <div id="cskhUserList"></div>
+    </div>
+    <div class="card">
+      <strong style="display:block;margin-bottom:10px;font-size:15px;">💸 Duyệt lệnh rút tiền &amp; nâng VIP</strong>
+      <div id="cskhOrderList"></div>
+    </div>
+    <div class="card">
+      <strong style="display:block;margin-bottom:10px;font-size:15px;">💬 Chat hỗ trợ khách hàng</strong>
+      <div class="chat-box" id="cskhChatBox"></div>
+      <form onsubmit="sendCskhMsg(event)" style="display:flex;gap:8px;margin-top:10px;">
+        <input type="text" id="cskhMsgInput" class="form-input" placeholder="Trả lời khách hàng...">
+        <button type="submit" class="btn-primary" style="width:auto;padding:0 18px;">Gửi</button>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- ADMIN APP -->
 <div id="adminApp" class="admin-shell hidden">
   <div class="topbar">
@@ -854,10 +888,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V20';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V20';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V20';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V20';
+const KEY = 'TF_VIP_PRO_CLOUD_V21';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V21';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V21';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V21';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -946,7 +980,7 @@ const INIT = {
   vipRequests: [],
   users: [
     { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] },
-    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [{ t: 'Làm nhiệm vụ Vượt link', a: 600 }] },
+    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] },
     { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], hist: [] }
   ],
   tasks: [],
@@ -969,7 +1003,7 @@ const INIT = {
 
 function applyBrandLogo() {
   if (!BRAND_LOGO_SRC) return;
-  ['introLogoImg', 'authLogoImg', 'userTopLogoImg', 'adminTopLogoImg', 'aiFabLogoImg', 'aiHeaderLogoImg'].forEach(id => {
+  ['introLogoImg', 'authLogoImg', 'userTopLogoImg', 'cskhTopLogoImg', 'adminTopLogoImg', 'aiFabLogoImg', 'aiHeaderLogoImg'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.src = BRAND_LOGO_SRC;
   });
@@ -1073,7 +1107,7 @@ function renderNoticeItemHtml(n, isAck) {
 }
 
 function renderUserNotices() {
-  if (!me || me.role === 'admin') return;
+  if (!me || me.role === 'admin' || me.role === 'cskh') return;
   const allMine = getUserNoticesForMe();
   const unreadCount = allMine.filter(n => !me.dismissedNotifyIds.includes(n.id)).length;
 
@@ -1449,6 +1483,7 @@ function save() {
 async function manualSyncCloud() {
   await pullFromCloud(false);
   if (me && me.role === 'admin') renderAdmin();
+  else if (me && me.role === 'cskh') renderCskhPanel();
   else if (me) {
     renderUser();
     checkApprovedWithdrawPopup();
@@ -1475,10 +1510,12 @@ setInterval(async () => {
   if (!CLOUD_ENABLED || !me || spinning || Date.now() < reactionLockUntil) return;
   const linksTabActive = !document.getElementById('aViewLinks')?.classList.contains('hidden');
   const isEditingLinks = linksTabActive && document.activeElement && document.activeElement.closest('#aViewLinks');
-  if (isEditingLinks) return;
+  const isEditingCskh = me.role === 'cskh' && document.activeElement && document.activeElement.closest('#cskhApp');
+  if (isEditingLinks || isEditingCskh) return;
 
   await pullFromCloud(true);
   if (me && me.role === 'admin') renderAdmin();
+  else if (me && me.role === 'cskh') renderCskhPanel();
   else if (me) {
     renderUser();
     checkApprovedWithdrawPopup();
@@ -1489,6 +1526,7 @@ document.addEventListener('visibilitychange', async () => {
   if (document.visibilityState === 'visible' && CLOUD_ENABLED && me && !spinning) {
     await pullFromCloud(true);
     if (me && me.role === 'admin') renderAdmin();
+    else if (me && me.role === 'cskh') renderCskhPanel();
     else if (me) {
       renderUser();
       checkApprovedWithdrawPopup();
@@ -1533,7 +1571,7 @@ function hasCompleted50kDeposit(user) {
 }
 
 function checkApprovedWithdrawPopup() {
-  if (!me || me.role === 'admin') return;
+  if (!me || me.role === 'admin' || me.role === 'cskh') return;
   if (!Array.isArray(me.seenApprovedWdIds)) me.seenApprovedWdIds = [];
   const newlyApproved = db.withdraws.find(w => (w.uid === me.id || w.u === me.u) && w.st === 'ok' && !me.seenApprovedWdIds.includes(w.id));
   if (!newlyApproved) return;
@@ -1632,7 +1670,7 @@ async function submitAuth(e) {
     checkVipExpiry(found);
     me = found;
     localStorage.setItem(SESSION_USER_KEY, me.u);
-    if (me.role !== 'admin') botAnnounceToUser(me, 'Đăng nhập');
+    if (me.role === 'user') botAnnounceToUser(me, 'Đăng nhập');
     save(); startSession(false);
   } else {
     if (db.users.some(x => x.u.toLowerCase() === u.toLowerCase())) return toast('Tài khoản đã tồn tại');
@@ -1689,10 +1727,17 @@ function startSession(isRestore = false) {
   document.getElementById('aiFloatBtn').classList.remove('hidden');
   if (me.role === 'admin') {
     document.getElementById('userApp').classList.add('hidden');
+    document.getElementById('cskhApp')?.classList.add('hidden');
     document.getElementById('adminApp').classList.remove('hidden');
     renderAdmin();
+  } else if (me.role === 'cskh') {
+    document.getElementById('userApp').classList.add('hidden');
+    document.getElementById('adminApp').classList.add('hidden');
+    document.getElementById('cskhApp')?.classList.remove('hidden');
+    renderCskhPanel();
   } else {
     document.getElementById('adminApp').classList.add('hidden');
+    document.getElementById('cskhApp')?.classList.add('hidden');
     document.getElementById('userApp').classList.remove('hidden');
     drawWheel(); renderUser();
     checkApprovedWithdrawPopup();
@@ -1704,10 +1749,76 @@ function logout() {
   me = null;
   localStorage.removeItem(SESSION_USER_KEY);
   document.getElementById('userApp').classList.add('hidden');
+  document.getElementById('cskhApp')?.classList.add('hidden');
   document.getElementById('adminApp').classList.add('hidden');
   document.getElementById('aiFloatBtn').classList.add('hidden');
   document.getElementById('authScreen').classList.remove('hidden');
   document.getElementById('authPass').value = '';
+}
+
+function renderCskhPanel() {
+  if (!me || me.role !== 'cskh') return;
+  const q = (document.getElementById('cskhUserSearch')?.value || '').trim().toLowerCase();
+  const customers = db.users.filter(u => u.role === 'user');
+  const filtered = customers.filter(u => !q || u.name.toLowerCase().includes(q) || u.u.toLowerCase().includes(q) || u.refCode.toLowerCase().includes(q) || String(u.ip || '').includes(q));
+
+  document.getElementById('cskhUserList').innerHTML = filtered.length ? filtered.map(u => `
+    <div class="task-item">
+      <div>
+        <strong>${u.name}</strong> (@${u.u}) • <span class="vip-pill">VIP ${u.vip}</span>
+        <div style="font-size:12px;color:var(--muted);">Số dư: <strong style="color:var(--primary);">${money(u.bal)}</strong> • Đã làm: ${u.done} kèo • IP: ${u.ip || 'Chưa rõ'}</div>
+      </div>
+      <button type="button" class="btn-sm" style="background:var(--indigo-soft);color:var(--indigo);" onclick="selectCskhCustomer('${u.u}')">Chat KH</button>
+    </div>
+  `).join('') : '<div style="font-size:13px;color:var(--muted);">Không tìm thấy tài khoản khách hàng phù hợp.</div>';
+
+  const pendingWds = db.withdraws.filter(w => w.st === 'pending');
+  const pendingVips = db.vipRequests.filter(r => r.st === 'pending');
+  document.getElementById('cskhOrderList').innerHTML = `
+    ${pendingWds.map(w => `
+      <div class="task-item">
+        <div><strong>Rút #${w.id} • @${w.u} • ${money(w.amt)}</strong><div style="font-size:12px;color:var(--muted);">${w.bank} - ${w.acc} (${w.owner})</div></div>
+        <div style="display:flex;gap:6px;">
+          <button type="button" class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actWd('${w.id}',1);renderCskhPanel();">Duyệt</button>
+          <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="actWd('${w.id}',0);renderCskhPanel();">Hủy</button>
+        </div>
+      </div>
+    `).join('')}
+    ${pendingVips.map(r => `
+      <div class="task-item">
+        <div><strong>VIP #${r.id} • @${r.u} • ${r.pkgName}</strong><div style="font-size:12px;color:var(--muted);">Số tiền: ${money(r.price)}</div></div>
+        <div style="display:flex;gap:6px;">
+          <button type="button" class="btn-sm" style="background:var(--primary);color:#fff;" onclick="actVipReq('${r.id}',1);renderCskhPanel();">Duyệt</button>
+          <button type="button" class="btn-sm" style="background:var(--red-soft);color:var(--red);" onclick="actVipReq('${r.id}',0);renderCskhPanel();">Từ chối</button>
+        </div>
+      </div>
+    `).join('')}
+    ${(!pendingWds.length && !pendingVips.length) ? '<div style="font-size:13px;color:var(--muted);">Hiện không có lệnh nào chờ duyệt.</div>' : ''}
+  `;
+
+  const box = document.getElementById('cskhChatBox');
+  if (box) {
+    const msgs = (db.msgs || []).filter(m => m.ch === 'cskh' && (!activeSupportCustomer || m.ownerUser === activeSupportCustomer || m.senderUser === activeSupportCustomer));
+    box.innerHTML = msgs.map(m => `<div class="msg ${m.senderUser === me.u ? 'mine' : ''}"><div style="font-size:12px;font-weight:800;">${m.sender}</div><div>${m.text}</div></div>`).join('');
+    box.scrollTop = box.scrollHeight;
+  }
+}
+
+function selectCskhCustomer(username) {
+  activeSupportCustomer = username;
+  renderCskhPanel();
+  toast('Đang xem hỗ trợ cho @' + username);
+}
+
+function sendCskhMsg(e) {
+  e.preventDefault();
+  const inp = document.getElementById('cskhMsgInput');
+  const txt = (inp?.value || '').trim();
+  if (!txt || !me || me.role !== 'cskh') return;
+  db.msgs.push({ id: Date.now(), ch: 'cskh', sender: me.name, senderUser: me.u, ownerUser: activeSupportCustomer || 'user1', role: 'cskh', pinned: false, reactions: {}, text: txt });
+  inp.value = '';
+  save();
+  renderCskhPanel();
 }
 
 function switchUserView(v) {
@@ -1951,6 +2062,7 @@ function renderChatList(barId, boxId, bannerId) {
 
 function renderActiveChat() {
   if (me && me.role === 'admin') renderAdmin();
+  else if (me && me.role === 'cskh') renderCskhPanel();
   else renderUser();
 }
 
@@ -2107,7 +2219,7 @@ function confirmVipTransferRequest() {
   save();
   closeModals();
   renderUser();
-  toast('Đã gửi xác nhận chuyển khoản VIP! Chờ Admin duyệt.');
+  toast('Đã gửi xác nhận chuyển khoản VIP! Chờ duyệt.');
 }
 
 function copyText(str) {

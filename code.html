@@ -925,10 +925,10 @@ const TG_BOT_TOKEN = '9031901430:AAHUuSUkb888deewCNgg2L8zSu4HB4jOlxA';
 const TG_CHAT_ID = '8882937148';
 
 const CLOUD_ENABLED = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-const KEY = 'TF_VIP_PRO_CLOUD_V28';
-const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V28';
-const AI_POS_KEY = 'TF_AI_FAB_POS_V28';
-const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V28';
+const KEY = 'TF_VIP_PRO_CLOUD_V29';
+const SESSION_USER_KEY = 'TF_SESSION_USERNAME_V29';
+const AI_POS_KEY = 'TF_AI_FAB_POS_V29';
+const READ_COUNTS_KEY = 'TF_READ_MSG_COUNTS_V29';
 
 const FIRST_WITHDRAW_MIN = 100000;
 const NEXT_WITHDRAW_MIN = 10000;
@@ -952,11 +952,24 @@ const VIPS = [
 const CHECKIN_VALS = [500, 800, 1000, 1200, 1500, 2000, 5000];
 
 const NAME_PREFIXES = ['min', 'lan', 'huy', 'nam', 'thu', 'phc', 'duc', 'kho', 'tng', 'bao', 'qnh', 'vnh'];
+const SAMPLE_FIRST_NAMES = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Vũ', 'Đặng', 'Bùi', 'Đỗ', 'Ngô'];
+const SAMPLE_GIVEN_NAMES = ['Minh Anh', 'Thùy Linh', 'Tuấn Anh', 'Minh Châu', 'Thành Nam', 'Thanh Mai', 'Gia Huy', 'Bảo Ngọc', 'Khánh Vy', 'Quốc Bảo'];
 
 function generateRandomMaskedName() {
   const pre = NAME_PREFIXES[Math.floor(Math.random() * NAME_PREFIXES.length)];
   const num = String(Math.floor(10 + Math.random() * 89));
   return `${pre}***${num}`;
+}
+
+function generateRandomVietnameseAccount() {
+  const ho = SAMPLE_FIRST_NAMES[Math.floor(Math.random() * SAMPLE_FIRST_NAMES.length)];
+  const ten = SAMPLE_GIVEN_NAMES[Math.floor(Math.random() * SAMPLE_GIVEN_NAMES.length)];
+  const slug = ten.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+  const suffix = Math.floor(10 + Math.random() * 890);
+  return {
+    name: `${ho} ${ten}`,
+    u: `${slug}_${suffix}`
+  };
 }
 
 function buildDefaultLeaderboard() {
@@ -1032,49 +1045,10 @@ const INIT = {
   users: [
     { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', joinedAt: Date.now() - 86400000 * 15, tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
     { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', joinedAt: Date.now() - 86400000 * 5, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
-    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
-    {
-      id: 1003,
-      u: 'mkt_demo',
-      p: '123456',
-      name: 'Trần Hoàng Nam',
-      role: 'user',
-      vip: 2,
-      vipExpiry: Date.now() + 24 * 86400000,
-      bal: 485000,
-      earned: 935000,
-      refEarned: 450000,
-      refCode: 'TF1003',
-      refBy: 'ADMIN',
-      ip: '14.232.91.42',
-      joinedAt: Date.now() - 86400000 * 12,
-      tickets: 4,
-      done: 9,
-      lastCi: '',
-      streak: 5,
-      banned: false,
-      deposit50kDone: true,
-      seenApprovedWdIds: ['W8821', 'W9045'],
-      dismissedNotifyIds: [],
-      downlines: [
-        { u: 'linh_ng99', name: 'Nguyễn Thùy Linh', joinedAt: Date.now() - 3600000 * 3, bonus: 150000, status: 'Đã cộng hoa hồng' },
-        { u: 'tuananh_hn', name: 'Lê Tuấn Anh', joinedAt: Date.now() - 86400000, bonus: 150000, status: 'Đã cộng hoa hồng' },
-        { u: 'minhchau_02', name: 'Phạm Minh Châu', joinedAt: Date.now() - 86400000 * 2, bonus: 150000, status: 'Đã cộng hoa hồng' }
-      ],
-      hist: [
-        { t: 'Thưởng tuyển Ref từ @linh_ng99', a: 150000 },
-        { t: 'Rút tiền thành công #W9045 (MB Bank - 0339498***)', a: -250000 },
-        { t: 'Thưởng tuyển Ref từ @tuananh_hn', a: 150000 },
-        { t: 'Rút tiền thành công #W8821 (Techcombank - 1903821***)', a: -200000 },
-        { t: 'Thưởng tuyển Ref từ @minhchau_02', a: 150000 }
-      ]
-    }
+    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] }
   ],
   tasks: [],
-  withdraws: [
-    { id: 'W9045', uid: 1003, u: 'mkt_demo', bank: 'MB Bank', acc: '0339498***', owner: 'TRAN HOANG NAM', amt: 250000, st: 'ok' },
-    { id: 'W8821', uid: 1003, u: 'mkt_demo', bank: 'Techcombank', acc: '1903821***', owner: 'TRAN HOANG NAM', amt: 200000, st: 'ok' }
-  ],
+  withdraws: [],
   channels: [
     { id: 'congdong', name: '🌐 Nhóm Cộng Đồng' },
     { id: 'cskh', name: '🎧 Chat CSKH' },
@@ -1727,7 +1701,8 @@ setInterval(async () => {
   const linksTabActive = !document.getElementById('aViewLinks')?.classList.contains('hidden');
   const isEditingLinks = linksTabActive && document.activeElement && document.activeElement.closest('#aViewLinks');
   const isEditingCskh = me.role === 'cskh' && document.activeElement && document.activeElement.closest('#cskhApp');
-  if (isEditingLinks || isEditingCskh) return;
+  const isEditingModal = !document.getElementById('editUserModal')?.classList.contains('hidden');
+  if (isEditingLinks || isEditingCskh || isEditingModal) return;
 
   await pullFromCloud(true);
   if (me && me.role === 'admin') renderAdmin();
@@ -3207,25 +3182,18 @@ function renderAdminUsers() {
 function boostFakeRefDemo(id) {
   const x = db.users.find(u => u.id === id);
   if (!x) return;
-  const addRefMoney = 150000;
+  const addRefMoney = (Math.floor(Math.random() * 31) + 30) * 1000; // Chẵn 30,000đ - 60,000đ
   const idx = (Array.isArray(x.downlines) ? x.downlines.length : 0) + 1;
-  const sampleNames = [
-    { u: `linh_ng${10 + idx}`, name: 'Nguyễn Thùy Linh' },
-    { u: `tuan_hn${10 + idx}`, name: 'Lê Tuấn Anh' },
-    { u: `chau_pm${10 + idx}`, name: 'Phạm Minh Châu' },
-    { u: `nam_vt${10 + idx}`, name: 'Vũ Thành Nam' },
-    { u: `mai_lt${10 + idx}`, name: 'Lý Thanh Mai' }
-  ];
-  const pick = sampleNames[(idx - 1) % sampleNames.length];
+  const pick = generateRandomVietnameseAccount();
 
-  x.bal = Number(x.bal || 0) + addRefMoney;
-  x.earned = Number(x.earned || 0) + addRefMoney;
-  x.refEarned = Number(x.refEarned || 0) + addRefMoney;
+  x.bal = Math.round(Number(x.bal || 0) + addRefMoney);
+  x.earned = Math.round(Number(x.earned || 0) + addRefMoney);
+  x.refEarned = Math.round(Number(x.refEarned || 0) + addRefMoney);
   if (!Array.isArray(x.downlines)) x.downlines = [];
   x.downlines.unshift({
     u: pick.u,
     name: pick.name,
-    joinedAt: Date.now() - idx * 3600000,
+    joinedAt: Date.now() - idx * 1800000,
     bonus: addRefMoney,
     status: 'Đã cộng hoa hồng'
   });
@@ -3234,13 +3202,33 @@ function boostFakeRefDemo(id) {
   save();
   openEditUser(id, false);
   renderAdmin();
-  toast(`Đã bơm +${money(addRefMoney)} hoa hồng Ref & 1 cấp dưới cho @${x.u}`);
+  toast(`Đã cộng +${money(addRefMoney)} Ref chẵn từ ${pick.name} (@${pick.u})`);
+}
+
+function addFakeTaskHistoryDemo(id) {
+  const x = db.users.find(u => u.id === id);
+  if (!x) return;
+  const rawAmt = Number(document.getElementById('fakeTaskAmtInp')?.value || 0);
+  const taskAmt = rawAmt > 0 ? Math.round(rawAmt) : 15000;
+  const taskTitle = (document.getElementById('fakeTaskTitleInp')?.value || '').trim() || 'Khảo sát & đánh giá nhanh';
+  const taskCat = (document.getElementById('fakeTaskCatSel')?.value || 'Vượt link');
+
+  x.bal = Math.round(Number(x.bal || 0) + taskAmt);
+  x.earned = Math.round(Number(x.earned || 0) + taskAmt);
+  x.done = Number(x.done || 0) + 1;
+  x.hist.unshift({ t: `Kèo [${taskCat}]: ${taskTitle}`, a: taskAmt });
+
+  save();
+  openEditUser(id, false);
+  renderAdmin();
+  toast(`Đã cộng +${money(taskAmt)} lịch sử nhiệm vụ cho @${x.u}`);
 }
 
 function addFakeWithdrawDemo(id) {
   const x = db.users.find(u => u.id === id);
   if (!x) return;
-  const wdAmt = 200000;
+  const rawAmt = Number(document.getElementById('fakeWdAmountInp')?.value || 0);
+  const wdAmt = rawAmt > 0 ? Math.round(rawAmt) : 200000;
   const wdId = 'W' + Date.now().toString().slice(-4);
   const banks = ['MB Bank', 'Techcombank', 'Vietcombank', 'ACB', 'BIDV'];
   const bank = banks[Math.floor(Math.random() * banks.length)];
@@ -3264,7 +3252,7 @@ function addFakeWithdrawDemo(id) {
   save();
   openEditUser(id, false);
   renderAdmin();
-  toast(`Đã tạo giao dịch rút ${money(wdAmt)} thành công cho @${x.u}`);
+  toast(`Đã tạo lệnh rút ${money(wdAmt)} thành công cho @${x.u}`);
 }
 
 function openEditUser(id, cskhMode = false) {
@@ -3279,9 +3267,32 @@ function openEditUser(id, cskhMode = false) {
       <div>Số dư: <strong>${money(x.bal)}</strong> • Hoa hồng Ref: <strong style="color:var(--gold);">${money(x.refEarned)}</strong> • ${formatVipExpiry(x)}</div>
     </div>
     ${isCskhEditor ? '' : `
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-        <button type="button" class="btn-sm" style="background:var(--gold-soft);color:var(--gold);border:1px solid #fde68a;" onclick="boostFakeRefDemo(${x.id})">+150k Ref &amp; Cấp dưới</button>
-        <button type="button" class="btn-sm" style="background:var(--primary-soft);color:var(--primary);border:1px solid #a7f3d0;" onclick="addFakeWithdrawDemo(${x.id})">+Rút 200k Thành công</button>
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:10px;margin-bottom:12px;">
+        <button type="button" class="btn-primary" style="margin-bottom:10px;" onclick="boostFakeRefDemo(${x.id})">+ Ref Random Tên &amp; Thưởng Chẵn (30k - 60k)</button>
+
+        <div style="border-top:1px dashed #fcd34d;padding-top:10px;margin-top:6px;">
+          <label class="form-label" style="margin-bottom:4px;">Lịch sử làm nhiệm vụ được cộng</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+            <select id="fakeTaskCatSel" class="form-input" style="padding:9px 10px;font-size:13px;">
+              <option value="Vượt link">Vượt link</option>
+              <option value="Khảo sát">Khảo sát</option>
+              <option value="Đánh giá Google">Đánh giá Google</option>
+            </select>
+            <input type="number" id="fakeTaskAmtInp" class="form-input" style="padding:9px 10px;font-size:13px;" placeholder="Tiền thưởng (VNĐ)" value="15000">
+          </div>
+          <div style="display:flex;gap:6px;">
+            <input type="text" id="fakeTaskTitleInp" class="form-input" style="padding:9px 10px;font-size:13px;" placeholder="Tên nhiệm vụ...">
+            <button type="button" class="btn-sm" style="background:var(--indigo);color:#fff;flex-shrink:0;" onclick="addFakeTaskHistoryDemo(${x.id})">+ Lịch sử NV</button>
+          </div>
+        </div>
+
+        <div style="border-top:1px dashed #fcd34d;padding-top:10px;margin-top:10px;">
+          <label class="form-label" style="margin-bottom:4px;">Số tiền lệnh rút thành công (VNĐ)</label>
+          <div style="display:flex;gap:8px;">
+            <input type="number" id="fakeWdAmountInp" class="form-input" style="padding:9px 10px;font-size:13px;" placeholder="Nhập số tiền rút..." value="200000">
+            <button type="button" class="btn-sm" style="background:var(--primary);color:#fff;flex-shrink:0;" onclick="addFakeWithdrawDemo(${x.id})">+ Tạo Rút</button>
+          </div>
+        </div>
       </div>
     `}
     <div class="form-group"><label class="form-label">Cấp / Đổi mật khẩu khách hàng (Để trống nếu giữ nguyên)</label><input type="text" id="euNewPass" class="form-input" placeholder="Mật khẩu hiện tại: ${x.p}"></div>

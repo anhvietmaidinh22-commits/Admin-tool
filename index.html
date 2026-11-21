@@ -2479,7 +2479,7 @@ function renderUser() {
           ${t.guide ? `<div style="font-size:12px;color:#475569;margin-top:3px;">${t.guide}</div>` : ''}
           <div style="font-size:12px;color:var(--muted);margin-top:4px;">Thưởng: <strong style="color:var(--primary);font-size:14px;">+${money(rew)}</strong> • Đã làm: ${t.done}</div>
         </div>
-        <button type="button" class="btn-sm" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(5,150,105,0.24);" onclick="openTask('${t.id}')">Làm ngay</button>
+        <button type="button" class="btn-sm js-do-task" data-task-id="${encodeURIComponent(String(t.id))}" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(5,150,105,0.24);">Làm ngay</button>
       </div>
     `;
   }).join('') : '<div class="card" style="text-align:center;color:var(--muted);font-size:13px;">Bạn đã hoàn thành hết kèo trong mục này.</div>';
@@ -2651,6 +2651,13 @@ function openTask(id) {
   if (codeInp) codeInp.value = '';
   document.getElementById('taskModal').classList.remove('hidden');
 }
+
+document.getElementById('taskList')?.addEventListener('click', function (e) {
+  const btn = e.target.closest('.js-do-task');
+  if (!btn) return;
+  e.preventDefault();
+  openTask(decodeURIComponent(btn.getAttribute('data-task-id') || ''));
+});
 
 function confirmTask() {
   if (!curTask || !me) return;

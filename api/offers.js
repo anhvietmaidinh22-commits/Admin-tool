@@ -10,10 +10,12 @@ function calcSafeUserReward(netPayoutVnd, marginRate = OFFER_MARGIN_RATE) {
 }
 
 function extractNumber(val) {
-  if (typeof val === 'number') return val;
+  if (typeof val === 'number') return Number.isFinite(val) ? val : 0;
   if (!val) return 0;
-  const cleaned = String(val).replace(/[^\d.]/g, '');
-  return Number(cleaned || 0);
+  const plainText = String(val).replace(/<[^>]*>/g, ' ');
+  const cleaned = plainText.replace(/[^\d.]/g, '');
+  const num = Number(cleaned || 0);
+  return Number.isFinite(num) ? num : 0;
 }
 
 function buildMasofferUrl(pubId, token) {
@@ -88,10 +90,19 @@ async function fetchSingleSource(sourceUrl) {
     ? parsed
     : (Array.isArray(parsed.data) ? parsed.data : (parsed.offers || parsed.items || []));
 
+  const sampleRaw = rawList[0]
+    ? Object.fromEntries(
+        Object.entries(rawList[0]).map(([k, v]) => [
+          k,
+          typeof v === 'string' ? v.slice(0, 120) : v
+        ])
+      )
+    : null;
+
   const offers = rawList
     .map((item, idx) => {
       const rawPayout = extractNumber(
-        item.payout_vnd ?? item.payout ?? item.commission ?? item.commission_rate ?? 0
+        item.payout_vnd ?? item.payout ?? item.commission ?? item.commission_vnd ?? item.commission_rate ?? 0
       );
       const reward = calcSafeUserReward(rawPayout, OFFER_MARGIN_RATE);
       const domainUrl = item.domain
@@ -101,24 +112,24 @@ async function fetchSingleSource(sourceUrl) {
         item.tracking_url || item.click_url || item.offer_url || item.url || item.link || domainUrl || ''
       ).trim();
 
-      if (reward <= 0 || !url) return null;
-
       return {
         id: String(item.offer_id || item.id || `OFFER_${idx + 1}`),
         cat: 'Khảo sát',
         title: String(item.name || item.title || item.offer_name || `Chiến dịch #${idx + 1}`).trim(),
+        rawPayout,
         reward,
         url,
         guide: 'Mở link chiến dịch, hoàn thành yêu cầu và nhập mã xác nhận để nhận thưởng.'
       };
     })
-    .filter(Boolean);
+    .filter((o) => Boolean(o.url));
 
   return {
     sourceUrl,
     ok: true,
     status: upstream.status,
     rawCount: rawList.length,
+    sampleRaw,
     offers
   };
 }
@@ -153,11 +164,12 @@ export default async function handler(req, res) {
       ok: true,
       sourcesCount: sources.length,
       totalOffers: mergedOffers.length,
-      sources: results.map(({ sourceUrl, ok, status, rawCount, error, preview }) => ({
+      sources: results.map(({ sourceUrl, ok, status, rawCount, sampleRaw, error, preview }) => ({
         sourceUrl,
         ok,
         status,
         rawCount: rawCount ?? 0,
+        sampleRaw: sampleRaw || null,
         error: error || null,
         preview: preview || null
       })),

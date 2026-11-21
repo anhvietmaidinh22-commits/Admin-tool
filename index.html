@@ -321,7 +321,7 @@
           <div style="font-size:12px;opacity:0.88;font-weight:600;">Số dư ví khả dụng</div>
           <div style="font-size:31px;font-weight:900;letter-spacing:-0.5px;margin-top:2px;" id="uBal">0đ</div>
         </div>
-        <button onclick="switchUserView('wallet')" style="background:#fff;color:#065f46;font-weight:800;padding:10px 15px;border-radius:13px;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,0.16);">Rút tiền →</button>
+        <button type="button" id="heroWithdrawBtn" onclick="goToWithdrawView()" style="background:#fff;color:#065f46;font-weight:800;padding:10px 15px;border-radius:13px;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,0.16);position:relative;z-index:2;">Rút tiền →</button>
       </div>
       <div class="wallet-meta">
         <div class="wallet-chip">Tổng kiếm: <strong id="uEarned" style="color:#a7f3d0;">0đ</strong></div>
@@ -479,7 +479,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card" id="withdrawFormCard">
       <strong style="display:block;margin-bottom:10px;font-size:16px;">💸 Rút tiền ngân hàng</strong>
       <div id="wdRuleNoticeBox" class="rule-alert-box"></div>
       <div class="form-group">
@@ -1108,9 +1108,9 @@ const INIT = {
   ],
   vipRequests: [],
   users: [
-    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', joinedAt: Date.now() - 86400000 * 15, tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], completedTaskIds: [], hist: [] },
-    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', joinedAt: Date.now() - 86400000 * 5, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], completedTaskIds: [], hist: [] },
-    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], completedTaskIds: [], hist: [] }
+    { id: 1000, u: 'admin', p: '1', name: 'Admin', role: 'admin', vip: 3, vipExpiry: 0, bal: 2000000, earned: 2000000, refEarned: 0, refCode: 'ADMIN', refBy: 'Hệ thống', ip: '113.190.10.2', joinedAt: Date.now() - 86400000 * 15, tickets: 5, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
+    { id: 1001, u: 'user1', p: '123456', name: 'Nguyễn Minh', role: 'user', vip: 0, vipExpiry: 0, bal: 120000, earned: 120000, refEarned: 0, refCode: 'TF1001', refBy: 'ADMIN', ip: '14.232.88.14', joinedAt: Date.now() - 86400000 * 5, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: false, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] },
+    { id: 1002, u: 'cskh1', p: '123456', name: 'Hỗ Trợ Viên', role: 'cskh', vip: 2, vipExpiry: Date.now() + 25 * 86400000, bal: 50000, earned: 50000, refEarned: 0, refCode: 'CSKH1', refBy: 'ADMIN', ip: '27.72.41.9', joinedAt: Date.now() - 86400000 * 10, tickets: 2, done: 0, lastCi: '', streak: 1, banned: false, deposit50kDone: true, seenApprovedWdIds: [], dismissedNotifyIds: [], downlines: [], hist: [] }
   ],
   tasks: [],
   withdraws: [],
@@ -2161,14 +2161,23 @@ function sendCskhMsg(e) {
 
 function switchUserView(v) {
   ['Home', 'Wheel', 'Vip', 'Ref', 'Chat', 'Wallet'].forEach(k => {
-    document.getElementById('view' + k).classList.add('hidden');
-    document.getElementById('nBtn' + k).classList.remove('active');
+    document.getElementById('view' + k)?.classList.add('hidden');
+    document.getElementById('nBtn' + k)?.classList.remove('active');
   });
   const c = v[0].toUpperCase() + v.slice(1);
-  document.getElementById('view' + c).classList.remove('hidden');
-  document.getElementById('nBtn' + c).classList.add('active');
+  document.getElementById('view' + c)?.classList.remove('hidden');
+  document.getElementById('nBtn' + c)?.classList.add('active');
   if (v === 'chat') markChannelRead(curCh);
   renderUser();
+}
+
+function goToWithdrawView() {
+  switchUserView('wallet');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(() => {
+    document.getElementById('withdrawFormCard')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('wdAcc')?.focus();
+  }, 120);
 }
 
 function selectChannel(chId) {
@@ -2468,22 +2477,25 @@ function renderUser() {
   const doneIds = new Set(Array.isArray(me.completedTaskIds) ? me.completedTaskIds.map(String) : []);
   const availableTasks = db.tasks.filter(t => !doneIds.has(String(t.id)));
   const filteredTasks = (curTaskCat === 'all' ? availableTasks : availableTasks.filter(t => (t.cat || 'Vượt link') === curTaskCat)).slice(0, 50);
-  document.getElementById('taskList').innerHTML = filteredTasks.length ? filteredTasks.map(t => {
-    const rew = Number(t.reward || 0);
-    const catName = t.cat || 'Vượt link';
-    const encodedId = encodeURIComponent(String(t.id));
-    return `
-      <div class="task-item">
-        <div style="min-width:0;">
-          <span class="task-tag ${getCategoryTagClass(catName)}">${catName}</span>
-          <div style="font-weight:800;font-size:15px;color:var(--text);">${t.title}</div>
-          ${t.guide ? `<div style="font-size:12px;color:#475569;margin-top:3px;">${t.guide}</div>` : ''}
-          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Thưởng: <strong style="color:var(--primary);font-size:14px;">+${money(rew)}</strong> • Đã làm: ${t.done}</div>
+  const taskListEl = document.getElementById('taskList');
+  if (taskListEl) {
+    taskListEl.innerHTML = filteredTasks.length ? filteredTasks.map((t, idx) => {
+      const rew = Number(t.reward || 0);
+      const catName = t.cat || 'Vượt link';
+      const safeIdArg = encodeURIComponent(String(t.id ?? idx));
+      return `
+        <div class="task-item">
+          <div style="min-width:0;">
+            <span class="task-tag ${getCategoryTagClass(catName)}">${catName}</span>
+            <div style="font-weight:800;font-size:15px;color:var(--text);">${t.title}</div>
+            ${t.guide ? `<div style="font-size:12px;color:#475569;margin-top:3px;">${t.guide}</div>` : ''}
+            <div style="font-size:12px;color:var(--muted);margin-top:4px;">Thưởng: <strong style="color:var(--primary);font-size:14px;">+${money(rew)}</strong> • Đã làm: ${t.done}</div>
+          </div>
+          <button type="button" class="btn-sm" onclick="openTask('${safeIdArg}')" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(5,150,105,0.24);">Làm ngay</button>
         </div>
-        <button type="button" class="btn-sm" onclick="openTask('${encodedId}')" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(5,150,105,0.24);">Làm ngay</button>
-      </div>
-    `;
-  }).join('') : '<div class="card" style="text-align:center;color:var(--muted);font-size:13px;">Bạn đã hoàn thành hết kèo trong mục này.</div>';
+      `;
+    }).join('') : '<div class="card" style="text-align:center;color:var(--muted);font-size:13px;">Bạn đã hoàn thành hết kèo trong mục này.</div>';
+  }
 
   const mList = [...db.winners, ...db.winners];
   document.getElementById('winnerMarquee').innerHTML = mList.map(w => `<div class="marquee-item"><span><strong>${w.u}</strong></span><span style="font-weight:800;color:${w.p === 'Chúc may mắn lần sau' ? 'var(--muted)' : 'var(--primary)'};">${w.p}</span></div>`).join('');
@@ -2626,14 +2638,14 @@ function claimChest() {
 function openTask(id) {
   if (!me) return;
   const rawId = decodeURIComponent(String(id || ''));
-  const targetId = db.tasks.some(x => String(x.id) === rawId) ? rawId : String(id || '');
   const vip = VIPS[me.vip] || VIPS[0];
   if (me.done >= vip.limit) return toast('Hết lượt nhiệm vụ hôm nay! Nâng VIP để thêm lượt.');
-  if (Array.isArray(me.completedTaskIds) && me.completedTaskIds.map(String).includes(targetId)) {
+  curTask = db.tasks.find(x => String(x.id) === rawId || String(x.id) === String(id));
+  if (!curTask) return toast('Không tìm thấy dữ liệu nhiệm vụ này!');
+  const doneArr = Array.isArray(me.completedTaskIds) ? me.completedTaskIds.map(String) : [];
+  if (doneArr.includes(String(curTask.id)) || doneArr.includes(rawId)) {
     return toast('Bạn đã hoàn thành kèo này rồi!');
   }
-  curTask = db.tasks.find(x => String(x.id) === targetId || String(x.id) === String(id));
-  if (!curTask) return toast('Không tìm thấy dữ liệu nhiệm vụ này!');
   const catName = curTask.cat || 'Vượt link';
   document.getElementById('tmTitle').textContent = `${curTask.title} (${catName})`;
   const guideEl = document.getElementById('tmGuideBox');
@@ -2650,7 +2662,11 @@ function openTask(id) {
     if (codeInp) codeInp.placeholder = 'Nhập mã hoặc nội dung xác minh (tối thiểu 3 ký tự)...';
   }
   document.getElementById('tmReward').textContent = money(Number(curTask.reward || 0));
-  document.getElementById('tmLink').href = curTask.url;
+  const linkEl = document.getElementById('tmLink');
+  if (linkEl) {
+    const cleanTaskUrl = cleanOptionalUrl(curTask.url);
+    linkEl.href = cleanTaskUrl || '#';
+  }
   if (codeInp) codeInp.value = '';
   document.getElementById('taskModal').classList.remove('hidden');
 }

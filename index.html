@@ -444,6 +444,34 @@
       border-color: #FCA5A5;
       background: linear-gradient(180deg, #FEF2F2 0%, #FFFFFF 100%);
     }
+    .prod-preview-box {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 8px;
+      margin: 8px 0 10px;
+    }
+    .prod-preview-img {
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #F1F5F9;
+      flex-shrink: 0;
+    }
+    .prod-preview-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
 
     .step-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 8px; }
     .step-item {
@@ -778,35 +806,14 @@
       <div class="card" style="background: linear-gradient(135deg, #FFF7ED 0%, #FFFFFF 100%); border-color: #FED7AA;">
         <div class="card-header">
           <div class="card-title">⚡ Dán Link Kiểm Tra Hoàn Tiền</div>
-          <span class="badge badge-primary" id="homeRateBadge">Hoàn tới 8%</span>
+          <span class="badge badge-primary">Tự động tính tiền hoàn</span>
         </div>
         <p class="text-xs text-muted" style="margin-bottom: 10px;">
-          Dán link sản phẩm Shopee hoặc TikTok Shop trước khi mua để nhận tiền hoàn về STK ngân hàng.
+          Dán link sản phẩm Shopee hoặc TikTok Shop trước khi mua để xem ngay số tiền hoàn nhận về STK ngân hàng.
         </p>
         <button class="btn btn-primary" onclick="switchTab('cashback')">
           Dán Link Nhận Hoàn Tiền Ngay →
         </button>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">📊 Mức Hoàn Tiền Theo Ngành Hàng</div>
-          <span class="badge badge-success">Cập nhật 2026</span>
-        </div>
-        <div class="rate-grid">
-          <div class="rate-box">
-            <div class="rate-val">5% - 8%</div>
-            <div class="rate-lbl">Thời trang &amp; Mỹ phẩm</div>
-          </div>
-          <div class="rate-box">
-            <div class="rate-val">4% - 6%</div>
-            <div class="rate-lbl">Nhà cửa &amp; Đời sống</div>
-          </div>
-          <div class="rate-box">
-            <div class="rate-val">2% - 3.5%</div>
-            <div class="rate-lbl">Điện tử &amp; Phụ kiện</div>
-          </div>
-        </div>
       </div>
 
       <div class="card">
@@ -826,7 +833,7 @@
       </div>
     </main>
 
-    <!-- TAB 2: HOÀN TIỀN (TÍCH HỢP GIẢI MÃ LINK NGẮN + SHOPEE ID 17387130712 + DEEPLINK) -->
+    <!-- TAB 2: HOÀN TIỀN (CHỈ DÁN LINK -> TỰ LẤY SẢN PHẨM, GIÁ & TÍNH TIỀN HOÀN VNĐ) -->
     <main id="tab-cashback" class="tab-view">
       <div class="card">
         <div class="card-header">
@@ -834,18 +841,14 @@
           <span class="badge badge-info">Shopee / TikTok</span>
         </div>
         <p class="text-xs text-muted" style="margin-bottom: 10px;">
-          Dán đường dẫn sản phẩm cần mua (hỗ trợ cả link dài <code>shopee.vn</code> lẫn link rút gọn <code>vn.shp.ee</code>, <code>vt.tiktok.com</code>). Hệ thống tự động gắn mã theo dõi hoàn tiền cho bạn.
+          Dán đường dẫn sản phẩm cần mua. Hệ thống sẽ tự động lấy thông tin sản phẩm, giá bán và tính ngay <b>số tiền được hoàn</b> cho bạn.
         </p>
         <div class="form-group">
           <label class="form-label">Dán link sản phẩm cần mua:</label>
           <input type="url" id="cbProductUrl" class="input" placeholder="https://shopee.vn/... hoặc https://vn.shp.ee/..." />
         </div>
-        <div class="form-group">
-          <label class="form-label">Giá sản phẩm trên sàn (VNĐ - tùy chọn để tính số tiền cụ thể):</label>
-          <input type="number" id="cbProductPrice" class="input" placeholder="VD: 250000" />
-        </div>
         <button id="btnCheckCb" class="btn btn-primary" onclick="checkCashbackLink()">
-          Kiểm Tra Hoàn Tiền &amp; Tạo Link Mua
+          Kiểm Tra Sản Phẩm &amp; Tiền Hoàn
         </button>
 
         <div id="cbCheckResult"></div>
@@ -872,7 +875,7 @@
         </div>
         <h3 style="font-family:var(--font-display); font-size:17px; margin-bottom:4px;">Mời Bạn Bè - Hưởng Hoa Hồng Trọn Đời</h3>
         <p class="text-xs" style="opacity:0.85;">
-          Nhận thưởng ngay khi bạn bè đăng ký hợp lệ (IP sạch) và hưởng thêm % trên mỗi đơn hàng F1 hoàn tất đối soát!
+          Nhận thưởng ngay khi bạn bè đăng ký hợp lệ (IP sạch) và hưởng thêm hoa hồng trên mỗi đơn hàng F1 hoàn tất đối soát!
         </p>
       </div>
 
@@ -1113,7 +1116,7 @@
     // =========================================================
     // 1. STATE KHỞI TẠO + ĐỒNG BỘ CLOUD SUPABASE + SHOPEE ID 17387130712
     // =========================================================
-    const STORAGE_KEY = 'HOANTIEN247_PROD_V6';
+    const STORAGE_KEY = 'HOANTIEN247_PROD_V7';
     const DEFAULT_CLOUD_URL = 'https://ffvauosrkonyurosobqi.supabase.co';
     const DEFAULT_CLOUD_KEY = 'sb_publishable_ySmFZ2zFsdz47pmvpHf9Dg_GDrTFlfN';
     const BRAND_LOGO_SRC = 'https://i.ibb.co/Q3M0XD2c/1795632489799.png';
@@ -1500,37 +1503,43 @@
     }
 
     // =========================================================
-    // 5. GIẢI MÃ LINK NGẮN + GHÉP LINK AFFILIATE KÉP (SHOPEE ID + DEEPLINK)
+    // 5. TỰ LẤY SẢN PHẨM, GIÁ & TÍNH TIỀN HOÀN VNĐ (ẨN %)
     // =========================================================
-    async function resolveShortProductUrl(rawUrl) {
-      const lower = rawUrl.toLowerCase();
-      const needsExpand =
-        lower.includes('vn.shp.ee') ||
-        lower.includes('shp.ee') ||
-        lower.includes('shope.ee') ||
-        lower.includes('s.shopee.vn') ||
-        lower.includes('vt.tiktok.com') ||
-        lower.includes('vm.tiktok.com');
-
-      if (!needsExpand) return rawUrl;
-
+    async function fetchProductInfoFromLink(rawUrl) {
       try {
         const res = await fetch(`/api/resolve-link?url=${encodeURIComponent(rawUrl)}`);
         if (res.ok) {
           const data = await res.json();
-          if (data && data.resolvedUrl) return data.resolvedUrl;
+          if (data && data.resolvedUrl) {
+            return {
+              resolvedUrl: data.resolvedUrl,
+              title: data.title || '',
+              image: data.image || '',
+              price: Number(data.price || 0)
+            };
+          }
         }
       } catch (e) {
-        console.warn('Resolve shortlink fallback:', e);
+        console.warn('Resolve product fallback:', e);
       }
-      return rawUrl;
+
+      // Fallback tách tên sản phẩm từ URL Shopee nếu chạy local không có serverless API
+      let fallbackTitle = '';
+      try {
+        const parsed = new URL(rawUrl);
+        const slugMatch = parsed.pathname.match(/^\/(.+?)-i\.\d+\.\d+/);
+        if (slugMatch && slugMatch[1]) {
+          fallbackTitle = decodeURIComponent(slugMatch[1]).replace(/-/g, ' ');
+        }
+      } catch (_) {}
+
+      return { resolvedUrl: rawUrl, title: fallbackTitle, image: '', price: 0 };
     }
 
     function buildAffiliateTrackingUrl(platform, cleanProductUrl, subId) {
       const baseAff = (platform === 'Shopee' ? state.settings.shopeeBaseAff : state.settings.tiktokBaseAff).trim();
       const shopeeAffId = (state.settings.shopeeAffiliateId || DEFAULT_SHOPEE_AFF_ID).trim();
 
-      // Cơ chế 2: Nếu Admin dán Deeplink ACCESSTRADE / ADPIA / MasOffer (go.isclix.com, adpia, masoffer, hoặc chứa ?url=)
       if (
         baseAff &&
         (baseAff.includes('isclix.com') ||
@@ -1546,13 +1555,11 @@
         return `${baseAff}${sep}url=${encodeURIComponent(cleanProductUrl)}&utm_source=${encodeURIComponent(subId)}&sub1=${encodeURIComponent(subId)}`;
       }
 
-      // Cơ chế 1: Universal Link trực tiếp của Shopee Affiliate (ID 17387130712)
       if (platform === 'Shopee') {
         const redirBase = baseAff && baseAff.includes('an_redir') ? baseAff : 'https://s.shopee.vn/an_redir';
         return `${redirBase}?origin_link=${encodeURIComponent(cleanProductUrl)}&affiliate_id=${encodeURIComponent(shopeeAffId)}&sub_id=${encodeURIComponent(subId)}`;
       }
 
-      // TikTok Shop fallback
       if (baseAff && baseAff !== 'https://vt.tiktok.com/') {
         const sep = baseAff.includes('?') ? '&' : '?';
         return `${baseAff}${sep}url=${encodeURIComponent(cleanProductUrl)}&sub_id=${encodeURIComponent(subId)}`;
@@ -1562,7 +1569,6 @@
 
     async function checkCashbackLink() {
       const rawInput = document.getElementById('cbProductUrl').value.trim();
-      const priceInput = Number(document.getElementById('cbProductPrice').value || 0);
       const out = document.getElementById('cbCheckResult');
       const btn = document.getElementById('btnCheckCb');
 
@@ -1572,14 +1578,15 @@
       }
 
       btn.disabled = true;
-      btn.textContent = '⏳ Đang giải mã link & tính hoa hồng...';
+      btn.textContent = '⏳ Đang lấy thông tin sản phẩm & tiền hoàn...';
 
-      const urlInput = await resolveShortProductUrl(rawInput);
+      const info = await fetchProductInfoFromLink(rawInput);
+      const urlInput = info.resolvedUrl;
 
       btn.disabled = false;
-      btn.textContent = 'Kiểm Tra Hoàn Tiền & Tạo Link Mua';
+      btn.textContent = 'Kiểm Tra Sản Phẩm & Tiền Hoàn';
 
-      const lower = (urlInput + ' ' + rawInput).toLowerCase();
+      const lower = (urlInput + ' ' + rawInput + ' ' + info.title).toLowerCase();
       let platform = '';
       if (lower.includes('shopee') || lower.includes('shp.ee')) {
         platform = 'Shopee';
@@ -1605,19 +1612,28 @@
       const user = getCurrentUser();
       const subId = user ? user.refCode : 'GUEST';
       const trackingUrl = buildAffiliateTrackingUrl(platform, urlInput, subId);
+      const displayTitle = info.title || `Sản phẩm ${platform}`;
+      const displayImg = info.image || BRAND_LOGO_SRC;
 
       if (isZeroCommission) {
         out.innerHTML = `
           <div class="check-result-card zero-cb">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
               <span class="badge badge-dark">${platform}</span>
-              <span class="badge badge-danger">Không hỗ trợ hoa hồng</span>
+              <span class="badge badge-danger">Không hỗ trợ hoàn tiền</span>
+            </div>
+            <div class="prod-preview-box">
+              <img src="${escapeHtml(displayImg)}" referrerpolicy="no-referrer" class="prod-preview-img" onerror="this.src='${BRAND_LOGO_SRC}'" alt="SP" />
+              <div>
+                <div class="prod-preview-title">${escapeHtml(displayTitle)}</div>
+                ${info.price > 0 ? `<div class="text-xs font-bold" style="color:var(--text);">Giá bán: ${formatVND(info.price)}</div>` : ''}
+              </div>
             </div>
             <div style="font-family:var(--font-display); font-weight:800; font-size:20px; color:var(--danger); margin:4px 0;">
-              Tiền hoàn: 0₫
+              Tiền được hoàn: 0₫
             </div>
             <p class="text-xs text-muted" style="margin-bottom:10px;">
-              Sản phẩm/Shop này nằm trong danh mục không trả hoa hồng tiếp thị liên kết từ sàn (thẻ cào, dịch vụ, voucher điện tử hoặc shop không tham gia Affiliate).
+              Sản phẩm/Shop này không nằm trong danh mục hoàn tiền (thẻ cào, dịch vụ số, voucher điện tử hoặc shop không tham gia ưu đãi).
             </p>
             <a href="${escapeHtml(urlInput)}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="width:100%;">
               Vẫn Mở Link Gốc Trên ${platform} ↗
@@ -1627,36 +1643,53 @@
         return;
       }
 
+      // Kiểm tra xem sản phẩm có khớp Deal Hot đang có trên web để lấy giá chính xác nếu sàn chặn scrape
+      let finalPrice = info.price;
+      const matchedDeal = state.deals.find(d => d.affUrl && urlInput.includes(d.affUrl));
+      if (!finalPrice && matchedDeal) finalPrice = Number(matchedDeal.salePrice || 0);
+
       const rate = Number(state.settings.defaultCashbackPct || 4.5);
-      const estCashback = priceInput > 0 ? Math.round((priceInput * rate) / 100) : 0;
+      const estCashback = finalPrice > 0 ? Math.round((finalPrice * rate) / 100) : 0;
 
       out.innerHTML = `
         <div class="check-result-card has-cb">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <span class="badge badge-dark">${platform}</span>
-            <span class="badge badge-success">✓ Đủ điều kiện hoàn tiền (${rate}%)</span>
+            <span class="badge badge-success">✓ Đủ điều kiện nhận hoàn tiền</span>
           </div>
-          <div style="font-family:var(--font-display); font-weight:800; font-size:19px; color:var(--success); margin:4px 0;">
-            ${priceInput > 0 ? `Hoàn dự kiến: +${formatVND(estCashback)}` : `Mức hoàn áp dụng: ${rate}% giá trị đơn`}
+
+          <div class="prod-preview-box">
+            <img src="${escapeHtml(displayImg)}" referrerpolicy="no-referrer" class="prod-preview-img" onerror="this.src='${BRAND_LOGO_SRC}'" alt="SP" />
+            <div style="flex:1; min-width:0;">
+              <div class="prod-preview-title">${escapeHtml(displayTitle)}</div>
+              ${finalPrice > 0
+                ? `<div class="text-xs text-muted">Giá sản phẩm: <b style="color:var(--text);">${formatVND(finalPrice)}</b></div>`
+                : `<div class="text-xs text-muted">Đơn hàng đủ điều kiện ghi nhận hoàn tiền tự động</div>`}
+            </div>
           </div>
-          <p class="text-xs text-muted" style="margin-bottom:10px;">
-            Link đã gắn mã theo dõi <b>${escapeHtml(subId)}</b>. Bấm nút bên dưới để sang ${platform} đặt hàng ngay.
-          </p>
-          <a href="${escapeHtml(trackingUrl)}" target="_blank" rel="noopener" onclick="recordPendingOrder('${platform}', '${escapeHtml(urlInput)}', ${priceInput}, ${estCashback})" class="btn btn-primary" style="width:100%;">
+
+          <div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:11px; padding:10px 12px; margin-bottom:10px;">
+            <div class="text-xs text-muted">Số tiền được hoàn dự kiến:</div>
+            <div style="font-family:var(--font-display); font-weight:800; font-size:21px; color:var(--success);">
+              ${estCashback > 0 ? `+${formatVND(estCashback)}` : 'Tính tự động theo giá thanh toán trên sàn'}
+            </div>
+          </div>
+
+          <a href="${escapeHtml(trackingUrl)}" target="_blank" rel="noopener" onclick="recordPendingOrder('${platform}', '${escapeHtml(displayTitle)}', ${finalPrice}, ${estCashback})" class="btn btn-primary" style="width:100%;">
             Mua Ngay &amp; Nhận Hoàn Tiền ↗
           </a>
         </div>
       `;
     }
 
-    function recordPendingOrder(platform, productUrl, price, cashbackAmount) {
+    function recordPendingOrder(platform, productTitle, price, cashbackAmount) {
       const user = getCurrentUser();
       if (!user) return;
       const order = {
         id: 'DH' + Date.now().toString().slice(-6),
         userId: user.id,
         platform,
-        productName: `Đơn hàng ${platform} (${productUrl.slice(0, 32)}...)`,
+        productName: productTitle || `Đơn hàng ${platform}`,
         orderValue: price || 0,
         cashbackAmount: cashbackAmount || 0,
         step: 1,
@@ -1667,7 +1700,7 @@
         user.balancePending = (user.balancePending || 0) + cashbackAmount;
       }
       saveState();
-      showToast('Đã ghi nhận phiên mua hàng vào mục Ví & Đơn!');
+      showToast('Đã ghi nhận đơn hàng vào mục Ví & Đơn!');
     }
 
     // =========================================================
@@ -2448,13 +2481,13 @@
 
           const rate = state.settings.defaultCashbackPct;
           const cb = Math.round((val * rate) / 100);
-          reply = `🧮 Với đơn hàng <b>${formatVND(val)}</b> (mức hoàn trung bình <b>${rate}%</b>), bạn nhận được khoảng <b>+${formatVND(cb)}</b> tiền hoàn về ví sau khi đơn hoàn tất đối soát.<br><br>⚠️ <i>Lưu ý: Các mặt hàng như thẻ cào, dịch vụ số hoặc shop không tham gia Affiliate sẽ hiển thị <b>0₫</b> khi dán link kiểm tra.</i>`;
+          reply = `🧮 Với đơn hàng <b>${formatVND(val)}</b>, bạn nhận được khoảng <b>+${formatVND(cb)}</b> tiền hoàn về ví sau khi đơn hoàn tất đối soát.<br><br>⚠️ <i>Lưu ý: Các mặt hàng như thẻ cào, dịch vụ số hoặc shop không tham gia Affiliate sẽ hiển thị <b>0₫</b> khi dán link kiểm tra.</i>`;
         } else if (lower.includes('cách') || lower.includes('mua')) {
-          reply = `🛍️ <b>3 bước nhận hoàn tiền cực dễ:</b><br>1. Copy link sản phẩm trên Shopee hoặc TikTok Shop.<br>2. Vào tab <b>Hoàn Tiền</b> trên HoànTiền247 → dán link để kiểm tra mức hoàn và bấm <b>Mua Ngay</b>.<br>3. Nhận hàng thành công và đợi sàn đối soát xong là rút thẳng tiền về STK ngân hàng!`;
+          reply = `🛍️ <b>3 bước nhận hoàn tiền cực dễ:</b><br>1. Copy link sản phẩm trên Shopee hoặc TikTok Shop.<br>2. Vào tab <b>Hoàn Tiền</b> trên HoànTiền247 → dán link để xem số tiền hoàn và bấm <b>Mua Ngay</b>.<br>3. Nhận hàng thành công và đợi sàn đối soát xong là rút thẳng tiền về STK ngân hàng!`;
         } else if (lower.includes('bao lâu') || lower.includes('đối soát') || lower.includes('rút')) {
           reply = `⏳ <b>Quy trình đối soát 3 bước:</b><br>• <b>B1:</b> Ghi nhận đơn ngay sau khi đặt.<br>• <b>B2:</b> Sàn đối soát sau khi bạn nhận hàng và không bấm trả hàng/hoàn tiền.<br>• <b>B3:</b> Tiền chuyển sang <b>Số Dư Khả Dụng</b>, bạn vào tab <b>Ví &amp; Đơn → Rút Tiền</b> (tối thiểu 50.000₫) để rút về STK hoặc QR ngân hàng!`;
         } else if (lower.includes('ref') || lower.includes('f1') || lower.includes('giới thiệu')) {
-          reply = `🎁 <b>Chính sách Tuyển Ref F1:</b><br>• Nhận ngay <b>${formatVND(state.settings.refInviterBonus)}</b> cho mỗi bạn bè đăng ký hợp lệ (IP mạng sạch không trùng clone).<br>• Hưởng thêm <b>${state.settings.refOrderPct}%</b> trên tổng tiền hoàn mỗi khi F1 mua sắm thành công trọn đời!`;
+          reply = `🎁 <b>Chính sách Tuyển Ref F1:</b><br>• Nhận ngay <b>${formatVND(state.settings.refInviterBonus)}</b> cho mỗi bạn bè đăng ký hợp lệ (IP mạng sạch không trùng clone).<br>• Hưởng thêm hoa hồng trên mỗi đơn hàng F1 mua sắm thành công trọn đời!`;
         } else if (lower.includes('cskh') || lower.includes('liên hệ') || lower.includes('hỗ trợ')) {
           const z = state.settings.cskhZalo || 'Đang cập nhật trong mục Cá Nhân';
           const t = state.settings.cskhTele || 'Đang cập nhật trong mục Cá Nhân';
@@ -2494,7 +2527,6 @@
         `;
       }
 
-      document.getElementById('homeRateBadge').textContent = `Hoàn TB ${state.settings.defaultCashbackPct}%`;
       document.getElementById('voucherCountBadge').textContent = `${state.vouchers.length} mã`;
       document.getElementById('dealCountBadge').textContent = `${state.deals.length} deal`;
 
@@ -2554,7 +2586,7 @@
     function renderRefTab() {
       const user = getCurrentUser();
       const area = document.getElementById('refContentArea');
-      document.getElementById('refPctBadge').textContent = `+${state.settings.refOrderPct}% Tiền Hoàn F1`;
+      document.getElementById('refPctBadge').textContent = `Thưởng F1 Tự Động`;
 
       if (!user) {
         area.innerHTML = `
@@ -3146,7 +3178,7 @@
       } else if (activeAdminTab === 'web') {
         body = `
           <div class="form-group">
-            <label class="form-label">Tỷ lệ hoàn tiền mặc định (%):</label>
+            <label class="form-label">Hệ số tính tiền hoàn cho khách (% ẩn - chỉ dùng để tính ra số tiền VNĐ):</label>
             <input type="number" step="0.1" id="admCbPct" class="input" value="${state.settings.defaultCashbackPct}" />
           </div>
           <div class="form-group">

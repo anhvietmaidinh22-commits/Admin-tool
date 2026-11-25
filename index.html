@@ -927,7 +927,7 @@
     </div>
   </div>
 
-  <!-- MODAL: TRỢ LÝ AI CHATBOT (CÓ TRA CỨU TIẾN ĐỘ HOÀN TIỀN ĐƠN HÀNG CỦA KHÁCH) -->
+  <!-- MODAL: TRỢ LÝ AI CHATBOT -->
   <div id="aiChatModal" class="modal-backdrop" onclick="backdropClose(event, 'aiChatModal')">
     <div class="modal-box chat-box">
       <div class="chat-head">
@@ -957,9 +957,12 @@
 
   <script>
     // =========================================================
-    // 1. STATE KHỞI TẠO SẠCH CHUẨN PRODUCTION + CLOUD SUPABASE
+    // 1. STATE KHỞI TẠO + ĐỒNG BỘ CLOUD SUPABASE (ĐÃ GẮN SẴN KEY)
     // =========================================================
-    const STORAGE_KEY = 'HOANTIEN247_PROD_V2';
+    const STORAGE_KEY = 'HOANTIEN247_PROD_V3';
+    const DEFAULT_CLOUD_URL = 'https://ffvauosrkonyurosobqi.supabase.co';
+    const DEFAULT_CLOUD_KEY = 'sb_publishable_ySmFZ2zFsdz47pmvpHf9Dg_GDrTFlfN';
+
     let REAL_CLIENT_IP = 'Đang xác thực...';
     let authMode = 'login';
     let activeAdminTab = 'orders';
@@ -976,7 +979,7 @@
           name: 'Quản Trị Viên',
           username: 'Admin',
           password: '1',
-          role: 'admin', // admin | cskh | user
+          role: 'admin',
           refCode: 'ADMIN247',
           referredBy: '',
           registerIp: 'System',
@@ -1028,8 +1031,8 @@
           secret: ''
         },
         cloudSync: {
-          url: 'https://sigudratdxuzbizuvxbq.supabase.co',
-          anonKey: '',
+          url: DEFAULT_CLOUD_URL,
+          anonKey: DEFAULT_CLOUD_KEY,
           rowId: 'main_production_state'
         }
       }
@@ -1042,6 +1045,13 @@
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return JSON.parse(JSON.stringify(defaultState));
         const parsed = JSON.parse(raw);
+        const mergedCloud = {
+          ...defaultState.settings.cloudSync,
+          ...((parsed.settings || {}).cloudSync || {})
+        };
+        if (!mergedCloud.url) mergedCloud.url = DEFAULT_CLOUD_URL;
+        if (!mergedCloud.anonKey) mergedCloud.anonKey = DEFAULT_CLOUD_KEY;
+
         return {
           ...JSON.parse(JSON.stringify(defaultState)),
           ...parsed,
@@ -1050,7 +1060,7 @@
             ...(parsed.settings || {}),
             teleBot: { ...defaultState.settings.teleBot, ...((parsed.settings || {}).teleBot || {}) },
             shopeeApi: { ...defaultState.settings.shopeeApi, ...((parsed.settings || {}).shopeeApi || {}) },
-            cloudSync: { ...defaultState.settings.cloudSync, ...((parsed.settings || {}).cloudSync || {}) }
+            cloudSync: mergedCloud
           }
         };
       } catch (e) {
@@ -1063,17 +1073,18 @@
       pushToCloud();
     }
 
-    // Đồng bộ Cloud Supabase giữa các thiết bị
     async function pullFromCloud(silent = true) {
       const cfg = state.settings.cloudSync || {};
-      if (!cfg.url || !cfg.anonKey) return;
+      const url = (cfg.url || DEFAULT_CLOUD_URL).trim();
+      const key = (cfg.anonKey || DEFAULT_CLOUD_KEY).trim();
+      if (!url || !key) return;
       try {
         const res = await fetch(
-          `${cfg.url.trim()}/rest/v1/hoantien247_store?id=eq.${cfg.rowId || 'main_production_state'}&select=payload,updated_at`,
+          `${url}/rest/v1/hoantien247_store?id=eq.${cfg.rowId || 'main_production_state'}&select=payload,updated_at`,
           {
             headers: {
-              apikey: cfg.anonKey.trim(),
-              Authorization: `Bearer ${cfg.anonKey.trim()}`
+              apikey: key,
+              Authorization: `Bearer ${key}`
             },
             cache: 'no-store'
           }
@@ -1086,7 +1097,12 @@
             state = {
               ...JSON.parse(JSON.stringify(defaultState)),
               ...rows[0].payload,
-              currentUserId: localSession
+              currentUserId: localSession,
+              settings: {
+                ...defaultState.settings,
+                ...(rows[0].payload.settings || {}),
+                cloudSync: { url, anonKey: key, rowId: cfg.rowId || 'main_production_state' }
+              }
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
             renderAll();
@@ -1102,16 +1118,18 @@
 
     async function pushToCloud() {
       const cfg = state.settings.cloudSync || {};
-      if (!cfg.url || !cfg.anonKey || isCloudSyncing) return;
+      const url = (cfg.url || DEFAULT_CLOUD_URL).trim();
+      const key = (cfg.anonKey || DEFAULT_CLOUD_KEY).trim();
+      if (!url || !key || isCloudSyncing) return;
       isCloudSyncing = true;
       try {
         const payloadToSync = { ...state, currentUserId: null };
         const nowIso = new Date().toISOString();
-        await fetch(`${cfg.url.trim()}/rest/v1/hoantien247_store`, {
+        await fetch(`${url}/rest/v1/hoantien247_store`, {
           method: 'POST',
           headers: {
-            apikey: cfg.anonKey.trim(),
-            Authorization: `Bearer ${cfg.anonKey.trim()}`,
+            apikey: key,
+            Authorization: `Bearer ${key}`,
             'Content-Type': 'application/json',
             Prefer: 'resolution=merge-duplicates'
           },
@@ -1408,7 +1426,7 @@
         productName: `Đơn hàng ${platform} (${productUrl.slice(0, 32)}...)`,
         orderValue: price || 0,
         cashbackAmount: cashbackAmount || 0,
-        step: 1, // 1: Ghi nhận | 2: Đối soát | 3: Khả dụng | 0: Hủy
+        step: 1,
         createdAt: new Date().toLocaleString('vi-VN')
       };
       state.orders.unshift(order);
@@ -1441,6 +1459,7 @@
           showToast('Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!');
           return;
         }
+        await pullFromCloud(true);
         const found = state.users.find(
           u => u.username.toLowerCase() === username.toLowerCase() && u.password === password
         );
@@ -1468,6 +1487,9 @@
         showToast('Vui lòng điền đầy đủ Họ tên, Tài khoản và Mật khẩu!');
         return;
       }
+
+      await pullFromCloud(true);
+
       if (state.users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
         showToast('Tên đăng nhập hoặc SĐT này đã tồn tại!');
         return;
@@ -2172,7 +2194,6 @@
       const lower = text.toLowerCase();
       let reply = '';
 
-      // 1. Tra cứu tiến độ đơn hàng của khách
       if (
         lower.includes('tiến độ') ||
         lower.includes('đơn hàng') ||
@@ -2183,7 +2204,6 @@
       ) {
         reply = buildCustomerOrderProgressReply();
       } else {
-        // 2. Tính tiền hoàn theo số tiền nhập vào
         const numMatch = lower.match(/(\d+(?:[.,]\d+)?)\s*(k|nghìn|ngàn|tr|triệu|đ|d)?/);
         if (numMatch && (lower.includes('hoàn') || lower.includes('tính') || lower.includes('đơn') || numMatch[2])) {
           let val = parseFloat(numMatch[1].replace(',', '.'));
@@ -2597,7 +2617,6 @@
         `;
       }
 
-      // Chỉ Admin hoặc CSKH mới thấy bảng quản trị; tài khoản khách tuyệt đối không có quyền chỉnh sửa/thêm bất kỳ thứ gì
       if (user.role === 'admin') {
         html += renderAdminPanel();
       } else if (user.role === 'cskh') {
@@ -2906,14 +2925,14 @@
           <button class="btn btn-primary" onclick="saveAdminWebAff()">Lưu Cấu Hình Web & Affiliate</button>
 
           <div class="divider"></div>
-          <div class="font-bold" style="margin-bottom:6px;">☁️ Đồng Bộ Cloud Supabase (Đa Thiết Bị)</div>
+          <div class="font-bold" style="margin-bottom:6px;">☁️ Đồng Bộ Cloud Supabase (Đang Kết Nối)</div>
           <div class="form-group">
             <label class="form-label">Supabase Project URL:</label>
             <input type="url" id="admCloudUrl" class="input" value="${escapeHtml(state.settings.cloudSync.url)}" />
           </div>
           <div class="form-group">
-            <label class="form-label">Supabase Anon Public Key:</label>
-            <input type="password" id="admCloudKey" class="input" value="${escapeHtml(state.settings.cloudSync.anonKey)}" placeholder="Dán anon public key của bạn..." />
+            <label class="form-label">Supabase Publishable / Anon Key:</label>
+            <input type="password" id="admCloudKey" class="input" value="${escapeHtml(state.settings.cloudSync.anonKey)}" />
           </div>
           <div class="btn-row">
             <button class="btn btn-success btn-sm" style="flex:1;" onclick="saveCloudConfig()">☁️ Lưu & Đồng Bộ Cloud</button>
@@ -3016,7 +3035,7 @@
     }
 
     // =========================================================
-    // 11. KHỞI CHẠY TỨC THÌ (0MS) & ĐỒNG BỘ CLOUD
+    // 11. KHỞI CHẠY TỨC THÌ (0MS) & ĐỒNG BỘ CLOUD REAL-TIME
     // =========================================================
     function initApp() {
       try {
@@ -3046,7 +3065,7 @@
 
       detectRealNetworkIP();
       pullFromCloud(true);
-      setInterval(() => pullFromCloud(true), 4500);
+      setInterval(() => pullFromCloud(true), 4000);
     }
 
     window.addEventListener('DOMContentLoaded', initApp);

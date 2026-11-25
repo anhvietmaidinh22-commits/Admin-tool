@@ -367,6 +367,7 @@
       transition: transform 0.1s, opacity 0.15s;
     }
     .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
     .btn-primary {
       background: linear-gradient(135deg, #EE4D2D, #FF6433);
       color: #fff;
@@ -739,7 +740,7 @@
   <!-- MÀN HÌNH INTRO CHÀO MỪNG -->
   <div id="introSplash" class="intro-splash">
     <div class="intro-logo-box">
-      <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" alt="Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=&quot;font-family:var(--font-display);font-weight:800;font-size:36px;color:#EE4D2D;&quot;>247</span>';" />
+      <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" referrerpolicy="no-referrer" alt="Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=&quot;font-family:var(--font-display);font-weight:800;font-size:36px;color:#EE4D2D;&quot;>247</span>';" />
     </div>
     <div class="intro-title">Hoàn tiền 247</div>
     <div class="intro-sub">Mua sắm Shopee &amp; TikTok Shop • Hoàn tiền về STK 24/7</div>
@@ -761,7 +762,7 @@
       <div class="header-top">
         <div class="brand">
           <div class="brand-logo">
-            <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" alt="Logo Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.textContent='247';" />
+            <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" referrerpolicy="no-referrer" alt="Logo Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.textContent='247';" />
           </div>
           <div>
             <div class="brand-title">HoànTiền247</div>
@@ -825,7 +826,7 @@
       </div>
     </main>
 
-    <!-- TAB 2: HOÀN TIỀN (CHỈ DÁN LINK KIỂM TRA - KHÁCH KHÔNG ĐƯỢC TẠO/SỬA DEAL) -->
+    <!-- TAB 2: HOÀN TIỀN (TÍCH HỢP GIẢI MÃ LINK NGẮN + SHOPEE ID 17387130712 + DEEPLINK) -->
     <main id="tab-cashback" class="tab-view">
       <div class="card">
         <div class="card-header">
@@ -833,17 +834,17 @@
           <span class="badge badge-info">Shopee / TikTok</span>
         </div>
         <p class="text-xs text-muted" style="margin-bottom: 10px;">
-          Dán đường dẫn sản phẩm cần mua. Hệ thống sẽ tính ngay số tiền hoàn dự kiến (hoặc báo <b>0₫</b> nếu mặt hàng không hỗ trợ hoa hồng).
+          Dán đường dẫn sản phẩm cần mua (hỗ trợ cả link dài <code>shopee.vn</code> lẫn link rút gọn <code>vn.shp.ee</code>, <code>vt.tiktok.com</code>). Hệ thống tự động gắn mã theo dõi hoàn tiền cho bạn.
         </p>
         <div class="form-group">
           <label class="form-label">Dán link sản phẩm cần mua:</label>
-          <input type="url" id="cbProductUrl" class="input" placeholder="https://shopee.vn/... hoặc https://vt.tiktok.com/..." />
+          <input type="url" id="cbProductUrl" class="input" placeholder="https://shopee.vn/... hoặc https://vn.shp.ee/..." />
         </div>
         <div class="form-group">
           <label class="form-label">Giá sản phẩm trên sàn (VNĐ - tùy chọn để tính số tiền cụ thể):</label>
           <input type="number" id="cbProductPrice" class="input" placeholder="VD: 250000" />
         </div>
-        <button class="btn btn-primary" onclick="checkCashbackLink()">
+        <button id="btnCheckCb" class="btn btn-primary" onclick="checkCashbackLink()">
           Kiểm Tra Hoàn Tiền &amp; Tạo Link Mua
         </button>
 
@@ -891,7 +892,7 @@
     <!-- Floating AI Assistant Button with Brand Logo -->
     <button class="ai-fab" onclick="openModal('aiChatModal')" aria-label="Trợ lý AI">
       <span class="ai-dot"></span>
-      <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" alt="AI Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=&quot;ai-dot&quot;></span><span style=&quot;font-weight:800;font-size:14px;&quot;>AI</span>';" />
+      <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" referrerpolicy="no-referrer" alt="AI Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=&quot;ai-dot&quot;></span><span style=&quot;font-weight:800;font-size:14px;&quot;>AI</span>';" />
     </button>
 
     <!-- Bottom Navigation -->
@@ -1084,7 +1085,7 @@
       <div class="chat-head">
         <div style="display:flex; align-items:center; gap:9px;">
           <div class="chat-avatar">
-            <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" alt="AI Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.textContent='AI';" />
+            <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" referrerpolicy="no-referrer" alt="AI Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.textContent='AI';" />
           </div>
           <div>
             <div style="font-family:var(--font-display); font-weight:800; font-size:14px;">Trợ Lý HoànTiền247</div>
@@ -1110,12 +1111,13 @@
 
   <script>
     // =========================================================
-    // 1. STATE KHỞI TẠO + ĐỒNG BỘ CLOUD SUPABASE (ĐÃ GẮN SẴN KEY)
+    // 1. STATE KHỞI TẠO + ĐỒNG BỘ CLOUD SUPABASE + SHOPEE ID 17387130712
     // =========================================================
-    const STORAGE_KEY = 'HOANTIEN247_PROD_V5';
+    const STORAGE_KEY = 'HOANTIEN247_PROD_V6';
     const DEFAULT_CLOUD_URL = 'https://ffvauosrkonyurosobqi.supabase.co';
     const DEFAULT_CLOUD_KEY = 'sb_publishable_ySmFZ2zFsdz47pmvpHf9Dg_GDrTFlfN';
     const BRAND_LOGO_SRC = 'https://i.ibb.co/Q3M0XD2c/1795632489799.png';
+    const DEFAULT_SHOPEE_AFF_ID = '17387130712';
 
     let REAL_CLIENT_IP = 'Đang xác thực...';
     let authMode = 'login';
@@ -1157,7 +1159,8 @@
       announcements: [],
       settings: {
         defaultCashbackPct: 4.5,
-        shopeeBaseAff: 'https://shope.ee/',
+        shopeeAffiliateId: DEFAULT_SHOPEE_AFF_ID,
+        shopeeBaseAff: 'https://s.shopee.vn/an_redir',
         tiktokBaseAff: 'https://vt.tiktok.com/',
         noCommissionKeywords: 'thẻ cào, nạp tiền, data 4g, vàng, bạc, kim cương, voucher dịch vụ, sữa dưới 24 tháng, sim số',
         shortDomain: 'autopostai.site',
@@ -1211,16 +1214,19 @@
         if (!mergedCloud.url) mergedCloud.url = DEFAULT_CLOUD_URL;
         if (!mergedCloud.anonKey) mergedCloud.anonKey = DEFAULT_CLOUD_KEY;
 
+        const mergedSettings = {
+          ...defaultState.settings,
+          ...(parsed.settings || {}),
+          teleBot: { ...defaultState.settings.teleBot, ...((parsed.settings || {}).teleBot || {}) },
+          shopeeApi: { ...defaultState.settings.shopeeApi, ...((parsed.settings || {}).shopeeApi || {}) },
+          cloudSync: mergedCloud
+        };
+        if (!mergedSettings.shopeeAffiliateId) mergedSettings.shopeeAffiliateId = DEFAULT_SHOPEE_AFF_ID;
+
         return {
           ...JSON.parse(JSON.stringify(defaultState)),
           ...parsed,
-          settings: {
-            ...defaultState.settings,
-            ...(parsed.settings || {}),
-            teleBot: { ...defaultState.settings.teleBot, ...((parsed.settings || {}).teleBot || {}) },
-            shopeeApi: { ...defaultState.settings.shopeeApi, ...((parsed.settings || {}).shopeeApi || {}) },
-            cloudSync: mergedCloud
-          }
+          settings: mergedSettings
         };
       } catch (e) {
         return JSON.parse(JSON.stringify(defaultState));
@@ -1253,13 +1259,15 @@
           if (rows[0].updated_at !== lastCloudUpdatedAt) {
             lastCloudUpdatedAt = rows[0].updated_at;
             const localSession = state.currentUserId;
+            const remoteSettings = rows[0].payload.settings || {};
             state = {
               ...JSON.parse(JSON.stringify(defaultState)),
               ...rows[0].payload,
               currentUserId: localSession,
               settings: {
                 ...defaultState.settings,
-                ...(rows[0].payload.settings || {}),
+                ...remoteSettings,
+                shopeeAffiliateId: remoteSettings.shopeeAffiliateId || DEFAULT_SHOPEE_AFF_ID,
                 cloudSync: { url, anonKey: key, rowId: cfg.rowId || 'main_production_state' }
               }
             };
@@ -1492,21 +1500,88 @@
     }
 
     // =========================================================
-    // 5. KIỂM TRA LINK HOÀN TIỀN (BÁO 0Đ NẾU KHÔNG CÓ HOA HỒNG)
+    // 5. GIẢI MÃ LINK NGẮN + GHÉP LINK AFFILIATE KÉP (SHOPEE ID + DEEPLINK)
     // =========================================================
-    function checkCashbackLink() {
-      const urlInput = document.getElementById('cbProductUrl').value.trim();
+    async function resolveShortProductUrl(rawUrl) {
+      const lower = rawUrl.toLowerCase();
+      const needsExpand =
+        lower.includes('vn.shp.ee') ||
+        lower.includes('shp.ee') ||
+        lower.includes('shope.ee') ||
+        lower.includes('s.shopee.vn') ||
+        lower.includes('vt.tiktok.com') ||
+        lower.includes('vm.tiktok.com');
+
+      if (!needsExpand) return rawUrl;
+
+      try {
+        const res = await fetch(`/api/resolve-link?url=${encodeURIComponent(rawUrl)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.resolvedUrl) return data.resolvedUrl;
+        }
+      } catch (e) {
+        console.warn('Resolve shortlink fallback:', e);
+      }
+      return rawUrl;
+    }
+
+    function buildAffiliateTrackingUrl(platform, cleanProductUrl, subId) {
+      const baseAff = (platform === 'Shopee' ? state.settings.shopeeBaseAff : state.settings.tiktokBaseAff).trim();
+      const shopeeAffId = (state.settings.shopeeAffiliateId || DEFAULT_SHOPEE_AFF_ID).trim();
+
+      // Cơ chế 2: Nếu Admin dán Deeplink ACCESSTRADE / ADPIA / MasOffer (go.isclix.com, adpia, masoffer, hoặc chứa ?url=)
+      if (
+        baseAff &&
+        (baseAff.includes('isclix.com') ||
+         baseAff.includes('adpia') ||
+         baseAff.includes('masoffer') ||
+         baseAff.includes('shorten.asia') ||
+         baseAff.includes('url='))
+      ) {
+        const sep = baseAff.includes('?') ? '&' : '?';
+        if (baseAff.includes('url=')) {
+          return `${baseAff}${encodeURIComponent(cleanProductUrl)}&utm_source=${encodeURIComponent(subId)}&sub1=${encodeURIComponent(subId)}`;
+        }
+        return `${baseAff}${sep}url=${encodeURIComponent(cleanProductUrl)}&utm_source=${encodeURIComponent(subId)}&sub1=${encodeURIComponent(subId)}`;
+      }
+
+      // Cơ chế 1: Universal Link trực tiếp của Shopee Affiliate (ID 17387130712)
+      if (platform === 'Shopee') {
+        const redirBase = baseAff && baseAff.includes('an_redir') ? baseAff : 'https://s.shopee.vn/an_redir';
+        return `${redirBase}?origin_link=${encodeURIComponent(cleanProductUrl)}&affiliate_id=${encodeURIComponent(shopeeAffId)}&sub_id=${encodeURIComponent(subId)}`;
+      }
+
+      // TikTok Shop fallback
+      if (baseAff && baseAff !== 'https://vt.tiktok.com/') {
+        const sep = baseAff.includes('?') ? '&' : '?';
+        return `${baseAff}${sep}url=${encodeURIComponent(cleanProductUrl)}&sub_id=${encodeURIComponent(subId)}`;
+      }
+      return cleanProductUrl;
+    }
+
+    async function checkCashbackLink() {
+      const rawInput = document.getElementById('cbProductUrl').value.trim();
       const priceInput = Number(document.getElementById('cbProductPrice').value || 0);
       const out = document.getElementById('cbCheckResult');
+      const btn = document.getElementById('btnCheckCb');
 
-      if (!urlInput) {
+      if (!rawInput) {
         showToast('Vui lòng dán link sản phẩm Shopee hoặc TikTok!');
         return;
       }
 
-      const lower = urlInput.toLowerCase();
+      btn.disabled = true;
+      btn.textContent = '⏳ Đang giải mã link & tính hoa hồng...';
+
+      const urlInput = await resolveShortProductUrl(rawInput);
+
+      btn.disabled = false;
+      btn.textContent = 'Kiểm Tra Hoàn Tiền & Tạo Link Mua';
+
+      const lower = (urlInput + ' ' + rawInput).toLowerCase();
       let platform = '';
-      if (lower.includes('shopee') || lower.includes('shope.ee')) {
+      if (lower.includes('shopee') || lower.includes('shp.ee')) {
         platform = 'Shopee';
       } else if (lower.includes('tiktok')) {
         platform = 'TikTok Shop';
@@ -1529,8 +1604,7 @@
 
       const user = getCurrentUser();
       const subId = user ? user.refCode : 'GUEST';
-      const baseAff = platform === 'Shopee' ? state.settings.shopeeBaseAff : state.settings.tiktokBaseAff;
-      const trackingUrl = `${baseAff}?sub_id=${encodeURIComponent(subId)}&url=${encodeURIComponent(urlInput)}`;
+      const trackingUrl = buildAffiliateTrackingUrl(platform, urlInput, subId);
 
       if (isZeroCommission) {
         out.innerHTML = `
@@ -1566,7 +1640,7 @@
             ${priceInput > 0 ? `Hoàn dự kiến: +${formatVND(estCashback)}` : `Mức hoàn áp dụng: ${rate}% giá trị đơn`}
           </div>
           <p class="text-xs text-muted" style="margin-bottom:10px;">
-            Bấm nút bên dưới để chuyển sang ${platform} đặt hàng ngay (không mở lại link khác để tránh mất ghi nhận đơn).
+            Link đã gắn mã theo dõi <b>${escapeHtml(subId)}</b>. Bấm nút bên dưới để sang ${platform} đặt hàng ngay.
           </p>
           <a href="${escapeHtml(trackingUrl)}" target="_blank" rel="noopener" onclick="recordPendingOrder('${platform}', '${escapeHtml(urlInput)}', ${priceInput}, ${estCashback})" class="btn btn-primary" style="width:100%;">
             Mua Ngay &amp; Nhận Hoàn Tiền ↗
@@ -1841,7 +1915,7 @@
     }
 
     // =========================================================
-    // 8. ADMIN & CSKH ACTIONS (CHỈ ADMIN/CSKH MỚI CÓ QUYỀN)
+    // 8. ADMIN & CSKH ACTIONS
     // =========================================================
     function advanceOrderStep(orderId, targetStep) {
       const user = getCurrentUser();
@@ -2204,7 +2278,8 @@
       const cur = getCurrentUser();
       if (!cur || cur.role !== 'admin') return;
       state.settings.defaultCashbackPct = Number(document.getElementById('admCbPct').value || 4.5);
-      state.settings.shopeeBaseAff = document.getElementById('admShopeeAff').value.trim();
+      state.settings.shopeeAffiliateId = document.getElementById('admShopeeAffId').value.trim() || DEFAULT_SHOPEE_AFF_ID;
+      state.settings.shopeeBaseAff = document.getElementById('admShopeeAff').value.trim() || 'https://s.shopee.vn/an_redir';
       state.settings.tiktokBaseAff = document.getElementById('admTiktokAff').value.trim();
       state.settings.noCommissionKeywords = document.getElementById('admNoCbKw').value.trim();
       saveState();
@@ -2447,7 +2522,7 @@
           const estCb = Math.round((d.salePrice * (d.cashbackPct || state.settings.defaultCashbackPct)) / 100);
           return `
             <div class="deal-card">
-              <img src="${escapeHtml(d.img)}" class="deal-img" onerror="this.src='${BRAND_LOGO_SRC}'" alt="${escapeHtml(d.title)}" />
+              <img src="${escapeHtml(d.img)}" referrerpolicy="no-referrer" class="deal-img" onerror="this.src='${BRAND_LOGO_SRC}'" alt="${escapeHtml(d.title)}" />
               <div class="deal-body">
                 <div>
                   <span class="badge badge-dark" style="margin-bottom:4px;">${escapeHtml(d.platform)}</span>
@@ -2740,7 +2815,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
             <div style="display:flex; align-items:center; gap:10px;">
               <div class="user-avatar-badge">
-                <img src="${BRAND_LOGO_SRC}" alt="Logo tài khoản" onerror="this.style.display='none'; this.parentElement.textContent='${escapeHtml(user.name.slice(0,2).toUpperCase())}';" />
+                <img src="${BRAND_LOGO_SRC}" referrerpolicy="no-referrer" alt="Logo tài khoản" onerror="this.style.display='none'; this.parentElement.textContent='${escapeHtml(user.name.slice(0,2).toUpperCase())}';" />
               </div>
               <div>
                 <div style="font-family:var(--font-display); font-weight:800; font-size:17px;">${escapeHtml(user.name)}</div>
@@ -3075,11 +3150,15 @@
             <input type="number" step="0.1" id="admCbPct" class="input" value="${state.settings.defaultCashbackPct}" />
           </div>
           <div class="form-group">
-            <label class="form-label">Link gốc Affiliate Shopee:</label>
+            <label class="form-label">Shopee Affiliate ID của bạn (Ăn hoa hồng trực tiếp):</label>
+            <input type="text" id="admShopeeAffId" class="input" value="${escapeHtml(state.settings.shopeeAffiliateId || DEFAULT_SHOPEE_AFF_ID)}" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Link gốc chuyển đổi Shopee (Mặc định an_redir hoặc Deeplink AT/ADPIA):</label>
             <input type="url" id="admShopeeAff" class="input" value="${escapeHtml(state.settings.shopeeBaseAff)}" />
           </div>
           <div class="form-group">
-            <label class="form-label">Link gốc Affiliate TikTok Shop:</label>
+            <label class="form-label">Link gốc chuyển đổi TikTok Shop (Deeplink AT/ADPIA/MasOffer):</label>
             <input type="url" id="admTiktokAff" class="input" value="${escapeHtml(state.settings.tiktokBaseAff)}" />
           </div>
           <div class="form-group">

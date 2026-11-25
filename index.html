@@ -63,6 +63,130 @@
       padding-bottom: 84px;
     }
 
+    /* Intro Splash Screen */
+    .intro-splash {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      height: 100dvh;
+      background: linear-gradient(165deg, #FFFFFF 0%, #FFF7ED 55%, #FFEDD5 100%);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+    .intro-splash.hide {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .intro-logo-box {
+      width: 156px;
+      height: 156px;
+      border-radius: 34px;
+      background: #FFFFFF;
+      border: 2px solid #FED7AA;
+      box-shadow: 0 16px 36px rgba(238, 77, 45, 0.16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 18px;
+      animation: introPulse 1.1s ease;
+    }
+    @keyframes introPulse {
+      0% { transform: scale(0.86); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .intro-logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 8px;
+    }
+    .intro-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 22px;
+      color: #0F172A;
+      margin-bottom: 6px;
+    }
+    .intro-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .intro-loader {
+      width: 150px;
+      height: 5px;
+      background: #E2E8F0;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .intro-loader-bar {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #EE4D2D, #059669);
+      animation: loadBar 1.25s linear forwards;
+    }
+    @keyframes loadBar {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(0); }
+    }
+
+    /* Logo & Avatar Helpers */
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+      flex-shrink: 0;
+    }
+    .brand-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 2px;
+    }
+    .user-avatar-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      background: #FFF7ED;
+      border: 1.5px solid #FED7AA;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+      font-family: var(--font-display);
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .user-avatar-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 3px;
+    }
+
     .marquee-bar {
       background: linear-gradient(90deg, #1E293B, #0F172A);
       color: #F8FAFC;
@@ -113,20 +237,6 @@
       gap: 10px;
     }
     .brand { display: flex; align-items: center; gap: 9px; }
-    .brand-logo {
-      width: 36px;
-      height: 36px;
-      border-radius: 11px;
-      background: #fff;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 17px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-    }
     .brand-title {
       font-family: var(--font-display);
       font-weight: 800;
@@ -498,29 +608,37 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
+    /* Floating AI Chatbot with Brand Logo */
     .ai-fab {
       position: fixed;
       right: 16px;
       bottom: 84px;
       z-index: 45;
-      width: 50px;
-      height: 50px;
+      width: 54px;
+      height: 54px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #0F172A, #1E293B);
-      color: #fff;
-      border: 2px solid #fff;
-      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.3);
+      background: #FFFFFF;
+      color: var(--primary);
+      border: 2.5px solid var(--primary);
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.22);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      overflow: visible;
+    }
+    .ai-fab img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      border-radius: 50%;
     }
     .ai-dot {
       position: absolute;
-      top: 2px;
-      right: 2px;
-      width: 11px;
-      height: 11px;
+      top: 0;
+      right: 0;
+      width: 13px;
+      height: 13px;
       border-radius: 50%;
       background: #10B981;
       border: 2px solid #fff;
@@ -529,10 +647,29 @@
     .chat-head {
       background: linear-gradient(135deg, #0F172A, #1E293B);
       color: #fff;
-      padding: 13px 15px;
+      padding: 12px 15px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+    }
+    .chat-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .chat-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 2px;
     }
     .chat-msgs {
       flex: 1;
@@ -598,6 +735,19 @@
 <body>
   <div id="toast" class="toast"></div>
 
+  <!-- MÀN HÌNH INTRO CHÀO MỪNG -->
+  <div id="introSplash" class="intro-splash">
+    <div class="intro-logo-box">
+      <img src="./logo-hoantien247.png" alt="Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=&quot;font-family:var(--font-display);font-weight:800;font-size:36px;color:#EE4D2D;&quot;>247</span>';" />
+    </div>
+    <div class="intro-title">Hoàn tiền 247</div>
+    <div class="intro-sub">Mua sắm Shopee &amp; TikTok Shop • Hoàn tiền về STK 24/7</div>
+    <div class="intro-loader">
+      <div class="intro-loader-bar"></div>
+    </div>
+    <button type="button" class="btn btn-outline btn-sm" onclick="dismissIntro()">Vào ứng dụng ngay →</button>
+  </div>
+
   <div class="app-shell">
     <div id="marqueeBar" class="marquee-bar">
       <span class="marquee-tag">THÔNG BÁO</span>
@@ -609,10 +759,12 @@
     <header class="app-header">
       <div class="header-top">
         <div class="brand">
-          <div class="brand-logo">HT</div>
+          <div class="brand-logo">
+            <img src="./logo-hoantien247.png" alt="Logo Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.textContent='247';" />
+          </div>
           <div>
             <div class="brand-title">HoànTiền247</div>
-            <div class="brand-sub">Mua sắm Shopee & TikTok nhận hoàn tiền</div>
+            <div class="brand-sub">Mua sắm Shopee &amp; TikTok nhận hoàn tiền</div>
           </div>
         </div>
         <div class="header-actions" id="headerActions"></div>
@@ -642,15 +794,15 @@
         <div class="rate-grid">
           <div class="rate-box">
             <div class="rate-val">5% - 8%</div>
-            <div class="rate-lbl">Thời trang & Mỹ phẩm</div>
+            <div class="rate-lbl">Thời trang &amp; Mỹ phẩm</div>
           </div>
           <div class="rate-box">
             <div class="rate-val">4% - 6%</div>
-            <div class="rate-lbl">Nhà cửa & Đời sống</div>
+            <div class="rate-lbl">Nhà cửa &amp; Đời sống</div>
           </div>
           <div class="rate-box">
             <div class="rate-val">2% - 3.5%</div>
-            <div class="rate-lbl">Điện tử & Phụ kiện</div>
+            <div class="rate-lbl">Điện tử &amp; Phụ kiện</div>
           </div>
         </div>
       </div>
@@ -691,7 +843,7 @@
           <input type="number" id="cbProductPrice" class="input" placeholder="VD: 250000" />
         </div>
         <button class="btn btn-primary" onclick="checkCashbackLink()">
-          Kiểm Tra Hoàn Tiền & Tạo Link Mua
+          Kiểm Tra Hoàn Tiền &amp; Tạo Link Mua
         </button>
 
         <div id="cbCheckResult"></div>
@@ -702,7 +854,7 @@
           <div class="card-title">📌 Lưu Ý Để Không Bị Mất Hoàn Tiền</div>
         </div>
         <ul class="text-xs text-muted" style="padding-left: 16px; line-height: 1.7;">
-          <li>Bấm nút <b>Mua Ngay & Nhận Hoàn Tiền</b> trực tiếp từ trang này sang app Shopee / TikTok.</li>
+          <li>Bấm nút <b>Mua Ngay &amp; Nhận Hoàn Tiền</b> trực tiếp từ trang này sang app Shopee / TikTok.</li>
           <li>Không bấm vào các link tiếp thị/livestream khác trước khi hoàn tất thanh toán.</li>
           <li>Các mặt hàng như thẻ cào, dịch vụ số, voucher điện tử hoặc shop không bật Affiliate sẽ hiển thị <b>0₫</b>.</li>
         </ul>
@@ -735,12 +887,10 @@
       <div id="profileContentArea"></div>
     </main>
 
-    <!-- Floating AI Assistant Button -->
+    <!-- Floating AI Assistant Button with Brand Logo -->
     <button class="ai-fab" onclick="openModal('aiChatModal')" aria-label="Trợ lý AI">
       <span class="ai-dot"></span>
-      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
-      </svg>
+      <img src="./logo-hoantien247.png" alt="AI Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=&quot;ai-dot&quot;></span><span style=&quot;font-weight:800;font-size:14px;&quot;>AI</span>';" />
     </button>
 
     <!-- Bottom Navigation -->
@@ -761,7 +911,7 @@
       </button>
       <button class="nav-item" data-tab="wallet" onclick="switchTab('wallet')">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-        <span>Ví & Đơn</span>
+        <span>Ví &amp; Đơn</span>
       </button>
       <button class="nav-item" data-tab="profile" onclick="switchTab('profile')">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
@@ -819,7 +969,7 @@
             <option value="KienlongBank">KienlongBank</option>
             <option value="NCB">NCB (Quốc Dân)</option>
             <option value="Saigonbank">Saigonbank</option>
-            <option value="PGBank">PGBank (Thịnh Vượng & Phát Triển)</option>
+            <option value="PGBank">PGBank (Thịnh Vượng &amp; Phát Triển)</option>
             <option value="BVBank">BVBank (Bản Việt)</option>
             <option value="DongA Bank">DongA Bank (Đông Á)</option>
             <option value="OceanBank">OceanBank (Đại Dương)</option>
@@ -828,7 +978,7 @@
             <option value="VRB">VRB (Liên doanh Việt - Nga)</option>
             <option value="Indovina Bank">Indovina Bank (IVB)</option>
           </optgroup>
-          <optgroup label="Ngân hàng số & Ngân hàng nước ngoài tại VN">
+          <optgroup label="Ngân hàng số &amp; Ngân hàng nước ngoài tại VN">
             <option value="Cake by VPBank">Cake by VPBank</option>
             <option value="Timo by BVBank">Timo Digital Bank</option>
             <option value="TNEX">TNEX Digital Bank</option>
@@ -932,10 +1082,12 @@
     <div class="modal-box chat-box">
       <div class="chat-head">
         <div style="display:flex; align-items:center; gap:9px;">
-          <div style="width:34px; height:34px; border-radius:10px; background:var(--primary); display:flex; align-items:center; justify-content:center; font-weight:800;">AI</div>
+          <div class="chat-avatar">
+            <img src="./logo-hoantien247.png" alt="AI Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.textContent='AI';" />
+          </div>
           <div>
             <div style="font-family:var(--font-display); font-weight:800; font-size:14px;">Trợ Lý HoànTiền247</div>
-            <div style="font-size:11px; color:#34D399;">● Trực tuyến • Tra cứu đơn & Hoàn tiền</div>
+            <div style="font-size:11px; color:#34D399;">● Trực tuyến • Tra cứu đơn &amp; Hoàn tiền</div>
           </div>
         </div>
         <button class="pill-btn" onclick="closeModal('aiChatModal')">✕</button>
@@ -959,9 +1111,10 @@
     // =========================================================
     // 1. STATE KHỞI TẠO + ĐỒNG BỘ CLOUD SUPABASE (ĐÃ GẮN SẴN KEY)
     // =========================================================
-    const STORAGE_KEY = 'HOANTIEN247_PROD_V3';
+    const STORAGE_KEY = 'HOANTIEN247_PROD_V4';
     const DEFAULT_CLOUD_URL = 'https://ffvauosrkonyurosobqi.supabase.co';
     const DEFAULT_CLOUD_KEY = 'sb_publishable_ySmFZ2zFsdz47pmvpHf9Dg_GDrTFlfN';
+    const BRAND_LOGO_SRC = './logo-hoantien247.png';
 
     let REAL_CLIENT_IP = 'Đang xác thực...';
     let authMode = 'login';
@@ -1039,6 +1192,11 @@
     };
 
     let state = loadState();
+
+    function dismissIntro() {
+      const el = document.getElementById('introSplash');
+      if (el) el.classList.add('hide');
+    }
 
     function loadState() {
       try {
@@ -1410,7 +1568,7 @@
             Bấm nút bên dưới để chuyển sang ${platform} đặt hàng ngay (không mở lại link khác để tránh mất ghi nhận đơn).
           </p>
           <a href="${escapeHtml(trackingUrl)}" target="_blank" rel="noopener" onclick="recordPendingOrder('${platform}', '${escapeHtml(urlInput)}', ${priceInput}, ${estCashback})" class="btn btn-primary" style="width:100%;">
-            Mua Ngay & Nhận Hoàn Tiền ↗
+            Mua Ngay &amp; Nhận Hoàn Tiền ↗
           </a>
         </div>
       `;
@@ -1994,7 +2152,7 @@
       const cur = getCurrentUser();
       if (!cur || cur.role !== 'admin') return;
       const title = document.getElementById('admDTitle').value.trim();
-      const img = document.getElementById('admDImg').value.trim() || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80';
+      const img = document.getElementById('admDImg').value.trim() || BRAND_LOGO_SRC;
       const oldPrice = Number(document.getElementById('admDOld').value || 0);
       const salePrice = Number(document.getElementById('admDSale').value || 0);
       const affUrl = document.getElementById('admDUrl').value.trim();
@@ -2105,7 +2263,7 @@
               id: 'api_' + (item.id || Date.now() + Math.random()),
               platform: item.platform || 'Shopee',
               title,
-              img: item.img || item.imageUrl || 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=600&q=80',
+              img: item.img || item.imageUrl || BRAND_LOGO_SRC,
               oldPrice: Number(item.oldPrice || Math.round(salePrice * 1.25)),
               salePrice,
               cashbackPct: Number(item.cashbackPct || state.settings.defaultCashbackPct),
@@ -2130,7 +2288,7 @@
       if (box && !box.innerHTML.trim()) {
         appendChatMsg(
           'bot',
-          'Chào bạn! 👋 Mình là <b>Trợ Lý HoànTiền247</b>.<br>Mình có thể hỗ trợ bạn:<br>• 📦 <b>Tra cứu tiến độ hoàn tiền đơn hàng</b> của bạn theo thời gian thực.<br>• 🧮 Tính nhanh tiền hoàn theo giá đơn hàng.<br>• 💸 Hướng dẫn đối soát & rút tiền về STK.'
+          'Chào bạn! 👋 Mình là <b>Trợ Lý HoànTiền247</b>.<br>Mình có thể hỗ trợ bạn:<br>• 📦 <b>Tra cứu tiến độ hoàn tiền đơn hàng</b> của bạn theo thời gian thực.<br>• 🧮 Tính nhanh tiền hoàn theo giá đơn hàng.<br>• 💸 Hướng dẫn đối soát &amp; rút tiền về STK.'
         );
       }
     }
@@ -2218,7 +2376,7 @@
         } else if (lower.includes('cách') || lower.includes('mua')) {
           reply = `🛍️ <b>3 bước nhận hoàn tiền cực dễ:</b><br>1. Copy link sản phẩm trên Shopee hoặc TikTok Shop.<br>2. Vào tab <b>Hoàn Tiền</b> trên HoànTiền247 → dán link để kiểm tra mức hoàn và bấm <b>Mua Ngay</b>.<br>3. Nhận hàng thành công và đợi sàn đối soát xong là rút thẳng tiền về STK ngân hàng!`;
         } else if (lower.includes('bao lâu') || lower.includes('đối soát') || lower.includes('rút')) {
-          reply = `⏳ <b>Quy trình đối soát 3 bước:</b><br>• <b>B1:</b> Ghi nhận đơn ngay sau khi đặt.<br>• <b>B2:</b> Sàn đối soát sau khi bạn nhận hàng và không bấm trả hàng/hoàn tiền.<br>• <b>B3:</b> Tiền chuyển sang <b>Số Dư Khả Dụng</b>, bạn vào tab <b>Ví & Đơn → Rút Tiền</b> (tối thiểu 50.000₫) để rút về STK hoặc QR ngân hàng!`;
+          reply = `⏳ <b>Quy trình đối soát 3 bước:</b><br>• <b>B1:</b> Ghi nhận đơn ngay sau khi đặt.<br>• <b>B2:</b> Sàn đối soát sau khi bạn nhận hàng và không bấm trả hàng/hoàn tiền.<br>• <b>B3:</b> Tiền chuyển sang <b>Số Dư Khả Dụng</b>, bạn vào tab <b>Ví &amp; Đơn → Rút Tiền</b> (tối thiểu 50.000₫) để rút về STK hoặc QR ngân hàng!`;
         } else if (lower.includes('ref') || lower.includes('f1') || lower.includes('giới thiệu')) {
           reply = `🎁 <b>Chính sách Tuyển Ref F1:</b><br>• Nhận ngay <b>${formatVND(state.settings.refInviterBonus)}</b> cho mỗi bạn bè đăng ký hợp lệ (IP mạng sạch không trùng clone).<br>• Hưởng thêm <b>${state.settings.refOrderPct}%</b> trên tổng tiền hoàn mỗi khi F1 mua sắm thành công trọn đời!`;
         } else if (lower.includes('cskh') || lower.includes('liên hệ') || lower.includes('hỗ trợ')) {
@@ -2288,7 +2446,7 @@
           const estCb = Math.round((d.salePrice * (d.cashbackPct || state.settings.defaultCashbackPct)) / 100);
           return `
             <div class="deal-card">
-              <img src="${escapeHtml(d.img)}" class="deal-img" onerror="this.src='https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=600&q=80'" alt="${escapeHtml(d.title)}" />
+              <img src="${escapeHtml(d.img)}" class="deal-img" onerror="this.src='${BRAND_LOGO_SRC}'" alt="${escapeHtml(d.title)}" />
               <div class="deal-body">
                 <div>
                   <span class="badge badge-dark" style="margin-bottom:4px;">${escapeHtml(d.platform)}</span>
@@ -2343,7 +2501,7 @@
         return true;
       });
 
-      const refCaption = `💸 Mình đang dùng HoànTiền247 để mua Shopee & TikTok Shop được hoàn tiền mặt về STK mỗi ngày.\n🎁 Đăng ký qua link của mình để nhận quà tân thủ nhé:\n👉 ${shortRefUrl}`;
+      const refCaption = `💸 Mình đang dùng HoànTiền247 để mua Shopee &amp; TikTok Shop được hoàn tiền mặt về STK mỗi ngày.\n🎁 Đăng ký qua link của mình để nhận quà tân thủ nhé:\n👉 ${shortRefUrl}`;
 
       area.innerHTML = `
         <div class="card">
@@ -2429,7 +2587,7 @@
         area.innerHTML = `
           <div class="card" style="text-align:center; padding:24px 16px;">
             <div style="font-size:32px; margin-bottom:8px;">💳</div>
-            <div class="font-bold" style="font-size:15px; margin-bottom:6px;">Đăng nhập để xem Ví & Đơn hàng</div>
+            <div class="font-bold" style="font-size:15px; margin-bottom:6px;">Đăng nhập để xem Ví &amp; Đơn hàng</div>
             <p class="text-xs text-muted" style="margin-bottom:14px;">Theo dõi tiến độ đối soát 3 bước và rút tiền hoàn về STK ngân hàng của bạn.</p>
             <button class="btn btn-primary" onclick="switchTab('profile')">Đăng Nhập Ngay</button>
           </div>
@@ -2578,10 +2736,15 @@
 
       let html = `
         <div class="card">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <div>
-              <div style="font-family:var(--font-display); font-weight:800; font-size:17px;">${escapeHtml(user.name)}</div>
-              <div class="text-xs text-muted">@${escapeHtml(user.username)} • Mã mời: <b>${escapeHtml(user.refCode)}</b></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div class="user-avatar-badge">
+                <img src="${BRAND_LOGO_SRC}" alt="Logo tài khoản" onerror="this.style.display='none'; this.parentElement.textContent='${escapeHtml(user.name.slice(0,2).toUpperCase())}';" />
+              </div>
+              <div>
+                <div style="font-family:var(--font-display); font-weight:800; font-size:17px;">${escapeHtml(user.name)}</div>
+                <div class="text-xs text-muted">@${escapeHtml(user.username)} • Mã mời: <b>${escapeHtml(user.refCode)}</b></div>
+              </div>
             </div>
             <span class="badge ${user.role==='admin'?'badge-danger':(user.role==='cskh'?'badge-info':'badge-success')}">
               ${user.role==='admin'?'QUẢN TRỊ VIÊN':(user.role==='cskh'?'NHÂN VIÊN CSKH':'THÀNH VIÊN')}
@@ -2704,7 +2867,7 @@
             <button class="btn btn-primary btn-sm" style="width:100%;" onclick="adminAdjustUserBalance()">Xác Nhận Cập Nhật Số Dư</button>
           </div>
 
-          <div class="font-bold" style="margin-bottom:8px;">👥 Danh Sách Thành Viên & Phân Quyền (${state.users.length})</div>
+          <div class="font-bold" style="margin-bottom:8px;">👥 Danh Sách Thành Viên &amp; Phân Quyền (${state.users.length})</div>
           ${state.users.map(u => `
             <div style="border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:8px;">
               <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -2729,7 +2892,7 @@
         const allF1s = state.users.filter(u => u.referredBy);
         body = `
           <div class="form-group">
-            <label><input type="checkbox" id="admRefEnabled" ${state.settings.refEnabled ? 'checked' : ''} /> Bật hệ thống Tuyển Ref & Hoa hồng F1</label>
+            <label><input type="checkbox" id="admRefEnabled" ${state.settings.refEnabled ? 'checked' : ''} /> Bật hệ thống Tuyển Ref &amp; Hoa hồng F1</label>
           </div>
           <div class="form-group">
             <label><input type="checkbox" id="admRefCheckIp" ${state.settings.refCheckIp ? 'checked' : ''} /> Chặn cộng thưởng nếu trùng IP mạng thật</label>
@@ -2755,7 +2918,7 @@
           <button class="btn btn-primary" onclick="saveAdminRefSettings()">Lưu Cài Đặt Giới Thiệu</button>
 
           <div class="divider"></div>
-          <div class="font-bold" style="margin-bottom:8px;">🛡️ Giám Sát F1 & Kiểm Tra IP (${allF1s.length})</div>
+          <div class="font-bold" style="margin-bottom:8px;">🛡️ Giám Sát F1 &amp; Kiểm Tra IP (${allF1s.length})</div>
           ${!allF1s.length ? `<div class="empty-state">Chưa có lượt giới thiệu F1 nào.</div>` : allF1s.map(f => `
             <div style="border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:8px;">
               <div class="font-bold">${escapeHtml(f.name)} (@${escapeHtml(f.username)})</div>
@@ -2805,7 +2968,7 @@
           `).join('')}
 
           <div class="divider"></div>
-          <div class="font-bold" style="margin-bottom:8px;">💬 Cài Đặt Kênh CSKH Zalo & Telegram</div>
+          <div class="font-bold" style="margin-bottom:8px;">💬 Cài Đặt Kênh CSKH Zalo &amp; Telegram</div>
           <div class="form-group">
             <label class="form-label">SĐT Zalo CSKH:</label>
             <input type="text" id="admCskhZalo" class="input" value="${escapeHtml(state.settings.cskhZalo)}" placeholder="VD: 0339498650" />
@@ -2922,7 +3085,7 @@
             <label class="form-label">Từ khóa / Danh mục không có hoa hồng (Báo 0₫):</label>
             <textarea id="admNoCbKw" class="textarea" rows="2">${escapeHtml(state.settings.noCommissionKeywords)}</textarea>
           </div>
-          <button class="btn btn-primary" onclick="saveAdminWebAff()">Lưu Cấu Hình Web & Affiliate</button>
+          <button class="btn btn-primary" onclick="saveAdminWebAff()">Lưu Cấu Hình Web &amp; Affiliate</button>
 
           <div class="divider"></div>
           <div class="font-bold" style="margin-bottom:6px;">☁️ Đồng Bộ Cloud Supabase (Đang Kết Nối)</div>
@@ -2935,7 +3098,7 @@
             <input type="password" id="admCloudKey" class="input" value="${escapeHtml(state.settings.cloudSync.anonKey)}" />
           </div>
           <div class="btn-row">
-            <button class="btn btn-success btn-sm" style="flex:1;" onclick="saveCloudConfig()">☁️ Lưu & Đồng Bộ Cloud</button>
+            <button class="btn btn-success btn-sm" style="flex:1;" onclick="saveCloudConfig()">☁️ Lưu &amp; Đồng Bộ Cloud</button>
             <button class="btn btn-outline btn-sm" onclick="pullFromCloud(false)">🔄 Kéo Dữ Liệu</button>
           </div>
 
@@ -2981,7 +3144,7 @@
       let body = '';
       if (activeCskhTab === 'orders') {
         body = `
-          <div class="font-bold" style="margin-bottom:8px;">📦 Duyệt Đơn & Xử Lý Lệnh Rút</div>
+          <div class="font-bold" style="margin-bottom:8px;">📦 Duyệt Đơn &amp; Xử Lý Lệnh Rút</div>
           ${state.withdrawals.filter(w => w.status === 'pending').map(w => `
             <div style="border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:8px;">
               <div class="font-bold">${escapeHtml(w.userName)} • ${formatVND(w.amount)}</div>
@@ -3007,7 +3170,7 @@
       } else {
         const customers = state.users.filter(u => u.role === 'user');
         body = `
-          <div class="font-bold" style="margin-bottom:8px;">🔍 Hỗ Trợ Khách Hàng & Sửa STK (${customers.length})</div>
+          <div class="font-bold" style="margin-bottom:8px;">🔍 Hỗ Trợ Khách Hàng &amp; Sửa STK (${customers.length})</div>
           ${!customers.length ? `<div class="empty-state">Chưa có khách hàng đăng ký.</div>` : customers.map(c => `
             <div style="border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
               <div>
@@ -3026,7 +3189,7 @@
             <div class="card-title">🎧 Bảng Điều Khiển CSKH</div>
           </div>
           <div class="admin-subtabs">
-            <button class="subtab-pill ${activeCskhTab==='orders'?'active':''}" onclick="activeCskhTab='orders'; renderProfileTab();">1. Duyệt Đơn & Rút</button>
+            <button class="subtab-pill ${activeCskhTab==='orders'?'active':''}" onclick="activeCskhTab='orders'; renderProfileTab();">1. Duyệt Đơn &amp; Rút</button>
             <button class="subtab-pill ${activeCskhTab==='customers'?'active':''}" onclick="activeCskhTab='customers'; renderProfileTab();">2. Hỗ Trợ Khách Hàng</button>
           </div>
           ${body}
@@ -3038,6 +3201,8 @@
     // 11. KHỞI CHẠY TỨC THÌ (0MS) & ĐỒNG BỘ CLOUD REAL-TIME
     // =========================================================
     function initApp() {
+      setTimeout(dismissIntro, 1300);
+
       try {
         const params = new URLSearchParams(window.location.search);
         const refParam = params.get('ref');

@@ -382,17 +382,6 @@
     .btn-sm { padding: 7px 10px; font-size: 12px; border-radius: 9px; width: auto; }
     .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
 
-    .rate-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .rate-box {
-      background: #F8FAFC;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 9px 6px;
-      text-align: center;
-    }
-    .rate-val { font-family: var(--font-display); font-weight: 800; font-size: 14px; color: var(--primary); }
-    .rate-lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-
     .deal-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .deal-card {
       background: #fff;
@@ -833,7 +822,7 @@
       </div>
     </main>
 
-    <!-- TAB 2: HOÀN TIỀN (CHỈ DÁN LINK -> TỰ LẤY SẢN PHẨM, GIÁ & TÍNH TIỀN HOÀN VNĐ) -->
+    <!-- TAB 2: HOÀN TIỀN (CHỈ 1 Ô DÁN LINK -> LỌC SẠCH TÊN SP + TÍNH TIỀN HOÀN VNĐ) -->
     <main id="tab-cashback" class="tab-view">
       <div class="card">
         <div class="card-header">
@@ -841,11 +830,11 @@
           <span class="badge badge-info">Shopee / TikTok</span>
         </div>
         <p class="text-xs text-muted" style="margin-bottom: 10px;">
-          Dán đường dẫn sản phẩm cần mua. Hệ thống sẽ tự động lấy thông tin sản phẩm, giá bán và tính ngay <b>số tiền được hoàn</b> cho bạn.
+          Dán đường dẫn sản phẩm cần mua. Hệ thống sẽ tự động kiểm tra sản phẩm và tính ngay <b>số tiền được hoàn</b> cho bạn.
         </p>
         <div class="form-group">
           <label class="form-label">Dán link sản phẩm cần mua:</label>
-          <input type="url" id="cbProductUrl" class="input" placeholder="https://shopee.vn/... hoặc https://vn.shp.ee/..." />
+          <input type="url" id="cbProductUrl" class="input" placeholder="https://shopee.vn/... hoặc https://s.shopee.vn/..." />
         </div>
         <button id="btnCheckCb" class="btn btn-primary" onclick="checkCashbackLink()">
           Kiểm Tra Sản Phẩm &amp; Tiền Hoàn
@@ -871,7 +860,7 @@
       <div class="card" style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); color: #fff;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
           <span class="badge badge-primary">THU NHẬP THỤ ĐỘNG</span>
-          <span class="badge badge-success" id="refPctBadge">+15% Tiền Hoàn F1</span>
+          <span class="badge badge-success" id="refPctBadge">Thưởng F1 Tự Động</span>
         </div>
         <h3 style="font-family:var(--font-display); font-size:17px; margin-bottom:4px;">Mời Bạn Bè - Hưởng Hoa Hồng Trọn Đời</h3>
         <p class="text-xs" style="opacity:0.85;">
@@ -1116,7 +1105,7 @@
     // =========================================================
     // 1. STATE KHỞI TẠO + ĐỒNG BỘ CLOUD SUPABASE + SHOPEE ID 17387130712
     // =========================================================
-    const STORAGE_KEY = 'HOANTIEN247_PROD_V7';
+    const STORAGE_KEY = 'HOANTIEN247_PROD_V8';
     const DEFAULT_CLOUD_URL = 'https://ffvauosrkonyurosobqi.supabase.co';
     const DEFAULT_CLOUD_KEY = 'sb_publishable_ySmFZ2zFsdz47pmvpHf9Dg_GDrTFlfN';
     const BRAND_LOGO_SRC = 'https://i.ibb.co/Q3M0XD2c/1795632489799.png';
@@ -1130,6 +1119,7 @@
     let tempQrBase64 = '';
     let isCloudSyncing = false;
     let lastCloudUpdatedAt = '';
+    let lastCheckedOrderData = { platform: '', title: '', price: 0, cashback: 0 };
 
     const defaultState = {
       users: [
@@ -1503,17 +1493,46 @@
     }
 
     // =========================================================
-    // 5. TỰ LẤY SẢN PHẨM, GIÁ & TÍNH TIỀN HOÀN VNĐ (ẨN %)
+    // 5. GIẢI MÃ LINK SẠCH + LẤY SẢN PHẨM & TÍNH TIỀN HOÀN VNĐ (ẨN %)
     // =========================================================
+    function cleanTitleString(rawTitle, resolvedUrl) {
+      let t = String(rawTitle || '').trim();
+      // Loại bỏ hoàn toàn trường hợp tên bị dính query rác như 28343713450?__mobile__=1...
+      if (t.includes('__mobile__') || t.includes('credential_token') || t.includes('uls_trackid') || /^\d+\?/.test(t)) {
+        t = '';
+      }
+      if (!t && resolvedUrl) {
+        try {
+          const parsed = new URL(resolvedUrl);
+          const slugMatch = parsed.pathname.match(/^\/(.+?)-i\.\d+\.\d+/);
+          if (slugMatch && slugMatch[1]) {
+            t = decodeURIComponent(slugMatch[1]).replace(/-/g, ' ');
+          } else {
+            const prodMatch = parsed.pathname.match(/\/product\/\d+\/(\d+)/) || parsed.pathname.match(/-i\.\d+\.(\d+)/);
+            if (prodMatch && prodMatch[1]) {
+              t = `Sản phẩm Shopee (Mã #${prodMatch[1]})`;
+            }
+          }
+        } catch (_) {}
+      }
+      return t;
+    }
+
     async function fetchProductInfoFromLink(rawUrl) {
+      const apiCfg = state.settings.shopeeApi || {};
       try {
-        const res = await fetch(`/api/resolve-link?url=${encodeURIComponent(rawUrl)}`);
+        const res = await fetch(`/api/resolve-link?url=${encodeURIComponent(rawUrl)}`, {
+          headers: {
+            'x-app-id': apiCfg.appId || '',
+            'Authorization': apiCfg.secret ? `Bearer ${apiCfg.secret}` : ''
+          }
+        });
         if (res.ok) {
           const data = await res.json();
           if (data && data.resolvedUrl) {
             return {
               resolvedUrl: data.resolvedUrl,
-              title: data.title || '',
+              title: cleanTitleString(data.title, data.resolvedUrl),
               image: data.image || '',
               price: Number(data.price || 0)
             };
@@ -1523,17 +1542,12 @@
         console.warn('Resolve product fallback:', e);
       }
 
-      // Fallback tách tên sản phẩm từ URL Shopee nếu chạy local không có serverless API
-      let fallbackTitle = '';
-      try {
-        const parsed = new URL(rawUrl);
-        const slugMatch = parsed.pathname.match(/^\/(.+?)-i\.\d+\.\d+/);
-        if (slugMatch && slugMatch[1]) {
-          fallbackTitle = decodeURIComponent(slugMatch[1]).replace(/-/g, ' ');
-        }
-      } catch (_) {}
-
-      return { resolvedUrl: rawUrl, title: fallbackTitle, image: '', price: 0 };
+      return {
+        resolvedUrl: rawUrl,
+        title: cleanTitleString('', rawUrl),
+        image: '',
+        price: 0
+      };
     }
 
     function buildAffiliateTrackingUrl(platform, cleanProductUrl, subId) {
@@ -1567,6 +1581,23 @@
       return cleanProductUrl;
     }
 
+    function updateInlineCashbackCalc(val) {
+      const num = Number(val || 0);
+      const rate = Number(state.settings.defaultCashbackPct || 4.5);
+      const displayEl = document.getElementById('inlineCbAmountText');
+      if (!displayEl) return;
+      if (num > 0) {
+        const cb = Math.round((num * rate) / 100);
+        displayEl.textContent = `+${formatVND(cb)}`;
+        lastCheckedOrderData.price = num;
+        lastCheckedOrderData.cashback = cb;
+      } else {
+        displayEl.textContent = 'Nhập giá sản phẩm để xem tiền hoàn';
+        lastCheckedOrderData.price = 0;
+        lastCheckedOrderData.cashback = 0;
+      }
+    }
+
     async function checkCashbackLink() {
       const rawInput = document.getElementById('cbProductUrl').value.trim();
       const out = document.getElementById('cbCheckResult');
@@ -1578,7 +1609,7 @@
       }
 
       btn.disabled = true;
-      btn.textContent = '⏳ Đang lấy thông tin sản phẩm & tiền hoàn...';
+      btn.textContent = '⏳ Đang kiểm tra sản phẩm & tiền hoàn...';
 
       const info = await fetchProductInfoFromLink(rawInput);
       const urlInput = info.resolvedUrl;
@@ -1643,13 +1674,19 @@
         return;
       }
 
-      // Kiểm tra xem sản phẩm có khớp Deal Hot đang có trên web để lấy giá chính xác nếu sàn chặn scrape
       let finalPrice = info.price;
       const matchedDeal = state.deals.find(d => d.affUrl && urlInput.includes(d.affUrl));
       if (!finalPrice && matchedDeal) finalPrice = Number(matchedDeal.salePrice || 0);
 
       const rate = Number(state.settings.defaultCashbackPct || 4.5);
       const estCashback = finalPrice > 0 ? Math.round((finalPrice * rate) / 100) : 0;
+
+      lastCheckedOrderData = {
+        platform,
+        title: displayTitle,
+        price: finalPrice,
+        cashback: estCashback
+      };
 
       out.innerHTML = `
         <div class="check-result-card has-cb">
@@ -1664,22 +1701,31 @@
               <div class="prod-preview-title">${escapeHtml(displayTitle)}</div>
               ${finalPrice > 0
                 ? `<div class="text-xs text-muted">Giá sản phẩm: <b style="color:var(--text);">${formatVND(finalPrice)}</b></div>`
-                : `<div class="text-xs text-muted">Đơn hàng đủ điều kiện ghi nhận hoàn tiền tự động</div>`}
+                : `<input type="number" class="input" style="padding:6px 9px; font-size:12px; margin-top:4px;" placeholder="Nhập giá bán (đ) để tính tiền hoàn..." oninput="updateInlineCashbackCalc(this.value)" />`}
             </div>
           </div>
 
           <div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:11px; padding:10px 12px; margin-bottom:10px;">
             <div class="text-xs text-muted">Số tiền được hoàn dự kiến:</div>
-            <div style="font-family:var(--font-display); font-weight:800; font-size:21px; color:var(--success);">
-              ${estCashback > 0 ? `+${formatVND(estCashback)}` : 'Tính tự động theo giá thanh toán trên sàn'}
+            <div id="inlineCbAmountText" style="font-family:var(--font-display); font-weight:800; font-size:20px; color:var(--success);">
+              ${estCashback > 0 ? `+${formatVND(estCashback)}` : 'Nhập giá sản phẩm để xem tiền hoàn'}
             </div>
           </div>
 
-          <a href="${escapeHtml(trackingUrl)}" target="_blank" rel="noopener" onclick="recordPendingOrder('${platform}', '${escapeHtml(displayTitle)}', ${finalPrice}, ${estCashback})" class="btn btn-primary" style="width:100%;">
+          <a href="${escapeHtml(trackingUrl)}" target="_blank" rel="noopener" onclick="recordPendingOrderFromCheck()" class="btn btn-primary" style="width:100%;">
             Mua Ngay &amp; Nhận Hoàn Tiền ↗
           </a>
         </div>
       `;
+    }
+
+    function recordPendingOrderFromCheck() {
+      recordPendingOrder(
+        lastCheckedOrderData.platform,
+        lastCheckedOrderData.title,
+        lastCheckedOrderData.price,
+        lastCheckedOrderData.cashback
+      );
     }
 
     function recordPendingOrder(platform, productTitle, price, cashbackAmount) {

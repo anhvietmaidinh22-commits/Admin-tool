@@ -822,7 +822,7 @@
       </div>
     </main>
 
-    <!-- TAB 2: HOÀN TIỀN (CHỈ 1 Ô DÁN LINK -> LỌC SẠCH TÊN SP + TÍNH TIỀN HOÀN VNĐ) -->
+    <!-- TAB 2: HOÀN TIỀN -->
     <main id="tab-cashback" class="tab-view">
       <div class="card">
         <div class="card-header">
@@ -1103,13 +1103,14 @@
 
   <script>
     // =========================================================
-    // 1. STATE KHỞI TẠO + ĐỒNG BỘ CLOUD SUPABASE + SHOPEE ID 17387130712
+    // 1. STATE KHỞI TẠO + ĐỒNG BỘ CLOUD SUPABASE + ADPIA A100157123
     // =========================================================
     const STORAGE_KEY = 'HOANTIEN247_PROD_V8';
     const DEFAULT_CLOUD_URL = 'https://ffvauosrkonyurosobqi.supabase.co';
     const DEFAULT_CLOUD_KEY = 'sb_publishable_ySmFZ2zFsdz47pmvpHf9Dg_GDrTFlfN';
     const BRAND_LOGO_SRC = 'https://i.ibb.co/Q3M0XD2c/1795632489799.png';
     const DEFAULT_SHOPEE_AFF_ID = '17387130712';
+    const DEFAULT_ADPIA_SHOPEE_BASE = 'https://click.adpia.vn/tracking.php?m=shopee&a=A100157123&l=9999&l_cd1=3&l_cd2=0&tu=';
 
     let REAL_CLIENT_IP = 'Đang xác thực...';
     let authMode = 'login';
@@ -1153,7 +1154,7 @@
       settings: {
         defaultCashbackPct: 4.5,
         shopeeAffiliateId: DEFAULT_SHOPEE_AFF_ID,
-        shopeeBaseAff: 'https://s.shopee.vn/an_redir',
+        shopeeBaseAff: DEFAULT_ADPIA_SHOPEE_BASE,
         tiktokBaseAff: 'https://vt.tiktok.com/',
         noCommissionKeywords: 'thẻ cào, nạp tiền, data 4g, vàng, bạc, kim cương, voucher dịch vụ, sữa dưới 24 tháng, sim số',
         shortDomain: 'autopostai.site',
@@ -1215,6 +1216,9 @@
           cloudSync: mergedCloud
         };
         if (!mergedSettings.shopeeAffiliateId) mergedSettings.shopeeAffiliateId = DEFAULT_SHOPEE_AFF_ID;
+        if (!mergedSettings.shopeeBaseAff || mergedSettings.shopeeBaseAff === 'https://s.shopee.vn/an_redir') {
+          mergedSettings.shopeeBaseAff = DEFAULT_ADPIA_SHOPEE_BASE;
+        }
 
         return {
           ...JSON.parse(JSON.stringify(defaultState)),
@@ -1261,6 +1265,9 @@
                 ...defaultState.settings,
                 ...remoteSettings,
                 shopeeAffiliateId: remoteSettings.shopeeAffiliateId || DEFAULT_SHOPEE_AFF_ID,
+                shopeeBaseAff: (!remoteSettings.shopeeBaseAff || remoteSettings.shopeeBaseAff === 'https://s.shopee.vn/an_redir')
+                  ? DEFAULT_ADPIA_SHOPEE_BASE
+                  : remoteSettings.shopeeBaseAff,
                 cloudSync: { url, anonKey: key, rowId: cfg.rowId || 'main_production_state' }
               }
             };
@@ -1493,11 +1500,10 @@
     }
 
     // =========================================================
-    // 5. GIẢI MÃ LINK SẠCH + LẤY SẢN PHẨM & TÍNH TIỀN HOÀN VNĐ (ẨN %)
+    // 5. GIẢI MÃ LINK SẠCH + GHÉP LINK ADPIA (u_id TRƯỚC &tu=)
     // =========================================================
     function cleanTitleString(rawTitle, resolvedUrl) {
       let t = String(rawTitle || '').trim();
-      // Loại bỏ hoàn toàn trường hợp tên bị dính query rác như 28343713450?__mobile__=1...
       if (t.includes('__mobile__') || t.includes('credential_token') || t.includes('uls_trackid') || /^\d+\?/.test(t)) {
         t = '';
       }
@@ -1553,30 +1559,38 @@
     function buildAffiliateTrackingUrl(platform, cleanProductUrl, subId) {
       const baseAff = (platform === 'Shopee' ? state.settings.shopeeBaseAff : state.settings.tiktokBaseAff).trim();
       const shopeeAffId = (state.settings.shopeeAffiliateId || DEFAULT_SHOPEE_AFF_ID).trim();
+      const encodedTarget = encodeURIComponent(cleanProductUrl);
+      const encodedSub = encodeURIComponent(subId || 'GUEST');
 
+      // 1. Chuẩn ADPIA: Chèn &u_id=... TRƯỚC &tu= để không bị đẩy về trang chủ Shopee
+      if (baseAff && (baseAff.includes('adpia.vn') || baseAff.includes('tu='))) {
+        const cleanBase = baseAff.replace(/([?&])(u_id|tu)=.*$/g, '');
+        const sep = cleanBase.includes('?') ? '&' : '?';
+        return `${cleanBase}${sep}u_id=${encodedSub}&tu=${encodedTarget}`;
+      }
+
+      // 2. Chuẩn ACCESSTRADE / MasOffer / Shorten.asia (?url=...)
       if (
         baseAff &&
         (baseAff.includes('isclix.com') ||
-         baseAff.includes('adpia') ||
          baseAff.includes('masoffer') ||
          baseAff.includes('shorten.asia') ||
          baseAff.includes('url='))
       ) {
-        const sep = baseAff.includes('?') ? '&' : '?';
-        if (baseAff.includes('url=')) {
-          return `${baseAff}${encodeURIComponent(cleanProductUrl)}&utm_source=${encodeURIComponent(subId)}&sub1=${encodeURIComponent(subId)}`;
-        }
-        return `${baseAff}${sep}url=${encodeURIComponent(cleanProductUrl)}&utm_source=${encodeURIComponent(subId)}&sub1=${encodeURIComponent(subId)}`;
+        const cleanBase = baseAff.replace(/([?&])url=.*$/, '');
+        const sep = cleanBase.includes('?') ? '&' : '?';
+        return `${cleanBase}${sep}utm_source=${encodedSub}&sub1=${encodedSub}&url=${encodedTarget}`;
       }
 
+      // 3. Chuẩn Shopee an_redir trực tiếp
       if (platform === 'Shopee') {
         const redirBase = baseAff && baseAff.includes('an_redir') ? baseAff : 'https://s.shopee.vn/an_redir';
-        return `${redirBase}?origin_link=${encodeURIComponent(cleanProductUrl)}&affiliate_id=${encodeURIComponent(shopeeAffId)}&sub_id=${encodeURIComponent(subId)}`;
+        return `${redirBase}?origin_link=${encodedTarget}&affiliate_id=${encodeURIComponent(shopeeAffId)}&sub_id=${encodedSub}`;
       }
 
       if (baseAff && baseAff !== 'https://vt.tiktok.com/') {
         const sep = baseAff.includes('?') ? '&' : '?';
-        return `${baseAff}${sep}url=${encodeURIComponent(cleanProductUrl)}&sub_id=${encodeURIComponent(subId)}`;
+        return `${baseAff}${sep}url=${encodedTarget}&sub_id=${encodedSub}`;
       }
       return cleanProductUrl;
     }
@@ -2358,7 +2372,7 @@
       if (!cur || cur.role !== 'admin') return;
       state.settings.defaultCashbackPct = Number(document.getElementById('admCbPct').value || 4.5);
       state.settings.shopeeAffiliateId = document.getElementById('admShopeeAffId').value.trim() || DEFAULT_SHOPEE_AFF_ID;
-      state.settings.shopeeBaseAff = document.getElementById('admShopeeAff').value.trim() || 'https://s.shopee.vn/an_redir';
+      state.settings.shopeeBaseAff = document.getElementById('admShopeeAff').value.trim() || DEFAULT_ADPIA_SHOPEE_BASE;
       state.settings.tiktokBaseAff = document.getElementById('admTiktokAff').value.trim();
       state.settings.noCommissionKeywords = document.getElementById('admNoCbKw').value.trim();
       saveState();
@@ -3232,7 +3246,7 @@
             <input type="text" id="admShopeeAffId" class="input" value="${escapeHtml(state.settings.shopeeAffiliateId || DEFAULT_SHOPEE_AFF_ID)}" />
           </div>
           <div class="form-group">
-            <label class="form-label">Link gốc chuyển đổi Shopee (Mặc định an_redir hoặc Deeplink AT/ADPIA):</label>
+            <label class="form-label">Link gốc chuyển đổi Shopee (ADPIA / Deeplink AT / an_redir):</label>
             <input type="url" id="admShopeeAff" class="input" value="${escapeHtml(state.settings.shopeeBaseAff)}" />
           </div>
           <div class="form-group">

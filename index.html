@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
-  <title>HoànTiền247 - Mua Sắm Thông Minh, Hoàn Tiền Tự Động 24/7</title>
+  <title>HoànTiền247 - Hoàn Tiền Mua Sắm Shopee & TikTok Shop 24/7</title>
   <link rel="icon" type="image/png" href="https://i.ibb.co/Q3M0XD2c/1795632489799.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,17 +11,17 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     :root {
-      --primary: #F97316;
-      --primary-dark: #EA580C;
-      --primary-soft: #FFF7ED;
+      --primary: #EE4D2D;
+      --primary-dark: #D73211;
+      --primary-soft: #FFF4EE;
       --primary-border: #FED7AA;
       --accent: #0F766E;
       --accent-soft: #F0FDFA;
-      --bg-page: #F4F6FA;
+      --bg-page: #FFF9F5;
       --bg-card: #FFFFFF;
       --bg-sub: #F8FAFC;
-      --border: #E2E8F0;
-      --text: #0F172A;
+      --border: #EFE5DC;
+      --text: #1E293B;
       --text-muted: #64748B;
       --success: #059669;
       --success-soft: #ECFDF5;
@@ -33,15 +33,15 @@
       --info-soft: #F0F9FF;
       --font-display: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif;
       --font-body: 'Be Vietnam Pro', sans-serif;
-      --shadow-sm: 0 2px 10px rgba(15, 23, 42, 0.04);
-      --shadow-md: 0 14px 34px rgba(15, 23, 42, 0.14);
+      --shadow-sm: 0 2px 10px rgba(15, 23, 42, 0.035);
+      --shadow-md: 0 14px 34px rgba(15, 23, 42, 0.12);
     }
 
     body.dark-mode {
-      --primary: #FB923C;
-      --primary-dark: #F97316;
-      --primary-soft: rgba(249, 115, 22, 0.15);
-      --primary-border: rgba(251, 146, 60, 0.3);
+      --primary: #FF6B3D;
+      --primary-dark: #EE4D2D;
+      --primary-soft: rgba(238, 77, 45, 0.16);
+      --primary-border: rgba(255, 107, 61, 0.32);
       --accent: #14B8A6;
       --accent-soft: rgba(20, 184, 166, 0.14);
       --bg-page: #0B1120;
@@ -64,13 +64,15 @@
       font-family: var(--font-body);
       font-size: 13.5px;
       line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
       transition: background 0.2s, color 0.2s;
     }
 
+    /* INTRO SPLASH */
     .intro-splash {
       position: fixed;
       inset: 0;
-      background: linear-gradient(155deg, #FFFFFF 0%, #FFF7ED 55%, #FFEDD5 100%);
+      background: linear-gradient(160deg, #FFFFFF 0%, #FFF7ED 55%, #FFEDD5 100%);
       z-index: 300;
       display: flex;
       flex-direction: column;
@@ -82,12 +84,12 @@
     }
     .intro-splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
     .intro-logo-wrap {
-      width: 128px;
-      height: 128px;
-      border-radius: 30px;
+      width: 132px;
+      height: 132px;
+      border-radius: 32px;
       background: #FFFFFF;
       border: 2px solid #FED7AA;
-      box-shadow: 0 18px 40px rgba(249, 115, 22, 0.18);
+      box-shadow: 0 18px 40px rgba(238, 77, 45, 0.18);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -98,9 +100,10 @@
     @keyframes popScale { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
     .intro-logo-wrap img { width: 100%; height: 100%; object-fit: contain; padding: 10px; }
     .intro-bar { width: 160px; height: 5px; background: #E2E8F0; border-radius: 99px; overflow: hidden; margin: 14px 0; }
-    .intro-bar-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #F97316, #0F766E); animation: slideLoad 1.1s linear forwards; }
+    .intro-bar-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #EE4D2D, #FF7337); animation: slideLoad 1.1s linear forwards; }
     @keyframes slideLoad { 0% { transform: translateX(-100%); } 100% { transform: translateX(0); } }
 
+    /* TOP NAVBAR */
     .top-navbar {
       position: sticky;
       top: 0;
@@ -112,55 +115,97 @@
     .navbar-inner {
       max-width: 1140px;
       margin: 0 auto;
-      padding: 10px 16px;
+      padding: 10px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
     }
-    .nav-brand { display: flex; align-items: center; gap: 9px; cursor: pointer; flex-shrink: 0; }
+    .nav-brand { display: flex; align-items: center; gap: 8px; cursor: pointer; flex-shrink: 0; }
     .nav-brand img { width: 34px; height: 34px; border-radius: 10px; object-fit: contain; background: var(--primary-soft); padding: 2px; border: 1px solid var(--primary-border); }
-    .nav-brand-name { font-family: var(--font-display); font-weight: 800; font-size: 16px; color: var(--text); letter-spacing: -0.3px; }
-    .nav-brand-name span { color: var(--primary); }
+    .nav-brand-name { font-family: var(--font-display); font-weight: 800; font-size: 15.5px; color: var(--primary); letter-spacing: -0.3px; }
 
-    .nav-links { display: flex; align-items: center; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+    .nav-links { display: flex; align-items: center; gap: 3px; overflow-x: auto; scrollbar-width: none; }
     .nav-links::-webkit-scrollbar { display: none; }
     .nav-link-btn {
       background: none;
       border: none;
-      padding: 7px 11px;
+      padding: 7px 10px;
       border-radius: 10px;
       font-family: var(--font-body);
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--text-muted);
       cursor: pointer;
       white-space: nowrap;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.15s;
     }
     .nav-link-btn.active { color: var(--primary); background: var(--primary-soft); font-weight: 700; }
 
-    .avatar-trigger {
-      width: 36px;
-      height: 36px;
-      border-radius: 11px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff;
-      border: none;
-      font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 12.5px;
+    .avatar-logo-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--primary-soft);
+      border: 1.5px solid var(--primary);
+      padding: 2px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       flex-shrink: 0;
-      box-shadow: 0 3px 10px rgba(249, 115, 22, 0.28);
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(238, 77, 45, 0.22);
+    }
+    .avatar-logo-btn img { width: 100%; height: 100%; object-fit: contain; border-radius: 9px; }
+    .user-logo-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: #FFFFFF;
+      border: 1.5px solid var(--primary-border);
+      padding: 3px;
+      object-fit: contain;
+      flex-shrink: 0;
     }
 
+    /* DROPDOWNS */
+    .quick-menu-dropdown, .profile-dropdown {
+      position: fixed;
+      top: 58px;
+      width: 280px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow-md);
+      z-index: 88;
+      display: none;
+      overflow: hidden;
+      animation: dropIn 0.16s ease;
+    }
+    .quick-menu-dropdown { left: max(14px, calc(50% - 410px)); }
+    .profile-dropdown { right: max(14px, calc(50% - 554px)); }
+    .quick-menu-dropdown.open, .profile-dropdown.open { display: block; }
+    @keyframes dropIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .dd-head { padding: 13px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .dd-section-label { font-size: 10px; font-weight: 800; color: var(--text-muted); padding: 8px 14px 3px; text-transform: uppercase; letter-spacing: 0.4px; }
+    .dd-item { width: 100%; background: none; border: none; padding: 9px 14px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; font-weight: 600; color: var(--text); cursor: pointer; text-align: left; }
+    .dd-item:hover { background: var(--bg-sub); }
+    .dd-item.danger { color: var(--danger); }
+
+    /* MARQUEE */
+    .marquee-bar { background: #1E293B; color: #F8FAFC; font-size: 11.5px; padding: 6px 12px; display: none; align-items: center; gap: 8px; overflow: hidden; white-space: nowrap; }
+    .marquee-bar.active { display: flex; }
+    .marquee-tag { background: var(--primary); color: #fff; font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: 5px; }
+    .marquee-track { overflow: hidden; flex: 1; }
+    .marquee-text { display: inline-block; padding-left: 100%; animation: marqueeAnim 18s linear infinite; }
+    @keyframes marqueeAnim { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+    /* MAIN SHELL & DESKTOP 2-COLUMN GRID */
     .app-container {
       width: 100%;
       max-width: 1140px;
@@ -168,83 +213,110 @@
       min-height: calc(100dvh - 58px);
       display: flex;
       flex-direction: column;
-      padding-bottom: 90px;
+      padding-bottom: 92px;
     }
-    .page-view { display: none; padding: 16px; }
+    .page-view { display: none; padding: 14px; }
     .page-view.active { display: block; animation: fadeIn 0.2s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
     .dashboard-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 16px;
+      gap: 14px;
       align-items: start;
     }
     @media (min-width: 820px) {
-      .dashboard-grid {
-        grid-template-columns: 420px 1fr;
-      }
-      .page-view { padding: 22px 16px; }
+      .dashboard-grid { grid-template-columns: 1.2fr 0.85fr; }
+      .page-view { padding: 20px 16px; }
     }
 
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 18px;
-      padding: 16px;
-      margin-bottom: 14px;
+      padding: 15px;
+      margin-bottom: 13px;
       box-shadow: var(--shadow-sm);
     }
 
+    /* GREETING & BALANCE CARD */
     .hero-wallet-card {
-      background: linear-gradient(135deg, #0F172A 0%, #1E293B 58%, #0F766E 100%);
-      color: #FFFFFF;
+      background: linear-gradient(135deg, var(--primary-soft) 0%, var(--bg-card) 100%);
+      border: 1px solid var(--primary-border);
       border-radius: 20px;
-      padding: 18px;
-      margin-bottom: 14px;
-      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
+      padding: 16px;
+      margin-bottom: 13px;
+      box-shadow: var(--shadow-sm);
     }
-    .hero-wallet-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 8px; }
+    .hero-wallet-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; }
     .hero-balance-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(255, 255, 255, 0.09);
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: var(--bg-card);
+      border: 1px solid var(--primary-border);
       border-radius: 14px;
-      padding: 13px 15px;
+      padding: 12px 14px;
       cursor: pointer;
     }
 
-    .metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+    /* 4 QUICK ACTIONS */
+    .quick-actions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 13px; }
+    .qa-action-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      color: var(--text);
+      font-size: 11.5px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .qa-action-btn:hover { border-color: var(--primary); }
+    .qa-action-icon { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+
+    .metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; margin-bottom: 13px; }
     .metric-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 15px;
-      padding: 12px;
+      padding: 11px 12px;
       display: flex;
       align-items: center;
       gap: 10px;
       box-shadow: var(--shadow-sm);
     }
-    .metric-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 11px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
+    .metric-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
+    /* CONVERTER CARD */
     .converter-card {
       background: var(--bg-card);
       border: 1.5px solid var(--primary-border);
       border-radius: 18px;
       padding: 16px;
-      margin-bottom: 14px;
-      box-shadow: 0 6px 22px rgba(249, 115, 22, 0.07);
+      margin-bottom: 13px;
+      box-shadow: 0 6px 22px rgba(238, 77, 45, 0.06);
     }
+    .supported-platforms-bar { display: flex; align-items: center; gap: 8px; margin: 10px 0 12px; flex-wrap: wrap; }
+    .platform-logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: var(--bg-sub);
+    }
+    .platform-logo-badge svg { width: 17px; height: 17px; flex-shrink: 0; }
 
     .input, .select, .textarea {
       width: 100%;
@@ -275,7 +347,7 @@
     }
     .btn:active { transform: scale(0.98); }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    .btn-primary { background: linear-gradient(135deg, #F97316, #EA580C); color: #fff; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.28); }
+    .btn-primary { background: linear-gradient(135deg, #EE4D2D, #FF6B3D); color: #fff; box-shadow: 0 4px 14px rgba(238, 77, 45, 0.25); }
     .btn-accent { background: var(--accent); color: #fff; }
     .btn-dark { background: #1E293B; color: #fff; }
     .btn-success { background: var(--success); color: #fff; }
@@ -286,73 +358,30 @@
     .btn-sm { padding: 6px 11px; font-size: 11.5px; border-radius: 9px; }
     .btn-row { display: flex; gap: 7px; flex-wrap: wrap; }
 
+    /* TIMELINE */
     .steps-wrapper { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
-    .step-row-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: var(--bg-sub);
-      border: 1px solid var(--border);
-    }
-    .step-circle {
-      width: 24px;
-      height: 24px;
-      border-radius: 8px;
-      background: var(--primary);
-      color: #fff;
-      font-weight: 800;
-      font-size: 11.5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
+    .step-row-card { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--bg-sub); border: 1px solid var(--border); }
+    .step-circle { width: 24px; height: 24px; border-radius: 8px; background: var(--primary-soft); border: 1.5px solid var(--primary); color: var(--primary); font-weight: 800; font-size: 11.5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
+    /* PARTNER BANNER */
     .partner-banner {
-      background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
-      color: #FFFFFF;
+      background: linear-gradient(135deg, #FFF1E6 0%, #FFE4D1 100%);
+      border: 1px solid #FDBA74;
+      color: #0F172A;
       border-radius: 18px;
       padding: 16px;
-      margin-bottom: 14px;
+      margin-bottom: 13px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
     }
 
+    /* Q&A COMMUNITY */
     .qa-comment-box { border: 1px solid var(--border); border-radius: 14px; padding: 11px 13px; margin-bottom: 9px; background: var(--bg-sub); }
     .qa-reply-box { margin-top: 8px; margin-left: 14px; padding: 9px 11px; border-radius: 11px; background: var(--bg-card); border-left: 3px solid var(--primary); }
 
-    .profile-dropdown {
-      position: fixed;
-      top: 58px;
-      right: max(14px, calc(50% - 554px));
-      width: 276px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      box-shadow: var(--shadow-md);
-      z-index: 85;
-      display: none;
-      overflow: hidden;
-    }
-    .profile-dropdown.open { display: block; }
-    .dd-head { padding: 13px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .dd-section-label { font-size: 10px; font-weight: 800; color: var(--text-muted); padding: 8px 14px 3px; text-transform: uppercase; letter-spacing: 0.4px; }
-    .dd-item { width: 100%; background: none; border: none; padding: 9px 14px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; font-weight: 600; color: var(--text); cursor: pointer; text-align: left; }
-    .dd-item:hover { background: var(--bg-sub); }
-    .dd-item.danger { color: var(--danger); }
-
-    .marquee-bar { background: #0F172A; color: #F8FAFC; font-size: 11.5px; padding: 6px 12px; display: none; align-items: center; gap: 8px; overflow: hidden; white-space: nowrap; }
-    .marquee-bar.active { display: flex; }
-    .marquee-tag { background: var(--primary); color: #fff; font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: 5px; }
-    .marquee-track { overflow: hidden; flex: 1; }
-    .marquee-text { display: inline-block; padding-left: 100%; animation: marqueeAnim 18s linear infinite; }
-    @keyframes marqueeAnim { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-
+    /* PILLS, GUIDE & FAQ */
     .filter-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 12px; scrollbar-width: none; }
     .filter-pills::-webkit-scrollbar { display: none; }
     .f-pill { padding: 6px 13px; border-radius: 99px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted); font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
@@ -370,24 +399,25 @@
     .deal-img { width: 100%; height: 135px; object-fit: cover; background: var(--bg-sub); }
     .deal-body { padding: 10px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
 
+    /* FLOATING STACK */
     .floating-stack { position: fixed; right: 16px; bottom: 20px; z-index: 45; display: flex; flex-direction: column; align-items: flex-end; gap: 9px; }
     .floating-saved-pill {
-      background: linear-gradient(135deg, #F97316, #EA580C);
+      background: linear-gradient(135deg, #EE4D2D, #FF6B3D);
       color: #fff;
       border: 2px solid #fff;
       padding: 9px 14px;
       border-radius: 99px;
       font-size: 12px;
       font-weight: 700;
-      box-shadow: 0 6px 18px rgba(249, 115, 22, 0.35);
+      box-shadow: 0 6px 18px rgba(238, 77, 45, 0.35);
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
     }
     .ai-fab {
-      width: 50px;
-      height: 50px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
       background: #FFFFFF;
       border: 2.5px solid var(--primary);
@@ -401,12 +431,13 @@
     }
     .ai-fab img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
 
+    /* MODALS */
     .modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.62); z-index: 100; display: none; align-items: center; justify-content: center; padding: 14px; }
     .modal-backdrop.open { display: flex; }
-    .modal-box { width: 100%; max-width: 440px; max-height: 88dvh; overflow-y: auto; background: var(--bg-card); color: var(--text); border-radius: 22px; padding: 18px; box-shadow: var(--shadow-md); position: relative; }
+    .modal-box { width: 100%; max-width: 450px; max-height: 88dvh; overflow-y: auto; background: var(--bg-card); color: var(--text); border-radius: 22px; padding: 18px; box-shadow: var(--shadow-md); position: relative; }
 
     .promo-modal-banner {
-      background: linear-gradient(135deg, #0F172A 0%, #1E293B 55%, #EA580C 100%);
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 55%, #EE4D2D 100%);
       color: #fff;
       border-radius: 16px;
       padding: 18px 16px;
@@ -414,15 +445,32 @@
       margin-bottom: 14px;
     }
 
-    .chat-box { padding: 0; overflow: hidden; display: flex; flex-direction: column; height: 74dvh; max-height: 560px; }
+    /* CHATBOT */
+    .chat-box { padding: 0; overflow: hidden; display: flex; flex-direction: column; height: 76dvh; max-height: 580px; }
     .chat-head { background: #0F172A; color: #fff; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; }
-    .chat-msgs { flex: 1; overflow-y: auto; padding: 12px; background: var(--bg-sub); display: flex; flex-direction: column; gap: 8px; }
-    .msg { max-width: 86%; padding: 9px 12px; border-radius: 14px; font-size: 12.5px; line-height: 1.48; }
+    .chat-msgs { flex: 1; overflow-y: auto; padding: 12px; background: var(--bg-sub); display: flex; flex-direction: column; gap: 9px; }
+    .msg { max-width: 90%; padding: 10px 13px; border-radius: 14px; font-size: 12.5px; line-height: 1.5; }
     .msg.bot { align-self: flex-start; background: var(--bg-card); border: 1px solid var(--border); }
     .msg.user { align-self: flex-end; background: var(--primary); color: #fff; }
-    .chat-chips { display: flex; gap: 6px; overflow-x: auto; padding: 8px 10px; background: var(--bg-card); border-top: 1px solid var(--border); scrollbar-width: none; }
-    .chat-chips::-webkit-scrollbar { display: none; }
-    .chip-btn { padding: 5px 10px; border-radius: 99px; border: 1px solid var(--border); background: var(--bg-sub); color: var(--text); font-size: 11px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+    .bot-vertical-suggestions { display: flex; flex-direction: column; gap: 6px; margin-top: 9px; padding-top: 8px; border-top: 1px dashed var(--border); }
+    .bot-suggest-row {
+      width: 100%;
+      text-align: left;
+      background: var(--primary-soft);
+      border: 1px solid var(--primary-border);
+      color: var(--text);
+      padding: 8px 11px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      transition: background 0.15s;
+    }
+    .bot-suggest-row:hover { background: var(--primary); color: #fff; }
     .chat-input-bar { display: flex; gap: 6px; padding: 10px; background: var(--bg-card); border-top: 1px solid var(--border); }
 
     .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 99px; font-size: 11px; font-weight: 700; }
@@ -450,39 +498,26 @@
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    .app-footer {
-      background: #0F172A;
-      color: #94A3B8;
-      padding: 16px;
-      font-size: 12px;
-      margin-top: auto;
-    }
-    .footer-inner {
-      max-width: 1140px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+    .app-footer { background: #1E293B; color: #CBD5E1; padding: 16px; font-size: 12px; margin-top: auto; }
+    .footer-inner { max-width: 1140px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
   </style>
 </head>
 <body>
   <div id="toast" class="toast"></div>
 
-  <!-- MÀN HÌNH INTRO ĐẦY ĐỦ LOGO HOÀN TIỀN 247 -->
+  <!-- INTRO SPLASH -->
   <div id="introSplash" class="intro-splash">
     <div class="intro-logo-wrap">
       <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" alt="Logo HoànTiền247" />
     </div>
-    <div style="font-family:var(--font-display); font-weight:800; font-size:22px; color:#0F172A;">HoànTiền<span style="color:#F97316;">247</span></div>
+    <div style="font-family:var(--font-display); font-weight:800; font-size:22px; color:#EE4D2D;">HoànTiền247</div>
     <div style="font-size:13px; color:#64748B; margin-top:4px;">Mua sắm Shopee &amp; TikTok Shop • Hoàn tiền về ngân hàng 24/7</div>
     <div class="intro-bar"><div class="intro-bar-fill"></div></div>
     <button class="btn btn-outline btn-sm" onclick="dismissIntro()">Vào trang chủ ngay →</button>
   </div>
 
-  <!-- MENU PROFILE XỔ XUỐNG GÓC PHẢI -->
+  <!-- MENU XỔ XUỐNG TỔNG QUAN & AVATAR -->
+  <div id="quickMenuDropdown" class="quick-menu-dropdown"></div>
   <div id="profileDropdown" class="profile-dropdown"></div>
 
   <!-- TOP NAVBAR -->
@@ -490,15 +525,19 @@
     <div class="navbar-inner">
       <div class="nav-brand" onclick="switchPage('dashboard')">
         <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" alt="Logo" />
-        <span class="nav-brand-name">HoànTiền<span>247</span></span>
+        <span class="nav-brand-name">HoànTiền247</span>
       </div>
       <nav class="nav-links">
-        <button class="nav-link-btn active" data-page="dashboard" onclick="switchPage('dashboard')"><i data-lucide="layout-dashboard" class="icon-sm"></i> Tổng quan</button>
-        <button class="nav-link-btn" data-page="guide" onclick="switchPage('guide')"><i data-lucide="book-open" class="icon-sm"></i> Cẩm nang</button>
-        <button class="nav-link-btn" data-page="history" onclick="switchPage('history')"><i data-lucide="receipt" class="icon-sm"></i> Đơn hoàn tiền</button>
+        <button id="btnNavOverview" class="nav-link-btn active" data-page="dashboard" onclick="handleOverviewNavClick(event)">
+          <i data-lucide="layout-grid" class="icon-sm"></i> Tổng quan <i data-lucide="chevron-down" class="icon-sm"></i>
+        </button>
+        <button class="nav-link-btn" data-page="guide" onclick="switchPage('guide')"><i data-lucide="book-open" class="icon-sm"></i> Hướng dẫn</button>
+        <button class="nav-link-btn" data-page="history" onclick="switchPage('history')"><i data-lucide="receipt" class="icon-sm"></i> Lịch sử hoàn tiền</button>
         <button class="nav-link-btn" data-page="withdraw" onclick="switchPage('withdraw')"><i data-lucide="landmark" class="icon-sm"></i> Rút tiền</button>
       </nav>
-      <button id="topAvatarBtn" class="avatar-trigger" onclick="toggleProfileDropdown()">247</button>
+      <button id="topAvatarBtn" class="avatar-logo-btn" onclick="toggleProfileDropdown()" title="Tài khoản &amp; Quản trị">
+        <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" alt="Avatar" />
+      </button>
     </div>
   </header>
 
@@ -508,168 +547,119 @@
   </div>
 
   <div class="app-container">
-    <!-- TRANG 1: TỔNG QUAN -->
+    <!-- =====================================================
+         TRANG 1: TỔNG QUAN (GÁN LINK Ở TRÊN, HỎI ĐÁP Ở DƯỚI)
+         ===================================================== -->
     <main id="page-dashboard" class="page-view active">
       <div class="dashboard-grid">
+        <!-- CỘT CHÍNH -->
         <div>
+          <!-- HERO CARD VÍ & CHÀO MỪNG -->
           <div class="hero-wallet-card">
             <div class="hero-wallet-top">
-              <div style="display:flex; align-items:center; gap:9px;">
-                <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" style="width:36px; height:36px; border-radius:10px; background:#fff; padding:2px;" alt="Logo" />
+              <div style="display:flex; align-items:center; gap:10px;">
+                <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" class="user-logo-avatar" alt="Logo" />
                 <div>
-                  <div id="greetingTitle" class="font-bold" style="font-size:15px;">Xin chào, bạn!</div>
-                  <div style="font-size:11.5px; opacity:0.8;">Hoàn tiền mua sắm tự động 24/7</div>
+                  <div id="greetingTitle" class="font-bold" style="font-size:15px;">Chào buổi sáng, bạn!</div>
+                  <div class="text-xs text-muted">Hoàn tiền mua sắm tự động 24/7</div>
                 </div>
               </div>
               <div style="display:flex; gap:6px;">
-                <button class="btn btn-primary btn-sm" onclick="switchPage('agency')"><i data-lucide="users" class="icon-sm"></i> Mời bạn</button>
-                <button class="btn btn-sm" style="background:rgba(255,255,255,0.14); color:#fff;" onclick="switchPage('settings')"><i data-lucide="settings" class="icon-sm"></i></button>
+                <button class="btn btn-primary btn-sm" onclick="switchPage('agency')"><i data-lucide="users" class="icon-sm"></i> Mời bạn bè</button>
+                <button class="btn btn-outline btn-sm" onclick="switchPage('settings')"><i data-lucide="settings" class="icon-sm"></i></button>
               </div>
             </div>
 
             <div class="hero-balance-row" onclick="switchPage('withdraw')">
               <div>
-                <div style="font-size:11px; opacity:0.8;">Số dư khả dụng có thể rút</div>
-                <div id="dashAvailBalance" style="font-family:var(--font-display); font-weight:800; font-size:25px; color:#FDBA74;">0₫</div>
+                <div class="text-xs text-muted">Số dư khả dụng</div>
+                <div id="dashAvailBalance" style="font-family:var(--font-display); font-weight:800; font-size:24px; color:var(--primary);">0₫</div>
               </div>
-              <span class="btn btn-sm" style="background:#fff; color:#0F172A;">Rút tiền <i data-lucide="chevron-right" class="icon-sm"></i></span>
+              <span class="btn btn-primary btn-sm">Rút tiền <i data-lucide="chevron-right" class="icon-sm"></i></span>
             </div>
           </div>
 
-          <div class="metrics-grid">
-            <div class="metric-card" onclick="switchPage('history')" style="cursor:pointer;">
-              <div class="metric-icon" style="background:var(--info-soft); color:var(--info);"><i data-lucide="shopping-bag" class="icon-md"></i></div>
-              <div><div class="text-xs text-muted">Đơn của tôi</div><div id="statTotalOrders" class="font-bold" style="font-size:15px;">0</div></div>
-            </div>
-            <div class="metric-card" onclick="switchPage('history')" style="cursor:pointer;">
-              <div class="metric-icon" style="background:var(--warning-soft); color:var(--warning);"><i data-lucide="clock" class="icon-md"></i></div>
-              <div><div class="text-xs text-muted">Chờ đối soát</div><div id="statPendingCb" class="font-bold" style="font-size:15px; color:var(--warning);">0₫</div></div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-icon" style="background:var(--success-soft); color:var(--success);"><i data-lucide="trending-up" class="icon-md"></i></div>
-              <div><div class="text-xs text-muted">Tổng tích lũy</div><div id="statTotalEarned" class="font-bold" style="font-size:15px; color:var(--success);">0₫</div></div>
-            </div>
-            <div class="metric-card" onclick="switchPage('withdraw')" style="cursor:pointer;">
-              <div class="metric-icon" style="background:var(--primary-soft); color:var(--primary);"><i data-lucide="wallet" class="icon-md"></i></div>
-              <div><div class="text-xs text-muted">Đã rút về STK</div><div id="statWithdrawn" class="font-bold" style="font-size:15px;">0₫</div></div>
-            </div>
+          <!-- 4 NÚT CHỨC NĂNG NHANH -->
+          <div class="quick-actions-grid">
+            <button class="qa-action-btn" onclick="document.getElementById('cbProductUrl').focus()">
+              <div class="qa-action-icon" style="background:var(--primary-soft); color:var(--primary);"><i data-lucide="link" class="icon-md"></i></div>
+              <span>Gán link</span>
+            </button>
+            <button class="qa-action-btn" onclick="openClaimOrderModal()">
+              <div class="qa-action-icon" style="background:var(--info-soft); color:var(--info);"><i data-lucide="plus-circle" class="icon-md"></i></div>
+              <span>Báo mã đơn</span>
+            </button>
+            <button class="qa-action-btn" onclick="openSavedCartModal()">
+              <div class="qa-action-icon" style="background:var(--warning-soft); color:var(--warning);"><i data-lucide="shopping-cart" class="icon-md"></i></div>
+              <span>Giỏ link</span>
+            </button>
+            <button class="qa-action-btn" onclick="switchPage('agency')">
+              <div class="qa-action-icon" style="background:var(--success-soft); color:var(--success);"><i data-lucide="gift" class="icon-md"></i></div>
+              <span>Đại lý F1</span>
+            </button>
           </div>
 
-          <div class="partner-banner">
-            <div>
-              <span class="badge" style="background:rgba(255,255,255,0.2); color:#fff; margin-bottom:5px;">CHƯƠNG TRÌNH ĐỐI TÁC</span>
-              <div style="font-family:var(--font-display); font-weight:800; font-size:17px; line-height:1.25;">
-                MỜI BẠN BÈ MUA SẮM<br>NHẬN <span id="bannerRefPct" style="color:#FDE047;">15%</span> HOA HỒNG F1
-              </div>
-              <div style="font-size:11.5px; opacity:0.9; margin-top:4px;">Tặng thêm quà tân thủ cho cả người mời &amp; bạn bè!</div>
-            </div>
-            <button class="btn btn-sm" style="background:#fff; color:#0F766E; flex-shrink:0;" onclick="switchPage('agency')">Lấy link mời <i data-lucide="arrow-up-right" class="icon-sm"></i></button>
-          </div>
-
-          <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <div>
-                <div class="font-bold" style="font-size:14.5px; display:flex; align-items:center; gap:6px;">
-                  <i data-lucide="message-square" class="icon-md" style="color:var(--primary);"></i> Hỏi đáp &amp; Thảo luận <span class="badge badge-primary" id="qaTotalBadge">0</span>
-                </div>
-                <div class="text-xs text-muted">Giải đáp thắc mắc hoàn tiền Shopee, TikTok Shop</div>
-              </div>
-            </div>
-
-            <div style="display:flex; gap:7px; margin-bottom:12px;">
-              <input type="text" id="qaNewInput" class="input" placeholder="Viết câu hỏi hoặc bình luận của bạn..." onkeypress="if(event.key==='Enter') postCommunityQuestion()" />
-              <button class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="postCommunityQuestion()"><i data-lucide="send" class="icon-sm"></i> Gửi</button>
-            </div>
-
-            <div id="qaCommentsList"></div>
-          </div>
-        </div>
-
-        <div>
+          <!-- KHUNG GÁN LINK HOÀN TIỀN (NẰM Ở TRÊN + LOGO SHOPEE & TIKTOK) -->
           <div class="converter-card">
-            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
               <div style="display:flex; align-items:center; gap:10px;">
                 <div style="width:38px; height:38px; border-radius:11px; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center;"><i data-lucide="link" class="icon-md"></i></div>
                 <div>
-                  <div class="font-bold" style="font-size:15px;">Tạo link hoàn tiền ngay</div>
-                  <div class="text-xs text-muted">Hỗ trợ toàn bộ sản phẩm Shopee &amp; TikTok Shop</div>
+                  <div class="font-bold" style="font-size:15px;">Tạo link hoàn tiền</div>
+                  <div class="text-xs text-muted">Mua sắm nhận hoàn tiền tự động về tài khoản</div>
                 </div>
               </div>
-              <button class="btn btn-outline btn-sm" onclick="openSavedCartModal()"><i data-lucide="shopping-cart" class="icon-sm"></i> Giỏ link (<span id="savedCartBadgeTop">0</span>)</button>
+              <button class="btn btn-outline btn-sm" onclick="openSavedCartModal()"><i data-lucide="shopping-cart" class="icon-sm"></i> Giỏ (<span id="savedCartBadgeTop">0</span>)</button>
+            </div>
+
+            <div class="supported-platforms-bar">
+              <span class="text-xs text-muted font-bold">Hỗ trợ:</span>
+              <span class="platform-logo-badge" style="border-color:#FDBA74; background:#FFF7ED; color:#EE4D2D;">
+                <svg viewBox="0 0 24 24" fill="#EE4D2D"><path d="M12 2a4 4 0 0 0-4 4H5a1 1 0 0 0-.99 1.14l1.7 12.2A3 3 0 0 0 8.68 22h6.64a3 3 0 0 0 2.97-2.66l1.7-12.2A1 1 0 0 0 19 6h-3a4 4 0 0 0-4-4zm0 2a2 2 0 0 1 2 2h-4a2 2 0 0 1 2-2zm0 6.5c1.9 0 3.3.95 3.3 2.35 0 1.25-.95 1.95-2.6 2.25l-.95.18c-.85.16-1.25.45-1.25.92 0 .55.6.9 1.55.9.95 0 1.65-.35 2.05-.95l1.45 1.05c-.7.95-1.95 1.5-3.55 1.5-2.1 0-3.55-1.05-3.55-2.55 0-1.35.95-2.1 2.75-2.42l.95-.17c.8-.15 1.15-.4 1.15-.82 0-.48-.55-.8-1.4-.8-.85 0-1.45.3-1.85.82l-1.4-1.02c.65-.9 1.85-1.44 3.35-1.44z"/></svg>
+                Shopee
+              </span>
+              <span class="platform-logo-badge" style="border-color:#CBD5E1; background:#0F172A; color:#FFFFFF;">
+                <svg viewBox="0 0 24 24" fill="#FFFFFF"><path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/></svg>
+                TikTok Shop
+              </span>
             </div>
 
             <div style="display:flex; gap:8px;">
-              <input type="url" id="cbProductUrl" class="input" placeholder="Dán link sản phẩm Shopee hoặc TikTok Shop..." />
+              <input type="url" id="cbProductUrl" class="input" placeholder="Nhấn để dán link Shopee / TikTok..." />
               <button id="btnCheckCb" class="btn btn-primary" style="white-space:nowrap; flex-shrink:0;" onclick="checkCashbackLink()">
-                <i data-lucide="zap" class="icon-sm"></i> Tạo link
+                <i data-lucide="link" class="icon-sm"></i> Dán link
               </button>
             </div>
 
             <div id="cbCheckResult"></div>
 
             <div style="margin-top:11px; padding:9px 12px; border-radius:11px; background:var(--warning-soft); border:1px solid #FDE68A; display:flex; justify-content:space-between; align-items:center; gap:8px;">
-              <span class="text-xs" style="display:flex; align-items:center; gap:6px;"><i data-lucide="alert-triangle" class="icon-sm" style="color:var(--warning);"></i> <b>Lưu ý:</b> Xóa SP cũ khỏi giỏ trên app trước khi bấm Mua Ngay</span>
-              <button class="btn btn-outline btn-sm" onclick="switchPage('guide')">Xem <i data-lucide="chevron-right" class="icon-sm"></i></button>
+              <span class="text-xs" style="display:flex; align-items:center; gap:6px;"><i data-lucide="alert-triangle" class="icon-sm" style="color:var(--warning);"></i> <b>Quan trọng:</b> Đọc kỹ hướng dẫn để đảm bảo sàn ghi nhận đơn</span>
+              <button class="btn btn-outline btn-sm" onclick="switchPage('guide')">Xem</button>
             </div>
           </div>
 
-          <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <div>
-                <div class="font-bold" style="font-size:14.5px; display:flex; align-items:center; gap:6px;">
-                  <i data-lucide="list-checks" class="icon-md" style="color:var(--accent);"></i> Quy trình nhận hoàn tiền <span class="badge badge-info">6 bước</span>
-                </div>
-                <div class="text-xs text-muted">Từ lúc dán link đến khi tiền về tài khoản ngân hàng</div>
-              </div>
-              <button class="btn btn-outline btn-sm" onclick="toggleStepsBox()" id="btnToggleSteps">Thu gọn</button>
+          <!-- 4 Ô THỐNG KÊ NHANH -->
+          <div class="metrics-grid">
+            <div class="metric-card" onclick="switchPage('history')" style="cursor:pointer;">
+              <div class="metric-icon" style="background:var(--info-soft); color:var(--info);"><i data-lucide="shopping-bag" class="icon-md"></i></div>
+              <div><div class="text-xs text-muted">Tổng đơn hàng</div><div id="statTotalOrders" class="font-bold" style="font-size:15px;">0</div></div>
             </div>
-
-            <div id="stepsBoxWrap" class="steps-wrapper">
-              <div class="step-row-card">
-                <div style="display:flex; align-items:center; gap:10px;">
-                  <span class="step-circle">1</span>
-                  <div><div class="font-bold" style="font-size:12.5px;">Copy &amp; Dán link sản phẩm</div><div class="text-xs text-muted">Dán link vào ô phía trên hoặc lưu vào Giỏ link để mua sau.</div></div>
-                </div>
-                <span class="badge badge-primary">Tạo link</span>
-              </div>
-              <div class="step-row-card">
-                <div style="display:flex; align-items:center; gap:10px;">
-                  <span class="step-circle">2</span>
-                  <div><div class="font-bold" style="font-size:12.5px;">Mở sàn &amp; Đặt hàng liền mạch</div><div class="text-xs text-muted">Bấm Mua Ngay sang app Shopee/TikTok, áp mã giảm giá bình thường.</div></div>
-                </div>
-                <span class="badge badge-warning">Đặt đơn</span>
-              </div>
-              <div class="step-row-card">
-                <div style="display:flex; align-items:center; gap:10px;">
-                  <span class="step-circle">3</span>
-                  <div><div class="font-bold" style="font-size:12.5px;">Báo mã đơn hàng trên web</div><div class="text-xs text-muted">Vào mục <b>Đơn hoàn tiền → + Báo Mã Đơn</b> để hệ thống theo dõi.</div></div>
-                </div>
-                <span class="badge badge-info">Đối soát</span>
-              </div>
-              <div class="step-row-card">
-                <div style="display:flex; align-items:center; gap:10px;">
-                  <span class="step-circle">4</span>
-                  <div><div class="font-bold" style="font-size:12.5px;">Xác nhận "Đã nhận hàng"</div><div class="text-xs text-muted">Sau khi nhận hàng và không đổi trả, bấm đã nhận hàng trên sàn.</div></div>
-                </div>
-                <span class="badge badge-info">Chốt đơn</span>
-              </div>
-              <div class="step-row-card">
-                <div style="display:flex; align-items:center; gap:10px;">
-                  <span class="step-circle">5</span>
-                  <div><div class="font-bold" style="font-size:12.5px;">Cộng tiền vào Số dư khả dụng</div><div class="text-xs text-muted">Hệ thống duyệt hoàn tất và cộng trực tiếp vào ví của bạn.</div></div>
-                </div>
-                <span class="badge badge-success">Cộng ví</span>
-              </div>
-              <div class="step-row-card">
-                <div style="display:flex; align-items:center; gap:10px;">
-                  <span class="step-circle">6</span>
-                  <div><div class="font-bold" style="font-size:12.5px;">Rút tiền về STK ngân hàng 24/7</div><div class="text-xs text-muted">Rút miễn phí về 40+ ngân hàng &amp; ví điện tử từ 50.000₫.</div></div>
-                </div>
-                <span class="badge badge-success">Rút ngay</span>
-              </div>
+            <div class="metric-card" onclick="switchPage('history')" style="cursor:pointer;">
+              <div class="metric-icon" style="background:var(--warning-soft); color:var(--warning);"><i data-lucide="clock" class="icon-md"></i></div>
+              <div><div class="text-xs text-muted">Hoàn tiền tạm tính</div><div id="statPendingCb" class="font-bold" style="font-size:15px; color:var(--warning);">0₫</div></div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon" style="background:var(--success-soft); color:var(--success);"><i data-lucide="trending-up" class="icon-md"></i></div>
+              <div><div class="text-xs text-muted">Tổng hoa hồng</div><div id="statTotalEarned" class="font-bold" style="font-size:15px; color:var(--success);">0₫</div></div>
+            </div>
+            <div class="metric-card" onclick="switchPage('withdraw')" style="cursor:pointer;">
+              <div class="metric-icon" style="background:var(--primary-soft); color:var(--primary);"><i data-lucide="wallet" class="icon-md"></i></div>
+              <div><div class="text-xs text-muted">Số tiền đã rút</div><div id="statWithdrawn" class="font-bold" style="font-size:15px;">0₫</div></div>
             </div>
           </div>
 
+          <!-- KHO MÃ GIẢM GIÁ & DEAL HOT -->
           <div id="dashVoucherSection" class="card" style="display:none;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
               <span class="font-bold" style="font-size:14px; display:flex; align-items:center; gap:6px;"><i data-lucide="ticket" class="icon-md" style="color:var(--primary);"></i> Kho Mã Giảm Giá Độc Quyền</span>
@@ -686,20 +676,114 @@
             <div id="homeDealList" class="deal-grid"></div>
           </div>
         </div>
+
+        <!-- CỘT PHỤ (QUY TRÌNH + ĐẠI LÝ + HỎI ĐÁP NẰM Ở DƯỚI) -->
+        <div>
+          <!-- QUY TRÌNH NHẬN HOÀN TIỀN 6 BƯỚC -->
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div class="font-bold" style="font-size:14.5px; display:flex; align-items:center; gap:6px;">
+                  <i data-lucide="list-checks" class="icon-md" style="color:var(--primary);"></i> Quy trình nhận hoàn tiền <span class="badge badge-info">6 bước</span>
+                </div>
+                <div class="text-xs text-muted">Từ lúc dán link đến khi tiền về ví và rút được ngay</div>
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="toggleStepsBox()" id="btnToggleSteps">Thu gọn</button>
+            </div>
+
+            <div id="stepsBoxWrap" class="steps-wrapper">
+              <div class="step-row-card">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span class="step-circle">1</span>
+                  <div><div class="font-bold" style="font-size:12.5px;">Đọc hướng dẫn mua hàng</div><div class="text-xs text-muted">Đọc kỹ lưu ý để đảm bảo đơn hàng không bị rớt hoàn tiền.</div></div>
+                </div>
+                <span class="badge badge-warning">Tránh rớt đơn</span>
+              </div>
+              <div class="step-row-card">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span class="step-circle">2</span>
+                  <div><div class="font-bold" style="font-size:12.5px;">Dán link vào hệ thống</div><div class="text-xs text-muted">Dán link và bấm <b>Mua Ngay</b> hoặc lưu vào Giỏ link.</div></div>
+                </div>
+                <span class="badge badge-primary">Thao tác link</span>
+              </div>
+              <div class="step-row-card">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span class="step-circle">3</span>
+                  <div><div class="font-bold" style="font-size:12.5px;">Đặt hàng trên sàn</div><div class="text-xs text-muted">Áp voucher giảm giá &amp; freeship bình thường trên Shopee / TikTok.</div></div>
+                </div>
+                <span class="badge badge-info">Thanh toán</span>
+              </div>
+              <div class="step-row-card">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span class="step-circle">4</span>
+                  <div><div class="font-bold" style="font-size:12.5px;">Báo mã đơn &amp; Kiểm tra đơn hàng</div><div class="text-xs text-muted">Vào <b>Lịch sử hoàn tiền → + Báo Mã Đơn</b> để đối soát nhanh.</div></div>
+                </div>
+                <span class="badge badge-info">Đối soát</span>
+              </div>
+              <div class="step-row-card">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span class="step-circle">5</span>
+                  <div><div class="font-bold" style="font-size:12.5px;">Bấm duyệt đơn trên sàn</div><div class="text-xs text-muted">Khi nhận hàng (không đổi trả), bấm "Đã nhận hàng" để chốt sớm.</div></div>
+                </div>
+                <span class="badge badge-primary">Shopee / TikTok</span>
+              </div>
+              <div class="step-row-card">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span class="step-circle">6</span>
+                  <div><div class="font-bold" style="font-size:12.5px;">Tiền về Số dư khả dụng</div><div class="text-xs text-muted">Rút trực tiếp về tài khoản ngân hàng bất kỳ lúc nào (từ 50.000₫).</div></div>
+                </div>
+                <span class="badge badge-success">Có thể rút luôn</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- BANNER MỜI BẠN THAM GIA -->
+          <div class="partner-banner">
+            <div>
+              <div class="font-bold" style="color:var(--primary); font-size:12px;">HoànTiền247 • Chương trình Đại lý</div>
+              <div style="font-family:var(--font-display); font-weight:800; font-size:17px; line-height:1.25; margin-top:2px;">
+                MỜI BẠN THAM GIA<br>MUA HÀNG HOÀN TIỀN
+              </div>
+              <div style="font-size:12px; margin-top:4px;">Nhận ngay <b style="color:var(--primary); font-size:16px;" id="bannerRefPct">15%</b> hoa hồng mỗi đơn từ bạn bè*</div>
+            </div>
+            <button class="btn btn-primary btn-sm" style="flex-shrink:0;" onclick="switchPage('agency')">Mời bạn ngay <i data-lucide="arrow-up-right" class="icon-sm"></i></button>
+          </div>
+
+          <!-- MỤC HỎI ĐÁP & THẢO LUẬN CỘNG ĐỒNG (NẰM Ở PHẦN DƯỚI) -->
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <div>
+                <div class="font-bold" style="font-size:14.5px; display:flex; align-items:center; gap:6px;">
+                  <i data-lucide="message-square" class="icon-md" style="color:var(--primary);"></i> Hỏi đáp &amp; Thảo luận <span class="badge badge-primary" id="qaTotalBadge">0</span>
+                </div>
+                <div class="text-xs text-muted">Thắc mắc &amp; thảo luận về hoàn tiền Shopee, TikTok Shop</div>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:7px; margin-bottom:12px;">
+              <input type="text" id="qaNewInput" class="input" placeholder="Viết bình luận hoặc câu hỏi của bạn..." onkeypress="if(event.key==='Enter') postCommunityQuestion()" />
+              <button class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="postCommunityQuestion()"><i data-lucide="send" class="icon-sm"></i> Gửi</button>
+            </div>
+
+            <div id="qaCommentsList"></div>
+          </div>
+        </div>
       </div>
     </main>
 
-    <!-- TRANG 2: CẨM NANG & HƯỚNG DẪN -->
+    <!-- =====================================================
+         TRANG 2: HƯỚNG DẪN SỬ DỤNG
+         ===================================================== -->
     <main id="page-guide" class="page-view">
       <div style="margin-bottom:14px;">
-        <h2 style="font-family:var(--font-display); font-weight:800; font-size:19px;">Cẩm nang &amp; Hướng dẫn sử dụng</h2>
-        <p class="text-xs text-muted">Hướng dẫn chi tiết từng bước nhận hoàn tiền Shopee, TikTok Shop và cài đặt ứng dụng ra màn hình chính.</p>
+        <h2 style="font-family:var(--font-display); font-weight:800; font-size:19px;">Sổ tay &amp; Hướng dẫn sử dụng</h2>
+        <p class="text-xs text-muted">Tài liệu hướng dẫn từng bước nhận hoàn tiền khi mua sắm trên Shopee &amp; TikTok Shop, cùng mẹo cài đặt ứng dụng ra màn hình chính.</p>
       </div>
 
       <div class="card">
         <div class="text-xs font-bold" style="color:var(--primary);">PHẦN 1 • Quy trình mua sắm</div>
         <div style="font-family:var(--font-display); font-weight:800; font-size:16px; margin-bottom:10px;">
-          Cách mua hàng nhận <span style="color:var(--primary);">Hoàn tiền 100%</span>
+          Hướng dẫn mua sắm nhận <span style="color:var(--primary);">Hoàn tiền</span>
         </div>
 
         <div class="filter-pills">
@@ -710,12 +794,12 @@
         <div id="guideStepsGrid" class="guide-grid-2"></div>
 
         <div style="margin-top:12px; background:var(--primary-soft); border:1px solid var(--primary-border); border-radius:13px; padding:12px;">
-          <div class="badge badge-primary" style="margin-bottom:8px;">MẸO MUA NHIỀU MÓN CÙNG 1 SHOP</div>
+          <div class="badge badge-primary" style="margin-bottom:8px;">MUA NHIỀU SẢN PHẨM CÙNG 1 SHOP</div>
           <div class="guide-grid-2" style="margin-top:0;">
-            <div class="guide-step-box"><div class="font-bold" style="font-size:12.5px;">1. Giỏ hàng trống</div><div class="text-xs text-muted">Xóa sản phẩm cũ của shop khỏi giỏ trước khi dán link.</div></div>
-            <div class="guide-step-box"><div class="font-bold" style="font-size:12.5px;">2. Dán 1 link duy nhất</div><div class="text-xs text-muted">Dán link 1 món bất kỳ trong shop vào HoànTiền247 để mở app.</div></div>
-            <div class="guide-step-box"><div class="font-bold" style="font-size:12.5px;">3. Vào Shop nhặt tiếp</div><div class="text-xs text-muted">Thêm món 1 vào giỏ → Bấm "Xem Shop" để chọn thêm các món khác.</div></div>
-            <div class="guide-step-box"><div class="font-bold" style="font-size:12.5px;">4. Thanh toán 1 lần</div><div class="text-xs text-muted">Vào giỏ hàng chọn tất cả món vừa thêm và đặt hàng.</div></div>
+            <div class="guide-step-box"><div class="font-bold" style="font-size:12.5px;">1. Giỏ hàng trống</div><div class="text-xs text-muted">Đảm bảo giỏ hàng chưa có sẵn sản phẩm của shop định mua.</div></div>
+            <div class="guide-step-box"><div class="font-bold" style="font-size:12.5px;">2. Dán 1 link duy nhất</div><div class="text-xs text-muted">Chỉ cần dán link 1 sản phẩm bất kỳ trong shop vào HoànTiền247 để mở app.</div></div>
+            <div class="guide-step-box"><div class="font-bold" style="font-size:12.5px;">3. Vào Shop nhặt tiếp</div><div class="text-xs text-muted">Thêm SP1 vào giỏ → Bấm "Xem Shop" để thêm tiếp các sản phẩm khác.</div></div>
+            <div class="guide-step-box"><div class="font-bold" style="font-size:12.5px;">4. Đặt hàng tại giỏ</div><div class="text-xs text-muted">Vào giỏ hàng tích chọn tất cả món vừa nhặt và thanh toán ngay 1 lần.</div></div>
           </div>
         </div>
       </div>
@@ -723,7 +807,7 @@
       <div class="card">
         <div class="text-xs font-bold" style="color:var(--accent);">PHẦN 2 • Cài đặt ứng dụng PWA</div>
         <div style="font-family:var(--font-display); font-weight:800; font-size:16px; margin-bottom:10px;">
-          Thêm HoànTiền247 vào <span style="color:var(--accent);">Màn hình chính</span>
+          Thêm ứng dụng vào <span style="color:var(--accent);">Màn hình chính</span>
         </div>
         <div class="filter-pills">
           <button class="f-pill active" id="pwaIosBtn" onclick="switchPwaOs('ios')"><i data-lucide="smartphone" class="icon-sm"></i> iPhone / iOS (Safari)</button>
@@ -733,26 +817,28 @@
       </div>
 
       <div class="card">
-        <div class="font-bold" style="font-size:15px; margin-bottom:10px; display:flex; align-items:center; gap:6px;"><i data-lucide="help-circle" class="icon-md" style="color:var(--primary);"></i> Câu hỏi thường gặp (FAQ)</div>
+        <div class="font-bold" style="font-size:15px; margin-bottom:10px; display:flex; align-items:center; gap:6px;"><i data-lucide="help-circle" class="icon-md" style="color:var(--primary);"></i> Hướng dẫn chung &amp; Giải đáp thắc mắc</div>
         <div class="faq-item" onclick="this.classList.toggle('open')">
-          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:13px;"><span>Hoàn tiền mua sắm hoạt động như thế nào?</span><i data-lucide="chevron-down" class="icon-sm"></i></div>
+          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:13px;"><span>Hoàn tiền mua sắm là gì?</span><i data-lucide="chevron-down" class="icon-sm"></i></div>
           <div class="faq-ans">Khi bạn tạo link tại HoànTiền247 và mua hàng trên Shopee/TikTok Shop, sàn trả hoa hồng tiếp thị cho hệ thống và chúng tôi hoàn lại trực tiếp bằng tiền mặt về tài khoản ngân hàng của bạn.</div>
         </div>
         <div class="faq-item" onclick="this.classList.toggle('open')">
-          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:13px;"><span>Làm sao để lưu link sản phẩm ưng ý mua sau?</span><i data-lucide="chevron-down" class="icon-sm"></i></div>
-          <div class="faq-ans">Sau khi dán link vào ô "Tạo link hoàn tiền", bạn bấm nút <b>+ Lưu Giỏ Link</b>. Khi nào cần mua chỉ việc mở nút <b>Giỏ link</b> góc dưới màn hình và bấm Mua Ngay!</div>
+          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:13px;"><span>Mẹo mua sắm nhận hoàn tiền?</span><i data-lucide="chevron-down" class="icon-sm"></i></div>
+          <div class="faq-ans">Xóa sản phẩm khỏi giỏ hàng trước khi dán link, mở trực tiếp sang app sàn từ nút Mua Ngay và tránh bấm vào livestream hoặc video review giữa chừng.</div>
         </div>
         <div class="faq-item" onclick="this.classList.toggle('open')">
-          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:13px;"><span>Bao lâu thì được rút tiền về ngân hàng?</span><i data-lucide="chevron-down" class="icon-sm"></i></div>
-          <div class="faq-ans">Ngay sau khi đơn hàng giao thành công, hết thời gian đổi trả của sàn và được Admin duyệt sang Số dư khả dụng (từ 50.000₫), bạn có thể đặt lệnh rút tiền 24/7.</div>
+          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:13px;"><span>Tại sao tôi đã mua hàng thành công nhưng chưa được ghi nhận?</span><i data-lucide="chevron-down" class="icon-sm"></i></div>
+          <div class="faq-ans">Sau khi đặt đơn thành công trên sàn, bạn hãy vào mục <b>Lịch sử hoàn tiền → + Báo Mã Đơn</b> nhập mã đơn hàng để hệ thống cập nhật và đối soát nhanh nhất.</div>
         </div>
       </div>
     </main>
 
-    <!-- TRANG 3: ĐƠN HOÀN TIỀN -->
+    <!-- =====================================================
+         TRANG 3: LỊCH SỬ HOÀN TIỀN
+         ===================================================== -->
     <main id="page-history" class="page-view">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h2 style="font-family:var(--font-display); font-weight:800; font-size:19px;">Đơn hoàn tiền của tôi</h2>
+        <h2 style="font-family:var(--font-display); font-weight:800; font-size:19px;">Lịch sử hoàn tiền</h2>
         <button class="btn btn-primary btn-sm" onclick="openClaimOrderModal()"><i data-lucide="plus-circle" class="icon-sm"></i> Báo Mã Đơn</button>
       </div>
 
@@ -763,50 +849,58 @@
       <div class="filter-pills">
         <button class="f-pill active" data-hfilter="all" onclick="setHistoryFilter('all')">Tất cả</button>
         <button class="f-pill" data-hfilter="1" onclick="setHistoryFilter('1')">Chờ xử lý</button>
-        <button class="f-pill" data-hfilter="2" onclick="setHistoryFilter('2')">Đang đối soát</button>
+        <button class="f-pill" data-hfilter="2" onclick="setHistoryFilter('2')">Đang xử lý</button>
         <button class="f-pill" data-hfilter="3" onclick="setHistoryFilter('3')">Hoàn tất</button>
-        <button class="f-pill" data-hfilter="0" onclick="setHistoryFilter('0')">Đã hủy</button>
+        <button class="f-pill" data-hfilter="0" onclick="setHistoryFilter('0')">Hủy</button>
       </div>
 
       <div id="historySummaryArea"></div>
       <div id="historyOrdersArea"></div>
     </main>
 
-    <!-- TRANG 4: RÚT TIỀN -->
+    <!-- =====================================================
+         TRANG 4: RÚT TIỀN
+         ===================================================== -->
     <main id="page-withdraw" class="page-view">
-      <h2 style="font-family:var(--font-display); font-weight:800; font-size:19px; margin-bottom:12px;">Rút tiền về ngân hàng</h2>
+      <h2 style="font-family:var(--font-display); font-weight:800; font-size:19px; margin-bottom:12px;">Lịch sử rút tiền</h2>
       <div id="withdrawPageArea"></div>
     </main>
 
-    <!-- TRANG 5: ĐẠI LÝ / MỜI BẠN BÈ F1 -->
+    <!-- =====================================================
+         TRANG 5: ĐẠI LÝ / MỜI BẠN BÈ F1
+         ===================================================== -->
     <main id="page-agency" class="page-view">
       <h2 style="font-family:var(--font-display); font-weight:800; font-size:19px; margin-bottom:12px;">Chương trình Đại lý &amp; Tuyển Ref</h2>
       <div id="agencyPageArea"></div>
     </main>
 
-    <!-- TRANG 6: CÀI ĐẶT & QUẢN TRỊ VIÊN -->
+    <!-- =====================================================
+         TRANG 6: CÀI ĐẶT & BẢNG QUẢN TRỊ VIÊN TOÀN DIỆN (8 TAB)
+         ===================================================== -->
     <main id="page-settings" class="page-view">
       <h2 style="font-family:var(--font-display); font-weight:800; font-size:19px; margin-bottom:12px;">Cài đặt &amp; Tài khoản</h2>
       <div id="settingsPageArea"></div>
     </main>
   </div>
 
+  <!-- FOOTER -->
   <footer class="app-footer">
     <div class="footer-inner">
       <div style="display:flex; align-items:center; gap:8px;">
         <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" style="width:24px; height:24px; border-radius:6px; background:#fff; padding:1px;" alt="Logo" />
-        <span>© 2026 <b>HoànTiền247</b> • Mua sắm hoàn tiền thông minh</span>
+        <span>© 2026 <b>HoànTiền247</b>. All rights reserved.</span>
       </div>
       <div style="display:flex; gap:14px;">
-        <span style="cursor:pointer;" onclick="switchPage('guide')">Cẩm nang</span>
+        <span style="cursor:pointer;" onclick="switchPage('guide')">Hướng dẫn</span>
         <span style="cursor:pointer;" onclick="openAiChatModal()">Trợ lý AI</span>
       </div>
     </div>
   </footer>
 
+  <!-- FLOATING STACK -->
   <div class="floating-stack">
     <button class="floating-saved-pill" onclick="openSavedCartModal()">
-      <i data-lucide="shopping-cart" class="icon-sm"></i> Giỏ link (<span id="floatSavedCount">0</span>)
+      <i data-lucide="shopping-cart" class="icon-sm"></i> Giỏ hàng (<span id="floatSavedCount">0</span>)
     </button>
     <button class="ai-fab" onclick="openAiChatModal()" aria-label="Trợ lý AI">
       <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" alt="AI HoànTiền247" />
@@ -824,7 +918,7 @@
         <button class="btn btn-outline btn-sm" onclick="changeNoticeSlide(1)"><i data-lucide="chevron-right" class="icon-sm"></i></button>
       </div>
       <label class="text-xs text-muted" style="display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom:10px; cursor:pointer;">
-        <input type="checkbox" id="chkHideUnifiedNotice" /> Không hiển thị lại thông báo này
+        <input type="checkbox" id="chkHideUnifiedNotice" /> Không hiển thị lại
       </label>
       <button class="btn btn-primary" style="width:100%;" onclick="closeUnifiedNotice()">Đã hiểu &amp; Tiếp tục</button>
     </div>
@@ -854,7 +948,7 @@
   <div id="savedCartModal" class="modal-backdrop" onclick="backdropClose(event, 'savedCartModal')">
     <div class="modal-box">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div class="font-bold" style="font-size:15px; display:flex; align-items:center; gap:6px;"><i data-lucide="shopping-cart" class="icon-md" style="color:var(--primary);"></i> Giỏ Link Hoàn Tiền Đã Lưu</div>
+        <div class="font-bold" style="font-size:15px; display:flex; align-items:center; gap:6px;"><i data-lucide="shopping-cart" class="icon-md" style="color:var(--primary);"></i> Giỏ Hàng Link Hoàn Tiền</div>
         <button class="btn btn-outline btn-sm" onclick="closeModal('savedCartModal')"><i data-lucide="x" class="icon-sm"></i></button>
       </div>
       <p class="text-xs text-muted" style="margin-bottom:10px;">Các sản phẩm bạn đã lưu link hoàn tiền. Bấm <b>Mua Ngay</b> để mở app sàn và chốt đơn.</p>
@@ -951,7 +1045,7 @@
     </div>
   </div>
 
-  <!-- MODAL AI CHATBOT -->
+  <!-- MODAL AI CHATBOT (XỔ 1 HÀNG DỌC CÂU HỎI ĐỀ XUẤT NGAY DƯỚI CÂU CHÀO) -->
   <div id="aiChatModal" class="modal-backdrop" onclick="backdropClose(event, 'aiChatModal')">
     <div class="modal-box chat-box">
       <div class="chat-head">
@@ -965,9 +1059,8 @@
         <button class="btn btn-outline btn-sm" style="color:#fff; border-color:#475569;" onclick="closeModal('aiChatModal')"><i data-lucide="x" class="icon-sm"></i></button>
       </div>
       <div id="chatMessages" class="chat-msgs"></div>
-      <div id="dynamicChatChips" class="chat-chips"></div>
       <div class="chat-input-bar">
-        <input type="text" id="chatInput" class="input" placeholder="Hỏi đơn hàng, mã giảm giá, deal hot, rút tiền..." onkeypress="if(event.key==='Enter') sendUserChat()" />
+        <input type="text" id="chatInput" class="input" placeholder="Nhập câu hỏi của bạn hoặc chọn mục gợi ý phía trên..." onkeypress="if(event.key==='Enter') sendUserChat()" />
         <button class="btn btn-primary btn-sm" onclick="sendUserChat()">Gửi</button>
       </div>
     </div>
@@ -1055,6 +1148,10 @@
         refNewUserBonus: 5000,
         refOrderPct: 15,
         refCheckIp: true,
+        cskhZalo: '',
+        cskhZaloGroup: '',
+        cskhTele: '',
+        cskhTeleGroup: '',
         teleBot: { enabled: false, token: '', chatId: '', onRegister: true, onWithdraw: true, onAnnouncement: true, onNewDeal: true },
         shopeeApi: { endpoint: '', appId: '', secret: '' },
         cloudSync: { url: DEFAULT_CLOUD_URL, anonKey: DEFAULT_CLOUD_KEY, rowId: 'main_production_state' }
@@ -1158,7 +1255,6 @@
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
             renderAll();
-            renderChatChips();
             if (!silent) showToast('Đã đồng bộ dữ liệu Cloud mới nhất!');
           }
         } else {
@@ -1214,6 +1310,9 @@
       showToast(label);
     }
 
+    // =========================================================
+    // UNIFIED NOTICE SLIDER (CHỐNG ĐÈ 2 POPUP)
+    // =========================================================
     function initUnifiedNotices() {
       noticeSlides = [];
       if (!localStorage.getItem('HT247_HIDE_PROMO_V2')) {
@@ -1225,7 +1324,7 @@
             <p style="margin-bottom:6px;">Lướt thấy món ưng ý trên <b>Shopee / TikTok Shop</b> nhưng chưa muốn mua ngay? Hãy dùng ngay <b>Giỏ Link Hoàn Tiền</b>:</p>
             <p>1. Copy link sản phẩm từ sàn và dán vào ô <b>Tạo link hoàn tiền</b>.</p>
             <p>2. Bấm nút <b>+ Lưu Giỏ Link</b> để lưu giữ sản phẩm kèm ưu đãi hoàn tiền.</p>
-            <p>3. Khi nào cần mua, mở <b>Giỏ link</b> góc dưới màn hình và bấm <b>Mua Ngay</b> là nhận tiền hoàn về ví!</p>
+            <p>3. Khi nào cần mua, mở <b>Giỏ hàng</b> góc dưới màn hình và bấm <b>Mua Ngay</b> là nhận tiền hoàn về ví!</p>
           `
         });
       }
@@ -1274,15 +1373,51 @@
       closeModal('unifiedNoticeModal');
     }
 
+    // =========================================================
+    // MENU XỔ XUỐNG KHI BẤM "TỔNG QUAN" & MENU AVATAR
+    // =========================================================
+    function handleOverviewNavClick(e) {
+      e.stopPropagation();
+      closeProfileDropdown();
+      const qm = document.getElementById('quickMenuDropdown');
+      renderQuickMenuDropdown();
+      qm.classList.toggle('open');
+      refreshIcons();
+    }
+
+    function renderQuickMenuDropdown() {
+      const qm = document.getElementById('quickMenuDropdown');
+      const user = getCurrentUser();
+      qm.innerHTML = `
+        <div class="dd-section-label">Điều hướng chức năng</div>
+        <button class="dd-item" onclick="switchPage('dashboard'); closeAllDropdowns();"><i data-lucide="home" class="icon-sm"></i> Trang chủ &amp; Tạo link</button>
+        <button class="dd-item" onclick="openSavedCartModal(); closeAllDropdowns();"><i data-lucide="shopping-cart" class="icon-sm"></i> Giỏ hàng link hoàn tiền (${savedLinks.length})</button>
+        <button class="dd-item" onclick="openClaimOrderModal(); closeAllDropdowns();"><i data-lucide="plus-circle" class="icon-sm"></i> Báo mã đơn hàng mới</button>
+        <button class="dd-item" onclick="switchPage('history'); closeAllDropdowns();"><i data-lucide="receipt" class="icon-sm"></i> Lịch sử hoàn tiền</button>
+        <button class="dd-item" onclick="switchPage('withdraw'); closeAllDropdowns();"><i data-lucide="landmark" class="icon-sm"></i> Rút tiền về ngân hàng</button>
+        <button class="dd-item" onclick="switchPage('agency'); closeAllDropdowns();"><i data-lucide="users" class="icon-sm"></i> Chương trình Đại lý F1</button>
+        <button class="dd-item" onclick="switchPage('guide'); closeAllDropdowns();"><i data-lucide="book-open" class="icon-sm"></i> Sổ tay &amp; Hướng dẫn</button>
+        ${user && user.role === 'admin' ? `<button class="dd-item" style="color:var(--primary);" onclick="switchPage('settings'); closeAllDropdowns();"><i data-lucide="shield" class="icon-sm"></i> Bảng điều khiển Quản Trị Viên</button>` : ''}
+      `;
+    }
+
+    function closeAllDropdowns() {
+      const qm = document.getElementById('quickMenuDropdown');
+      const pd = document.getElementById('profileDropdown');
+      if (qm) qm.classList.remove('open');
+      if (pd) pd.classList.remove('open');
+    }
+
     function toggleDarkMode() {
       document.body.classList.toggle('dark-mode');
       localStorage.setItem('HT247_THEME', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
       renderProfileDropdown();
+      refreshIcons();
     }
 
     function switchPage(pageName) {
       currentPage = pageName;
-      closeProfileDropdown();
+      closeAllDropdowns();
       document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-link-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.page === pageName));
       const target = document.getElementById('page-' + pageName);
@@ -1291,20 +1426,23 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function toggleProfileDropdown() {
+    function toggleProfileDropdown(e) {
+      if (e) e.stopPropagation();
+      const qm = document.getElementById('quickMenuDropdown');
+      if (qm) qm.classList.remove('open');
       const dd = document.getElementById('profileDropdown');
       renderProfileDropdown();
       dd.classList.toggle('open');
       refreshIcons();
     }
-    function closeProfileDropdown() {
-      const dd = document.getElementById('profileDropdown');
-      if (dd) dd.classList.remove('open');
-    }
+
     document.addEventListener('click', (e) => {
       const dd = document.getElementById('profileDropdown');
+      const qm = document.getElementById('quickMenuDropdown');
       const btn = document.getElementById('topAvatarBtn');
-      if (dd && dd.classList.contains('open') && !dd.contains(e.target) && !btn.contains(e.target)) closeProfileDropdown();
+      const ovBtn = document.getElementById('btnNavOverview');
+      if (dd && dd.classList.contains('open') && !dd.contains(e.target) && !btn.contains(e.target)) dd.classList.remove('open');
+      if (qm && qm.classList.contains('open') && !qm.contains(e.target) && !ovBtn.contains(e.target)) qm.classList.remove('open');
     });
 
     function renderProfileDropdown() {
@@ -1314,36 +1452,35 @@
       if (!user) {
         dd.innerHTML = `
           <div class="dd-head">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <img src="${BRAND_LOGO_SRC}" style="width:32px; height:32px; border-radius:8px;" alt="Logo" />
+            <div style="display:flex; align-items:center; gap:9px;">
+              <img src="${BRAND_LOGO_SRC}" style="width:36px; height:36px; border-radius:10px; border:1px solid var(--primary-border);" alt="Logo" />
               <div><div class="font-bold">Khách vãng lai</div><div class="text-xs text-muted">Đăng nhập để lưu tiền hoàn</div></div>
             </div>
           </div>
           <button class="dd-item" onclick="switchPage('settings')"><i data-lucide="log-in" class="icon-sm"></i> Đăng nhập / Tạo tài khoản</button>
           <button class="dd-item" onclick="toggleDarkMode()"><i data-lucide="moon" class="icon-sm"></i> Giao diện: ${isDark ? 'Dark' : 'Light'}</button>
-          <button class="dd-item" onclick="switchPage('guide')"><i data-lucide="book-open" class="icon-sm"></i> Cẩm nang &amp; hướng dẫn</button>
+          <button class="dd-item" onclick="switchPage('guide')"><i data-lucide="book-open" class="icon-sm"></i> Trung tâm trợ giúp &amp; hướng dẫn</button>
         `;
         return;
       }
-      const initials = user.name.split(' ').map(w => w[0]).join('').slice(-2).toUpperCase();
       dd.innerHTML = `
         <div class="dd-head">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <div class="avatar-trigger" style="width:32px; height:32px; font-size:11px;">${escapeHtml(initials)}</div>
+          <div style="display:flex; align-items:center; gap:9px;">
+            <img src="${BRAND_LOGO_SRC}" style="width:36px; height:36px; border-radius:10px; border:1.5px solid var(--primary);" alt="Avatar" />
             <div><div class="font-bold" style="font-size:12.5px;">${escapeHtml(user.name)}</div><div class="text-xs text-muted">@${escapeHtml(user.username)}</div></div>
           </div>
           <span class="font-bold" style="color:var(--primary); font-size:12px;">${formatVND(user.balanceAvailable)}</span>
         </div>
         <div class="dd-section-label">Tài khoản</div>
         <button class="dd-item" onclick="switchPage('settings')"><i data-lucide="user-cog" class="icon-sm"></i> Hồ sơ &amp; bảo mật ${user.role==='admin'?'(Admin)':''}</button>
-        <button class="dd-item" onclick="switchPage('history')"><i data-lucide="receipt" class="icon-sm"></i> Đơn hoàn tiền của tôi</button>
-        <button class="dd-item" onclick="openWithdrawModal(); closeProfileDropdown();"><i data-lucide="credit-card" class="icon-sm"></i> Phương thức thanh toán</button>
+        <button class="dd-item" onclick="switchPage('history')"><i data-lucide="receipt" class="icon-sm"></i> Lịch sử hoàn tiền</button>
+        <button class="dd-item" onclick="openWithdrawModal(); closeAllDropdowns();"><i data-lucide="credit-card" class="icon-sm"></i> Phương thức thanh toán</button>
         <button class="dd-item" onclick="switchPage('withdraw')"><i data-lucide="landmark" class="icon-sm"></i> Yêu cầu rút tiền</button>
         <div class="dd-section-label">Tùy chọn</div>
         <button class="dd-item" onclick="toggleDarkMode()"><i data-lucide="moon" class="icon-sm"></i> Giao diện: ${isDark ? 'Dark' : 'Light'}</button>
         <div class="dd-section-label">Trợ giúp</div>
-        <button class="dd-item" onclick="switchPage('guide')"><i data-lucide="book-open" class="icon-sm"></i> Cẩm nang &amp; hướng dẫn</button>
-        <button class="dd-item danger" onclick="logoutUser(); closeProfileDropdown();"><i data-lucide="log-out" class="icon-sm"></i> Đăng xuất</button>
+        <button class="dd-item" onclick="switchPage('guide')"><i data-lucide="book-open" class="icon-sm"></i> Trung tâm trợ giúp &amp; hướng dẫn</button>
+        <button class="dd-item danger" onclick="logoutUser(); closeAllDropdowns();"><i data-lucide="log-out" class="icon-sm"></i> Đăng xuất</button>
       `;
     }
 
@@ -1351,6 +1488,9 @@
     function closeModal(id) { const el = document.getElementById(id); if (el) el.classList.remove('open'); }
     function backdropClose(e, id) { if (e.target && e.target.id === id) closeModal(id); }
 
+    // =========================================================
+    // IP, DEVICE FINGERPRINT & TELEGRAM BOT
+    // =========================================================
     function getOrCreateDeviceFingerprint() {
       let fp = localStorage.getItem('HT247_DEVICE_FP');
       if (!fp) {
@@ -1382,12 +1522,21 @@
     async function sendTelegramAlert(eventType, payload) {
       const cfg = state.settings.teleBot || {};
       if (!cfg.enabled || !cfg.token || !cfg.chatId) return;
+      if (eventType === 'REGISTER' && !cfg.onRegister) return;
+      if (eventType === 'WITHDRAW' && !cfg.onWithdraw) return;
+      if (eventType === 'ANNOUNCEMENT' && !cfg.onAnnouncement) return;
+      if (eventType === 'NEW_DEAL_CODE' && !cfg.onNewDeal) return;
+
       const now = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
       let message = '';
       if (eventType === 'REGISTER') {
         message = `👤 <b>THÀNH VIÊN MỚI</b>\n• Họ tên: <b>${escapeHtml(payload.name)}</b> (<code>${escapeHtml(payload.username)}</code>)\n• Mã mời: <code>${payload.refCode}</code>\n• IP: <code>${escapeHtml(payload.ip)}</code>\n🕒 <i>${now}</i>`;
       } else if (eventType === 'WITHDRAW') {
         message = `💸 <b>LỆNH RÚT TIỀN MỚI</b>\n• Khách: <b>${escapeHtml(payload.name)}</b>\n• Số tiền: <b>${formatVND(payload.amount)}</b>\n• NH: <b>${escapeHtml(payload.bank)}</b> • STK: <code>${escapeHtml(payload.stk)}</code> (${escapeHtml(payload.holder)})\n🕒 <i>${now}</i>`;
+      } else if (eventType === 'ANNOUNCEMENT') {
+        message = `📢 <b>THÔNG BÁO MỚI</b>\n• ${escapeHtml(payload.title)}: ${escapeHtml(payload.content)}\n🕒 <i>${now}</i>`;
+      } else if (eventType === 'NEW_DEAL_CODE') {
+        message = `🔥 <b>${escapeHtml(payload.kind)}</b>\n• <b>${escapeHtml(payload.title)}</b>: ${escapeHtml(payload.detail)}\n🕒 <i>${now}</i>`;
       }
       if (!message) return;
       try {
@@ -1399,6 +1548,9 @@
       } catch (e) {}
     }
 
+    // =========================================================
+    // TẠO LINK HOÀN TIỀN & GIỎ HÀNG LINK
+    // =========================================================
     function cleanTitleString(rawTitle, resolvedUrl) {
       let t = String(rawTitle || '').trim();
       if (t.includes('__mobile__') || t.includes('credential_token') || t.includes('uls_trackid') || /^\d+\?/.test(t)) t = '';
@@ -1481,7 +1633,7 @@
       const urlInput = info.resolvedUrl;
 
       btn.disabled = false;
-      btn.innerHTML = '<i data-lucide="zap" class="icon-sm"></i> Tạo link';
+      btn.innerHTML = '<i data-lucide="link" class="icon-sm"></i> Dán link';
 
       const lower = (urlInput + ' ' + rawInput + ' ' + info.title).toLowerCase();
       let platform = '';
@@ -1551,12 +1703,12 @@
     function addLastItemToSavedCart() {
       if (!lastGeneratedItem) return;
       if (savedLinks.some(x => x.cleanUrl === lastGeneratedItem.cleanUrl)) {
-        showToast('Sản phẩm này đã có trong Giỏ link rồi!');
+        showToast('Sản phẩm này đã có trong Giỏ hàng rồi!');
         return;
       }
       savedLinks.unshift(lastGeneratedItem);
       saveSavedLinks();
-      showToast('Đã lưu vào Giỏ Link Hoàn Tiền!');
+      showToast('Đã lưu vào Giỏ Hàng Link Hoàn Tiền!');
     }
 
     function openSavedCartModal() {
@@ -1590,6 +1742,9 @@
       btn.textContent = hidden ? 'Thu gọn' : 'Mở rộng';
     }
 
+    // =========================================================
+    // HỎI ĐÁP CỘNG ĐỒNG
+    // =========================================================
     function postCommunityQuestion() {
       const inp = document.getElementById('qaNewInput');
       const txt = inp.value.trim();
@@ -1650,14 +1805,17 @@
       box.innerHTML = list.slice(0, 8).map(q => `
         <div class="qa-comment-box">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
-            <span class="font-bold" style="font-size:12.5px; display:flex; align-items:center; gap:5px;"><i data-lucide="user" class="icon-sm"></i> ${escapeHtml(q.author)}</span>
+            <span class="font-bold" style="font-size:12.5px; display:flex; align-items:center; gap:5px;">
+              <img src="${BRAND_LOGO_SRC}" style="width:18px; height:18px; border-radius:5px;" alt="Avt" /> ${escapeHtml(q.author)}
+            </span>
             <span class="text-xs text-muted">${escapeHtml(q.createdAt)}</span>
           </div>
           <div style="font-size:12.5px;">${escapeHtml(q.text)}</div>
           ${q.reply ? `
             <div class="qa-reply-box">
               <div style="display:flex; align-items:center; gap:5px; margin-bottom:2px;">
-                <span class="font-bold" style="font-size:11.5px; color:var(--primary); display:flex; align-items:center; gap:4px;"><i data-lucide="headphones" class="icon-sm"></i> Chăm sóc khách hàng</span>
+                <img src="${BRAND_LOGO_SRC}" style="width:16px; height:16px; border-radius:4px;" alt="CSKH" />
+                <span class="font-bold" style="font-size:11.5px; color:var(--primary);">Chăm sóc khách hàng</span>
                 <span class="badge badge-success" style="font-size:9.5px; padding:1px 6px;">CSKH</span>
               </div>
               <div class="text-xs">${escapeHtml(q.reply)}</div>
@@ -1673,6 +1831,9 @@
       `).join('');
     }
 
+    // =========================================================
+    // CẨM NANG & PWA TABS
+    // =========================================================
     function switchGuidePlat(plat) {
       guidePlatform = plat;
       document.getElementById('gPlatShopee').classList.toggle('active', plat === 'shopee');
@@ -1691,7 +1852,7 @@
         const appName = guidePlatform === 'shopee' ? 'Shopee' : 'TikTok Shop';
         gBox.innerHTML = `
           <div class="guide-step-box"><span class="step-num-pill">01</span><div class="font-bold" style="font-size:12.5px;">Tìm &amp; sao chép link</div><div class="text-xs text-muted">Mở app ${appName}, chọn sản phẩm và bấm "Chia sẻ" → "Sao chép liên kết".</div></div>
-          <div class="guide-step-box"><span class="step-num-pill">02</span><div class="font-bold" style="font-size:12.5px;">Dán link vào web</div><div class="text-xs text-muted">Dán link vào ô "Tạo link hoàn tiền ngay" trên HoànTiền247.</div></div>
+          <div class="guide-step-box"><span class="step-num-pill">02</span><div class="font-bold" style="font-size:12.5px;">Dán link vào web</div><div class="text-xs text-muted">Dán link vào ô "Tạo link hoàn tiền" trên HoànTiền247.</div></div>
           <div class="guide-step-box"><span class="step-num-pill">03</span><div class="font-bold" style="font-size:12.5px;">Mua hàng &amp; Thanh toán</div><div class="text-xs text-muted">Bấm "Mua Ngay" chuyển sang ${appName}, áp mã giảm giá &amp; freeship bình thường.</div></div>
           <div class="guide-step-box"><span class="step-num-pill">04</span><div class="font-bold" style="font-size:12.5px;">Nhận hoàn tiền về ví</div><div class="text-xs text-muted">Báo mã đơn hoặc đợi sàn đối soát xong là rút thẳng về ngân hàng.</div></div>
         `;
@@ -1712,6 +1873,9 @@
       }
     }
 
+    // =========================================================
+    // ĐƠN HOÀN TIỀN, RÚT TIỀN, ĐẠI LÝ & ADMIN PANEL TOÀN DIỆN (8 TAB)
+    // =========================================================
     function setHistoryFilter(f) {
       historyFilter = f;
       document.querySelectorAll('[data-hfilter]').forEach(b => b.classList.toggle('active', b.dataset.hfilter === f));
@@ -1743,7 +1907,7 @@
         orderValue: val, cashbackAmount: estCb, step: 1, createdAt: new Date().toLocaleString('vi-VN')
       });
       user.balancePending = (user.balancePending || 0) + estCb;
-      saveState(); closeModal('claimOrderModal'); renderAll(); renderChatChips();
+      saveState(); closeModal('claimOrderModal'); renderAll();
       showToast('Đã gửi mã đơn hàng thành công!');
     }
 
@@ -1895,8 +2059,8 @@
       const myWds = state.withdrawals.filter(w => w.userId === user.id);
       area.innerHTML = `
         <div class="hero-wallet-card" onclick="openWithdrawModal()" style="cursor:pointer;">
-          <div style="font-size:12px; opacity:0.85;">Số dư khả dụng có thể rút</div>
-          <div style="font-family:var(--font-display); font-weight:800; font-size:26px; color:#FDBA74; margin:4px 0 10px;">${formatVND(user.balanceAvailable)}</div>
+          <div class="text-xs text-muted">Số dư có thể rút</div>
+          <div style="font-family:var(--font-display); font-weight:800; font-size:26px; color:var(--primary); margin:4px 0 10px;">${formatVND(user.balanceAvailable)}</div>
           <button class="btn btn-primary btn-sm">Tạo lệnh rút tiền ngay</button>
         </div>
 
@@ -2062,11 +2226,10 @@
         return;
       }
 
-      const initials = user.name.split(' ').map(w => w[0]).join('').slice(-2).toUpperCase();
       let html = `
         <div class="card" style="background:linear-gradient(135deg, var(--primary-soft), var(--bg-card)); border-color:var(--primary-border); display:flex; align-items:center; justify-content:space-between;">
           <div style="display:flex; align-items:center; gap:10px;">
-            <div class="avatar-trigger" style="width:44px; height:44px; font-size:15px;">${escapeHtml(initials)}</div>
+            <img src="${BRAND_LOGO_SRC}" class="user-logo-avatar" alt="Avatar" />
             <div><div class="font-bold" style="font-size:15px;">${escapeHtml(user.name)}</div><div class="text-xs text-muted">@${escapeHtml(user.username)} • Mã mời: <b>${escapeHtml(user.refCode)}</b></div></div>
           </div>
           <span class="badge badge-primary">${user.role.toUpperCase()}</span>
@@ -2082,7 +2245,7 @@
             <span class="badge badge-info">${isDark ? 'Dark' : 'Light'}</span>
           </div>
           <div style="padding:10px 0; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="switchPage('guide')">
-            <div><div class="font-bold">Cẩm nang sử dụng &amp; FAQ</div><div class="text-xs text-muted">Quy tắc nhận hoàn tiền chi tiết</div></div>
+            <div><div class="font-bold">Sổ tay hướng dẫn &amp; FAQ</div><div class="text-xs text-muted">Quy tắc nhận hoàn tiền chi tiết</div></div>
             <i data-lucide="chevron-right" class="icon-sm"></i>
           </div>
         </div>
@@ -2096,6 +2259,9 @@
       area.innerHTML = html;
     }
 
+    // =========================================================
+    // BẢNG QUẢN TRỊ VIÊN TOÀN DIỆN (8 TAB CHỨC NĂNG ĐẦY ĐỦ)
+    // =========================================================
     function advanceOrderStep(orderId, targetStep) {
       const ord = state.orders.find(o => o.id === orderId);
       if (!ord) return;
@@ -2177,12 +2343,26 @@
     }
 
     function setUserRole(uid, r) { const u = state.users.find(x => x.id === uid); if (u && u.username !== 'Admin') { u.role = r; saveState(); renderAll(); } }
+    function toggleUserLock(uid) { const u = state.users.find(x => x.id === uid); if (u && u.username !== 'Admin') { u.locked = !u.locked; saveState(); renderAll(); } }
     function deleteDuplicateUser(uid) {
       const u = state.users.find(x => x.id === uid);
       if (!u || u.username === 'Admin' || !confirm(`Xóa tài khoản ${u.name}?`)) return;
       state.users = state.users.filter(x => x.id !== uid);
       state.orders = state.orders.filter(o => o.userId !== uid);
       saveState(); renderAll(); showToast('Đã xóa tài khoản!');
+    }
+
+    function approveF1Ip(uid, approve) {
+      const u = state.users.find(x => x.id === uid);
+      if (!u) return;
+      const was = u.ipApproved;
+      u.ipApproved = approve; u.ipDuplicate = !approve;
+      if (approve && !was && u.referredBy && state.settings.refEnabled) {
+        const inv = state.users.find(x => x.refCode === u.referredBy);
+        u.balanceAvailable = (u.balanceAvailable || 0) + Number(state.settings.refNewUserBonus || 0);
+        if (inv) inv.balanceAvailable = (inv.balanceAvailable || 0) + Number(state.settings.refInviterBonus || 0);
+      }
+      saveState(); renderAll(); showToast('Đã cập nhật trạng thái IP!');
     }
 
     function openEditCustomerModal(uid) {
@@ -2226,13 +2406,25 @@
       const content = document.getElementById('admNoticeContent').value.trim();
       if (!content) return;
       state.announcements.unshift({ id: 'nt_' + Date.now(), type, title, content, active: true, createdAt: new Date().toLocaleString('vi-VN') });
-      saveState(); renderAll(); showToast('Đã đăng thông báo!');
+      saveState(); sendTelegramAlert('ANNOUNCEMENT', { title, content }); renderAll(); showToast('Đã đăng thông báo!');
+    }
+
+    function saveAdminCskhContacts() {
+      state.settings.cskhZalo = document.getElementById('admCskhZalo').value.trim();
+      state.settings.cskhZaloGroup = document.getElementById('admCskhZaloGroup').value.trim();
+      state.settings.cskhTele = document.getElementById('admCskhTele').value.trim();
+      state.settings.cskhTeleGroup = document.getElementById('admCskhTeleGroup').value.trim();
+      saveState(); renderAll(); showToast('Đã lưu kênh CSKH!');
     }
 
     function saveAdminTeleBot() {
       state.settings.teleBot.enabled = document.getElementById('admBotEnabled').checked;
       state.settings.teleBot.token = document.getElementById('admBotToken').value.trim();
       state.settings.teleBot.chatId = document.getElementById('admBotChatId').value.trim();
+      state.settings.teleBot.onRegister = document.getElementById('admBotReg').checked;
+      state.settings.teleBot.onWithdraw = document.getElementById('admBotWd').checked;
+      state.settings.teleBot.onAnnouncement = document.getElementById('admBotNotice').checked;
+      state.settings.teleBot.onNewDeal = document.getElementById('admBotDeal').checked;
       saveState(); showToast('Đã lưu Bot Telegram!');
     }
 
@@ -2242,7 +2434,7 @@
       const platform = document.getElementById('admVPlatform').value;
       if (!code || !desc) return;
       state.vouchers.unshift({ id: 'vc_' + Date.now(), code, desc, platform });
-      saveState(); renderAll(); showToast('Đã thêm mã!');
+      saveState(); sendTelegramAlert('NEW_DEAL_CODE', { kind: `Mã ${platform}`, title: code, detail: desc }); renderAll(); showToast('Đã thêm mã!');
     }
 
     function addAdminDeal() {
@@ -2254,7 +2446,7 @@
       if (!title || salePrice <= 0 || !affUrl) return;
       const platform = affUrl.toLowerCase().includes('tiktok') ? 'TikTok Shop' : 'Shopee';
       state.deals.unshift({ id: 'dl_' + Date.now(), platform, title, img, oldPrice: oldPrice || Math.round(salePrice * 1.3), salePrice, cashbackPct: state.settings.defaultCashbackPct, affUrl });
-      saveState(); renderAll(); showToast('Đã đăng Deal Hot!');
+      saveState(); sendTelegramAlert('NEW_DEAL_CODE', { kind: `Deal ${platform}`, title, detail: formatVND(salePrice) }); renderAll(); showToast('Đã đăng Deal Hot!');
     }
 
     function saveAdminWebAff() {
@@ -2272,16 +2464,30 @@
       saveState(); pullFromCloud(false);
     }
 
+    function saveShopeeApiConfig() {
+      state.settings.shopeeApi.endpoint = document.getElementById('admApiEndpoint').value.trim();
+      state.settings.shopeeApi.appId = document.getElementById('admApiAppId').value.trim();
+      state.settings.shopeeApi.secret = document.getElementById('admApiSecret').value.trim();
+      saveState(); showToast('Đã lưu API Shopee!');
+    }
+
     function renderAdminPanel() {
+      const totalAvailAll = state.users.reduce((s, u) => s + Number(u.balanceAvailable || 0), 0);
+      const totalPendAll = state.users.reduce((s, u) => s + Number(u.balancePending || 0), 0);
+      const pendingWds = state.withdrawals.filter(w => w.status === 'pending').length;
+      const unansweredQa = state.qaComments.filter(q => !q.reply).length;
+
       const tabs = [
-        { id: 'orders', label: '1. Đơn & Rút' },
-        { id: 'users', label: '2. Thành Viên' },
-        { id: 'ref', label: '3. Đại Lý' },
-        { id: 'notice', label: '4. Thông Báo' },
-        { id: 'bot', label: '5. Bot Tele' },
-        { id: 'deals', label: '6. Mã & Deal' },
-        { id: 'web', label: '7. Web & Cloud' }
+        { id: 'orders', label: `1. Đơn & Rút (${pendingWds})` },
+        { id: 'users', label: `2. Thành Viên (${state.users.length})` },
+        { id: 'qa', label: `3. Hỏi Đáp (${unansweredQa})` },
+        { id: 'ref', label: '4. Đại Lý & IP' },
+        { id: 'notice', label: '5. TB & CSKH' },
+        { id: 'bot', label: '6. Bot Tele' },
+        { id: 'deals', label: '7. Mã & Deal' },
+        { id: 'web', label: '8. Web & Cloud' }
       ];
+
       let body = '';
       if (activeAdminTab === 'orders') {
         body = `
@@ -2294,7 +2500,7 @@
                 <button class="btn btn-outline btn-sm" onclick="copyText('${escapeHtml(w.stk)}')">Copy STK</button>
                 <button class="btn btn-info btn-sm" onclick="viewWithdrawQr('${w.id}', 'vietqr')">VietQR</button>
                 ${w.qrImage ? `<button class="btn btn-dark btn-sm" onclick="viewWithdrawQr('${w.id}', 'uploaded')">QR Khách</button>` : ''}
-                ${w.status === 'pending' ? `<button class="btn btn-success btn-sm" onclick="processWithdraw('${w.id}', 'paid')">Duyệt</button><button class="btn btn-danger btn-sm" onclick="processWithdraw('${w.id}', 'rejected')">Hủy</button>` : ''}
+                ${w.status === 'pending' ? `<button class="btn btn-success btn-sm" onclick="processWithdraw('${w.id}', 'paid')">Duyệt</button><button class="btn btn-danger btn-sm" onclick="processWithdraw('${w.id}', 'rejected')">Hủy</button>` : `<span class="badge ${w.status==='paid'?'badge-success':'badge-danger'}">${w.status==='paid'?'Đã chuyển':'Đã hủy'}</span>`}
               </div>
             </div>
           `).join('') || '<div class="text-xs text-muted">Chưa có lệnh rút.</div>'}
@@ -2307,10 +2513,11 @@
             const b = state.users.find(u => u.id === o.userId);
             return `<div style="border:1px solid var(--border); border-radius:11px; padding:9px; margin-bottom:7px;">
               <div style="display:flex; justify-content:space-between;"><span class="font-bold">#${o.id} (${escapeHtml(b ? b.name : o.userId)})</span><span class="font-bold" style="color:var(--success);">+${formatVND(o.cashbackAmount)}</span></div>
-              <div class="text-xs text-muted" style="margin:3px 0 6px;">Bước: B${o.step}</div>
+              <div class="text-xs text-muted" style="margin:3px 0 6px;">Giá trị đơn: ${formatVND(o.orderValue)} • Bước: <b>B${o.step}</b></div>
               <div class="btn-row">
                 <button class="btn btn-warning btn-sm" onclick="advanceOrderStep('${o.id}', 2)">B2: Đối Soát</button>
                 <button class="btn btn-success btn-sm" onclick="advanceOrderStep('${o.id}', 3)">B3: Cộng Ví</button>
+                <button class="btn btn-danger btn-sm" onclick="advanceOrderStep('${o.id}', 0)">Hủy</button>
                 <button class="btn btn-outline btn-sm" onclick="deleteSingleOrder('${o.id}')">Xóa</button>
               </div>
             </div>`;
@@ -2319,31 +2526,54 @@
       } else if (activeAdminTab === 'users') {
         body = `
           <div style="background:var(--bg-sub); padding:10px; border-radius:11px; margin-bottom:10px;">
-            <div class="font-bold" style="margin-bottom:6px;">Cộng / Trừ Tiền Thủ Công</div>
+            <div class="font-bold" style="margin-bottom:6px;">Cộng / Trừ Tiền Thủ Công Cho Khách</div>
             <div class="form-group"><select id="admAdjUser" class="select">${state.users.map(u => `<option value="${u.id}">${escapeHtml(u.name)} (@${escapeHtml(u.username)}) - ${formatVND(u.balanceAvailable)}</option>`).join('')}</select></div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px;">
-              <select id="admAdjType" class="select"><option value="add">+ Cộng tiền</option><option value="sub">- Trừ tiền</option></select>
-              <input type="number" id="admAdjAmount" class="input" placeholder="Số tiền..." />
+              <select id="admAdjType" class="select"><option value="add">+ Cộng tiền vào ví</option><option value="sub">- Trừ tiền khỏi ví</option></select>
+              <input type="number" id="admAdjAmount" class="input" placeholder="Nhập số tiền..." />
             </div>
-            <button class="btn btn-primary btn-sm" style="width:100%;" onclick="adminAdjustUserBalance()">Cập Nhật Số Dư</button>
+            <button class="btn btn-primary btn-sm" style="width:100%;" onclick="adminAdjustUserBalance()">Xác Nhận Cập Nhật Số Dư</button>
           </div>
           ${state.users.map(u => `
             <div style="border:1px solid var(--border); border-radius:11px; padding:9px; margin-bottom:7px;">
-              <div style="display:flex; justify-content:space-between;"><span class="font-bold">${escapeHtml(u.name)} (@${escapeHtml(u.username)})</span><span class="badge badge-dark">${u.role.toUpperCase()}</span></div>
-              <div class="text-xs text-muted">Ví: ${formatVND(u.balanceAvailable)} • IP: ${escapeHtml(u.registerIp)}</div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:7px;">
+                  <img src="${BRAND_LOGO_SRC}" style="width:26px; height:26px; border-radius:7px;" alt="Avt" />
+                  <span class="font-bold">${escapeHtml(u.name)} (@${escapeHtml(u.username)})</span>
+                </div>
+                <span class="badge badge-dark">${u.role.toUpperCase()}</span>
+              </div>
+              <div class="text-xs text-muted" style="margin-top:4px;">Ví: <b>${formatVND(u.balanceAvailable)}</b> • Chờ duyệt: ${formatVND(u.balancePending)} • IP: ${escapeHtml(u.registerIp)}</div>
               ${u.username !== 'Admin' ? `<div class="btn-row" style="margin-top:6px;">
-                <button class="btn btn-info btn-sm" onclick="setUserRole('${u.id}', 'cskh')">CSKH</button>
-                <button class="btn btn-outline btn-sm" onclick="setUserRole('${u.id}', 'user')">TV</button>
-                <button class="btn btn-warning btn-sm" onclick="openEditCustomerModal('${u.id}')">Sửa STK</button>
+                <button class="btn btn-info btn-sm" onclick="setUserRole('${u.id}', 'cskh')">Cấp CSKH</button>
+                <button class="btn btn-outline btn-sm" onclick="setUserRole('${u.id}', 'user')">Về TV</button>
+                <button class="btn btn-warning btn-sm" onclick="openEditCustomerModal('${u.id}')">Sửa STK/MK</button>
+                <button class="btn btn-outline btn-sm" onclick="toggleUserLock('${u.id}')">${u.locked ? 'Mở khóa' : 'Khóa'}</button>
                 <button class="btn btn-danger btn-sm" onclick="deleteDuplicateUser('${u.id}')">Xóa</button>
               </div>` : ''}
             </div>
           `).join('')}
         `;
+      } else if (activeAdminTab === 'qa') {
+        body = `
+          <div class="font-bold" style="margin-bottom:8px;">Quản Lý Câu Hỏi &amp; Bình Luận Khách Hàng (${state.qaComments.length})</div>
+          ${state.qaComments.map(q => `
+            <div style="border:1px solid var(--border); border-radius:11px; padding:10px; margin-bottom:8px;">
+              <div style="display:flex; justify-content:space-between;"><span class="font-bold">${escapeHtml(q.author)}</span><span class="text-xs text-muted">${escapeHtml(q.createdAt)}</span></div>
+              <div class="text-xs" style="margin:4px 0;">${escapeHtml(q.text)}</div>
+              ${q.reply ? `<div class="text-xs" style="color:var(--success); margin-bottom:6px;"><b>Đã trả lời:</b> ${escapeHtml(q.reply)}</div>` : `<div class="text-xs" style="color:var(--warning); margin-bottom:6px;">Chưa có phản hồi</div>`}
+              <div class="btn-row">
+                <button class="btn btn-primary btn-sm" onclick="openQaReplyModal('${q.id}')">Trả lời CSKH</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteCommunityQuestion('${q.id}')">Xóa</button>
+              </div>
+            </div>
+          `).join('') || '<div class="text-xs text-muted">Chưa có câu hỏi nào.</div>'}
+        `;
       } else if (activeAdminTab === 'ref') {
+        const allF1s = state.users.filter(u => u.referredBy);
         body = `
           <div class="form-group"><label><input type="checkbox" id="admRefEnabled" ${state.settings.refEnabled ? 'checked' : ''} /> Bật chương trình Đại lý F1</label></div>
-          <div class="form-group"><label><input type="checkbox" id="admRefCheckIp" ${state.settings.refCheckIp ? 'checked' : ''} /> Chặn trùng IP &amp; thiết bị</label></div>
+          <div class="form-group"><label><input type="checkbox" id="admRefCheckIp" ${state.settings.refCheckIp ? 'checked' : ''} /> Chặn trùng IP &amp; thiết bị khi đăng ký</label></div>
           <div class="form-group"><label class="form-label">Domain link mời:</label><input type="text" id="admShortDomain" class="input" value="${escapeHtml(state.settings.shortDomain)}" /></div>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
             <div class="form-group"><label class="form-label">Thưởng mời (đ):</label><input type="number" id="admRefInviter" class="input" value="${state.settings.refInviterBonus}" /></div>
@@ -2351,22 +2581,46 @@
           </div>
           <div class="form-group"><label class="form-label">% Hoa hồng F1:</label><input type="number" id="admRefOrderPct" class="input" value="${state.settings.refOrderPct}" /></div>
           <button class="btn btn-primary" style="width:100%;" onclick="saveAdminRefSettings()">Lưu Cài Đặt Đại Lý</button>
+          <div class="divider"></div>
+          <div class="font-bold" style="margin-bottom:6px;">Giám Sát Tài Khoản F1 (${allF1s.length})</div>
+          ${allF1s.map(f => `
+            <div style="border:1px solid var(--border); border-radius:11px; padding:9px; margin-bottom:7px;">
+              <div class="font-bold">${escapeHtml(f.name)} (@${escapeHtml(f.username)}) • Mã mời: ${escapeHtml(f.referredBy)}</div>
+              <div class="text-xs text-muted" style="margin:3px 0 6px;">IP: ${escapeHtml(f.registerIp)}</div>
+              <div class="btn-row">
+                <button class="btn btn-success btn-sm" onclick="approveF1Ip('${f.id}', true)">Duyệt Hợp Lệ</button>
+                <button class="btn btn-danger btn-sm" onclick="approveF1Ip('${f.id}', false)">Đánh Dấu Trùng IP</button>
+              </div>
+            </div>
+          `).join('') || '<div class="text-xs text-muted">Chưa có F1 nào.</div>'}
         `;
       } else if (activeAdminTab === 'notice') {
         body = `
+          <div class="font-bold" style="margin-bottom:6px;">Đăng Thông Báo Mới</div>
           <div class="form-group"><select id="admNoticeType" class="select"><option value="popup">Popup mở web</option><option value="marquee">Chữ chạy đầu trang</option></select></div>
           <div class="form-group"><input type="text" id="admNoticeTitle" class="input" placeholder="Tiêu đề..." /></div>
           <div class="form-group"><textarea id="admNoticeContent" class="textarea" rows="2" placeholder="Nội dung..."></textarea></div>
           <button class="btn btn-primary btn-sm" style="width:100%; margin-bottom:10px;" onclick="addAdminAnnouncement()">+ Đăng Thông Báo</button>
           ${state.announcements.map(a => `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);"><span class="text-xs"><b>${escapeHtml(a.title)}</b>: ${escapeHtml(a.content)}</span><button class="btn btn-danger btn-sm" onclick="state.announcements=state.announcements.filter(x=>x.id!=='${a.id}'); saveState(); renderAll();">Xóa</button></div>`).join('')}
+          <div class="divider"></div>
+          <div class="font-bold" style="margin-bottom:6px;">Cấu Hình Kênh CSKH Zalo &amp; Telegram</div>
+          <div class="form-group"><input type="text" id="admCskhZalo" class="input" value="${escapeHtml(state.settings.cskhZalo || '')}" placeholder="SĐT Zalo CSKH..." /></div>
+          <div class="form-group"><input type="url" id="admCskhZaloGroup" class="input" value="${escapeHtml(state.settings.cskhZaloGroup || '')}" placeholder="Link Nhóm Zalo..." /></div>
+          <div class="form-group"><input type="text" id="admCskhTele" class="input" value="${escapeHtml(state.settings.cskhTele || '')}" placeholder="Username Telegram CSKH..." /></div>
+          <div class="form-group"><input type="url" id="admCskhTeleGroup" class="input" value="${escapeHtml(state.settings.cskhTeleGroup || '')}" placeholder="Link Nhóm Telegram..." /></div>
+          <button class="btn btn-dark btn-sm" style="width:100%;" onclick="saveAdminCskhContacts()">Lưu Kênh CSKH</button>
         `;
       } else if (activeAdminTab === 'bot') {
         const b = state.settings.teleBot;
         body = `
-          <div class="form-group"><label><input type="checkbox" id="admBotEnabled" ${b.enabled ? 'checked' : ''} /> Kích hoạt Bot Telegram</label></div>
+          <div class="form-group"><label><input type="checkbox" id="admBotEnabled" ${b.enabled ? 'checked' : ''} /> Kích hoạt Bot Telegram báo Real-time</label></div>
           <div class="form-group"><label class="form-label">Bot Token:</label><input type="text" id="admBotToken" class="input" value="${escapeHtml(b.token)}" /></div>
           <div class="form-group"><label class="form-label">Chat ID:</label><input type="text" id="admBotChatId" class="input" value="${escapeHtml(b.chatId)}" /></div>
-          <button class="btn btn-primary" style="width:100%;" onclick="saveAdminTeleBot()">Lưu Bot Telegram</button>
+          <div class="form-group"><label><input type="checkbox" id="admBotReg" ${b.onRegister ? 'checked' : ''} /> Báo khi có thành viên mới đăng ký</label></div>
+          <div class="form-group"><label><input type="checkbox" id="admBotWd" ${b.onWithdraw ? 'checked' : ''} /> Báo khi có lệnh rút tiền mới</label></div>
+          <div class="form-group"><label><input type="checkbox" id="admBotNotice" ${b.onAnnouncement ? 'checked' : ''} /> Báo khi Admin đăng thông báo</label></div>
+          <div class="form-group"><label><input type="checkbox" id="admBotDeal" ${b.onNewDeal ? 'checked' : ''} /> Báo khi đăng Mã giảm giá / Deal mới</label></div>
+          <button class="btn btn-primary" style="width:100%;" onclick="saveAdminTeleBot()">Lưu Cấu Hình Bot Telegram</button>
         `;
       } else if (activeAdminTab === 'deals') {
         body = `
@@ -2377,6 +2631,8 @@
           </div>
           <div class="form-group"><input type="text" id="admVDesc" class="input" placeholder="Mô tả..." /></div>
           <button class="btn btn-dark btn-sm" style="width:100%; margin-bottom:10px;" onclick="addAdminVoucher()">+ Thêm Mã</button>
+          ${state.vouchers.map(v => `<div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border);"><span class="text-xs"><b>${escapeHtml(v.code)}</b>: ${escapeHtml(v.desc)}</span><button class="btn btn-danger btn-sm" onclick="state.vouchers=state.vouchers.filter(x=>x.id!=='${v.id}'); saveState(); renderAll();">Xóa</button></div>`).join('')}
+          <div class="divider"></div>
           <div class="font-bold" style="margin-bottom:6px;">Đăng Deal Hot</div>
           <div class="form-group"><input type="text" id="admDTitle" class="input" placeholder="Tên sản phẩm..." /></div>
           <div class="form-group"><input type="url" id="admDImg" class="input" placeholder="Link ảnh (https://...)" /></div>
@@ -2385,7 +2641,8 @@
             <input type="number" id="admDSale" class="input" placeholder="Giá sale" />
           </div>
           <div class="form-group"><input type="url" id="admDUrl" class="input" placeholder="Link sản phẩm..." /></div>
-          <button class="btn btn-primary btn-sm" style="width:100%;" onclick="addAdminDeal()">+ Đăng Deal</button>
+          <button class="btn btn-primary btn-sm" style="width:100%; margin-bottom:8px;" onclick="addAdminDeal()">+ Đăng Deal</button>
+          ${state.deals.map(d => `<div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border);"><span class="text-xs"><b>${escapeHtml(d.title)}</b> (${formatVND(d.salePrice)})</span><button class="btn btn-danger btn-sm" onclick="state.deals=state.deals.filter(x=>x.id!=='${d.id}'); saveState(); renderAll();">Gỡ</button></div>`).join('')}
         `;
       } else if (activeAdminTab === 'web') {
         body = `
@@ -2395,6 +2652,14 @@
           <div class="form-group"><label class="form-label">Link gốc TikTok Shop:</label><input type="url" id="admTiktokAff" class="input" value="${escapeHtml(state.settings.tiktokBaseAff)}" /></div>
           <div class="form-group"><label class="form-label">Từ khóa không hoàn tiền (0₫):</label><textarea id="admNoCbKw" class="textarea" rows="2">${escapeHtml(state.settings.noCommissionKeywords)}</textarea></div>
           <button class="btn btn-primary" style="width:100%;" onclick="saveAdminWebAff()">Lưu Cấu Hình Web &amp; Affiliate</button>
+          <div class="divider"></div>
+          <div class="font-bold" style="margin-bottom:6px;">Kết Nối Shopee Open API (Tự động kéo ảnh/giá thật)</div>
+          <div class="form-group"><input type="text" id="admApiEndpoint" class="input" value="${escapeHtml(state.settings.shopeeApi.endpoint || '')}" placeholder="Endpoint URL (Tùy chọn)..." /></div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px;">
+            <input type="text" id="admApiAppId" class="input" value="${escapeHtml(state.settings.shopeeApi.appId || '')}" placeholder="App ID..." />
+            <input type="password" id="admApiSecret" class="input" value="${escapeHtml(state.settings.shopeeApi.secret || '')}" placeholder="Secret Key..." />
+          </div>
+          <button class="btn btn-dark btn-sm" style="width:100%;" onclick="saveShopeeApiConfig()">Lưu API Shopee</button>
           <div class="divider"></div>
           <div class="form-group"><label class="form-label">Supabase URL:</label><input type="url" id="admCloudUrl" class="input" value="${escapeHtml(state.settings.cloudSync.url)}" /></div>
           <div class="form-group"><label class="form-label">Supabase Key:</label><input type="password" id="admCloudKey" class="input" value="${escapeHtml(state.settings.cloudSync.anonKey)}" /></div>
@@ -2408,6 +2673,12 @@
       return `
         <div class="card">
           <div class="font-bold" style="font-size:15px; margin-bottom:10px;">Bảng Điều Khiển Quản Trị Viên</div>
+          <div class="metrics-grid">
+            <div class="metric-card"><div class="metric-icon" style="background:var(--info-soft); color:var(--info);"><i data-lucide="users" class="icon-md"></i></div><div><div class="text-xs text-muted">Thành viên</div><div class="font-bold">${state.users.length}</div></div></div>
+            <div class="metric-card"><div class="metric-icon" style="background:var(--primary-soft); color:var(--primary);"><i data-lucide="shopping-bag" class="icon-md"></i></div><div><div class="text-xs text-muted">Tổng đơn</div><div class="font-bold">${state.orders.length}</div></div></div>
+            <div class="metric-card"><div class="metric-icon" style="background:var(--success-soft); color:var(--success);"><i data-lucide="wallet" class="icon-md"></i></div><div><div class="text-xs text-muted">Tổng ví khả dụng</div><div class="font-bold" style="color:var(--success);">${formatVND(totalAvailAll)}</div></div></div>
+            <div class="metric-card"><div class="metric-icon" style="background:var(--warning-soft); color:var(--warning);"><i data-lucide="clock" class="icon-md"></i></div><div><div class="text-xs text-muted">Tổng chờ duyệt</div><div class="font-bold" style="color:var(--warning);">${formatVND(totalPendAll)}</div></div></div>
+          </div>
           <div class="filter-pills">
             ${tabs.map(t => `<button class="f-pill ${activeAdminTab===t.id?'active':''}" onclick="activeAdminTab='${t.id}'; renderSettingsPage(); refreshIcons();">${t.label}</button>`).join('')}
           </div>
@@ -2425,32 +2696,67 @@
       `;
     }
 
-    function openAiChatModal() { initChatbot(); renderChatChips(); openModal('aiChatModal'); }
-    function renderChatChips() {
-      const box = document.getElementById('dynamicChatChips');
-      if (!box) return;
-      const chips = [
-        { label: 'Tiến độ đơn của tôi', q: 'Kiểm tra tiến độ đơn hàng của tôi' },
-        { label: 'Giỏ link đã lưu', q: 'Giỏ link hoàn tiền là gì?' },
-        { label: 'Điều kiện rút tiền', q: 'Điều kiện rút tiền về ngân hàng?' },
-        { label: 'Hoa hồng Đại lý F1', q: 'Chính sách hoa hồng đại lý F1?' }
-      ];
-      if (state.vouchers.length) chips.splice(1, 0, { label: `Mã giảm giá (${state.vouchers.length})`, q: 'Có mã giảm giá nào mới?' });
-      if (state.deals.length) chips.splice(2, 0, { label: `Deal Hot (${state.deals.length})`, q: 'Xem Deal Hot mới nhất' });
-      box.innerHTML = chips.map(c => `<button class="chip-btn" onclick="sendQuickChat('${escapeHtml(c.q)}')">${escapeHtml(c.label)}</button>`).join('');
+    // =========================================================
+    // CHATBOT: CÂU HỎI ĐỀ XUẤT XỔ 1 HÀNG DỌC NGAY DƯỚI CÂU CHÀO
+    // =========================================================
+    function openAiChatModal() {
+      initChatbot();
+      openModal('aiChatModal');
     }
+
+    function getDynamicSuggestionsList() {
+      const list = [
+        { label: 'Kiểm tra tiến độ đơn hàng của tôi', q: 'Kiểm tra tiến độ đơn hàng của tôi' },
+        { label: 'Xem Giỏ link hoàn tiền đã lưu', q: 'Giỏ link hoàn tiền là gì?' },
+        { label: 'Cách mua hàng nhận hoàn tiền Shopee / TikTok', q: 'Cách nhận hoàn tiền Shopee và TikTok Shop?' },
+        { label: 'Điều kiện & thời gian rút tiền về ngân hàng', q: 'Điều kiện rút tiền về ngân hàng?' },
+        { label: 'Chính sách hoa hồng Đại lý giới thiệu F1', q: 'Chính sách hoa hồng đại lý F1?' }
+      ];
+      if (state.vouchers && state.vouchers.length > 0) {
+        list.splice(1, 0, { label: `Xem ${state.vouchers.length} Mã giảm giá mới hôm nay`, q: 'Có mã giảm giá nào mới?' });
+      }
+      if (state.deals && state.deals.length > 0) {
+        list.splice(2, 0, { label: `Xem ${state.deals.length} Deal Hot hoàn tiền cao`, q: 'Xem Deal Hot mới nhất' });
+      }
+      if (state.announcements && state.announcements.some(a => a.active)) {
+        list.splice(1, 0, { label: 'Xem Thông báo mới nhất từ hệ thống', q: 'Có thông báo mới nào không?' });
+      }
+      return list;
+    }
+
     function initChatbot() {
       const box = document.getElementById('chatMessages');
-      if (box && !box.innerHTML.trim()) appendChatMsg('bot', 'Chào bạn! Mình là <b>Trợ Lý HoànTiền247</b>. Bạn cần tra cứu đơn hàng, giỏ link hoàn tiền hay cách rút tiền?');
-      renderChatChips();
+      if (!box) return;
+      const suggestions = getDynamicSuggestionsList();
+      const verticalHtml = `
+        <div class="bot-vertical-suggestions">
+          ${suggestions.map(item => `
+            <button type="button" class="bot-suggest-row" onclick="sendQuickChat('${escapeHtml(item.q)}')">
+              <span>${escapeHtml(item.label)}</span>
+              <i data-lucide="chevron-right" class="icon-sm"></i>
+            </button>
+          `).join('')}
+        </div>
+      `;
+      box.innerHTML = `
+        <div class="msg bot">
+          <div>Chào bạn! Mình là <b>Trợ Lý HoànTiền247</b>. Bạn hãy chọn một chủ đề bên dưới hoặc nhập câu hỏi để mình hỗ trợ ngay nhé:</div>
+          ${verticalHtml}
+        </div>
+      `;
+      refreshIcons();
     }
+
     function appendChatMsg(s, html) {
       const box = document.getElementById('chatMessages');
       if (!box) return;
       const d = document.createElement('div'); d.className = `msg ${s}`; d.innerHTML = html;
       box.appendChild(d); box.scrollTop = box.scrollHeight;
+      refreshIcons();
     }
+
     function sendQuickChat(t) { document.getElementById('chatInput').value = t; sendUserChat(); }
+
     function sendUserChat() {
       const inp = document.getElementById('chatInput');
       const text = inp.value.trim();
@@ -2464,24 +2770,30 @@
         if (!user) reply = 'Bạn vui lòng đăng nhập ở góc trên bên phải để xem tiến độ đơn hàng của mình nhé.';
         else {
           const myOrds = state.orders.filter(o => o.userId === user.id);
-          reply = myOrds.length ? `Bạn có <b>${myOrds.length} đơn</b> • Khả dụng: <b>${formatVND(user.balanceAvailable)}</b> • Chờ duyệt: <b>${formatVND(user.balancePending)}</b>.` : 'Bạn chưa có đơn hàng nào. Sau khi mua qua link, bấm <b>+ Báo Mã Đơn</b> ở mục Đơn hoàn tiền nhé!';
+          reply = myOrds.length ? `Bạn có <b>${myOrds.length} đơn</b> • Khả dụng: <b>${formatVND(user.balanceAvailable)}</b> • Chờ duyệt: <b>${formatVND(user.balancePending)}</b>.` : 'Bạn chưa có đơn hàng nào. Sau khi mua qua link, bấm <b>+ Báo Mã Đơn</b> ở mục Lịch sử hoàn tiền nhé!';
         }
       } else if (l.includes('giỏ')) {
-        reply = `Bạn hiện có <b>${savedLinks.length} sản phẩm</b> trong Giỏ link hoàn tiền. Bấm nút <b>Giỏ link</b> ở góc dưới bên phải để mở và đặt mua ngay!`;
+        reply = `Bạn hiện có <b>${savedLinks.length} sản phẩm</b> trong Giỏ hàng link hoàn tiền. Bấm nút <b>Giỏ hàng</b> ở góc dưới bên phải để mở và đặt mua ngay!`;
       } else if (l.includes('mã')) {
         reply = state.vouchers.length ? state.vouchers.map(v => `• <b>${escapeHtml(v.code)}</b>: ${escapeHtml(v.desc)}`).join('<br>') : 'Hiện chưa có mã giảm giá mới.';
       } else if (l.includes('deal')) {
         reply = state.deals.length ? state.deals.map(d => `• <b>${escapeHtml(d.title)}</b> (${formatVND(d.salePrice)})`).join('<br>') : 'Hiện chưa có Deal Hot mới.';
+      } else if (l.includes('thông báo')) {
+        const active = state.announcements.filter(a => a.active);
+        reply = active.length ? active.map(a => `• <b>${escapeHtml(a.title)}</b>: ${escapeHtml(a.content)}`).join('<br>') : 'Hiện chưa có thông báo mới nào.';
       } else if (l.includes('rút')) {
         reply = 'Số dư khả dụng tối thiểu <b>50.000₫</b> là có thể rút thẳng về 40+ ngân hàng & ví điện tử tại mục <b>Rút tiền</b>!';
       } else if (l.includes('đại lý') || l.includes('f1')) {
         reply = `Nhận ngay <b>${formatVND(state.settings.refInviterBonus)}</b> mỗi bạn bè F1 đăng ký hợp lệ và hưởng <b>${state.settings.refOrderPct}%</b> hoa hồng đơn hàng trọn đời!`;
       } else {
-        reply = 'Dán link Shopee/TikTok vào ô <b>Tạo link hoàn tiền ngay</b> → Mua hàng → Báo mã đơn để nhận hoàn tiền tự động!';
+        reply = 'Dán link Shopee/TikTok vào ô <b>Tạo link hoàn tiền</b> → Mua hàng → Báo mã đơn để nhận hoàn tiền tự động!';
       }
       setTimeout(() => appendChatMsg('bot', reply), 200);
     }
 
+    // =========================================================
+    // RENDER ALL & INIT
+    // =========================================================
     function renderAll() {
       const user = getCurrentUser();
       updateSavedCartBadges();
@@ -2491,15 +2803,11 @@
       if (activeMarquee) { document.getElementById('marqueeText').textContent = `${activeMarquee.title}: ${activeMarquee.content}`; mBar.classList.add('active'); }
       else mBar.classList.remove('active');
 
-      const avatarBtn = document.getElementById('topAvatarBtn');
       const greetEl = document.getElementById('greetingTitle');
       if (user) {
-        const initials = user.name.split(' ').map(w => w[0]).join('').slice(-2).toUpperCase();
-        avatarBtn.textContent = initials || 'TV';
-        greetEl.textContent = `Xin chào, ${user.name}!`;
+        greetEl.textContent = `Chào buổi sáng, ${user.name}!`;
       } else {
-        avatarBtn.textContent = '247';
-        greetEl.textContent = 'Xin chào, bạn!';
+        greetEl.textContent = 'Chào buổi sáng, bạn!';
       }
 
       const myOrders = user ? state.orders.filter(o => o.userId === user.id) : [];

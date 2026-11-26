@@ -1,107 +1,70 @@
-const crypto = require('crypto');
-
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-app-id, Authorization');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const rawUrl = ((req.query && req.query.url) || (req.body && req.body.url) || '').trim();
-  if (!rawUrl) return res.status(400).json({ error: 'Missing url' });
-
-  let currentUrl = rawUrl.startsWith('http') ? rawUrl : `https://${rawUrl}`;
-  let title = '';
-  let image = '';
-  let price = 0;
-  let shopId = '';
-  let itemId = '';
-
-  // 1. Giải mã link rút gọn s.shopee.vn / vn.shp.ee / vt.tiktok.com
-  try {
-    let hops = 0;
-    while (hops < 8) {
-      const r = await fetch(currentUrl, {
-        method: 'GET',
-        redirect: 'manual',
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15'
-        }
-      });
-      const loc = r.headers.get('location');
-      if (loc && r.status >= 300 && r.status < 400) {
-        currentUrl = new URL(loc, currentUrl).toString();
-        hops++;
-      } else {
-        break;
-      }
-    }
-  } catch (_) {}
-
-  // 2. Xóa sạch tham số rác & tách ID sản phẩm
-  try {
-    const parsed = new URL(currentUrl);
-    if (parsed.hostname.includes('shopee.vn')) {
-      parsed.search = '';
-      currentUrl = parsed.toString();
-
-      const prodMatch = parsed.pathname.match(/\/product\/(\d+)\/(\d+)/);
-      const iMatch = parsed.pathname.match(/-i\.(\d+)\.(\d+)/);
-
-      if (prodMatch) {
-        shopId = prodMatch[1];
-        itemId = prodMatch[2];
-        currentUrl = `https://shopee.vn/product/${shopId}/${itemId}`;
-        title = `Sản phẩm Shopee (Mã #${itemId})`;
-      } else if (iMatch) {
-        shopId = iMatch[1];
-        itemId = iMatch[2];
-        const slugMatch = parsed.pathname.match(/^\/(.+?)-i\.\d+\.\d+/);
-        if (slugMatch && slugMatch[1]) {
-          title = decodeURIComponent(slugMatch[1]).replace(/-/g, ' ');
-        } else {
-          title = `Sản phẩm Shopee (Mã #${itemId})`;
-        }
-      }
-    } else if (parsed.hostname.includes('tiktok.com')) {
-      parsed.search = '';
-      currentUrl = parsed.toString();
-      title = 'Sản phẩm TikTok Shop';
-    }
-  } catch (_) {}
-
-  // 3. Gọi chính thức Shopee Affiliate Open API (nếu đã điền AppID & Secret)
-  const appId = req.headers['x-app-id'] || process.env.SHOPEE_APP_ID || '';
-  const authHeader = req.headers['authorization'] || '';
-  const secret = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : (process.env.SHOPEE_SECRET || '');
-
-  if (appId && secret && itemId) {
-    try {
-      const timestamp = Math.floor(Date.now() / 1000);
-      const payload = JSON.stringify({
-        query: `query { productOfferV2(itemId: ${itemId}, limit: 1) { nodes { productName imageUrl priceMin offerLink } } }`
-      });
-      const signature = crypto
-        .createHash('sha256')
-        .update(`${appId}${timestamp}${payload}${secret}`)
-        .digest('hex');
-
-      const gqlRes = await fetch('https://open-api.affiliate.shopee.vn/graphql', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `SHA256 Credential=${appId}, Timestamp=${timestamp}, Signature=${signature}`
-        },
-        body: payload
-      });
-      const gqlJson = await gqlRes.json();
-      const node = gqlJson?.data?.productOfferV2?.nodes?.[0];
-      if (node) {
-        if (node.productName) title = node.productName;
-        if (node.imageUrl) image = node.imageUrl;
-        if (node.priceMin) price = Number(node.priceMin);
-      }
-    } catch (_) {}
+  const rawUrl = String(req.query.url || '').trim();
+  if (!rawUrl) {
+    return res.status(400).json({ error: 'Missing url parameter' });
   }
 
-  return res.status(200).json({ resolvedUrl: currentUrl, title, image, price, itemId });
-};
+  let targetUrl = rawUrl;
+  if (!/^https?:\/\//i.test(targetUrl)) {
+    targetUrl = 'https://' + targetUrl;
+  }
+
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 5000);
+
+    const response = await fetch(targetUrl, {
+      method: 'GET',
+      redirect: 'follow',
+      signal: controller.signal,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'vi-VN,vi;q=0.9,en;q=0.8'
+      }
+    });
+    clearTimeout(timer);
+
+    const resolvedUrl = response.url || targetUrl;
+    const html = await response.text();
+
+    let title = '';
+    let image = '';
+    let price = 0;
+
+    const ogTitle = html.match(/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)["']/i)
+      || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:title["']/i)
+      || html.match(/<title[^>]*>([^<]+)<\/title>/i);
+    if (ogTitle && ogTitle[1]) {
+      title = ogTitle[1]
+        .replace(/\s*[|\-]\s*(Shopee Việt Nam|TikTok Shop|TikTok).*$/i, '')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .trim();
+    }
+
+    const ogImage = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
+      || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+    if (ogImage && ogImage[1]) {
+      image = ogImage[1].trim();
+    }
+
+    const priceMatch = html.match(/<meta[^>]+property=["']product:price:amount["'][^>]+content=["']([0-9.]+)["']/i)
+      || html.match(/"price"\s*:\s*"?([0-9]{4,10})"?/i)
+      || html.match(/₫\s*([0-9]{1,3}(?:[.,][0-9]{3})+)/);
+    if (priceMatch && priceMatch[1]) {
+      const rawNum = Number(String(priceMatch[1]).replace(/[.,]/g, ''));
+      if (rawNum >= 1000 && rawNum <= 500000000) {
+        price = rawNum;
+      }
+    }
+
+    return res.status(200).json({ resolvedUrl, title, image, price });
+  } catch (err) {
+    return res.status(200).json({ resolvedUrl: targetUrl, title: '', image: '', price: 0 });
+  }
+}

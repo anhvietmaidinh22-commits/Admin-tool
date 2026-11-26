@@ -73,7 +73,7 @@
       inset: 0;
       background: linear-gradient(160deg, #FFFFFF 0%, #FFF7ED 55%, #FFEDD5 100%);
       z-index: 300;
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -81,7 +81,7 @@
       text-align: center;
       transition: opacity 0.35s ease, visibility 0.35s ease;
     }
-    .intro-splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+    .intro-splash.hide { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
     .intro-logo-wrap {
       width: 132px;
       height: 132px;
@@ -367,23 +367,6 @@
       gap: 12px;
     }
 
-    .live-feed-viewport {
-      max-height: 196px;
-      overflow: hidden;
-      position: relative;
-    }
-    .live-feed-track {
-      display: flex;
-      flex-direction: column;
-      animation: feedScrollLoop 14s linear infinite;
-    }
-    .live-feed-track:hover {
-      animation-play-state: paused;
-    }
-    @keyframes feedScrollLoop {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-50%); }
-    }
     .live-feed-item {
       display: flex;
       align-items: center;
@@ -395,7 +378,6 @@
       border: 1px solid var(--border);
       margin-bottom: 6px;
       font-size: 12px;
-      flex-shrink: 0;
     }
 
     .qa-comment-box { border: 1px solid var(--border); border-radius: 14px; padding: 11px 13px; margin-bottom: 9px; background: var(--bg-sub); }
@@ -521,7 +503,7 @@
 <body>
   <div id="toast" class="toast"></div>
 
-  <div id="introSplash" class="intro-splash">
+  <div id="introSplash" class="intro-splash hide" style="display:none;">
     <div class="intro-logo-wrap">
       <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" alt="Logo HoànTiền247" />
     </div>
@@ -615,7 +597,7 @@
                   <div class="text-xs text-muted">Mua sắm nhận hoàn tiền tự động về tài khoản</div>
                 </div>
               </div>
-              <button type="button" class="btn btn-outline btn-sm" style="white-space:nowrap; flex-shrink:0; display:inline-flex; align-items:center; gap:5px;" onclick="openSavedCartModal()"><i data-lucide="shopping-cart" class="icon-sm"></i><span>Giỏ (<span id="savedCartBadgeTop">0</span>)</span></button>
+              <button class="btn btn-outline btn-sm" onclick="openSavedCartModal()"><i data-lucide="shopping-cart" class="icon-sm"></i> Giỏ (<span id="savedCartBadgeTop">0</span>)</button>
             </div>
 
             <div class="supported-platforms-bar">
@@ -1352,13 +1334,12 @@
       }
       const activePopups = (state.announcements || []).filter(a => a.active && a.type === 'popup');
       activePopups.forEach(p => {
-        const imgTopHtml = p.image ? `<div style="text-align:center; margin-bottom:12px;"><img src="${p.image}" style="width:100%; max-height:220px; border-radius:12px; border:1px solid var(--border); object-fit:contain; background:var(--bg-sub);" alt="Ảnh thông báo" /></div>` : '';
-        const textBottomHtml = p.content ? `<div style="margin-top:4px;"><p style="white-space:pre-line;">${escapeHtml(p.content)}</p></div>` : '';
+        const imgHtml = p.image ? `<div style="text-align:center; margin-bottom:10px;"><img src="${p.image}" style="max-width:100%; max-height:210px; border-radius:12px; border:1px solid var(--border); object-fit:contain;" alt="Thông báo" /></div>` : '';
         noticeSlides.push({
           tag: 'THÔNG BÁO HỆ THỐNG',
           title: p.title,
           sub: p.createdAt || 'HoànTiền247',
-          html: `${imgTopHtml}${textBottomHtml}`
+          html: `${imgHtml}<p style="white-space:pre-line;">${escapeHtml(p.content)}</p>`
         });
       });
 
@@ -1542,9 +1523,7 @@
       try {
         const res = await fetch('https://www.cloudflare.com/cdn-cgi/trace', { cache: 'no-store' });
         const text = await res.text();
-        const match = text.match(/ip=([^
-
-]+)/);
+        const match = text.match(/ip=([^\n\r]+)/);
         if (match && match[1]) { REAL_CLIENT_IP = match[1].trim(); return REAL_CLIENT_IP; }
       } catch (e) {}
       REAL_CLIENT_IP = 'Không xác định';
@@ -1562,25 +1541,13 @@
       const now = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
       let message = '';
       if (eventType === 'REGISTER') {
-        message = `👤 <b>THÀNH VIÊN MỚI</b>
-• Họ tên: <b>${escapeHtml(payload.name)}</b> (<code>${escapeHtml(payload.username)}</code>)
-• Mã mời: <code>${payload.refCode}</code>
-• IP: <code>${escapeHtml(payload.ip)}</code>
-🕒 <i>${now}</i>`;
+        message = `👤 <b>THÀNH VIÊN MỚI</b>\n• Họ tên: <b>${escapeHtml(payload.name)}</b> (<code>${escapeHtml(payload.username)}</code>)\n• Mã mời: <code>${payload.refCode}</code>\n• IP: <code>${escapeHtml(payload.ip)}</code>\n🕒 <i>${now}</i>`;
       } else if (eventType === 'WITHDRAW') {
-        message = `💸 <b>LỆNH RÚT TIỀN MỚI</b>
-• Khách: <b>${escapeHtml(payload.name)}</b>
-• Số tiền: <b>${formatVND(payload.amount)}</b>
-• NH: <b>${escapeHtml(payload.bank)}</b> • STK: <code>${escapeHtml(payload.stk)}</code> (${escapeHtml(payload.holder)})
-🕒 <i>${now}</i>`;
+        message = `💸 <b>LỆNH RÚT TIỀN MỚI</b>\n• Khách: <b>${escapeHtml(payload.name)}</b>\n• Số tiền: <b>${formatVND(payload.amount)}</b>\n• NH: <b>${escapeHtml(payload.bank)}</b> • STK: <code>${escapeHtml(payload.stk)}</code> (${escapeHtml(payload.holder)})\n🕒 <i>${now}</i>`;
       } else if (eventType === 'ANNOUNCEMENT') {
-        message = `📢 <b>THÔNG BÁO MỚI</b>
-• ${escapeHtml(payload.title)}: ${escapeHtml(payload.content)}
-🕒 <i>${now}</i>`;
+        message = `📢 <b>THÔNG BÁO MỚI</b>\n• ${escapeHtml(payload.title)}: ${escapeHtml(payload.content)}\n🕒 <i>${now}</i>`;
       } else if (eventType === 'NEW_DEAL_CODE') {
-        message = `🔥 <b>${escapeHtml(payload.kind)}</b>
-• <b>${escapeHtml(payload.title)}</b>: ${escapeHtml(payload.detail)}
-🕒 <i>${now}</i>`;
+        message = `🔥 <b>${escapeHtml(payload.kind)}</b>\n• <b>${escapeHtml(payload.title)}</b>: ${escapeHtml(payload.detail)}\n🕒 <i>${now}</i>`;
       }
       if (!message) return;
       try {
@@ -1767,7 +1734,7 @@
               <img src="${escapeHtml(displayImg)}" onerror="this.src='${BRAND_LOGO_SRC}'" style="width:52px; height:52px; border-radius:9px; object-fit:cover;" alt="SP" />
               <div style="flex:1; min-width:0;">
                 <div class="font-bold" style="font-size:12.5px;">${escapeHtml(displayTitle)}</div>
-                <div class="text-xs text-muted">Hoàn dự kiến: <b style="color:var(--success); font-size:14px;">+${formatVND(estCashback)}</b></div>
+                <div class="text-xs text-muted">Hoàn dự kiến: <b style="color:var(--success); font-size:13.5px;">+${formatVND(estCashback)}</b> ${isAutoEstimatedPrice ? `(tạm tính ~${rate}% • chốt theo giá đơn thực tế)` : `(${rate}% giá trị)`}</div>
               </div>
             </div>
             <div class="btn-row">
@@ -1858,29 +1825,22 @@
         { type: 'order', name: 'Phạm Khánh Linh', detail: 'Hoàn tiền TikTok Shop', amount: '+68.000₫', status: 'Đã cộng ví', badgeClass: 'badge-success' }
       ];
 
-      const merged = [...realItems, ...demoFeed].slice(0, 6);
-      const looped = [...merged, ...merged];
-      area.innerHTML = `
-        <div class="live-feed-viewport">
-          <div class="live-feed-track">
-            ${looped.map(item => `
-              <div class="live-feed-item">
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <img src="${BRAND_LOGO_SRC}" style="width:24px; height:24px; border-radius:6px;" alt="Avt" />
-                  <div>
-                    <div class="font-bold" style="font-size:12px;">${escapeHtml(item.name)}</div>
-                    <div class="text-xs text-muted">${escapeHtml(item.detail)}</div>
-                  </div>
-                </div>
-                <div style="text-align:right;">
-                  <div class="font-bold" style="color:${item.type==='withdraw'?'var(--primary)':'var(--success)'};">${escapeHtml(item.amount)}</div>
-                  <span class="badge ${item.badgeClass}" style="font-size:9.5px; padding:1px 6px;">${escapeHtml(item.status)}</span>
-                </div>
-              </div>
-            `).join('')}
+      const merged = [...realItems, ...demoFeed].slice(0, 5);
+      area.innerHTML = merged.map(item => `
+        <div class="live-feed-item">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <img src="${BRAND_LOGO_SRC}" style="width:24px; height:24px; border-radius:6px;" alt="Avt" />
+            <div>
+              <div class="font-bold" style="font-size:12px;">${escapeHtml(item.name)}</div>
+              <div class="text-xs text-muted">${escapeHtml(item.detail)}</div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div class="font-bold" style="color:${item.type==='withdraw'?'var(--primary)':'var(--success)'};">${escapeHtml(item.amount)}</div>
+            <span class="badge ${item.badgeClass}" style="font-size:9.5px; padding:1px 6px;">${escapeHtml(item.status)}</span>
           </div>
         </div>
-      `;
+      `).join('');
     }
 
     function postCommunityQuestion() {
@@ -3211,12 +3171,10 @@
       else mBar.classList.remove('active');
 
       const greetEl = document.getElementById('greetingTitle');
-      const hourNow = new Date().getHours();
-      const timeGreeting = hourNow < 12 ? 'Chào buổi sáng' : (hourNow < 18 ? 'Chào buổi chiều' : 'Chào buổi tối');
       if (user) {
-        greetEl.textContent = `${timeGreeting}, ${user.name}!`;
+        greetEl.textContent = `Chào buổi sáng, ${user.name}!`;
       } else {
-        greetEl.textContent = `${timeGreeting}, bạn!`;
+        greetEl.textContent = 'Chào buổi sáng, bạn!';
       }
 
       const myOrders = user ? state.orders.filter(o => o.userId === user.id) : [];

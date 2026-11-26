@@ -64,7 +64,6 @@
       padding-bottom: 84px;
     }
 
-    /* Intro Splash Screen */
     .intro-splash {
       position: fixed;
       top: 0;
@@ -143,7 +142,6 @@
       100% { transform: translateX(0); }
     }
 
-    /* Logo & Avatar Helpers */
     .brand-logo {
       width: 38px;
       height: 38px;
@@ -627,7 +625,6 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
-    /* Floating AI Chatbot with Brand Logo */
     .ai-fab {
       position: fixed;
       right: 16px;
@@ -754,7 +751,6 @@
 <body>
   <div id="toast" class="toast"></div>
 
-  <!-- MÀN HÌNH INTRO CHÀO MỪNG -->
   <div id="introSplash" class="intro-splash">
     <div class="intro-logo-box">
       <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" referrerpolicy="no-referrer" alt="Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=&quot;font-family:var(--font-display);font-weight:800;font-size:36px;color:#EE4D2D;&quot;>247</span>';" />
@@ -850,7 +846,7 @@
         <ul class="text-xs text-muted" style="padding-left: 16px; line-height: 1.7;">
           <li>Bấm nút <b>Mua Ngay &amp; Nhận Hoàn Tiền</b> trực tiếp từ trang này sang app Shopee / TikTok.</li>
           <li>Không bấm vào các link tiếp thị/livestream khác trước khi hoàn tất thanh toán.</li>
-          <li>Các mặt hàng như thẻ cào, dịch vụ số, voucher điện tử hoặc shop không bật Affiliate sẽ không được hoàn tiền.</li>
+          <li>Sau khi đặt đơn thành công trên sàn, bạn có thể vào mục <b>Ví &amp; Đơn → Báo Mã Đơn</b> để hệ thống đối soát nhanh.</li>
         </ul>
       </div>
     </main>
@@ -881,13 +877,11 @@
       <div id="profileContentArea"></div>
     </main>
 
-    <!-- Floating AI Assistant Button with Brand Logo -->
     <button class="ai-fab" onclick="openAiChatModal()" aria-label="Trợ lý AI">
       <span class="ai-dot"></span>
       <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" referrerpolicy="no-referrer" alt="AI Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=&quot;ai-dot&quot;></span><span style=&quot;font-weight:800;font-size:14px;&quot;>AI</span>';" />
     </button>
 
-    <!-- Bottom Navigation -->
     <nav class="bottom-nav">
       <button class="nav-item active" data-tab="home" onclick="switchTab('home')">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
@@ -912,6 +906,37 @@
         <span>Cá Nhân</span>
       </button>
     </nav>
+  </div>
+
+  <!-- MODAL: KHÁCH BÁO MÃ ĐƠN HÀNG THẬT -->
+  <div id="claimOrderModal" class="modal-backdrop" onclick="backdropClose(event, 'claimOrderModal')">
+    <div class="modal-box">
+      <div class="card-header">
+        <div class="card-title">🧾 Báo Mã Đơn Hàng Đã Đặt</div>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('claimOrderModal')">✕</button>
+      </div>
+      <p class="text-xs text-muted" style="margin-bottom:10px;">
+        Sau khi thanh toán đơn hàng thành công trên Shopee / TikTok Shop, nhập mã đơn tại đây để hệ thống đối soát và cộng tiền hoàn.
+      </p>
+      <div class="form-group">
+        <label class="form-label">Sàn thương mại điện tử:</label>
+        <select id="claimPlatform" class="select">
+          <option value="Shopee">Shopee</option>
+          <option value="TikTok Shop">TikTok Shop</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mã đơn hàng (Order ID trên sàn):</label>
+        <input type="text" id="claimOrderCode" class="input" placeholder="VD: 261126ABCXYZ..." />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Giá trị thanh toán đơn hàng (VNĐ):</label>
+        <input type="number" id="claimOrderValue" class="input" placeholder="VD: 250000" />
+      </div>
+      <button class="btn btn-primary" onclick="submitClaimOrder()">
+        Gửi Đơn Chờ Đối Soát
+      </button>
+    </div>
   </div>
 
   <!-- MODAL: RÚT TIỀN VỀ STK -->
@@ -1071,7 +1096,7 @@
     </div>
   </div>
 
-  <!-- MODAL: TRỢ LÝ AI CHATBOT (TỰ ĐỘNG CẬP NHẬT CÂU HỎI & DỮ LIỆU MỚI NHẤT TRÊN WEB) -->
+  <!-- MODAL: TRỢ LÝ AI CHATBOT -->
   <div id="aiChatModal" class="modal-backdrop" onclick="backdropClose(event, 'aiChatModal')">
     <div class="modal-box chat-box">
       <div class="chat-head">
@@ -1096,9 +1121,6 @@
   </div>
 
   <script>
-    // =========================================================
-    // 1. STATE KHỞI TẠO + ĐỒNG BỘ CLOUD SUPABASE + ADPIA A100157123
-    // =========================================================
     const STORAGE_KEY = 'HOANTIEN247_PROD_V8';
     const DEFAULT_CLOUD_URL = 'https://ffvauosrkonyurosobqi.supabase.co';
     const DEFAULT_CLOUD_KEY = 'sb_publishable_ySmFZ2zFsdz47pmvpHf9Dg_GDrTFlfN';
@@ -1113,10 +1135,8 @@
     let f1Filter = 'all';
     let tempQrBase64 = '';
     let isCloudSyncing = false;
+    let isAuthSubmitting = false;
     let lastCloudUpdatedAt = '';
-    let lastCheckedOrderData = { platform: '', title: '', url: '', price: 0, cashback: 0 };
-    let lastRecordedUrl = '';
-    let lastRecordedTime = 0;
 
     const defaultState = {
       users: [
@@ -1129,6 +1149,7 @@
           refCode: 'ADMIN247',
           referredBy: '',
           registerIp: 'System',
+          deviceFp: 'SYSTEM_ADMIN',
           ipDuplicate: false,
           ipApproved: true,
           balanceAvailable: 0,
@@ -1354,9 +1375,26 @@
       showToast(label);
     }
 
-    // =========================================================
-    // 2. BẮT IP MẠNG THẬT CỦA THIẾT BỊ
-    // =========================================================
+    function getOrCreateDeviceFingerprint() {
+      let fp = localStorage.getItem('HT247_DEVICE_FP');
+      if (!fp) {
+        const raw = [
+          navigator.userAgent || '',
+          screen.width + 'x' + screen.height,
+          navigator.language || '',
+          Intl.DateTimeFormat().resolvedOptions().timeZone || ''
+        ].join('|');
+        let hash = 0;
+        for (let i = 0; i < raw.length; i++) {
+          hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+          hash |= 0;
+        }
+        fp = 'DEV_' + Math.abs(hash).toString(36).toUpperCase();
+        localStorage.setItem('HT247_DEVICE_FP', fp);
+      }
+      return fp;
+    }
+
     async function detectRealNetworkIP() {
       try {
         const res = await fetch('https://api.ipify.org?format=json', { cache: 'no-store' });
@@ -1399,9 +1437,6 @@
       if (el) el.textContent = REAL_CLIENT_IP;
     }
 
-    // =========================================================
-    // 3. BOT TELEGRAM BÁO REAL-TIME 4 SỰ KIỆN
-    // =========================================================
     async function sendTelegramAlert(eventType, payload) {
       const cfg = state.settings.teleBot || {};
       if (!cfg.enabled || !cfg.token || !cfg.chatId) return;
@@ -1465,9 +1500,6 @@
       }
     }
 
-    // =========================================================
-    // 4. ĐIỀU HƯỚNG TAB & MODAL
-    // =========================================================
     function switchTab(tabName) {
       document.querySelectorAll('.tab-view').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -1496,9 +1528,6 @@
       if (e.target && e.target.id === id) closeModal(id);
     }
 
-    // =========================================================
-    // 5. GIẢI MÃ LINK SẠCH + GHÉP LINK ADPIA (u_id TRƯỚC &tu=)
-    // =========================================================
     function cleanTitleString(rawTitle, resolvedUrl) {
       let t = String(rawTitle || '').trim();
       if (t.includes('__mobile__') || t.includes('credential_token') || t.includes('uls_trackid') || /^\d+\?/.test(t)) {
@@ -1559,14 +1588,12 @@
       const encodedTarget = encodeURIComponent(cleanProductUrl);
       const encodedSub = encodeURIComponent(subId || 'GUEST');
 
-      // 1. Chuẩn ADPIA: Chèn &u_id=... TRƯỚC &tu= để không bị đẩy về trang chủ Shopee
       if (baseAff && (baseAff.includes('adpia.vn') || baseAff.includes('tu='))) {
         const cleanBase = baseAff.replace(/([?&])(u_id|tu)=.*$/g, '');
         const sep = cleanBase.includes('?') ? '&' : '?';
         return `${cleanBase}${sep}u_id=${encodedSub}&tu=${encodedTarget}`;
       }
 
-      // 2. Chuẩn ACCESSTRADE / MasOffer / Shorten.asia (?url=...)
       if (
         baseAff &&
         (baseAff.includes('isclix.com') ||
@@ -1579,7 +1606,6 @@
         return `${cleanBase}${sep}utm_source=${encodedSub}&sub1=${encodedSub}&url=${encodedTarget}`;
       }
 
-      // 3. Chuẩn Shopee an_redir trực tiếp
       if (platform === 'Shopee') {
         const redirBase = baseAff && baseAff.includes('an_redir') ? baseAff : 'https://s.shopee.vn/an_redir';
         return `${redirBase}?origin_link=${encodedTarget}&affiliate_id=${encodeURIComponent(shopeeAffId)}&sub_id=${encodedSub}`;
@@ -1675,14 +1701,6 @@
       const rate = Number(state.settings.defaultCashbackPct || 4.5);
       const estCashback = finalPrice > 0 ? Math.round((finalPrice * rate) / 100) : 0;
 
-      lastCheckedOrderData = {
-        platform,
-        title: displayTitle,
-        url: urlInput,
-        price: finalPrice,
-        cashback: estCashback
-      };
-
       out.innerHTML = `
         <div class="check-result-card has-cb">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
@@ -1709,55 +1727,66 @@
             </div>
           ` : ''}
 
-          <a href="${escapeHtml(trackingUrl)}" target="_blank" rel="noopener" onclick="recordPendingOrderFromCheck()" class="btn btn-primary" style="width:100%;">
+          <a href="${escapeHtml(trackingUrl)}" target="_blank" rel="noopener" class="btn btn-primary" style="width:100%;">
             Mua Ngay &amp; Nhận Hoàn Tiền ↗
           </a>
         </div>
       `;
     }
 
-    function recordPendingOrderFromCheck() {
-      recordPendingOrder(
-        lastCheckedOrderData.platform,
-        lastCheckedOrderData.title,
-        lastCheckedOrderData.price,
-        lastCheckedOrderData.cashback,
-        lastCheckedOrderData.url
-      );
-    }
-
-    function recordPendingOrder(platform, productTitle, price, cashbackAmount, productUrl = '') {
+    function openClaimOrderModal() {
       const user = getCurrentUser();
-      if (!user) return;
-      // Chống ghi trùng đơn nếu khách bấm nhiều lần cùng 1 link trong 2 phút
-      const now = Date.now();
-      if (productUrl && lastRecordedUrl === productUrl && (now - lastRecordedTime) < 120000) {
+      if (!user) {
+        showToast('Vui lòng đăng nhập để báo mã đơn hàng!');
+        switchTab('profile');
         return;
       }
-      lastRecordedUrl = productUrl;
-      lastRecordedTime = now;
-
-      const order = {
-        id: 'DH' + now.toString().slice(-6),
-        userId: user.id,
-        platform,
-        productName: productTitle || `Đơn hàng ${platform}`,
-        orderValue: price || 0,
-        cashbackAmount: cashbackAmount || 0,
-        step: 1,
-        createdAt: new Date().toLocaleString('vi-VN')
-      };
-      state.orders.unshift(order);
-      if (cashbackAmount > 0) {
-        user.balancePending = (user.balancePending || 0) + cashbackAmount;
-      }
-      saveState();
-      showToast('Đã ghi nhận lượt mua hàng vào mục Ví & Đơn!');
+      document.getElementById('claimOrderCode').value = '';
+      document.getElementById('claimOrderValue').value = '';
+      openModal('claimOrderModal');
     }
 
-    // =========================================================
-    // 6. ĐĂNG KÝ / ĐĂNG NHẬP & CHECK IP THẬT
-    // =========================================================
+    function submitClaimOrder() {
+      const user = getCurrentUser();
+      if (!user) return;
+      const platform = document.getElementById('claimPlatform').value;
+      const code = document.getElementById('claimOrderCode').value.trim().toUpperCase();
+      const val = Number(document.getElementById('claimOrderValue').value || 0);
+
+      if (!code || code.length < 5) {
+        showToast('Vui lòng nhập chính xác mã đơn hàng trên sàn!');
+        return;
+      }
+      if (val <= 0) {
+        showToast('Vui lòng nhập giá trị thanh toán đơn hàng!');
+        return;
+      }
+      if (state.orders.some(o => o.id.toUpperCase() === code)) {
+        showToast('Mã đơn hàng này đã được gửi trước đó!');
+        return;
+      }
+
+      const rate = Number(state.settings.defaultCashbackPct || 4.5);
+      const estCb = Math.round((val * rate) / 100);
+
+      state.orders.unshift({
+        id: code,
+        userId: user.id,
+        platform,
+        productName: `Đơn hàng ${platform} (#${code})`,
+        orderValue: val,
+        cashbackAmount: estCb,
+        step: 1,
+        createdAt: new Date().toLocaleString('vi-VN')
+      });
+      user.balancePending = (user.balancePending || 0) + estCb;
+      saveState();
+      closeModal('claimOrderModal');
+      renderAll();
+      renderChatChips();
+      showToast('Đã gửi mã đơn hàng thành công!');
+    }
+
     function setAuthMode(mode) {
       authMode = mode;
       renderProfileTab();
@@ -1770,112 +1799,140 @@
     }
 
     async function handleAuthSubmit() {
-      if (authMode === 'login') {
-        const username = document.getElementById('authUser').value.trim();
-        const password = document.getElementById('authPass').value.trim();
-        if (!username || !password) {
-          showToast('Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!');
+      if (isAuthSubmitting) return;
+      isAuthSubmitting = true;
+
+      const submitBtn = document.querySelector('#profileContentArea .btn-primary');
+      const oldBtnText = submitBtn ? submitBtn.textContent : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⏳ Đang kiểm tra & xử lý...';
+      }
+
+      try {
+        if (authMode === 'login') {
+          const username = document.getElementById('authUser').value.trim();
+          const password = document.getElementById('authPass').value.trim();
+          if (!username || !password) {
+            showToast('Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!');
+            return;
+          }
+          await pullFromCloud(true);
+          const found = state.users.find(
+            u => u.username.toLowerCase() === username.toLowerCase() && u.password === password
+          );
+          if (!found) {
+            showToast('Sai tài khoản hoặc mật khẩu!');
+            return;
+          }
+          if (found.locked) {
+            showToast('Tài khoản của bạn đang bị tạm khóa!');
+            return;
+          }
+          state.currentUserId = found.id;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          renderAll();
+          showToast(`Chào mừng ${found.name} quay trở lại!`);
           return;
         }
+
+        const name = document.getElementById('regName').value.trim();
+        const rawUser = document.getElementById('regUser').value.trim();
+        const cleanUser = rawUser.replace(/\s+/g, '').toLowerCase();
+        const password = document.getElementById('regPass').value.trim();
+        const refInput = (document.getElementById('regRef').value.trim() || '').toUpperCase();
+
+        if (!name || !cleanUser || !password) {
+          showToast('Vui lòng điền đầy đủ Họ tên, Tài khoản và Mật khẩu!');
+          return;
+        }
+
         await pullFromCloud(true);
-        const found = state.users.find(
-          u => u.username.toLowerCase() === username.toLowerCase() && u.password === password
+
+        const dupUsername = state.users.some(
+          u => u.username.replace(/\s+/g, '').toLowerCase() === cleanUser
         );
-        if (!found) {
-          showToast('Sai tài khoản hoặc mật khẩu!');
+        if (dupUsername) {
+          showToast('⚠️ Tài khoản hoặc SĐT này đã tồn tại trên hệ thống!');
           return;
         }
-        if (found.locked) {
-          showToast('Tài khoản của bạn đang bị tạm khóa!');
+
+        const deviceFp = getOrCreateDeviceFingerprint();
+        const dupDevice = state.users.some(u => u.role === 'user' && u.deviceFp === deviceFp);
+        if (dupDevice) {
+          showToast('⚠️ Thiết bị này đã đăng ký tài khoản rồi, vui lòng đăng nhập!');
           return;
         }
-        state.currentUserId = found.id;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+        if (REAL_CLIENT_IP.startsWith('Đang')) {
+          await detectRealNetworkIP();
+        }
+
+        const isDuplicateIP =
+          REAL_CLIENT_IP !== 'Không xác định' &&
+          state.users.some(u => u.role === 'user' && u.registerIp === REAL_CLIENT_IP);
+
+        if (isDuplicateIP && state.settings.refCheckIp) {
+          showToast('⚠️ Mạng Wi-Fi / 4G này đã có tài khoản đăng ký! Không thể tạo thêm.');
+          return;
+        }
+
+        const newRefCode = 'HT' + Math.random().toString(36).substring(2, 7).toUpperCase();
+        let validInviter = null;
+        if (refInput) {
+          validInviter = state.users.find(u => u.refCode.toUpperCase() === refInput);
+        }
+
+        const canAwardRef = state.settings.refEnabled && validInviter && !isDuplicateIP;
+
+        const newUser = {
+          id: 'u_' + Date.now(),
+          name,
+          username: rawUser,
+          password,
+          role: 'user',
+          refCode: newRefCode,
+          referredBy: validInviter ? validInviter.refCode : '',
+          registerIp: REAL_CLIENT_IP,
+          deviceFp,
+          ipDuplicate: isDuplicateIP,
+          ipApproved: !isDuplicateIP,
+          balanceAvailable: canAwardRef ? Number(state.settings.refNewUserBonus || 0) : 0,
+          balancePending: 0,
+          bankName: '',
+          bankStk: '',
+          bankHolder: '',
+          bankQr: '',
+          locked: false,
+          createdAt: new Date().toLocaleDateString('vi-VN')
+        };
+
+        if (canAwardRef && validInviter) {
+          validInviter.balanceAvailable =
+            (validInviter.balanceAvailable || 0) + Number(state.settings.refInviterBonus || 0);
+        }
+
+        state.users.push(newUser);
+        state.currentUserId = newUser.id;
+        saveState();
+
+        sendTelegramAlert('REGISTER', {
+          name: newUser.name,
+          username: newUser.username,
+          refCode: newUser.refCode,
+          referredBy: validInviter ? `${validInviter.name} (${validInviter.refCode})` : '',
+          ip: REAL_CLIENT_IP,
+          isDuplicateIP
+        });
+
         renderAll();
-        showToast(`Chào mừng ${found.name} quay trở lại!`);
-        return;
-      }
-
-      const name = document.getElementById('regName').value.trim();
-      const username = document.getElementById('regUser').value.trim();
-      const password = document.getElementById('regPass').value.trim();
-      const refInput = (document.getElementById('regRef').value.trim() || '').toUpperCase();
-
-      if (!name || !username || !password) {
-        showToast('Vui lòng điền đầy đủ Họ tên, Tài khoản và Mật khẩu!');
-        return;
-      }
-
-      await pullFromCloud(true);
-
-      if (state.users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
-        showToast('Tên đăng nhập hoặc SĐT này đã tồn tại!');
-        return;
-      }
-
-      if (REAL_CLIENT_IP.startsWith('Đang')) {
-        await detectRealNetworkIP();
-      }
-
-      const isDuplicateIP =
-        REAL_CLIENT_IP !== 'Không xác định' &&
-        state.users.some(u => u.registerIp === REAL_CLIENT_IP);
-
-      const newRefCode = 'HT' + Math.random().toString(36).substring(2, 7).toUpperCase();
-      let validInviter = null;
-      if (refInput) {
-        validInviter = state.users.find(u => u.refCode.toUpperCase() === refInput);
-      }
-
-      const canAwardRef =
-        state.settings.refEnabled &&
-        validInviter &&
-        (!state.settings.refCheckIp || !isDuplicateIP);
-
-      const newUser = {
-        id: 'u_' + Date.now(),
-        name,
-        username,
-        password,
-        role: 'user',
-        refCode: newRefCode,
-        referredBy: validInviter ? validInviter.refCode : '',
-        registerIp: REAL_CLIENT_IP,
-        ipDuplicate: isDuplicateIP,
-        ipApproved: !isDuplicateIP,
-        balanceAvailable: canAwardRef ? Number(state.settings.refNewUserBonus || 0) : 0,
-        balancePending: 0,
-        bankName: '',
-        bankStk: '',
-        bankHolder: '',
-        bankQr: '',
-        locked: false,
-        createdAt: new Date().toLocaleDateString('vi-VN')
-      };
-
-      if (canAwardRef && validInviter) {
-        validInviter.balanceAvailable =
-          (validInviter.balanceAvailable || 0) + Number(state.settings.refInviterBonus || 0);
-      }
-
-      state.users.push(newUser);
-      state.currentUserId = newUser.id;
-      saveState();
-
-      sendTelegramAlert('REGISTER', {
-        name: newUser.name,
-        username: newUser.username,
-        refCode: newUser.refCode,
-        referredBy: validInviter ? `${validInviter.name} (${validInviter.refCode})` : '',
-        ip: REAL_CLIENT_IP,
-        isDuplicateIP
-      });
-
-      renderAll();
-      if (isDuplicateIP && validInviter) {
-        showToast('Đăng ký thành công! (Cảnh báo trùng IP nên tạm khóa thưởng mời)');
-      } else {
         showToast('Đăng ký tài khoản thành công!');
+      } finally {
+        isAuthSubmitting = false;
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = oldBtnText;
+        }
       }
     }
 
@@ -1886,9 +1943,6 @@
       showToast('Đã đăng xuất tài khoản');
     }
 
-    // =========================================================
-    // 7. RÚT TIỀN VỀ STK & UPLOAD QR CÁ NHÂN
-    // =========================================================
     function openWithdrawModal() {
       const user = getCurrentUser();
       if (!user) {
@@ -1999,9 +2053,6 @@
       showToast('Đã gửi lệnh rút tiền! Tiền sẽ về STK sau khi QTV duyệt.');
     }
 
-    // =========================================================
-    // 8. ADMIN & CSKH ACTIONS
-    // =========================================================
     function advanceOrderStep(orderId, targetStep) {
       const user = getCurrentUser();
       if (!user || (user.role !== 'admin' && user.role !== 'cskh')) return;
@@ -2052,12 +2103,12 @@
     function clearAllTestOrders() {
       const user = getCurrentUser();
       if (!user || user.role !== 'admin') return;
-      if (!confirm('Bạn muốn xóa sạch toàn bộ danh sách đơn hàng test hiện tại trên hệ thống?')) return;
+      if (!confirm('Bạn muốn xóa sạch toàn bộ danh sách đơn hàng hiện tại trên hệ thống?')) return;
       state.orders = [];
       state.users.forEach(u => { u.balancePending = 0; });
       saveState();
       renderAll();
-      showToast('Đã xóa sạch toàn bộ đơn test!');
+      showToast('Đã xóa sạch toàn bộ đơn hàng!');
     }
 
     function processWithdraw(wdId, action) {
@@ -2150,6 +2201,19 @@
       saveState();
       renderAll();
       showToast(u.locked ? 'Đã khóa tài khoản' : 'Đã mở khóa tài khoản');
+    }
+
+    function deleteDuplicateUser(uid) {
+      const cur = getCurrentUser();
+      if (!cur || cur.role !== 'admin') return;
+      const u = state.users.find(x => x.id === uid);
+      if (!u || u.username === 'Admin') return;
+      if (!confirm(`Xóa vĩnh viễn tài khoản ${u.name} (@${u.username}) khỏi hệ thống?`)) return;
+      state.users = state.users.filter(x => x.id !== uid);
+      state.orders = state.orders.filter(o => o.userId !== uid);
+      saveState();
+      renderAll();
+      showToast('Đã xóa tài khoản trùng lặp!');
     }
 
     function openEditCustomerModal(uid) {
@@ -2476,9 +2540,6 @@
       }
     }
 
-    // =========================================================
-    // 9. TRỢ LÝ AI CHATBOT (TỰ ĐỘNG ĐỌC DỮ LIỆU MỚI NHẤT & ĐỀ XUẤT ĐẦY ĐỦ)
-    // =========================================================
     function openAiChatModal() {
       initChatbot();
       renderChatChips();
@@ -2499,7 +2560,6 @@
         { label: '💬 Liên hệ CSKH', q: 'Thông tin liên hệ CSKH hỗ trợ' }
       ];
 
-      // Tự động bổ sung đề xuất nếu Admin có cập nhật Mã giảm giá, Deal Hot hoặc Thông báo mới
       if (state.vouchers && state.vouchers.length > 0) {
         chips.splice(1, 0, {
           label: `🎟️ Mã giảm giá mới (${state.vouchers.length})`,
@@ -2558,7 +2618,7 @@
 
       const myOrders = state.orders.filter(o => o.userId === user.id);
       if (!myOrders.length) {
-        return `📭 Tài khoản <b>${escapeHtml(user.name)}</b> hiện chưa có đơn hàng nào được ghi nhận.<br>• Số dư khả dụng: <b>${formatVND(user.balanceAvailable)}</b><br>• Tiền chờ đối soát: <b>${formatVND(user.balancePending)}</b><br><br>👉 Khi bạn sang tab <b>Hoàn Tiền</b>, dán link sản phẩm và bấm <b>Mua Ngay &amp; Nhận Hoàn Tiền</b>, đơn sẽ tự động cập nhật tại đây.`;
+        return `📭 Tài khoản <b>${escapeHtml(user.name)}</b> hiện chưa có đơn hàng nào được ghi nhận.<br>• Số dư khả dụng: <b>${formatVND(user.balanceAvailable)}</b><br>• Tiền chờ đối soát: <b>${formatVND(user.balancePending)}</b><br><br>👉 Sau khi đặt hàng qua link của web, bạn vào tab <b>Ví &amp; Đơn → + Báo Mã Đơn</b> để hệ thống cập nhật tại đây.`;
       }
 
       const s1 = myOrders.filter(o => o.step === 1).length;
@@ -2568,7 +2628,7 @@
 
       const latestList = myOrders.slice(0, 5).map(o => {
         const stepLabel =
-          o.step === 1 ? '🟡 B1: Đã ghi nhận lượt mua' :
+          o.step === 1 ? '🟡 B1: Chờ xác nhận đơn' :
           o.step === 2 ? '🔵 B2: Sàn đang đối soát' :
           o.step === 3 ? '🟢 B3: Hoàn tất (Đã cộng ví)' :
           '🔴 Đã hủy / Không hợp lệ';
@@ -2650,7 +2710,7 @@
         } else if (lower.includes('cách') || lower.includes('mua')) {
           reply = `🛍️ <b>3 bước nhận hoàn tiền cực dễ:</b><br>1. Copy link sản phẩm trên Shopee hoặc TikTok Shop.<br>2. Vào tab <b>Hoàn Tiền</b> trên HoànTiền247 → dán link và bấm <b>Mua Ngay &amp; Nhận Hoàn Tiền</b>.<br>3. Nhận hàng thành công và đợi sàn đối soát xong là rút thẳng tiền về STK ngân hàng!`;
         } else if (lower.includes('bao lâu') || lower.includes('đối soát') || lower.includes('rút')) {
-          reply = `⏳ <b>Quy trình đối soát &amp; rút tiền:</b><br>• <b>B1:</b> Ghi nhận lượt mua ngay khi bấm qua web.<br>• <b>B2:</b> Sàn đối soát sau khi bạn nhận hàng và không bấm trả hàng/hoàn tiền.<br>• <b>B3:</b> Tiền chuyển sang <b>Số Dư Khả Dụng</b>, bạn vào tab <b>Ví &amp; Đơn → Rút Tiền</b> (tối thiểu <b>50.000₫</b>) để rút về STK hoặc QR của 40+ ngân hàng &amp; ví điện tử!`;
+          reply = `⏳ <b>Quy trình đối soát &amp; rút tiền:</b><br>• <b>B1:</b> Khách đặt đơn qua link &amp; báo mã đơn.<br>• <b>B2:</b> Sàn đối soát sau khi bạn nhận hàng và không bấm trả hàng/hoàn tiền.<br>• <b>B3:</b> Tiền chuyển sang <b>Số Dư Khả Dụng</b>, bạn vào tab <b>Ví &amp; Đơn → Rút Tiền</b> (tối thiểu <b>50.000₫</b>) để rút về STK hoặc QR của 40+ ngân hàng &amp; ví điện tử!`;
         } else if (lower.includes('ref') || lower.includes('f1') || lower.includes('giới thiệu')) {
           reply = `🎁 <b>Chính sách Tuyển Ref F1 mới nhất:</b><br>• Thưởng người mời: <b>${formatVND(state.settings.refInviterBonus)}</b> / F1 hợp lệ (IP mạng sạch không trùng).<br>• Quà tân thủ cho người được mời: <b>${formatVND(state.settings.refNewUserBonus)}</b>.<br>• Hưởng thêm hoa hồng trên mỗi đơn hàng F1 hoàn tất đối soát trọn đời!<br>👉 Vào tab <b>Tuyển Ref</b> ở giữa thanh menu để lấy link rút gọn <code>https://${escapeHtml(state.settings.shortDomain)}/r/...</code> nhé!`;
         } else if (lower.includes('cskh') || lower.includes('liên hệ') || lower.includes('hỗ trợ')) {
@@ -2665,9 +2725,6 @@
       setTimeout(() => appendChatMsg('bot', reply), 220);
     }
 
-    // =========================================================
-    // 10. RENDER TOÀN BỘ GIAO DIỆN
-    // =========================================================
     function renderAll() {
       const user = getCurrentUser();
 
@@ -2717,6 +2774,8 @@
       } else {
         dList.innerHTML = state.deals.map(d => {
           const estCb = Math.round((d.salePrice * (d.cashbackPct || state.settings.defaultCashbackPct)) / 100);
+          const subId = user ? user.refCode : 'GUEST';
+          const trackLink = buildAffiliateTrackingUrl(d.platform, d.affUrl, subId);
           return `
             <div class="deal-card">
               <img src="${escapeHtml(d.img)}" referrerpolicy="no-referrer" class="deal-img" onerror="this.src='${BRAND_LOGO_SRC}'" alt="${escapeHtml(d.title)}" />
@@ -2733,7 +2792,7 @@
                   <div class="badge badge-success" style="margin-bottom:7px; width:100%; justify-content:center;">
                     Hoàn +${formatVND(estCb)}
                   </div>
-                  <a href="${escapeHtml(d.affUrl)}" target="_blank" rel="noopener" onclick="recordPendingOrder('${escapeHtml(d.platform)}', '${escapeHtml(d.title)}', ${d.salePrice}, ${estCb}, '${escapeHtml(d.affUrl)}')" class="btn btn-primary btn-sm" style="width:100%;">
+                  <a href="${escapeHtml(trackLink)}" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="width:100%;">
                     Mua Ngay ↗
                   </a>
                 </div>
@@ -2888,9 +2947,10 @@
 
         <div class="card">
           <div class="card-header">
-            <div class="card-title">📦 Tiến Độ Đối Soát Đơn Hàng (${myOrders.length})</div>
+            <div class="card-title">📦 Đơn Hàng Hoàn Tiền (${myOrders.length})</div>
+            <button class="btn btn-primary btn-sm" onclick="openClaimOrderModal()">+ Báo Mã Đơn</button>
           </div>
-          ${!myOrders.length ? `<div class="empty-state">Bạn chưa có đơn hàng hoàn tiền nào.</div>` : myOrders.map(o => `
+          ${!myOrders.length ? `<div class="empty-state">Chưa có đơn hàng nào. Sau khi đặt hàng qua link của web, bấm <b>+ Báo Mã Đơn</b> để cập nhật tiến độ!</div>` : myOrders.map(o => `
             <div style="border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:8px;">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
                 <span class="badge badge-dark">${escapeHtml(o.platform)} • #${escapeHtml(o.id)}</span>
@@ -3104,7 +3164,7 @@
           <div class="divider"></div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <span class="font-bold">📦 Duyệt Tiến Độ Đơn (${state.orders.length})</span>
-            ${state.orders.length ? `<button class="btn btn-danger btn-sm" onclick="clearAllTestOrders()">🗑️ Xóa Sạch Đơn Test</button>` : ''}
+            ${state.orders.length ? `<button class="btn btn-danger btn-sm" onclick="clearAllTestOrders()">🗑️ Xóa Sạch Đơn</button>` : ''}
           </div>
           ${!state.orders.length ? `<div class="empty-state">Chưa có đơn hàng nào.</div>` : state.orders.map(o => {
             const buyer = state.users.find(u => u.id === o.userId);
@@ -3159,6 +3219,7 @@
                   <button class="btn btn-outline btn-sm" onclick="setUserRole('${u.id}', 'user')">Về TV</button>
                   <button class="btn btn-warning btn-sm" onclick="openEditCustomerModal('${u.id}')">Sửa TT/STK</button>
                   <button class="btn btn-danger btn-sm" onclick="toggleUserLock('${u.id}')">${u.locked ? 'Mở Khóa' : 'Khóa'}</button>
+                  <button class="btn btn-outline btn-sm" onclick="deleteDuplicateUser('${u.id}')">🗑️ Xóa</button>
                 </div>
               ` : ''}
             </div>
@@ -3171,7 +3232,7 @@
             <label><input type="checkbox" id="admRefEnabled" ${state.settings.refEnabled ? 'checked' : ''} /> Bật hệ thống Tuyển Ref &amp; Hoa hồng F1</label>
           </div>
           <div class="form-group">
-            <label><input type="checkbox" id="admRefCheckIp" ${state.settings.refCheckIp ? 'checked' : ''} /> Chặn cộng thưởng nếu trùng IP mạng thật</label>
+            <label><input type="checkbox" id="admRefCheckIp" ${state.settings.refCheckIp ? 'checked' : ''} /> Chặn trùng IP &amp; trùng thiết bị khi đăng ký</label>
           </div>
           <div class="form-group">
             <label class="form-label">Domain link giới thiệu rút gọn:</label>
@@ -3333,7 +3394,7 @@
             </div>
           </div>
           <div class="form-group">
-            <input type="url" id="admDUrl" class="input" placeholder="Link Affiliate sản phẩm..." />
+            <input type="url" id="admDUrl" class="input" placeholder="Link sản phẩm Shopee / TikTok..." />
           </div>
           <button class="btn btn-primary btn-sm" style="width:100%; margin-bottom:10px;" onclick="addAdminDeal()">+ Đăng Deal Hot</button>
           ${state.deals.map(d => `
@@ -3477,9 +3538,6 @@
       `;
     }
 
-    // =========================================================
-    // 11. KHỞI CHẠY TỨC THÌ (0MS) & ĐỒNG BỘ CLOUD REAL-TIME
-    // =========================================================
     function initApp() {
       setTimeout(dismissIntro, 1300);
 

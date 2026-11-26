@@ -3,21 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>HoànTiền247 - Hoàn Tiền Mua Sắm Shopee & TikTok Shop</title>
+  <title>HoànTiền247 - Mua Sắm Thông Minh, Hoàn Tiền Siêu Tốc 24/7</title>
   <link rel="icon" type="image/png" href="https://i.ibb.co/Q3M0XD2c/1795632489799.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #EE4D2D;
-      --primary-hover: #D73211;
-      --primary-soft: #FFF4EE;
+      --primary: #F97316;
+      --primary-dark: #EA580C;
+      --primary-soft: #FFF7ED;
       --primary-border: #FED7AA;
-      --bg-page: #FFF9F5;
+      --accent: #0F766E;
+      --accent-soft: #F0FDFA;
+      --bg-page: #F6F8FB;
       --bg-card: #FFFFFF;
-      --bg-sub: #F8FAFC;
-      --border: #F1E5DC;
+      --bg-sub: #F1F5F9;
+      --border: #E2E8F0;
       --text: #0F172A;
       --text-muted: #64748B;
       --success: #059669;
@@ -31,18 +33,20 @@
       --font-display: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif;
       --font-body: 'Be Vietnam Pro', sans-serif;
       --shadow-sm: 0 2px 10px rgba(15, 23, 42, 0.04);
-      --shadow-md: 0 10px 28px rgba(15, 23, 42, 0.12);
+      --shadow-md: 0 12px 30px rgba(15, 23, 42, 0.12);
     }
 
     body.dark-mode {
-      --primary: #FF6337;
-      --primary-hover: #EE4D2D;
-      --primary-soft: rgba(238, 77, 45, 0.16);
-      --primary-border: rgba(255, 99, 55, 0.32);
+      --primary: #FB923C;
+      --primary-dark: #F97316;
+      --primary-soft: rgba(249, 115, 22, 0.15);
+      --primary-border: rgba(251, 146, 60, 0.3);
+      --accent: #14B8A6;
+      --accent-soft: rgba(20, 184, 166, 0.14);
       --bg-page: #0B1120;
-      --bg-card: #131C31;
-      --bg-sub: #1A2540;
-      --border: #253352;
+      --bg-card: #111827;
+      --bg-sub: #1E293B;
+      --border: #273549;
       --text: #F8FAFC;
       --text-muted: #94A3B8;
       --success-soft: rgba(5, 150, 105, 0.18);
@@ -58,26 +62,25 @@
       color: var(--text);
       font-family: var(--font-body);
       font-size: 13.5px;
-      line-height: 1.48;
+      line-height: 1.5;
       transition: background 0.2s, color 0.2s;
     }
 
     .app-container {
       width: 100%;
-      max-width: 540px;
+      max-width: 560px;
       margin: 0 auto;
       min-height: 100dvh;
       display: flex;
       flex-direction: column;
-      padding-bottom: 86px;
+      padding-bottom: 92px;
       position: relative;
     }
 
-    /* TOP NAVBAR GIỐNG HOANTIENMUASAM */
     .top-navbar {
       position: sticky;
       top: 0;
-      z-index: 40;
+      z-index: 45;
       background: var(--bg-card);
       border-bottom: 1px solid var(--border);
       padding: 10px 14px;
@@ -90,27 +93,31 @@
     .nav-brand {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
       cursor: pointer;
       flex-shrink: 0;
     }
     .nav-brand img {
-      width: 30px;
-      height: 30px;
-      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
       object-fit: contain;
+      background: var(--primary-soft);
+      padding: 2px;
     }
     .nav-brand-name {
       font-family: var(--font-display);
       font-weight: 800;
-      font-size: 14.5px;
-      color: var(--primary);
+      font-size: 15px;
+      color: var(--text);
       letter-spacing: -0.3px;
     }
+    .nav-brand-name span { color: var(--primary); }
+
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       overflow-x: auto;
       scrollbar-width: none;
     }
@@ -118,8 +125,8 @@
     .nav-link-btn {
       background: none;
       border: none;
-      padding: 6px 8px;
-      border-radius: 8px;
+      padding: 6px 9px;
+      border-radius: 10px;
       font-family: var(--font-body);
       font-size: 12px;
       font-weight: 600;
@@ -133,11 +140,12 @@
       background: var(--primary-soft);
       font-weight: 700;
     }
+
     .avatar-trigger {
       width: 34px;
       height: 34px;
-      border-radius: 50%;
-      background: var(--primary);
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: #fff;
       border: none;
       font-family: var(--font-display);
@@ -148,64 +156,33 @@
       justify-content: center;
       cursor: pointer;
       flex-shrink: 0;
-      box-shadow: 0 3px 10px rgba(238, 77, 45, 0.3);
+      box-shadow: 0 3px 10px rgba(249, 115, 22, 0.28);
     }
 
-    /* DROPDOWN MENU PROFILE */
     .profile-dropdown {
       position: fixed;
-      top: 56px;
-      right: max(12px, calc(50% - 258px));
-      width: 268px;
+      top: 58px;
+      right: max(12px, calc(50% - 268px));
+      width: 272px;
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 18px;
       box-shadow: var(--shadow-md);
-      z-index: 80;
+      z-index: 85;
       display: none;
       overflow: hidden;
       animation: dropIn 0.16s ease;
     }
     .profile-dropdown.open { display: block; }
-    @keyframes dropIn {
-      from { opacity: 0; transform: translateY(-8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .dd-head {
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-    .dd-section-label {
-      font-size: 10.5px;
-      font-weight: 700;
-      color: var(--text-muted);
-      padding: 8px 14px 3px;
-      text-transform: uppercase;
-    }
-    .dd-item {
-      width: 100%;
-      background: none;
-      border: none;
-      padding: 9px 14px;
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--text);
-      cursor: pointer;
-      text-align: left;
-    }
+    @keyframes dropIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+    .dd-head { padding: 13px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .dd-section-label { font-size: 10px; font-weight: 800; color: var(--text-muted); padding: 8px 14px 3px; text-transform: uppercase; letter-spacing: 0.4px; }
+    .dd-item { width: 100%; background: none; border: none; padding: 9px 14px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; font-weight: 600; color: var(--text); cursor: pointer; text-align: left; }
     .dd-item:hover { background: var(--bg-sub); }
     .dd-item.danger { color: var(--danger); }
 
-    /* MARQUEE */
     .marquee-bar {
-      background: #1E293B;
+      background: #0F172A;
       color: #F8FAFC;
       font-size: 11.5px;
       padding: 6px 12px;
@@ -216,12 +193,11 @@
       white-space: nowrap;
     }
     .marquee-bar.active { display: flex; }
-    .marquee-tag { background: var(--primary); color: #fff; font-weight: 700; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
+    .marquee-tag { background: var(--primary); color: #fff; font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: 5px; }
     .marquee-track { overflow: hidden; flex: 1; }
     .marquee-text { display: inline-block; padding-left: 100%; animation: marqueeAnim 18s linear infinite; }
     @keyframes marqueeAnim { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-    /* MAIN VIEW & CARDS */
     .page-view { display: none; padding: 14px; }
     .page-view.active { display: block; animation: fadeIn 0.2s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
@@ -229,108 +205,76 @@
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px;
+      border-radius: 18px;
+      padding: 15px;
       margin-bottom: 12px;
       box-shadow: var(--shadow-sm);
     }
-    .greeting-banner {
-      background: linear-gradient(135deg, var(--primary-soft) 0%, var(--bg-card) 100%);
-      border: 1px solid var(--primary-border);
-      border-radius: 16px;
+
+    .hero-wallet-card {
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 60%, #115E59 100%);
+      color: #FFFFFF;
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.16);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-wallet-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .hero-balance-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 14px;
       padding: 12px 14px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-    .balance-card {
-      background: linear-gradient(135deg, var(--primary-soft) 0%, var(--bg-card) 100%);
-      border: 1px solid var(--primary-border);
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-    }
-    .balance-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      background: var(--primary);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
     }
 
-    /* 4 Ô THỐNG KÊ ĐƠN HÀNG */
-    .stats-row-4 {
+    .metrics-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin-top: 10px;
+      gap: 9px;
+      margin-bottom: 12px;
     }
-    .stat-mini {
-      background: var(--bg-sub);
+    .metric-card {
+      background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px;
+      border-radius: 15px;
+      padding: 11px 12px;
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
     }
-    .stat-mini-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 9px;
+    .metric-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 16px;
       flex-shrink: 0;
     }
 
-    /* THANH CHƯƠNG TRÌNH ĐẠI LÝ */
-    .agency-bar {
-      background: linear-gradient(90deg, rgba(139, 92, 246, 0.12), rgba(238, 77, 45, 0.08));
-      border: 1px solid rgba(139, 92, 246, 0.25);
-      border-radius: 14px;
-      padding: 11px 14px;
+    .converter-card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--primary-border);
+      border-radius: 18px;
+      padding: 15px;
       margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
+      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.07);
     }
+    .platform-chips { display: flex; align-items: center; gap: 6px; margin: 8px 0 11px; flex-wrap: wrap; }
+    .plat-chip { padding: 4px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
 
-    /* KHUNG TẠO LINK HOÀN TIỀN */
-    .platform-icons {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin: 8px 0 12px;
-      flex-wrap: wrap;
-    }
-    .plat-pill {
-      padding: 4px 9px;
-      border-radius: 8px;
-      font-size: 11px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .link-input-group {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
     .input, .select, .textarea {
       width: 100%;
       padding: 11px 12px;
@@ -360,7 +304,8 @@
     }
     .btn:active { transform: scale(0.98); }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(238, 77, 45, 0.25); }
+    .btn-primary { background: linear-gradient(135deg, #F97316, #EA580C); color: #fff; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.28); }
+    .btn-accent { background: var(--accent); color: #fff; }
     .btn-dark { background: #1E293B; color: #fff; }
     .btn-success { background: var(--success); color: #fff; }
     .btn-warning { background: var(--warning); color: #fff; }
@@ -370,170 +315,86 @@
     .btn-sm { padding: 6px 10px; font-size: 11.5px; border-radius: 9px; }
     .btn-row { display: flex; gap: 7px; flex-wrap: wrap; }
 
-    /* TIMELINE 7 BƯỚC QUY TRÌNH NHẬN HOÀN TIỀN */
-    .timeline-list {
-      position: relative;
-      padding-left: 30px;
-      margin-top: 10px;
-    }
-    .timeline-list::before {
-      content: '';
-      position: absolute;
-      left: 11px;
-      top: 8px;
-      bottom: 8px;
-      width: 2px;
-      background: var(--primary-border);
-    }
-    .tl-item {
-      position: relative;
-      padding: 9px 11px;
-      background: var(--bg-sub);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-bottom: 8px;
+    .steps-wrapper { margin-top: 10px; display: flex; flex-direction: column; gap: 7px; }
+    .step-row-card {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
+      padding: 9px 11px;
+      border-radius: 12px;
+      background: var(--bg-sub);
+      border: 1px solid var(--border);
     }
-    .tl-num {
-      position: absolute;
-      left: -30px;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--primary-soft);
-      border: 1.5px solid var(--primary);
-      color: var(--primary);
+    .step-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #fff;
       font-weight: 800;
-      font-size: 11px;
+      font-size: 11.5px;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-    .tl-badge {
-      font-size: 10.5px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 99px;
-      white-space: nowrap;
       flex-shrink: 0;
     }
 
-    /* BANNER MỜI BẠN BÈ 25% */
-    .invite-promo-banner {
-      background: linear-gradient(135deg, #FFF1E6 0%, #FFE4D1 100%);
-      border: 1px solid #FDBA74;
+    .partner-banner {
+      background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+      color: #FFFFFF;
       border-radius: 18px;
       padding: 16px;
-      color: #0F172A;
       margin-bottom: 12px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* GUIDE GRID CARDS */
-    .guide-grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 9px;
-      margin-top: 10px;
-    }
-    .guide-step-box {
-      background: var(--bg-sub);
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      padding: 11px;
-    }
-    .step-num-pill {
-      display: inline-block;
-      background: var(--primary-soft);
-      color: var(--primary);
-      font-weight: 800;
-      font-size: 11px;
-      padding: 2px 7px;
-      border-radius: 6px;
-      margin-bottom: 5px;
-    }
-    .faq-item {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 11px 12px;
-      margin-bottom: 8px;
-      background: var(--bg-card);
-      cursor: pointer;
-    }
-    .faq-ans {
-      display: none;
-      margin-top: 7px;
-      padding-top: 7px;
-      border-top: 1px dashed var(--border);
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .faq-item.open .faq-ans { display: block; }
-
-    /* FILTER PILLS & TABLES */
-    .filter-pills {
       display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 6px;
-      margin-bottom: 10px;
-      scrollbar-width: none;
-    }
-    .filter-pills::-webkit-scrollbar { display: none; }
-    .f-pill {
-      padding: 6px 12px;
-      border-radius: 99px;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .f-pill.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
     }
 
-    /* DEAL GRID & VOUCHERS */
-    .deal-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; }
-    .deal-card {
-      background: var(--bg-card);
+    .qa-comment-box {
       border: 1px solid var(--border);
       border-radius: 14px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
+      padding: 11px 12px;
+      margin-bottom: 9px;
+      background: var(--bg-sub);
     }
+    .qa-reply-box {
+      margin-top: 8px;
+      margin-left: 16px;
+      padding: 8px 10px;
+      border-radius: 11px;
+      background: var(--bg-card);
+      border-left: 3px solid var(--primary);
+    }
+
+    .guide-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; margin-top: 10px; }
+    .guide-step-box { background: var(--bg-sub); border: 1px solid var(--border); border-radius: 13px; padding: 11px; }
+    .step-num-pill { display: inline-block; background: var(--primary-soft); color: var(--primary); font-weight: 800; font-size: 11px; padding: 2px 7px; border-radius: 6px; margin-bottom: 5px; }
+    .faq-item { border: 1px solid var(--border); border-radius: 12px; padding: 11px 12px; margin-bottom: 8px; background: var(--bg-card); cursor: pointer; }
+    .faq-ans { display: none; margin-top: 7px; padding-top: 7px; border-top: 1px dashed var(--border); font-size: 12px; color: var(--text-muted); }
+    .faq-item.open .faq-ans { display: block; }
+
+    .filter-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; scrollbar-width: none; }
+    .filter-pills::-webkit-scrollbar { display: none; }
+    .f-pill { padding: 6px 12px; border-radius: 99px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted); font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .f-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    .deal-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; }
+    .deal-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
     .deal-img { width: 100%; height: 130px; object-fit: cover; background: var(--bg-sub); }
     .deal-body { padding: 9px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
 
-    /* FLOATING AI BUTTON & CART CHIP */
-    .floating-stack {
-      position: fixed;
-      right: 14px;
-      bottom: 18px;
-      z-index: 45;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
-    }
-    .floating-orders-pill {
-      background: var(--primary);
+    .floating-stack { position: fixed; right: 14px; bottom: 18px; z-index: 45; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+    .floating-saved-pill {
+      background: linear-gradient(135deg, #F97316, #EA580C);
       color: #fff;
-      border: none;
+      border: 2px solid #fff;
       padding: 8px 13px;
       border-radius: 99px;
       font-size: 12px;
       font-weight: 700;
-      box-shadow: 0 6px 18px rgba(238, 77, 45, 0.35);
+      box-shadow: 0 6px 18px rgba(249, 115, 22, 0.35);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -543,43 +404,30 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: var(--primary);
+      background: #0F172A;
       color: #fff;
       border: 2px solid #fff;
-      box-shadow: 0 8px 20px rgba(238, 77, 45, 0.35);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 20px;
       cursor: pointer;
-      position: relative;
     }
 
-    /* MODALS */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.6);
-      z-index: 95;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 12px;
-    }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.62); z-index: 95; display: none; align-items: center; justify-content: center; padding: 14px; }
     .modal-backdrop.open { display: flex; }
-    .modal-box {
-      width: 100%;
-      max-width: 430px;
-      max-height: 88dvh;
-      overflow-y: auto;
-      background: var(--bg-card);
-      color: var(--text);
-      border-radius: 20px;
+    .modal-box { width: 100%; max-width: 430px; max-height: 88dvh; overflow-y: auto; background: var(--bg-card); color: var(--text); border-radius: 22px; padding: 16px; box-shadow: var(--shadow-md); position: relative; }
+
+    .promo-modal-banner {
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 55%, #EA580C 100%);
+      color: #fff;
+      border-radius: 15px;
       padding: 16px;
-      box-shadow: var(--shadow-md);
+      text-align: center;
+      margin-bottom: 12px;
     }
 
-    /* CHATBOT */
     .chat-box { padding: 0; overflow: hidden; display: flex; flex-direction: column; height: 74dvh; max-height: 550px; }
     .chat-head { background: #0F172A; color: #fff; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; }
     .chat-msgs { flex: 1; overflow-y: auto; padding: 12px; background: var(--bg-sub); display: flex; flex-direction: column; gap: 8px; }
@@ -629,7 +477,6 @@
 <body>
   <div id="toast" class="toast"></div>
 
-  <!-- MENU PROFILE XỔ XUỐNG GÓC PHẢI (GIỐNG ẢNH MẪU) -->
   <div id="profileDropdown" class="profile-dropdown"></div>
 
   <div class="app-container">
@@ -638,213 +485,160 @@
       <div class="marquee-track"><span id="marqueeText" class="marquee-text"></span></div>
     </div>
 
-    <!-- TOP NAVIGATION BAR -->
     <header class="top-navbar">
       <div class="nav-brand" onclick="switchPage('dashboard')">
         <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" alt="Logo" />
-        <span class="nav-brand-name">HoànTiền247</span>
+        <span class="nav-brand-name">HoànTiền<span>247</span></span>
       </div>
       <nav class="nav-links">
-        <button class="nav-link-btn active" data-page="dashboard" onclick="switchPage('dashboard')">Dashboard</button>
-        <button class="nav-link-btn" data-page="guide" onclick="switchPage('guide')">Hướng dẫn</button>
-        <button class="nav-link-btn" data-page="history" onclick="switchPage('history')">Lịch sử hoàn tiền</button>
+        <button class="nav-link-btn active" data-page="dashboard" onclick="switchPage('dashboard')">Tổng quan</button>
+        <button class="nav-link-btn" data-page="guide" onclick="switchPage('guide')">Cẩm nang</button>
+        <button class="nav-link-btn" data-page="history" onclick="switchPage('history')">Đơn hoàn tiền</button>
         <button class="nav-link-btn" data-page="withdraw" onclick="switchPage('withdraw')">Rút tiền</button>
       </nav>
-      <button id="topAvatarBtn" class="avatar-trigger" onclick="toggleProfileDropdown()">VD</button>
+      <button id="topAvatarBtn" class="avatar-trigger" onclick="toggleProfileDropdown()">247</button>
     </header>
 
-    <!-- =====================================================
-         TRANG 1: DASHBOARD (TỔNG QUAN + DÁN LINK + QUY TRÌNH 7 BƯỚC)
-         ===================================================== -->
     <main id="page-dashboard" class="page-view active">
-      <!-- Lời chào & Nút mời bạn bè -->
-      <div class="greeting-banner">
-        <div>
-          <div id="greetingTitle" class="font-bold" style="font-size:14.5px;">Chào buổi sáng, bạn!</div>
-          <div class="text-xs text-muted">Mua sắm thông minh - Hoàn tiền tự động 24/7</div>
-        </div>
-        <div style="display:flex; align-items:center; gap:6px;">
-          <button class="btn btn-primary btn-sm" onclick="switchPage('agency')">👥 Mời bạn bè</button>
-          <button class="btn btn-outline btn-sm" onclick="switchPage('settings')" title="Cài đặt">⚙️</button>
-        </div>
-      </div>
-
-      <!-- Thẻ Số dư khả dụng -->
-      <div class="balance-card" onclick="switchPage('withdraw')">
-        <div style="display:flex; align-items:center; gap:11px;">
-          <div class="balance-icon">🏛️</div>
+      <div class="hero-wallet-card">
+        <div class="hero-wallet-top">
           <div>
-            <div class="text-xs text-muted">Số dư khả dụng</div>
-            <div id="dashAvailBalance" style="font-family:var(--font-display); font-weight:800; font-size:20px; color:var(--primary);">0₫</div>
-            <div class="text-xs text-muted">Nhấn để rút tiền về ngân hàng</div>
+            <div id="greetingTitle" class="font-bold" style="font-size:15px;">Xin chào, bạn! 👋</div>
+            <div style="font-size:11.5px; opacity:0.8;">Hoàn tiền mua sắm tự động 24/7</div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-primary btn-sm" onclick="switchPage('agency')">🎁 Mời bạn bè</button>
+            <button class="btn btn-sm" style="background:rgba(255,255,255,0.14); color:#fff;" onclick="switchPage('settings')">⚙️</button>
           </div>
         </div>
-        <span style="color:var(--primary); font-weight:800; font-size:16px;">›</span>
+
+        <div class="hero-balance-row" onclick="switchPage('withdraw')" style="cursor:pointer;">
+          <div>
+            <div style="font-size:11px; opacity:0.8;">Số dư khả dụng có thể rút</div>
+            <div id="dashAvailBalance" style="font-family:var(--font-display); font-weight:800; font-size:24px; color:#FDBA74;">0₫</div>
+          </div>
+          <span class="btn btn-sm" style="background:#fff; color:#0F172A;">Rút tiền ›</span>
+        </div>
       </div>
 
-      <!-- Thẻ Đơn hàng cá nhân (4 chỉ số) -->
-      <div class="card">
+      <div class="metrics-grid">
+        <div class="metric-card" onclick="switchPage('history')" style="cursor:pointer;">
+          <div class="metric-icon" style="background:var(--info-soft); color:var(--info);">📦</div>
+          <div><div class="text-xs text-muted">Đơn của tôi</div><div id="statTotalOrders" class="font-bold" style="font-size:15px;">0</div></div>
+        </div>
+        <div class="metric-card" onclick="switchPage('history')" style="cursor:pointer;">
+          <div class="metric-icon" style="background:var(--warning-soft); color:var(--warning);">⏳</div>
+          <div><div class="text-xs text-muted">Chờ đối soát</div><div id="statPendingCb" class="font-bold" style="font-size:15px; color:var(--warning);">0₫</div></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--success-soft); color:var(--success);">💰</div>
+          <div><div class="text-xs text-muted">Tổng tích lũy</div><div id="statTotalEarned" class="font-bold" style="font-size:15px; color:var(--success);">0₫</div></div>
+        </div>
+        <div class="metric-card" onclick="switchPage('withdraw')" style="cursor:pointer;">
+          <div class="metric-icon" style="background:var(--primary-soft); color:var(--primary);">🏦</div>
+          <div><div class="text-xs text-muted">Đã rút về STK</div><div id="statWithdrawn" class="font-bold" style="font-size:15px;">0₫</div></div>
+        </div>
+      </div>
+
+      <div class="converter-card">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span class="font-bold" style="font-size:13.5px;">🛍️ Đơn hàng cá nhân</span>
-          <button class="btn btn-outline btn-sm" onclick="switchPage('history')">Xem tất cả đơn hàng ›</button>
-        </div>
-        <div class="stats-row-4">
-          <div class="stat-mini">
-            <div class="stat-mini-icon" style="background:var(--info-soft); color:var(--info);">📦</div>
+          <div style="display:flex; align-items:center; gap:9px;">
+            <div style="width:36px; height:36px; border-radius:11px; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-size:16px;">🔗</div>
             <div>
-              <div class="text-xs text-muted">Tổng đơn hàng</div>
-              <div id="statTotalOrders" class="font-bold" style="font-size:14px;">0</div>
+              <div class="font-bold" style="font-size:15px;">Tạo link hoàn tiền ngay</div>
+              <div class="text-xs text-muted">Dán link sản phẩm để kích hoạt hoàn tiền</div>
             </div>
           </div>
-          <div class="stat-mini">
-            <div class="stat-mini-icon" style="background:var(--warning-soft); color:var(--warning);">⏳</div>
-            <div>
-              <div class="text-xs text-muted">Hoàn tiền tạm tính</div>
-              <div id="statPendingCb" class="font-bold" style="font-size:14px; color:var(--warning);">0₫</div>
-            </div>
-          </div>
-          <div class="stat-mini">
-            <div class="stat-mini-icon" style="background:var(--success-soft); color:var(--success);">📈</div>
-            <div>
-              <div class="text-xs text-muted">Tổng hoa hồng</div>
-              <div id="statTotalEarned" class="font-bold" style="font-size:14px; color:var(--success);">0₫</div>
-            </div>
-          </div>
-          <div class="stat-mini">
-            <div class="stat-mini-icon" style="background:var(--primary-soft); color:var(--primary);">💳</div>
-            <div>
-              <div class="text-xs text-muted">Số tiền đã rút</div>
-              <div id="statWithdrawn" class="font-bold" style="font-size:14px;">0₫</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Thanh Chương trình Đại lý -->
-      <div class="agency-bar">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-size:18px;">👥</span>
-          <div>
-            <div class="font-bold" style="font-size:13px;">Chương trình Đại lý</div>
-            <div class="text-xs text-muted" id="agencyQuickSummary">Nhận thưởng F1 &amp; hoa hồng trọn đời</div>
-          </div>
-        </div>
-        <button class="btn btn-outline btn-sm" onclick="switchPage('agency')">Chi tiết đại lý ›</button>
-      </div>
-
-      <!-- KHUNG TẠO LINK HOÀN TIỀN (CHỨC NĂNG CHÍNH) -->
-      <div class="card" style="border-color:var(--primary-border);">
-        <div style="display:flex; align-items:center; gap:9px;">
-          <div style="width:36px; height:36px; border-radius:10px; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-size:16px;">🔗</div>
-          <div>
-            <div class="font-bold" style="font-size:15px;">Tạo link hoàn tiền</div>
-            <div class="text-xs text-muted">Mua sắm nhận hoàn tiền tự động về tài khoản</div>
-          </div>
+          <button class="btn btn-outline btn-sm" onclick="openSavedCartModal()">🛒 Giỏ link (<span id="savedCartBadgeTop">0</span>)</button>
         </div>
 
-        <div class="platform-icons">
+        <div class="platform-chips">
           <span class="text-xs text-muted">Hỗ trợ:</span>
-          <span class="plat-pill" style="background:#FFF1EE; color:#EE4D2D;">🛍️ Shopee</span>
-          <span class="plat-pill" style="background:#F1F5F9; color:#0F172A;">🎵 TikTok Shop</span>
+          <span class="plat-chip" style="background:#FFF1EE; color:#EE4D2D;">🛍️ Shopee</span>
+          <span class="plat-chip" style="background:#F1F5F9; color:#0F172A;">🎵 TikTok Shop</span>
         </div>
 
-        <div class="link-input-group">
-          <input type="url" id="cbProductUrl" class="input" placeholder="Nhấn để dán link Shopee / TikTok..." />
+        <div style="display:flex; gap:8px;">
+          <input type="url" id="cbProductUrl" class="input" placeholder="Dán link sản phẩm Shopee hoặc TikTok..." />
           <button id="btnCheckCb" class="btn btn-primary" style="white-space:nowrap; flex-shrink:0;" onclick="checkCashbackLink()">
-            🔗 Dán link
+            ⚡ Tạo link
           </button>
         </div>
 
         <div id="cbCheckResult"></div>
 
-        <div style="margin-top:10px; padding:9px 11px; border-radius:11px; background:var(--warning-soft); border:1px solid #FDE68A; display:flex; justify-content:space-between; align-items:center;">
-          <span class="text-xs"><b>⚠️ Quan trọng:</b> Đọc kỹ hướng dẫn để đảm bảo sàn ghi nhận đơn</span>
+        <div style="margin-top:10px; padding:8px 11px; border-radius:11px; background:var(--warning-soft); border:1px solid #FDE68A; display:flex; justify-content:space-between; align-items:center;">
+          <span class="text-xs"><b>📌 Lưu ý:</b> Xóa SP cũ khỏi giỏ trên app trước khi bấm Mua Ngay</span>
           <button class="btn btn-outline btn-sm" onclick="switchPage('guide')">Xem ›</button>
         </div>
       </div>
 
-      <!-- QUY TRÌNH NHẬN HOÀN TIỀN 7 BƯỚC (CÓ NÚT THU GỌN) -->
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div>
-            <div class="font-bold" style="font-size:14px;">Quy trình nhận hoàn tiền <span class="badge badge-info">7 bước</span></div>
-            <div class="text-xs text-muted">Từ lúc dán link đến khi tiền về ví và rút được ngay</div>
+            <div class="font-bold" style="font-size:14px;">Quy trình nhận hoàn tiền <span class="badge badge-info">6 bước</span></div>
+            <div class="text-xs text-muted">Từ lúc dán link đến khi tiền về tài khoản ngân hàng</div>
           </div>
-          <button class="btn btn-outline btn-sm" onclick="toggleTimeline7()" id="btnToggleTl">Thu gọn ∧</button>
+          <button class="btn btn-outline btn-sm" onclick="toggleStepsBox()" id="btnToggleSteps">Thu gọn ∧</button>
         </div>
 
-        <div id="timeline7Wrap" class="timeline-list">
-          <div class="tl-item">
-            <span class="tl-num">1</span>
-            <div>
-              <div class="font-bold" style="font-size:12.5px;">Đọc hướng dẫn mua hàng</div>
-              <div class="text-xs text-muted">Đọc kỹ lưu ý để đảm bảo đơn hàng không bị rớt hoàn tiền.</div>
+        <div id="stepsBoxWrap" class="steps-wrapper">
+          <div class="step-row-card">
+            <div style="display:flex; align-items:center; gap:9px;">
+              <span class="step-circle">1</span>
+              <div><div class="font-bold" style="font-size:12.5px;">Copy &amp; Dán link sản phẩm</div><div class="text-xs text-muted">Dán link vào ô phía trên hoặc lưu vào Giỏ link để mua sau.</div></div>
             </div>
-            <span class="tl-badge badge-warning">Tránh rớt đơn</span>
+            <span class="badge badge-primary">Tạo link</span>
           </div>
-          <div class="tl-item">
-            <span class="tl-num">2</span>
-            <div>
-              <div class="font-bold" style="font-size:12.5px;">Dán link vào hệ thống</div>
-              <div class="text-xs text-muted">Dán link và bấm <b>Mua Ngay &amp; Nhận Hoàn Tiền</b>.</div>
+          <div class="step-row-card">
+            <div style="display:flex; align-items:center; gap:9px;">
+              <span class="step-circle">2</span>
+              <div><div class="font-bold" style="font-size:12.5px;">Mở sàn &amp; Đặt hàng liền mạch</div><div class="text-xs text-muted">Bấm Mua Ngay sang app Shopee/TikTok, áp mã giảm giá bình thường.</div></div>
             </div>
-            <span class="tl-badge badge-primary">Thao tác link</span>
+            <span class="badge badge-warning">Đặt đơn</span>
           </div>
-          <div class="tl-item">
-            <span class="tl-num">3</span>
-            <div>
-              <div class="font-bold" style="font-size:12.5px;">Đặt hàng trên sàn</div>
-              <div class="text-xs text-muted">Áp voucher giảm giá &amp; freeship bình thường trên Shopee / TikTok.</div>
+          <div class="step-row-card">
+            <div style="display:flex; align-items:center; gap:9px;">
+              <span class="step-circle">3</span>
+              <div><div class="font-bold" style="font-size:12.5px;">Báo mã đơn hàng trên web</div><div class="text-xs text-muted">Vào mục <b>Đơn hoàn tiền → + Báo Mã Đơn</b> để hệ thống theo dõi.</div></div>
             </div>
-            <span class="tl-badge badge-info">Thanh toán</span>
+            <span class="badge badge-info">Đối soát</span>
           </div>
-          <div class="tl-item">
-            <span class="tl-num">4</span>
-            <div>
-              <div class="font-bold" style="font-size:12.5px;">Kiểm tra &amp; báo mã đơn hàng</div>
-              <div class="text-xs text-muted">Vào mục <b>Lịch sử hoàn tiền → + Báo Mã Đơn</b> để đối soát nhanh.</div>
+          <div class="step-row-card">
+            <div style="display:flex; align-items:center; gap:9px;">
+              <span class="step-circle">4</span>
+              <div><div class="font-bold" style="font-size:12.5px;">Xác nhận "Đã nhận hàng"</div><div class="text-xs text-muted">Sau khi nhận hàng và không đổi trả, bấm đã nhận hàng trên sàn.</div></div>
             </div>
-            <span class="tl-badge badge-info">Cập nhật đơn</span>
+            <span class="badge badge-info">Chốt đơn</span>
           </div>
-          <div class="tl-item">
-            <span class="tl-num">5</span>
-            <div>
-              <div class="font-bold" style="font-size:12.5px;">Bấm duyệt đơn trên sàn</div>
-              <div class="text-xs text-muted">Khi nhận hàng (không đổi trả), bấm <b>"Đã nhận hàng"</b> để chốt hoa hồng sớm.</div>
+          <div class="step-row-card">
+            <div style="display:flex; align-items:center; gap:9px;">
+              <span class="step-circle">5</span>
+              <div><div class="font-bold" style="font-size:12.5px;">Cộng tiền vào Số dư khả dụng</div><div class="text-xs text-muted">Hệ thống duyệt hoàn tất và cộng trực tiếp vào ví của bạn.</div></div>
             </div>
-            <span class="tl-badge badge-primary">Shopee / TikTok</span>
+            <span class="badge badge-success">Cộng ví</span>
           </div>
-          <div class="tl-item">
-            <span class="tl-num">6</span>
-            <div>
-              <div class="font-bold" style="font-size:12.5px;">Tiền vào ví Tạm tính</div>
-              <div class="text-xs text-muted">Chờ sàn đối soát hoàn tất (tránh đơn hoàn/trả hàng).</div>
+          <div class="step-row-card">
+            <div style="display:flex; align-items:center; gap:9px;">
+              <span class="step-circle">6</span>
+              <div><div class="font-bold" style="font-size:12.5px;">Rút tiền về STK ngân hàng 24/7</div><div class="text-xs text-muted">Rút miễn phí về 40+ ngân hàng &amp; ví điện tử từ 50.000₫.</div></div>
             </div>
-            <span class="tl-badge badge-success">Chờ đối soát</span>
-          </div>
-          <div class="tl-item">
-            <span class="tl-num">7</span>
-            <div>
-              <div class="font-bold" style="font-size:12.5px;">Tiền về Số dư khả dụng</div>
-              <div class="text-xs text-muted">Bạn có thể rút thẳng về tài khoản ngân hàng bất kỳ lúc nào (từ 50.000₫).</div>
-            </div>
-            <span class="tl-badge badge-success">Có thể rút luôn</span>
+            <span class="badge badge-success">Rút ngay</span>
           </div>
         </div>
       </div>
 
-      <!-- BANNER MỜI BẠN THAM GIA -->
-      <div class="invite-promo-banner">
-        <div class="font-bold" style="color:var(--primary); font-size:13px;">HoànTiền247 • Chương trình Đại lý</div>
-        <div style="font-family:var(--font-display); font-weight:800; font-size:18px; margin:2px 0;">MỜI BẠN THAM GIA<br>MUA HÀNG HOÀN TIỀN</div>
-        <div style="display:flex; align-items:baseline; gap:8px; margin:6px 0 10px;">
-          <span style="font-family:var(--font-display); font-weight:800; font-size:28px; color:var(--primary);" id="bannerRefPct">15%</span>
-          <span class="text-xs font-bold">hoa hồng mỗi đơn<br>từ bạn bè F1*</span>
+      <div class="partner-banner">
+        <div>
+          <span class="badge" style="background:rgba(255,255,255,0.2); color:#fff; margin-bottom:5px;">CHƯƠNG TRÌNH ĐỐI TÁC</span>
+          <div style="font-family:var(--font-display); font-weight:800; font-size:17px; line-height:1.25;">
+            MỜI BẠN BÈ MUA SẮM<br>NHẬN <span id="bannerRefPct" style="color:#FDE047;">15%</span> HOA HỒNG F1
+          </div>
+          <div style="font-size:11.5px; opacity:0.9; margin-top:4px;">Tặng thêm quà tân thủ cho cả người mời &amp; bạn bè!</div>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="switchPage('agency')">MỜI BẠN NGAY ↗</button>
+        <button class="btn btn-sm" style="background:#fff; color:#0F766E; flex-shrink:0;" onclick="switchPage('agency')">Lấy link mời ›</button>
       </div>
 
-      <!-- KHO MÃ GIẢM GIÁ & DEAL HOT TỪ ADMIN -->
       <div id="dashVoucherSection" class="card" style="display:none;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <span class="font-bold" style="font-size:14px;">🎟️ Kho Mã Giảm Giá Độc Quyền</span>
@@ -860,22 +654,34 @@
         </div>
         <div id="homeDealList" class="deal-grid"></div>
       </div>
+
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div>
+            <div class="font-bold" style="font-size:14.5px;">💬 Hỏi đáp &amp; Thảo luận cộng đồng <span class="badge badge-primary" id="qaTotalBadge">0</span></div>
+            <div class="text-xs text-muted">Thắc mắc về hoàn tiền Shopee, TikTok Shop — CSKH hỗ trợ trực tiếp</div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:7px; margin-bottom:12px;">
+          <input type="text" id="qaNewInput" class="input" placeholder="Viết câu hỏi hoặc bình luận của bạn..." onkeypress="if(event.key==='Enter') postCommunityQuestion()" />
+          <button class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="postCommunityQuestion()">Gửi ➤</button>
+        </div>
+
+        <div id="qaCommentsList"></div>
+      </div>
     </main>
 
-    <!-- =====================================================
-         TRANG 2: HƯỚNG DẪN SỬ DỤNG & CÂU HỎI THƯỜNG GẶP
-         ===================================================== -->
     <main id="page-guide" class="page-view">
       <div style="margin-bottom:12px;">
-        <h2 style="font-family:var(--font-display); font-weight:800; font-size:18px;">Sổ tay &amp; Hướng dẫn sử dụng</h2>
-        <p class="text-xs text-muted">Tài liệu từng bước nhận hoàn tiền khi mua sắm trên Shopee &amp; TikTok Shop, cùng mẹo cài đặt ứng dụng ra màn hình chính.</p>
+        <h2 style="font-family:var(--font-display); font-weight:800; font-size:18px;">Cẩm nang &amp; Hướng dẫn sử dụng</h2>
+        <p class="text-xs text-muted">Hướng dẫn chi tiết từng bước nhận hoàn tiền Shopee, TikTok Shop và cài đặt ứng dụng ra màn hình chính.</p>
       </div>
 
-      <!-- PHẦN 1: QUY TRÌNH MUA SẮM -->
       <div class="card">
         <div class="text-xs font-bold" style="color:var(--primary);">PHẦN 1 • Quy trình mua sắm</div>
         <div style="font-family:var(--font-display); font-weight:800; font-size:16px; margin-bottom:10px;">
-          Hướng dẫn mua sắm nhận <span style="color:var(--primary);">Hoàn tiền</span>
+          Cách mua hàng nhận <span style="color:var(--primary);">Hoàn tiền 100%</span>
         </div>
 
         <div class="filter-pills">
@@ -886,44 +692,20 @@
         <div id="guideStepsGrid" class="guide-grid-2"></div>
 
         <div style="margin-top:12px; background:var(--primary-soft); border:1px solid var(--primary-border); border-radius:13px; padding:11px;">
-          <div class="badge badge-primary" style="margin-bottom:8px;">🛍️ MUA NHIỀU SẢN PHẨM CÙNG 1 SHOP</div>
+          <div class="badge badge-primary" style="margin-bottom:8px;">🛍️ MẸO MUA NHIỀU MÓN CÙNG 1 SHOP</div>
           <div class="guide-grid-2" style="margin-top:0;">
-            <div class="guide-step-box">
-              <div class="font-bold" style="font-size:12px;">1. Giỏ hàng trống</div>
-              <div class="text-xs text-muted">Đảm bảo giỏ hàng chưa có sẵn sản phẩm của shop định mua.</div>
-            </div>
-            <div class="guide-step-box">
-              <div class="font-bold" style="font-size:12px;">2. Dán 1 link duy nhất</div>
-              <div class="text-xs text-muted">Chỉ cần dán link 1 sản phẩm bất kỳ trong shop vào HoànTiền247 để mở app.</div>
-            </div>
-            <div class="guide-step-box">
-              <div class="font-bold" style="font-size:12px;">3. Vào Shop nhặt tiếp</div>
-              <div class="text-xs text-muted">Thêm SP1 vào giỏ → Bấm "Xem Shop" để thêm tiếp các món khác.</div>
-            </div>
-            <div class="guide-step-box">
-              <div class="font-bold" style="font-size:12px;">4. Đặt hàng tại giỏ</div>
-              <div class="text-xs text-muted">Vào giỏ hàng tích chọn tất cả món vừa nhặt và thanh toán 1 lần.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="guide-grid-2" style="margin-top:10px;">
-          <div class="guide-step-box" style="border-color:#A7F3D0;">
-            <div class="font-bold" style="font-size:12px; color:var(--success);">✅ Voucher &amp; Ưu đãi giữ nguyên 100%</div>
-            <div class="text-xs text-muted">Vẫn áp dụng đầy đủ mã giảm giá, freeship và xu từ sàn.</div>
-          </div>
-          <div class="guide-step-box" style="border-color:#FDE68A;">
-            <div class="font-bold" style="font-size:12px; color:var(--warning);">⚠️ Mẹo tránh mất đơn hoàn tiền</div>
-            <div class="text-xs text-muted">Tránh bấm vào link livestream hoặc video review khác giữa chừng.</div>
+            <div class="guide-step-box"><div class="font-bold" style="font-size:12px;">1. Giỏ hàng trống</div><div class="text-xs text-muted">Xóa sản phẩm cũ của shop khỏi giỏ trước khi dán link.</div></div>
+            <div class="guide-step-box"><div class="font-bold" style="font-size:12px;">2. Dán 1 link duy nhất</div><div class="text-xs text-muted">Dán link 1 món bất kỳ trong shop vào HoànTiền247 để mở app.</div></div>
+            <div class="guide-step-box"><div class="font-bold" style="font-size:12px;">3. Vào Shop nhặt tiếp</div><div class="text-xs text-muted">Thêm món 1 vào giỏ → Bấm "Xem Shop" để chọn thêm các món khác.</div></div>
+            <div class="guide-step-box"><div class="font-bold" style="font-size:12px;">4. Thanh toán 1 lần</div><div class="text-xs text-muted">Vào giỏ hàng chọn tất cả món vừa thêm và đặt hàng.</div></div>
           </div>
         </div>
       </div>
 
-      <!-- PHẦN 2: CÀI ĐẶT PWA RA MÀN HÌNH CHÍNH -->
       <div class="card">
-        <div class="text-xs font-bold" style="color:var(--info);">PHẦN 2 • Cài đặt ứng dụng PWA</div>
+        <div class="text-xs font-bold" style="color:var(--accent);">PHẦN 2 • Cài đặt ứng dụng PWA</div>
         <div style="font-family:var(--font-display); font-weight:800; font-size:16px; margin-bottom:10px;">
-          Thêm ứng dụng vào <span style="color:var(--info);">Màn hình chính</span>
+          Thêm HoànTiền247 vào <span style="color:var(--accent);">Màn hình chính</span>
         </div>
         <div class="filter-pills">
           <button class="f-pill active" id="pwaIosBtn" onclick="switchPwaOs('ios')">🍎 iPhone / iOS (Safari)</button>
@@ -932,36 +714,26 @@
         <div id="pwaStepsGrid" class="guide-grid-2"></div>
       </div>
 
-      <!-- PHẦN 3: HƯỚNG DẪN CHUNG & FAQ -->
       <div class="card">
-        <div class="font-bold" style="font-size:14.5px; margin-bottom:10px;">❓ Hướng dẫn chung &amp; Giải đáp thắc mắc</div>
+        <div class="font-bold" style="font-size:14.5px; margin-bottom:10px;">❓ Câu hỏi thường gặp (FAQ)</div>
         <div class="faq-item" onclick="this.classList.toggle('open')">
-          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:12.5px;">
-            <span>• Hoàn tiền mua sắm là gì?</span><span>⌄</span>
-          </div>
-          <div class="faq-ans">Khi bạn mua hàng Shopee hoặc TikTok Shop thông qua link tạo tại HoànTiền247, sàn sẽ trích hoa hồng tiếp thị và chúng tôi chia sẻ lại trực tiếp bằng tiền mặt về tài khoản ngân hàng của bạn.</div>
+          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:12.5px;"><span>• Hoàn tiền mua sắm hoạt động như thế nào?</span><span>⌄</span></div>
+          <div class="faq-ans">Khi bạn tạo link tại HoànTiền247 và mua hàng trên Shopee/TikTok Shop, sàn trả hoa hồng tiếp thị cho hệ thống và chúng tôi hoàn lại trực tiếp bằng tiền mặt về tài khoản ngân hàng của bạn.</div>
         </div>
         <div class="faq-item" onclick="this.classList.toggle('open')">
-          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:12.5px;">
-            <span>• Mẹo mua sắm nhận hoàn tiền 100% thành công?</span><span>⌄</span>
-          </div>
-          <div class="faq-ans">Xóa sản phẩm cũ khỏi giỏ trước khi dán link, mở trực tiếp sang app sàn từ nút Mua Ngay và hoàn tất thanh toán liền mạch không thoát ra bấm link quảng cáo khác.</div>
+          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:12.5px;"><span>• Làm sao để lưu link sản phẩm ưng ý mua sau?</span><span>⌄</span></div>
+          <div class="faq-ans">Sau khi dán link vào ô "Tạo link hoàn tiền", bạn bấm nút <b>+ Lưu Giỏ Link</b>. Khi nào cần mua chỉ việc mở nút <b>🛒 Giỏ link</b> góc dưới màn hình và bấm Mua Ngay!</div>
         </div>
         <div class="faq-item" onclick="this.classList.toggle('open')">
-          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:12.5px;">
-            <span>• Tại sao tôi đã mua hàng nhưng chưa thấy đơn?</span><span>⌄</span>
-          </div>
-          <div class="faq-ans">Sau khi đặt đơn thành công, bạn hãy vào mục <b>Lịch sử hoàn tiền → + Báo Mã Đơn</b> nhập mã đơn hàng trên Shopee/TikTok để hệ thống ghi nhận và đối soát nhanh nhất.</div>
+          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:12.5px;"><span>• Bao lâu thì được rút tiền về ngân hàng?</span><span>⌄</span></div>
+          <div class="faq-ans">Ngay sau khi đơn hàng giao thành công, hết thời gian đổi trả của sàn và được Admin duyệt sang Số dư khả dụng (từ 50.000₫), bạn có thể đặt lệnh rút tiền 24/7.</div>
         </div>
       </div>
     </main>
 
-    <!-- =====================================================
-         TRANG 3: LỊCH SỬ HOÀN TIỀN (TÌM KIẾM + LỌC + BÁO MÃ ĐƠN)
-         ===================================================== -->
     <main id="page-history" class="page-view">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <h2 style="font-family:var(--font-display); font-weight:800; font-size:18px;">Lịch sử hoàn tiền</h2>
+        <h2 style="font-family:var(--font-display); font-weight:800; font-size:18px;">Đơn hoàn tiền của tôi</h2>
         <button class="btn btn-primary btn-sm" onclick="openClaimOrderModal()">+ Báo Mã Đơn</button>
       </div>
 
@@ -972,73 +744,91 @@
       <div class="filter-pills">
         <button class="f-pill active" data-hfilter="all" onclick="setHistoryFilter('all')">Tất cả</button>
         <button class="f-pill" data-hfilter="1" onclick="setHistoryFilter('1')">Chờ xử lý</button>
-        <button class="f-pill" data-hfilter="2" onclick="setHistoryFilter('2')">Đang xử lý</button>
+        <button class="f-pill" data-hfilter="2" onclick="setHistoryFilter('2')">Đang đối soát</button>
         <button class="f-pill" data-hfilter="3" onclick="setHistoryFilter('3')">Hoàn tất</button>
-        <button class="f-pill" data-hfilter="0" onclick="setHistoryFilter('0')">Hủy</button>
+        <button class="f-pill" data-hfilter="0" onclick="setHistoryFilter('0')">Đã hủy</button>
       </div>
 
       <div id="historySummaryArea"></div>
       <div id="historyOrdersArea"></div>
     </main>
 
-    <!-- =====================================================
-         TRANG 4: RÚT TIỀN & LỊCH SỬ RÚT TIỀN
-         ===================================================== -->
     <main id="page-withdraw" class="page-view">
-      <h2 style="font-family:var(--font-display); font-weight:800; font-size:18px; margin-bottom:10px;">Lịch sử rút tiền</h2>
+      <h2 style="font-family:var(--font-display); font-weight:800; font-size:18px; margin-bottom:10px;">Rút tiền về ngân hàng</h2>
       <div id="withdrawPageArea"></div>
     </main>
 
-    <!-- =====================================================
-         TRANG 5: CHƯƠNG TRÌNH ĐẠI LÝ / MỜI BẠN BÈ F1
-         ===================================================== -->
     <main id="page-agency" class="page-view">
       <h2 style="font-family:var(--font-display); font-weight:800; font-size:18px; margin-bottom:10px;">Chương trình Đại lý &amp; Tuyển Ref</h2>
       <div id="agencyPageArea"></div>
     </main>
 
-    <!-- =====================================================
-         TRANG 6: CÀI ĐẶT TÀI KHOẢN & QUẢN TRỊ VIÊN (7 TAB ADMIN)
-         ===================================================== -->
     <main id="page-settings" class="page-view">
       <h2 style="font-family:var(--font-display); font-weight:800; font-size:18px; margin-bottom:10px;">Cài đặt &amp; Tài khoản</h2>
       <div id="settingsPageArea"></div>
     </main>
 
-    <!-- FOOTER GIỐNG MẪU -->
     <footer class="app-footer">
-      <span>© 2026 HoànTiền247. All rights reserved.</span>
+      <span>© 2026 HoànTiền247 • Mua sắm hoàn tiền thông minh</span>
       <div style="display:flex; gap:10px;">
-        <span style="cursor:pointer;" onclick="switchPage('guide')">Hướng dẫn</span>
-        <span style="cursor:pointer;" onclick="openAiChatModal()">Hỗ trợ</span>
+        <span style="cursor:pointer;" onclick="switchPage('guide')">Cẩm nang</span>
+        <span style="cursor:pointer;" onclick="openAiChatModal()">Trợ lý AI</span>
       </div>
     </footer>
 
-    <!-- NÚT NỔI GÓC PHẢI DƯỚI (GIỎ HÀNG / ĐƠN + TRỢ LÝ AI) -->
     <div class="floating-stack">
-      <button class="floating-orders-pill" onclick="switchPage('history')">
-        🛒 Đơn hàng (<span id="floatOrderCount">0</span>)
+      <button class="floating-saved-pill" onclick="openSavedCartModal()">
+        🛒 Giỏ link (<span id="floatSavedCount">0</span>)
       </button>
       <button class="ai-fab" onclick="openAiChatModal()" aria-label="Trợ lý AI">💬</button>
     </div>
   </div>
 
-  <!-- MODAL: KHÁCH BÁO MÃ ĐƠN HÀNG THẬT -->
+  <div id="featurePromoModal" class="modal-backdrop" onclick="backdropClose(event, 'featurePromoModal')">
+    <div class="modal-box">
+      <button class="btn btn-outline btn-sm" style="position:absolute; right:12px; top:12px; z-index:5;" onclick="closeFeaturePromo()">✕</button>
+      <div class="promo-modal-banner">
+        <span class="badge" style="background:rgba(255,255,255,0.2); color:#fff; margin-bottom:6px;">✨ TÍNH NĂNG MỚI TRÊN HOÀNTIỀN247</span>
+        <div style="font-family:var(--font-display); font-weight:800; font-size:18px;">GIỎ HÀNG LINK HOÀN TIỀN</div>
+        <div style="font-size:12px; opacity:0.9; margin-top:3px;">Ưng là lưu • Cần là chốt đơn nhận hoàn tiền ngay!</div>
+      </div>
+
+      <div style="font-size:12.5px; line-height:1.6; margin-bottom:12px;">
+        <p style="margin-bottom:6px;">Lướt thấy món ưng ý trên <b>Shopee / TikTok Shop</b> nhưng chưa muốn mua ngay? Hãy dùng ngay <b>Giỏ Link Hoàn Tiền</b>:</p>
+        <p>1️⃣ Copy link sản phẩm từ sàn và dán vào ô <b>Tạo link hoàn tiền</b>.</p>
+        <p>2️⃣ Bấm nút <b>+ Lưu Giỏ Link</b> để lưu giữ sản phẩm kèm ưu đãi hoàn tiền.</p>
+        <p>3️⃣ Khi nào cần mua, mở <b>🛒 Giỏ link</b> góc dưới màn hình và bấm <b>Mua Ngay</b> là nhận tiền hoàn về ví!</p>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <label class="text-xs text-muted" style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+          <input type="checkbox" id="chkHideFeaturePromo" /> Không hiển thị lại thông báo này
+        </label>
+      </div>
+      <button class="btn btn-primary" style="width:100%;" onclick="closeFeaturePromo()">Trải nghiệm ngay →</button>
+    </div>
+  </div>
+
+  <div id="savedCartModal" class="modal-backdrop" onclick="backdropClose(event, 'savedCartModal')">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div class="font-bold" style="font-size:15px;">🛒 Giỏ Link Hoàn Tiền Đã Lưu</div>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('savedCartModal')">✕</button>
+      </div>
+      <p class="text-xs text-muted" style="margin-bottom:10px;">Các sản phẩm bạn đã lưu link hoàn tiền. Bấm <b>Mua Ngay</b> để mở app sàn và chốt đơn.</p>
+      <div id="savedCartListArea"></div>
+    </div>
+  </div>
+
   <div id="claimOrderModal" class="modal-backdrop" onclick="backdropClose(event, 'claimOrderModal')">
     <div class="modal-box">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
         <div class="font-bold" style="font-size:15px;">🧾 Báo Mã Đơn Hàng Đã Đặt</div>
         <button class="btn btn-outline btn-sm" onclick="closeModal('claimOrderModal')">✕</button>
       </div>
-      <p class="text-xs text-muted" style="margin-bottom:10px;">
-        Sau khi thanh toán đơn hàng thành công trên Shopee / TikTok Shop, nhập mã đơn tại đây để hệ thống đối soát và cộng tiền hoàn.
-      </p>
       <div class="form-group">
         <label class="form-label">Sàn thương mại điện tử:</label>
-        <select id="claimPlatform" class="select">
-          <option value="Shopee">Shopee</option>
-          <option value="TikTok Shop">TikTok Shop</option>
-        </select>
+        <select id="claimPlatform" class="select"><option value="Shopee">Shopee</option><option value="TikTok Shop">TikTok Shop</option></select>
       </div>
       <div class="form-group">
         <label class="form-label">Mã đơn hàng (Order ID trên sàn):</label>
@@ -1052,7 +842,6 @@
     </div>
   </div>
 
-  <!-- MODAL: RÚT TIỀN / THÊM TÀI KHOẢN NGÂN HÀNG -->
   <div id="withdrawModal" class="modal-backdrop" onclick="backdropClose(event, 'withdrawModal')">
     <div class="modal-box">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -1063,64 +852,25 @@
         <div class="text-xs text-muted">Số dư khả dụng có thể rút:</div>
         <div style="font-family:var(--font-display); font-weight:800; font-size:18px; color:var(--success);" id="wdAvailText">0₫</div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Số tiền muốn rút (VNĐ - Tối thiểu 50.000₫):</label>
-        <input type="number" id="wdAmount" class="input" placeholder="Nhập số tiền muốn rút..." />
-      </div>
+      <div class="form-group"><label class="form-label">Số tiền muốn rút (Tối thiểu 50.000₫):</label><input type="number" id="wdAmount" class="input" placeholder="Nhập số tiền..." /></div>
       <div class="form-group">
         <label class="form-label">Ngân hàng / Ví điện tử (40+ Ngân hàng VN):</label>
         <select id="wdBank" class="select">
-          <option value="Vietcombank">Vietcombank (VCB)</option>
-          <option value="MB Bank">MB Bank (Quân Đội)</option>
-          <option value="Techcombank">Techcombank (TCB)</option>
-          <option value="BIDV">BIDV</option>
-          <option value="VietinBank">VietinBank</option>
-          <option value="Agribank">Agribank</option>
-          <option value="ACB">ACB (Á Châu)</option>
-          <option value="VPBank">VPBank</option>
-          <option value="TPBank">TPBank</option>
-          <option value="Sacombank">Sacombank</option>
-          <option value="HDBank">HDBank</option>
-          <option value="VIB">VIB</option>
-          <option value="MSB">MSB</option>
-          <option value="SHB">SHB</option>
-          <option value="SeABank">SeABank</option>
-          <option value="OCB">OCB</option>
-          <option value="Eximbank">Eximbank</option>
-          <option value="LPBank">LPBank</option>
-          <option value="Nam A Bank">Nam A Bank</option>
-          <option value="Bac A Bank">Bac A Bank</option>
-          <option value="PVcomBank">PVcomBank</option>
-          <option value="ABBank">ABBank</option>
-          <option value="VietBank">VietBank</option>
-          <option value="BaoViet Bank">BaoViet Bank</option>
-          <option value="KienlongBank">KienlongBank</option>
-          <option value="NCB">NCB</option>
-          <option value="Cake by VPBank">Cake by VPBank</option>
-          <option value="Timo by BVBank">Timo Digital Bank</option>
-          <option value="TNEX">TNEX Digital Bank</option>
-          <option value="Woori Bank">Woori Bank Việt Nam</option>
-          <option value="Shinhan Bank">Shinhan Bank Việt Nam</option>
-          <option value="HSBC">HSBC Việt Nam</option>
-          <option value="Ví MoMo">Ví Điện Tử MoMo</option>
-          <option value="ZaloPay">Ví ZaloPay</option>
-          <option value="Viettel Money">Viettel Money</option>
+          <option value="Vietcombank">Vietcombank (VCB)</option><option value="MB Bank">MB Bank (Quân Đội)</option><option value="Techcombank">Techcombank (TCB)</option>
+          <option value="BIDV">BIDV</option><option value="VietinBank">VietinBank</option><option value="Agribank">Agribank</option><option value="ACB">ACB</option>
+          <option value="VPBank">VPBank</option><option value="TPBank">TPBank</option><option value="Sacombank">Sacombank</option><option value="HDBank">HDBank</option>
+          <option value="VIB">VIB</option><option value="MSB">MSB</option><option value="SHB">SHB</option><option value="SeABank">SeABank</option><option value="OCB">OCB</option>
+          <option value="Eximbank">Eximbank</option><option value="LPBank">LPBank</option><option value="Nam A Bank">Nam A Bank</option><option value="Bac A Bank">Bac A Bank</option>
+          <option value="PVcomBank">PVcomBank</option><option value="ABBank">ABBank</option><option value="VietBank">VietBank</option><option value="Cake by VPBank">Cake by VPBank</option>
+          <option value="Timo by BVBank">Timo Digital Bank</option><option value="TNEX">TNEX Digital Bank</option><option value="Ví MoMo">Ví Điện Tử MoMo</option><option value="ZaloPay">Ví ZaloPay</option><option value="Viettel Money">Viettel Money</option>
         </select>
       </div>
-      <div class="form-group">
-        <label class="form-label">Số tài khoản / SĐT Ví:</label>
-        <input type="text" id="wdStk" class="input" placeholder="Nhập chính xác số tài khoản..." />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Tên chủ tài khoản (Viết hoa không dấu):</label>
-        <input type="text" id="wdHolder" class="input" placeholder="VD: NGUYEN VAN A" />
-      </div>
+      <div class="form-group"><label class="form-label">Số tài khoản / SĐT Ví:</label><input type="text" id="wdStk" class="input" placeholder="Nhập chính xác STK..." /></div>
+      <div class="form-group"><label class="form-label">Tên chủ tài khoản (Viết hoa không dấu):</label><input type="text" id="wdHolder" class="input" placeholder="VD: NGUYEN VAN A" /></div>
       <div class="form-group">
         <label class="form-label">Ảnh mã QR cá nhân (Tùy chọn):</label>
         <input type="file" id="wdQrFile" accept="image/*" class="input" onchange="handleQrUpload(event)" />
-        <div id="wdQrPreviewWrap" style="margin-top:8px; display:none; text-align:center;">
-          <img id="wdQrPreview" style="max-height:130px; border-radius:10px; border:1px solid var(--border);" alt="QR" />
-        </div>
+        <div id="wdQrPreviewWrap" style="margin-top:8px; display:none; text-align:center;"><img id="wdQrPreview" style="max-height:130px; border-radius:10px;" alt="QR" /></div>
       </div>
       <div class="btn-row">
         <button class="btn btn-outline" style="flex:1;" onclick="saveBankOnly()">Lưu STK</button>
@@ -1129,7 +879,6 @@
     </div>
   </div>
 
-  <!-- MODAL: XEM QR / VIETQR (ADMIN & CSKH) -->
   <div id="qrViewerModal" class="modal-backdrop" onclick="backdropClose(event, 'qrViewerModal')">
     <div class="modal-box" style="text-align:center;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -1140,7 +889,6 @@
     </div>
   </div>
 
-  <!-- MODAL: POPUP THÔNG BÁO -->
   <div id="popupNoticeModal" class="modal-backdrop" onclick="backdropClose(event, 'popupNoticeModal')">
     <div class="modal-box">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -1152,7 +900,6 @@
     </div>
   </div>
 
-  <!-- MODAL: SỬA THÔNG TIN KHÁCH -->
   <div id="editCustomerModal" class="modal-backdrop" onclick="backdropClose(event, 'editCustomerModal')">
     <div class="modal-box">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -1161,7 +908,7 @@
       </div>
       <input type="hidden" id="editCustId" />
       <div class="form-group"><label class="form-label">Tên hiển thị:</label><input type="text" id="editCustName" class="input" /></div>
-      <div class="form-group"><label class="form-label">Đặt lại mật khẩu mới (Để trống nếu giữ nguyên):</label><input type="text" id="editCustPass" class="input" /></div>
+      <div class="form-group"><label class="form-label">Mật khẩu mới (Bỏ trống nếu giữ nguyên):</label><input type="text" id="editCustPass" class="input" /></div>
       <div class="form-group"><label class="form-label">Ngân hàng:</label><input type="text" id="editCustBank" class="input" /></div>
       <div class="form-group"><label class="form-label">Số tài khoản (STK):</label><input type="text" id="editCustStk" class="input" /></div>
       <div class="form-group"><label class="form-label">Tên chủ thẻ:</label><input type="text" id="editCustHolder" class="input" /></div>
@@ -1169,7 +916,6 @@
     </div>
   </div>
 
-  <!-- MODAL: AI CHATBOT -->
   <div id="aiChatModal" class="modal-backdrop" onclick="backdropClose(event, 'aiChatModal')">
     <div class="modal-box chat-box">
       <div class="chat-head">
@@ -1192,10 +938,8 @@
   </div>
 
   <script>
-    // =========================================================
-    // 1. STATE + SUPABASE CLOUD + ADPIA A100157123
-    // =========================================================
     const STORAGE_KEY = 'HOANTIEN247_PROD_V8';
+    const SAVED_CART_KEY = 'HOANTIEN247_SAVED_LINKS';
     const DEFAULT_CLOUD_URL = 'https://ffvauosrkonyurosobqi.supabase.co';
     const DEFAULT_CLOUD_KEY = 'sb_publishable_ySmFZ2zFsdz47pmvpHf9Dg_GDrTFlfN';
     const BRAND_LOGO_SRC = 'https://i.ibb.co/Q3M0XD2c/1795632489799.png';
@@ -1206,15 +950,14 @@
     let currentPage = 'dashboard';
     let authMode = 'login';
     let activeAdminTab = 'orders';
-    let activeCskhTab = 'orders';
     let historyFilter = 'all';
     let guidePlatform = 'shopee';
     let pwaOs = 'ios';
-    let f1Filter = 'all';
     let tempQrBase64 = '';
     let isCloudSyncing = false;
     let isAuthSubmitting = false;
     let lastCloudUpdatedAt = '';
+    let lastGeneratedItem = null;
 
     const defaultState = {
       users: [
@@ -1246,6 +989,22 @@
       vouchers: [],
       deals: [],
       announcements: [],
+      qaComments: [
+        {
+          id: 'qa_1',
+          author: 'Minh Anh',
+          text: 'Mình muốn đặt 3 món khác nhau trong cùng 1 shop trên Shopee thì thao tác thế nào để nhận đủ hoàn tiền ạ?',
+          createdAt: '2 ngày trước',
+          reply: 'Bạn chỉ cần dán link 1 sản phẩm bất kỳ trong shop vào HoànTiền247 để mở app, thêm vào giỏ rồi bấm "Xem Shop" nhặt tiếp 2 món còn lại và thanh toán 1 lần nhé!'
+        },
+        {
+          id: 'qa_2',
+          author: 'Hoàng Nam',
+          text: 'Rút tiền về tài khoản ngân hàng bao lâu thì nhận được tiền ạ?',
+          createdAt: '1 ngày trước',
+          reply: 'Sau khi số dư khả dụng đạt từ 50.000₫, bạn tạo lệnh rút tiền và Admin sẽ duyệt chuyển khoản trong ngày (thường trong vòng 15–60 phút) ạ.'
+        }
+      ],
       settings: {
         defaultCashbackPct: 4.5,
         shopeeAffiliateId: DEFAULT_SHOPEE_AFF_ID,
@@ -1258,33 +1017,29 @@
         refNewUserBonus: 5000,
         refOrderPct: 15,
         refCheckIp: true,
-        cskhZalo: '',
-        cskhZaloGroup: '',
-        cskhTele: '',
-        cskhTeleGroup: '',
-        teleBot: {
-          enabled: false,
-          token: '',
-          chatId: '',
-          onRegister: true,
-          onWithdraw: true,
-          onAnnouncement: true,
-          onNewDeal: true
-        },
-        shopeeApi: {
-          endpoint: '',
-          appId: '',
-          secret: ''
-        },
-        cloudSync: {
-          url: DEFAULT_CLOUD_URL,
-          anonKey: DEFAULT_CLOUD_KEY,
-          rowId: 'main_production_state'
-        }
+        teleBot: { enabled: false, token: '', chatId: '', onRegister: true, onWithdraw: true, onAnnouncement: true, onNewDeal: true },
+        shopeeApi: { endpoint: '', appId: '', secret: '' },
+        cloudSync: { url: DEFAULT_CLOUD_URL, anonKey: DEFAULT_CLOUD_KEY, rowId: 'main_production_state' }
       }
     };
 
     let state = loadState();
+    let savedLinks = loadSavedLinks();
+
+    function loadSavedLinks() {
+      try { return JSON.parse(localStorage.getItem(SAVED_CART_KEY) || '[]'); } catch (_) { return []; }
+    }
+    function saveSavedLinks() {
+      localStorage.setItem(SAVED_CART_KEY, JSON.stringify(savedLinks));
+      updateSavedCartBadges();
+    }
+    function updateSavedCartBadges() {
+      const c = savedLinks.length;
+      const b1 = document.getElementById('savedCartBadgeTop');
+      const b2 = document.getElementById('floatSavedCount');
+      if (b1) b1.textContent = c;
+      if (b2) b2.textContent = c;
+    }
 
     function loadState() {
       try {
@@ -1294,7 +1049,6 @@
         const mergedCloud = { ...defaultState.settings.cloudSync, ...((parsed.settings || {}).cloudSync || {}) };
         if (!mergedCloud.url) mergedCloud.url = DEFAULT_CLOUD_URL;
         if (!mergedCloud.anonKey) mergedCloud.anonKey = DEFAULT_CLOUD_KEY;
-
         const mergedSettings = {
           ...defaultState.settings,
           ...(parsed.settings || {}),
@@ -1306,7 +1060,12 @@
         if (!mergedSettings.shopeeBaseAff || mergedSettings.shopeeBaseAff === 'https://s.shopee.vn/an_redir') {
           mergedSettings.shopeeBaseAff = DEFAULT_ADPIA_SHOPEE_BASE;
         }
-        return { ...JSON.parse(JSON.stringify(defaultState)), ...parsed, settings: mergedSettings };
+        return {
+          ...JSON.parse(JSON.stringify(defaultState)),
+          ...parsed,
+          qaComments: Array.isArray(parsed.qaComments) && parsed.qaComments.length ? parsed.qaComments : defaultState.qaComments,
+          settings: mergedSettings
+        };
       } catch (e) {
         return JSON.parse(JSON.stringify(defaultState));
       }
@@ -1337,6 +1096,7 @@
               ...JSON.parse(JSON.stringify(defaultState)),
               ...rows[0].payload,
               currentUserId: localSession,
+              qaComments: Array.isArray(rows[0].payload.qaComments) && rows[0].payload.qaComments.length ? rows[0].payload.qaComments : state.qaComments,
               settings: {
                 ...defaultState.settings,
                 ...remoteSettings,
@@ -1369,12 +1129,7 @@
         const nowIso = new Date().toISOString();
         await fetch(`${url}/rest/v1/hoantien247_store`, {
           method: 'POST',
-          headers: {
-            apikey: key,
-            Authorization: `Bearer ${key}`,
-            'Content-Type': 'application/json',
-            Prefer: 'resolution=merge-duplicates'
-          },
+          headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates' },
           body: JSON.stringify({ id: cfg.rowId || 'main_production_state', payload: payloadToSync, updated_at: nowIso })
         });
         lastCloudUpdatedAt = nowIso;
@@ -1410,9 +1165,6 @@
       showToast(label);
     }
 
-    // =========================================================
-    // 2. THEME LIGHT/DARK & NAVIGATION & DROPDOWN
-    // =========================================================
     function toggleDarkMode() {
       document.body.classList.toggle('dark-mode');
       localStorage.setItem('HT247_THEME', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -1423,9 +1175,7 @@
       currentPage = pageName;
       closeProfileDropdown();
       document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.nav-link-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.page === pageName);
-      });
+      document.querySelectorAll('.nav-link-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.page === pageName));
       const target = document.getElementById('page-' + pageName);
       if (target) target.classList.add('active');
       renderAll();
@@ -1437,61 +1187,47 @@
       renderProfileDropdown();
       dd.classList.toggle('open');
     }
-
     function closeProfileDropdown() {
       const dd = document.getElementById('profileDropdown');
       if (dd) dd.classList.remove('open');
     }
-
     document.addEventListener('click', (e) => {
       const dd = document.getElementById('profileDropdown');
       const btn = document.getElementById('topAvatarBtn');
-      if (dd && dd.classList.contains('open') && !dd.contains(e.target) && !btn.contains(e.target)) {
-        closeProfileDropdown();
-      }
+      if (dd && dd.classList.contains('open') && !dd.contains(e.target) && !btn.contains(e.target)) closeProfileDropdown();
     });
 
     function renderProfileDropdown() {
       const dd = document.getElementById('profileDropdown');
       const user = getCurrentUser();
       const isDark = document.body.classList.contains('dark-mode');
-
       if (!user) {
         dd.innerHTML = `
-          <div class="dd-head">
-            <div>
-              <div class="font-bold">Khách vãng lai</div>
-              <div class="text-xs text-muted">Đăng nhập để lưu tiền hoàn</div>
-            </div>
-          </div>
+          <div class="dd-head"><div><div class="font-bold">Khách vãng lai</div><div class="text-xs text-muted">Đăng nhập để lưu tiền hoàn</div></div></div>
           <button class="dd-item" onclick="switchPage('settings')">🔑 Đăng nhập / Tạo tài khoản</button>
           <button class="dd-item" onclick="toggleDarkMode()">🌗 Giao diện: ${isDark ? 'Dark' : 'Light'}</button>
-          <button class="dd-item" onclick="switchPage('guide')">❓ Trung tâm trợ giúp &amp; hướng dẫn</button>
+          <button class="dd-item" onclick="switchPage('guide')">📖 Cẩm nang &amp; hướng dẫn</button>
         `;
         return;
       }
-
       const initials = user.name.split(' ').map(w => w[0]).join('').slice(-2).toUpperCase();
       dd.innerHTML = `
         <div class="dd-head">
           <div style="display:flex; align-items:center; gap:8px;">
             <div class="avatar-trigger" style="width:32px; height:32px; font-size:11px;">${escapeHtml(initials)}</div>
-            <div>
-              <div class="font-bold" style="font-size:12.5px;">${escapeHtml(user.name)}</div>
-              <div class="text-xs text-muted">@${escapeHtml(user.username)}</div>
-            </div>
+            <div><div class="font-bold" style="font-size:12.5px;">${escapeHtml(user.name)}</div><div class="text-xs text-muted">@${escapeHtml(user.username)}</div></div>
           </div>
           <span class="font-bold" style="color:var(--primary); font-size:12px;">${formatVND(user.balanceAvailable)}</span>
         </div>
         <div class="dd-section-label">Tài khoản</div>
         <button class="dd-item" onclick="switchPage('settings')">👤 Hồ sơ &amp; bảo mật ${user.role==='admin'?'(Admin)':''}</button>
-        <button class="dd-item" onclick="switchPage('history')">🔔 Lịch sử đơn hoàn tiền</button>
+        <button class="dd-item" onclick="switchPage('history')">📦 Đơn hoàn tiền của tôi</button>
         <button class="dd-item" onclick="openWithdrawModal(); closeProfileDropdown();">🏛️ Phương thức thanh toán</button>
         <button class="dd-item" onclick="switchPage('withdraw')">💸 Yêu cầu rút tiền</button>
         <div class="dd-section-label">Tùy chọn</div>
         <button class="dd-item" onclick="toggleDarkMode()">🌗 Giao diện: ${isDark ? 'Dark' : 'Light'}</button>
         <div class="dd-section-label">Trợ giúp</div>
-        <button class="dd-item" onclick="switchPage('guide')">❓ Trung tâm trợ giúp &amp; hướng dẫn</button>
+        <button class="dd-item" onclick="switchPage('guide')">📖 Cẩm nang &amp; hướng dẫn</button>
         <button class="dd-item danger" onclick="logoutUser(); closeProfileDropdown();">🚪 Đăng xuất</button>
       `;
     }
@@ -1500,9 +1236,13 @@
     function closeModal(id) { const el = document.getElementById(id); if (el) el.classList.remove('open'); }
     function backdropClose(e, id) { if (e.target && e.target.id === id) closeModal(id); }
 
-    // =========================================================
-    // 3. IP THẬT, DEVICE FINGERPRINT & TELEGRAM BOT
-    // =========================================================
+    function closeFeaturePromo() {
+      if (document.getElementById('chkHideFeaturePromo')?.checked) {
+        localStorage.setItem('HT247_HIDE_PROMO_V1', '1');
+      }
+      closeModal('featurePromoModal');
+    }
+
     function getOrCreateDeviceFingerprint() {
       let fp = localStorage.getItem('HT247_DEVICE_FP');
       if (!fp) {
@@ -1534,23 +1274,14 @@
     async function sendTelegramAlert(eventType, payload) {
       const cfg = state.settings.teleBot || {};
       if (!cfg.enabled || !cfg.token || !cfg.chatId) return;
-      if (eventType === 'REGISTER' && !cfg.onRegister) return;
-      if (eventType === 'WITHDRAW' && !cfg.onWithdraw) return;
-      if (eventType === 'ANNOUNCEMENT' && !cfg.onAnnouncement) return;
-      if (eventType === 'NEW_DEAL_CODE' && !cfg.onNewDeal) return;
-
       const now = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
       let message = '';
       if (eventType === 'REGISTER') {
-        message = `👤 <b>THÀNH VIÊN MỚI ĐĂNG KÝ</b>\n• Họ tên: <b>${escapeHtml(payload.name)}</b> (<code>${escapeHtml(payload.username)}</code>)\n• Mã mời: <code>${payload.refCode}</code>\n• Người giới thiệu: <b>${escapeHtml(payload.referredBy || 'Không có')}</b>\n• IP mạng thật: <code>${escapeHtml(payload.ip)}</code>\n🕒 <i>${now}</i>`;
+        message = `👤 <b>THÀNH VIÊN MỚI</b>\n• Họ tên: <b>${escapeHtml(payload.name)}</b> (<code>${escapeHtml(payload.username)}</code>)\n• Mã mời: <code>${payload.refCode}</code>\n• IP: <code>${escapeHtml(payload.ip)}</code>\n🕒 <i>${now}</i>`;
       } else if (eventType === 'WITHDRAW') {
         message = `💸 <b>LỆNH RÚT TIỀN MỚI</b>\n• Khách: <b>${escapeHtml(payload.name)}</b>\n• Số tiền: <b>${formatVND(payload.amount)}</b>\n• NH: <b>${escapeHtml(payload.bank)}</b> • STK: <code>${escapeHtml(payload.stk)}</code> (${escapeHtml(payload.holder)})\n🕒 <i>${now}</i>`;
-      } else if (eventType === 'ANNOUNCEMENT') {
-        message = `📢 <b>THÔNG BÁO MỚI</b>\n• ${escapeHtml(payload.title)}: ${escapeHtml(payload.content)}\n🕒 <i>${now}</i>`;
-      } else if (eventType === 'NEW_DEAL_CODE') {
-        message = `🔥 <b>${escapeHtml(payload.kind)}</b>\n• <b>${escapeHtml(payload.title)}</b>: ${escapeHtml(payload.detail)}\n🕒 <i>${now}</i>`;
       }
-
+      if (!message) return;
       try {
         await fetch(`https://api.telegram.org/bot${cfg.token.trim()}/sendMessage`, {
           method: 'POST',
@@ -1560,9 +1291,6 @@
       } catch (e) {}
     }
 
-    // =========================================================
-    // 4. TẠO LINK HOÀN TIỀN (CHUẨN ADPIA u_id TRƯỚC &tu=)
-    // =========================================================
     function cleanTitleString(rawTitle, resolvedUrl) {
       let t = String(rawTitle || '').trim();
       if (t.includes('__mobile__') || t.includes('credential_token') || t.includes('uls_trackid') || /^\d+\?/.test(t)) t = '';
@@ -1634,30 +1362,24 @@
           }
         } catch (_) {}
       }
-      if (!rawInput) {
-        showToast('Vui lòng dán link sản phẩm Shopee hoặc TikTok vào ô!');
-        return;
-      }
+      if (!rawInput) { showToast('Vui lòng dán link sản phẩm Shopee hoặc TikTok!'); return; }
 
       const out = document.getElementById('cbCheckResult');
       const btn = document.getElementById('btnCheckCb');
       btn.disabled = true;
-      btn.textContent = '⏳ Đang tạo link...';
+      btn.textContent = '⏳ Đang xử lý...';
 
       const info = await fetchProductInfoFromLink(rawInput);
       const urlInput = info.resolvedUrl;
 
       btn.disabled = false;
-      btn.textContent = '🔗 Dán link';
+      btn.textContent = '⚡ Tạo link';
 
       const lower = (urlInput + ' ' + rawInput + ' ' + info.title).toLowerCase();
       let platform = '';
       if (lower.includes('shopee') || lower.includes('shp.ee')) platform = 'Shopee';
       else if (lower.includes('tiktok')) platform = 'TikTok Shop';
-      else {
-        showToast('Link chưa đúng định dạng Shopee hoặc TikTok Shop!');
-        return;
-      }
+      else { showToast('Link chưa đúng định dạng Shopee hoặc TikTok Shop!'); return; }
 
       const noCbList = (state.settings.noCommissionKeywords || '').split(',').map(k => k.trim().toLowerCase()).filter(Boolean);
       const isZeroCommission = noCbList.some(kw => lower.includes(kw)) || lower.includes('nocb') || lower.includes('topup');
@@ -1685,103 +1407,189 @@
       const rate = Number(state.settings.defaultCashbackPct || 4.5);
       const estCashback = info.price > 0 ? Math.round((info.price * rate) / 100) : 0;
 
+      lastGeneratedItem = {
+        id: 'SL' + Date.now(),
+        platform,
+        title: displayTitle,
+        image: displayImg,
+        cleanUrl: urlInput,
+        trackingUrl,
+        savedAt: new Date().toLocaleString('vi-VN')
+      };
+
       out.innerHTML = `
         <div style="margin-top:12px; padding:12px; border-radius:14px; border:1.5px solid #6EE7B7; background:var(--success-soft);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <span class="badge badge-dark">${platform}</span>
-            <span class="badge badge-success">✓ Đã kích hoạt link hoàn tiền</span>
+            <span class="badge badge-success">✓ Sẵn sàng nhận hoàn tiền</span>
           </div>
           <div style="display:flex; gap:10px; align-items:center; background:var(--bg-card); padding:8px; border-radius:11px; margin-bottom:10px;">
-            <img src="${escapeHtml(displayImg)}" onerror="this.src='${BRAND_LOGO_SRC}'" style="width:54px; height:54px; border-radius:9px; object-fit:cover;" alt="SP" />
+            <img src="${escapeHtml(displayImg)}" onerror="this.src='${BRAND_LOGO_SRC}'" style="width:52px; height:52px; border-radius:9px; object-fit:cover;" alt="SP" />
             <div style="flex:1; min-width:0;">
               <div class="font-bold" style="font-size:12.5px;">${escapeHtml(displayTitle)}</div>
               <div class="text-xs text-muted">${estCashback > 0 ? `Hoàn dự kiến: <b style="color:var(--success);">+${formatVND(estCashback)}</b>` : 'Tự động ghi nhận hoa hồng khi thanh toán'}</div>
             </div>
           </div>
           <div class="btn-row">
-            <a href="${escapeHtml(trackingUrl)}" target="_blank" rel="noopener" class="btn btn-primary" style="flex:2;">Mua Ngay &amp; Nhận Hoàn Tiền ↗</a>
-            <button class="btn btn-outline" style="flex:1;" onclick="copyText('${escapeHtml(trackingUrl)}', 'Đã copy link hoàn tiền!')">📋 Copy Link</button>
+            <a href="${escapeHtml(trackingUrl)}" target="_blank" rel="noopener" class="btn btn-primary" style="flex:2;">Mua Ngay ↗</a>
+            <button class="btn btn-accent" style="flex:1.3;" onclick="addLastItemToSavedCart()">+ Lưu Giỏ Link</button>
           </div>
         </div>
       `;
     }
 
-    function toggleTimeline7() {
-      const wrap = document.getElementById('timeline7Wrap');
-      const btn = document.getElementById('btnToggleTl');
-      const isHidden = wrap.style.display === 'none';
-      wrap.style.display = isHidden ? 'block' : 'none';
-      btn.textContent = isHidden ? 'Thu gọn ∧' : 'Mở rộng ∨';
+    function addLastItemToSavedCart() {
+      if (!lastGeneratedItem) return;
+      if (savedLinks.some(x => x.cleanUrl === lastGeneratedItem.cleanUrl)) {
+        showToast('Sản phẩm này đã có trong Giỏ link rồi!');
+        return;
+      }
+      savedLinks.unshift(lastGeneratedItem);
+      saveSavedLinks();
+      showToast('🛒 Đã lưu vào Giỏ Link Hoàn Tiền!');
     }
 
-    // =========================================================
-    // 5. HƯỚNG DẪN SỬ DỤNG & PWA TABS
-    // =========================================================
+    function openSavedCartModal() {
+      const area = document.getElementById('savedCartListArea');
+      if (!savedLinks.length) {
+        area.innerHTML = `<div class="empty-state">Giỏ link của bạn đang trống. Hãy dán link sản phẩm và bấm <b>+ Lưu Giỏ Link</b> nhé!</div>`;
+      } else {
+        area.innerHTML = savedLinks.map((item, idx) => `
+          <div style="border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:8px; display:flex; gap:9px; align-items:center;">
+            <img src="${escapeHtml(item.image)}" onerror="this.src='${BRAND_LOGO_SRC}'" style="width:48px; height:48px; border-radius:9px; object-fit:cover;" alt="SP" />
+            <div style="flex:1; min-width:0;">
+              <span class="badge badge-dark" style="margin-bottom:3px;">${escapeHtml(item.platform)}</span>
+              <div class="font-bold" style="font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(item.title)}</div>
+              <div class="text-xs text-muted">${escapeHtml(item.savedAt)}</div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:4px;">
+              <a href="${escapeHtml(item.trackingUrl)}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Mua ↗</a>
+              <button class="btn btn-outline btn-sm" onclick="savedLinks.splice(${idx}, 1); saveSavedLinks(); openSavedCartModal();">Xóa</button>
+            </div>
+          </div>
+        `).join('');
+      }
+      openModal('savedCartModal');
+    }
+
+    function toggleStepsBox() {
+      const wrap = document.getElementById('stepsBoxWrap');
+      const btn = document.getElementById('btnToggleSteps');
+      const hidden = wrap.style.display === 'none';
+      wrap.style.display = hidden ? 'flex' : 'none';
+      btn.textContent = hidden ? 'Thu gọn ∧' : 'Mở rộng ∨';
+    }
+
+    function postCommunityQuestion() {
+      const inp = document.getElementById('qaNewInput');
+      const txt = inp.value.trim();
+      if (!txt) { showToast('Vui lòng nhập nội dung câu hỏi!'); return; }
+      const user = getCurrentUser();
+      const authorName = user ? user.name : 'Thành viên mới';
+      state.qaComments.unshift({
+        id: 'qa_' + Date.now(),
+        author: authorName,
+        text: txt,
+        createdAt: 'Vừa xong',
+        reply: ''
+      });
+      inp.value = '';
+      saveState();
+      renderQaBoard();
+      showToast('Đã gửi câu hỏi lên bảng thảo luận!');
+    }
+
+    function replyCommunityQuestion(qaId) {
+      const q = state.qaComments.find(x => x.id === qaId);
+      if (!q) return;
+      const ans = prompt(`Trả lời câu hỏi của ${q.author}:`, q.reply || '');
+      if (ans === null) return;
+      q.reply = ans.trim();
+      saveState();
+      renderQaBoard();
+      showToast('Đã cập nhật phản hồi CSKH!');
+    }
+
+    function deleteCommunityQuestion(qaId) {
+      state.qaComments = state.qaComments.filter(x => x.id !== qaId);
+      saveState();
+      renderQaBoard();
+    }
+
+    function renderQaBoard() {
+      const box = document.getElementById('qaCommentsList');
+      const badge = document.getElementById('qaTotalBadge');
+      if (!box) return;
+      const list = state.qaComments || [];
+      if (badge) badge.textContent = list.length;
+      const user = getCurrentUser();
+      const isStaff = user && (user.role === 'admin' || user.role === 'cskh');
+
+      box.innerHTML = list.slice(0, 8).map(q => `
+        <div class="qa-comment-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
+            <span class="font-bold" style="font-size:12.5px;">👤 ${escapeHtml(q.author)}</span>
+            <span class="text-xs text-muted">${escapeHtml(q.createdAt)}</span>
+          </div>
+          <div style="font-size:12.5px;">${escapeHtml(q.text)}</div>
+          ${q.reply ? `
+            <div class="qa-reply-box">
+              <div style="display:flex; align-items:center; gap:5px; margin-bottom:2px;">
+                <span class="font-bold" style="font-size:11.5px; color:var(--primary);">🎧 Chăm sóc khách hàng</span>
+                <span class="badge badge-success" style="font-size:9.5px; padding:1px 6px;">CSKH</span>
+              </div>
+              <div class="text-xs">${escapeHtml(q.reply)}</div>
+            </div>
+          ` : ''}
+          ${isStaff ? `
+            <div class="btn-row" style="margin-top:6px;">
+              <button class="btn btn-outline btn-sm" onclick="replyCommunityQuestion('${q.id}')">💬 Trả lời CSKH</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteCommunityQuestion('${q.id}')">Xóa</button>
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+    }
+
     function switchGuidePlat(plat) {
       guidePlatform = plat;
       document.getElementById('gPlatShopee').classList.toggle('active', plat === 'shopee');
       document.getElementById('gPlatTiktok').classList.toggle('active', plat === 'tiktok');
       renderGuideGrids();
     }
-
     function switchPwaOs(os) {
       pwaOs = os;
       document.getElementById('pwaIosBtn').classList.toggle('active', os === 'ios');
       document.getElementById('pwaAndBtn').classList.toggle('active', os === 'android');
       renderGuideGrids();
     }
-
     function renderGuideGrids() {
       const gBox = document.getElementById('guideStepsGrid');
       if (gBox) {
         const appName = guidePlatform === 'shopee' ? 'Shopee' : 'TikTok Shop';
         gBox.innerHTML = `
-          <div class="guide-step-box">
-            <span class="step-num-pill">01</span>
-            <div class="font-bold" style="font-size:12.5px;">Tìm &amp; sao chép link</div>
-            <div class="text-xs text-muted">Mở app ${appName}, tìm sản phẩm cần mua và bấm nút "Chia sẻ" → "Sao chép liên kết".</div>
-          </div>
-          <div class="guide-step-box">
-            <span class="step-num-pill">02</span>
-            <div class="font-bold" style="font-size:12.5px;">Dán link vào web</div>
-            <div class="text-xs text-muted">Dán link vào ô "Tạo link hoàn tiền" trên Dashboard để kích hoạt ưu đãi.</div>
-          </div>
-          <div class="guide-step-box">
-            <span class="step-num-pill">03</span>
-            <div class="font-bold" style="font-size:12.5px;">Mua hàng &amp; Thanh toán</div>
-            <div class="text-xs text-muted">Nhấn "Mua Ngay" chuyển sang ${appName}. Áp voucher giảm giá &amp; freeship bình thường.</div>
-          </div>
-          <div class="guide-step-box">
-            <span class="step-num-pill">04</span>
-            <div class="font-bold" style="font-size:12.5px;">Nhận tiền hoàn tự động</div>
-            <div class="text-xs text-muted">Báo mã đơn hoặc đợi sàn đối soát xong là rút thẳng tiền về STK ngân hàng.</div>
-          </div>
+          <div class="guide-step-box"><span class="step-num-pill">01</span><div class="font-bold" style="font-size:12.5px;">Tìm &amp; sao chép link</div><div class="text-xs text-muted">Mở app ${appName}, chọn sản phẩm và bấm "Chia sẻ" → "Sao chép liên kết".</div></div>
+          <div class="guide-step-box"><span class="step-num-pill">02</span><div class="font-bold" style="font-size:12.5px;">Dán link vào web</div><div class="text-xs text-muted">Dán link vào ô "Tạo link hoàn tiền ngay" trên HoànTiền247.</div></div>
+          <div class="guide-step-box"><span class="step-num-pill">03</span><div class="font-bold" style="font-size:12.5px;">Mua hàng &amp; Thanh toán</div><div class="text-xs text-muted">Bấm "Mua Ngay" chuyển sang ${appName}, áp mã giảm giá &amp; freeship bình thường.</div></div>
+          <div class="guide-step-box"><span class="step-num-pill">04</span><div class="font-bold" style="font-size:12.5px;">Nhận hoàn tiền về ví</div><div class="text-xs text-muted">Báo mã đơn hoặc đợi sàn đối soát xong là rút thẳng về ngân hàng.</div></div>
         `;
       }
-
       const pBox = document.getElementById('pwaStepsGrid');
       if (pBox) {
-        if (pwaOs === 'ios') {
-          pBox.innerHTML = `
-            <div class="guide-step-box"><span class="step-num-pill">01</span><div class="font-bold" style="font-size:12px;">Mở bằng Safari</div><div class="text-xs text-muted">Mở autopostai.site bằng trình duyệt Safari trên iPhone.</div></div>
-            <div class="guide-step-box"><span class="step-num-pill">02</span><div class="font-bold" style="font-size:12px;">Bấm nút Chia sẻ</div><div class="text-xs text-muted">Bấm biểu tượng ô vuông có mũi tên lên ở đáy màn hình.</div></div>
-            <div class="guide-step-box"><span class="step-num-pill">03</span><div class="font-bold" style="font-size:12px;">Thêm vào MH chính</div><div class="text-xs text-muted">Kéo xuống chọn mục [+] Thêm vào MH chính.</div></div>
-            <div class="guide-step-box"><span class="step-num-pill">04</span><div class="font-bold" style="font-size:12px;">Bấm "Thêm"</div><div class="text-xs text-muted">Nhấn Thêm ở góc trên bên phải để hoàn tất cài app.</div></div>
-          `;
-        } else {
-          pBox.innerHTML = `
-            <div class="guide-step-box"><span class="step-num-pill">01</span><div class="font-bold" style="font-size:12px;">Mở bằng Chrome</div><div class="text-xs text-muted">Mở autopostai.site bằng trình duyệt Chrome trên Android.</div></div>
-            <div class="guide-step-box"><span class="step-num-pill">02</span><div class="font-bold" style="font-size:12px;">Bấm menu 3 chấm</div><div class="text-xs text-muted">Bấm biểu tượng ⋮ ở góc trên bên phải trình duyệt.</div></div>
-            <div class="guide-step-box"><span class="step-num-pill">03</span><div class="font-bold" style="font-size:12px;">Cài đặt ứng dụng</div><div class="text-xs text-muted">Chọn "Thêm vào Màn hình chính" hoặc "Cài đặt ứng dụng".</div></div>
-            <div class="guide-step-box"><span class="step-num-pill">04</span><div class="font-bold" style="font-size:12px;">Xác nhận Cài đặt</div><div class="text-xs text-muted">Biểu tượng HoànTiền247 sẽ xuất hiện ngay ngoài màn hình chính.</div></div>
-          `;
-        }
+        pBox.innerHTML = pwaOs === 'ios' ? `
+          <div class="guide-step-box"><span class="step-num-pill">01</span><div class="font-bold" style="font-size:12px;">Mở bằng Safari</div><div class="text-xs text-muted">Mở autopostai.site bằng trình duyệt Safari trên iPhone.</div></div>
+          <div class="guide-step-box"><span class="step-num-pill">02</span><div class="font-bold" style="font-size:12px;">Bấm nút Chia sẻ</div><div class="text-xs text-muted">Bấm biểu tượng ô vuông có mũi tên lên ở đáy màn hình.</div></div>
+          <div class="guide-step-box"><span class="step-num-pill">03</span><div class="font-bold" style="font-size:12px;">Thêm vào MH chính</div><div class="text-xs text-muted">Kéo xuống chọn mục [+] Thêm vào MH chính.</div></div>
+          <div class="guide-step-box"><span class="step-num-pill">04</span><div class="font-bold" style="font-size:12px;">Bấm "Thêm"</div><div class="text-xs text-muted">Nhấn Thêm ở góc trên bên phải để hoàn tất cài app.</div></div>
+        ` : `
+          <div class="guide-step-box"><span class="step-num-pill">01</span><div class="font-bold" style="font-size:12px;">Mở bằng Chrome</div><div class="text-xs text-muted">Mở autopostai.site bằng trình duyệt Chrome trên Android.</div></div>
+          <div class="guide-step-box"><span class="step-num-pill">02</span><div class="font-bold" style="font-size:12px;">Bấm menu 3 chấm</div><div class="text-xs text-muted">Bấm biểu tượng ⋮ ở góc trên bên phải trình duyệt.</div></div>
+          <div class="guide-step-box"><span class="step-num-pill">03</span><div class="font-bold" style="font-size:12px;">Cài đặt ứng dụng</div><div class="text-xs text-muted">Chọn "Thêm vào Màn hình chính" hoặc "Cài đặt ứng dụng".</div></div>
+          <div class="guide-step-box"><span class="step-num-pill">04</span><div class="font-bold" style="font-size:12px;">Xác nhận Cài đặt</div><div class="text-xs text-muted">Biểu tượng HoànTiền247 sẽ xuất hiện ngay ngoài màn hình chính.</div></div>
+        `;
       }
     }
 
-    // =========================================================
-    // 6. LỊCH SỬ HOÀN TIỀN & BÁO MÃ ĐƠN
-    // =========================================================
     function setHistoryFilter(f) {
       historyFilter = f;
       document.querySelectorAll('[data-hfilter]').forEach(b => b.classList.toggle('active', b.dataset.hfilter === f));
@@ -1790,7 +1598,7 @@
 
     function openClaimOrderModal() {
       const user = getCurrentUser();
-      if (!user) { showToast('Vui lòng đăng nhập để báo mã đơn hàng!'); switchPage('settings'); return; }
+      if (!user) { showToast('Vui lòng đăng nhập để báo mã đơn!'); switchPage('settings'); return; }
       document.getElementById('claimOrderCode').value = '';
       document.getElementById('claimOrderValue').value = '';
       openModal('claimOrderModal');
@@ -1813,10 +1621,7 @@
         orderValue: val, cashbackAmount: estCb, step: 1, createdAt: new Date().toLocaleString('vi-VN')
       });
       user.balancePending = (user.balancePending || 0) + estCb;
-      saveState();
-      closeModal('claimOrderModal');
-      renderAll();
-      renderChatChips();
+      saveState(); closeModal('claimOrderModal'); renderAll(); renderChatChips();
       showToast('Đã gửi mã đơn hàng thành công!');
     }
 
@@ -1828,36 +1633,15 @@
 
       const avail = user ? user.balanceAvailable : 0;
       const pend = user ? user.balancePending : 0;
-      const myWds = user ? state.withdrawals.filter(w => w.userId === user.id && w.status === 'paid') : [];
-      const paidTotal = myWds.reduce((s, x) => s + Number(x.amount || 0), 0);
-
       sumArea.innerHTML = `
-        <div class="balance-card" onclick="switchPage('withdraw')">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <div class="balance-icon">🏛️</div>
-            <div><div class="text-xs text-muted">Số dư khả dụng</div><div class="font-bold" style="font-size:17px; color:var(--primary);">${formatVND(avail)}</div></div>
-          </div>
-          <span>›</span>
-        </div>
-        <div class="card" style="background:var(--warning-soft); border-color:#FDE68A;">
-          <div class="text-xs text-muted">⏳ Hoa hồng tạm tính (Chờ đối soát)</div>
-          <div class="font-bold" style="font-size:17px; color:var(--warning); margin:2px 0;">${formatVND(pend)}</div>
-          <div class="text-xs text-muted">Mẹo: Vào sàn xác nhận "Đã nhận hàng" sau khi nhận bưu phẩm để chốt hoa hồng sớm.</div>
-        </div>
-        <div class="card" style="background:var(--success-soft); border-color:#A7F3D0;">
-          <div class="text-xs text-muted">💳 Số tiền đã rút thành công</div>
-          <div class="font-bold" style="font-size:17px; color:var(--success);">${formatVND(paidTotal)}</div>
+        <div class="metrics-grid">
+          <div class="metric-card" onclick="switchPage('withdraw')" style="cursor:pointer;"><div class="metric-icon" style="background:var(--success-soft);">🏛️</div><div><div class="text-xs text-muted">Số dư khả dụng</div><div class="font-bold" style="color:var(--success);">${formatVND(avail)}</div></div></div>
+          <div class="metric-card"><div class="metric-icon" style="background:var(--warning-soft);">⏳</div><div><div class="text-xs text-muted">Chờ đối soát</div><div class="font-bold" style="color:var(--warning);">${formatVND(pend)}</div></div></div>
         </div>
       `;
 
       if (!user) {
-        ordArea.innerHTML = `
-          <div class="card" style="text-align:center; padding:26px 14px;">
-            <div class="font-bold" style="font-size:15px; margin-bottom:6px;">Bắt đầu nhận hoàn tiền ngay!</div>
-            <p class="text-xs text-muted" style="margin-bottom:12px;">Đăng nhập tài khoản để theo dõi chi tiết từng đơn hàng hoàn tiền của bạn.</p>
-            <button class="btn btn-primary" onclick="switchPage('settings')">Đăng Nhập / Tạo Tài Khoản</button>
-          </div>
-        `;
+        ordArea.innerHTML = `<div class="card" style="text-align:center; padding:24px;"><div class="font-bold" style="margin-bottom:8px;">Đăng nhập để xem đơn hoàn tiền</div><button class="btn btn-primary" onclick="switchPage('settings')">Đăng Nhập Ngay</button></div>`;
         return;
       }
 
@@ -1873,7 +1657,7 @@
             <div class="font-bold" style="font-size:15px; margin-bottom:4px;">Bắt đầu nhận hoàn tiền ngay!</div>
             <p class="text-xs text-muted" style="margin-bottom:12px;">1. Tạo link → 2. Mua hàng → 3. Báo mã đơn &amp; Nhận tiền</p>
             <div class="btn-row" style="justify-content:center;">
-              <button class="btn btn-primary btn-sm" onclick="switchPage('dashboard')">🔗 Tạo link affiliate đầu tiên</button>
+              <button class="btn btn-primary btn-sm" onclick="switchPage('dashboard')">⚡ Tạo link ngay</button>
               <button class="btn btn-outline btn-sm" onclick="openClaimOrderModal()">+ Báo Mã Đơn</button>
             </div>
           </div>
@@ -1902,9 +1686,6 @@
       }).join('');
     }
 
-    // =========================================================
-    // 7. TRANG RÚT TIỀN (GIỐNG ẢNH MẪU)
-    // =========================================================
     function openWithdrawModal() {
       const user = getCurrentUser();
       if (!user) { showToast('Vui lòng đăng nhập!'); switchPage('settings'); return; }
@@ -1954,10 +1735,8 @@
       if (!stk || !holder) { showToast('Vui lòng nhập Số tài khoản và Tên chủ thẻ!'); return; }
       user.bankName = bank; user.bankStk = stk; user.bankHolder = holder;
       if (tempQrBase64) user.bankQr = tempQrBase64;
-      saveState();
-      closeModal('withdrawModal');
-      renderAll();
-      showToast('Đã lưu tài khoản ngân hàng nhận tiền!');
+      saveState(); closeModal('withdrawModal'); renderAll();
+      showToast('Đã lưu tài khoản ngân hàng!');
     }
 
     function submitWithdraw() {
@@ -1979,10 +1758,8 @@
         id: 'WD' + Date.now().toString().slice(-6), userId: user.id, userName: user.name, username: user.username,
         amount, bank, stk, holder, qrImage: user.bankQr || '', status: 'pending', createdAt: new Date().toLocaleString('vi-VN')
       });
-      saveState();
-      sendTelegramAlert('WITHDRAW', { name: user.name, username: user.username, amount, bank, stk, holder });
-      closeModal('withdrawModal');
-      renderAll();
+      saveState(); sendTelegramAlert('WITHDRAW', { name: user.name, username: user.username, amount, bank, stk, holder });
+      closeModal('withdrawModal'); renderAll();
       showToast('Đã gửi yêu cầu rút tiền thành công!');
     }
 
@@ -1996,20 +1773,14 @@
       }
       const myWds = state.withdrawals.filter(w => w.userId === user.id);
       area.innerHTML = `
-        <div class="balance-card" onclick="openWithdrawModal()">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <div class="balance-icon">🏛️</div>
-            <div>
-              <div class="text-xs text-muted">Số dư có thể rút</div>
-              <div class="font-bold" style="font-size:19px; color:var(--primary);">${formatVND(user.balanceAvailable)}</div>
-              <div class="text-xs text-muted">Nhấn để tạo lệnh rút tiền</div>
-            </div>
-          </div>
-          <button class="btn btn-primary btn-sm">Rút tiền</button>
+        <div class="hero-wallet-card" onclick="openWithdrawModal()" style="cursor:pointer;">
+          <div style="font-size:12px; opacity:0.85;">Số dư khả dụng có thể rút</div>
+          <div style="font-family:var(--font-display); font-weight:800; font-size:26px; color:#FDBA74; margin:4px 0 10px;">${formatVND(user.balanceAvailable)}</div>
+          <button class="btn btn-primary btn-sm">💸 Tạo lệnh rút tiền ngay</button>
         </div>
 
         <div class="card" style="background:var(--warning-soft); border-color:#FDE68A;">
-          <div class="font-bold" style="font-size:13px; margin-bottom:4px;">💳 ${user.bankStk ? 'Tài khoản ngân hàng đã liên kết' : 'Chưa có tài khoản nhận tiền'}</div>
+          <div class="font-bold" style="font-size:13px; margin-bottom:4px;">💳 ${user.bankStk ? 'Tài khoản nhận tiền đã liên kết' : 'Chưa có tài khoản nhận tiền'}</div>
           <div class="text-xs text-muted" style="margin-bottom:8px;">
             ${user.bankStk ? `${escapeHtml(user.bankName)} • <b>${escapeHtml(user.bankStk)}</b> (${escapeHtml(user.bankHolder)})` : 'Vui lòng thêm thông tin tài khoản ngân hàng hoặc ví điện tử để nhận tiền rút.'}
           </div>
@@ -2020,22 +1791,14 @@
           <div class="font-bold" style="font-size:13.5px; margin-bottom:8px;">Lịch sử yêu cầu rút tiền (${myWds.length})</div>
           ${!myWds.length ? `<div class="empty-state">Chưa có yêu cầu rút tiền nào</div>` : myWds.map(w => `
             <div style="border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
-              <div>
-                <div class="font-bold">${formatVND(w.amount)} • ${escapeHtml(w.bank)}</div>
-                <div class="text-xs text-muted">STK: ${escapeHtml(w.stk)} • ${escapeHtml(w.createdAt)}</div>
-              </div>
-              ${w.status === 'paid' ? '<span class="badge badge-success">✓ Đã chuyển</span>' :
-                w.status === 'rejected' ? '<span class="badge badge-danger">✕ Từ chối</span>' :
-                '<span class="badge badge-warning">⏳ Chờ duyệt</span>'}
+              <div><div class="font-bold">${formatVND(w.amount)} • ${escapeHtml(w.bank)}</div><div class="text-xs text-muted">STK: ${escapeHtml(w.stk)} • ${escapeHtml(w.createdAt)}</div></div>
+              ${w.status === 'paid' ? '<span class="badge badge-success">✓ Đã chuyển</span>' : w.status === 'rejected' ? '<span class="badge badge-danger">✕ Từ chối</span>' : '<span class="badge badge-warning">⏳ Chờ duyệt</span>'}
             </div>
           `).join('')}
         </div>
       `;
     }
 
-    // =========================================================
-    // 8. TRANG ĐẠI LÝ / MỜI BẠN BÈ F1
-    // =========================================================
     function renderAgencyPage() {
       const user = getCurrentUser();
       const area = document.getElementById('agencyPageArea');
@@ -2056,16 +1819,13 @@
         </div>
         <div class="card">
           <div class="font-bold" style="font-size:14px; margin-bottom:8px;">📊 Thống Kê Thành Viên F1 (${myF1s.length})</div>
-          <div class="stats-row-4" style="margin-bottom:10px;">
-            <div class="stat-mini"><div class="stat-mini-icon" style="background:var(--info-soft);">👥</div><div><div class="text-xs text-muted">Tổng F1</div><div class="font-bold">${myF1s.length}</div></div></div>
-            <div class="stat-mini"><div class="stat-mini-icon" style="background:var(--success-soft);">✅</div><div><div class="text-xs text-muted">IP Hợp lệ</div><div class="font-bold" style="color:var(--success);">${validF1s.length}</div></div></div>
+          <div class="metrics-grid">
+            <div class="metric-card"><div class="metric-icon" style="background:var(--info-soft);">👥</div><div><div class="text-xs text-muted">Tổng F1</div><div class="font-bold">${myF1s.length}</div></div></div>
+            <div class="metric-card"><div class="metric-icon" style="background:var(--success-soft);">✅</div><div><div class="text-xs text-muted">IP Hợp lệ</div><div class="font-bold" style="color:var(--success);">${validF1s.length}</div></div></div>
           </div>
           ${!myF1s.length ? `<div class="empty-state">Chưa có bạn bè nào đăng ký qua link của bạn.</div>` : myF1s.map(f => `
             <div style="border:1px solid var(--border); border-radius:11px; padding:9px; margin-bottom:7px; display:flex; justify-content:space-between; align-items:center;">
-              <div>
-                <div class="font-bold">${escapeHtml(f.name)} (@${escapeHtml(f.username)})</div>
-                <div class="text-xs text-muted">Ngày ĐK: ${escapeHtml(f.createdAt)} • IP: ${escapeHtml(f.registerIp)}</div>
-              </div>
+              <div><div class="font-bold">${escapeHtml(f.name)} (@${escapeHtml(f.username)})</div><div class="text-xs text-muted">Ngày ĐK: ${escapeHtml(f.createdAt)} • IP: ${escapeHtml(f.registerIp)}</div></div>
               ${f.ipApproved ? '<span class="badge badge-success">Hợp lệ</span>' : '<span class="badge badge-danger">Trùng IP</span>'}
             </div>
           `).join('')}
@@ -2073,9 +1833,6 @@
       `;
     }
 
-    // =========================================================
-    // 9. TRANG CÀI ĐẶT & 7 TAB QUẢN TRỊ VIÊN (ADMIN)
-    // =========================================================
     function setAuthMode(mode) { authMode = mode; renderSettingsPage(); }
 
     async function handleAuthSubmit() {
@@ -2138,7 +1895,7 @@
         state.users.push(newUser);
         state.currentUserId = newUser.id;
         saveState();
-        sendTelegramAlert('REGISTER', { name: newUser.name, username: newUser.username, refCode: newUser.refCode, referredBy: validInviter ? validInviter.refCode : '', ip: REAL_CLIENT_IP, isDuplicateIP });
+        sendTelegramAlert('REGISTER', { name: newUser.name, username: newUser.username, refCode: newUser.refCode, ip: REAL_CLIENT_IP });
         renderAll();
         showToast('Đăng ký tài khoản thành công!');
       } finally {
@@ -2189,10 +1946,7 @@
         <div class="card" style="background:linear-gradient(135deg, var(--primary-soft), var(--bg-card)); border-color:var(--primary-border); display:flex; align-items:center; justify-content:space-between;">
           <div style="display:flex; align-items:center; gap:10px;">
             <div class="avatar-trigger" style="width:44px; height:44px; font-size:15px;">${escapeHtml(initials)}</div>
-            <div>
-              <div class="font-bold" style="font-size:15px;">${escapeHtml(user.name)}</div>
-              <div class="text-xs text-muted">@${escapeHtml(user.username)} • Mã mời: <b>${escapeHtml(user.refCode)}</b></div>
-            </div>
+            <div><div class="font-bold" style="font-size:15px;">${escapeHtml(user.name)}</div><div class="text-xs text-muted">@${escapeHtml(user.username)} • Mã mời: <b>${escapeHtml(user.refCode)}</b></div></div>
           </div>
           <span class="badge badge-primary">${user.role.toUpperCase()}</span>
         </div>
@@ -2207,7 +1961,7 @@
             <span class="badge badge-info">${isDark ? 'Dark' : 'Light'} ›</span>
           </div>
           <div style="padding:10px 0; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="switchPage('guide')">
-            <div><div class="font-bold">📖 Hướng dẫn sử dụng &amp; FAQ</div><div class="text-xs text-muted">Quy tắc nhận hoàn tiền chi tiết</div></div>
+            <div><div class="font-bold">📖 Cẩm nang sử dụng &amp; FAQ</div><div class="text-xs text-muted">Quy tắc nhận hoàn tiền chi tiết</div></div>
             <span>›</span>
           </div>
         </div>
@@ -2221,9 +1975,6 @@
       area.innerHTML = html;
     }
 
-    // =========================================================
-    // 10. ADMIN PANEL (7 TAB ĐẦY ĐỦ) & CSKH PANEL
-    // =========================================================
     function advanceOrderStep(orderId, targetStep) {
       const ord = state.orders.find(o => o.id === orderId);
       if (!ord) return;
@@ -2259,8 +2010,7 @@
 
     function clearAllTestOrders() {
       if (!confirm('Xóa sạch toàn bộ đơn hàng hiện tại trên hệ thống?')) return;
-      state.orders = [];
-      state.users.forEach(u => { u.balancePending = 0; });
+      state.orders = []; state.users.forEach(u => { u.balancePending = 0; });
       saveState(); renderAll(); showToast('Đã xóa sạch toàn bộ đơn!');
     }
 
@@ -2306,7 +2056,6 @@
     }
 
     function setUserRole(uid, r) { const u = state.users.find(x => x.id === uid); if (u && u.username !== 'Admin') { u.role = r; saveState(); renderAll(); } }
-    function toggleUserLock(uid) { const u = state.users.find(x => x.id === uid); if (u && u.username !== 'Admin') { u.locked = !u.locked; saveState(); renderAll(); } }
     function deleteDuplicateUser(uid) {
       const u = state.users.find(x => x.id === uid);
       if (!u || u.username === 'Admin' || !confirm(`Xóa tài khoản ${u.name}?`)) return;
@@ -2340,19 +2089,6 @@
       saveState(); closeModal('editCustomerModal'); renderAll(); showToast('Đã cập nhật hồ sơ!');
     }
 
-    function approveF1Ip(uid, approve) {
-      const u = state.users.find(x => x.id === uid);
-      if (!u) return;
-      const was = u.ipApproved;
-      u.ipApproved = approve; u.ipDuplicate = !approve;
-      if (approve && !was && u.referredBy && state.settings.refEnabled) {
-        const inv = state.users.find(x => x.refCode === u.referredBy);
-        u.balanceAvailable = (u.balanceAvailable || 0) + Number(state.settings.refNewUserBonus || 0);
-        if (inv) inv.balanceAvailable = (inv.balanceAvailable || 0) + Number(state.settings.refInviterBonus || 0);
-      }
-      saveState(); renderAll(); showToast('Đã cập nhật trạng thái IP!');
-    }
-
     function saveAdminRefSettings() {
       state.settings.refEnabled = document.getElementById('admRefEnabled').checked;
       state.settings.refCheckIp = document.getElementById('admRefCheckIp').checked;
@@ -2369,9 +2105,7 @@
       const content = document.getElementById('admNoticeContent').value.trim();
       if (!content) return;
       state.announcements.unshift({ id: 'nt_' + Date.now(), type, title, content, active: true, createdAt: new Date().toLocaleString('vi-VN') });
-      saveState();
-      sendTelegramAlert('ANNOUNCEMENT', { title, content });
-      renderAll(); showToast('Đã đăng thông báo!');
+      saveState(); renderAll(); showToast('Đã đăng thông báo!');
     }
 
     function saveAdminTeleBot() {
@@ -2387,8 +2121,7 @@
       const platform = document.getElementById('admVPlatform').value;
       if (!code || !desc) return;
       state.vouchers.unshift({ id: 'vc_' + Date.now(), code, desc, platform });
-      saveState(); sendTelegramAlert('NEW_DEAL_CODE', { kind: `Mã ${platform}`, title: code, detail: desc });
-      renderAll(); showToast('Đã thêm mã!');
+      saveState(); renderAll(); showToast('Đã thêm mã!');
     }
 
     function addAdminDeal() {
@@ -2571,16 +2304,13 @@
       `;
     }
 
-    // =========================================================
-    // 11. CHATBOT ĐỒNG BỘ DỮ LIỆU MỚI NHẤT
-    // =========================================================
     function openAiChatModal() { initChatbot(); renderChatChips(); openModal('aiChatModal'); }
     function renderChatChips() {
       const box = document.getElementById('dynamicChatChips');
       if (!box) return;
       const chips = [
         { label: '📦 Tiến độ đơn của tôi', q: 'Kiểm tra tiến độ đơn hàng của tôi' },
-        { label: '🛍️ Cách nhận hoàn tiền', q: 'Cách nhận hoàn tiền Shopee và TikTok Shop?' },
+        { label: '🛒 Giỏ link đã lưu', q: 'Giỏ link hoàn tiền là gì?' },
         { label: '💸 Điều kiện rút tiền', q: 'Điều kiện rút tiền về ngân hàng?' },
         { label: '🎁 Hoa hồng Đại lý F1', q: 'Chính sách hoa hồng đại lý F1?' }
       ];
@@ -2590,7 +2320,7 @@
     }
     function initChatbot() {
       const box = document.getElementById('chatMessages');
-      if (box && !box.innerHTML.trim()) appendChatMsg('bot', 'Chào bạn! 👋 Mình là <b>Trợ Lý HoànTiền247</b>. Bạn cần tra cứu đơn hàng, mã giảm giá hay cách rút tiền?');
+      if (box && !box.innerHTML.trim()) appendChatMsg('bot', 'Chào bạn! 👋 Mình là <b>Trợ Lý HoànTiền247</b>. Bạn cần tra cứu đơn hàng, giỏ link hoàn tiền hay cách rút tiền?');
       renderChatChips();
     }
     function appendChatMsg(s, html) {
@@ -2613,8 +2343,10 @@
         if (!user) reply = '🔒 Bạn vui lòng đăng nhập ở góc trên bên phải để xem tiến độ đơn hàng của mình nhé.';
         else {
           const myOrds = state.orders.filter(o => o.userId === user.id);
-          reply = myOrds.length ? `📦 Bạn có <b>${myOrds.length} đơn</b> • Khả dụng: <b>${formatVND(user.balanceAvailable)}</b> • Chờ duyệt: <b>${formatVND(user.balancePending)}</b>.` : '📭 Bạn chưa có đơn hàng nào. Sau khi mua qua link, bấm <b>+ Báo Mã Đơn</b> ở mục Lịch sử hoàn tiền nhé!';
+          reply = myOrds.length ? `📦 Bạn có <b>${myOrds.length} đơn</b> • Khả dụng: <b>${formatVND(user.balanceAvailable)}</b> • Chờ duyệt: <b>${formatVND(user.balancePending)}</b>.` : '📭 Bạn chưa có đơn hàng nào. Sau khi mua qua link, bấm <b>+ Báo Mã Đơn</b> ở mục Đơn hoàn tiền nhé!';
         }
+      } else if (l.includes('giỏ')) {
+        reply = `🛒 Bạn hiện có <b>${savedLinks.length} sản phẩm</b> trong Giỏ link hoàn tiền. Bấm nút <b>🛒 Giỏ link</b> ở góc dưới bên phải để mở và đặt mua ngay!`;
       } else if (l.includes('mã')) {
         reply = state.vouchers.length ? state.vouchers.map(v => `• <b>${escapeHtml(v.code)}</b>: ${escapeHtml(v.desc)}`).join('<br>') : 'Hiện chưa có mã giảm giá mới.';
       } else if (l.includes('deal')) {
@@ -2624,36 +2356,31 @@
       } else if (l.includes('đại lý') || l.includes('f1')) {
         reply = `🎁 Nhận ngay <b>${formatVND(state.settings.refInviterBonus)}</b> mỗi bạn bè F1 đăng ký hợp lệ và hưởng <b>${state.settings.refOrderPct}%</b> hoa hồng đơn hàng trọn đời!`;
       } else {
-        reply = '🛍️ Dán link Shopee/TikTok vào ô <b>Tạo link hoàn tiền</b> trên Dashboard → Mua hàng → Báo mã đơn để nhận hoàn tiền tự động!';
+        reply = '⚡ Dán link Shopee/TikTok vào ô <b>Tạo link hoàn tiền ngay</b> → Mua hàng → Báo mã đơn để nhận hoàn tiền tự động!';
       }
       setTimeout(() => appendChatMsg('bot', reply), 200);
     }
 
-    // =========================================================
-    // 12. RENDER ALL & INIT
-    // =========================================================
     function renderAll() {
       const user = getCurrentUser();
+      updateSavedCartBadges();
 
-      // Marquee
       const activeMarquee = state.announcements.find(a => a.active && a.type === 'marquee');
       const mBar = document.getElementById('marqueeBar');
       if (activeMarquee) { document.getElementById('marqueeText').textContent = `${activeMarquee.title}: ${activeMarquee.content}`; mBar.classList.add('active'); }
       else mBar.classList.remove('active');
 
-      // Avatar & Greeting
       const avatarBtn = document.getElementById('topAvatarBtn');
       const greetEl = document.getElementById('greetingTitle');
       if (user) {
         const initials = user.name.split(' ').map(w => w[0]).join('').slice(-2).toUpperCase();
         avatarBtn.textContent = initials || 'TV';
-        greetEl.textContent = `Chào buổi sáng, ${user.name}!`;
+        greetEl.textContent = `Xin chào, ${user.name}! 👋`;
       } else {
-        avatarBtn.textContent = 'ĐN';
-        greetEl.textContent = 'Chào buổi sáng, bạn!';
+        avatarBtn.textContent = '247';
+        greetEl.textContent = 'Xin chào, bạn! 👋';
       }
 
-      // Dashboard stats
       const myOrders = user ? state.orders.filter(o => o.userId === user.id) : [];
       const myPaidWds = user ? state.withdrawals.filter(w => w.userId === user.id && w.status === 'paid') : [];
       const paidSum = myPaidWds.reduce((s, x) => s + Number(x.amount || 0), 0);
@@ -2665,10 +2392,8 @@
       document.getElementById('statPendingCb').textContent = formatVND(pend);
       document.getElementById('statTotalEarned').textContent = formatVND(avail + paidSum);
       document.getElementById('statWithdrawn').textContent = formatVND(paidSum);
-      document.getElementById('floatOrderCount').textContent = myOrders.length;
       document.getElementById('bannerRefPct').textContent = `${state.settings.refOrderPct || 15}%`;
 
-      // Vouchers & Deals on Dashboard
       const vSec = document.getElementById('dashVoucherSection');
       if (state.vouchers.length) {
         vSec.style.display = 'block';
@@ -2704,6 +2429,7 @@
         }).join('');
       } else dSec.style.display = 'none';
 
+      renderQaBoard();
       renderGuideGrids();
       renderHistoryPage();
       renderWithdrawPage();
@@ -2727,6 +2453,10 @@
 
       renderAll();
       initChatbot();
+
+      if (!localStorage.getItem('HT247_HIDE_PROMO_V1')) {
+        setTimeout(() => openModal('featurePromoModal'), 450);
+      }
 
       const activePopup = state.announcements.find(a => a.active && a.type === 'popup');
       if (activePopup) {

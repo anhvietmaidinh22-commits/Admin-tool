@@ -73,7 +73,7 @@
       inset: 0;
       background: linear-gradient(160deg, #FFFFFF 0%, #FFF7ED 55%, #FFEDD5 100%);
       z-index: 300;
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -81,7 +81,7 @@
       text-align: center;
       transition: opacity 0.35s ease, visibility 0.35s ease;
     }
-    .intro-splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+    .intro-splash.hide { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
     .intro-logo-wrap {
       width: 132px;
       height: 132px;
@@ -503,7 +503,7 @@
 <body>
   <div id="toast" class="toast"></div>
 
-  <div id="introSplash" class="intro-splash">
+  <div id="introSplash" class="intro-splash hide" style="display:none;">
     <div class="intro-logo-wrap">
       <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" alt="Logo HoànTiền247" />
     </div>
@@ -1173,7 +1173,10 @@
 
     function dismissIntro() {
       const el = document.getElementById('introSplash');
-      if (el) el.classList.add('hide');
+      if (el) {
+        el.classList.add('hide');
+        el.style.display = 'none';
+      }
     }
 
     function loadSavedLinks() {
@@ -1520,9 +1523,7 @@
       try {
         const res = await fetch('https://www.cloudflare.com/cdn-cgi/trace', { cache: 'no-store' });
         const text = await res.text();
-        const match = text.match(/ip=([^
-
-]+)/);
+        const match = text.match(/ip=([^\n\r]+)/);
         if (match && match[1]) { REAL_CLIENT_IP = match[1].trim(); return REAL_CLIENT_IP; }
       } catch (e) {}
       REAL_CLIENT_IP = 'Không xác định';
@@ -1540,25 +1541,13 @@
       const now = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
       let message = '';
       if (eventType === 'REGISTER') {
-        message = `👤 <b>THÀNH VIÊN MỚI</b>
-• Họ tên: <b>${escapeHtml(payload.name)}</b> (<code>${escapeHtml(payload.username)}</code>)
-• Mã mời: <code>${payload.refCode}</code>
-• IP: <code>${escapeHtml(payload.ip)}</code>
-🕒 <i>${now}</i>`;
+        message = `👤 <b>THÀNH VIÊN MỚI</b>\n• Họ tên: <b>${escapeHtml(payload.name)}</b> (<code>${escapeHtml(payload.username)}</code>)\n• Mã mời: <code>${payload.refCode}</code>\n• IP: <code>${escapeHtml(payload.ip)}</code>\n🕒 <i>${now}</i>`;
       } else if (eventType === 'WITHDRAW') {
-        message = `💸 <b>LỆNH RÚT TIỀN MỚI</b>
-• Khách: <b>${escapeHtml(payload.name)}</b>
-• Số tiền: <b>${formatVND(payload.amount)}</b>
-• NH: <b>${escapeHtml(payload.bank)}</b> • STK: <code>${escapeHtml(payload.stk)}</code> (${escapeHtml(payload.holder)})
-🕒 <i>${now}</i>`;
+        message = `💸 <b>LỆNH RÚT TIỀN MỚI</b>\n• Khách: <b>${escapeHtml(payload.name)}</b>\n• Số tiền: <b>${formatVND(payload.amount)}</b>\n• NH: <b>${escapeHtml(payload.bank)}</b> • STK: <code>${escapeHtml(payload.stk)}</code> (${escapeHtml(payload.holder)})\n🕒 <i>${now}</i>`;
       } else if (eventType === 'ANNOUNCEMENT') {
-        message = `📢 <b>THÔNG BÁO MỚI</b>
-• ${escapeHtml(payload.title)}: ${escapeHtml(payload.content)}
-🕒 <i>${now}</i>`;
+        message = `📢 <b>THÔNG BÁO MỚI</b>\n• ${escapeHtml(payload.title)}: ${escapeHtml(payload.content)}\n🕒 <i>${now}</i>`;
       } else if (eventType === 'NEW_DEAL_CODE') {
-        message = `🔥 <b>${escapeHtml(payload.kind)}</b>
-• <b>${escapeHtml(payload.title)}</b>: ${escapeHtml(payload.detail)}
-🕒 <i>${now}</i>`;
+        message = `🔥 <b>${escapeHtml(payload.kind)}</b>\n• <b>${escapeHtml(payload.title)}</b>: ${escapeHtml(payload.detail)}\n🕒 <i>${now}</i>`;
       }
       if (!message) return;
       try {
@@ -3247,7 +3236,8 @@
     }
 
     function initApp() {
-      setTimeout(dismissIntro, 1200);
+      dismissIntro();
+      setTimeout(dismissIntro, 300);
       if (localStorage.getItem('HT247_THEME') === 'dark') document.body.classList.add('dark-mode');
       try {
         const params = new URLSearchParams(window.location.search);

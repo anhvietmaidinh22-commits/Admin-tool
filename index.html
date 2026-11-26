@@ -522,7 +522,7 @@
 <body>
   <div id="toast" class="toast"></div>
 
-  <div id="introSplash" class="intro-splash">
+  <div id="introSplash" class="intro-splash hide" style="display:none !important; visibility:hidden !important; opacity:0 !important;">
     <div class="intro-logo-wrap">
       <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" alt="Logo HoànTiền247" />
     </div>
@@ -531,6 +531,7 @@
     <div class="intro-bar"><div class="intro-bar-fill"></div></div>
     <button class="btn btn-outline btn-sm" onclick="dismissIntro()">Vào trang chủ ngay →</button>
   </div>
+  <script>(function(){var s=document.getElementById('introSplash');if(s){s.style.setProperty('display','none','important');s.classList.add('hide');}})();</script>
 
   <div id="quickMenuDropdown" class="quick-menu-dropdown"></div>
   <div id="profileDropdown" class="profile-dropdown"></div>
@@ -1613,8 +1614,11 @@
     }
 
     async function fetchProductInfoFromLink(rawUrl) {
+      const apiCfg = state.settings.shopeeApi || {};
       try {
-        const res = await fetch(`/api/resolve-link?url=${encodeURIComponent(rawUrl)}`);
+        const res = await fetch(`/api/resolve-link?url=${encodeURIComponent(rawUrl)}`, {
+          headers: { 'x-app-id': apiCfg.appId || '', 'Authorization': apiCfg.secret ? `Bearer ${apiCfg.secret}` : '' }
+        });
         if (res.ok) {
           const data = await res.json();
           if (data && data.resolvedUrl) {
@@ -1649,6 +1653,7 @@
         const sep = baseAff.includes('?') ? '&' : '?';
         return `${baseAff}${sep}u_id=${encodedSub}&url=${encodedTarget}`;
       }
+      // Fallback gắn tracking sub_id trực tiếp vào link TikTok Shop nếu chưa điền link chiến dịch ADPIA TikTok
       try {
         const uObj = new URL(cleanProductUrl);
         uObj.searchParams.set('utm_source', 'hoantien247');

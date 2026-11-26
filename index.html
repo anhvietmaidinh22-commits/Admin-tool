@@ -662,7 +662,7 @@
       background: #10B981;
       border: 2px solid #fff;
     }
-    .chat-box { display: flex; flex-direction: column; height: 72dvh; max-height: 540px; padding: 0; overflow: hidden; }
+    .chat-box { display: flex; flex-direction: column; height: 74dvh; max-height: 560px; padding: 0; overflow: hidden; }
     .chat-head {
       background: linear-gradient(135deg, #0F172A, #1E293B);
       color: #fff;
@@ -699,7 +699,7 @@
       flex-direction: column;
       gap: 9px;
     }
-    .msg { max-width: 86%; padding: 9px 12px; border-radius: 14px; font-size: 13px; line-height: 1.48; }
+    .msg { max-width: 88%; padding: 9px 12px; border-radius: 14px; font-size: 13px; line-height: 1.48; }
     .msg.bot { align-self: flex-start; background: #fff; border: 1px solid var(--border); border-bottom-left-radius: 4px; }
     .msg.user { align-self: flex-end; background: var(--primary); color: #fff; border-bottom-right-radius: 4px; }
     .chat-chips {
@@ -795,10 +795,10 @@
       <div class="card" style="background: linear-gradient(135deg, #FFF7ED 0%, #FFFFFF 100%); border-color: #FED7AA;">
         <div class="card-header">
           <div class="card-title">⚡ Dán Link Kiểm Tra Hoàn Tiền</div>
-          <span class="badge badge-primary">Tự động tính tiền hoàn</span>
+          <span class="badge badge-primary">Hoàn tiền tự động</span>
         </div>
         <p class="text-xs text-muted" style="margin-bottom: 10px;">
-          Dán link sản phẩm Shopee hoặc TikTok Shop trước khi mua để xem ngay số tiền hoàn nhận về STK ngân hàng.
+          Dán link sản phẩm Shopee hoặc TikTok Shop trước khi mua để kích hoạt hoàn tiền tự động về STK ngân hàng.
         </p>
         <button class="btn btn-primary" onclick="switchTab('cashback')">
           Dán Link Nhận Hoàn Tiền Ngay →
@@ -830,7 +830,7 @@
           <span class="badge badge-info">Shopee / TikTok</span>
         </div>
         <p class="text-xs text-muted" style="margin-bottom: 10px;">
-          Dán đường dẫn sản phẩm cần mua. Hệ thống sẽ tự động kiểm tra sản phẩm và tính ngay <b>số tiền được hoàn</b> cho bạn.
+          Dán đường dẫn sản phẩm cần mua. Hệ thống sẽ kiểm tra điều kiện ưu đãi và tạo đường dẫn mua hàng nhận hoàn tiền ngay lập tức.
         </p>
         <div class="form-group">
           <label class="form-label">Dán link sản phẩm cần mua:</label>
@@ -850,7 +850,7 @@
         <ul class="text-xs text-muted" style="padding-left: 16px; line-height: 1.7;">
           <li>Bấm nút <b>Mua Ngay &amp; Nhận Hoàn Tiền</b> trực tiếp từ trang này sang app Shopee / TikTok.</li>
           <li>Không bấm vào các link tiếp thị/livestream khác trước khi hoàn tất thanh toán.</li>
-          <li>Các mặt hàng như thẻ cào, dịch vụ số, voucher điện tử hoặc shop không bật Affiliate sẽ hiển thị <b>0₫</b>.</li>
+          <li>Các mặt hàng như thẻ cào, dịch vụ số, voucher điện tử hoặc shop không bật Affiliate sẽ không được hoàn tiền.</li>
         </ul>
       </div>
     </main>
@@ -882,7 +882,7 @@
     </main>
 
     <!-- Floating AI Assistant Button with Brand Logo -->
-    <button class="ai-fab" onclick="openModal('aiChatModal')" aria-label="Trợ lý AI">
+    <button class="ai-fab" onclick="openAiChatModal()" aria-label="Trợ lý AI">
       <span class="ai-dot"></span>
       <img src="https://i.ibb.co/Q3M0XD2c/1795632489799.png" referrerpolicy="no-referrer" alt="AI Hoàn tiền 247" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=&quot;ai-dot&quot;></span><span style=&quot;font-weight:800;font-size:14px;&quot;>AI</span>';" />
     </button>
@@ -914,7 +914,7 @@
     </nav>
   </div>
 
-  <!-- MODAL: RÚT TIỀN VỀ STK (ĐẦY ĐỦ TẤT CẢ NGÂN HÀNG VIỆT NAM) -->
+  <!-- MODAL: RÚT TIỀN VỀ STK -->
   <div id="withdrawModal" class="modal-backdrop" onclick="backdropClose(event, 'withdrawModal')">
     <div class="modal-box">
       <div class="card-header">
@@ -1071,7 +1071,7 @@
     </div>
   </div>
 
-  <!-- MODAL: TRỢ LÝ AI CHATBOT -->
+  <!-- MODAL: TRỢ LÝ AI CHATBOT (TỰ ĐỘNG CẬP NHẬT CÂU HỎI & DỮ LIỆU MỚI NHẤT TRÊN WEB) -->
   <div id="aiChatModal" class="modal-backdrop" onclick="backdropClose(event, 'aiChatModal')">
     <div class="modal-box chat-box">
       <div class="chat-head">
@@ -1081,21 +1081,15 @@
           </div>
           <div>
             <div style="font-family:var(--font-display); font-weight:800; font-size:14px;">Trợ Lý HoànTiền247</div>
-            <div style="font-size:11px; color:#34D399;">● Trực tuyến • Tra cứu đơn &amp; Hoàn tiền</div>
+            <div style="font-size:11px; color:#34D399;">● Đồng bộ dữ liệu mới nhất trên web</div>
           </div>
         </div>
         <button class="pill-btn" onclick="closeModal('aiChatModal')">✕</button>
       </div>
       <div id="chatMessages" class="chat-msgs"></div>
-      <div class="chat-chips">
-        <button class="chip-btn" onclick="sendQuickChat('Kiểm tra tiến độ hoàn tiền đơn hàng của tôi')">📦 Tiến độ hoàn tiền của tôi</button>
-        <button class="chip-btn" onclick="sendQuickChat('Đơn 500k hoàn bao nhiêu?')">🧮 Tính tiền hoàn 500k</button>
-        <button class="chip-btn" onclick="sendQuickChat('Cách nhận hoàn tiền Shopee/TikTok?')">🛍️ Cách nhận hoàn tiền</button>
-        <button class="chip-btn" onclick="sendQuickChat('Hoa hồng tuyển Ref F1 tính thế nào?')">🎁 Hoa hồng F1</button>
-        <button class="chip-btn" onclick="sendQuickChat('Liên hệ CSKH hỗ trợ')">💬 Gặp CSKH</button>
-      </div>
+      <div id="dynamicChatChips" class="chat-chips"></div>
       <div class="chat-input-bar">
-        <input type="text" id="chatInput" class="input" placeholder="Hỏi tiến độ đơn hàng, mã #DH... hoặc giá trị đơn..." onkeypress="if(event.key==='Enter') sendUserChat()" />
+        <input type="text" id="chatInput" class="input" placeholder="Hỏi đơn hàng, mã giảm giá, deal hot, rút tiền..." onkeypress="if(event.key==='Enter') sendUserChat()" />
         <button class="btn btn-primary btn-sm" onclick="sendUserChat()">Gửi</button>
       </div>
     </div>
@@ -1120,7 +1114,9 @@
     let tempQrBase64 = '';
     let isCloudSyncing = false;
     let lastCloudUpdatedAt = '';
-    let lastCheckedOrderData = { platform: '', title: '', price: 0, cashback: 0 };
+    let lastCheckedOrderData = { platform: '', title: '', url: '', price: 0, cashback: 0 };
+    let lastRecordedUrl = '';
+    let lastRecordedTime = 0;
 
     const defaultState = {
       users: [
@@ -1273,6 +1269,7 @@
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
             renderAll();
+            renderChatChips();
             if (!silent) showToast('☁️ Đã đồng bộ dữ liệu Cloud mới nhất!');
           }
         } else {
@@ -1595,23 +1592,6 @@
       return cleanProductUrl;
     }
 
-    function updateInlineCashbackCalc(val) {
-      const num = Number(val || 0);
-      const rate = Number(state.settings.defaultCashbackPct || 4.5);
-      const displayEl = document.getElementById('inlineCbAmountText');
-      if (!displayEl) return;
-      if (num > 0) {
-        const cb = Math.round((num * rate) / 100);
-        displayEl.textContent = `+${formatVND(cb)}`;
-        lastCheckedOrderData.price = num;
-        lastCheckedOrderData.cashback = cb;
-      } else {
-        displayEl.textContent = 'Nhập giá sản phẩm để xem tiền hoàn';
-        lastCheckedOrderData.price = 0;
-        lastCheckedOrderData.cashback = 0;
-      }
-    }
-
     async function checkCashbackLink() {
       const rawInput = document.getElementById('cbProductUrl').value.trim();
       const out = document.getElementById('cbCheckResult');
@@ -1623,7 +1603,7 @@
       }
 
       btn.disabled = true;
-      btn.textContent = '⏳ Đang kiểm tra sản phẩm & tiền hoàn...';
+      btn.textContent = '⏳ Đang kiểm tra sản phẩm...';
 
       const info = await fetchProductInfoFromLink(rawInput);
       const urlInput = info.resolvedUrl;
@@ -1698,6 +1678,7 @@
       lastCheckedOrderData = {
         platform,
         title: displayTitle,
+        url: urlInput,
         price: finalPrice,
         cashback: estCashback
       };
@@ -1715,16 +1696,18 @@
               <div class="prod-preview-title">${escapeHtml(displayTitle)}</div>
               ${finalPrice > 0
                 ? `<div class="text-xs text-muted">Giá sản phẩm: <b style="color:var(--text);">${formatVND(finalPrice)}</b></div>`
-                : `<input type="number" class="input" style="padding:6px 9px; font-size:12px; margin-top:4px;" placeholder="Nhập giá bán (đ) để tính tiền hoàn..." oninput="updateInlineCashbackCalc(this.value)" />`}
+                : `<div class="text-xs text-muted">Tự động tính hoàn tiền theo giá trị thanh toán trên sàn</div>`}
             </div>
           </div>
 
-          <div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:11px; padding:10px 12px; margin-bottom:10px;">
-            <div class="text-xs text-muted">Số tiền được hoàn dự kiến:</div>
-            <div id="inlineCbAmountText" style="font-family:var(--font-display); font-weight:800; font-size:20px; color:var(--success);">
-              ${estCashback > 0 ? `+${formatVND(estCashback)}` : 'Nhập giá sản phẩm để xem tiền hoàn'}
+          ${estCashback > 0 ? `
+            <div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:11px; padding:10px 12px; margin-bottom:10px;">
+              <div class="text-xs text-muted">Số tiền được hoàn dự kiến:</div>
+              <div style="font-family:var(--font-display); font-weight:800; font-size:20px; color:var(--success);">
+                +${formatVND(estCashback)}
+              </div>
             </div>
-          </div>
+          ` : ''}
 
           <a href="${escapeHtml(trackingUrl)}" target="_blank" rel="noopener" onclick="recordPendingOrderFromCheck()" class="btn btn-primary" style="width:100%;">
             Mua Ngay &amp; Nhận Hoàn Tiền ↗
@@ -1738,15 +1721,24 @@
         lastCheckedOrderData.platform,
         lastCheckedOrderData.title,
         lastCheckedOrderData.price,
-        lastCheckedOrderData.cashback
+        lastCheckedOrderData.cashback,
+        lastCheckedOrderData.url
       );
     }
 
-    function recordPendingOrder(platform, productTitle, price, cashbackAmount) {
+    function recordPendingOrder(platform, productTitle, price, cashbackAmount, productUrl = '') {
       const user = getCurrentUser();
       if (!user) return;
+      // Chống ghi trùng đơn nếu khách bấm nhiều lần cùng 1 link trong 2 phút
+      const now = Date.now();
+      if (productUrl && lastRecordedUrl === productUrl && (now - lastRecordedTime) < 120000) {
+        return;
+      }
+      lastRecordedUrl = productUrl;
+      lastRecordedTime = now;
+
       const order = {
-        id: 'DH' + Date.now().toString().slice(-6),
+        id: 'DH' + now.toString().slice(-6),
         userId: user.id,
         platform,
         productName: productTitle || `Đơn hàng ${platform}`,
@@ -1760,7 +1752,7 @@
         user.balancePending = (user.balancePending || 0) + cashbackAmount;
       }
       saveState();
-      showToast('Đã ghi nhận đơn hàng vào mục Ví & Đơn!');
+      showToast('Đã ghi nhận lượt mua hàng vào mục Ví & Đơn!');
     }
 
     // =========================================================
@@ -2043,6 +2035,31 @@
       showToast(targetStep === 3 ? 'Đã duyệt hoàn tất & cộng ví khách!' : 'Đã cập nhật tiến độ đơn hàng!');
     }
 
+    function deleteSingleOrder(orderId) {
+      const user = getCurrentUser();
+      if (!user || user.role !== 'admin') return;
+      const ord = state.orders.find(o => o.id === orderId);
+      if (ord && ord.step !== 3 && ord.step !== 0) {
+        const buyer = state.users.find(u => u.id === ord.userId);
+        if (buyer) buyer.balancePending = Math.max(0, (buyer.balancePending || 0) - (ord.cashbackAmount || 0));
+      }
+      state.orders = state.orders.filter(o => o.id !== orderId);
+      saveState();
+      renderAll();
+      showToast('Đã xóa đơn khỏi danh sách!');
+    }
+
+    function clearAllTestOrders() {
+      const user = getCurrentUser();
+      if (!user || user.role !== 'admin') return;
+      if (!confirm('Bạn muốn xóa sạch toàn bộ danh sách đơn hàng test hiện tại trên hệ thống?')) return;
+      state.orders = [];
+      state.users.forEach(u => { u.balancePending = 0; });
+      saveState();
+      renderAll();
+      showToast('Đã xóa sạch toàn bộ đơn test!');
+    }
+
     function processWithdraw(wdId, action) {
       const user = getCurrentUser();
       if (!user || (user.role !== 'admin' && user.role !== 'cskh')) return;
@@ -2200,6 +2217,7 @@
       state.settings.refOrderPct = Number(document.getElementById('admRefOrderPct').value || 0);
       saveState();
       renderAll();
+      renderChatChips();
       showToast('Đã lưu cài đặt Giới thiệu & Check IP!');
     }
 
@@ -2233,6 +2251,7 @@
       document.getElementById('admNoticeTitle').value = '';
       document.getElementById('admNoticeContent').value = '';
       renderAll();
+      renderChatChips();
       showToast('Đã thêm thông báo mới!');
     }
 
@@ -2244,6 +2263,7 @@
       item.active = !item.active;
       saveState();
       renderAll();
+      renderChatChips();
     }
 
     function deleteAnnouncement(id) {
@@ -2252,6 +2272,7 @@
       state.announcements = state.announcements.filter(x => x.id !== id);
       saveState();
       renderAll();
+      renderChatChips();
       showToast('Đã gỡ bỏ thông báo!');
     }
 
@@ -2304,6 +2325,7 @@
       document.getElementById('admVCode').value = '';
       document.getElementById('admVDesc').value = '';
       renderAll();
+      renderChatChips();
       showToast('Đã thêm mã giảm giá!');
     }
 
@@ -2313,6 +2335,7 @@
       state.vouchers = state.vouchers.filter(v => v.id !== id);
       saveState();
       renderAll();
+      renderChatChips();
       showToast('Đã xóa mã giảm giá');
     }
 
@@ -2355,6 +2378,7 @@
       document.getElementById('admDSale').value = '';
       document.getElementById('admDUrl').value = '';
       renderAll();
+      renderChatChips();
       showToast('Đã đăng Deal Hot mới!');
     }
 
@@ -2364,6 +2388,7 @@
       state.deals = state.deals.filter(d => d.id !== id);
       saveState();
       renderAll();
+      renderChatChips();
       showToast('Đã gỡ sản phẩm Deal');
     }
 
@@ -2377,6 +2402,7 @@
       state.settings.noCommissionKeywords = document.getElementById('admNoCbKw').value.trim();
       saveState();
       renderAll();
+      renderChatChips();
       showToast('Đã lưu cấu hình Web & Affiliate!');
     }
 
@@ -2443,6 +2469,7 @@
         });
         saveState();
         renderAll();
+        renderChatChips();
         showToast(`Đã đồng bộ thành công ${added} deal từ API!`);
       } catch (err) {
         showToast('Lỗi gọi API: Kiểm tra lại Endpoint URL hoặc cấu hình CORS trên server!');
@@ -2450,16 +2477,62 @@
     }
 
     // =========================================================
-    // 9. TRỢ LÝ AI CHATBOT (TÍCH HỢP TRA CỨU TIẾN ĐỘ HOÀN TIỀN)
+    // 9. TRỢ LÝ AI CHATBOT (TỰ ĐỘNG ĐỌC DỮ LIỆU MỚI NHẤT & ĐỀ XUẤT ĐẦY ĐỦ)
     // =========================================================
+    function openAiChatModal() {
+      initChatbot();
+      renderChatChips();
+      openModal('aiChatModal');
+    }
+
+    function renderChatChips() {
+      const box = document.getElementById('dynamicChatChips');
+      if (!box) return;
+
+      const chips = [
+        { label: '📦 Tiến độ đơn của tôi', q: 'Kiểm tra tiến độ hoàn tiền đơn hàng của tôi' },
+        { label: '🛍️ Cách nhận hoàn tiền', q: 'Cách nhận hoàn tiền Shopee và TikTok Shop?' },
+        { label: '💸 Điều kiện rút tiền', q: 'Điều kiện và cách rút tiền về ngân hàng?' },
+        { label: '🧮 Tính hoàn tiền 500k', q: 'Đơn 500k được hoàn bao nhiêu tiền?' },
+        { label: '🎁 Hoa hồng Tuyển Ref F1', q: 'Chính sách hoa hồng tuyển Ref F1 như thế nào?' },
+        { label: '🚫 Mặt hàng không hoàn tiền', q: 'Những mặt hàng nào không được hoàn tiền?' },
+        { label: '💬 Liên hệ CSKH', q: 'Thông tin liên hệ CSKH hỗ trợ' }
+      ];
+
+      // Tự động bổ sung đề xuất nếu Admin có cập nhật Mã giảm giá, Deal Hot hoặc Thông báo mới
+      if (state.vouchers && state.vouchers.length > 0) {
+        chips.splice(1, 0, {
+          label: `🎟️ Mã giảm giá mới (${state.vouchers.length})`,
+          q: 'Có mã giảm giá nào mới hôm nay?'
+        });
+      }
+      if (state.deals && state.deals.length > 0) {
+        chips.splice(2, 0, {
+          label: `🔥 Deal Hot hoàn cao (${state.deals.length})`,
+          q: 'Xem danh sách Deal Hot hoàn tiền cao mới nhất'
+        });
+      }
+      if (state.announcements && state.announcements.some(a => a.active)) {
+        chips.splice(1, 0, {
+          label: '📢 Thông báo mới nhất',
+          q: 'Có thông báo mới nào từ hệ thống không?'
+        });
+      }
+
+      box.innerHTML = chips.map(c =>
+        `<button class="chip-btn" onclick="sendQuickChat('${escapeHtml(c.q)}')">${escapeHtml(c.label)}</button>`
+      ).join('');
+    }
+
     function initChatbot() {
       const box = document.getElementById('chatMessages');
       if (box && !box.innerHTML.trim()) {
         appendChatMsg(
           'bot',
-          'Chào bạn! 👋 Mình là <b>Trợ Lý HoànTiền247</b>.<br>Mình có thể hỗ trợ bạn:<br>• 📦 <b>Tra cứu tiến độ hoàn tiền đơn hàng</b> của bạn theo thời gian thực.<br>• 🧮 Tính nhanh tiền hoàn theo giá đơn hàng.<br>• 💸 Hướng dẫn đối soát &amp; rút tiền về STK.'
+          'Chào bạn! 👋 Mình là <b>Trợ Lý HoànTiền247</b>.<br>Mình luôn cập nhật tự động toàn bộ thông tin mới nhất trên web:<br>• 📦 <b>Tra cứu đơn hàng &amp; số dư</b> của riêng bạn.<br>• 🎟️ <b>Mã giảm giá &amp; Deal Hot</b> mới nhất Admin vừa đăng.<br>• 📢 <b>Thông báo hệ thống, chính sách Ref F1 &amp; rút tiền</b>.<br><br>Bạn hãy bấm vào các câu hỏi gợi ý bên dưới hoặc nhắn trực tiếp cho mình nhé!'
         );
       }
+      renderChatChips();
     }
 
     function appendChatMsg(sender, html) {
@@ -2480,12 +2553,12 @@
     function buildCustomerOrderProgressReply() {
       const user = getCurrentUser();
       if (!user) {
-        return `🔒 Bạn chưa đăng nhập tài khoản! Hãy bấm vào tab <b>Cá Nhân</b> ở góc dưới bên phải để đăng nhập, sau đó mình sẽ tra cứu chi tiết từng đơn hoàn tiền của bạn ngay nhé.`;
+        return `🔒 Bạn chưa đăng nhập tài khoản! Hãy bấm vào tab <b>Cá Nhân</b> ở góc dưới bên phải để đăng nhập, sau đó mình sẽ kiểm tra chính xác đơn hàng và số dư của bạn ngay.`;
       }
 
       const myOrders = state.orders.filter(o => o.userId === user.id);
       if (!myOrders.length) {
-        return `📭 Tài khoản <b>${escapeHtml(user.name)}</b> hiện chưa có đơn hàng hoàn tiền nào.<br>• Số dư khả dụng: <b>${formatVND(user.balanceAvailable)}</b><br>• Đang chờ đối soát: <b>${formatVND(user.balancePending)}</b><br><br>👉 Bạn chỉ cần sang tab <b>Hoàn Tiền</b>, dán link Shopee/TikTok rồi bấm mua hàng là đơn sẽ tự động cập nhật tại đây!`;
+        return `📭 Tài khoản <b>${escapeHtml(user.name)}</b> hiện chưa có đơn hàng nào được ghi nhận.<br>• Số dư khả dụng: <b>${formatVND(user.balanceAvailable)}</b><br>• Tiền chờ đối soát: <b>${formatVND(user.balancePending)}</b><br><br>👉 Khi bạn sang tab <b>Hoàn Tiền</b>, dán link sản phẩm và bấm <b>Mua Ngay &amp; Nhận Hoàn Tiền</b>, đơn sẽ tự động cập nhật tại đây.`;
       }
 
       const s1 = myOrders.filter(o => o.step === 1).length;
@@ -2493,22 +2566,23 @@
       const s3 = myOrders.filter(o => o.step === 3).length;
       const s0 = myOrders.filter(o => o.step === 0).length;
 
-      const latestList = myOrders.slice(0, 4).map(o => {
+      const latestList = myOrders.slice(0, 5).map(o => {
         const stepLabel =
-          o.step === 1 ? '🟡 B1: Đã ghi nhận đơn' :
+          o.step === 1 ? '🟡 B1: Đã ghi nhận lượt mua' :
           o.step === 2 ? '🔵 B2: Sàn đang đối soát' :
           o.step === 3 ? '🟢 B3: Hoàn tất (Đã cộng ví)' :
           '🔴 Đã hủy / Không hợp lệ';
-        return `• <b>#${escapeHtml(o.id)}</b> (${escapeHtml(o.platform)}): <b>+${formatVND(o.cashbackAmount)}</b><br>&nbsp;&nbsp;↳ <i>${stepLabel}</i>`;
+        const cbTxt = o.cashbackAmount > 0 ? `+${formatVND(o.cashbackAmount)}` : 'Đang đối soát từ sàn';
+        return `• <b>#${escapeHtml(o.id)}</b> (${escapeHtml(o.platform)}): <b>${cbTxt}</b><br>&nbsp;&nbsp;↳ <i>${stepLabel}</i>`;
       }).join('<br>');
 
-      return `📦 <b>Cập nhật tiến độ hoàn tiền của ${escapeHtml(user.name)}:</b><br>` +
+      return `📦 <b>Tiến độ đơn hàng của ${escapeHtml(user.name)} (Tổng ${myOrders.length} đơn):</b><br>` +
         `• 🟡 Chờ xác nhận (B1): <b>${s1} đơn</b><br>` +
         `• 🔵 Đang đối soát (B2): <b>${s2} đơn</b><br>` +
-        `• 🟢 Đã cộng khả dụng (B3): <b>${s3} đơn</b>${s0 ? ` • 🔴 Hủy: <b>${s0}</b>` : ''}<br>` +
+        `• 🟢 Đã cộng ví (B3): <b>${s3} đơn</b>${s0 ? ` • 🔴 Hủy: <b>${s0}</b>` : ''}<br>` +
         `• 💰 Số dư khả dụng rút ngay: <b>${formatVND(user.balanceAvailable)}</b><br>` +
         `• ⏳ Tiền đang chờ đối soát: <b>${formatVND(user.balancePending)}</b><br><br>` +
-        `<b>Chi tiết đơn gần nhất:</b><br>${latestList}`;
+        `<b>Chi tiết gần nhất:</b><br>${latestList}`;
     }
 
     function sendUserChat() {
@@ -2530,6 +2604,37 @@
         lower.includes('của tôi')
       ) {
         reply = buildCustomerOrderProgressReply();
+      } else if (lower.includes('mã giảm') || lower.includes('voucher') || lower.includes('code')) {
+        if (!state.vouchers.length) {
+          reply = `🎟️ Hiện tại Admin chưa đăng mã giảm giá mới nào. Bạn hãy quay lại kiểm tra sau hoặc dùng tính năng dán link hoàn tiền trực tiếp nhé!`;
+        } else {
+          const list = state.vouchers.slice(0, 6).map(v =>
+            `• <b>[${escapeHtml(v.platform)}] <code>${escapeHtml(v.code)}</code></b>: ${escapeHtml(v.desc)}`
+          ).join('<br>');
+          reply = `🎟️ <b>Danh sách Mã Giảm Giá mới nhất trên web (${state.vouchers.length} mã):</b><br>${list}<br><br>👉 Bạn vào <b>Trang Chủ</b> để bấm <b>Copy Mã</b> nhanh nhé!`;
+        }
+      } else if (lower.includes('deal') || lower.includes('săn sale') || lower.includes('sản phẩm hot')) {
+        if (!state.deals.length) {
+          reply = `🔥 Hiện chưa có Deal Hot nào được đăng trên Trang Chủ. Bạn có thể dán bất kỳ link Shopee/TikTok nào vào tab <b>Hoàn Tiền</b> để nhận hoàn tiền tự động!`;
+        } else {
+          const list = state.deals.slice(0, 5).map(d => {
+            const cb = Math.round((d.salePrice * (d.cashbackPct || state.settings.defaultCashbackPct)) / 100);
+            return `• <b>${escapeHtml(d.title)}</b> (${escapeHtml(d.platform)}) — Giá sale: <b>${formatVND(d.salePrice)}</b> (Hoàn <b>+${formatVND(cb)}</b>)`;
+          }).join('<br>');
+          reply = `🔥 <b>Top Deal Hot hoàn tiền cao mới nhất (${state.deals.length} deal):</b><br>${list}<br><br>👉 Mở <b>Trang Chủ</b> để bấm <b>Mua Ngay</b> nhận hoàn tiền!`;
+        }
+      } else if (lower.includes('thông báo') || lower.includes('tin tức') || lower.includes('cập nhật')) {
+        const activeNotices = state.announcements.filter(a => a.active);
+        if (!activeNotices.length) {
+          reply = `📢 Hiện tại hệ thống hoạt động bình thường và chưa có thông báo đặc biệt nào mới.`;
+        } else {
+          const list = activeNotices.map(a =>
+            `• <b>${escapeHtml(a.title)}</b>: ${escapeHtml(a.content)} <i>(${escapeHtml(a.createdAt)})</i>`
+          ).join('<br>');
+          reply = `📢 <b>Thông báo mới nhất từ Quản Trị Viên:</b><br>${list}`;
+        }
+      } else if (lower.includes('không được hoàn') || lower.includes('0đ') || lower.includes('danh mục') || lower.includes('loại trừ')) {
+        reply = `🚫 <b>Các mặt hàng / trường hợp không được hoàn tiền (0₫):</b><br>• ${escapeHtml(state.settings.noCommissionKeywords)}<br>• Shop không tham gia chương trình Affiliate của sàn hoặc khách bấm sang link quảng cáo/livestream khác trước khi thanh toán.`;
       } else {
         const numMatch = lower.match(/(\d+(?:[.,]\d+)?)\s*(k|nghìn|ngàn|tr|triệu|đ|d)?/);
         if (numMatch && (lower.includes('hoàn') || lower.includes('tính') || lower.includes('đơn') || numMatch[2])) {
@@ -2541,23 +2646,23 @@
 
           const rate = state.settings.defaultCashbackPct;
           const cb = Math.round((val * rate) / 100);
-          reply = `🧮 Với đơn hàng <b>${formatVND(val)}</b>, bạn nhận được khoảng <b>+${formatVND(cb)}</b> tiền hoàn về ví sau khi đơn hoàn tất đối soát.<br><br>⚠️ <i>Lưu ý: Các mặt hàng như thẻ cào, dịch vụ số hoặc shop không tham gia Affiliate sẽ hiển thị <b>0₫</b> khi dán link kiểm tra.</i>`;
+          reply = `🧮 Với đơn hàng trị giá <b>${formatVND(val)}</b>, số tiền hoàn dự kiến bạn nhận về ví là khoảng <b>+${formatVND(cb)}</b> (tùy ngành hàng của sàn).<br><br>⚠️ <i>Lưu ý: Các mặt hàng như ${escapeHtml(state.settings.noCommissionKeywords)} không áp dụng hoàn tiền.</i>`;
         } else if (lower.includes('cách') || lower.includes('mua')) {
-          reply = `🛍️ <b>3 bước nhận hoàn tiền cực dễ:</b><br>1. Copy link sản phẩm trên Shopee hoặc TikTok Shop.<br>2. Vào tab <b>Hoàn Tiền</b> trên HoànTiền247 → dán link để xem số tiền hoàn và bấm <b>Mua Ngay</b>.<br>3. Nhận hàng thành công và đợi sàn đối soát xong là rút thẳng tiền về STK ngân hàng!`;
+          reply = `🛍️ <b>3 bước nhận hoàn tiền cực dễ:</b><br>1. Copy link sản phẩm trên Shopee hoặc TikTok Shop.<br>2. Vào tab <b>Hoàn Tiền</b> trên HoànTiền247 → dán link và bấm <b>Mua Ngay &amp; Nhận Hoàn Tiền</b>.<br>3. Nhận hàng thành công và đợi sàn đối soát xong là rút thẳng tiền về STK ngân hàng!`;
         } else if (lower.includes('bao lâu') || lower.includes('đối soát') || lower.includes('rút')) {
-          reply = `⏳ <b>Quy trình đối soát 3 bước:</b><br>• <b>B1:</b> Ghi nhận đơn ngay sau khi đặt.<br>• <b>B2:</b> Sàn đối soát sau khi bạn nhận hàng và không bấm trả hàng/hoàn tiền.<br>• <b>B3:</b> Tiền chuyển sang <b>Số Dư Khả Dụng</b>, bạn vào tab <b>Ví &amp; Đơn → Rút Tiền</b> (tối thiểu 50.000₫) để rút về STK hoặc QR ngân hàng!`;
+          reply = `⏳ <b>Quy trình đối soát &amp; rút tiền:</b><br>• <b>B1:</b> Ghi nhận lượt mua ngay khi bấm qua web.<br>• <b>B2:</b> Sàn đối soát sau khi bạn nhận hàng và không bấm trả hàng/hoàn tiền.<br>• <b>B3:</b> Tiền chuyển sang <b>Số Dư Khả Dụng</b>, bạn vào tab <b>Ví &amp; Đơn → Rút Tiền</b> (tối thiểu <b>50.000₫</b>) để rút về STK hoặc QR của 40+ ngân hàng &amp; ví điện tử!`;
         } else if (lower.includes('ref') || lower.includes('f1') || lower.includes('giới thiệu')) {
-          reply = `🎁 <b>Chính sách Tuyển Ref F1:</b><br>• Nhận ngay <b>${formatVND(state.settings.refInviterBonus)}</b> cho mỗi bạn bè đăng ký hợp lệ (IP mạng sạch không trùng clone).<br>• Hưởng thêm hoa hồng trên mỗi đơn hàng F1 mua sắm thành công trọn đời!`;
+          reply = `🎁 <b>Chính sách Tuyển Ref F1 mới nhất:</b><br>• Thưởng người mời: <b>${formatVND(state.settings.refInviterBonus)}</b> / F1 hợp lệ (IP mạng sạch không trùng).<br>• Quà tân thủ cho người được mời: <b>${formatVND(state.settings.refNewUserBonus)}</b>.<br>• Hưởng thêm hoa hồng trên mỗi đơn hàng F1 hoàn tất đối soát trọn đời!<br>👉 Vào tab <b>Tuyển Ref</b> ở giữa thanh menu để lấy link rút gọn <code>https://${escapeHtml(state.settings.shortDomain)}/r/...</code> nhé!`;
         } else if (lower.includes('cskh') || lower.includes('liên hệ') || lower.includes('hỗ trợ')) {
           const z = state.settings.cskhZalo || 'Đang cập nhật trong mục Cá Nhân';
           const t = state.settings.cskhTele || 'Đang cập nhật trong mục Cá Nhân';
-          reply = `💬 Bạn có thể liên hệ trực tiếp đội ngũ CSKH qua:<br>• <b>Zalo:</b> ${escapeHtml(z)}<br>• <b>Telegram:</b> ${escapeHtml(t)}<br>Hoặc vào tab <b>Cá Nhân</b> để bấm mở nhanh kênh hỗ trợ nhé!`;
+          reply = `💬 <b>Kênh hỗ trợ CSKH trực tiếp:</b><br>• <b>Zalo:</b> ${escapeHtml(z)}<br>• <b>Telegram:</b> ${escapeHtml(t)}<br>Bạn có thể vào tab <b>Cá Nhân</b> để bấm mở nhanh nhóm hỗ trợ Zalo/Telegram nhé!`;
         } else {
-          reply = `Mình sẵn sàng hỗ trợ bạn! Bạn có thể bấm nút <b>📦 Tiến độ hoàn tiền của tôi</b> ngay bên dưới để xem trạng thái các đơn hàng hiện tại, hoặc nhập giá trị đơn hàng (VD: <i>"Đơn 450k hoàn bao nhiêu?"</i>) nhé 😊`;
+          reply = `Mình có thể giải đáp mọi thông tin trên web cho bạn! Hãy bấm vào một trong các chủ đề gợi ý ngay bên dưới (Đơn hàng của tôi, Mã giảm giá, Deal Hot, Thông báo mới, Rút tiền, Tuyển Ref, CSKH) hoặc nhập câu hỏi của bạn nhé 😊`;
         }
       }
 
-      setTimeout(() => appendChatMsg('bot', reply), 240);
+      setTimeout(() => appendChatMsg('bot', reply), 220);
     }
 
     // =========================================================
@@ -2628,7 +2733,7 @@
                   <div class="badge badge-success" style="margin-bottom:7px; width:100%; justify-content:center;">
                     Hoàn +${formatVND(estCb)}
                   </div>
-                  <a href="${escapeHtml(d.affUrl)}" target="_blank" rel="noopener" onclick="recordPendingOrder('${escapeHtml(d.platform)}', '${escapeHtml(d.title)}', ${d.salePrice}, ${estCb})" class="btn btn-primary btn-sm" style="width:100%;">
+                  <a href="${escapeHtml(d.affUrl)}" target="_blank" rel="noopener" onclick="recordPendingOrder('${escapeHtml(d.platform)}', '${escapeHtml(d.title)}', ${d.salePrice}, ${estCb}, '${escapeHtml(d.affUrl)}')" class="btn btn-primary btn-sm" style="width:100%;">
                     Mua Ngay ↗
                   </a>
                 </div>
@@ -2789,7 +2894,7 @@
             <div style="border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:8px;">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
                 <span class="badge badge-dark">${escapeHtml(o.platform)} • #${escapeHtml(o.id)}</span>
-                <span class="font-bold" style="color:var(--success);">+${formatVND(o.cashbackAmount)}</span>
+                <span class="font-bold" style="color:var(--success);">${o.cashbackAmount > 0 ? '+' + formatVND(o.cashbackAmount) : 'Chờ đối soát'}</span>
               </div>
               <div class="font-bold" style="font-size:12.5px; margin-bottom:3px;">${escapeHtml(o.productName)}</div>
               <div class="text-xs text-muted">${escapeHtml(o.createdAt)}</div>
@@ -2997,20 +3102,23 @@
           `).join('')}
 
           <div class="divider"></div>
-          <div class="font-bold" style="margin-bottom:8px;">📦 Duyệt Tiến Độ Đơn Hoàn Tiền (${state.orders.length})</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span class="font-bold">📦 Duyệt Tiến Độ Đơn (${state.orders.length})</span>
+            ${state.orders.length ? `<button class="btn btn-danger btn-sm" onclick="clearAllTestOrders()">🗑️ Xóa Sạch Đơn Test</button>` : ''}
+          </div>
           ${!state.orders.length ? `<div class="empty-state">Chưa có đơn hàng nào.</div>` : state.orders.map(o => {
             const buyer = state.users.find(u => u.id === o.userId);
             return `
               <div style="border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:8px;">
                 <div style="display:flex; justify-content:space-between;">
                   <span class="font-bold">#${o.id} • ${escapeHtml(buyer ? buyer.name : o.userId)}</span>
-                  <span class="font-bold" style="color:var(--success);">+${formatVND(o.cashbackAmount)}</span>
+                  <span class="font-bold" style="color:var(--success);">${o.cashbackAmount > 0 ? '+' + formatVND(o.cashbackAmount) : '0₫'}</span>
                 </div>
                 <div class="text-xs text-muted" style="margin-bottom:6px;">${escapeHtml(o.productName)} • Bước hiện tại: <b>B${o.step}</b></div>
                 <div class="btn-row">
                   <button class="btn btn-warning btn-sm" onclick="advanceOrderStep('${o.id}', 2)">B2: Đối Soát</button>
                   <button class="btn btn-success btn-sm" onclick="advanceOrderStep('${o.id}', 3)">B3: Cộng Ví</button>
-                  <button class="btn btn-danger btn-sm" onclick="advanceOrderStep('${o.id}', 0)">Hủy Đơn</button>
+                  <button class="btn btn-outline btn-sm" onclick="deleteSingleOrder('${o.id}')">Xóa</button>
                 </div>
               </div>
             `;
